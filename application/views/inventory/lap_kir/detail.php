@@ -30,7 +30,6 @@
 						<div class="form-group">
 							<label>Pilih Puskesmas / Ruangan</label>
 				     		<select name="code_cl_phc" class="form-control" id="code_cl_phc">
-				     			<option value="">Pilih Puskesmas</option>
 								<?php foreach ($kodepuskesmas as $row ) { ;?>
 								<option value="<?php echo $row->code; ?>" <?php //if($kode==$row->code) echo "selected"; ?> ><?php echo $row->value; ?></option>
 							<?php	} ;?>

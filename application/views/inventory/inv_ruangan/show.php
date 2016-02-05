@@ -18,19 +18,24 @@
 	    </div>
 
 	      <div class="box-footer">
-    		<div class="col-md-9">
+    		<div class="col-md-8">
 			 	<button type="button" class="btn btn-primary" onclick="document.location.href='<?php echo base_url()?>inventory/inv_ruangan/add'"><i class='fa fa-plus-square-o'></i> &nbsp; Tambah Ruangan</button>
 			 	<button type="button" class="btn btn-success" id="btn-refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
 			 </div>
-    		<div class="col-md-3">
-	     		<select name="code_cl_phc" class="form-control">
-	     			<option value="">Pilih Puskesmas</option>
-					<?php foreach ($datapuskesmas as $row ) { ;?>
-					<option value="<?php echo $row->code; ?>" onchange="" ><?php echo $row->value; ?></option>
-				<?php	} ;?>
-	     	</select>
-			</div>
-	     </div>
+    		<div class="col-md-4">
+	     	<div class="row">
+		     	<div class="col-md-4" style="padding-top:5px;"><label> Puskesmas </label> </div>
+		     	<div class="col-md-8">
+			     		<select name="code_cl_phc" class="form-control">
+							<?php foreach ($datapuskesmas as $row ) { ;?>
+							<option value="<?php echo $row->code; ?>" onchange="" ><?php echo $row->value; ?></option>
+						<?php	} ;?>
+			     	</select>
+			     	</div>	
+	     	</div>
+		  </div>
+		</div>
+		</div>
         <div class="box-body">
 		    <div class="div-grid">
 		        <div id="jqxgrid"></div>

@@ -151,17 +151,17 @@ class Distribusibarang extends CI_Controller {
 	public function get_ruangan()
 	{
 		if($this->input->is_ajax_request()) {
-			$code_cl_phc = $this->input->post('code_cl_phc');
+			$code_cl_phc = 'P'.$this->session->userdata('puskesmas');//$this->input->post('code_cl_phc');
 			$id_mst_inv_ruangan = $this->input->post('id_mst_inv_ruangan');
 
 			$kode 	= $this->inv_ruangan_model->getSelectedData('mst_inv_ruangan',$code_cl_phc)->result();
 
 			$all = $this->distribusibarang_model->get_count($code_cl_phc);
 			echo '<option value="all">-- Seluruh Ruangan '.$all.' --</option>';
-			if(substr($code_cl_phc, -2)=="01"){
+			//if(substr($code_cl_phc, -2)=="01"){
 				$none = $this->distribusibarang_model->get_count();
 				echo '<option value="none">-- Belum Distribusi '.$none.' --</option>';
-			}
+			//}
 			foreach($kode as $kode) :
 				$ruangan = $this->distribusibarang_model->get_count($code_cl_phc,$kode->id_mst_inv_ruangan);
 				echo $select = $kode->id_mst_inv_ruangan == $id_mst_inv_ruangan ? 'selected' : '';

@@ -70,7 +70,7 @@ class Pengadaanbarang extends CI_Controller {
 		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
 			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
 		}
-		$rows = $this->pengadaanbarang_model->get_data($this->input->post('recordstartindex'), $this->input->post('pagesize'));
+		//$rows = $this->pengadaanbarang_model->get_data($this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$rows = $this->pengadaanbarang_model->get_data();
 		$data = array();
 		$no=1;

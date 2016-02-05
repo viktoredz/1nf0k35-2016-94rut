@@ -17,7 +17,6 @@
   			     <div class="form-group">
                 <label>Puskesmas tujuan</label>
                 <select name="code_cl_phc2" class="form-control" id="code_cl_phc2">
-                  <option value="0">Pilih Puskesmas</option>
                     <?php foreach ($datapuskesmas as $row ) { ;?>
                     <option value="<?php echo $row->code; ?>" onchange="" ><?php echo $row->value; ?></option>
                     <?php	} ;?>

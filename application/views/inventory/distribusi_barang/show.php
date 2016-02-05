@@ -21,7 +21,6 @@
       	<div class="box-footer">
 		  <div class="col-md-3">
      		<select name="code_cl_phc" class="form-control" id="code_cl_phc">
-     			<option value="none">Pilih Puskesmas</option>
 				<?php foreach ($datapuskesmas as $row ) { ;?>
 					<option value="<?php echo $row->code; ?>" onchange="" ><?php echo $row->value; ?></option>
 				<?php	} ;?>
