@@ -25,13 +25,22 @@
             ?>"></div>
         </div>
         <div class="form-group">
-          <label>Status<h1></h1></label>
+          <label>Status</label>
           <select  name="status" type="text" class="form-control">
               <option value="">Pilih Status</option>
               </option>
               <?php foreach($kodestatus as $stat) : ?>
                 <?php $select = $stat->code == set_value('status') ? 'selected' : '' ?>
                 <option value="<?php echo $stat->code ?>" <?php echo $select ?>><?php echo $stat->value ?></option>
+              <?php endforeach ?>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Puskesmas</label>
+          <select  name="codepus" id="puskesmas" class="form-control">
+              <?php foreach($kodepuskesmas as $pus) : ?>
+                <?php $select = $pus->code == set_value('codepus') ? 'selected' : '' ?>
+                <option value="<?php echo $pus->code ?>" <?php echo $select ?>><?php echo $pus->value ?></option>
               <?php endforeach ?>
           </select>
         </div>

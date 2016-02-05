@@ -18,18 +18,22 @@
 	    </div>
 
       	<div class="box-footer">
-	      <div class="col-md-9">
+	      <div class="col-md-8">
 		 	<button type="button" class="btn btn-primary" onclick="document.location.href='<?php echo base_url()?>inventory/permohonanbarang/add'"><i class='fa fa-plus-square-o'></i> &nbsp; Tambah</button>
 		 	<button type="button" class="btn btn-warning" id="btn-refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
 		 	<button type="button" class="btn btn-success" id="btn-export"><i class='fa fa-file-excel-o'></i> &nbsp; Export</button>
 	     </div>
-	     <div class="col-md-3">
-	     		<select name="code_cl_phc" id="puskesmas" class="form-control">
-	     			<option value="">Pilih Puskesmas</option>
-					<?php foreach ($datapuskesmas as $row ) { ;?>
-					<option value="<?php echo $row->code; ?>" onchange="" ><?php echo $row->value; ?></option>
-				<?php	} ;?>
-	     	</select>
+	     <div class="col-md-4">
+	     	<div class="row">
+		     	<div class="col-md-4" style="padding-top:5px;"><label> Puskesmas </label> </div>
+		     	<div class="col-md-8">
+		     		<select name="code_cl_phc" id="puskesmas" class="form-control">
+						<?php foreach ($datapuskesmas as $row ) { ;?>
+							<option value="<?php echo $row->code; ?>" onchange="" ><?php echo $row->value; ?></option>
+						<?php	} ;?>
+			     	</select>
+			     </div>	
+	     	</div>
 		  </div>
 		</div>
         <div class="box-body">

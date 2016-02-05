@@ -189,6 +189,7 @@ WHERE inv_inventaris_barang.barang_kembar_proc = (SELECT barang_kembar_proc FROM
         $data['nomor_kontrak']              = $this->input->post('nomor_kontrak');
         $data['tgl_kwitansi']               = date("Y-m-d",strtotime($this->input->post('tgl1')));
         $data['nomor_kwitansi']             = $this->input->post('nomor_kwitansi');
+        $data['code_cl_phc']                = $this->input->post('codepus');
 		$data['waktu_dibuat']		        = date('Y-m-d H:i:s');
         $data['terakhir_diubah']            = "0000-00-00 00:00:00";
 		$data['jumlah_unit']      	        = 0;
@@ -233,6 +234,7 @@ WHERE inv_inventaris_barang.barang_kembar_proc = (SELECT barang_kembar_proc FROM
         $data['nomor_kontrak']              = $this->input->post('nomor_kontrak');
         $data['tgl_kwitansi']               = date("Y-m-d",strtotime($this->input->post('tgl1')));
         $data['nomor_kwitansi']             = $this->input->post('nomor_kwitansi');
+        $data['code_cl_phc']                = $this->input->post('codepus');
         $data['terakhir_diubah']            = date('Y-m-d H:i:s');
 		$this->db->where('id_pengadaan',$kode);
 

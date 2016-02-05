@@ -41,7 +41,9 @@ class Pengadaanbarang extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
-		
+		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
 		$rows_all = $this->pengadaanbarang_model->get_data();
 
 
@@ -65,7 +67,9 @@ class Pengadaanbarang extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
-		
+		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
 		$rows = $this->pengadaanbarang_model->get_data($this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$rows = $this->pengadaanbarang_model->get_data();
 		$data = array();
@@ -247,7 +251,10 @@ class Pengadaanbarang extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
-		
+		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
+
 		$rows_all = $this->pengadaanbarang_model->get_data();
 
 
@@ -271,7 +278,9 @@ class Pengadaanbarang extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
-		
+		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
 		$rows = $this->pengadaanbarang_model->get_data($this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();
 
@@ -281,7 +290,7 @@ class Pengadaanbarang extends CI_Controller {
 		}else{
 			$unlock = 0;
 		}
-
+		
 		foreach($rows as $act) {
 			$data[] = array(
 				'id_pengadaan' 				=> $act->id_pengadaan,
@@ -293,8 +302,8 @@ class Pengadaanbarang extends CI_Controller {
 				'nilai_pengadaan'			=> number_format($act->nilai_pengadaan,2),
 				'keterangan'				=> $act->keterangan,
 				'detail'					=> 1,
-				'edit'						=> $unlock,
-				'delete'					=> $unlock
+				'edit'						=> 1,//$unlock,
+				'delete'					=> 1//$unlock
 			);
 		}
 
@@ -320,7 +329,14 @@ class Pengadaanbarang extends CI_Controller {
 		}else{
 			$data['unlock'] = 0;
 		}
+		$kodepuskesmas = $this->session->userdata('puskesmas');
+		if(substr($kodepuskesmas, -2)=="01"){
+			$this->db->like('code','P'.substr($kodepuskesmas, 0,7));
+		}else {
+			$this->db->like('code','P'.$kodepuskesmas);
+		}
 
+		$data['datapuskesmas'] 	= $this->inv_ruangan_model->get_data_puskesmas();
 		$data['content'] = $this->parser->parse("inventory/pengadaan_barang/show",$data,true);
 		$this->template->show($data,"home");
 	}
@@ -373,6 +389,13 @@ class Pengadaanbarang extends CI_Controller {
 			$data['title_form']="Tambah Pengadaan Barang";
 			$data['action']="add";
 			$data['kode']="";
+			$kodepuskesmas = $this->session->userdata('puskesmas');
+			if(substr($kodepuskesmas, -2)=="01"){
+				$this->db->like('code','P'.substr($kodepuskesmas,0,7));
+			}else{
+				$this->db->like('code','P'.$kodepuskesmas);
+			}
+			$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
 
 			$data['kodestatus'] = $this->pengadaanbarang_model->get_data_status();
 		
@@ -402,7 +425,13 @@ class Pengadaanbarang extends CI_Controller {
 			$data['title_form']		= "Ubah Pengadaan Barang";
 			$data['action']			= "edit";
 			$data['kode']			= $id_pengadaan;
-
+			$kodepuskesmas = $this->session->userdata('puskesmas');
+			if(substr($kodepuskesmas, -2)=="01"){
+				$this->db->like('code','P'.substr($kodepuskesmas,0,7));
+			}else{
+				$this->db->like('code','P'.$kodepuskesmas);
+			}
+			$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
 			$data['kodestatus'] = $this->pengadaanbarang_model->get_data_status();
 			$data['kodestatus_inv'] = $this->pengadaanbarang_model->pilih_data_status('status_inventaris');
 			$data['barang']	  	= $this->parser->parse('inventory/pengadaan_barang/barang', $data, TRUE);
