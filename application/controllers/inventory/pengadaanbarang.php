@@ -275,8 +275,8 @@ class Pengadaanbarang extends CI_Controller {
 		$rows = $this->pengadaanbarang_model->get_data($this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();
 
-		$kodepuskesmas = $this->session->userdata('puskesmas');
-		/*if(substr($kodepuskesmas, -2)=="01"){
+		/*$kodepuskesmas = $this->session->userdata('puskesmas');
+		if(substr($kodepuskesmas, -2)=="01"){
 			$unlock = 1;
 		}else{
 			$unlock = 0;
@@ -293,8 +293,8 @@ class Pengadaanbarang extends CI_Controller {
 				'nilai_pengadaan'			=> number_format($act->nilai_pengadaan,2),
 				'keterangan'				=> $act->keterangan,
 				'detail'					=> 1,
-				'edit'						=> $unlock,
-				'delete'					=> $unlock
+				'edit'						=> 1,//$unlock,
+				'delete'					=> 1//$unlock
 			);
 		}
 
