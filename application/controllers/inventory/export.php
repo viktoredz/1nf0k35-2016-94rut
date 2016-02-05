@@ -292,11 +292,6 @@ class Export extends CI_Controller {
 		}else{
 			$namaruang = $this->input->post('ruang');
 		}
-		if(empty($ruang) or $ruang == 'Pilih Ruangan'){
-			$namaruang = 'Semua Data Ruangan';
-		}else{
-			$namaruang = $this->input->post('ruang');
-		}
 		if(empty($tanggal_export) or $tanggal_export == ''){
 			$tanggal_export = date('d-m-Y');
 		}else{
