@@ -41,7 +41,9 @@ class Pengadaanbarang extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
-		
+		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
 		$rows_all = $this->pengadaanbarang_model->get_data();
 
 
@@ -65,7 +67,9 @@ class Pengadaanbarang extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
-		
+		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
 		$rows = $this->pengadaanbarang_model->get_data($this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$rows = $this->pengadaanbarang_model->get_data();
 		$data = array();
@@ -247,7 +251,10 @@ class Pengadaanbarang extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
-		
+		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
+
 		$rows_all = $this->pengadaanbarang_model->get_data();
 
 
@@ -271,17 +278,19 @@ class Pengadaanbarang extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
-		
+		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
 		$rows = $this->pengadaanbarang_model->get_data($this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();
 
-		/*$kodepuskesmas = $this->session->userdata('puskesmas');
+		$kodepuskesmas = $this->session->userdata('puskesmas');
 		if(substr($kodepuskesmas, -2)=="01"){
 			$unlock = 1;
 		}else{
 			$unlock = 0;
 		}
-		*/
+		
 		foreach($rows as $act) {
 			$data[] = array(
 				'id_pengadaan' 				=> $act->id_pengadaan,
@@ -320,7 +329,14 @@ class Pengadaanbarang extends CI_Controller {
 		}else{
 			$data['unlock'] = 0;
 		}
+		$kodepuskesmas = $this->session->userdata('puskesmas');
+		if(substr($kodepuskesmas, -2)=="01"){
+			$this->db->like('code','P'.substr($kodepuskesmas, 0,7));
+		}else {
+			$this->db->like('code','P'.$kodepuskesmas);
+		}
 
+		$data['datapuskesmas'] 	= $this->inv_ruangan_model->get_data_puskesmas();
 		$data['content'] = $this->parser->parse("inventory/pengadaan_barang/show",$data,true);
 		$this->template->show($data,"home");
 	}

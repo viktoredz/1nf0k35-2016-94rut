@@ -19,15 +19,26 @@
 	    </div>
 
       	<div class="box-footer">
-	      <div class="col-md-6">
+	      <div class="col-md-8">
 	      	<?php //if($unlock==1){ ?>
 		 	<button type="button" class="btn btn-primary" onclick="document.location.href='<?php echo base_url()?>inventory/pengadaanbarang/add'"><i class='fa fa-plus-square-o'></i> &nbsp; Pengadaan Baru</button>
 			<?php //} ?>		 	
 		 	<button type="button" class="btn btn-success" id="btn-refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
           <button type="button" id="btn-export" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Export</button>
 	     </div>
-	      <div class="col-md-6">
-	     </div>
+	      <div class="col-md-4">
+	     	<div class="row">
+		     	<div class="col-md-4" style="padding-top:5px;"><label> Puskesmas </label> </div>
+		     	<div class="col-md-8">
+		     		<select name="code_cl_phc" id="puskesmas" class="form-control">
+						<?php foreach ($datapuskesmas as $row ) { ;?>
+							<option value="<?php echo $row->code; ?>" onchange="" ><?php echo $row->value; ?></option>
+						<?php	} ;?>
+			     	</select>
+			     </div>	
+	     	</div>
+		  </div>
+		</div>
 		</div>
         <div class="box-body">
 		    <div class="div-grid">
