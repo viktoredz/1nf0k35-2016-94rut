@@ -152,17 +152,27 @@ class Lap_rkbu extends CI_Controller {
 		$data_tabel[] = array('no'=> '4', 'tgl'=>'10/10/2010' , 'ruangan'=>'Hill'      , 'jumlah'=>'19', 'keterangan'=>'bagus', 'status'=>'bagus');
 		*/
 		$puskes = $this->input->post('puskes'); 
-		if(empty($puskes) or $puskes == 'Pilih Puskesmas'){
-			$nama = 'Semua Data Puskesmas';
+		if(empty($puskes) or $puskes == 'Pilih Puskesmas'){	
+				$nama = 'Semua Data Puskesmas';
 		}else{
-			$nama = $this->input->post('puskes');
+				$nama = $this->inv_barang_model->get_nama('value','cl_phc','code',$this->input->post('puskes'));
 		}
 		$tanggal = $this->input->post('filter_tanggal'); 
 		$tanggal1 = $this->input->post('filter_tanggal1'); 
+		if(empty($tanggal) or $tanggal == '' or empty($tanggal1) or $tanggal1 == ''){
+			$tanggal = date('d-m-Y');
+			$tanggal1 = date('d-m-Y');
+		}else{
+			$tanggals = explode("-", $this->input->post('filter_tanggal'));
+			$tanggal = $tanggals[2].'-'.$tanggals[1].'-'.$tanggals[0];
+			$tanggals1 = explode("-", $this->input->post('filter_tanggal1'));
+			$tanggal1 = $tanggals1[2].'-'.$tanggals1[1].'-'.$tanggals1[0];
+		}
+		$ruang = $this->input->post('ruang');
 		if(empty($ruang) or $ruang == 'Pilih Ruangan'){
 			$ruang = '-';
 		}else{
-			$ruang = $this->input->post('ruang');
+			$ruang = $this->inv_barang_model->get_nama('nama_ruangan','mst_inv_ruangan','id_mst_inv_ruangan',$this->input->post('ruang'));
 		}
 		$data_puskesmas[] = array('nama_puskesmas' => $nama,'tanggal' => $tanggal,'tanggal1' => $tanggal1,'ruang' => $ruang);
 		
