@@ -123,8 +123,8 @@ class Lap_pengadaan extends CI_Controller {
 		if($this->input->post('status') != '') {
 			$this->db->where("inv_pengadaan.pilihan_status_pengadaan",$this->input->post('status'));
 		}
-		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
-			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		if ($this->input->post('puskesmas')!='' or empty($this->input->post('puskesmas'))) {
+			$this->db->where('code_cl_phc',$this->input->post('puskesmas'));
 		}
 		$rows_all = $this->lap_pengadaan_model->get_data();
 
@@ -187,8 +187,9 @@ class Lap_pengadaan extends CI_Controller {
 		$kode_sess=$this->session->userdata('puskesmas');
 		$kd_prov = $this->inv_barang_model->get_nama('value','cl_province','code',substr($kode_sess, 0,2));
 		$kd_kab  = $this->inv_barang_model->get_nama('value','cl_district','code',substr($kode_sess, 0,4));
+		$puskesmas  = $this->inv_barang_model->get_nama('value','cl_phc','code','P'.$kode_sess);
 		
-		$data_puskesmas[] = array('tanggal_export'=>$tanggal_export,'tanggal_export1'=>$tanggal_export1,'kd_kab' => $kd_kab,'kd_prov' => $kd_prov);
+		$data_puskesmas[] = array('tanggal_export'=>$tanggal_export,'tanggal_export1'=>$tanggal_export1,'kd_kab' => $kd_kab,'kd_prov' => $kd_prov,'puskesmas' => $puskesmas);
 		$dir = getcwd().'/';
 		$template = $dir.'public/files/template/inventory/lap_pengadaan.xlsx';		
 		$TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8);
