@@ -9,6 +9,7 @@ class Lap_pengadaan extends CI_Controller {
 		
 		$this->load->model('inventory/lap_pengadaan_model');
 		$this->load->model('inventory/inv_barang_model');
+		$this->load->model('inventory/inv_ruangan_model');
 		$this->load->model('inventory/distribusibarang_model');
 		$this->load->model('mst/puskesmas_model');
 		$this->load->model('inventory/pengadaanbarang_model');
@@ -18,6 +19,14 @@ class Lap_pengadaan extends CI_Controller {
 		$this->authentication->verify('inventory','edit');
 		$data['title_group'] 	= "Laporan";
 		$data['title_form'] 	= "Pengadaan Barang";;
+		$kodepuskesmas = $this->session->userdata('puskesmas');
+		if(substr($kodepuskesmas, -2)=="01"){
+			$this->db->like('code','P'.substr($kodepuskesmas, 0,7));
+		}else {
+			$this->db->like('code','P'.$kodepuskesmas);
+		}
+
+		$data['datapuskesmas'] 	= $this->inv_ruangan_model->get_data_puskesmas();
 		$data['kodestatus'] = $this->pengadaanbarang_model->get_data_status();
 		$data['content'] = $this->parser->parse("inventory/lap_pengadaan/detail",$data,true);
 
@@ -114,6 +123,9 @@ class Lap_pengadaan extends CI_Controller {
 		if($this->input->post('status') != '') {
 			$this->db->where("inv_pengadaan.pilihan_status_pengadaan",$this->input->post('status'));
 		}
+		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
 		$rows_all = $this->lap_pengadaan_model->get_data();
 
 		if($_POST) {
@@ -140,7 +152,9 @@ class Lap_pengadaan extends CI_Controller {
 		if($this->input->post('status') != '') {
 			$this->db->where("inv_pengadaan.pilihan_status_pengadaan",$this->input->post('status'));
 		}
-
+		if ($this->input->post('puskesmas')!='' or empty($this->input->post('puskesmas'))) {
+			$this->db->where('code_cl_phc',$this->input->post('puskesmas'));
+		}
 		$rows = $this->lap_pengadaan_model->get_data();
 		
 		$data_tabel = array();

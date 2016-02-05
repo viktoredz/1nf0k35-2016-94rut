@@ -34,10 +34,20 @@
 				  	</div>
 				  	<div class="col-md-12">
 						<div class="form-group">
+							<label>Pilih Puskesmas</label>
+							<select  name="puskesmas" id="puskesmas" type="text" class="form-control">
+							      <?php foreach($datapuskesmas as $stat) : ?>
+							        <?php $select = $stat->code == set_value('status') ? 'selected' : '' ?>
+							        <option value="<?php echo $stat->code ?>" <?php echo $select ?>><?php echo $stat->value ?></option>
+							      <?php endforeach ?>
+							  </select>
+						</div>
+				  	</div>
+				  	<div class="col-md-12">
+						<div class="form-group">
 							<label>Pilih Status</label>
 							<select  name="status" id="status" type="text" class="form-control">
 							      <option value="">Pilih Status</option>
-							      </option>
 							      <?php foreach($kodestatus as $stat) : ?>
 							        <?php $select = $stat->code == set_value('status') ? 'selected' : '' ?>
 							        <option value="<?php echo $stat->code ?>" <?php echo $select ?>><?php echo $stat->value ?></option>
@@ -80,6 +90,7 @@
 		var status 		= $("#status").val();
 		var tanggal		= $("#tgl").val();
 		var tanggal1		= $("#tgl1").val();
+		var puskesmas		= $("#puskesmas").val();
 		
 		var t = tanggal.split('-');
 		var tgl = t[2]+'-'+t[1]+'-'+t[0];
@@ -88,7 +99,7 @@
 		$.ajax({
 		        url : '<?php echo site_url('inventory/lap_pengadaan/permohonan_export') ?>',
 		        type : 'POST',
-		        data : 'status='+status+'&filter_tanggal='+tgl+'&filter_tanggal1='+tgl1,
+		        data : 'status='+status+'&filter_tanggal='+tgl+'&filter_tanggal1='+tgl1+'&puskesmas='+puskesmas,
 		        success : function(data) {
 					if(data != ""){
 						location.href = data;
