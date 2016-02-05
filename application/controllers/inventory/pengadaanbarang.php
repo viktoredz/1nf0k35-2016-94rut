@@ -276,12 +276,12 @@ class Pengadaanbarang extends CI_Controller {
 		$data = array();
 
 		$kodepuskesmas = $this->session->userdata('puskesmas');
-		if(substr($kodepuskesmas, -2)=="01"){
+		/*if(substr($kodepuskesmas, -2)=="01"){
 			$unlock = 1;
 		}else{
 			$unlock = 0;
 		}
-
+		*/
 		foreach($rows as $act) {
 			$data[] = array(
 				'id_pengadaan' 				=> $act->id_pengadaan,
@@ -373,6 +373,13 @@ class Pengadaanbarang extends CI_Controller {
 			$data['title_form']="Tambah Pengadaan Barang";
 			$data['action']="add";
 			$data['kode']="";
+			$kodepuskesmas = $this->session->userdata('puskesmas');
+			if(substr($kodepuskesmas, -2)=="01"){
+				$this->db->like('code','P'.substr($kodepuskesmas,0,7));
+			}else{
+				$this->db->like('code','P'.$kodepuskesmas);
+			}
+			$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
 
 			$data['kodestatus'] = $this->pengadaanbarang_model->get_data_status();
 		
@@ -402,7 +409,13 @@ class Pengadaanbarang extends CI_Controller {
 			$data['title_form']		= "Ubah Pengadaan Barang";
 			$data['action']			= "edit";
 			$data['kode']			= $id_pengadaan;
-
+			$kodepuskesmas = $this->session->userdata('puskesmas');
+			if(substr($kodepuskesmas, -2)=="01"){
+				$this->db->like('code','P'.substr($kodepuskesmas,0,7));
+			}else{
+				$this->db->like('code','P'.$kodepuskesmas);
+			}
+			$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
 			$data['kodestatus'] = $this->pengadaanbarang_model->get_data_status();
 			$data['kodestatus_inv'] = $this->pengadaanbarang_model->pilih_data_status('status_inventaris');
 			$data['barang']	  	= $this->parser->parse('inventory/pengadaan_barang/barang', $data, TRUE);

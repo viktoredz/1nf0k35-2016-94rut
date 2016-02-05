@@ -25,9 +25,8 @@
             ?>"></div>
         </div>
         <div class="form-group">
-          <label>Puskesmas<h1></h1></label>
+          <label>Puskesmas</label>
           <select  name="codepus" id="puskesmas" class="form-control">
-          <option value="">Pilih Puskesmas</option>
               <?php foreach($kodepuskesmas as $pus) : ?>
                 <?php $select = $pus->code == set_value('codepus') ? 'selected' : '' ?>
                 <option value="<?php echo $pus->code ?>" <?php echo $select ?>><?php echo $pus->value ?></option>

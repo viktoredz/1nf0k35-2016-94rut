@@ -45,6 +45,15 @@
           } ?>
         </div>
         <div class="form-group">
+          <label>Puskesmas</label>
+          <select  name="codepus" id="puskesmas" class="form-control">
+              <?php foreach($kodepuskesmas as $pus) : ?>
+                <?php $select = $pus->code == set_value('codepus') ? 'selected' : '' ?>
+                <option value="<?php echo $pus->code ?>" <?php echo $select ?>><?php echo $pus->value ?></option>
+              <?php endforeach ?>
+          </select>
+        </div>
+        <div class="form-group">
           <label>Nomor Kontrak</label>
           <?php if(!isset($viewreadonly)){ ?>
           <input type="text" class="form-control" name="nomor_kontrak" placeholder="Nomor Kontrak" value="<?php 
