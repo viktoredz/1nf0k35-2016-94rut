@@ -12,7 +12,7 @@ class Admin_config_model extends CI_Model {
     {
         $query = $this->db->get($this->tabel);
 		foreach($query->result_array() as $key=>$value){
-			$data[$value['key']]=$value['value'];
+			if($value['key']!='district') $data[$value['key']]=$value['value'];
 		}
         return $data;
     }
@@ -51,20 +51,14 @@ class Admin_config_model extends CI_Model {
 		$keywords['value']=$this->input->post('keywords');
 		$this->db->update($this->tabel, $keywords, array('key' => 'keywords'));
 
-		$mail_server['value']=$this->input->post('mail_server');
-		$this->db->update($this->tabel, $mail_server, array('key' => 'mail_server'));
+		$epuskesmas_server['value']=$this->input->post('epuskesmas_server');
+		$this->db->update($this->tabel, $epuskesmas_server, array('key' => 'epuskesmas_server'));
 
-		$mail_port['value']=$this->input->post('mail_port');
-		$this->db->update($this->tabel, $mail_port, array('key' => 'mail_port'));
+		$epuskesmas_user['value']=$this->input->post('epuskesmas_user');
+		$this->db->update($this->tabel, $epuskesmas_user, array('key' => 'epuskesmas_user'));
 
-		$mail_signature['value']=$this->input->post('mail_signature');
-		$this->db->update($this->tabel, $mail_signature, array('key' => 'mail_signature'));
-
-		$mail_user['value']=$this->input->post('mail_user');
-		$this->db->update($this->tabel, $mail_user, array('key' => 'mail_user'));
-
-		$mail_password['value']=$this->input->post('mail_password');
-		$this->db->update($this->tabel, $mail_password, array('key' => 'mail_password'));
+		$epuskesmas_password['value']=$this->input->post('epuskesmas_password');
+		$this->db->update($this->tabel, $epuskesmas_password, array('key' => 'epuskesmas_password'));
 
 		return true;
     }

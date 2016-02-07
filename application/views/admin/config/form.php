@@ -56,30 +56,25 @@
       <!-- general form elements -->
       <div class="box box-warning">
         <div class="box-header">
-          <h3 class="box-title">Mail Configuration</h3>
+          <h3 class="box-title">ePuskesmas Configuration</h3>
         </div><!-- /.box-header -->
 
         <!-- form start -->
           <div class="box-body">
             <div class="form-group">
-              <label for="exampleInputEmail1">Mail Server</label>
-              <input type="text" class="form-control" name="mail_server" placeholder="{mail_server}" value="{mail_server}">
+              <label for="exampleInputEmail1">ePuskesmas Server</label>
+              <input type="text" class="form-control" name="epuskesmas_server" placeholder="Server" value="{epuskesmas_server}">
             </div>
             <div class="form-group">
-              <label for="exampleInputEmail1">Mail Port</label>
-              <input type="text" class="form-control" name="mail_port" placeholder="{mail_port}" value="{mail_port}">
+              <label for="exampleInputEmail1">Username</label>
+              <input type="text" class="form-control" name="epuskesmas_user" placeholder="Username" value="{epuskesmas_user}">
             </div>
             <div class="form-group">
-              <label for="exampleInputEmail1">Mail Signature</label>
-              <input type="text" class="form-control" name="mail_signature" placeholder="{mail_signature}" value="{mail_signature}">
+              <label for="exampleInputEmail1">Password</label>
+              <input type="password" class="form-control" name="epuskesmas_password" placeholder="Password" value="{epuskesmas_password}">
             </div>
             <div class="form-group">
-              <label for="exampleInputEmail1">Mail User</label>
-              <input type="text" class="form-control" name="mail_user" placeholder="{mail_user}" value="{mail_user}">
-            </div>
-            <div class="form-group">
-              <label for="exampleInputEmail1">Mail Password</label>
-              <input type="text" class="form-control" name="mail_password" placeholder="{mail_password}" value="{mail_password}">
+              <button type="button" id="btn-test" class="btn btn-danger">Test Connection</button>
             </div>
           </div><!-- /.box-body -->
           <div class="box-footer">
@@ -96,5 +91,20 @@
 	$(function () {	
 		$("#menu_admin_config").addClass("active");
 		$("#menu_admin_panel").addClass("active");
+
+    $("#btn-test").click(function(){
+      var url = $("[name='epuskesmas_server']").val();
+      var usr = $("[name='epuskesmas_user']").val();
+      var pass = $("[name='epuskesmas_password']").val();
+
+        $.ajax({
+            url: url + '/index.php?act=login',
+            type: 'POST',
+            crossDomain: true,
+            data : 'kode=<?php echo $this->session->userdata('puskesmas')?>&puskesmas=KEC. MATRAMAN&username='+ usr + '&password=' + pass
+        }).done(function (data) {
+            alert(data);                
+        })
+    });
 	});
 </script>
