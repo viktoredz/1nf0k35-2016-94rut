@@ -487,11 +487,7 @@ class Inv_barang_model extends CI_Model {
         }
         	return  $id;
     }
-    function doupload($upload_data,$id){
-        $data['filename'] = $upload_data['file_name'];
-        $this->db->update('inv_inventaris_barang',array('foto_barang'=>$data['filename']),array('id_inventaris_barang'=>$id));
-        return $id;
-    }
+
     function tampilstatus_id($status,$tipe){
         $this->db->select('code');
         $this->db->where('value',$status);

@@ -149,21 +149,12 @@
 					}
                  }
                 },<?php } ?>
-                { text: 'barcode', align: 'center', editable: false,filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
-				    var dataRecord = $("#jqxgrid_barang").jqxGrid('getrowdata', row);
-				    if(dataRecord.delete==1){
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/barcode.png' onclick='barcode_barang(\""+dataRecord.id_mst_inv_barang+"\",\""+dataRecord.barang_kembar_proc+"\",\""+dataRecord.id_inventaris_barang+"\",\""+dataRecord.id_pengadaan+"\");'></a></div>";
-					}else{
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
-					}
-                 }
-                },
 				{ text: 'Kode Barang', align: 'center', cellsalign: 'center', editable: false, datafield: 'id_mst_inv_barang', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
-				{ text: 'Register', align: 'center', cellsalign: 'center', editable: false, datafield: 'register', columntype: 'textbox', filtertype: 'textbox', width: '5%' },
+				{ text: 'Register', align: 'center', cellsalign: 'center', editable: false, datafield: 'register', columntype: 'textbox', filtertype: 'textbox', width: '6%' },
 				{ text: 'Nama Barang ', editable: false,datafield: 'nama_barang', columntype: 'textbox', filtertype: 'textbox', width: '22%'},
 				{ text: 'Harga (Rp.)', align: 'center', cellsalign: 'right', editable: false, datafield: 'harga', columntype: 'textbox', filtertype: 'textbox', width: '10%'},
-				{ text: 'Puskesmas ', editable: false,datafield: 'puskesmas', columntype: 'textbox', filtertype: 'textbox', width: '13%'},
-				{ text: 'Ruangan ', editable: false, datafield: 'nama_ruangan', columntype: 'textbox', filtertype: 'textbox', width: '10%'},
+				{ text: 'Puskesmas ', editable: false,datafield: 'puskesmas', columntype: 'textbox', filtertype: 'textbox', width: '14%'},
+				{ text: 'Ruangan ', editable: false, datafield: 'nama_ruangan', columntype: 'textbox', filtertype: 'textbox', width: '13%'},
 				{ text: '<b><i class="fa fa-pencil-square-o"></i> Status</b>', align: 'center', cellsalign: 'center', datafield: 'value', width: '7%', columntype: 'dropdownlist',
                         createeditor: function (row, column, editor) {
                             // assign a new data source to the dropdownlist.
@@ -1536,19 +1527,6 @@
 		});
 		$("#popup_barang").jqxWindow('open');
 		$.get("<?php echo base_url().'inventory/inv_barang/edit_barang/';?>" + id_barang+'/'+barang_kembar_proc+'/'+id_inventaris_barang+'/'+id_pengadaan, function(data) {
-			$("#popup_barang #popup_content").html(data);
-		});
-	}
-	function barcode_barang(id_barang,barang_kembar_proc,id_inventaris_barang,id_pengadaan){
-		$("#popup_barang #popup_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-		$("#popup_barang").jqxWindow({
-			theme: theme, resizable: false,
-			width: 1000,
-			height: 600,
-			isModal: true, autoOpen: false, modalOpacity: 0.2
-		});
-		$("#popup_barang").jqxWindow('open');
-		$.get("<?php echo base_url().'inventory/inv_barang/edit_barang/';?>" + id_barang+'/'+"barcode"+'/'+id_inventaris_barang+'/'+id_pengadaan, function(data) {
 			$("#popup_barang #popup_content").html(data);
 		});
 	}
