@@ -2,11 +2,11 @@
 class Inv_barang_model extends CI_Model {
 
     var $tabel    = 'inv_inventaris_barang';
-	var $lang	  = '';
+    var $lang     = '';
 
     function __construct() {
         parent::__construct();
-		$this->lang	  = $this->config->item('language');
+        $this->lang   = $this->config->item('language');
     }
     function get_nama($kolom_sl,$tabel,$kolom_wh,$kond){
        $this->db->where($kolom_wh,$kond);
@@ -17,12 +17,12 @@ class Inv_barang_model extends CI_Model {
         }
     }
     function get_data_status()
-    {	
-    	$this->db->where("mst_inv_pilihan.tipe",'status_pengadaan');
- 		$this->db->select('mst_inv_pilihan.*');		
- 		$this->db->order_by('mst_inv_pilihan.code','asc');
-		$query = $this->db->get('mst_inv_pilihan');	
-		return $query->result();	
+    {   
+        $this->db->where("mst_inv_pilihan.tipe",'status_pengadaan');
+        $this->db->select('mst_inv_pilihan.*');     
+        $this->db->order_by('mst_inv_pilihan.code','asc');
+        $query = $this->db->get('mst_inv_pilihan'); 
+        return $query->result();    
     }
     function pilih_data_status($status)
     {   
@@ -209,39 +209,39 @@ class Inv_barang_model extends CI_Model {
         }
         return $query->result();
     }
- 	function get_data_row($kode){
-		$data = array();
-		$this->db->where("inv_pengadaan.id_pengadaan",$kode);
-		$this->db->select("$this->tabel.*,mst_inv_pilihan.value");
+    function get_data_row($kode){
+        $data = array();
+        $this->db->where("inv_pengadaan.id_pengadaan",$kode);
+        $this->db->select("$this->tabel.*,mst_inv_pilihan.value");
         $this->db->join('mst_inv_pilihan', "inv_pengadaan.pilihan_status_pengadaan = mst_inv_pilihan.code AND mst_inv_pilihan.tipe='status_pengadaan'",'left');
-		$query = $this->db->get($this->tabel);
-		if ($query->num_rows() > 0){
-			$data = $query->row_array();
-		}
+        $query = $this->db->get($this->tabel);
+        if ($query->num_rows() > 0){
+            $data = $query->row_array();
+        }
 
-		$query->free_result();    
-		return $data;
-	}
-	function get_data_barang_edit($id_barang,$kd_proc,$kd_inventaris){
-		$data = array();
-		
-		/*$this->db->select("inv_inventaris_barang.id_inventaris_barang,inv_inventaris_barang.id_mst_inv_barang,inv_inventaris_barang.nama_barang,inv_inventaris_barang.harga,
+        $query->free_result();    
+        return $data;
+    }
+    function get_data_barang_edit($id_barang,$kd_proc,$kd_inventaris){
+        $data = array();
+        
+        /*$this->db->select("inv_inventaris_barang.id_inventaris_barang,inv_inventaris_barang.id_mst_inv_barang,inv_inventaris_barang.nama_barang,inv_inventaris_barang.harga,
                         COUNT(inv_inventaris_barang.id_mst_inv_barang) AS jumlah,
                         COUNT(inv_inventaris_barang.id_mst_inv_barang)*inv_inventaris_barang.harga AS totalharga,
                         inv_inventaris_barang.keterangan_pengadaan,inv_inventaris_barang.tanggal_diterima,
                         inv_inventaris_barang.waktu_dibuat,inv_inventaris_barang.terakhir_diubah,inv_inventaris_barang.pilihan_status_invetaris");
-		$this->db->where("id_inventaris_barang",$kd_inventaris);
-		$this->db->where("id_mst_inv_barang",$id_barang);
+        $this->db->where("id_inventaris_barang",$kd_inventaris);
+        $this->db->where("id_mst_inv_barang",$id_barang);
         $this->db->where("barang_kembar_proc",$kd_proc);*/
         $sql="SELECT inv_inventaris_barang.*,COUNT(inv_inventaris_barang.barang_kembar_proc) AS jumlah FROM inv_inventaris_barang WHERE inv_inventaris_barang.barang_kembar_proc = (SELECT barang_kembar_proc FROM inv_inventaris_barang WHERE id_inventaris_barang= ? )";
-		$query = $this->db->query($sql, array($kd_inventaris));
-		if ($query->num_rows() > 0){
-			$data = $query->row_array();
-		}
+        $query = $this->db->query($sql, array($kd_inventaris));
+        if ($query->num_rows() > 0){
+            $data = $query->row_array();
+        }
 
-		$query->free_result();    
-		return $data;
-	}
+        $query->free_result();    
+        return $data;
+    }
 
     function get_register($kd_inventaris){
         $this->db->where('id_inventaris_barang',$kd_inventaris);
@@ -326,21 +326,21 @@ class Inv_barang_model extends CI_Model {
         return $data;
     }
 
-	public function getSelectedData($table,$data){
+    public function getSelectedData($table,$data){
         return $this->db->get_where($table, $data);
     }
 
     function get_permohonan_id($puskesmas="")
     {
-    	$this->db->select('MAX(id_inv_permohonan_barang)+1 as id');
-    	$this->db->where('code_cl_phc',$puskesmas);
-    	$permohonan = $this->db->get('inv_permohonan_barang')->row();
-    	if (empty($permohonan->id)) {
-    		return 1;
-    	}else {
-    		return $permohonan->id;
-    	}
-	}
+        $this->db->select('MAX(id_inv_permohonan_barang)+1 as id');
+        $this->db->where('code_cl_phc',$puskesmas);
+        $permohonan = $this->db->get('inv_permohonan_barang')->row();
+        if (empty($permohonan->id)) {
+            return 1;
+        }else {
+            return $permohonan->id;
+        }
+    }
 
     function get_inventaris($id)
     {
@@ -371,19 +371,19 @@ class Inv_barang_model extends CI_Model {
 
    function insert_entry()
     {
-    	$data['tgl_pengadaan']	            = date("Y-m-d",strtotime($this->input->post('tgl')));
-		$data['pilihan_status_pengadaan']	= $this->input->post('status');
-		$data['keterangan']		            = $this->input->post('keterangan');
+        $data['tgl_pengadaan']              = date("Y-m-d",strtotime($this->input->post('tgl')));
+        $data['pilihan_status_pengadaan']   = $this->input->post('status');
+        $data['keterangan']                 = $this->input->post('keterangan');
         $data['nomor_kontrak']              = $this->input->post('nomor_kontrak');
-		$data['waktu_dibuat']		        = date('Y-m-d H:i:s');
+        $data['waktu_dibuat']               = date('Y-m-d H:i:s');
         $data['terakhir_diubah']            = "0000-00-00 00:00:00";
-		$data['jumlah_unit']      	        = 0;
+        $data['jumlah_unit']                = 0;
         $data['nilai_pengadaan']            = 0;
-		if($this->db->insert($this->tabel, $data)){
-			return $this->db->insert_id();
-		}else{
-			return mysql_error();
-		}
+        if($this->db->insert($this->tabel, $data)){
+            return $this->db->insert_id();
+        }else{
+            return mysql_error();
+        }
     }
     function get_data_puskesmas($start=0,$limit=999999,$options=array())
     {
@@ -456,25 +456,25 @@ class Inv_barang_model extends CI_Model {
 
     function update_entry($kode)
     {
-    	$data['tgl_pengadaan']             = date("Y-m-d",strtotime($this->input->post('tgl')));
+        $data['tgl_pengadaan']             = date("Y-m-d",strtotime($this->input->post('tgl')));
         $data['pilihan_status_pengadaan']   = $this->input->post('status');
         $data['keterangan']                 = $this->input->post('keterangan');
         $data['nomor_kontrak']              = $this->input->post('nomor_kontrak');
         $data['terakhir_diubah']            = date('Y-m-d');
-		$this->db->where('id_pengadaan',$kode);
+        $this->db->where('id_pengadaan',$kode);
 
-		if($this->db->update($this->tabel, $data)){
-			return true;
-		}else{
-			return mysql_error();
-		}
+        if($this->db->update($this->tabel, $data)){
+            return true;
+        }else{
+            return mysql_error();
+        }
     }
     function tampil_id($status){
-    	$this->db->select('code');
-    	$this->db->where('value',$status);
-		$this->db->where('tipe','status_pengadaan');
-		$query=$this->db->get('mst_inv_pilihan');
-		if($query->num_rows()>0)
+        $this->db->select('code');
+        $this->db->where('value',$status);
+        $this->db->where('tipe','status_pengadaan');
+        $query=$this->db->get('mst_inv_pilihan');
+        if($query->num_rows()>0)
         {
             foreach($query->result() as $k)
             {
@@ -485,9 +485,13 @@ class Inv_barang_model extends CI_Model {
         {
             $id = 1;
         }
-        	return  $id;
+            return  $id;
     }
-
+    function doupload($upload_data,$id){
+        $data['filename'] = $upload_data['file_name'];
+        $this->db->update('inv_inventaris_barang',array('foto_barang'=>$data['filename']),array('id_inventaris_barang'=>$id));
+        return $id;
+    }
     function tampilstatus_id($status,$tipe){
         $this->db->select('code');
         $this->db->where('value',$status);
@@ -508,9 +512,9 @@ class Inv_barang_model extends CI_Model {
     }
 
     function update_status()
-    {	
+    {   
         $pilihan_inv    = $this->input->post('pilihan_inv');
-    	$kode_proc      = $this->input->post('kode_proc');
+        $kode_proc      = $this->input->post('kode_proc');
         
         $this->db->where('barang_kembar_proc',$kode_proc);
         $id = $this->db->get("inv_inventaris_barang")->result(); 
@@ -523,10 +527,10 @@ class Inv_barang_model extends CI_Model {
 
     }
     function sum_jumlah_item($kode,$tipe){
-    	$this->db->select_sum($tipe);
-    	$this->db->where('id_pengadaan',$kode);
-		$query=$this->db->get('inv_inventaris_barang');
-		if($query->num_rows()>0)
+        $this->db->select_sum($tipe);
+        $this->db->where('id_pengadaan',$kode);
+        $query=$this->db->get('inv_inventaris_barang');
+        if($query->num_rows()>0)
         {
             foreach($query->result() as $k)
             {
@@ -562,13 +566,13 @@ class Inv_barang_model extends CI_Model {
         $this->db->where('id_pengadaan',$kode);  
         return $query = $this->db->get("inv_inventaris_barang"); 
     }
-	function delete_entry($kode)
-	{
-		$this->db->where('id_pengadaan',$kode);
+    function delete_entry($kode)
+    {
+        $this->db->where('id_pengadaan',$kode);
 
-		return $this->db->delete($this->tabel);
-	}
-	function delete_entryitem($id_barang,$kd_proc,$kd_inventaris){
+        return $this->db->delete($this->tabel);
+    }
+    function delete_entryitem($id_barang,$kd_proc,$kd_inventaris){
         $this->db->where('id_inventaris_barang',$kd_inventaris);
         $this->db->delete('inv_inventaris_distribusi');
         $this->db->where('id_inventaris_barang',$kd_inventaris);
@@ -597,16 +601,16 @@ class Inv_barang_model extends CI_Model {
 
         $this->db->where('id_inventaris_barang',$kd_inventaris);
         return $this->db->delete('inv_inventaris_barang');
-	}
+    }
     function delete_entryitem_table($kode,$id_barang,$table)
     {    
         $this->db->where('id_pengadaan',$kode);
         $this->db->where('id_mst_inv_barang',$id_barang);
         return $this->db->delete($table);
     }
-	function get_databarang($start=0,$limit=999999)
+    function get_databarang($start=0,$limit=999999)
     {
-		$this->db->order_by('uraian','asc');
+        $this->db->order_by('uraian','asc');
         $query = $this->db->get('mst_inv_barang',$limit,$start);
         return $query->result();
     }

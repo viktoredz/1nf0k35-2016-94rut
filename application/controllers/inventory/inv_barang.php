@@ -11,7 +11,54 @@ class Inv_barang extends CI_Controller {
 		$this->load->model('inventory/inv_ruangan_model');
 		$this->load->model('mst/invbarang_model');
 	}
+	function doupload($kode){
+		$this->authentication->verify('inventory','add');
 
+		
+		if(!isset($_FILES['filename']['name']) || $_FILES['filename']['name']==""){
+			echo "ERROR2_File / Dokumen harus ada.";
+		}else{
+			if(count($_FILES)>0){
+				$path='./public/files/foto/';
+				if (!is_dir($path)){
+					mkdir($path);
+				}
+				
+				$path .=$kode;
+				if (!is_dir($path)) {
+					mkdir($path);
+				}
+				
+				@unlink($path."/".$_FILES['filename']['name']);
+				$config['upload_path'] = $path;
+				$config['allowed_types'] = 'jpg|jpeg|png';
+				$config['max_size']	= '999999';
+				$config['overwrite'] = false;
+				$this->load->library('upload', $config);
+				$upload = $this->upload->do_upload('filename');
+				if($upload === FALSE) {
+					echo "ERROR3_".$this->upload->display_errors();
+				}else{
+					$upload_data = $this->upload->data();
+					$kode=$this->inv_barang_model->doupload($upload_data,$kode);
+					if($kode!=false){
+						echo "OK_".$kode;
+					}else{
+						echo "ERROR4_Database Error";
+					}
+				}
+			}else{
+				echo "ERROR5_Upload failed";
+			}
+		}
+	}
+	public function timeline_foto($kode = 0){
+  		$data = array();
+       	//$data['data_comment'] 	= $this->srikandi_model->get_comment($kode);
+  		echo $this->parser->parse("inventory/inv_barang/foto",$data);
+
+  		die();
+  	}
 	function index(){
 		$this->authentication->verify('inventory','edit');
 
@@ -588,6 +635,9 @@ class Inv_barang extends CI_Controller {
    			if($id_pengadaan==0){
 				die($this->parser->parse('inventory/inv_barang/barang_form_edit', $data));
 			}else{
+				if($kd_proc=="barcode"){
+					$data['barcode']		= "active";	
+				}
 				die($this->parser->parse('inventory/inv_barang/barang_form_view', $data));
 			}
 		}else{
