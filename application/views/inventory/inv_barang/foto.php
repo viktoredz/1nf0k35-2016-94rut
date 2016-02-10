@@ -37,7 +37,7 @@ setTimeout(function() {
 
 
 <td>
-<!--<div class="img-thumbnail dg-picture-zoom"  style="background-image: url(<?php echo base_url()?>public/files/foto/<?php echo $row->id_inventaris_barang; ?>/<?php echo htmlspecialchars($row->namafile); ?>); background-size: cover; -webkit-transform: scale(1, 1) perspective(10000px) rotateX(0deg); opacity: 1; background-position: 50% 49%; background-repeat: no-repeat no-repeat;width:170px;height:100px">
+<div class="img-thumbnail dg-picture-zoom"  style="background-image: url(<?php echo base_url()?>public/files/foto/<?php echo $row->id_inventaris_barang; ?>/<?php echo htmlspecialchars($row->namafile); ?>); background-size: cover; -webkit-transform: scale(1, 1) perspective(10000px) rotateX(0deg); opacity: 1; background-position: 50% 49%; background-repeat: no-repeat no-repeat;width:170px;height:100px">
    <a href="#" onclick="deleteimg(<?php echo $row->id_inventaris_barang.','."'".$row->namafile."'";?>)">
    <div style="background:#fbbc11;padding:4px;position:relative;float:left;margin-right:2px;cursor:pointer;height:25px;width:25px" id="btndelete__<?php echo $row->id_inventaris_barang.'__'.$row->namafile;?>">
       <i class="glyphicon glyphicon-trash" style="color:#FFFFFF;font-size:17px;position:relative;" title="Hapus Foto"></i>          
@@ -46,10 +46,10 @@ setTimeout(function() {
    <div style="background:#fbbc11;padding:4px;position:relative;float:left;margin-right:2px;cursor:pointer;height:25px;width:25px" id="zoom">              
       <i class="glyphicon glyphicon-zoom-in" style="color:#FFFFFF;font-size:17px;position:relative;" title="Zoom In"></i>  
    </div>                    
-</div>-->
-<ul class="enlarge">
+</div>
+<!--<ul class="enlarge">
 <li><img src="<?php echo base_url()?>public/files/foto/<?php echo $row->id_inventaris_barang; ?>/<?php echo htmlspecialchars($row->namafile); ?>" width="150px" height="100px" alt="Dechairs" /><span><img src="<?php echo base_url()?>public/files/foto/<?php echo $row->id_inventaris_barang; ?>/<?php echo htmlspecialchars($row->namafile); ?>" alt="Deckchairs" /><br /><?php echo $row->namafile; ?></span></li>
-</ul>
+</ul>-->
 </td>
       <!--<td><img src="<?php echo base_url()?>public/files/foto/<?php echo $row->id_inventaris_barang; ?>/<?php echo htmlspecialchars($row->namafile); ?> " width="170px" height="100px"/></td>-->
 
@@ -64,7 +64,7 @@ setTimeout(function() {
 </tr>
 </div>
 </table>
-
+<!--
 
 <style type="text/css">
   ul.enlarge{
@@ -125,4 +125,4 @@ left: -200px;
 ul.enlarge img, ul.enlarge span{
 behavior: url(pie/PIE.htc); 
 }
-</style>
+</style>-->
