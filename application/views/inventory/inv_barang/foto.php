@@ -75,7 +75,7 @@ ul.enlarge li{
 display:inline-block; /*places the images in a line*/
 position: relative;
 z-index: 0; /*resets the stack order of the list items - later we'll increase this*/
-margin:10px 40px 0 20px;
+margin:10px 10px 0 0px;
 }
 ul.enlarge img{
 background-color:#eae9d4;
@@ -91,7 +91,7 @@ ul.enlarge span{
 position:absolute;
 left: -9999px;
 background-color:#eae9d4;
-padding: 10px;
+padding: 1px;
 font-family: 'Droid Sans', sans-serif;
 font-size:.9em;
 text-align: center; 
