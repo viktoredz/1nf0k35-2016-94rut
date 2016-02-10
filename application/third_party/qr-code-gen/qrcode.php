@@ -36,7 +36,7 @@ class qrcode
       
     //creating text qr code  
     public function text($text){  
-        $this->data = $text;  
+        $this->data = str_replace("%20", " ", $text);  
     }  
       
     //creatng code with sms metadata  

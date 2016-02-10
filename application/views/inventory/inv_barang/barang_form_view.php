@@ -206,7 +206,11 @@
                 </div>
                 <div class="form-group">
                   <label>Barcode</label><br/>
-                  <img src="http://localhost/projek/epuskesmasgarut/inventory/barcode/draw/<?php echo $kd_proc; ?>" >
+                  <img src="http://localhost/projek/epuskesmasgarut/inventory/barcode/draw/<?php echo substr($kd_proc, 1); ?>" >
+                </div>
+                <div class="form-group">
+                  <label>QR code</label><br/>
+                  <img src="http://localhost/projek/epuskesmasgarut/inventory/qrcodes/draw/<?php echo $kd_proc; ?>" >
                 </div>
                 <div class="box-footer">
                 <button type="button" name="btn_simpan" class="btn btn-primary"> Upload </button>

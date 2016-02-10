@@ -12,16 +12,16 @@
 
 
 
-<!--<table>
+<table>
 <tr>
 <?php
-/*   if(isset($data_foto) && !empty($data_foto)){ 
+   if(isset($data_foto) && !empty($data_foto)){ 
       $i=1;
       foreach ($data_foto as $row ) {
 ?>
 
 
-<!--<td>
+<td>
 <div class="img-thumbnail dg-picture-zoom"  style="background-image: url(<?php echo base_url()?>public/files/foto/<?php echo $row->id_inventaris_barang; ?>/<?php echo htmlspecialchars($row->namafile); ?>); background-size: cover; -webkit-transform: scale(1, 1) perspective(10000px) rotateX(0deg); opacity: 1; background-position: 50% 49%; background-repeat: no-repeat no-repeat;width:170px;height:100px">
    <a href="#" onclick="deleteimg(<?php echo $row->id_inventaris_barang.','."'".$row->namafile."'";?>)">
    <div style="background:#fbbc11;padding:4px;position:relative;float:left;margin-right:2px;cursor:pointer;height:25px;width:25px" id="btndelete__<?php echo $row->id_inventaris_barang.'__'.$row->namafile;?>">
@@ -33,17 +33,16 @@
    </div>                    
 </div>
 </td>
-<a href="<?php echo base_url()?>public/files/foto/<?php echo $row->id_inventaris_barang; ?>/<?php echo htmlspecialchars($row->namafile); ?>" class="fancybox" title="African Daisy"><img src="<?php echo base_url()?>public/files/foto/<?php echo $row->id_inventaris_barang; ?>/<?php echo htmlspecialchars($row->namafile); ?>" width="320" height="214" alt="African Daisy"></a>
       <!--<td><img src="<?php echo base_url()?>public/files/foto/<?php echo $row->id_inventaris_barang; ?>/<?php echo htmlspecialchars($row->namafile); ?> " width="170px" height="100px"/></td>-->
 
 <?php
-         /*if(($i%2)==0){
+         if(($i%2)==0){
             echo "</tr><tr>";     
          }
          $i++;
       }
-   }*/
+   }
 ?>
 </tr>
 </div>
-</table>-->
+</table>
