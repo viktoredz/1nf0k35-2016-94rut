@@ -206,7 +206,7 @@
                 </div>
                 <div class="form-group">
                   <label>Barcode</label><br/>
-                  <img src="http://localhost/projek/epuskesmasgarut/inventory/barcode/draw/<?php echo $kd_proc; ?>" widht="150px" height="100px">
+                  <img src="http://localhost/projek/epuskesmasgarut/inventory/barcode/draw/<?php echo $kd_proc; ?>" >
                 </div>
                 <div class="box-footer">
                 <button type="button" name="btn_simpan" class="btn btn-primary"> Upload </button>
