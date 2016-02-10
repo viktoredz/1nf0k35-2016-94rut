@@ -1,25 +1,34 @@
-<img src="<?php echo base_url()?>public/files/foto/10/belanja.png " width="150px" height="100px"/>
-<?php
-  /* $folder = "10"; // Ubah nama foldernya
-   $handle = opendir($folder);
-   echo '<table cellspacing="2" cellpadding="5">';
-   echo '<tr>';
-   $i = 1;
-   $fileGambar = array('png', 'jpg', 'jpeg', 'gif');
 
-   while(false !== ($file = readdir($handle))){
-      $fileAndExt = explode('.', $file);
-      if(in_array(end($fileAndExt), $fileGambar)){
-         echo '<td style="border:1px solid #000000;" align="center">
-            <img src="<?php echo base_url()?>public/files/foto/10/'.$file.'" width="100" /><br />
-            '.$file.'
-         </td>';
-      if(($i % 4) == 0){
-         echo '</tr><tr>';
-      }
-      $i++;
-   }
-}
-   echo '</tr>';
-   echo '</table>';*/
+<table>
+<tr>
+<?php
+   if(isset($data_foto) && !empty($data_foto)){ 
+      $i=1;
+      foreach ($data_foto as $row ) {
 ?>
+
+<td>
+<div class="img-thumbnail dg-picture-zoom"  style="background-image: url(<?php echo base_url()?>public/files/foto/<?php echo $row->id_inventaris_barang; ?>/<?php echo htmlspecialchars($row->namafile); ?>); background-size: cover; -webkit-transform: scale(1, 1) perspective(10000px) rotateX(0deg); opacity: 1; background-position: 50% 49%; background-repeat: no-repeat no-repeat;width:170px;height:100px">
+   <a href="#" onclick="deleteimg(<?php echo $row->id_inventaris_barang.','."'".$row->namafile."'";?>)">
+   <div style="background:#fbbc11;padding:4px;position:relative;float:left;margin-right:2px;cursor:pointer;height:25px;width:25px" id="btndelete__<?php echo $row->id_inventaris_barang.'__'.$row->namafile;?>">
+      <i class="glyphicon glyphicon-trash" style="color:#FFFFFF;font-size:17px;position:relative;" title="Hapus Foto"></i>          
+   </div>            
+   </a>
+   <div style="background:#fbbc11;padding:4px;position:relative;float:left;margin-right:2px;cursor:pointer;height:25px;width:25px" id="zoom">              
+      <i class="glyphicon glyphicon-zoom-in" style="color:#FFFFFF;font-size:17px;position:relative;" title="Zoom In"></i>  
+   </div>                    
+</div>
+</td>
+      <!--<td><img src="<?php echo base_url()?>public/files/foto/<?php echo $row->id_inventaris_barang; ?>/<?php echo htmlspecialchars($row->namafile); ?> " width="170px" height="100px"/></td>-->
+
+<?php
+         if(($i%2)==0){
+            echo "</tr><tr>";     
+         }
+         $i++;
+      }
+   }
+?>
+</tr>
+</div>
+</table>

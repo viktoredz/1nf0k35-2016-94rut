@@ -54,10 +54,18 @@ class Inv_barang extends CI_Controller {
 	}
 	public function timeline_foto($kode = 0){
   		$data = array();
-       	//$data['data_comment'] 	= $this->srikandi_model->get_comment($kode);
+       	$data['data_foto'] 	= $this->inv_barang_model->get_foto($kode);
   		echo $this->parser->parse("inventory/inv_barang/foto",$data);
 
   		die();
+  	}
+  	public function dodelimg($kode = 0,$img="0"){
+  		if ($this->db->delete('inv_inventaris_barang_foto',array('id_inventaris_barang' => $kode,'namafile'=>$img))) {
+  			@unlink("<?php echo base_url()?>public/files/foto/12/".$img);
+  			return 1;
+  		}else{
+  			return  0;
+  		}
   	}
 	function index(){
 		$this->authentication->verify('inventory','edit');
@@ -632,12 +640,13 @@ class Inv_barang extends CI_Controller {
 			$data['notice']			= validation_errors();
    			$data['inventaris'] 	= $this->inv_barang_model->get_inventaris($kd_inventaris); 
    			/*end mengirim status pada masing2 form*/
-   			if($id_pengadaan==0){
+   			if($id_pengadaan=="barcode"){
+   				$data['id_pengadaan'] = "barcode";
+   				$data['kd_proc']		= $kd_proc;
+   				die($this->parser->parse('inventory/inv_barang/barang_form_view', $data));
+   			}else if($id_pengadaan==0){
 				die($this->parser->parse('inventory/inv_barang/barang_form_edit', $data));
 			}else{
-				if($kd_proc=="barcode"){
-					$data['barcode']		= "active";	
-				}
 				die($this->parser->parse('inventory/inv_barang/barang_form_view', $data));
 			}
 		}else{

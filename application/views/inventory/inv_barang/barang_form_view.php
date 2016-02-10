@@ -1,7 +1,8 @@
 
 <script type="text/javascript">
+
   <?php $kodebarang_ = substr($id_mst_inv_barang, 0,2);
-  if($kd_proc!="barcode"){
+  if($id_pengadaan!="barcode"){
       if($kodebarang_=='01') {?>  
             $("#status_sertifikat_tanggal").jqxDateTimeInput({ width: '300px', height: '25px' })
 <?php  }else if($kodebarang_=='02') {?>
@@ -24,7 +25,22 @@
     $("#popup_barang2").jqxWindow('close');
     filter_jqxgrid_inv_barang();
   }
-  
+  function deleteimg(id,name){
+    if(confirm("Anda yakin akan menghapus data ("+name+") ini?")){
+      $.ajax({ 
+        type: "POST",
+        url: "<?php echo base_url()?>inventory/inv_barang/dodelimg/"+id+"/"+name,
+        success: function(response){
+           if(response==""){
+             timeline_foto();          
+           }else{
+             alert('data error');
+             timeline_foto();
+          }
+        }
+       });    
+    }
+  }
     $(function(){
       timeline_foto();
       $('#btn-close').click(function(){
@@ -47,8 +63,10 @@
             var res=response.split("_");
              if(res[0]=="OK"){
                timeline_foto();
+               document.getElementById("filename").value = "";
              }else{
                 alert(res[0]+res[1]+res[2]);
+                timeline_foto();
              }
           }
          });    
@@ -59,7 +77,9 @@
       $("#timeline-foto").html(response);
     });
   }
+
 </script>
+
 
 <div style="padding:15px">
   <div id="notice" class="alert alert-success alert-dismissable" <?php if ($notice==""){ echo 'style="display:none"';} ?> >
@@ -169,12 +189,10 @@
 
     <!--body from edit-->
     <?php 
-      if($kd_proc=="barcode"){
-
-        echo $kd_proc;   
+      if($id_pengadaan=="barcode"){
         ?>      <div class="form-group">
                   <label>Upload Gambar</label>
-                  <input type="file" class="form-control" name="filename" value="<?php 
+                  <input type="file" class="form-control" id="filename" name="filename" value="<?php 
                     if(set_value('filename')=="" && isset($filename)){
                       echo $filename;
                     }else{
@@ -185,6 +203,10 @@
                 <div class="form-group">
                   <label>Foto Gambar</label>
                   <div id="timeline-foto"></div>
+                </div>
+                <div class="form-group">
+                  <label>Barcode</label><br/>
+                  <img src="http://localhost/projek/epuskesmasgarut/inventory/barcode/draw/<?php echo $kd_proc; ?>" widht="150px" height="100px">
                 </div>
                 <div class="box-footer">
                 <button type="button" name="btn_simpan" class="btn btn-primary"> Upload </button>

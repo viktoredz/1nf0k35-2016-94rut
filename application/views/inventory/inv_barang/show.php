@@ -1548,7 +1548,7 @@
 			isModal: true, autoOpen: false, modalOpacity: 0.2
 		});
 		$("#popup_barang").jqxWindow('open');
-		$.get("<?php echo base_url().'inventory/inv_barang/edit_barang/';?>" + id_barang+'/'+"barcode"+'/'+id_inventaris_barang+'/'+id_pengadaan, function(data) {
+		$.get("<?php echo base_url().'inventory/inv_barang/edit_barang/';?>" + id_barang+'/'+barang_kembar_proc+'/'+id_inventaris_barang+'/'+"barcode", function(data) {
 			$("#popup_barang #popup_content").html(data);
 		});
 	}

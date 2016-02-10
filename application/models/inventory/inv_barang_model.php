@@ -469,6 +469,11 @@ class Inv_barang_model extends CI_Model {
             return mysql_error();
         }
     }
+    public function getSelectedkembar($table,$data)
+    {
+        $this->db->select('barang_kembar_proc');
+        return $this->db->get_where($table, $data);
+    }
     function tampil_id($status){
         $this->db->select('code');
         $this->db->where('value',$status);
@@ -487,9 +492,16 @@ class Inv_barang_model extends CI_Model {
         }
             return  $id;
     }
+    function get_foto($id){
+        $this->db->select("*");
+        $this->db->where('id_inventaris_barang',$id);
+        $query=$this->db->get('inv_inventaris_barang_foto');
+        return $query->result();
+    }
     function doupload($upload_data,$id){
-        $data['filename'] = $upload_data['file_name'];
-        $this->db->update('inv_inventaris_barang',array('foto_barang'=>$data['filename']),array('id_inventaris_barang'=>$id));
+        $data['namafile'] = $upload_data['file_name'];
+        $data['id_inventaris_barang'] = $id;
+        $this->db->insert('inv_inventaris_barang_foto',$data);
         return $id;
     }
     function tampilstatus_id($status,$tipe){
