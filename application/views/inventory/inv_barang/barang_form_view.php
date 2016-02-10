@@ -200,6 +200,10 @@
                     }
                   ?>"/> 
                 </div>
+                <div class="box-footer">
+                <button type="button" name="btn_simpan" class="btn btn-primary"> Upload </button>
+                <button type="reset" class="btn btn-warning"> Ulang </button>
+                </div>
                 <div class="form-group">
                   <label>Foto Gambar</label>
                   <div id="timeline-foto"></div>
@@ -210,11 +214,7 @@
                 </div>
                 <div class="form-group">
                   <label>QR code</label><br/>
-                  <img src="http://localhost/projek/epuskesmasgarut/inventory/qrcodes/draw/<?php echo $kd_proc; ?>" >
-                </div>
-                <div class="box-footer">
-                <button type="button" name="btn_simpan" class="btn btn-primary"> Upload </button>
-                <button type="reset" class="btn btn-warning"> Ulang </button>
+                  <img src="http://localhost/projek/epuskesmasgarut/inventory/qrcodes/draw/<?php echo $id_barang.'/'.$kode; ?>" >
                 </div>
         <?php     
       }else{

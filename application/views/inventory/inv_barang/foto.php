@@ -9,9 +9,24 @@
 </script>-->
 
 
+<!--<link rel="stylesheet" type="text/css" href="<?php echo base_url()?>plugins/js/stylezoom.css" />
+<script type="text/javascript">
+
+setTimeout(function() {
+  if (location.hash) {
+    window.scrollTo(0, 0);
+  }
+}, 1);
 
 
-
+</script>
+<div class="holder">
+    <div id="image-1" class="image-lightbox">
+      <span class="close"><a href="#">X</a></span>
+      <img src="http://localhost/projek/epuskesmasgarut/public/files/foto/12/8.jpg" alt="earth!" width="100px" height="100px">
+      <a class="expand" href="#image-1"></a>
+    </div>
+  </div>-->
 <table>
 <tr>
 <?php
@@ -46,3 +61,4 @@
 </tr>
 </div>
 </table>
+
