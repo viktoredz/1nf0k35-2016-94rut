@@ -2,6 +2,7 @@
 <script>
 var code_cl_phc = '<?php echo $code_cl_phc?>';
 	$(function(){
+		ambil_total();
 	   var source = {
 			datatype: "json",
 			type	: "POST",
@@ -93,9 +94,25 @@ var code_cl_phc = '<?php echo $code_cl_phc?>';
 		});
 
 	});
+	function ambil_total()
+	{
+		$.ajax({
+		url: "<?php echo base_url().'inventory/permohonanbarang/total_permohonan/'.$kode ?>",
+		dataType: "json",
+		success:function(data)
+		{ 
+			$.each(data,function(index,elemet){
+				$("#total_jumlah_").html(elemet.totaljumlah);
+				$("#total_harga_").html(elemet.totalharga);
+			});
+		}
+		});
 
+		return false;
+	}
 	function close_popup(){
 		$("#popup_barang").jqxWindow('close');
+		ambil_total();
 	}
 
 	function add_barang(){

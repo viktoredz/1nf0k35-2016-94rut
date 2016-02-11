@@ -65,6 +65,7 @@
 			{ name: 'nama_ruangan', type: 'string'},
 			{ name: 'keterangan', type: 'text'},
 			{ name: 'value', type: 'string'},
+			{ name: 'totalharga', type: 'double'},
 			{ name: 'pilihan_status_pengadaan', type: 'number'},
 			{ name: 'detail', type: 'number'},
 			{ name: 'edit', type: 'number'},
@@ -158,8 +159,9 @@
                 },
                 { text: 'No', align: 'center', cellsalign: 'center',  datafield: 'no',editable:false ,sortable: false, filtertype: 'none', width: '4%' },
 				{ text: 'Tgl. Permohonan', align: 'center', cellsalign: 'center', editable:false , datafield: 'tanggal_permohonan', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '12%' },
-				{ text: 'Lokasi / Ruangan', editable:false ,datafield: 'nama_ruangan', columntype: 'textbox', filtertype: 'textbox', width: '20%' },
+				{ text: 'Lokasi / Ruangan', editable:false ,datafield: 'nama_ruangan', columntype: 'textbox', filtertype: 'textbox', width: '17%' },
 				{ text: 'Jumlah Barang', align: 'center', cellsalign: 'center', editable:false ,datafield: 'jumlah_unit', columntype: 'textbox', filtertype: 'textbox', width: '12%' },
+				{ text: 'Total Harga (Rp.)', align: 'center', cellsalign: 'center', editable:false ,datafield: 'totalharga', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
 				{
 	                text: '<b><i class="fa fa-pencil-square-o"></i> Status </b>', align: 'center', cellsalign: 'center', datafield: 'value', width: '12%', columntype: 'dropdownlist',
 	                createeditor: function (row, column, editor) {
@@ -175,7 +177,7 @@
 	                    if (newvalue == "") return oldvalue;
 	                }
                 },
-				{ text: 'Keterangan', editable:false ,datafield: 'keterangan', columntype: 'textbox', filtertype: 'textbox', width: '28%' }
+				{ text: 'Keterangan', editable:false ,datafield: 'keterangan', columntype: 'textbox', filtertype: 'textbox', width: '15%' }
             ]
 		});
 

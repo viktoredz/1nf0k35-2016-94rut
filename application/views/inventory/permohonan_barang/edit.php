@@ -55,6 +55,18 @@
               }
               ?></textarea>
         </div>
+        <table width="100%">
+          <tr>
+            <th width="25%">Total Jumlah</th>
+            <td>:</td>
+            <td width="70%"><div id="total_jumlah_"></div></td>
+          </tr>
+          <tr>
+            <th>Total Harga</th>
+            <td>:</td>
+            <td><div id="total_harga_"></div></td>
+          </tr>
+        </table>
       </div>
       <div class="box-footer">
         <button type="submit" class="btn btn-primary">Simpan</button>

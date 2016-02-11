@@ -92,6 +92,7 @@ class Permohonanbarang extends CI_Controller {
 				'tgl'		=> date("d-m-Y",strtotime($act->tanggal_permohonan)),				
 				'ruangan'	=> $act->nama_ruangan,
 				'jumlah'	=> $act->jumlah_unit,
+				'totalharga'=> number_format($act->totalharga),
 				'keterangan'=> $act->keterangan,
 				'status'	=> $act->value				
 			);
@@ -174,6 +175,7 @@ class Permohonanbarang extends CI_Controller {
 				'nama_barang'   				=> $act->nama_barang,
 				'jumlah'						=> $act->jumlah,
 				'harga'							=> number_format($act->harga,2),
+				'subtotal'						=> number_format($act->harga*$act->jumlah,2),
 				'keterangan'					=> $act->keterangan				
 			);
 		}
@@ -188,12 +190,14 @@ class Permohonanbarang extends CI_Controller {
 		$keterangan = $this->input->post('keterangan');
 		$ruang = $this->input->post('ruang');
 		$puskesmas = $nama;
-		
+		$jumlahtotal= $this->permohonanbarang_model->totalharga($this->input->post('kode'));
 		#$data_puskesmas[] = array('nama_puskesmas' => $nama, 'tanggal'=> $tanggal, 'keterangan'=>$keterangan, 'ruang'=>$ruang);
 		$data_puskesmas['nama_puskesmas'] = $nama;
 		$data_puskesmas['tanggal'] = $tanggal;
 		$data_puskesmas['ruang'] = $ruang;
 		$data_puskesmas['keterangan'] = $keterangan;
+		$data_puskesmas['totalharga'] = 'Rp. '.number_format($jumlahtotal['totalharga'],2);
+
 		
 		$TBS->ResetVarRef(false);
 		$TBS->VarRef =  &$data_puskesmas;
@@ -359,6 +363,7 @@ class Permohonanbarang extends CI_Controller {
 				'jumlah_unit'			=> $act->jumlah_unit,
 				'nama_ruangan'			=> $act->nama_ruangan,
 				'keterangan'			=> $act->keterangan,
+				'totalharga'			=> number_format($act->totalharga),
 				'value'					=> $act->value,
 				'detail'	=> 1,
 				'edit'		=> 1,
@@ -404,7 +409,18 @@ class Permohonanbarang extends CI_Controller {
 
 		$this->template->show($data,"home");
 	}
-
+	public function total_permohonan($id){
+		$this->db->where('id_inv_permohonan_barang',$id);
+		$this->db->select('sum(jumlah) as totaljumlah,sum(jumlah*harga) as totalharga');
+		$query = $this->db->get('inv_permohonan_barang_item')->result();
+		foreach ($query as $q) {
+			$totalpengadaan[] = array(
+				'totaljumlah' => $q->totaljumlah, 
+				'totalharga' => 'Rp. '.number_format($q->totalharga,2), 
+			);
+			echo json_encode($totalpengadaan);
+		}
+    }
 	public function get_ruangan()
 	{
 		if($this->input->is_ajax_request()) {
