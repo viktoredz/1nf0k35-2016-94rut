@@ -173,6 +173,8 @@ class Pengadaanbarang extends CI_Controller {
 		$nama_puskesmas	= $this->pengadaanbarang_model->get_data_nama($data_puskesmas['code_cl_phc']);
 		$data_puskesmas['puskesmas']		= $nama_puskesmas['value'];
 		$data_puskesmas['tgl_pengadaan']	= date("d-m-Y",strtotime($data_puskesmas['tgl_pengadaan']));
+		$data_puskesmas['tgl_kwitansi']		= date("d-m-Y",strtotime($data_puskesmas['tgl_kwitansi']));
+		$data_puskesmas['nomor_kwitansi']	= $data_puskesmas['nomor_kwitansi'];
 		$data_puskesmas['nilai_pengadaan']	= number_format($data_puskesmas['nilai_pengadaan'],2);
 		$data_puskesmas['pilihan_status_pengadaan']	= $this->pengadaanbarang_model->getPilihan("status_pengadaan",$data_puskesmas['pilihan_status_pengadaan']);
 
