@@ -210,11 +210,11 @@
                 </div>
                 <div class="form-group">
                   <label>Barcode</label><br/>
-                  <img src="http://localhost/projek/epuskesmasgarut/inventory/barcode/draw/<?php echo substr($kd_proc, 1); ?>" >
+                  <img src="<?php echo base_url()?>inventory/barcode/draw/<?php echo substr($kd_proc, 1); ?>" >
                 </div>
                 <div class="form-group">
                   <label>QR code</label><br/>
-                  <img src="http://localhost/projek/epuskesmasgarut/inventory/qrcodes/draw/<?php echo $id_barang.'/'.$kode; ?>" >
+                  <img src="<?php echo base_url()?>inventory/qrcodes/draw/<?php echo $id_barang.'/'.$kode; ?>" >
                 </div>
         <?php     
       }else{
