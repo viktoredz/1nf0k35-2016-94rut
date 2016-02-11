@@ -10,6 +10,7 @@ var code_cl_phc = '<?php echo $code_cl_phc?>';
 			{ name: 'id_inv_permohonan_barang_item', type: 'number' },
 			{ name: 'nama_barang', type: 'string' },
 			{ name: 'jumlah', type: 'number' },
+			{ name: 'harga', type: 'double' },
 			{ name: 'keterangan', type: 'string' },
 			{ name: 'id_inv_permohonan_barang', type: 'number' },
 			{ name: 'code_mst_inv_barang', type: 'string' },
@@ -72,9 +73,10 @@ var code_cl_phc = '<?php echo $code_cl_phc?>';
                 },
 				{ text: 'No', align: 'center', cellsalign: 'center', datafield: 'no', columntype: 'textbox', filtertype: 'none', width: '4%' },
 				{ text: 'Kode Barang', align: 'center', cellsalign: 'center', datafield: 'code_mst_inv_barang', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
-				{ text: 'Nama Barang', datafield: 'nama_barang', columntype: 'textbox', filtertype: 'textbox', width: '36%' },
+				{ text: 'Nama Barang', datafield: 'nama_barang', columntype: 'textbox', filtertype: 'textbox', width: '28%' },
 				{ text: 'Jumlah Barang',  align: 'center', cellsalign: 'center', datafield: 'jumlah', columntype: 'textbox', filtertype: 'textbox', width: '9%'},
-				{ text: 'Keterangan',datafield: 'keterangan', columntype: 'textbox', filtertype: 'textbox', width: '33%'}
+				{ text: 'Harga Barang (RP.)',  align: 'center', cellsalign: 'center', datafield: 'harga', columntype: 'textbox', filtertype: 'textbox', width: '16%'},
+				{ text: 'Keterangan',datafield: 'keterangan', columntype: 'textbox', filtertype: 'textbox', width: '25%'}
            ]
 		});
         

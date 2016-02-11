@@ -66,6 +66,18 @@ class Pengadaanbarang_model extends CI_Model {
 		$query->free_result();    
 		return $data;
 	}
+    function get_data_nama($kode){
+        $data = array();
+        $this->db->select('*');
+        $this->db->where('code',$kode);
+        $query=$this->db->get('cl_phc');
+        if ($query->num_rows() > 0){
+            $data = $query->row_array();
+        }
+
+        $query->free_result();    
+        return $data;
+    }
 	function get_data_barang_edit($id_barang,$kd_proc,$kd_inventaris){
 		$data = array();
 		
@@ -219,6 +231,7 @@ WHERE inv_inventaris_barang.barang_kembar_proc = (SELECT barang_kembar_proc FROM
             'id_pengadaan'          => $kode,
             'tanggal_diterima'      => $tanggal_diterima,
             'barang_kembar_proc'    => $kode_proc,
+            'code_cl_phc'           => 'P'.$this->session->userdata('puskesmas'),
         );
         if($this->db->insert('inv_inventaris_barang', $values)){
             return $this->db->insert_id();

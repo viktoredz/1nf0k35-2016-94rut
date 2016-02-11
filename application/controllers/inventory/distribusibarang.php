@@ -107,11 +107,11 @@ class Distribusibarang extends CI_Controller {
 			*/
 			
 			$kodepuskesmas = $this->session->userdata('puskesmas');
-			if(substr($kodepuskesmas, -2)=="01"){
+			/*if(substr($kodepuskesmas, -2)=="01"){
 				$this->db->like('code','P'.substr($kodepuskesmas, 0,7));
-			}else {
+			}else {*/
 				$this->db->like('code','P'.$kodepuskesmas);
-			}
+			//}
 			$data['datapuskesmas'] 	= $this->inv_barang_model->get_data_puskesmas();
 			$data['data_barang'] 	= $data_barang;
 			$data['notice']			= validation_errors();
@@ -133,15 +133,15 @@ class Distribusibarang extends CI_Controller {
 		$data['title_group'] = "Inventory";
 		$data['title_form'] = "Distribusi Barang";
 
-		$this->session->set_userdata('code_cl_phc',$this->session->userdata('puskesmas'));
+		$this->session->set_userdata('code_cl_phc',$this->input->post('code_cl_phc'));//$this->session->userdata('puskesmas'));
 		$this->session->unset_userdata('code_ruangan');
 
 		$kodepuskesmas = $this->session->userdata('puskesmas');
-		if(substr($kodepuskesmas, -2)=="01"){
+		/*if(substr($kodepuskesmas, -2)=="01"){
 			$this->db->like('code','P'.substr($kodepuskesmas, 0,7));
-		}else {
-			$this->db->like('code','P'.$kodepuskesmas);
-		}
+		}else {*/
+		$this->db->like('code','P'.$kodepuskesmas);
+		//}
 		$data['datapuskesmas'] 	= $this->inv_barang_model->get_data_puskesmas();
 		$data['pilih_kondisi'] = $this->distribusibarang_model->get_pilihan_kondisi();
 		$data['content'] = $this->parser->parse("inventory/distribusi_barang/show",$data,true);
@@ -151,7 +151,7 @@ class Distribusibarang extends CI_Controller {
 	public function get_ruangan()
 	{
 		if($this->input->is_ajax_request()) {
-			$code_cl_phc = 'P'.$this->session->userdata('puskesmas');//$this->input->post('code_cl_phc');
+			$code_cl_phc = $this->input->post('code_cl_phc');//'P'.$this->session->userdata('puskesmas');//;
 			$id_mst_inv_ruangan = $this->input->post('id_mst_inv_ruangan');
 
 			$kode 	= $this->inv_ruangan_model->getSelectedData('mst_inv_ruangan',$code_cl_phc)->result();

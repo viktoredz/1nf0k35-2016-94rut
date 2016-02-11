@@ -14,25 +14,29 @@ class Distribusibarang_model extends CI_Model {
 
 
 		$kodepuskesmas = $this->session->userdata('code_cl_phc');
-		$code_cl_phc = 'P'.$this->session->userdata('puskesmas');//$this->session->userdata('code_cl_phc');
+		$code_cl_phc = $this->session->userdata('code_cl_phc');//'P'.$this->session->userdata('puskesmas');//$this->session->userdata('code_cl_phc');
 		$code_ruangan = $this->session->userdata('code_ruangan');
 
-		if($this->session->userdata('code_ruangan') == 'none'){
+		if($this->session->userdata('code_ruangan') == 'none'){ //belum distribusi
 			//if(substr($kodepuskesmas, -2)=="01"){
 				$this->db->where('inv_inventaris_barang.id_inventaris_barang NOT IN (SELECT DISTINCT id_inventaris_barang FROM inv_inventaris_distribusi) ');
+				$this->db->where('inv_inventaris_barang.code_cl_phc',$this->session->userdata('code_cl_phc'));
 	        	$this->db->join('inv_inventaris_distribusi','inv_inventaris_distribusi.id_inventaris_barang = inv_inventaris_barang.id_inventaris_barang','left');
 			/*}else {
 				$this->db->where('inv_inventaris_distribusi.id_cl_phc',$this->session->userdata('code_cl_phc'));
 	        	$this->db->join('inv_inventaris_distribusi','inv_inventaris_distribusi.id_inventaris_barang = inv_inventaris_barang.id_inventaris_barang','inner');
 			}*/
 		}
-		elseif(!empty($code_cl_phc)){		
+		elseif(!empty($code_cl_phc)){		//seluruh dan per ruangan
 			$this->db->where('inv_inventaris_distribusi.id_cl_phc',$this->session->userdata('code_cl_phc'));
 			$this->db->where('inv_inventaris_distribusi.status','1');
 			
-			if(!empty($code_ruangan) and $code_ruangan == 'all'){
-			}else{
-				$this->db->where('inv_inventaris_distribusi.id_ruangan',$this->session->userdata('code_ruangan'));
+			if(!empty($code_ruangan) and $code_ruangan == 'all'){ //semua ruangan
+			}else{ //per ruangan
+				if ($code_ruangan!='0') {
+					$this->db->where('inv_inventaris_distribusi.id_ruangan',$this->session->userdata('code_ruangan'));
+				}
+				
 			}			
         	$this->db->join('inv_inventaris_distribusi','inv_inventaris_distribusi.id_inventaris_barang = inv_inventaris_barang.id_inventaris_barang','inner');
 			
@@ -51,7 +55,7 @@ class Distribusibarang_model extends CI_Model {
 		if($id_cl_phc=="none"){
 			return " ";
 		}else{
-			if($id_ruangan!="" && $id_cl_phc!=""){
+			if($id_ruangan!="" && $id_cl_phc!=""){ //per ruangan
 				$this->db->where('id_cl_phc', $id_cl_phc);
 				$this->db->where('id_ruangan', $id_ruangan);
 				$this->db->where('status', 1);
@@ -59,17 +63,18 @@ class Distribusibarang_model extends CI_Model {
         		$this->db->join('inv_inventaris_barang','inv_inventaris_distribusi.id_inventaris_barang = inv_inventaris_barang.id_inventaris_barang','inner');
 		        $count = $this->db->get('inv_inventaris_distribusi')->num_rows();
 				return "(".$count.")";
-			}elseif($id_cl_phc!=""){
-				$this->db->where('id_cl_phc', $id_cl_phc);
+			}elseif($id_cl_phc!=""){ //seluruhh ruangan 
+				$this->db->where('inv_inventaris_distribusi.id_cl_phc', $id_cl_phc);
 				$this->db->where('status', 1);
         		$this->db->join('inv_inventaris_barang','inv_inventaris_distribusi.id_inventaris_barang = inv_inventaris_barang.id_inventaris_barang','inner');
 		        $count = $this->db->get('inv_inventaris_distribusi')->num_rows();
 				return "(".$count.")";
 			}
-			else{
-				$puskes = 'P'.$this->session->userdata('puskesmas');
+			else{ //belum distribusi
+				$puskes ='P'.$this->session->userdata('puskesmas');// $this->session->userdata('code_cl_phc');//
 				$this->db->where("inv_inventaris_barang.id_inventaris_barang NOT IN (SELECT DISTINCT id_inventaris_barang FROM inv_inventaris_distribusi) ");
-				$this->db->join('inv_pengadaan',"'inv_inventaris_barang.id_pengadaan = inv_pengadaan.id_pengadaan AND code_cl_phc ='".$puskes."'");
+				$this->db->where('inv_inventaris_barang.code_cl_phc',$this->session->userdata('code_cl_phc'));
+				//$this->db->join('inv_pengadaan',"'inv_inventaris_barang.id_pengadaan = inv_pengadaan.id_pengadaan AND inv_inventaris_barang.code_cl_phc ='".$puskes."'");
         		$count = $query = $this->db->get('inv_inventaris_barang')->num_rows();
 				return "(".$count.")";
 			}

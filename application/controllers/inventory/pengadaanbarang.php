@@ -61,6 +61,7 @@ class Pengadaanbarang extends CI_Controller {
 				}elseif($field != 'year') {
 					$this->db->like($field,$value);
 				}
+
 			}
 
 			if(!empty($ord)) {
@@ -81,6 +82,8 @@ class Pengadaanbarang extends CI_Controller {
 			$data_tabel[] = array(
 				'tgl_pengadaan' 			=> date("d-m-Y",strtotime($act->tgl_pengadaan)),
 				'nomor_kontrak' 			=> $act->nomor_kontrak,
+				'nomor_kwitansi' 			=> $act->nomor_kwitansi,
+				'tgl_kwitansi' 				=> date("d-m-Y",strtotime($act->tgl_kwitansi)),
 				'pilihan_status_pengadaan' 	=> $this->pengadaanbarang_model->getPilihan("status_pengadaan",$act->pilihan_status_pengadaan),
 				'jumlah_unit'				=> $act->jumlah_unit,
 				'nilai_pengadaan'			=> number_format($act->nilai_pengadaan,2),
@@ -167,6 +170,8 @@ class Pengadaanbarang extends CI_Controller {
 		}
 
 		$data_puskesmas	= $this->pengadaanbarang_model->get_data_row($id);
+		$nama_puskesmas	= $this->pengadaanbarang_model->get_data_nama($data_puskesmas['code_cl_phc']);
+		$data_puskesmas['puskesmas']		= $nama_puskesmas['value'];
 		$data_puskesmas['tgl_pengadaan']	= date("d-m-Y",strtotime($data_puskesmas['tgl_pengadaan']));
 		$data_puskesmas['nilai_pengadaan']	= number_format($data_puskesmas['nilai_pengadaan'],2);
 		$data_puskesmas['pilihan_status_pengadaan']	= $this->pengadaanbarang_model->getPilihan("status_pengadaan",$data_puskesmas['pilihan_status_pengadaan']);
@@ -330,11 +335,11 @@ class Pengadaanbarang extends CI_Controller {
 			$data['unlock'] = 0;
 		}
 		$kodepuskesmas = $this->session->userdata('puskesmas');
-		if(substr($kodepuskesmas, -2)=="01"){
+		/*if(substr($kodepuskesmas, -2)=="01"){
 			$this->db->like('code','P'.substr($kodepuskesmas, 0,7));
-		}else {
-			$this->db->like('code','P'.$kodepuskesmas);
-		}
+		}else {*/
+		$this->db->like('code','P'.$kodepuskesmas);
+		//}
 
 		$data['datapuskesmas'] 	= $this->inv_ruangan_model->get_data_puskesmas();
 		$data['content'] = $this->parser->parse("inventory/pengadaan_barang/show",$data,true);
@@ -390,11 +395,11 @@ class Pengadaanbarang extends CI_Controller {
 			$data['action']="add";
 			$data['kode']="";
 			$kodepuskesmas = $this->session->userdata('puskesmas');
-			if(substr($kodepuskesmas, -2)=="01"){
+			/*if(substr($kodepuskesmas, -2)=="01"){
 				$this->db->like('code','P'.substr($kodepuskesmas,0,7));
-			}else{
+			}else{*/
 				$this->db->like('code','P'.$kodepuskesmas);
-			}
+			//}
 			$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
 
 			$data['kodestatus'] = $this->pengadaanbarang_model->get_data_status();
@@ -426,11 +431,11 @@ class Pengadaanbarang extends CI_Controller {
 			$data['action']			= "edit";
 			$data['kode']			= $id_pengadaan;
 			$kodepuskesmas = $this->session->userdata('puskesmas');
-			if(substr($kodepuskesmas, -2)=="01"){
+			/*if(substr($kodepuskesmas, -2)=="01"){
 				$this->db->like('code','P'.substr($kodepuskesmas,0,7));
-			}else{
+			}else{*/
 				$this->db->like('code','P'.$kodepuskesmas);
-			}
+			//}
 			$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
 			$data['kodestatus'] = $this->pengadaanbarang_model->get_data_status();
 			$data['kodestatus_inv'] = $this->pengadaanbarang_model->pilih_data_status('status_inventaris');
@@ -462,7 +467,7 @@ class Pengadaanbarang extends CI_Controller {
 			}else{
 				$data['unlock'] = 0;
 			}
-
+			$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
 			$data['kodestatus'] = $this->pengadaanbarang_model->get_data_status();
 			$data['kodestatus_inv'] = $this->pengadaanbarang_model->pilih_data_status('status_inventaris');
 			$data['barang']	  	= $this->parser->parse('inventory/pengadaan_barang/barang', $data, TRUE);
@@ -575,6 +580,7 @@ class Pengadaanbarang extends CI_Controller {
 			$jumlah =$this->input->post('jumlah');
 			$id_barang = $this->input->post('id_mst_inv_barang');
 			$kode_proc = $this->pengadaanbarang_model->barang_kembar_proc($id_barang);
+			$kodepuskesmas = 'P'.$this->session->userdata('puskesmas');
 			for($i=1;$i<=$jumlah;$i++){
 				$values = array(
 					'id_mst_inv_barang'=> $id_barang,
@@ -583,6 +589,7 @@ class Pengadaanbarang extends CI_Controller {
 					'keterangan_pengadaan' => $this->input->post('keterangan_pengadaan'),
 					'barang_kembar_proc' => $kode_proc,
 					'id_pengadaan' => $kode,
+					'code_cl_phc' => $kodepuskesmas,
 				);
 				$simpan=$this->db->insert('inv_inventaris_barang', $values);
 				$id_= $this->db->insert_id();

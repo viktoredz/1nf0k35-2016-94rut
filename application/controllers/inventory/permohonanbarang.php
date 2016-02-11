@@ -43,9 +43,10 @@ class Permohonanbarang extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
-		if($this->session->userdata('filter_code_cl_phc') != '') {
+
+		/*if($this->session->userdata('filter_code_cl_phc') != '') {
 			$this->db->where('inv_permohonan_barang.code_cl_phc',$this->session->userdata('filter_code_cl_phc'));
-		}
+		}*/
 		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
 			$this->db->where('inv_permohonan_barang.code_cl_phc','P'.$this->session->userdata('puskesmas'));
 		}
@@ -72,9 +73,9 @@ class Permohonanbarang extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
-		if($this->session->userdata('filter_code_cl_phc') != '') {
+		/*if($this->session->userdata('filter_code_cl_phc') != '') {
 			$this->db->where('inv_permohonan_barang.code_cl_phc',$this->session->userdata('filter_code_cl_phc'));
-		}
+		}*/
 		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
 			$this->db->where('inv_permohonan_barang.code_cl_phc','P'.$this->session->userdata('puskesmas'));
 		}
@@ -88,7 +89,7 @@ class Permohonanbarang extends CI_Controller {
 			
 			$data_tabel[] = array(
 				'no'		=> $no++,								
-				'tgl'		=> $act->tanggal_permohonan,				
+				'tgl'		=> date("d-m-Y",strtotime($act->tanggal_permohonan)),				
 				'ruangan'	=> $act->nama_ruangan,
 				'jumlah'	=> $act->jumlah_unit,
 				'keterangan'=> $act->keterangan,
@@ -172,6 +173,7 @@ class Permohonanbarang extends CI_Controller {
 				'no'							=> $no++,				
 				'nama_barang'   				=> $act->nama_barang,
 				'jumlah'						=> $act->jumlah,
+				'harga'							=> number_format($act->harga,2),
 				'keterangan'					=> $act->keterangan				
 			);
 		}
@@ -603,6 +605,7 @@ class Permohonanbarang extends CI_Controller {
 				'nama_barang'   				=> $act->nama_barang,
 				'jumlah'						=> $act->jumlah,
 				'keterangan'					=> $act->keterangan,
+				'harga'							=> number_format($act->harga,2),
 				'id_inv_permohonan_barang'		=> $act->id_inv_permohonan_barang,
 				'code_mst_inv_barang'   		=> substr(chunk_split($act->code_mst_inv_barang, 2, '.'),0,14),
 				'edit'		=> 1,

@@ -46,12 +46,20 @@
         </div>
         <div class="form-group">
           <label>Puskesmas</label>
+          <?php if(!isset($viewreadonly)){ ?>
           <select  name="codepus" id="puskesmas" class="form-control">
               <?php foreach($kodepuskesmas as $pus) : ?>
-                <?php $select = $pus->code == set_value('codepus') ? 'selected' : '' ?>
+                <?php $select = $pus->code == $code_cl_phc ? 'selected' : '' ?>
                 <option value="<?php echo $pus->code ?>" <?php echo $select ?>><?php echo $pus->value ?></option>
               <?php endforeach ?>
           </select>
+          <?php }else{ 
+              foreach($kodepuskesmas as $pus) : 
+                if($pus->code == $code_cl_phc ){
+                  echo "<br>".$pus->value ;
+                }
+              endforeach;
+          } ?>
         </div>
         <div class="form-group">
           <label>Nomor Kontrak</label>

@@ -131,9 +131,10 @@
       var areaChartData = {
         labels: [<?php 
         $i=0;
+       // print_r($bar);  
         foreach ($bar as $row ) { 
           if($i>0) echo ",";
-          echo "\"".str_replace(array("KEC. ","KEL. "),"", $row['puskesmas'])."\"";
+            echo "\"".str_replace(array("KEC. ","KEL. "),"", $row['puskesmas'])."\"";
           $i++;
         } ?>],
         datasets: [
