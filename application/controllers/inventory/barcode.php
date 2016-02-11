@@ -18,7 +18,7 @@ class Barcode extends CI_Controller {
 			'code' => "BCGean13",
 			'filetype' => "PNG",
 			'dpi' => 72,
-			'scale' => 2,
+			'scale' => 1,
 			'rotation' => 0,
 			'font_family' => "Arial.ttf",
 			'font_size' => 8,

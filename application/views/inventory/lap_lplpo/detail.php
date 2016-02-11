@@ -64,7 +64,7 @@
 	function doExport(){
       var thn = $("[name='thn']").val();
       var bln = $("[name='bln']").val();
-      var url = "{epuskesmas_server}includes/files/laporan/template/template.php?" + 'app_unit=3205181203&auth=3205181203&file=35&thn='+thn+'&bln='+bln+'&act=view_lplpo"+"&program=sp3&kode=sp3lplpo';
+      var url = "{epuskesmas_server}includes/files/laporan/template/template.php?" + 'app_unit={kodepuskesmas}&auth={kodepuskesmas}&file=35&thn='+thn+'&bln='+bln+'&act=view_lplpo"+"&program=sp3&kode=sp3lplpo';
 
       window.open(url);
 	}

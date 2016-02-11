@@ -149,7 +149,7 @@
 					}
                  }
                 },<?php } ?>
-                { text: 'barcode', align: 'center', editable: false,filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
+                { text: 'IMG', align: 'center', editable: false,filtertype: 'none', sortable: false, width: '4%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid_barang").jqxGrid('getrowdata', row);
 				    if(dataRecord.delete==1){
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/barcode.png' onclick='barcode_barang(\""+dataRecord.id_mst_inv_barang+"\",\""+dataRecord.barang_kembar_proc+"\",\""+dataRecord.id_inventaris_barang+"\",\""+dataRecord.id_pengadaan+"\");'></a></div>";
@@ -159,7 +159,7 @@
                  }
                 },
 				{ text: 'Kode Barang', align: 'center', cellsalign: 'center', editable: false, datafield: 'id_mst_inv_barang', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
-				{ text: 'Register', align: 'center', cellsalign: 'center', editable: false, datafield: 'register', columntype: 'textbox', filtertype: 'textbox', width: '5%' },
+				{ text: 'Register', align: 'center', cellsalign: 'center', editable: false, datafield: 'register', columntype: 'textbox', filtertype: 'textbox', width: '6%' },
 				{ text: 'Nama Barang ', editable: false,datafield: 'nama_barang', columntype: 'textbox', filtertype: 'textbox', width: '22%'},
 				{ text: 'Harga (Rp.)', align: 'center', cellsalign: 'right', editable: false, datafield: 'harga', columntype: 'textbox', filtertype: 'textbox', width: '10%'},
 				{ text: 'Puskesmas ', editable: false,datafield: 'puskesmas', columntype: 'textbox', filtertype: 'textbox', width: '13%'},
