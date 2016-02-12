@@ -60,8 +60,8 @@ var code_cl_phc = '<?php echo $code_cl_phc?>';
 				{ text: 'Kode Barang', align: 'center', cellsalign: 'center', datafield: 'code_mst_inv_barang', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
 				{ text: 'Nama Barang', datafield: 'nama_barang', columntype: 'textbox', filtertype: 'textbox', width: '28%' },
 				{ text: 'Jumlah Barang', align: 'center', cellsalign: 'center', datafield: 'jumlah', columntype: 'textbox', filtertype: 'textbox', width: '10%'},
-				{ text: 'Harga Barang (Rp.)', align: 'center', cellsalign: 'center', datafield: 'harga', columntype: 'textbox', filtertype: 'textbox', width: '14%'},
-				{ text: 'Sub Total (Rp.)',  align: 'center', cellsalign: 'center', datafield: 'subtotal', columntype: 'textbox', filtertype: 'textbox', width: '14%'},
+				{ text: 'Harga Barang (Rp.)', align: 'center', cellsalign: 'right', datafield: 'harga', columntype: 'textbox', filtertype: 'textbox', width: '14%'},
+				{ text: 'Sub Total (Rp.)',  align: 'center', cellsalign: 'right', datafield: 'subtotal', columntype: 'textbox', filtertype: 'textbox', width: '14%'},
 				{ text: 'Keterangan',datafield: 'keterangan', columntype: 'textbox', filtertype: 'textbox', width: '30%'}
            ]
 		});
@@ -135,6 +135,7 @@ var code_cl_phc = '<?php echo $code_cl_phc?>';
 				alert('Data berhasil dihapus');
 
 				$("#jqxgrid_barang").jqxGrid('updatebounddata', 'cells');
+				ambil_total();
 			});
 		}
 	}

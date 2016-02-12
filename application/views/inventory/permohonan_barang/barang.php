@@ -152,6 +152,7 @@ var code_cl_phc = '<?php echo $code_cl_phc?>';
 				alert('Data berhasil dihapus');
 
 				$("#jqxgrid_barang").jqxGrid('updatebounddata', 'cells');
+				ambil_total();
 			});
 		}
 	}
