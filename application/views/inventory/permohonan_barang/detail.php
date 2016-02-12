@@ -75,7 +75,7 @@
         </div>
         <table width="100%">
           <tr>
-            <th width="25%">Total Jumlah</th>
+            <th width="25%">Jumlah Unit</th>
             <td>:</td>
             <td width="70%"><div id="total_jumlah_"></div></td>
           </tr>

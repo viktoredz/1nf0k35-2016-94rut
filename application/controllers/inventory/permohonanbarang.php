@@ -197,6 +197,7 @@ class Permohonanbarang extends CI_Controller {
 		$data_puskesmas['ruang'] = $ruang;
 		$data_puskesmas['keterangan'] = $keterangan;
 		$data_puskesmas['totalharga'] = 'Rp. '.number_format($jumlahtotal['totalharga'],2);
+		$data_puskesmas['totaljumlah'] = $jumlahtotal['totaljumlah'];
 
 		
 		$TBS->ResetVarRef(false);
@@ -410,6 +411,7 @@ class Permohonanbarang extends CI_Controller {
 		$this->template->show($data,"home");
 	}
 	public function total_permohonan($id){
+		$this->db->where('code_cl_phc',"P".$this->session->userdata('puskesmas'));
 		$this->db->where('id_inv_permohonan_barang',$id);
 		$this->db->select('sum(jumlah) as totaljumlah,sum(jumlah*harga) as totalharga');
 		$query = $this->db->get('inv_permohonan_barang_item')->result();

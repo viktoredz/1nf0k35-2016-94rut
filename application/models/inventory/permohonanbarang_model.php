@@ -25,9 +25,9 @@ class Permohonanbarang_model extends CI_Model {
 		return $query->result_array();	
     }
     function get_data($start=0,$limit=999999,$options=array())
-    {	
+    {	$puskesmas_ = 'P'.$this->session->userdata('puskesmas');
     	$this->db->select("$this->tabel.*,mst_inv_ruangan.nama_ruangan,mst_inv_pilihan.value");
-    	$this->db->select("(select SUM(harga*jumlah) AS hrg FROM inv_permohonan_barang_item WHERE id_inv_permohonan_barang=inv_permohonan_barang.id_inv_permohonan_barang) AS totalharga");
+    	$this->db->select("(select SUM(harga*jumlah) AS hrg FROM inv_permohonan_barang_item WHERE id_inv_permohonan_barang=inv_permohonan_barang.id_inv_permohonan_barang and code_cl_phc="."'".$puskesmas_."'".") AS totalharga");
 		$this->db->join('mst_inv_ruangan', "inv_permohonan_barang.id_mst_inv_ruangan = mst_inv_ruangan.id_mst_inv_ruangan and inv_permohonan_barang.code_cl_phc = mst_inv_ruangan.code_cl_phc ",'left');
 		$this->db->join('mst_inv_pilihan', "inv_permohonan_barang.pilihan_status_pengadaan = mst_inv_pilihan.code AND mst_inv_pilihan.tipe='status_pengadaan'",'left');
 		$this->db->order_by('inv_permohonan_barang.id_inv_permohonan_barang','desc');
@@ -36,8 +36,9 @@ class Permohonanbarang_model extends CI_Model {
     }
     function totalharga($kode){
     	$data = array();
+    	$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
     	$this->db->where('id_inv_permohonan_barang',$kode);
-		$this->db->select("sum(harga*jumlah) as totalharga");
+		$this->db->select("sum(harga*jumlah) as totalharga,sum(jumlah) as totaljumlah");
 		$query = $this->db->get("inv_permohonan_barang_item");
 		if ($query->num_rows() > 0){
 			$data = $query->row_array();
