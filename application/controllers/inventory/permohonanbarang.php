@@ -624,6 +624,7 @@ class Permohonanbarang extends CI_Controller {
 				'jumlah'						=> $act->jumlah,
 				'keterangan'					=> $act->keterangan,
 				'harga'							=> number_format($act->harga,2),
+				'subtotal'						=> number_format($act->harga*$act->jumlah,2),
 				'id_inv_permohonan_barang'		=> $act->id_inv_permohonan_barang,
 				'code_mst_inv_barang'   		=> substr(chunk_split($act->code_mst_inv_barang, 2, '.'),0,14),
 				'edit'		=> 1,
