@@ -168,7 +168,7 @@ class Permohonanbarang_model extends CI_Model {
     	$status= $this->input->post('pilihan_status_pengadaan');
     	$data['pilihan_status_pengadaan']	= $this->tampil_id($status);
     	$id = $this->input->post('inv_permohonan_barang');
-		if($this->db->update($this->tabel, $data,array('id_inv_permohonan_barang'=> $id))){
+		if($this->db->update($this->tabel, $data,array('id_inv_permohonan_barang'=> $id,'code_cl_phc'=>'P'.$this->session->userdata('puskesmas')))){
 			return true;
 		}else{
 			return mysql_error();
