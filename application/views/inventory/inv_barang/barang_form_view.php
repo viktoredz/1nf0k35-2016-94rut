@@ -65,7 +65,7 @@
                timeline_foto();
                document.getElementById("filename").value = "";
              }else{
-                alert(res[0]+res[1]+res[2]);
+                alert(res[1]);
                 timeline_foto();
              }
           }
@@ -190,33 +190,33 @@
     <!--body from edit-->
     <?php 
       if($id_pengadaan=="barcode"){
-        ?>      <div class="form-group">
-                  <label>Upload Gambar</label>
-                  <input type="file" class="form-control" id="filename" name="filename" value="<?php 
-                    if(set_value('filename')=="" && isset($filename)){
-                      echo $filename;
-                    }else{
-                      echo  set_value('filename');
-                    }
-                  ?>"/> 
+        ?>      
+                <div class="form-group">
+                  <label>QR Code / Barcode</label>
+                  <br>
+                  <img src="<?php echo base_url()?>inventory/qrcodes/draw/<?php echo $id_barang.'/'.$kode; ?>" >
+                  <img src="<?php echo base_url()?>inventory/barcode/draw/<?php echo substr($kd_proc, 1); ?>" style="padding-left:10%">
                 </div>
                 <div class="box-footer">
-                <button type="button" name="btn_simpan" class="btn btn-primary"> Upload </button>
-                <button type="reset" class="btn btn-warning"> Ulang </button>
-                </div>
-                <div class="form-group">
-                  <label>Foto Gambar</label>
-                  <div id="timeline-foto"></div>
-                </div>
-                <div class="form-group">
-                  <label>Barcode</label><br/>
-                  <img src="<?php echo base_url()?>inventory/barcode/draw/<?php echo substr($kd_proc, 1); ?>" >
-                </div>
-                <div class="form-group">
-                  <label>QR code</label><br/>
-                  <img src="<?php echo base_url()?>inventory/qrcodes/draw/<?php echo $id_barang.'/'.$kode; ?>" >
-                </div>
-        <?php     
+                  <div class="form-group">
+                    <label>Galeri Foto</label>
+                    <input type="file" class="form-control" id="filename" name="filename" value="<?php 
+                      if(set_value('filename')=="" && isset($filename)){
+                        echo $filename;
+                      }else{
+                        echo  set_value('filename');
+                      }
+                    ?>"/> 
+                  </div>
+                  <div class="form-group">
+                    <button type="button" name="btn_simpan" class="btn btn-primary"> Upload Foto</button>
+                    <button type="reset" class="btn btn-warning"> Ulang </button>
+                  </div>
+                  <div class="form-group">
+                    <div id="timeline-foto"></div>
+                  </div>
+                 </div>
+       <?php     
       }else{
 
         $kodebarang_ = substr($id_mst_inv_barang, 0,2);

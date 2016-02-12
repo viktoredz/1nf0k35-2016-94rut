@@ -52,7 +52,7 @@ class Qrcodes extends CI_Controller {
 
 	    $filename = $PNG_TEMP_DIR.$id_barang.'.png';
 	    $errorCorrectionLevel = 'L';
-	    $matrixPointSize = 4;
+	    $matrixPointSize = 3;
 
 	    $text = implode("\n", $data);
 	    QRcode::png($text, $filename, $errorCorrectionLevel, $matrixPointSize, 2);    
