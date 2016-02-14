@@ -20,10 +20,10 @@ class Lap_pengadaan extends CI_Controller {
 		$data['title_group'] 	= "Laporan";
 		$data['title_form'] 	= "Pengadaan Barang";;
 		$kodepuskesmas = $this->session->userdata('puskesmas');
-		if(substr($kodepuskesmas, -2)=="01"){
-			$this->db->like('code','P'.substr($kodepuskesmas, 0,7));
+		if(strlen($kodepuskesmas) == 4){
+			$this->db->like('code','P'.substr($kodepuskesmas, 0,4));
 		}else {
-			$this->db->like('code','P'.$kodepuskesmas);
+			$this->db->where('code','P'.$kodepuskesmas);
 		}
 
 		$data['datapuskesmas'] 	= $this->inv_ruangan_model->get_data_puskesmas();

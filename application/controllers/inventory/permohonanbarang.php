@@ -14,6 +14,26 @@ class Permohonanbarang extends CI_Controller {
 		$this->load->model('mst/invbarang_model');
 	}
 
+	function index(){
+		$this->authentication->verify('inventory','edit');
+		$data['title_group'] = "Inventory";
+		$data['title_form'] = "Daftar Permohonan Barang";
+		$data['statusdata'] = $this->permohonanbarang_model->get_data_status();
+
+		$kodepuskesmas = $this->session->userdata('puskesmas');
+		if(strlen($kodepuskesmas) == 4){
+			$this->db->like('code','P'.substr($kodepuskesmas, 0,4));
+		}else {
+			$this->db->where('code','P'.$kodepuskesmas);
+		}
+
+		$data['datapuskesmas'] 	= $this->inv_ruangan_model->get_data_puskesmas();
+		$data['content'] = $this->parser->parse("inventory/permohonan_barang/show",$data,true);
+
+
+		$this->template->show($data,"home");
+	}
+
 	function permohonan_export(){
 		
 		$TBS = new clsTinyButStrong;		
@@ -390,26 +410,6 @@ class Permohonanbarang extends CI_Controller {
 		}
 	}
 	
-	function index(){
-		$this->authentication->verify('inventory','edit');
-		$data['title_group'] = "Inventory";
-		$data['title_form'] = "Daftar Permohonan Barang";
-		$data['statusdata'] = $this->permohonanbarang_model->get_data_status();
-		$this->db->like('code','p'.substr($this->session->userdata('puskesmas'),0,7));
-
-		$kodepuskesmas = $this->session->userdata('puskesmas');
-		if(substr($kodepuskesmas, -2)=="01"){
-			$this->db->like('code','P'.substr($kodepuskesmas, 0,7));
-		}else {
-			$this->db->like('code','P'.$kodepuskesmas);
-		}
-
-		$data['datapuskesmas'] 	= $this->inv_ruangan_model->get_data_puskesmas();
-		$data['content'] = $this->parser->parse("inventory/permohonan_barang/show",$data,true);
-
-
-		$this->template->show($data,"home");
-	}
 	public function total_permohonan($id){
 		$this->db->where('code_cl_phc',"P".$this->session->userdata('puskesmas'));
 		$this->db->where('id_inv_permohonan_barang',$id);
@@ -472,10 +472,10 @@ class Permohonanbarang extends CI_Controller {
 			$data['kode']="";
 
 			$kodepuskesmas = $this->session->userdata('puskesmas');
-			if(substr($kodepuskesmas, -2)=="01"){
-				$this->db->like('code','P'.substr($kodepuskesmas,0,7));
-			}else{
-				$this->db->like('code','P'.$kodepuskesmas);
+			if(strlen($kodepuskesmas) == 4){
+				$this->db->like('code','P'.substr($kodepuskesmas, 0,4));
+			}else {
+				$this->db->where('code','P'.$kodepuskesmas);
 			}
 			$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
 		

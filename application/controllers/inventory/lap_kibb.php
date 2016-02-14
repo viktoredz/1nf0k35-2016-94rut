@@ -20,11 +20,12 @@ class Lap_kibb extends CI_Controller {
 		$this->db->like('code','p'.substr($this->session->userdata('puskesmas'),0,7));
 
 		$kodepuskesmas = $this->session->userdata('puskesmas');
-		if(substr($kodepuskesmas, -2)=="01"){
-			$this->db->like('code','P'.substr($kodepuskesmas,0,7));
-		}else{
-			$this->db->like('code','P'.$kodepuskesmas);
+		if(strlen($kodepuskesmas) == 4){
+			$this->db->like('code','P'.substr($kodepuskesmas, 0,4));
+		}else {
+			$this->db->where('code','P'.$kodepuskesmas);
 		}
+
 		$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
 		$data['content'] = $this->parser->parse("inventory/lap_kibb/detail",$data,true);
 

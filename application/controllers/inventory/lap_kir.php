@@ -174,10 +174,10 @@ class Lap_kir extends CI_Controller {
 		$this->db->like('code','p'.substr($this->session->userdata('puskesmas'),0,7));
 
 		$kodepuskesmas = $this->session->userdata('puskesmas');
-		if(substr($kodepuskesmas, -2)=="01"){
-			$this->db->like('code','P'.substr($kodepuskesmas,0,7));
-		}else{
-			$this->db->like('code','P'.$kodepuskesmas);
+		if(strlen($kodepuskesmas) == 4){
+			$this->db->like('code','P'.substr($kodepuskesmas, 0,4));
+		}else {
+			$this->db->where('code','P'.$kodepuskesmas);
 		}
 		$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
 		$data['kondisi'] = $this->lap_kir_model->get_pilihan_kondisi()->result();

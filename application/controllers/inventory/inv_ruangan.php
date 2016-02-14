@@ -180,10 +180,10 @@ class Inv_ruangan extends CI_Controller {
 		$this->db->like('code','p'.substr($this->session->userdata('puskesmas'),0,7));
 
 		$kodepuskesmas = $this->session->userdata('puskesmas');
-		if(substr($kodepuskesmas, -2)=="01"){
-			$this->db->like('code','P'.substr($kodepuskesmas, 0,7));
+		if(strlen($kodepuskesmas) == 4){
+			$this->db->like('code','P'.substr($kodepuskesmas, 0,4));
 		}else {
-			$this->db->like('code','P'.$kodepuskesmas);
+			$this->db->where('code','P'.$kodepuskesmas);
 		}
 
 		$data['datapuskesmas'] 	= $this->inv_ruangan_model->get_data_puskesmas();
@@ -232,10 +232,10 @@ class Inv_ruangan extends CI_Controller {
 		$data['id'] = $id;
 
 		$kodepuskesmas = $this->session->userdata('puskesmas');
-		if(substr($kodepuskesmas, -2)=="01"){
-			$this->db->like('code','P'.substr($kodepuskesmas,0,7));
-		}else{
-			$this->db->like('code','P'.$kodepuskesmas);
+		if(strlen($kodepuskesmas) == 4){
+			$this->db->like('code','P'.substr($kodepuskesmas, 0,4));
+		}else {
+			$this->db->where('code','P'.$kodepuskesmas);
 		}
 		$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
 		$data['kondisi'] = $this->inv_ruangan_model->get_pilihan_kondisi()->result();
@@ -268,10 +268,10 @@ class Inv_ruangan extends CI_Controller {
         $this->form_validation->set_rules('codepus', 'Puskesmas', 'trim|required');
 
 		$kodepuskesmas = $this->session->userdata('puskesmas');
-		if(substr($kodepuskesmas, -2)=="01"){
-			$this->db->like('code','P'.substr($kodepuskesmas,0,7));
-		}else{
-			$this->db->like('code','P'.$kodepuskesmas);
+		if(strlen($kodepuskesmas) == 4){
+			$this->db->like('code','P'.substr($kodepuskesmas, 0,4));
+		}else {
+			$this->db->where('code','P'.$kodepuskesmas);
 		}
 		$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
 
@@ -315,10 +315,10 @@ class Inv_ruangan extends CI_Controller {
 			// var_dump($data);
 			// exit();
 			$kodepuskesmas = $this->session->userdata('puskesmas');
-			if(substr($kodepuskesmas, -2)=="01"){
-				$this->db->like('code','P'.substr($kodepuskesmas,0,7));
-			}else{
-				$this->db->like('code','P'.$kodepuskesmas);
+			if(strlen($kodepuskesmas) == 4){
+				$this->db->like('code','P'.substr($kodepuskesmas, 0,4));
+			}else {
+				$this->db->where('code','P'.$kodepuskesmas);
 			}
 			$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
 

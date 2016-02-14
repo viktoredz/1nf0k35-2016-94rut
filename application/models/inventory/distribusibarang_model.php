@@ -97,7 +97,8 @@ class Distribusibarang_model extends CI_Model {
 	function get_register($id_barang, $id_ruangan, $code_cl_phc){
 		$id_kembar = $this->get_kembar_id($id_barang);
 		$this->db->select('register');
-		$this->db->where('id_ruangan', $id_ruangan);
+		if($id_ruangan!='') $this->db->where('id_ruangan', $id_ruangan);
+		else $this->db->where('id_ruangan IS NULL');
 		$this->db->where('id_cl_phc', $code_cl_phc);
 		$this->db->where('barang_kembar_inv', $id_kembar);
 		$this->db->where('status', '1');
