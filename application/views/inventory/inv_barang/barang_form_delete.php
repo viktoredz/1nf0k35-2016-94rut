@@ -7,8 +7,8 @@
 
   function submit(){
       var data = new FormData();
-      $('#notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
-      $('#notice').show();
+      $('#notice-content_delete').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
+      $('#notice_delete').show();
 
       data.append('alasan_penghapusan', $("[name='alasan_penghapusan']").val());
 
@@ -23,16 +23,16 @@
           
             var res  = response.split("|");
             if(res[0]=="OK"){
-                $('#notice').hide();
-                $('#notice-content').html('<div class="alert">'+res[1]+'</div>');
-                $('#notice').show();
+                $('#notice_delete').hide();
+                $('#notice-content_delete').html('<div class="alert">'+res[1]+'</div>');
+                $('#notice_delete').show();
                 filter_jqxgrid_inv_barang();
                 close_popup2();
             }
             else{
-                $('#notice').hide();
-                $('#notice-content').html('<div class="alert">Alasan hapus barang harus isi</div>');
-                $('#notice').show();
+                $('#notice_delete').hide();
+                $('#notice-content_delete').html('<div class="alert">Alasan hapus barang harus isi</div>');
+                $('#notice_delete').show();
             }
         }
       });
@@ -42,13 +42,13 @@
 </script>
 
 <div style="padding:15px">
-  <div id="notice" class="alert alert-success alert-dismissable" <?php if ($notice==""){ echo 'style="display:none"';} ?> >
+  <div id="notice_delete" class="alert alert-success alert-dismissable" <?php if ($notice==""){ echo 'style="display:none"';} ?> >
     <button class="close" type="button" data-dismiss="alert" aria-hidden="true">×</button>
     <h4>
     <i class="icon fa fa-check"></i>
     Information!
     </h4>
-    <div id="notice-content">{notice}</div>
+    <div id="notice-content_delete">{notice}</div>
   </div>
 	<div class="row">
     <?php echo form_open(current_url(), 'id="form-hapus"') ?>
