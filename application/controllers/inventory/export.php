@@ -105,17 +105,25 @@ class Export extends CI_Controller {
 		if (($this->session->userdata('filterHAPUS') == '') ||($this->session->userdata('filterGIB') != '')) {
 				$this->db->where("pilihan_status_invetaris !=","3");
 			}
-		$rows = $this->inv_barang_model->get_data($this->input->post('recordstartindex'), $this->input->post('pagesize'));
-
-		$data = array();
+		$rows = $this->inv_barang_model->get_data(/*$this->input->post('recordstartindex'), $this->input->post('pagesize')*/);
+		$no=1;
+		$data_tabel = array();
 		foreach($rows as $act) {
-			$data[] = array(
+			if((empty($act->tanggal_pembelian))||($act->tanggal_pembelian == null) || ($act->tanggal_pembelian = '')){
+				$tgl_pem= "00-00-0000";
+			}else{
+				$tgl_pem= date("d-m-Y",strtotime($act->tanggal_pembelian));
+			}
+			$data_tabel[] = array(
+				'no'   							=> $no++,
 				'id_inventaris_barang'   		=> $act->id_inventaris_barang,
 				'id_mst_inv_barang'   			=> $act->id_mst_inv_barang,
 				'id_pengadaan'		   			=> $act->id_pengadaan,
 				'barang_kembar_proc'		   	=> $act->barang_kembar_proc,
 				'nama_barang'					=> $act->nama_barang,
-				
+				'register'		   				=> $act->register,
+				'pilihan_keadaan_barang'		=> $act->pilihan_keadaan_barang,
+				'tanggal_pembelian'		   		=> $tgl_pem,
 				'jumlah'						=> $act->jumlah,
 				'harga'							=> number_format($act->harga,2),
 				'totalharga'					=> number_format($act->totalharga,2),
@@ -143,7 +151,17 @@ class Export extends CI_Controller {
 		}else{
 			$namaruang = $this->input->post('ruang');
 		}
-		$data_puskesmas[] = array('nama_puskesmas' => $namapus,'nama_puskesmas' => $namaruang);
+		$kode_sess=$this->session->userdata('puskesmas');
+		$kd_prov = $this->inv_barang_model->get_nama('value','cl_province','code',substr($kode_sess, 0,2));
+		$kd_kab  = $this->inv_barang_model->get_nama('value','cl_district','code',substr($kode_sess, 0,4));
+		$kd_kec  = 'KEC. '.$this->inv_barang_model->get_nama('nama','cl_kec','code',substr($kode_sess, 0,7));
+		$kd_upb  = $this->input->post('namepuskes');
+		$bidang = 'Bidang Kesehatan';
+		$unit = 'Bidang Kesehatan';
+		$subunit = 'Bidang Kesehatan';
+		$upb = 'Bidang Kesehatan';
+
+		$data_puskesmas[] = array('nama_puskesmas' => $namapus,'kd_prov' => $kd_prov,'kd_kab' => $kd_kab,'bidang' => $bidang,'unit' => $unit,'subunit' => $subunit,'upb' => $upb);
 		$dir = getcwd().'/';
 		$template = $dir.'public/files/template/inventory/kibinventaris.xlsx';		
 		$TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8);
@@ -153,7 +171,7 @@ class Export extends CI_Controller {
 		$TBS->MergeBlock('b', $data_puskesmas);
 		
 		$code = uniqid();
-		$output_file_name = 'public/files/hasil/hasil_export_Inventaris_'.$code.'.xlsx';
+		$output_file_name = 'public/files/hasil/hasil_export_KibInventaris_'.$code.'.xlsx';
 		$output = $dir.$output_file_name;
 		$TBS->Show(OPENTBS_FILE, $output); // Also merges all [onshow] automatic fields.
 		

@@ -1617,9 +1617,9 @@
 	      <div class="col-md-9">
 			<button class="btn btn-primary" id='btn_add_barang' type='button'><i class='fa fa-plus-square-o'></i> &nbsp;Tambah Barang</button>
 			<button type="button " class="btn btn-warning" id="btn-refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
-			<?php 	if(!empty($filter_golongan_invetaris) || $filter_golongan_invetaris !=''){  ?>
+			<?php  //	if(!empty($filter_golongan_invetaris) || $filter_golongan_invetaris !=''){  ?>
 			<button type="button" class="btn btn-success" id="btn-export"><i class='fa fa-file-excel-o'></i> &nbsp; Export</button>	
-			<?php } ?>
+			<?php // } ?>
 		  </div>
 		</div>
 		<div class="box-header">
@@ -1696,7 +1696,9 @@
 	    <?php		}	 
 				} ?> 
 	        </ul>
-	     <?php 		if(!isset($filter_golongan_invetaris) || $filter_golongan_invetaris ==''){ ?>	
+	     <?php 		if(!isset($filter_golongan_invetaris) || $filter_golongan_invetaris ==''){ 
+	     	?>	
+
 			        		<div><div id="jqxgrid_barang"></div></div>
 			        		<div><div id="jqxgrid_DataHapus"></div></div>
 
@@ -1939,7 +1941,18 @@
 			var condition	= fltr.filter.getfilters()[0].condition;
 			var filteroperation	= fltr.filter.getfilters()[0].operation;
 			var filterdatafield	= fltr.filtercolumn;
-	<?php  if(isset($filter_golongan_invetaris)){
+	<?php
+	if(!isset($filter_golongan_invetaris) || $filter_golongan_invetaris ==''){
+	?>
+			if(filterdatafield=="tanggal_diterima"){
+					var d = new Date(value);
+					var day = d.getDate();
+					var month = d.getMonth()+1;
+					var year = d.getFullYear();
+					value =  year+'-'+month+'-'+day;
+			}
+
+	<?php }else if(isset($filter_golongan_invetaris)){
 	if($filter_golongan_invetaris=='0100000000'){ ?> 
 				if(filterdatafield=="status_sertifikat_tanggal"){
 					var d = new Date(value);
@@ -2011,8 +2024,8 @@
 		post = post+'&puskes='+$("#code_cl_phc option:selected").val();
 		post = post+'&namepuskes='+$("#code_cl_phc option:selected").text();
 		post = post+'&ruang='+$("#code_ruangan option:selected").text();
-
 		<?php 	if(!isset($filter_golongan_invetaris) || $filter_golongan_invetaris ==''){ ?>
+			
 					$.post("<?php echo base_url()?>inventory/export/permohonan_export_inventori",post,function(response	){
 						window.location.href=response;
 					});
