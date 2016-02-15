@@ -109,10 +109,10 @@ class Export extends CI_Controller {
 		$no=1;
 		$data_tabel = array();
 		foreach($rows as $act) {
-			if((empty($act->tanggal_pembelian))||($act->tanggal_pembelian == null) || ($act->tanggal_pembelian = '')){
-				$tgl_pem= "00-00-0000";
+			if($act->tanggal_pembelian == null){
+				$date="00-00-0000";
 			}else{
-				$tgl_pem= date("d-m-Y",strtotime($act->tanggal_pembelian));
+				$date = date("d-m-Y",strtotime($act->tanggal_pembelian));
 			}
 			$data_tabel[] = array(
 				'no'   							=> $no++,
@@ -123,7 +123,7 @@ class Export extends CI_Controller {
 				'nama_barang'					=> $act->nama_barang,
 				'register'		   				=> $act->register,
 				'pilihan_keadaan_barang'		=> $act->pilihan_keadaan_barang,
-				'tanggal_pembelian'		   		=> $tgl_pem,
+				'tanggal_pembelian'		   		=> $date,
 				'jumlah'						=> $act->jumlah,
 				'harga'							=> number_format($act->harga,2),
 				'totalharga'					=> number_format($act->totalharga,2),
