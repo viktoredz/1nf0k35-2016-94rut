@@ -44,7 +44,16 @@
 				$start=1;
 				foreach($query as $row):?>
 					<tr>
-						<td><input type="checkbox" name="id[]" value="<?php  echo $row->username?>" /></td>
+						<?php 
+		                	if(($row->username=="puskesmas")||($row->username=="sms")||($row->username=="inventory")||($row->username=="keuangan")||($row->username=="kepegawaian")){
+		                ?>
+		                <td align="center"></td>
+		                
+		                <?php
+		                	}else{
+		                ?>
+		                <td><input type="checkbox" name="id[]" value="<?php  echo $row->username?>" /></td>
+		                <?php } ?>
 						<td><?php  echo $start++?>&nbsp;</td>
 						<td><?php  echo $row->username?>&nbsp;</td>
 						<td><?php  echo ucwords($row->level)?>&nbsp;</td>
