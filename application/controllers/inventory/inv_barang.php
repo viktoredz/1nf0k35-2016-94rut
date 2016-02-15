@@ -655,17 +655,17 @@ class Inv_barang extends CI_Controller {
 			$data['notice']			= validation_errors();
    			$data['inventaris'] 	= $this->inv_barang_model->get_inventaris($kd_inventaris); 
    			/*end mengirim status pada masing2 form*/
-   			echo $id_pengadaan.' atas';
+   			//echo $id_pengadaan.' atas';
    			if($id_pengadaan==0){
-   				echo "edit";
+   				//echo "edit";
 				die($this->parser->parse('inventory/inv_barang/barang_form_edit', $data));
 			}else if(($id_pengadaan=="barcode")||($id_pengadaan!=0)){
    				$data['id_pengadaan'] = "barcode";
    				$data['kd_proc']		= $kd_proc;
-   				echo "kiecci";
+   				//echo "kiecci";
    				die($this->parser->parse('inventory/inv_barang/barang_form_view', $data));
    			}else{
-				echo " cobaa";
+				//echo " cobaa";
 				die($this->parser->parse('inventory/inv_barang/barang_form_view', $data));
 			}
 		}else{
@@ -906,17 +906,17 @@ class Inv_barang extends CI_Controller {
 			$data['notice']			= validation_errors();
    			$data['inventaris'] 	= $this->inv_barang_model->get_inventaris($kd_inventaris); 
    			/*end mengirim status pada masing2 form*/
-   			echo $id_pengadaan.' atas';
+   			//echo $id_pengadaan.' atas';
    			if(($id_pengadaan=="barcode")||($id_pengadaan!=0)){
    				$data['id_pengadaan'] = "barcode";
    				$data['kd_proc']		= $kd_proc;
-   				echo "kiecci";
+   				//echo "kiecci";
    				die($this->parser->parse('inventory/inv_barang/barang_form_view', $data));
    			}else if($id_pengadaan==0){
-   				echo "edit";
+   			//	echo "edit";
 				die($this->parser->parse('inventory/inv_barang/barang_form_edit', $data));
 			}else{
-				echo " cobaa";
+			//	echo " cobaa";
 				die($this->parser->parse('inventory/inv_barang/barang_form_view', $data));
 			}
 		}else{
