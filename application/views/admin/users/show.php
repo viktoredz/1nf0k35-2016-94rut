@@ -52,7 +52,16 @@
 						<td align="center"><img src="<?php  echo base_url()?>media/images/status_<?php  echo intval($row->status_active)?>.gif"></td>
 						<td align="center"><img src="<?php  echo base_url()?>media/images/status_<?php  echo intval($row->online)?>.gif"></td>
 						<td align="center"><a href="<?php  echo base_url()?>index.php/admin_user/edit/<?php  echo $row->username?>/<?php  echo $row->code?>" title="Detail Account"><img src="<?php  echo base_url()?>media/images/16_edit.gif" /></a></td>
+		                <?php 
+		                	if(($row->username=="puskesmas")||($row->username=="sms")||($row->username=="inventory")||($row->username=="keuangan")||($row->username=="kepegawaian")){
+		                ?>
+		                <td align="center"><a href="#" title="Delete Account" ><img src="<?php  echo base_url()?>media/images/16_lock.gif"></a></td>
+		                
+		                <?php
+		                	}else{
+		                ?>
 		                <td align="center"><a href="<?php  echo base_url()?>index.php/admin_user/dodel/<?php  echo $row->username?>/<?php  echo $row->code?>" title="Delete Account" onclick="return confirm_delete()" ><img src="<?php  echo base_url()?>media/images/16_del.gif"></a></td>
+		                <?php } ?>
 					</tr>
 				<?php endforeach;?>                   
 				</tbody>

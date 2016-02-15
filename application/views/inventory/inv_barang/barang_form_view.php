@@ -188,7 +188,7 @@
     <div class="box-body">
 
     <!--body from edit-->
-    <?php 
+    <?php // echo $id_pengadaan;
       if($id_pengadaan=="barcode"){
         ?>      
                 <div class="form-group">
