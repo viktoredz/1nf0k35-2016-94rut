@@ -235,8 +235,9 @@
 				alert('Data berhasil dihapus');
 
 				$("#jqxgrid_barang").jqxGrid('updatebounddata', 'cells');
+				ambil_total();
 			});
-			ambil_total();
+			
 		}
 	}
 
