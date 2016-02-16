@@ -188,7 +188,7 @@
     <div class="box-body">
 
     <!--body from edit-->
-    <?php  echo $action."ja";
+    <?php  
       if($action=="barcode"){
         ?>      
                 <div class="form-group">
