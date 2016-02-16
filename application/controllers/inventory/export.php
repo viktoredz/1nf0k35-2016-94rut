@@ -44,15 +44,15 @@ class Export extends CI_Controller {
 			$this->db->where("id_ruangan",$filter);
 		}
 
-		$kodepuskesmas = $this->session->userdata('puskesmas');
+		/*$kodepuskesmas = $this->session->userdata('puskesmas');
 		if(substr($kodepuskesmas, -2)=="01"){
 			if($this->session->userdata('filter_cl_phc') != ''){
 				$kodeplch = $this->session->userdata('filter_cl_phc');
 				$this->db->where("id_cl_phc",$kodeplch);
 			}
-		}else {
+		}else {*/
 			$this->db->where('id_cl_phc',"P".$this->session->userdata('puskesmas'));
-		}
+		//}
 
 		if($this->session->userdata('filterHAPUS') != '') {
 			$this->db->where("pilihan_status_invetaris","3");
@@ -89,15 +89,15 @@ class Export extends CI_Controller {
 			$this->db->where("id_ruangan",$filter);
 		}
 
-		$kodepuskesmas = $this->session->userdata('puskesmas');
+		/*$kodepuskesmas = $this->session->userdata('puskesmas');
 		if(substr($kodepuskesmas, -2)=="01"){
 			if($this->session->userdata('filter_cl_phc') != ''){
 				$kodeplch = $this->session->userdata('filter_cl_phc');
 				$this->db->where("id_cl_phc",$kodeplch);
 			}
-		}else {
+		}else {*/
 			$this->db->where('id_cl_phc',"P".$this->session->userdata('puskesmas'));
-		}
+		//}
 
 		if($this->session->userdata('filterHAPUS') != '') {
 			$this->db->where("pilihan_status_invetaris","3");
