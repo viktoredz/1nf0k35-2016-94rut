@@ -59,7 +59,7 @@ class Export extends CI_Controller {
 		}
 
 		if (($this->session->userdata('filterHAPUS') == '') ||($this->session->userdata('filterGIB') != '')) {
-				$this->db->where("xpilihan_status_invetaris !=","3");
+				$this->db->where("pilihan_status_invetaris !=","3");
 			}
 		$rows_all = $this->inv_barang_model->get_data_laporan();
 
