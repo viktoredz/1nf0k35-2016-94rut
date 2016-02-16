@@ -2,7 +2,7 @@
 <script type="text/javascript">
 
   <?php $kodebarang_ = substr($id_mst_inv_barang, 0,2);
-  if($id_pengadaan!="barcode"){
+  if($action!="barcode"){
       if($kodebarang_=='01') {?>  
             $("#status_sertifikat_tanggal").jqxDateTimeInput({ width: '300px', height: '25px' })
 <?php  }else if($kodebarang_=='02') {?>
@@ -188,8 +188,8 @@
     <div class="box-body">
 
     <!--body from edit-->
-    <?php // echo $id_pengadaan;
-      if($id_pengadaan=="barcode"){
+    <?php  
+      if($action=="barcode"){
         ?>      
                 <div class="form-group">
                   <label>QR Code / Barcode</label>

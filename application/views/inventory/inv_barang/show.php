@@ -1548,7 +1548,7 @@
 			isModal: true, autoOpen: false, modalOpacity: 0.2
 		});
 		$("#popup_barang").jqxWindow('open');
-		$.get("<?php echo base_url().'inventory/inv_barang/edit_barcode/';?>" + id_barang+'/'+barang_kembar_proc+'/'+id_inventaris_barang+'/'+"barcode", function(data) {
+		$.get("<?php echo base_url().'inventory/inv_barang/edit_barcode/';?>" + id_barang+'/'+barang_kembar_proc+'/'+id_inventaris_barang+'/'+id_pengadaan, function(data) {
 			$("#popup_barang #popup_content").html(data);
 		});
 	}
@@ -1657,8 +1657,9 @@
 	    <div class="div-grid">
 	      <div id='jqxtabs'>
 	      	<ul style='margin-left: 20px;'>
-	    <?php 	if(!isset($filter_golongan_invetaris) || $filter_golongan_invetaris ==''){ ?>	
-	     	
+	    <?php 	if(!isset($filter_golongan_invetaris) || $filter_golongan_invetaris ==''){ 
+	    	?>	
+	     		
 	            <li id="inventaris_">Inventaris</li>
 	            <li id="barang_hapus">Barang Dihapuskan</li>
 

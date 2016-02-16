@@ -41,9 +41,24 @@ class Inv_barang_model extends CI_Model {
         return $query->result();    
     }
 
+    function get_pilihan($code,$tipe)
+    {
+        $this->db->where('code',$code);
+        $this->db->where('tipe',$tipe);
+        $this->db->select('value');
+        $query = $this->db->get('mst_inv_pilihan'); 
+        foreach ($query->result() as $data ) {
+                return $data->value;
+        }
+    }
     function get_data($start=0,$limit=999999,$options=array())
     {
         $query = $this->db->get("get_all_inventaris2",$limit,$start);
+        return $query->result();
+    }
+    function get_data_laporan($start=0,$limit=999999,$options=array())
+    {
+        $query = $this->db->get("get_inventaris_laporan",$limit,$start);
         return $query->result();
     }
     

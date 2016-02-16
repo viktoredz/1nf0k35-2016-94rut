@@ -61,7 +61,7 @@ class Export extends CI_Controller {
 		if (($this->session->userdata('filterHAPUS') == '') ||($this->session->userdata('filterGIB') != '')) {
 				$this->db->where("pilihan_status_invetaris !=","3");
 			}
-		$rows_all = $this->inv_barang_model->get_data();
+		$rows_all = $this->inv_barang_model->get_data_laporan();
 
 
 		if($_POST) {
@@ -105,8 +105,9 @@ class Export extends CI_Controller {
 		if (($this->session->userdata('filterHAPUS') == '') ||($this->session->userdata('filterGIB') != '')) {
 				$this->db->where("pilihan_status_invetaris !=","3");
 			}
-		$rows = $this->inv_barang_model->get_data(/*$this->input->post('recordstartindex'), $this->input->post('pagesize')*/);
+		$rows = $this->inv_barang_model->get_data_laporan();
 		$no=1;
+
 		$data_tabel = array();
 		foreach($rows as $act) {
 			if($act->tanggal_pembelian == null){
@@ -114,6 +115,45 @@ class Export extends CI_Controller {
 			}else{
 				$date = date("d-m-Y",strtotime($act->tanggal_pembelian));
 			}
+			if(substr($act->id_mst_inv_barang,0,2)=="01"){
+				$merk = " - ";
+				$nobukti = $act->status_sertifikat_nomor_a;
+				$bahan = " - ";
+				$ukuran = $act->luas_a;
+				$satuan = $this->inv_barang_model->get_pilihan($act->pilihan_satuan_barang_a,"satuan");
+			}else if(substr($act->id_mst_inv_barang, 0,2)=="02"){
+				$merk = $act->merek_type_b;
+				$nobukti = $act->nomor_bpkb_b;
+				$bahan = $this->inv_barang_model->get_pilihan($act->pilihan_bahan_b,"bahan");
+				$ukuran = $act->ukuran_barang_b;
+				$satuan = $this->inv_barang_model->get_pilihan($act->pilihan_satuan_b,"satuan");
+			}else if(substr($act->id_mst_inv_barang,0,2)=="03"){
+				$merk = " - ";
+				$nobukti = $act->dokumen_nomor_c;
+				$bahan = $this->inv_barang_model->get_pilihan($act->pilihan_kons_beton_c,"kons_beton");
+				$ukuran = $act->luas_lantai_c;
+				$satuan = " - ";
+			}else if(substr($act->id_mst_inv_barang,0,2)=="04"){
+				$merk = " - ";
+				$nobukti = $act->dokumen_nomor_d;
+				$bahan = " - ";
+				$ukuran = $act->panjang_d." (Panjang)"." - ".$act->lebar_d." (Lebar)"." - ".$act->luas_d." (Luas)";
+				$satuan = " - ";
+			}else if(substr($act->id_mst_inv_barang,0,2)=="05"){
+				$merk = " - ";
+				$nobukti = " - ";
+				$bahan = $this->inv_barang_model->get_pilihan($act->pilihan_budaya_bahan_e,"bahan");
+				$ukuran = $act->flora_fauna_ukuran_e;
+				$satuan = $this->inv_barang_model->get_pilihan($act->pilihan_satuan_e,"satuan");
+			}else if(substr($act->id_mst_inv_barang,0,2)=="06"){
+				$merk = " - ";
+				$nobukti = $act->dokumen_nomor_f;
+				$bahan = $this->inv_barang_model->get_pilihan($act->pilihan_konstruksi_beton_f,"kons_beton");
+				$ukuran = $act->luas_f;
+				$satuan = " - ";
+			}
+			$asal = $this->inv_barang_model->get_pilihan($act->pilihan_asal,"asal_usul");
+			$keadaan = $this->inv_barang_model->get_pilihan($act->pilihan_keadaan_barang,"keadaan_barang");
 			$data_tabel[] = array(
 				'no'   							=> $no++,
 				'id_inventaris_barang'   		=> $act->id_inventaris_barang,
@@ -122,9 +162,15 @@ class Export extends CI_Controller {
 				'barang_kembar_proc'		   	=> $act->barang_kembar_proc,
 				'nama_barang'					=> $act->nama_barang,
 				'register'		   				=> $act->register,
-				'pilihan_keadaan_barang'		=> $act->pilihan_keadaan_barang,
+				'pilihan_keadaan_barang'		=> $keadaan,
 				'tanggal_pembelian'		   		=> $date,
+				'merk'		   					=> $merk,
+				'nobukti'				   		=> $nobukti,
+				'bahan'		   					=> $bahan,
+				'ukuran'		   				=> $ukuran,
+				'satuan'		   				=> $satuan,
 				'jumlah'						=> $act->jumlah,
+				'pilihan_asal'				   	=> $asal,
 				'harga'							=> number_format($act->harga,2),
 				'totalharga'					=> number_format($act->totalharga,2),
 				'keterangan_pengadaan'			=> $act->keterangan_pengadaan,
