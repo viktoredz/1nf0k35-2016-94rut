@@ -19,14 +19,10 @@ class Invbaranghabispakai_model extends CI_Model {
 
 	function get_data_detail($start=0, $limit=9999999, $options=array()){
 		$data = array();
-		$this->db->where("id_mst_inv_barang_habispakai_jenis",$kode);
+		$this->db->select("*");
 		$this->db->join('mst_inv_barang_habispakai_jenis',"mst_inv_barang_habispakai_jenis.id_mst_inv_barang_habispakai_jenis=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai");
-		$query = $this->db->get_where('mst_inv_barang_habispakai');
-		if ($query->num_rows() > 0){
-			$data = $query->row_array();
-		}
-		$query->free_result();    
-		return $data;
+	    $query = $this->db->get('mst_inv_barang_habispakai',$limit,$start);
+    	return $query->result();
 	}
 
 	function get_data_detail_group($start=0,$limit=9999999, $options=array()){

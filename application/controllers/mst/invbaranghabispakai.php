@@ -100,7 +100,7 @@ class Invbaranghabispakai extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
-
+		$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
 		
 		$rows_all = $this->invbaranghabispakai_model->get_data_detail($kode);
 
@@ -121,8 +121,8 @@ class Invbaranghabispakai extends CI_Controller {
 			}
 		}
 
-		
-		$rows = $this->invbaranghabispakai_model->get_data($this->input->post('recordstartindex'), $this->input->post('pagesize'));
+		$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
+		$rows = $this->invbaranghabispakai_model->get_data_detail($this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();
 		$no=1;
 		//$unlock = 1;
