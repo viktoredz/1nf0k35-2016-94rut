@@ -124,7 +124,7 @@ class Lap_pengadaan extends CI_Controller {
 			$this->db->where("inv_pengadaan.pilihan_status_pengadaan",$this->input->post('status'));
 		}
 		if ($this->input->post('puskesmas')!='' or empty($this->input->post('puskesmas'))) {
-			$this->db->where('code_cl_phc',$this->input->post('puskesmas'));
+			$this->db->where('inv_inventaris_barang.code_cl_phc',$this->input->post('puskesmas'));
 		}
 		$rows_all = $this->lap_pengadaan_model->get_data();
 
@@ -153,7 +153,7 @@ class Lap_pengadaan extends CI_Controller {
 			$this->db->where("inv_pengadaan.pilihan_status_pengadaan",$this->input->post('status'));
 		}
 		if ($this->input->post('puskesmas')!='' or empty($this->input->post('puskesmas'))) {
-			$this->db->where('code_cl_phc',$this->input->post('puskesmas'));
+			$this->db->where('inv_inventaris_barang.code_cl_phc',$this->input->post('puskesmas'));
 		}
 		$rows = $this->lap_pengadaan_model->get_data();
 		
