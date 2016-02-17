@@ -14,9 +14,9 @@
 </div>
 <?php } ?>
 
-<div class="row">
+<!--<div class="row">
 	<!-- left column -->
-	<div class="col-md-6">
+	<!--<div class="col-md-6">
 		<div class="box box-primary">
 			<div class="box-body">
 						<div class="form-group">
@@ -25,15 +25,25 @@
 						</div>
 			</div>
 		</div><!-- /.box -->
-	</div><!-- /.box -->
-</div>	
+	<!--</div><!-- /.box 
+</div>	-->
 
 
 <div class="box box-success">
   <div class="box-body">
-  	<div class="form-group pull-right">					
-		<button onClick="add_barang();" type="button"  class="btn btn-success">Tambah</button>
-		<button type="button" class="btn btn-warning" onClick="document.location.href='<?php echo base_url()?>mst/invbaranghabispakai'">Kembali</button>
+  	<div class="row"> 
+  		<div class="col-md-6"> 
+		  	<div class="form-group">
+				<h4><label>Uraian :</label>
+				<?php echo $uraian;?></h4>
+			</div>
+		</div>
+		<div class="col-md-6"> 
+		  	<div class="form-group pull-right">					
+				<button onClick="add_barang();" type="button"  class="btn btn-success">Tambah</button>
+				<button type="button" class="btn btn-warning" onClick="document.location.href='<?php echo base_url()?>mst/invbaranghabispakai'">Kembali</button>
+			</div>
+		</div>
 	</div>
     <div class="div-grid">
         <div id="jqxTabs">

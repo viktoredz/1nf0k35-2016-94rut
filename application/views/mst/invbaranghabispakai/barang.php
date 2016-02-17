@@ -7,12 +7,18 @@
 			type	: "POST",
 			datafields: [
 			
-			{ name: 'id_mst_inv_barang', type: 'string' },
-			{ name: 'nama_barang', type: 'string' },
-			{ name: 'register', type: 'string' },
-			{ name: 'tahun', type: 'number' },
-			{ name: 'pilihan_keadaan_barang', type: 'string' },
-			{ name: 'harga', type: 'number' },
+			{ name: 'id_mst_inv_barang_habispakai_jenis', type: 'string' },
+			{ name: 'uraian', type: 'string' },
+			{ name: 'no', type: 'string' },
+			{ name: 'id_mst_inv_barang_habispakai', type: 'string' },
+			{ name: 'code', type: 'string' },
+			{ name: 'negara_asal', type: 'number' },
+			{ name: 'merek_tipe', type: 'string' },
+			{ name: 'jenisuraian', type: 'string' },
+			{ name: 'pilihan_satuan', type: 'string' },
+			{ name: 'nama_satuan', type: 'string' },
+			{ name: 'edit', type: 'number' },
+			{ name: 'delete', type: 'number' },
 			
         ],
 		url: "<?php echo site_url('mst/invbaranghabispakai/json_detail/'.$kode); ?>",
@@ -50,23 +56,33 @@
 				return obj.data;    
 			},
 			columns: [
-				{ text: 'Kode Barang', align:'center', cellsalign:'center', editable: false, datafield: 'id_mst_inv_barang', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
-				{ text: 'Nama Barang ', editable: false,datafield: 'nama_barang', columntype: 'textbox', filtertype: 'textbox', width: '35%'},
-				{ text: 'Register ', align:'center', cellsalign:'center', editable: false,datafield: 'register', columntype: 'textbox', filtertype: 'textbox', width: '8%'},
-				{ text: 'Tahun ', align:'center', cellsalign:'center', editable: false,datafield: 'tahun', columntype: 'textbox', filtertype: 'textbox', width: '8%'},
-				<?php 
-				$w = 24/$n_kondisi;
-				foreach($kondisi as $r){ ?>
-					{ text: '<?=$r->id?>',  columngroup : 'kondisi',editable: false, datafield: '<?=$r->id?>', align:'center', cellsalign:'center', columntype: 'textbox', filtertype: 'textbox', width: '<?=$w?>%'},
-				<?php } ?>
-				
-				{ text: 'Harga (Rp)', align:'center', cellsalign:'right', editable: false,datafield: 'harga', columntype: 'textbox', filtertype: 'textbox', width: '15%',  cellsalign: 'right', cellsformat: 'f'}
+				{ text: 'Edit', align: 'center', filtertype: 'none', sortable: false, width: '4%', cellsrenderer: function (row) {
+				    var dataRecord = $("#jqxgrid_barang").jqxGrid('getrowdata', row);
+				    if(dataRecord.edit==1){
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='edit_barang(\""+dataRecord.id_mst_inv_barang_habispakai+"\");'></a></div>";
+					}else{
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
+					}
+                 }
+                },
+				{ text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '4%', cellsrenderer: function (row) {
+				    var dataRecord = $("#jqxgrid_barang").jqxGrid('getrowdata', row);
+				    if(dataRecord.delete==1){
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del_barang(\""+dataRecord.id_mst_inv_barang_habispakai+"\");'></a></div>";
+					}else{
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
+					}
+                 }
+                },
+				{ text: 'No', align: 'center', cellsalign: 'left', datafield: 'no', columntype: 'textbox', filtertype: 'none', width: '4%' },
+				{ text: 'Kode', align: 'center', cellsalign: 'left', datafield: 'code', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
+				{ text: 'Uraian', datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '22%' },
+				{ text: 'Merek Tipe',  align: 'center', cellsalign: 'left', datafield: 'merek_tipe', columntype: 'textbox', filtertype: 'textbox', width: '9%'},
+				{ text: 'Asal Negara', align: 'center', cellsalign: 'left', datafield: 'negara_asal', columntype: 'textbox', filtertype: 'textbox', width: '14%'},
+				{ text: 'Satuan',  align: 'center', cellsalign: 'left', datafield: 'nama_satuan', columntype: 'textbox', filtertype: 'textbox', width: '14%'},
+				{ text: 'Jenis Barang Habis Pakai',  align: 'center', cellsalign: 'left', datafield: 'jenisuraian', columntype: 'textbox', filtertype: 'textbox', width: '19%'},
            				
-           ],
-		   columngroups:
-		   [
-			{text: 'Kondisi', align: 'center', name:'kondisi'}
-		   ]
+           ]
 		});
         
 		$('#clearfilteringbutton').click(function () {
@@ -101,9 +117,9 @@
 		$("#popup_barang").jqxWindow('open');
 	}
 
-	function edit_barang(id_barang,barang_kembar_proc,id_inventaris_barang){
+	function edit_barang(kode){
 		$("#popup_barang #popup_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-		$.get("<?php echo base_url().'mst/invbaranghabispakai/edit_barang/'.$kode.'/';?>" + id_barang+'/'+barang_kembar_proc+'/'+id_inventaris_barang, function(data) {
+		$.get("<?php echo base_url().'mst/invbaranghabispakai/edit_barang/';?>" + kode, function(data) {
 			$("#popup_content").html(data);
 		});
 		$("#popup_barang").jqxWindow({
@@ -114,10 +130,10 @@
 		});
 		$("#popup_barang").jqxWindow('open');
 	}
-	function del_barang(id_barang,barang_kembar_proc){
+	function del_barang(id){
 		var confirms = confirm("Hapus Data ?");
 		if(confirms == true){
-			$.post("<?php echo base_url().'mst/invbaranghabispakai/dodelpermohonan/'.$kode.'/'; ?>" + id_barang+'/'+barang_kembar_proc,  function(){
+			$.post("<?php echo base_url().'mst/invbaranghabispakai/dodelbarang/'; ?>"+id,  function(){
 				alert('Data berhasil dihapus');
 
 				$("#jqxgrid_barang").jqxGrid('updatebounddata', 'cells');

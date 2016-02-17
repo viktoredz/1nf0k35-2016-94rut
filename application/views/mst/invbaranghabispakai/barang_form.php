@@ -36,6 +36,7 @@ if(isset($disable)){if($disable='disable'){?>
                       $('#notice-content').html('<div class="alert">'+res[1]+'</div>');
                       $('#notice').show();
                       $("#jqxgrid_barang").jqxGrid('updatebounddata', 'cells');
+                      close_popup();
                   }
                   else if(res[0]=="Error"){
                       $('#notice').hide();
@@ -70,12 +71,19 @@ if(isset($disable)){if($disable='disable'){?>
                echo  $kode; ?>"/>
             <div class="form-group">
               <label>Kode</label>
-              <input type="text" class="autocomplete form-control" id="code" name="code"  placeholder="Kode" value="<?php
+              <input type="text" class="form-control" id="code" name="code"  placeholder="Kode" value="<?php
               if(set_value('code')=="" && isset($code)){
                   echo $code;
                 }else{
                   echo  set_value('code');
                 }
+                ?>">
+                <input type="hidden" class="form-control" id="id_mst_inv_barang_habispakai" name="id_mst_inv_barang_habispakai"  placeholder="Kode" value="<?php
+                  if(set_value('id_mst_inv_barang_habispakai')=="" && isset($id_mst_inv_barang_habispakai)){
+                      echo $id_mst_inv_barang_habispakai;
+                    }else{
+                      echo  set_value('id_mst_inv_barang_habispakai');
+                    }
                 ?>">
             </div>
             <div class="form-group">
@@ -91,8 +99,8 @@ if(isset($disable)){if($disable='disable'){?>
             <div class="form-group">
               <label>Merek Tipe</label>
               <input type="text" class="form-control" name="merk" id="merk" placeholder="Merek Tipe" value="<?php 
-                if(set_value('merk')=="" && isset($merk)){
-                  echo $merk;
+                if(set_value('merk')=="" && isset($merek_tipe)){
+                  echo $merek_tipe;
                 }else{
                   echo  set_value('merk');
                 }
@@ -101,8 +109,8 @@ if(isset($disable)){if($disable='disable'){?>
             <div class="form-group">
               <label>Negara Asal</label>
               <input type="text" class="form-control" name="negara"  id="negara" placeholder="Negara Asal" value="<?php
-              if(set_value('negara')=="" && isset($negara)){
-                  echo $negara;
+              if(set_value('negara')=="" && isset($negara_asal)){
+                  echo $negara_asal;
                 }else{
                   echo  set_value('negara');
                 }
@@ -112,7 +120,7 @@ if(isset($disable)){if($disable='disable'){?>
               <label>Satuan</label>
               <select id="pilihan_satuan_barang" name="pilihan_satuan_barang" class="form-control" >
                 <?php foreach($pilihan_satuan_barang as $barang) : ?>
-                  <?php $select = $barang->code == $pilihan_satuan_barang ? 'selected' : '' ?>
+                  <?php $select = $barang->code == $pilihan_satuan ? 'selected' : '' ?>
                   <option value="<?php echo $barang->code ?>" <?php echo $select ?>><?php echo $barang->value ?></option>
                 <?php endforeach ?>
               </select>

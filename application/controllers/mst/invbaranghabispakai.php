@@ -81,7 +81,38 @@ class Invbaranghabispakai extends CI_Controller {
 
 		echo json_encode(array($json));
 	}
-	
+	public function edit_barang($kode=0)
+	{
+        $this->form_validation->set_rules('code', 'Kode', 'trim|required');
+        $this->form_validation->set_rules('uraian', 'Uraian', 'trim|required');
+        $this->form_validation->set_rules('merek_tipe', 'Merek Tipe', 'trim|required');
+        $this->form_validation->set_rules('negara_asal', 'Negara Asal', 'trim|required');
+		/*end validasi kode barang*/
+		if($this->form_validation->run()== FALSE){
+			$data = $this->invbaranghabispakai_model->get_data_detail_edit($kode); 
+			$data['action']="edit";
+			$data['kode']= $kode;
+			$data['notice']			= validation_errors();
+			$data['pilihan_satuan_barang'] = $this->pengadaanbarang_model->get_data_pilihan('satuan');
+			die($this->parser->parse('mst/invbaranghabispakai/barang_form',$data));
+		}else{
+			$dataupdate = array(
+					'code' 			=> $this->input->post('code'),
+					'uraian'		=> $this->input->post('uraian'),
+					'merek_tipe' 	=> $this->input->post('merek_tipe'),
+					'negara_asal' 	=> $this->input->post('negara_asal'),
+					'pilihan_satuan' => $this->input->post('pilihan_satuan'),
+				);
+			$key['id_mst_inv_barang_habispakai'] = $this->input->post('id_mst_inv_barang_habispakai_jenis');
+			$simpan = $this->db->update("mst_inv_barang_habispakai",$dataupdate,$key);
+			if($simpan==true){
+				die("OK|Data Telah diUbah");
+			}else{
+				 die("Error|Proses data gagal");
+			}
+		}
+		
+	}
 	function json_detail($kode = 0){
 		$this->authentication->verify('mst','show');
 
@@ -102,7 +133,7 @@ class Invbaranghabispakai extends CI_Controller {
 		}
 		$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
 		
-		$rows_all = $this->invbaranghabispakai_model->get_data_detail($kode);
+		$rows_all = $this->invbaranghabispakai_model->get_data_detail();
 
 
 		if($_POST) {
@@ -129,7 +160,14 @@ class Invbaranghabispakai extends CI_Controller {
 		foreach($rows as $act) {
 			$data[] = array(
 				'no'					=> $no++,
+				'code'					=> $act->code,
 				'uraian'				=> $act->uraian,
+				'merek_tipe'			=> $act->merek_tipe,
+				'negara_asal'			=> $act->negara_asal,
+				'pilihan_satuan'		=> $act->negara_asal,
+				'nama_satuan'			=> $act->nama_satuan,
+				'jenisuraian'			=> $act->jenisuraian,
+				'id_mst_inv_barang_habispakai'			=> $act->id_mst_inv_barang_habispakai,
 				'id_mst_inv_barang_habispakai_jenis'	=> $act->id_mst_inv_barang_habispakai_jenis,
 				'edit'					=> 1,
 				'delete'				=> 1
@@ -154,14 +192,6 @@ class Invbaranghabispakai extends CI_Controller {
 
 		$this->db->like('code','p'.substr($this->session->userdata('puskesmas'),0,7));
 
-		$kodepuskesmas = $this->session->userdata('puskesmas');
-		if(strlen($kodepuskesmas) == 4){
-			$this->db->like('code','P'.substr($kodepuskesmas, 0,4));
-		}else {
-			$this->db->where('code','P'.$kodepuskesmas);
-		}
-
-		$data['datapuskesmas'] 	= $this->invbaranghabispakai_model->get_data_puskesmas();
 		$data['content'] = $this->parser->parse("mst/invbaranghabispakai/show",$data,true);
 
 		$this->template->show($data,"home");
@@ -258,6 +288,15 @@ class Invbaranghabispakai extends CI_Controller {
 		}else{
 			$this->session->set_flashdata('alert', 'Delete data error');
 			redirect(base_url()."mst/invbaranghabispakai");
+		}
+	}
+	function dodelbarang($kode=0){
+		$this->authentication->verify('inventory','del');
+
+		if($this->invbaranghabispakai_model->delete_entryitem($kode)){
+				
+		}else{
+			$this->session->set_flashdata('alert', 'Delete data error');
 		}
 	}
 	
@@ -363,11 +402,11 @@ class Invbaranghabispakai extends CI_Controller {
 					'uraian'		=> $this->input->post('uraian'),
 					'merek_tipe' 	=> $this->input->post('merek_tipe'),
 					'negara_asal' 	=> $this->input->post('negara_asal'),
-					'pilihan_satuan' => $this->input->post('negara_asal'),
+					'pilihan_satuan' => $this->input->post('pilihan_satuan'),
 				);
 				$simpan=$this->db->insert('mst_inv_barang_habispakai', $values);
 				if($simpan==true){
-				die("OK|simpan");
+				die("OK|Data disimpan");
 			}else{
 				 die("Error|Proses data gagal");
 			}

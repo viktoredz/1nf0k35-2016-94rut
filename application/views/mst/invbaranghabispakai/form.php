@@ -16,7 +16,7 @@
 
 
 <section class="content">
-<form action="<?php echo base_url()?>mst/invbaranghabispakai/{action}/{kode}/{id}" method="POST" >
+<form action="<?php echo base_url()?>mst/invbaranghabispakai/{action}/{kode}" method="POST" >
 	<div class="row">
 		<!-- left column -->
 		<div class="col-md-6">
