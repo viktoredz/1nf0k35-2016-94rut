@@ -83,9 +83,7 @@ class Invbaranghabispakai extends CI_Controller {
 	}
 	public function edit_barang($kode=0)
 	{
-        $this->form_validation->set_rules('code', 'Kode', 'trim|required');
         $this->form_validation->set_rules('uraian', 'Uraian', 'trim|required');
-        $this->form_validation->set_rules('merek_tipe', 'Merek Tipe', 'trim|required');
         $this->form_validation->set_rules('negara_asal', 'Negara Asal', 'trim|required');
 		/*end validasi kode barang*/
 		if($this->form_validation->run()== FALSE){
@@ -385,9 +383,7 @@ class Invbaranghabispakai extends CI_Controller {
 	{	
 		$data['action']			= "add";
 		$data['kode']			= $kode;
-        $this->form_validation->set_rules('code', 'Kode', 'trim|required');
         $this->form_validation->set_rules('uraian', 'Uraian', 'trim|required');
-        $this->form_validation->set_rules('merek_tipe', 'Merek Tipe', 'trim|required');
         $this->form_validation->set_rules('negara_asal', 'Negara Asal', 'trim|required');
 
 		if($this->form_validation->run()== FALSE){
