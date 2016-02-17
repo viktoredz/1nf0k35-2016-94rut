@@ -100,7 +100,7 @@
         <div class="form-group">
           <label>Keterangan</label>
           <?php if(!isset($viewreadonly)){ ?>
-          <textarea class="form-control" name="keterangan" placeholder="Keterangan"><?php 
+          <textarea class="form-control" id="keterangan" name="keterangan" placeholder="Keterangan"><?php 
               if(set_value('keterangan')=="" && isset($keterangan)){
                 echo $keterangan;
               }else{
@@ -120,6 +120,12 @@
       <div class="box-body">
       <div id="success"> 
           <table class="table table-condensed">
+              <tr>
+                <td>Kode Inventaris</td>
+                <td>
+                <input type="text" id="kode_inventaris_" name="kode_inventaris_" placeholder="Kode Lokasi" />
+                </td>
+              </tr>
               <tr>
                 <td>Jumlah Unit</td>
                 <td>
@@ -174,6 +180,7 @@
 </div>
 <script type="text/javascript">
 $(function(){
+  kodeInvetaris();
     $('#btn-kembali').click(function(){
         window.location.href="<?php echo base_url()?>inventory/pengadaanbarang";
     });
@@ -189,6 +196,31 @@ $(function(){
       $("#tgl").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme});
       $("#tgl1").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme});
     <?php } ?>
+    document.getElementById("tgl").onchange = function() {
+        kodeInvetaris(document.getElementById("tgl").value);
+    };
   });
+    function kodeInvetaris(tahun=0)
+    { 
+      if (tahun!=0) {
+        tahun = tahun.substr(-2);
+      }else{
+        tahun = "<?php echo $tgl_pengadaan?>".substring(2,4);
+      }
+      //alert(tahun);
+      $.ajax({
+      url: "<?php echo base_url().'inventory/pengadaanbarang/kodeInvetaris';?>",
+      dataType: "json",
+      success:function(data)
+      { 
+        $.each(data,function(index,elemet){
+          $("#kode_inventaris_").val(elemet.kodeinv+"."+tahun);
+        });
+      }
+      });
 
+      return false;
+    }
 </script>
+
+      

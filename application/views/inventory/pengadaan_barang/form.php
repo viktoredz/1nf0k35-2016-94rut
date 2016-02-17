@@ -72,7 +72,7 @@
         </div>
         <div class="form-group">
           <label>Keterangan</label>
-          <textarea class="form-control" name="keterangan" placeholder="Keterangan"><?php 
+          <textarea class="form-control" name="keterangan" id="keterangan" placeholder="Keterangan"><?php 
               if(set_value('keterangan')=="" && isset($keterangan)){
                 echo $keterangan;
               }else{
@@ -88,6 +88,12 @@
     <div class="box box-warning">
       <div class="box-body">
         <table class="table table-condensed">
+          <tr>
+            <td>Kode Lokasi</td>
+            <td>
+                <input type="text" id="kode_inventaris_" name="kode_inventaris_" placeholder="Kode Lokasi" />
+            </td>
+          </tr>
           <tr>
             <td>Jumlah Unit</td>
             <td>
@@ -127,6 +133,7 @@
 
 <script type="text/javascript">
 $(function(){
+    kodeInvetaris();
     $('#btn-kembali').click(function(){
         window.location.href="<?php echo base_url()?>inventory/pengadaanbarang";
     });
@@ -136,6 +143,30 @@ $(function(){
 
     $("#tgl").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme});
     $("#tgl1").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme});
-
+    document.getElementById("tgl").onchange = function() {
+        kodeInvetaris(document.getElementById("tgl").value);
+    };
   });
+  
+  function kodeInvetaris(tahun=0)
+    {
+      if (tahun!=0) {
+        tahun = tahun.substr(-2);
+      }else{
+        var tahun = <?php echo date("y");?>;  
+      }
+      
+      $.ajax({
+      url: "<?php echo base_url().'inventory/pengadaanbarang/kodeInvetaris';?>",
+      dataType: "json",
+      success:function(data)
+      { 
+        $.each(data,function(index,elemet){
+          $("#kode_inventaris_").val(elemet.kodeinv+'.'+tahun);
+        });
+      }
+      });
+
+      return false;
+    }
 </script>

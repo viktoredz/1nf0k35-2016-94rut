@@ -1,6 +1,6 @@
 
 <script type="text/javascript">
-  <?php $kodebarang_ = substr($id_mst_inv_barang, 0,2);
+  <?php $kodebarang_ = substr($kode, -14,-12);
       if($kodebarang_=='01') {?>  
             $("#status_sertifikat_tanggal").jqxDateTimeInput({ width: '300px', height: '25px' })
 <?php  }else if($kodebarang_=='02') {?>
@@ -112,7 +112,7 @@ if(isset($disable)){if($disable='disable'){?>
                 contentType : false,
                 processData : false,
                 type : 'POST',
-                url : '<?php echo base_url()."inventory/pengadaanbarang/".$action."_barang/".$id_pengadaan."/".$id_barang."/".$kd_proc."/".$kode."/" ?>',
+                url : '<?php echo base_url()."inventory/pengadaanbarang/".$action."_barang/".$id_pengadaan."/".$kode."/" ?>',
                 data : data,
                 
                 success : function(response){
@@ -313,7 +313,7 @@ if(isset($disable)){if($disable='disable'){?>
 
     <!--body from edit-->
     <?php 
-    $kodebarang_ = substr($id_mst_inv_barang, 0,2);
+    $kodebarang_ = substr($kode, -14,-12);
     if($kodebarang_=='01') {?>
       <div class="form-group">
         <label>Luas</label>

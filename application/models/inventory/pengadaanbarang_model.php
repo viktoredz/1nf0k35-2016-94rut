@@ -9,7 +9,58 @@ class Pengadaanbarang_model extends CI_Model {
 		$this->lang	  = $this->config->item('language');
 
     }
-    
+    function kode_invetaris($kode){
+        $inv=explode(".", $kode);
+        $kode_invetaris = $inv[0].$inv[1].$inv[2].$inv[3].$inv[4].$inv[5].$inv[6];
+        $tahun          = $inv[6];
+        $id_barang      = $inv[7].$inv[8].$inv[9].$inv[10].$inv[11];
+        $register = $this->register($kode_invetaris,$id_barang);
+        return  $kode_invetaris.$id_barang.$register;
+    }
+    function barang_kembar_proc_($kode){
+        $inv=explode(".", $kode);
+        $kode_invetaris = $inv[0].$inv[1].$inv[2].$inv[3].$inv[4].$inv[5].$inv[6];
+        $tahun          = $inv[6];
+        $id_barang      = $inv[7].$inv[8].$inv[9].$inv[10].$inv[11];
+        $nomorproc = $this->proc($kode_invetaris,$id_barang);
+        return  $kode_invetaris.$id_barang.$nomorproc;
+    }
+    function proc($inv,$barang){
+        $q = $this->db->query("SELECT  MAX(RIGHT(barang_kembar_proc,4)) as kd_max FROM inv_inventaris_barang WHERE id_mst_inv_barang=".'"'.$barang.'"'." and id_inventaris_barang like ".'"%'.$inv.'%"'." ORDER BY barang_kembar_proc DESC");
+        $kd="";
+        if($q->num_rows()>0)
+        {
+            foreach($q->result() as $k)
+            {
+                $tmp = ((int)$k->kd_max)+1;
+                $kd = sprintf("%04s", $tmp);
+            }
+        }
+        else
+        {
+            $kd = "0001";
+        }
+        return $kd;
+    }
+    function register($inv,$barang){
+        $this->db->select("max(register) as register");
+        $this->db->like('id_inventaris_barang',"$inv");
+        $this->db->where('id_mst_inv_barang',$barang);
+        $q=$this->db->get('inv_inventaris_barang');
+        if($q->num_rows()>0)
+        {
+            foreach($q->result() as $k)
+            {
+                $tmp = ((int)$k->register)+1;
+                $register = sprintf("%04s", $tmp);
+            }
+        }
+        else
+        {
+            $register = "0001";
+        }
+        return $register;
+    }
     function get_data_status()
     {	
     	$this->db->where("mst_inv_pilihan.tipe",'status_pengadaan');
@@ -98,7 +149,7 @@ class Pengadaanbarang_model extends CI_Model {
 		$query->free_result();    
 		return $data;
 	}
-    function get_data_barang_edit_table($id_barang,$kd_inventaris,$pilih_table){
+    function get_data_barang_edit_table($kd_inventaris,$pilih_table){
         $data = array();
         if($pilih_table=='inv_inventaris_barang_a'){
 
@@ -339,19 +390,19 @@ WHERE inv_inventaris_barang.barang_kembar_proc = (SELECT barang_kembar_proc FROM
         return  $jumlah;
     }
     function barang_kembar_proc($kode){
-        $q = $this->db->query("SELECT  MAX(RIGHT(barang_kembar_proc,3)) as kd_max FROM inv_inventaris_barang WHERE id_mst_inv_barang=$kode ORDER BY barang_kembar_proc DESC");
+        $q = $this->db->query("SELECT  MAX(RIGHT(barang_kembar_proc,4)) as kd_max FROM inv_inventaris_barang WHERE id_mst_inv_barang=$kode ORDER BY barang_kembar_proc DESC");
         $kd = "";
         if($q->num_rows()>0)
         {
            foreach($q->result() as $k)
             {
                 $tmp = ((int)$k->kd_max)+1;
-                $kd = sprintf("%03s", $tmp);
+                $kd = sprintf("%04s", $tmp);
             }
         }
         else
         {
-            $kd = "001";
+            $kd = "0001";
         }
         return $kode.$kd;
     }
@@ -367,13 +418,13 @@ WHERE inv_inventaris_barang.barang_kembar_proc = (SELECT barang_kembar_proc FROM
 
 		return $this->db->delete($this->tabel);
 	}
-	function delete_entryitem($kode,$id_barang,$kd_proc)
-	{   $id = $this->db->query("SELECT id_inventaris_barang FROM inv_inventaris_barang WHERE barang_kembar_proc =$kd_proc")->result(); 
+	function delete_entryitem($kode,$kd_proc)
+	{   $id = $this->db->query("SELECT barang_kembar_proc FROM inv_inventaris_barang WHERE id_inventaris_barang =$kd_proc")->result(); 
         foreach ($id as $key) {
               $key->id_inventaris_barang;
-              $this->db->where('id_inventaris_barang',$key->id_inventaris_barang);
+              $this->db->where('barang_kembar_proc',$kd_proc);
               $this->db->delete('inv_inventaris_barang');
-                $kodebarang_ = substr($id_barang, 0,2);
+                $kodebarang_ = substr($kode, -14,-12);
                 if($kodebarang_=='01') {
                     $this->db->where('id_inventaris_barang',$key->id_inventaris_barang);
                     $this->db->delete('inv_inventaris_barang_a');
