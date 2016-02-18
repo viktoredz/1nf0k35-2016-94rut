@@ -46,7 +46,7 @@ if(isset($disable)){if($disable='disable'){?>
             data.append('nama_barang', $('#v_nama_barang').val());
             data.append('jumlah', $('#jumlah').val());
             data.append('harga', $('#harga').val());
-            data.append('keterangan_pengadaan', $('#keterangan').val());
+            //data.append('keterangan_pengadaan', $('#keterangan').val());
             var kd_barang = $('#v_kode_barang').val().substring(0,2);
             if(kd_barang=="01"){
                 data.append('luas', $('#luas').val());
@@ -239,9 +239,16 @@ if(isset($disable)){if($disable='disable'){?>
                 ?>" disabled>
             </div>
             <div class="form-group"> 
-              <label>Jenis Barang</label>
-              <input id="jqxinput" class="form-control" autocomplete="off" name="code_mst_inv" type="text" value="<?php 
-                if(set_value('code_mst_inv')=="" && isset($id_mst_inv_barang)){
+              <label>Register</label>
+              <input type="text" class="form-control" name="register" id="register" placeholder="Register" value="<?php 
+                if(set_value('register')=="" && isset($register)){
+                  echo $register.' s/d '.sprintf("%03s", $register+$jumlah);
+                }else{
+                  echo  set_value('register');
+                }
+                ?>" disabled>
+              <input id="jqxinput" class="form-control" autocomplete="off" name="code_mst_inv" type="hidden" value="<?php 
+                if(set_value('code_mst_inv')=="" && isset($id_mst_inv_barang)){ 
                   $s = array();
                   $s[0] = substr($id_mst_inv_barang, 0,2);
                   $s[1] = substr($id_mst_inv_barang, 2,2);
@@ -320,16 +327,16 @@ if(isset($disable)){if($disable='disable'){?>
             </select>
             </div>
             <?php }} ?>
-            <div class="form-group">
+            <!--<div class="form-group">
               <label>Keterangan</label>
               <textarea class="form-control" id="keterangan" name="keterangan" placeholder="Keterangan"><?php 
-                  if(set_value('keterangan')=="" && isset($keterangan_pengadaan)){
+                /*  if(set_value('keterangan')=="" && isset($keterangan_pengadaan)){
                     echo $keterangan_pengadaan;
                   }else{
                     echo  set_value('keterangan');
-                  }
+                  }*/
                   ?></textarea>
-            </div>
+            </div>-->
         </div>
         </div>
         </div>

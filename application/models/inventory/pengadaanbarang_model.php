@@ -94,7 +94,7 @@ class Pengadaanbarang_model extends CI_Model {
         return $query->result();
     }
     public function getItem($table,$data){
-        $this->db->select("inv_inventaris_barang.id_inventaris_barang,inv_inventaris_barang.id_mst_inv_barang,inv_inventaris_barang.nama_barang,inv_inventaris_barang.harga,inv_inventaris_barang.barang_kembar_proc,
+        $this->db->select(" inv_inventaris_barang.register,inv_inventaris_barang.id_inventaris_barang,inv_inventaris_barang.id_mst_inv_barang,inv_inventaris_barang.nama_barang,inv_inventaris_barang.harga,inv_inventaris_barang.barang_kembar_proc,
                         COUNT(inv_inventaris_barang.id_mst_inv_barang) AS jumlah,
                         COUNT(inv_inventaris_barang.id_mst_inv_barang)*inv_inventaris_barang.harga AS totalharga,
                         inv_inventaris_barang.keterangan_pengadaan,mst_inv_pilihan.value,inv_inventaris_barang.tanggal_diterima,
@@ -367,7 +367,7 @@ WHERE inv_inventaris_barang.barang_kembar_proc = (SELECT barang_kembar_proc FROM
         $id = $this->db->query("SELECT id_inventaris_barang FROM inv_inventaris_barang WHERE barang_kembar_proc =$kode_proc and id_pengadaan=$id_pengadaan")->result(); 
         foreach ($id as $key) {
             $data['pilihan_status_invetaris']   = $this->tampilstatus_id($pilihan_inv,'status_inventaris');
-            $this->db->update('inv_inventaris_barang', $data,array('id_inventaris_barang'=> $key->id_inventaris_barang));
+            $this->db->update('inv_inventaris_barang', $data,array('barang_kembar_proc'=> $this->input->post('kode_proc')));
         }
             
 

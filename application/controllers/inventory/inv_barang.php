@@ -617,7 +617,7 @@ class Inv_barang extends CI_Controller {
 			/*mengirim status pada masing2 form*/
 			$kodebarang_ = substr($id_barang, 0,2);
 	   		if($kodebarang_=='01') {
-	   			$data = $this->inv_barang_model->get_data_barang_edit_table($id_barang,$kd_inventaris,'inv_inventaris_barang_a'); 
+	   			$data = $this->inv_barang_model->get_data_barang_edit_table($kd_proc,$id_barang,$kd_inventaris,'inv_inventaris_barang_a'); 
 	   			$data['pilihan_satuan_barang_']			= $this->inv_barang_model->get_data_pilihan('satuan');
 	   			$data['pilihan_status_hak_']			= $this->inv_barang_model->get_data_pilihan('status_hak');
 	   			$data['pilihan_penggunaan_']			= $this->inv_barang_model->get_data_pilihan('penggunaan');

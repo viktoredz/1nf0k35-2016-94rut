@@ -269,67 +269,85 @@ class Inv_barang_model extends CI_Model {
         }
     }
 
-    function get_data_barang_edit_table($id_barang,$kd_inventaris,$pilih_table){
+    function get_data_barang_edit_table($kembarproc,$id_barang,$kd_inventaris,$pilih_table){
         $data = array();
         if($pilih_table=='inv_inventaris_barang_a'){
 
-            $sql= "SELECT inv_inventaris_barang_a.*, inv_inventaris_barang.*,COUNT(inv_inventaris_barang.barang_kembar_proc) AS jumlah 
+            $sql= "SELECT inv_inventaris_barang_a.*, inv_inventaris_barang.*,
+                    (SELECT COUNT(*) AS jml FROM inv_inventaris_distribusi WHERE id_inventaris_barang IN 
+                    (SELECT id_inventaris_barang FROM inv_inventaris_barang WHERE barang_kembar_proc = ".'"'.$kembarproc.'"'.")) 
+                    AS jumlah
                     FROM inv_inventaris_barang 
                     LEFT JOIN inv_inventaris_barang_a ON (inv_inventaris_barang.id_inventaris_barang = inv_inventaris_barang_a.id_inventaris_barang 
                     AND inv_inventaris_barang.id_mst_inv_barang=inv_inventaris_barang_a.id_mst_inv_barang)
-                    WHERE inv_inventaris_barang.barang_kembar_proc = (SELECT barang_kembar_proc FROM inv_inventaris_barang WHERE id_inventaris_barang= ? )
+                    WHERE inv_inventaris_barang.id_inventaris_barang = ".'"'.$kd_inventaris.'"'."
                     ";           
-            $query= $this->db->query($sql, array($kd_inventaris));
+            $query= $this->db->query($sql);
 
         }else if($pilih_table=='inv_inventaris_barang_b'){
 
-            $sql= "SELECT inv_inventaris_barang_b.*, inv_inventaris_barang.*,COUNT(inv_inventaris_barang.barang_kembar_proc) AS jumlah 
+            $sql= "SELECT inv_inventaris_barang_b.*, inv_inventaris_barang.*,
+                    (SELECT COUNT(*) AS jml FROM inv_inventaris_distribusi WHERE id_inventaris_barang IN 
+                    (SELECT id_inventaris_barang FROM inv_inventaris_barang WHERE barang_kembar_proc = ".'"'.$kembarproc.'"'.")) 
+                    AS jumlah
                     FROM inv_inventaris_barang 
                     LEFT JOIN inv_inventaris_barang_b ON (inv_inventaris_barang.id_inventaris_barang = inv_inventaris_barang_b.id_inventaris_barang 
                     AND inv_inventaris_barang.id_mst_inv_barang=inv_inventaris_barang_b.id_mst_inv_barang)
-                    WHERE inv_inventaris_barang.barang_kembar_proc = (SELECT barang_kembar_proc FROM inv_inventaris_barang WHERE id_inventaris_barang= ? )
+                    WHERE inv_inventaris_barang.id_inventaris_barang = ".'"'.$kd_inventaris.'"'."
                     ";           
-            $query= $this->db->query($sql, array($kd_inventaris));
+            $query= $this->db->query($sql);
 
         }else if($pilih_table=='inv_inventaris_barang_c'){
 
-            $sql= "SELECT inv_inventaris_barang_c.*, inv_inventaris_barang.*,COUNT(inv_inventaris_barang.barang_kembar_proc) AS jumlah 
+            $sql= "SELECT inv_inventaris_barang_c.*, inv_inventaris_barang.*
+                    (SELECT COUNT(*) AS jml FROM inv_inventaris_distribusi WHERE id_inventaris_barang IN 
+                    (SELECT id_inventaris_barang FROM inv_inventaris_barang WHERE barang_kembar_proc = ".'"'.$kembarproc.'"'.")) 
+                    AS jumlah
                     FROM inv_inventaris_barang 
                     LEFT JOIN inv_inventaris_barang_c ON (inv_inventaris_barang.id_inventaris_barang = inv_inventaris_barang_c.id_inventaris_barang 
                     AND inv_inventaris_barang.id_mst_inv_barang=inv_inventaris_barang_c.id_mst_inv_barang)
-                    WHERE inv_inventaris_barang.barang_kembar_proc = (SELECT barang_kembar_proc FROM inv_inventaris_barang WHERE id_inventaris_barang= ? )
+                    WHERE inv_inventaris_barang.id_inventaris_barang = ".'"'.$kd_inventaris.'"'."
                     ";           
-            $query= $this->db->query($sql, array($kd_inventaris));            
+            $query= $this->db->query($sql);            
 
         }else if($pilih_table=='inv_inventaris_barang_d'){
 
-            $sql= "SELECT inv_inventaris_barang_d.*, inv_inventaris_barang.*,COUNT(inv_inventaris_barang.barang_kembar_proc) AS jumlah 
+            $sql= "SELECT inv_inventaris_barang_d.*, inv_inventaris_barang.*,
+                    (SELECT COUNT(*) AS jml FROM inv_inventaris_distribusi WHERE id_inventaris_barang IN 
+                    (SELECT id_inventaris_barang FROM inv_inventaris_barang WHERE barang_kembar_proc = ".'"'.$kembarproc.'"'.")) 
+                    AS jumlah
                     FROM inv_inventaris_barang 
                     LEFT JOIN inv_inventaris_barang_d ON (inv_inventaris_barang.id_inventaris_barang = inv_inventaris_barang_d.id_inventaris_barang 
                     AND inv_inventaris_barang.id_mst_inv_barang=inv_inventaris_barang_d.id_mst_inv_barang)
-                    WHERE inv_inventaris_barang.barang_kembar_proc = (SELECT barang_kembar_proc FROM inv_inventaris_barang WHERE id_inventaris_barang= ? )
+                    WHERE inv_inventaris_barang.id_inventaris_barang = ".'"'.$kd_inventaris.'"'."
                     ";           
-            $query= $this->db->query($sql, array($kd_inventaris));
+            $query= $this->db->query($sql);
 
         }else if($pilih_table=='inv_inventaris_barang_e'){
 
-            $sql= "SELECT inv_inventaris_barang_e.*, inv_inventaris_barang.*,COUNT(inv_inventaris_barang.barang_kembar_proc) AS jumlah 
+            $sql= "SELECT inv_inventaris_barang_e.*, inv_inventaris_barang.*,
+                    (SELECT COUNT(*) AS jml FROM inv_inventaris_distribusi WHERE id_inventaris_barang IN 
+                    (SELECT id_inventaris_barang FROM inv_inventaris_barang WHERE barang_kembar_proc = ".'"'.$kembarproc.'"'.")) 
+                    AS jumlah
                     FROM inv_inventaris_barang 
                     LEFT JOIN inv_inventaris_barang_e ON (inv_inventaris_barang.id_inventaris_barang = inv_inventaris_barang_e.id_inventaris_barang 
                     AND inv_inventaris_barang.id_mst_inv_barang=inv_inventaris_barang_e.id_mst_inv_barang)
-                    WHERE inv_inventaris_barang.barang_kembar_proc = (SELECT barang_kembar_proc FROM inv_inventaris_barang WHERE id_inventaris_barang= ? )
+                    WHERE inv_inventaris_barang.id_inventaris_barang = ".'"'.$kd_inventaris.'"'."
                     ";           
-            $query= $this->db->query($sql, array($kd_inventaris));
+            $query= $this->db->query($sql);
 
         }else if($pilih_table=='inv_inventaris_barang_f'){   
 
-            $sql= "SELECT inv_inventaris_barang_f.*, inv_inventaris_barang.*,COUNT(inv_inventaris_barang.barang_kembar_proc) AS jumlah 
+            $sql= "SELECT inv_inventaris_barang_f.*, inv_inventaris_barang.*,
+                    (SELECT COUNT(*) AS jml FROM inv_inventaris_distribusi WHERE id_inventaris_barang IN 
+                    (SELECT id_inventaris_barang FROM inv_inventaris_barang WHERE barang_kembar_proc = ".'"'.$kembarproc.'"'.")) 
+                    AS jumlah
                     FROM inv_inventaris_barang 
                     LEFT JOIN inv_inventaris_barang_f ON (inv_inventaris_barang.id_inventaris_barang = inv_inventaris_barang_f.id_inventaris_barang 
                     AND inv_inventaris_barang.id_mst_inv_barang=inv_inventaris_barang_f.id_mst_inv_barang)
-                    WHERE inv_inventaris_barang.barang_kembar_proc = (SELECT barang_kembar_proc FROM inv_inventaris_barang WHERE id_inventaris_barang= ? )
+                    WHERE inv_inventaris_barang.id_inventaris_barang = ".'"'.$kd_inventaris.'"'."
                     ";           
-            $query= $this->db->query($sql, array($kd_inventaris));
+            $query= $this->db->query($sql);
 
         }
         

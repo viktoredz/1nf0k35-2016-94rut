@@ -56,7 +56,7 @@ function edit_barang(id_inventaris_barang,kodeproc){
             data.append('jumlah', $('#jumlah').val());
             data.append('harga', $('#harga').val());
             data.append('id_inventaris_barang', $('#v_kode_invetaris').val()+'.'+$('#id_inventaris_barang').val());
-            data.append('keterangan_pengadaan', $('#keterangan').val());
+            //data.append('keterangan_pengadaan', $('#keterangan').val());
             var id_pengadaan_ = '<?php echo $kode; ?>'; 
             var id_barang_    = $('#v_kode_barang').val();
             var kd_proc_      = 0;
@@ -261,16 +261,16 @@ function edit_barang(id_inventaris_barang,kodeproc){
             ?>"></div>
             </div>
             <?php }} ?>
-            <div class="form-group">
+           <!-- <div class="form-group">
               <label>Keterangan</label>
               <textarea class="form-control" id="keterangan" name="keterangan" placeholder="Keterangan"><?php 
-                  if(set_value('keterangan')=="" && isset($keterangan_pengadaan)){
+               /*   if(set_value('keterangan')=="" && isset($keterangan_pengadaan)){
                     echo $keterangan_pengadaan;
                   }else{
                     echo  set_value('keterangan');
-                  }
+                  }*/
                   ?></textarea>
-            </div>
+            </div>-->
         </div>
         <div class="box-footer">
             <button type="submit" class="btn btn-primary">Simpan</button>

@@ -19,10 +19,12 @@
 			{ name: 'pilihan_status_invetaris', type: 'string' },
 			{ name: 'tanggal_pembelian', type: 'date' },
 			{ name: 'foto_barang', type: 'string' },
+			{ name: 'register_sampai', type: 'string' },
 			{ name: 'barang_kembar_proc', type: 'string' },
 			{ name: 'keterangan_inventory', type: 'string' },
 			{ name: 'tanggal_pengadaan', type: 'date' },
 			{ name: 'tanggal_diterima', type: 'date' },
+			{ name: 'register', type: 'string' },
 			{ name: 'tanggal_dihapus', type: 'date' },
 			{ name: 'alasan_penghapusan', type: 'string' },
 			{ name: 'pilihan_asal', type: 'string' },
@@ -39,11 +41,12 @@
 		updateRow: function (rowID, rowData, commit) {
             commit(true);
 			var arr = $.map(rowData, function(el) { return el });
+			alert(arr);
 			//alert(arr[6]); alert(arr[8]);		//6 status
 			var pengadaan= '<?php echo $kode; ?>';
-			//alert(pengadaan);
+			//alert(arr[]);
 
-				$.post( '<?php echo base_url()?>inventory/pengadaanbarang/updatestatus_barang', {kode_proc:arr[6],pilihan_inv:arr[8],id_pengadaan:pengadaan},function( data ) {
+				$.post( '<?php echo base_url()?>inventory/pengadaanbarang/updatestatus_barang', {kode_proc:arr[7],pilihan_inv:arr[11],id_pengadaan:pengadaan},function( data ) {
 						$("#jqxgrid_barang").jqxGrid('updateBoundData');
 						
 				 });
@@ -100,17 +103,18 @@
                 },
 				{ text: 'Kode Barang', align: 'center',cellsalign: 'center',editable: false, datafield: 'id_mst_inv_barang', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
 				{ text: 'Nama Barang ', editable: false,datafield: 'nama_barang', columntype: 'textbox', filtertype: 'textbox', width: '23%'},
+				{ text: 'register ', editable: false,datafield: 'register_sampai', columntype: 'textbox', filtertype: 'none', width: '13%'},
 				{ text: 'Jumlah ', align: 'center',cellsalign: 'center',editable: false,datafield: 'jumlah', columntype: 'textbox', filtertype: 'textbox', width: '6%'},
 				{ text: 'Harga Satuan (Rp.)', align: 'center',cellsalign: 'right',editable: false, datafield: 'harga', columntype: 'textbox', filtertype: 'textbox', width: '11%'},
 				{ text: 'Sub Total (Rp.)', align: 'center',cellsalign: 'right',editable: false,datafield: 'totalharga', columntype: 'textbox', filtertype: 'textbox', width: '12%'},
             <?php }else{ ?>
 				{ text: 'Kode Barang', align: 'center',cellsalign: 'center',editable: false, datafield: 'id_mst_inv_barang', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
 				{ text: 'Nama Barang ', editable: false,datafield: 'nama_barang', columntype: 'textbox', filtertype: 'textbox', width: '28%'},
+				{ text: 'register ', editable: false,datafield: 'register_sampai', columntype: 'textbox', filtertype: 'none', width: '13%'},
 				{ text: 'Jumlah ', align: 'center',cellsalign: 'center',editable: false,datafield: 'jumlah', columntype: 'textbox', filtertype: 'textbox', width: '8%'},
 				{ text: 'Harga Satuan (Rp.)', align: 'center',cellsalign: 'right',editable: false, datafield: 'harga', columntype: 'textbox', filtertype: 'textbox', width: '12%'},
 				{ text: 'Sub Total (Rp.)', align: 'center',cellsalign: 'right',editable: false,datafield: 'totalharga', columntype: 'textbox', filtertype: 'textbox', width: '12%'},
             <?php } ?>
-				{ text: 'Keterangan ', editable: false,datafield: 'keterangan_pengadaan', columntype: 'textbox', filtertype: 'textbox', width: '13%'},
 				{
                         text: '<b><i class="fa fa-pencil-square-o"></i> Status</b>', align: 'center',cellsalign: 'center', datafield: 'value', width: '8%', columntype: 'dropdownlist',
                         createeditor: function (row, column, editor) {

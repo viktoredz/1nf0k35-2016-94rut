@@ -388,8 +388,9 @@ class Pengadaanbarang extends CI_Controller {
 
         $this->form_validation->set_rules('tgl', 'Tanggal Perngadaan', 'trim|required');
         $this->form_validation->set_rules('status', 'Status Pengadaan', 'trim|required');
-        $this->form_validation->set_rules('keterangan', 'Keterangan', 'trim|required');
         $this->form_validation->set_rules('nomor_kontrak', 'Nomor Kontrak', 'trim|required');
+        $this->form_validation->set_rules('keterangan', 'Nomor Kontrak', 'trim');
+        $this->form_validation->set_rules('nomor_kwitansi', 'Nomor Kontrak', 'trim');
 
 		if($this->form_validation->run()== FALSE){
 			$data['title_group'] = "Inventory";
@@ -536,6 +537,7 @@ class Pengadaanbarang extends CI_Controller {
 		}
 		$activity = $this->pengadaanbarang_model->getItem('inv_inventaris_barang', array('id_pengadaan'=>$id))->result();
 		foreach($activity as $act) {
+			$juml =$act->register+$act->jumlah;
 			$data[] = array(
 				'id_inventaris_barang'   		=> $act->id_inventaris_barang,
 				'id_mst_inv_barang'   			=> substr(chunk_split($act->id_mst_inv_barang, 2, '.'),0,14),
@@ -546,6 +548,8 @@ class Pengadaanbarang extends CI_Controller {
 				'keterangan_pengadaan'			=> $act->keterangan_pengadaan,
 				'pilihan_status_invetaris'		=> $act->pilihan_status_invetaris,
 				'barang_kembar_proc'			=> $act->barang_kembar_proc,
+				'register'						=> $act->register,
+				'register_sampai'				=> $act->register.' s/d '.sprintf("%03s",$juml),
 				'tanggal_diterima'				=> $act->tanggal_diterima,
 				'waktu_dibuat'					=> $act->waktu_dibuat,
 				'terakhir_diubah'				=> $act->terakhir_diubah,
@@ -580,7 +584,7 @@ class Pengadaanbarang extends CI_Controller {
         $this->form_validation->set_rules('nama_barang', 'Nama Barang', 'trim|required');
         $this->form_validation->set_rules('jumlah', 'Jumlah', 'trim|required');
         $this->form_validation->set_rules('harga', 'Harga Satuan', 'trim|required');
-        $this->form_validation->set_rules('keterangan_pengadaan', 'Keterangan', 'trim|required');
+        //$this->form_validation->set_rules('keterangan_pengadaan', 'Keterangan', 'trim|required');
         $this->form_validation->set_rules('id_inventaris_barang', 'Kode Inventaris', 'trim|required');
 
 		if($this->form_validation->run()== FALSE){
@@ -603,7 +607,7 @@ class Pengadaanbarang extends CI_Controller {
 					'id_mst_inv_barang'=> $id_barang,
 					'nama_barang' => $this->input->post('nama_barang'),
 					'harga' => $this->input->post('harga'),
-					'keterangan_pengadaan' => $this->input->post('keterangan_pengadaan'),
+					//'keterangan_pengadaan' => $this->input->post('keterangan_pengadaan'),
 					'barang_kembar_proc' => $kode_proc,
 					'id_pengadaan' => $kode,
 					'code_cl_phc' => $kodepuskesmas,
@@ -631,7 +635,7 @@ class Pengadaanbarang extends CI_Controller {
         $this->form_validation->set_rules('nama_barang', 'Nama Barang', 'trim|required');
         $this->form_validation->set_rules('jumlah', 'Jumlah', 'trim|required');
         $this->form_validation->set_rules('harga', 'Harga Satuan', 'trim|required');
-        $this->form_validation->set_rules('keterangan_pengadaan', 'Keterangan', 'trim|required');
+       // $this->form_validation->set_rules('keterangan_pengadaan', 'Keterangan', 'trim|required');
       	/*validasi kode barang*/
 	    $kodebarang_ = substr($kd_inventaris, -14,-12);
 	    if($kodebarang_=='01') {
@@ -746,7 +750,7 @@ class Pengadaanbarang extends CI_Controller {
 			$data_update = array(
 					'nama_barang' 			=> $this->input->post('nama_barang'),
 					'harga' 				=> $this->input->post('harga'),
-					'keterangan_pengadaan' 	=> $this->input->post('keterangan_pengadaan'),
+				//	'keterangan_pengadaan' 	=> $this->input->post('keterangan_pengadaan'),
 					'pilihan_status_invetaris'  => $this->input->post('pilihan_status_invetaris'),
 		            'tanggal_pembelian'     => $tanggal,
 		            'tanggal_pengadaan'     => $tanggal,
