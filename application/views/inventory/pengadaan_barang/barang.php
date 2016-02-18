@@ -41,12 +41,12 @@
 		updateRow: function (rowID, rowData, commit) {
             commit(true);
 			var arr = $.map(rowData, function(el) { return el });
-			alert(arr);
+			//alert(arr);
 			//alert(arr[6]); alert(arr[8]);		//6 status
 			var pengadaan= '<?php echo $kode; ?>';
 			//alert(arr[]);
 
-				$.post( '<?php echo base_url()?>inventory/pengadaanbarang/updatestatus_barang', {kode_proc:arr[7],pilihan_inv:arr[11],id_pengadaan:pengadaan},function( data ) {
+				$.post( '<?php echo base_url()?>inventory/pengadaanbarang/updatestatus_barang', {kode_proc:arr[7],pilihan_inv:arr[10],id_pengadaan:pengadaan},function( data ) {
 						$("#jqxgrid_barang").jqxGrid('updateBoundData');
 						
 				 });
