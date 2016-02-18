@@ -57,7 +57,7 @@
 			datatype: "json",
 			type	: "POST",
 			datafields: [
-			{ name: 'id_inventaris_barang', type: 'number' },
+			{ name: 'id_inventaris_barang', type: 'string' },
 			{ name: 'id_mst_inv_barang', type: 'string' },
 			{ name: 'id_pengadaan', type: 'number' },
 			{ name: 'barang_kembar_proc', type: 'string' },
@@ -188,7 +188,7 @@
 			datatype: "json",
 			type	: "POST",
 			datafields: [
-			{ name: 'id_inventaris_barang', type: 'number' },
+			{ name: 'id_inventaris_barang', type: 'string' },
 			{ name: 'id_mst_inv_barang', type: 'string' },
 			{ name: 'id_pengadaan', type: 'number' },
 			{ name: 'barang_kembar_proc', type: 'string' },
@@ -289,7 +289,7 @@
 			datatype: "json",
 			type	: "POST",
 			datafields: [
-			{ name: 'id_inventaris_barang', type: 'number' },
+			{ name: 'id_inventaris_barang', type: 'string' },
 			{ name: 'id_mst_inv_barang', type: 'string' },
 			{ name: 'id_pengadaan', type: 'number' },
 			{ name: 'barang_kembar_proc', type: 'string' },
@@ -388,7 +388,7 @@
 			datatype: "json",
 			type	: "POST",
 			datafields: [
-			{ name: 'id_inventaris_barang', type: 'number' },
+			{ name: 'id_inventaris_barang', type: 'string' },
 			{ name: 'id_mst_inv_barang', type: 'string' },
 			{ name: 'id_pengadaan', type: 'number' },
 			{ name: 'barang_kembar_proc', type: 'string' },
@@ -488,7 +488,7 @@
 			datatype: "json",
 			type	: "POST",
 			datafields: [
-			{ name: 'id_inventaris_barang', type: 'number' },
+			{ name: 'id_inventaris_barang', type: 'string' },
 			{ name: 'id_mst_inv_barang', type: 'string' },
 			{ name: 'uraian', type: 'string' },
 			{ name: 'id_pengadaan', type: 'number' },
@@ -595,7 +595,7 @@
 			datatype: "json",
 			type	: "POST",
 			datafields: [
-			{ name: 'id_inventaris_barang', type: 'number' },
+			{ name: 'id_inventaris_barang', type: 'string' },
 			{ name: 'id_mst_inv_barang', type: 'string' },
 			{ name: 'uraian', type: 'string' },
 			{ name: 'id_pengadaan', type: 'number' },
@@ -701,7 +701,7 @@
 			datatype: "json",
 			type	: "POST",
 			datafields: [
-			{ name: 'id_inventaris_barang', type: 'number' },
+			{ name: 'id_inventaris_barang', type: 'string' },
 			{ name: 'id_mst_inv_barang', type: 'string' },
 			{ name: 'uraian', type: 'string' },
 			{ name: 'id_pengadaan', type: 'number' },
@@ -799,7 +799,7 @@
 			datatype: "json",
 			type	: "POST",
 			datafields: [
-			{ name: 'id_inventaris_barang', type: 'number' },
+			{ name: 'id_inventaris_barang', type: 'string' },
 			{ name: 'id_mst_inv_barang', type: 'string' },
 			{ name: 'uraian', type: 'string' },
 			{ name: 'id_pengadaan', type: 'number' },
@@ -898,7 +898,7 @@
 			datatype: "json",
 			type	: "POST",
 			datafields: [
-			{ name: 'id_inventaris_barang', type: 'number' },
+			{ name: 'id_inventaris_barang', type: 'string' },
 			{ name: 'id_mst_inv_barang', type: 'string' },
 			{ name: 'uraian', type: 'string' },
 			{ name: 'konstruksi', type: 'string' },
@@ -995,7 +995,7 @@
 			datatype: "json",
 			type	: "POST",
 			datafields: [
-			{ name: 'id_inventaris_barang', type: 'number' },
+			{ name: 'id_inventaris_barang', type: 'string' },
 			{ name: 'id_mst_inv_barang', type: 'string' },
 			{ name: 'uraian', type: 'string' },
 			{ name: 'konstruksi', type: 'string' },
@@ -1093,7 +1093,7 @@
 			datatype: "json",
 			type	: "POST",
 			datafields: [
-			{ name: 'id_inventaris_barang', type: 'number' },
+			{ name: 'id_inventaris_barang', type: 'string' },
 			{ name: 'id_mst_inv_barang', type: 'string' },
 			{ name: 'uraian', type: 'string' },
 			{ name: 'satuan', type: 'string' },
@@ -1196,7 +1196,7 @@
 			datatype: "json",
 			type	: "POST",
 			datafields: [
-			{ name: 'id_inventaris_barang', type: 'number' },
+			{ name: 'id_inventaris_barang', type: 'string' },
 			{ name: 'id_mst_inv_barang', type: 'string' },
 			{ name: 'uraian', type: 'string' },
 			{ name: 'satuan', type: 'string' },
@@ -1299,7 +1299,7 @@
 			datatype: "json",
 			type	: "POST",
 			datafields: [
-			{ name: 'id_inventaris_barang', type: 'number' },
+			{ name: 'id_inventaris_barang', type: 'string' },
 			{ name: 'id_mst_inv_barang', type: 'string' },
 			{ name: 'uraian', type: 'string' },
 			{ name: 'bangunan', type: 'string' },
@@ -1399,7 +1399,7 @@
 			datatype: "json",
 			type	: "POST",
 			datafields: [
-			{ name: 'id_inventaris_barang', type: 'number' },
+			{ name: 'id_inventaris_barang', type: 'string' },
 			{ name: 'id_mst_inv_barang', type: 'string' },
 			{ name: 'uraian', type: 'string' },
 			{ name: 'bangunan', type: 'string' },

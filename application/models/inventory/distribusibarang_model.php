@@ -140,7 +140,7 @@ class Distribusibarang_model extends CI_Model {
 			$this->db->where('id_inventaris_barang', $barang[0]);
 			$this->db->update('inv_inventaris_distribusi', $val_update);
 			
-			$reg = $this->get_register($barang[0], $this->input->post('code_ruangan2'), $this->input->post('code_cl_phc2'));
+			//$reg = $this->get_register($barang[0], $this->input->post('code_ruangan2'), $this->input->post('code_cl_phc2'));
 			$id_kembar = $this->get_kembar_id($barang[0]);
 			#105_td_Kopi_td_B	
 			$t = explode('-',$this->input->post('tanggal'));
@@ -149,7 +149,7 @@ class Distribusibarang_model extends CI_Model {
 			$values = array(
 				'id_inventaris_distribusi'=>$this->get_id_distribusi($barang[0]),
 				'id_inventaris_barang' => $barang[0],
-				'register' => $reg,
+				//'register' => $reg,
 				'id_cl_phc' => $this->input->post('code_cl_phc2'),
 				'id_ruangan' => $this->input->post('code_ruangan2'),
 				'barang_kembar_inv' => $id_kembar,
