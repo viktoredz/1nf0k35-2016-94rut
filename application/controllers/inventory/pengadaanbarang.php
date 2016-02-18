@@ -549,7 +549,7 @@ class Pengadaanbarang extends CI_Controller {
 				'pilihan_status_invetaris'		=> $act->pilihan_status_invetaris,
 				'barang_kembar_proc'			=> $act->barang_kembar_proc,
 				'register'						=> $act->register,
-				'register_sampai'				=> $act->register.' s/d '.sprintf("%03s",$juml),
+				'register_sampai'				=> $act->register.' s/d '.sprintf("%04s",$juml),
 				'tanggal_diterima'				=> $act->tanggal_diterima,
 				'waktu_dibuat'					=> $act->waktu_dibuat,
 				'terakhir_diubah'				=> $act->terakhir_diubah,
