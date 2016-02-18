@@ -817,7 +817,7 @@ class Inv_barang extends CI_Controller {
 	   			$data = $this->inv_barang_model->get_data_barang_edit_table($kd_proc,$id_barang,$kd_inventaris,'inv_inventaris_barang_d'); 
 	   			$data['pilihan_status_tanah_']			= $this->inv_barang_model->get_data_pilihan('status_hak');
 	   		}else if($kodebarang_=='05') {
-	   			$data = $this->inv_barang_model->get_data_barang_edit_table($id_barang,$kd_inventaris,'inv_inventaris_barang_e'); 
+	   			$data = $this->inv_barang_model->get_data_barang_edit_table($kd_proc,$id_barang,$kd_inventaris,'inv_inventaris_barang_e'); 
 	   			$data['pilihan_budaya_bahan_']			= $this->inv_barang_model->get_data_pilihan('bahan');
 	   			$data['pilihan_satuan_']				= $this->inv_barang_model->get_data_pilihan('satuan');
    			}else if($kodebarang_=='06') {
