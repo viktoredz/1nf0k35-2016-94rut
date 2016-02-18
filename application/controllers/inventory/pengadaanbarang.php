@@ -592,6 +592,7 @@ class Pengadaanbarang extends CI_Controller {
 			$jumlah =$this->input->post('jumlah');
 			$id_barang = $this->input->post('id_mst_inv_barang');
 			$kode_proc = $this->pengadaanbarang_model->barang_kembar_proc_($this->input->post('id_inventaris_barang'));
+			$id_= $this->pengadaanbarang_model->kode_invetaris($this->input->post('id_inventaris_barang'));
 			$kodepuskesmas = 'P'.$this->session->userdata('puskesmas');
 			$id_inventaris = $this->pengadaanbarang_model->kode_invetaris($this->input->post('id_inventaris_barang'));
 			$register = substr($id_inventaris, 24,28);
@@ -608,7 +609,6 @@ class Pengadaanbarang extends CI_Controller {
 					'code_cl_phc' => $kodepuskesmas,
 				);
 				$simpan=$this->db->insert('inv_inventaris_barang', $values);
-				$id_= $this->pengadaanbarang_model->kode_invetaris($this->input->post('id_inventaris_barang'));
 			}
 			if($simpan==true){
 				$dataupdate['terakhir_diubah']= date('Y-m-d H:i:s');
@@ -616,14 +616,14 @@ class Pengadaanbarang extends CI_Controller {
 				$dataupdate['nilai_pengadaan']= $this->pengadaanbarang_model->sum_jumlah_item( $kode,'harga');
 				$key['id_pengadaan'] = $kode;
         		$this->db->update("inv_pengadaan",$dataupdate,$key);
-				die("OK|$id_");
+				die("OK|$id_|$kode_proc");
 			}else{
 				 die("Error|Proses data gagal");
 			}
 			
 		}
 	}
-	public function edit_barang($id_pengadaan=0,$kd_inventaris=0)
+	public function edit_barang($id_pengadaan=0,$kd_inventaris=0,$kode_proc=0)
 	{
 		$data['action']			= "edit";
 		$data['kode']			= $kd_inventaris;
@@ -732,6 +732,7 @@ class Pengadaanbarang extends CI_Controller {
 			$data['action']			= "edit";
 			$data['kode']			= $kd_inventaris;
 			$data['id_pengadaan']	= $id_pengadaan;
+			$data['kode_proc']		= $kode_proc;
 			$data['disable']		= "disable";
 			$data['notice']			= validation_errors();
    			/*end mengirim status pada masing2 form*/
@@ -739,124 +740,277 @@ class Pengadaanbarang extends CI_Controller {
 		}else{
 			$jumlah =$this->input->post('jumlah');
 			$tanggalterima = explode("/",$this->input->post('tanggal_diterima'));
-			$kodebarang_ = substr($id_barang, 0,2);
-			$id_barang = $this->input->post('id_mst_inv_barang');
-			$kode_proc = $this->pengadaanbarang_model->barang_kembar_proc($id_barang);
+			$kodebarang_ = substr($kd_inventaris, -14,-12);
 			$tanggal_diterima = $tanggalterima[2].'-'.$tanggalterima[1].'-'.$tanggalterima[0];
-			$simpan = $this->dodelpermohonan($kd_inventaris,$id_barang,$kd_proc);
-			for($i=1;$i<=$jumlah;$i++){
-				$id = $this->pengadaanbarang_model->insert_data_from($id_barang,$kode_proc,$tanggal_diterima,$id_pengadaan);
+			$tanggal = $this->pengadaanbarang_model->tanggal($id_pengadaan);
+			$data_update = array(
+					'nama_barang' 			=> $this->input->post('nama_barang'),
+					'harga' 				=> $this->input->post('harga'),
+					'keterangan_pengadaan' 	=> $this->input->post('keterangan_pengadaan'),
+					'pilihan_status_invetaris'  => $this->input->post('pilihan_status_invetaris'),
+		            'tanggal_pembelian'     => $tanggal,
+		            'tanggal_pengadaan'     => $tanggal,
+		            'tanggal_diterima'      => $tanggal_diterima,
+			);
+			$key_update = array('barang_kembar_proc' => $kode_proc,
+			 );
+			$this->db->update('inv_inventaris_barang',$data_update,$key_update);
+			//$simpan = $this->dodelpermohonan($kd_inventaris,$id_barang,$kd_proc);
+			//for($i=1;$i<=$jumlah;$i++){
+			//	$id = $this->pengadaanbarang_model->insert_data_from($id_barang,$kode_proc,$tanggal_diterima,$id_pengadaan);
 					/*simpan pada bedadatabase*/
+			$id_inv = $this->db->query("SELECT id_inventaris_barang,id_mst_inv_barang FROM inv_inventaris_barang WHERE  barang_kembar_proc=$kode_proc")->result();
+        	foreach ($id_inv as $keyinv) {
+        		$kodebarang_ = substr($keyinv->id_mst_inv_barang,0,2);
 		   		if($kodebarang_=='01') {	
+		   			$this->db->where('id_inventaris_barang',$keyinv->id_inventaris_barang);
+				 	$this->db->delete('inv_inventaris_barang_a');
+		   			/*$jumlah = $this->pengadaanbarang_model->jumlahtable('inv_inventaris_barang_a',$keyinv->id_inventaris);
+		   			if ($jumlah>0) {
 		   				$tanggal = explode("/",$this->input->post('status_sertifikat_tanggal'));
 		   				$status_sertifikat_tanggal = $tanggal[2].'-'.$tanggal[1].'-'.$tanggal[0];
 		   				$values = array(
-						'id_inventaris_barang' 	=> $id,
-						'id_mst_inv_barang'		=> $id_barang,
-						'luas' 					=> $this->input->post('luas'),
-						'alamat' 				=> $this->input->post('alamat'),
-						'pilihan_satuan_barang' => $this->input->post('pilihan_satuan_barang'),
-						'pilihan_status_hak' 	=> $this->input->post('pilihan_status_hak'),
-						'status_sertifikat_tanggal' => $status_sertifikat_tanggal,
-						'status_sertifikat_nomor'=> $this->input->post('status_sertifikat_nomor'),
-						'pilihan_penggunaan' 	=> $this->input->post('pilihan_penggunaan'),
-					);
-					$simpan=$this->db->insert('inv_inventaris_barang_a', $values);
+							'luas' 					=> $this->input->post('luas'),
+							'alamat' 				=> $this->input->post('alamat'),
+							'pilihan_satuan_barang' => $this->input->post('pilihan_satuan_barang'),
+							'pilihan_status_hak' 	=> $this->input->post('pilihan_status_hak'),
+							'status_sertifikat_tanggal' => $status_sertifikat_tanggal,
+							'status_sertifikat_nomor'=> $this->input->post('status_sertifikat_nomor'),
+							'pilihan_penggunaan' 	=> $this->input->post('pilihan_penggunaan'),
+						);
+						$key = array(
+							'id_inventaris_barang' 	=> $keyinv->id_inventaris_barang,
+							);
+						$simpan=$this->db->update('inv_inventaris_barang_a', $values,$key);
+		   			}else{*/
+		   				$tanggal = explode("/",$this->input->post('status_sertifikat_tanggal'));
+		   				$status_sertifikat_tanggal = $tanggal[2].'-'.$tanggal[1].'-'.$tanggal[0];
+		   				$values = array(
+							'id_inventaris_barang' 	=> $keyinv->id_inventaris_barang,
+							'id_mst_inv_barang'		=> $keyinv->id_mst_inv_barang,
+							'luas' 					=> $this->input->post('luas'),
+							'alamat' 				=> $this->input->post('alamat'),
+							'pilihan_satuan_barang' => $this->input->post('pilihan_satuan_barang'),
+							'pilihan_status_hak' 	=> $this->input->post('pilihan_status_hak'),
+							'status_sertifikat_tanggal' => $status_sertifikat_tanggal,
+							'status_sertifikat_nomor'=> $this->input->post('status_sertifikat_nomor'),
+							'pilihan_penggunaan' 	=> $this->input->post('pilihan_penggunaan'),
+						);
+						$simpan=$this->db->insert('inv_inventaris_barang_a', $values);
+						
+					//}
 		   		}else if($kodebarang_=='02') {
-		   			$tanggal = explode("/",$this->input->post('tanggal_bpkb'));
-		   			$tanggal_bpkb = $tanggal[2].'-'.$tanggal[1].'-'.$tanggal[0];
-		   			$tanggal_ = explode("/",$this->input->post('tanggal_perolehan'));
-		   			$tanggal_perolehan = $tanggal_[2].'-'.$tanggal_[1].'-'.$tanggal_[0];
-		   			$values = array(
-						'id_inventaris_barang' 	=> $id,
-						'id_mst_inv_barang'		=> $id_barang,
-						'merek_type' 			=> $this->input->post('merek_type'),
-						'identitas_barang' 		=> $this->input->post('identitas_barang'),
-						'pilihan_bahan' 		=> $this->input->post('pilihan_bahan'),
-						'ukuran_barang' 		=> $this->input->post('ukuran_barang'),
-						'pilihan_satuan' 		=> $this->input->post('pilihan_satuan'),
-						'tanggal_bpkb'			=> $tanggal_bpkb,
-						'nomor_bpkb'		 	=> $this->input->post('nomor_bpkb'),
-						'no_polisi'		 		=> $this->input->post('no_polisi'),
-						'tanggal_perolehan'	 	=> $tanggal_perolehan,
-					);
-					$simpan=$this->db->insert('inv_inventaris_barang_b', $values);
+		   			$this->db->where('id_inventaris_barang',$keyinv->id_inventaris_barang);
+				 	$this->db->delete('inv_inventaris_barang_b');
+		   			/*$jumlah = $this->pengadaanbarang_model->jumlahtable('inv_inventaris_barang_b',$keyinv->id_inventaris);
+		   			if($jumlah>0){
+		   				$tanggal = explode("/",$this->input->post('tanggal_bpkb'));
+			   			$tanggal_bpkb = $tanggal[2].'-'.$tanggal[1].'-'.$tanggal[0];
+			   			$tanggal_ = explode("/",$this->input->post('tanggal_perolehan'));
+			   			$tanggal_perolehan = $tanggal_[2].'-'.$tanggal_[1].'-'.$tanggal_[0];
+			   			$values = array(
+							'merek_type' 			=> $this->input->post('merek_type'),
+							'identitas_barang' 		=> $this->input->post('identitas_barang'),
+							'pilihan_bahan' 		=> $this->input->post('pilihan_bahan'),
+							'ukuran_barang' 		=> $this->input->post('ukuran_barang'),
+							'pilihan_satuan' 		=> $this->input->post('pilihan_satuan'),
+							'tanggal_bpkb'			=> $tanggal_bpkb,
+							'nomor_bpkb'		 	=> $this->input->post('nomor_bpkb'),
+							'no_polisi'		 		=> $this->input->post('no_polisi'),
+							'tanggal_perolehan'	 	=> $tanggal_perolehan,
+						);
+						$key = array(
+							'id_inventaris_barang' 	=> $keyinv->id_inventaris_barang,
+						 );	
+						$simpan=$this->db->update('inv_inventaris_barang_b', $values,$key);
+		   			}else{*/
+			   			$tanggal = explode("/",$this->input->post('tanggal_bpkb'));
+			   			$tanggal_bpkb = $tanggal[2].'-'.$tanggal[1].'-'.$tanggal[0];
+			   			$tanggal_ = explode("/",$this->input->post('tanggal_perolehan'));
+			   			$tanggal_perolehan = $tanggal_[2].'-'.$tanggal_[1].'-'.$tanggal_[0];
+			   			$values = array(
+							'id_inventaris_barang' 	=> $keyinv->id_inventaris_barang,
+							'id_mst_inv_barang'		=> $keyinv->id_mst_inv_barang,
+							'merek_type' 			=> $this->input->post('merek_type'),
+							'identitas_barang' 		=> $this->input->post('identitas_barang'),
+							'pilihan_bahan' 		=> $this->input->post('pilihan_bahan'),
+							'ukuran_barang' 		=> $this->input->post('ukuran_barang'),
+							'pilihan_satuan' 		=> $this->input->post('pilihan_satuan'),
+							'tanggal_bpkb'			=> $tanggal_bpkb,
+							'nomor_bpkb'		 	=> $this->input->post('nomor_bpkb'),
+							'no_polisi'		 		=> $this->input->post('no_polisi'),
+							'tanggal_perolehan'	 	=> $tanggal_perolehan,
+						);
+						$simpan=$this->db->insert('inv_inventaris_barang_b', $values);
+					//}
 		   		}else if($kodebarang_=='03') {
-		   			$tanggal = explode("/",$this->input->post('dokumen_tanggal'));
-		   			$dokumen_tanggal = $tanggal[2].'-'.$tanggal[1].'-'.$tanggal[0];
-		   			$values = array(
-						'id_inventaris_barang' 	=> $id,
-						'id_mst_inv_barang'		=> $id_barang,
-						'luas_lantai' 			=> $this->input->post('luas_lantai'),
-						'letak_lokasi_alamat' 	=> $this->input->post('letak_lokasi_alamat'),
-						'pillihan_status_hak' 	=> $this->input->post('pillihan_status_hak'),
-						'nomor_kode_tanah' 		=> $this->input->post('nomor_kode_tanah'),
-						'pilihan_kons_tingkat' 	=> $this->input->post('pilihan_kons_tingkat'),
-						'pilihan_kons_beton'	=> $this->input->post('pilihan_kons_beton'),
-						'dokumen_tanggal'		=> $dokumen_tanggal,
-						'dokumen_nomor'		 	=> $this->input->post('dokumen_nomor'),
-					);
-					$simpan=$this->db->insert('inv_inventaris_barang_c', $values);
+		   			$this->db->where('id_inventaris_barang',$keyinv->id_inventaris_barang);
+				 	$this->db->delete('inv_inventaris_barang_c');
+		   			/*$jumlah = $this->pengadaanbarang_model->jumlahtable('inv_inventaris_barang_c',$keyinv->id_inventaris);
+		   			if ($jumlah>0) {
+		   				$tanggal = explode("/",$this->input->post('dokumen_tanggal'));
+			   			$dokumen_tanggal = $tanggal[2].'-'.$tanggal[1].'-'.$tanggal[0];
+			   			$values = array(
+							'luas_lantai' 			=> $this->input->post('luas_lantai'),
+							'letak_lokasi_alamat' 	=> $this->input->post('letak_lokasi_alamat'),
+							'pillihan_status_hak' 	=> $this->input->post('pillihan_status_hak'),
+							'nomor_kode_tanah' 		=> $this->input->post('nomor_kode_tanah'),
+							'pilihan_kons_tingkat' 	=> $this->input->post('pilihan_kons_tingkat'),
+							'pilihan_kons_beton'	=> $this->input->post('pilihan_kons_beton'),
+							'dokumen_tanggal'		=> $dokumen_tanggal,
+							'dokumen_nomor'		 	=> $this->input->post('dokumen_nomor'),
+						);
+						$key = array(
+							'id_inventaris_barang' 	=> $keyinv->id_inventaris_barang,
+						 );	
+						$simpan=$this->db->update('inv_inventaris_barang_c', $values,$key);
+		   			}else {*/
+			   			$tanggal = explode("/",$this->input->post('dokumen_tanggal'));
+			   			$dokumen_tanggal = $tanggal[2].'-'.$tanggal[1].'-'.$tanggal[0];
+			   			$values = array(
+							'id_inventaris_barang' 	=> $keyinv->id_inventaris_barang,
+							'id_mst_inv_barang'		=> $keyinv->id_mst_inv_barang,
+							'luas_lantai' 			=> $this->input->post('luas_lantai'),
+							'letak_lokasi_alamat' 	=> $this->input->post('letak_lokasi_alamat'),
+							'pillihan_status_hak' 	=> $this->input->post('pillihan_status_hak'),
+							'nomor_kode_tanah' 		=> $this->input->post('nomor_kode_tanah'),
+							'pilihan_kons_tingkat' 	=> $this->input->post('pilihan_kons_tingkat'),
+							'pilihan_kons_beton'	=> $this->input->post('pilihan_kons_beton'),
+							'dokumen_tanggal'		=> $dokumen_tanggal,
+							'dokumen_nomor'		 	=> $this->input->post('dokumen_nomor'),
+						);
+						$simpan=$this->db->insert('inv_inventaris_barang_c', $values);
+					//}
 		   		}else if($kodebarang_=='04') {
-		   			$tanggal = explode("/",$this->input->post('dokumen_tanggal'));
-		   			$dokumen_tanggal = $tanggal[2].'-'.$tanggal[1].'-'.$tanggal[0];
-		   			$values = array(
-						'id_inventaris_barang' 	=> $id,
-						'id_mst_inv_barang'		=> $id_barang,
-						'konstruksi' 			=> $this->input->post('konstruksi'),
-						'panjang' 				=> $this->input->post('panjang'),
-						'lebar' 				=> $this->input->post('lebar'),
-						'luas' 					=> $this->input->post('luas'),
-						'letak_lokasi_alamat' 	=> $this->input->post('letak_lokasi_alamat'),
-						'dokumen_tanggal'		=> $dokumen_tanggal,
-						'dokumen_nomor'			=> $this->input->post('dokumen_nomor'),
-						'pilihan_status_tanah'	=> $this->input->post('pilihan_status_tanah'),
-						'nomor_kode_tanah'		=> $this->input->post('nomor_kode_tanah'),
-					);
-					$simpan=$this->db->insert('inv_inventaris_barang_d', $values);
+		   			$this->db->where('id_inventaris_barang',$keyinv->id_inventaris_barang);
+				 	$this->db->delete('inv_inventaris_barang_d');
+		   			/*$jumlah = $this->pengadaanbarang_model->jumlahtable('inv_inventaris_barang_d',$keyinv->id_inventaris);
+		   			if($jumlah>0){
+		   				$tanggal = explode("/",$this->input->post('dokumen_tanggal'));
+			   			$dokumen_tanggal = $tanggal[2].'-'.$tanggal[1].'-'.$tanggal[0];
+			   			$values = array(
+							'konstruksi' 			=> $this->input->post('konstruksi'),
+							'panjang' 				=> $this->input->post('panjang'),
+							'lebar' 				=> $this->input->post('lebar'),
+							'luas' 					=> $this->input->post('luas'),
+							'letak_lokasi_alamat' 	=> $this->input->post('letak_lokasi_alamat'),
+							'dokumen_tanggal'		=> $dokumen_tanggal,
+							'dokumen_nomor'			=> $this->input->post('dokumen_nomor'),
+							'pilihan_status_tanah'	=> $this->input->post('pilihan_status_tanah'),
+							'nomor_kode_tanah'		=> $this->input->post('nomor_kode_tanah'),
+						);
+		   				$key = array(
+							'id_inventaris_barang' 	=> $keyinv->id_inventaris_barang,
+						 );	
+						$simpan=$this->db->update('inv_inventaris_barang_d', $values,$key);
+		   			}else{*/
+			   			$tanggal = explode("/",$this->input->post('dokumen_tanggal'));
+			   			$dokumen_tanggal = $tanggal[2].'-'.$tanggal[1].'-'.$tanggal[0];
+			   			$values = array(
+							'id_inventaris_barang' 	=> $keyinv->id_inventaris_barang,
+							'id_mst_inv_barang'		=> $keyinv->id_mst_inv_barang,
+							'konstruksi' 			=> $this->input->post('konstruksi'),
+							'panjang' 				=> $this->input->post('panjang'),
+							'lebar' 				=> $this->input->post('lebar'),
+							'luas' 					=> $this->input->post('luas'),
+							'letak_lokasi_alamat' 	=> $this->input->post('letak_lokasi_alamat'),
+							'dokumen_tanggal'		=> $dokumen_tanggal,
+							'dokumen_nomor'			=> $this->input->post('dokumen_nomor'),
+							'pilihan_status_tanah'	=> $this->input->post('pilihan_status_tanah'),
+							'nomor_kode_tanah'		=> $this->input->post('nomor_kode_tanah'),
+						);
+						$simpan=$this->db->insert('inv_inventaris_barang_d', $values);
+					//}
 		   		}else if($kodebarang_=='05') {
-		   			$tanggal = explode("/",$this->input->post('tahun_cetak_beli'));
-		   			$tahun_cetak_beli = $tanggal[2].'-'.$tanggal[1].'-'.$tanggal[0];
-		   			$values = array(
-						'id_inventaris_barang' 	=> $id,
-						'id_mst_inv_barang'		=> $id_barang,
-						'buku_judul_pencipta' 	=> $this->input->post('buku_judul_pencipta'),
-						'buku_spesifikasi' 		=> $this->input->post('buku_spesifikasi'),
-						'budaya_asal_daerah' 	=> $this->input->post('budaya_asal_daerah'),
-						'budaya_pencipta' 		=> $this->input->post('budaya_pencipta'),
-						'pilihan_budaya_bahan' 	=> $this->input->post('pilihan_budaya_bahan'),
-						'flora_fauna_jenis'		=> $this->input->post('flora_fauna_jenis'),
-						'flora_fauna_ukuran'	=> $this->input->post('flora_fauna_ukuran'),
-						'pilihan_satuan'		=> $this->input->post('pilihan_satuan'),
-						'tahun_cetak_beli'		=> $tahun_cetak_beli,
-					);
-					$simpan=$this->db->insert('inv_inventaris_barang_e', $values);
+		   			$this->db->where('id_inventaris_barang',$keyinv->id_inventaris_barang);
+				 	$this->db->delete('inv_inventaris_barang_e');
+		   			/*$jumlah = $this->pengadaanbarang_model->jumlahtable('inv_inventaris_barang_e',$keyinv->id_inventaris);
+		   			if ($jumlah>0) {
+		   				$tanggal = explode("/",$this->input->post('tahun_cetak_beli'));
+			   			$tahun_cetak_beli = $tanggal[2].'-'.$tanggal[1].'-'.$tanggal[0];
+			   			$values = array(
+							'buku_judul_pencipta' 	=> $this->input->post('buku_judul_pencipta'),
+							'buku_spesifikasi' 		=> $this->input->post('buku_spesifikasi'),
+							'budaya_asal_daerah' 	=> $this->input->post('budaya_asal_daerah'),
+							'budaya_pencipta' 		=> $this->input->post('budaya_pencipta'),
+							'pilihan_budaya_bahan' 	=> $this->input->post('pilihan_budaya_bahan'),
+							'flora_fauna_jenis'		=> $this->input->post('flora_fauna_jenis'),
+							'flora_fauna_ukuran'	=> $this->input->post('flora_fauna_ukuran'),
+							'pilihan_satuan'		=> $this->input->post('pilihan_satuan'),
+							'tahun_cetak_beli'		=> $tahun_cetak_beli,
+						);
+		   				$key = array(
+							'id_inventaris_barang' 	=> $keyinv->id_inventaris_barang,
+						 );	
+						$simpan=$this->db->update('inv_inventaris_barang_e', $values,$key);
+		   			}else{*/
+			   			$tanggal = explode("/",$this->input->post('tahun_cetak_beli'));
+			   			$tahun_cetak_beli = $tanggal[2].'-'.$tanggal[1].'-'.$tanggal[0];
+			   			$values = array(
+							'id_inventaris_barang' 	=> $keyinv->id_inventaris_barang,
+							'id_mst_inv_barang'		=> $keyinv->id_mst_inv_barang,
+							'buku_judul_pencipta' 	=> $this->input->post('buku_judul_pencipta'),
+							'buku_spesifikasi' 		=> $this->input->post('buku_spesifikasi'),
+							'budaya_asal_daerah' 	=> $this->input->post('budaya_asal_daerah'),
+							'budaya_pencipta' 		=> $this->input->post('budaya_pencipta'),
+							'pilihan_budaya_bahan' 	=> $this->input->post('pilihan_budaya_bahan'),
+							'flora_fauna_jenis'		=> $this->input->post('flora_fauna_jenis'),
+							'flora_fauna_ukuran'	=> $this->input->post('flora_fauna_ukuran'),
+							'pilihan_satuan'		=> $this->input->post('pilihan_satuan'),
+							'tahun_cetak_beli'		=> $tahun_cetak_beli,
+						);
+						$simpan=$this->db->insert('inv_inventaris_barang_e', $values);
+					//}
 				}else if($kodebarang_=='06') {
-					$tanggal = explode("/",$this->input->post('tanggal_mulai'));
-		   			$tanggal_mulai = $tanggal[2].'-'.$tanggal[1].'-'.$tanggal[0];
-		   			$values = array(
-						'id_inventaris_barang' 	=> $id,
-						'id_mst_inv_barang'		=> $id_barang,
-						'bangunan' 				=> $this->input->post('bangunan'),
-						'pilihan_konstruksi_bertingkat' => $this->input->post('pilihan_konstruksi_bertingkat'),
-						'pilihan_konstruksi_beton' 	=> $this->input->post('pilihan_konstruksi_beton'),
-						'luas' 					=> $this->input->post('luas'),
-						'lokasi' 				=> $this->input->post('lokasi'),
-						'dokumen_tanggal'		=> $this->input->post('dokumen_tanggal'),
-						'dokumen_nomor'			=> $this->input->post('dokumen_nomor'),
-						'tanggal_mulai'			=> $tanggal_mulai,
-						'pilihan_status_tanah'	=> $this->input->post('pilihan_status_tanah'),
-					);
-					$simpan=$this->db->insert('inv_inventaris_barang_f', $values);
+					$this->db->where('id_inventaris_barang',$keyinv->id_inventaris_barang);
+				 	$this->db->delete('inv_inventaris_barang_f');
+					/*$jumlah = $this->pengadaanbarang_model->jumlahtable('inv_inventaris_barang_f',$keyinv->id_inventaris);
+					if($jumlah>0){
+						$tanggal = explode("/",$this->input->post('tanggal_mulai'));
+			   			$tanggal_mulai = $tanggal[2].'-'.$tanggal[1].'-'.$tanggal[0];
+			   			$values = array(
+							'bangunan' 				=> $this->input->post('bangunan'),
+							'pilihan_konstruksi_bertingkat' => $this->input->post('pilihan_konstruksi_bertingkat'),
+							'pilihan_konstruksi_beton' 	=> $this->input->post('pilihan_konstruksi_beton'),
+							'luas' 					=> $this->input->post('luas'),
+							'lokasi' 				=> $this->input->post('lokasi'),
+							'dokumen_tanggal'		=> $this->input->post('dokumen_tanggal'),
+							'dokumen_nomor'			=> $this->input->post('dokumen_nomor'),
+							'tanggal_mulai'			=> $tanggal_mulai,
+							'pilihan_status_tanah'	=> $this->input->post('pilihan_status_tanah'),
+						);
+						$key = array(
+							'id_inventaris_barang' 	=> $keyinv->id_inventaris_barang,
+						 );	
+						$simpan=$this->db->update('inv_inventaris_barang_f', $values,$key);
+					}else{*/
+						$tanggal = explode("/",$this->input->post('tanggal_mulai'));
+			   			$tanggal_mulai = $tanggal[2].'-'.$tanggal[1].'-'.$tanggal[0];
+			   			$values = array(
+							'id_inventaris_barang' 	=> $keyinv->id_inventaris_barang,
+							'id_mst_inv_barang'		=> $keyinv->id_mst_inv_barang,
+							'bangunan' 				=> $this->input->post('bangunan'),
+							'pilihan_konstruksi_bertingkat' => $this->input->post('pilihan_konstruksi_bertingkat'),
+							'pilihan_konstruksi_beton' 	=> $this->input->post('pilihan_konstruksi_beton'),
+							'luas' 					=> $this->input->post('luas'),
+							'lokasi' 				=> $this->input->post('lokasi'),
+							'dokumen_tanggal'		=> $this->input->post('dokumen_tanggal'),
+							'dokumen_nomor'			=> $this->input->post('dokumen_nomor'),
+							'tanggal_mulai'			=> $tanggal_mulai,
+							'pilihan_status_tanah'	=> $this->input->post('pilihan_status_tanah'),
+						);
+						$simpan=$this->db->insert('inv_inventaris_barang_f', $values);
+					//}
 				}
 				/*end simpan pada bedadatabase form*/
 			}
+			
 			if($simpan==true){
-				$dataupdate['terakhir_diubah']= date('Y-m-d H:i:s');
-				$dataupdate['nilai_pengadaan']= $this->pengadaanbarang_model->sum_jumlah_item( $id_pengadaan,'harga');
-				$dataupdate['jumlah_unit']= $this->pengadaanbarang_model->sum_unit($id_pengadaan)->num_rows();
-				$key['id_pengadaan'] = $id_pengadaan;
-        		$this->db->update("inv_pengadaan",$dataupdate,$key);
+				$dataupdate__['terakhir_diubah']= date('Y-m-d H:i:s');
+				$dataupdate__['nilai_pengadaan']= $this->pengadaanbarang_model->sum_jumlah_item( $id_pengadaan,'harga');
+				$dataupdate__['jumlah_unit']= $this->pengadaanbarang_model->sum_unit($id_pengadaan)->num_rows();
+				$key__['id_pengadaan'] = $id_pengadaan;
+        		$this->db->update("inv_pengadaan",$dataupdate__,$key__);
 				die("OK|");
 			}else{
 				 die("Error|Proses data gagal");

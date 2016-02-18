@@ -39,6 +39,7 @@ if(isset($disable)){if($disable='disable'){?>
             var data = new FormData();
             $('#notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
             $('#notice').show();
+            data.append('id_inventaris_barang', $('#id_inventaris_barang').val());
             data.append('id_mst_inv_barang', $('#v_kode_barang').val());
             data.append('tanggal_diterima', $('#dateInput').val());
             data.append('pilihan_status_invetaris', $('#status_invetaris').val());
@@ -112,7 +113,7 @@ if(isset($disable)){if($disable='disable'){?>
                 contentType : false,
                 processData : false,
                 type : 'POST',
-                url : '<?php echo base_url()."inventory/pengadaanbarang/".$action."_barang/".$id_pengadaan."/".$kode."/" ?>',
+                url : '<?php echo base_url()."inventory/pengadaanbarang/".$action."_barang/".$id_pengadaan."/".$kode."/".$kode_proc ?>',
                 data : data,
                 
                 success : function(response){
@@ -212,8 +213,31 @@ if(isset($disable)){if($disable='disable'){?>
     <div class="col-md-6">
     <div class="box box-primary">
           <div class="box-body">
+          <div class="form-group">
+              <label>Kode Inventaris</label>
+              <input type="text" class="form-control" id="id_inventaris_barang" name="id_inventaris_barang"  placeholder="Kode Inventaris Barang" value="<?php
+              if(set_value('id_inventaris_barang')=="" && isset($id_inventaris_barang)){
+                  $s = array();
+                  $s[0] = substr($id_inventaris_barang, 0,2);
+                  $s[1] = substr($id_inventaris_barang, 2,2);
+                  $s[2] = substr($id_inventaris_barang, 4,2);
+                  $s[3] = substr($id_inventaris_barang, 6,2);
+                  $s[4] = substr($id_inventaris_barang, 8,2);
+                  $s[5] = substr($id_inventaris_barang, 10,2);
+                  $s[6] = substr($id_inventaris_barang, 12,2);
+                  $s[7] = substr($id_inventaris_barang, 14,2);
+                  $s[8] = substr($id_inventaris_barang, 16,2);
+                  $s[9] = substr($id_inventaris_barang, 18,2);
+                  $s[10] = substr($id_inventaris_barang, 20,2);
+                  $s[11] = substr($id_inventaris_barang, 22,2);
+                  echo implode(".", $s);
+                }else{
+                  echo  set_value('id_inventaris_barang');
+                }
+                ?>" disabled>
+            </div>
             <div class="form-group"> 
-              <label>Kode Barang</label>
+              <label>Jenis Barang</label>
               <input id="jqxinput" class="form-control" autocomplete="off" name="code_mst_inv" type="text" value="<?php 
                 if(set_value('code_mst_inv')=="" && isset($id_mst_inv_barang)){
                   $s = array();
@@ -253,7 +277,7 @@ if(isset($disable)){if($disable='disable'){?>
                 }else{
                   echo  set_value('jumlah');
                 }
-                ?>">
+                ?>" disabled>
             </div>
             <div class="form-group">
               <label>Harga Satuan</label>

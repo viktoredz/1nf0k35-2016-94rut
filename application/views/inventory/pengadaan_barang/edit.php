@@ -195,10 +195,11 @@ $(function(){
     <?php if(!isset($viewreadonly)){?>
       $("#tgl").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme});
       $("#tgl1").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme});
-    <?php } ?>
+    
     document.getElementById("tgl").onchange = function() {
         kodeInvetaris(document.getElementById("tgl").value);
     };
+    <?php } ?>
   });
     function kodeInvetaris(tahun=0)
     { 

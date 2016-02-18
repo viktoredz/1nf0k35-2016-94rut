@@ -8,10 +8,9 @@ if(isset($disable)){if($disable='disable'){?>
 <?php }} ?>
 <script type="text/javascript">
 
-function edit_barang(id_inventaris_barang){
-  alert(id_inventaris_barang);
+function edit_barang(id_inventaris_barang,kodeproc){
     $("#popup_barang #popup_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-    $.get("<?php echo base_url().'inventory/pengadaanbarang/edit_barang/'.$kode.'/';?>"+id_inventaris_barang, function(data) {
+    $.get("<?php echo base_url().'inventory/pengadaanbarang/edit_barang/'.$kode.'/';?>"+id_inventaris_barang+'/'+kodeproc, function(data) {
       $("#popup_content").html(data);
     });
     $("#popup_barang").jqxWindow({
@@ -76,9 +75,7 @@ function edit_barang(id_inventaris_barang){
                       $('#notice').show();
                       $("#jqxgrid_barang").jqxGrid('updatebounddata', 'cells');
                       close_popup();
-                      var kode_           = res[1]; 
-                      var id_             = res[2];
-                      edit_barang(kode_); 
+                      edit_barang(res[1],res[2]); 
                   }
                   else if(res[0]=="Error"){
                       $('#notice').hide();

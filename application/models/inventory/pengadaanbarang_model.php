@@ -418,10 +418,24 @@ WHERE inv_inventaris_barang.barang_kembar_proc = (SELECT barang_kembar_proc FROM
 
 		return $this->db->delete($this->tabel);
 	}
+    function jumlahtable($table,$id_inventaris_barang){
+
+        $this->db->where('id_inventaris_barang',$id_inventaris_barang);
+        $q = $this->db->get($table);
+        $kd = 0;
+        if($q->num_rows()>0)
+        {
+           $kd = $q->num_rows();
+        }
+        else
+        {
+            $kd = 0;
+        }
+        return $kd;
+    }
 	function delete_entryitem($kode,$kd_proc)
-	{   $id = $this->db->query("SELECT barang_kembar_proc FROM inv_inventaris_barang WHERE id_inventaris_barang =$kd_proc")->result(); 
+	{   $id = $this->db->query("SELECT * FROM inv_inventaris_barang WHERE id_inventaris_barang =$kode")->result(); 
         foreach ($id as $key) {
-              $key->id_inventaris_barang;
               $this->db->where('barang_kembar_proc',$kd_proc);
               $this->db->delete('inv_inventaris_barang');
                 $kodebarang_ = substr($kode, -14,-12);
