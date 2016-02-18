@@ -162,29 +162,33 @@ function edit_barang(id_inventaris_barang,kodeproc){
 	<div class="row">
     <?php echo form_open(current_url(), 'id="form-ss"') ?>
           <div class="box-body">
-            <div class="col-md-6">
-            <div class="form-group">
-              <label>Kode Lokasi</label>
-              <input type="text" class="form-control" id="v_kode_invetaris" name="v_kode_invetaris"  placeholder="Kode Inventaris Barang" value="<?php
-              if(set_value('v_kode_invetaris')=="" && isset($id_inventaris_barang)){
-                  echo $id_inventaris_barang;
-                }else{
-                  echo  set_value('v_kode_invetaris');
-                }
-                ?>">
-            </div>
-            </div>
-            <div class="col-md-6">
-            <div class="form-group">
-              <label>Kode Barang</label>
-              <input type="text" class="form-control" id="id_inventaris_barang" name="id_inventaris_barang"  placeholder="Kode Inventaris Barang" value="<?php
-              if(set_value('id_inventaris_barang')=="" && isset($id_inventaris_barang)){
-                  echo $id_inventaris_barang;
-                }else{
-                  echo  set_value('id_inventaris_barang');
-                }
-                ?>">
-            </div>
+            <div class="continer">
+              <div class="row">           
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Kode Lokasi</label>
+                    <input type="text" class="form-control" id="v_kode_invetaris" name="v_kode_invetaris"  placeholder="Kode Inventaris Barang" value="<?php
+                    if(set_value('v_kode_invetaris')=="" && isset($id_inventaris_barang)){
+                        echo $id_inventaris_barang;
+                      }else{
+                        echo  set_value('v_kode_invetaris');
+                      }
+                      ?>">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Kode Barang</label>
+                    <input type="text" class="form-control" id="id_inventaris_barang" name="id_inventaris_barang"  placeholder="Kode Inventaris Barang" value="<?php
+                    if(set_value('id_inventaris_barang')=="" && isset($id_inventaris_barang)){
+                        echo $id_inventaris_barang;
+                      }else{
+                        echo  set_value('id_inventaris_barang');
+                      }
+                      ?>" readonly=''>
+                  </div>
+                </div>
+              </div>  
             </div>
             <div class="form-group">
               <label>Jenis Barang</label>
