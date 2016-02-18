@@ -22,6 +22,7 @@ class Distribusibarang_model extends CI_Model {
 				$this->db->where('inv_inventaris_barang.id_inventaris_barang NOT IN (SELECT DISTINCT id_inventaris_barang FROM inv_inventaris_distribusi) ');
 				$this->db->where('inv_inventaris_barang.code_cl_phc','P'.$this->session->userdata('puskesmas'));
 	        	$this->db->join('inv_inventaris_distribusi','inv_inventaris_distribusi.id_inventaris_barang = inv_inventaris_barang.id_inventaris_barang','left');
+	        	$this->db->join('inv_pengadaan',"inv_inventaris_barang.id_pengadaan = inv_pengadaan.id_pengadaan AND inv_pengadaan.pilihan_status_pengadaan ='4'");
 			/*}else {
 				$this->db->where('inv_inventaris_distribusi.id_cl_phc',$this->session->userdata('code_cl_phc'));
 	        	$this->db->join('inv_inventaris_distribusi','inv_inventaris_distribusi.id_inventaris_barang = inv_inventaris_barang.id_inventaris_barang','inner');
@@ -75,6 +76,7 @@ class Distribusibarang_model extends CI_Model {
 				$this->db->where("inv_inventaris_barang.id_inventaris_barang NOT IN (SELECT DISTINCT id_inventaris_barang FROM inv_inventaris_distribusi) ");
 				$this->db->where('inv_inventaris_barang.code_cl_phc','P'.$this->session->userdata('puskesmas'));
 				//$this->db->join('inv_pengadaan',"'inv_inventaris_barang.id_pengadaan = inv_pengadaan.id_pengadaan AND inv_inventaris_barang.code_cl_phc ='".$puskes."'");
+				$this->db->join('inv_pengadaan',"inv_inventaris_barang.id_pengadaan = inv_pengadaan.id_pengadaan AND inv_pengadaan.pilihan_status_pengadaan ='4'");
         		$count = $query = $this->db->get('inv_inventaris_barang')->num_rows();
 				return "(".$count.")";
 			}
