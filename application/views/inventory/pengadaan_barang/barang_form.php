@@ -164,7 +164,7 @@ function edit_barang(id_inventaris_barang,kodeproc){
           <div class="box-body">
             <div class="col-md-6">
             <div class="form-group">
-              <label>Kode Invetaris</label>
+              <label>Kode Lokasi</label>
               <input type="text" class="form-control" id="v_kode_invetaris" name="v_kode_invetaris"  placeholder="Kode Inventaris Barang" value="<?php
               if(set_value('v_kode_invetaris')=="" && isset($id_inventaris_barang)){
                   echo $id_inventaris_barang;
