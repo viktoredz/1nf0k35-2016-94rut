@@ -562,7 +562,7 @@ class Pengadaanbarang extends CI_Controller {
 
 		echo json_encode(array($json));
 	}
-	public function kodeInvetaris($id='3'){
+	public function kodeInvetaris($id=0){
 		$this->db->where('code',"P".$this->session->userdata('puskesmas'));
 		$query = $this->db->get('cl_phc')->result();
 		foreach ($query as $q) {

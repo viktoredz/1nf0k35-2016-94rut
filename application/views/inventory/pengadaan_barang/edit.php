@@ -121,7 +121,7 @@
       <div id="success"> 
           <table class="table table-condensed">
               <tr>
-                <td>Kode Inventaris</td>
+                <td>Kode Lokasi</td>
                 <td>
                 <input type="text" id="kode_inventaris_" name="kode_inventaris_" placeholder="Kode Lokasi" />
                 </td>
@@ -215,7 +215,8 @@ $(function(){
       success:function(data)
       { 
         $.each(data,function(index,elemet){
-          $("#kode_inventaris_").val(elemet.kodeinv+"."+tahun);
+          var lokasi = elemet.kodeinv.split(".")
+          $("#kode_inventaris_").val(lokasi[0]+"."+lokasi[1]+"."+lokasi[2]+"."+lokasi[3]+"."+lokasi[4]+"."+tahun+'.'+lokasi[5]);
         });
       }
       });

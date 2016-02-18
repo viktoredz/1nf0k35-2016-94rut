@@ -162,7 +162,8 @@ $(function(){
       success:function(data)
       { 
         $.each(data,function(index,elemet){
-          $("#kode_inventaris_").val(elemet.kodeinv+'.'+tahun);
+          var lokasi = elemet.kodeinv.split(".")
+          $("#kode_inventaris_").val(lokasi[0]+"."+lokasi[1]+"."+lokasi[2]+"."+lokasi[3]+"."+lokasi[4]+"."+tahun+'.'+lokasi[5]);
         });
       }
       });
