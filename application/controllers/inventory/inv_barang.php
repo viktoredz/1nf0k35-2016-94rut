@@ -634,23 +634,23 @@ class Inv_barang extends CI_Controller {
 	   			$data['pilihan_status_hak_']			= $this->inv_barang_model->get_data_pilihan('status_hak');
 	   			$data['pilihan_penggunaan_']			= $this->inv_barang_model->get_data_pilihan('penggunaan');
 	   		}else if($kodebarang_=='02') {
-	   			$data = $this->inv_barang_model->get_data_barang_edit_table($id_barang,$kd_inventaris,'inv_inventaris_barang_b'); 
+	   			$data = $this->inv_barang_model->get_data_barang_edit_table($kd_proc,$id_barang,$kd_inventaris,'inv_inventaris_barang_b'); 
 	   			$data['pilihan_bahan_']					= $this->inv_barang_model->get_data_pilihan('bahan');
 	   			$data['pilihan_satuan_']				= $this->inv_barang_model->get_data_pilihan('satuan');
 	   		}else if($kodebarang_=='03') {
-	   			$data = $this->inv_barang_model->get_data_barang_edit_table($id_barang,$kd_inventaris,'inv_inventaris_barang_c'); 
+	   			$data = $this->inv_barang_model->get_data_barang_edit_table($kd_proc,$id_barang,$kd_inventaris,'inv_inventaris_barang_c'); 
 	   			$data['pillihan_status_hak_']			= $this->inv_barang_model->get_data_pilihan('status_hak');
 	   			$data['pilihan_kons_tingkat_']			= $this->inv_barang_model->get_data_pilihan('kons_tingkat');
 	   			$data['pilihan_kons_beton_']			= $this->inv_barang_model->get_data_pilihan('kons_beton');
 	   		}else if($kodebarang_=='04') {
-	   			$data = $this->inv_barang_model->get_data_barang_edit_table($id_barang,$kd_inventaris,'inv_inventaris_barang_d'); 
+	   			$data = $this->inv_barang_model->get_data_barang_edit_table($kd_proc,$id_barang,$kd_inventaris,'inv_inventaris_barang_d'); 
 	   			$data['pilihan_status_tanah_']			= $this->inv_barang_model->get_data_pilihan('status_hak');
 	   		}else if($kodebarang_=='05') {
-	   			$data = $this->inv_barang_model->get_data_barang_edit_table($id_barang,$kd_inventaris,'inv_inventaris_barang_e'); 
+	   			$data = $this->inv_barang_model->get_data_barang_edit_table($kd_proc,$id_barang,$kd_inventaris,'inv_inventaris_barang_e'); 
 	   			$data['pilihan_budaya_bahan_']			= $this->inv_barang_model->get_data_pilihan('bahan');
 	   			$data['pilihan_satuan_']				= $this->inv_barang_model->get_data_pilihan('satuan');
    			}else if($kodebarang_=='06') {
-   				$data = $this->inv_barang_model->get_data_barang_edit_table($id_barang,$kd_inventaris,'inv_inventaris_barang_f'); 
+   				$data = $this->inv_barang_model->get_data_barang_edit_table($kd_proc,$id_barang,$kd_inventaris,'inv_inventaris_barang_f'); 
    				$data['pilihan_konstruksi_bertingkat_']	= $this->inv_barang_model->get_data_pilihan('kons_tingkat');
 	   			$data['pilihan_konstruksi_beton_']		= $this->inv_barang_model->get_data_pilihan('kons_beton');
 	   			$data['pilihan_status_tanah_']			= $this->inv_barang_model->get_data_pilihan('status_hak');

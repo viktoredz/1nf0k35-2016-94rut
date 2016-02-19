@@ -41,7 +41,7 @@ function edit_barang(id_barang,barang_kembar_proc,id_inventaris_barang){
         close_popup();
       }); 
         $('#form-ss').submit(function(){
-          alert($('#v_kode_invetaris').val()+'.'+$('#id_inventaris_barang').val());
+         // alert($('#v_kode_invetaris').val()+'.'+$('#id_inventaris_barang').val());
             var data = new FormData();
             $('#notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
             $('#notice').show();
@@ -72,7 +72,7 @@ function edit_barang(id_barang,barang_kembar_proc,id_inventaris_barang){
                       var kode_          = res[1]; 
                       var kd_proc_       = res[2];
                       var id_barang_     = res[2].slice(-14,-4);
-                      alert(res[1]+' , '+res[2]+' , '+id_barang_+'----'+kd_proc_+'----'+kode_)
+                     //alert(res[1]+' , '+res[2]+' , '+id_barang_+'----'+kd_proc_+'----'+kode_)
                       edit_barang(id_barang_,kd_proc_,kode_); 
                   }
                   else if(res[0]=="Error"){
