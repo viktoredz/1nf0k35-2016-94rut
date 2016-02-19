@@ -60,7 +60,7 @@
 			datatype: "json",
 			type	: "POST",
 			datafields: [
-			{ name: 'id_pengadaan', type: 'number'},
+			{ name: 'id_pengadaan', type: 'string'},
 			{ name: 'tgl_pengadaan', type: 'date'},
 			{ name: 'nomor_kontrak', type: 'string'},
 			{ name: 'pilihan_status_pengadaan', type: 'string'},

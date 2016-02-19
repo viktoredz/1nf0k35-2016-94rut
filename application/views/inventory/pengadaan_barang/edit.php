@@ -19,6 +19,24 @@
     <div class="box box-primary">
       <div class="box-body">
         <div class="form-group">
+          <label>Kode Lokasi</label>
+          <input type="text" class="form-control" name="kode_inventaris_" id="kode_inventaris_" placeholder="Kode Lokasi" value="<?php 
+            if(set_value('kode_inventaris_')=="" && isset($id_pengadaan)){
+                  $s = array();
+                  $s[0] = substr($id_pengadaan, 0,2);
+                  $s[1] = substr($id_pengadaan, 2,2);
+                  $s[2] = substr($id_pengadaan, 4,2);
+                  $s[3] = substr($id_pengadaan, 6,2);
+                  $s[4] = substr($id_pengadaan, 8,2);
+                  $s[5] = substr($id_pengadaan, 10,2);
+                  $s[6] = substr($id_pengadaan, 12,2);
+                  echo implode(".", $s);
+            }else{
+              echo  set_value('kode_inventaris_');
+            }
+            ?>" readonly="">
+        </div>
+        <div class="form-group">
           <label>Tanggal Pengadaan</label><?php if(isset($viewreadonly)){if($action='view'){ 
             echo "<br>".date("d-m-Y",strtotime($tgl_pengadaan)); }}else{ ?>
               <div id='tgl' name="tgl" disabled value="<?php
@@ -120,12 +138,6 @@
       <div class="box-body">
       <div id="success"> 
           <table class="table table-condensed">
-              <tr>
-                <td>Kode Lokasi</td>
-                <td>
-                <input type="text" id="kode_inventaris_" name="kode_inventaris_" placeholder="Kode Lokasi" />
-                </td>
-              </tr>
               <tr>
                 <td>Jumlah Unit</td>
                 <td>

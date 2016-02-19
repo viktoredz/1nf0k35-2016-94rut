@@ -386,6 +386,7 @@ class Pengadaanbarang extends CI_Controller {
 	function add(){
 		$this->authentication->verify('inventory','add');
 
+		$this->form_validation->set_rules('kode_inventaris_', 'Kode Inventaris', 'trim|required');
         $this->form_validation->set_rules('tgl', 'Tanggal Perngadaan', 'trim|required');
         $this->form_validation->set_rules('status', 'Status Pengadaan', 'trim|required');
         $this->form_validation->set_rules('nomor_kontrak', 'Nomor Kontrak', 'trim|required');

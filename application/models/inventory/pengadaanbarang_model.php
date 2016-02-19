@@ -246,6 +246,7 @@ WHERE inv_inventaris_barang.barang_kembar_proc = (SELECT barang_kembar_proc FROM
 
    function insert_entry()
     {
+        $data['id_pengadaan']               = $this->kode_pengadaan($this->input->post('kode_inventaris_'));
     	$data['tgl_pengadaan']	            = date("Y-m-d",strtotime($this->input->post('tgl')));
 		$data['pilihan_status_pengadaan']	= $this->input->post('status');
 		$data['keterangan']		            = $this->input->post('keterangan');
@@ -258,10 +259,34 @@ WHERE inv_inventaris_barang.barang_kembar_proc = (SELECT barang_kembar_proc FROM
 		$data['jumlah_unit']      	        = 0;
         $data['nilai_pengadaan']            = 0;
 		if($this->db->insert($this->tabel, $data)){
-			return $this->db->insert_id();
+			return $data['id_pengadaan'];
 		}else{
 			return mysql_error();
 		}
+    }
+    function kode_pengadaan($kode){
+        $inv=explode(".", $kode);
+        $kode_pengadaan = $inv[0].$inv[1].$inv[2].$inv[3].$inv[4].$inv[5].$inv[6];
+        $tahun          = $inv[6];
+        $urut = $this->nourut($kode_pengadaan);
+        return  $kode_pengadaan.$urut;
+    }
+    function nourut($kode_pengadaan){
+        $q = $this->db->query("select MAX(RIGHT(id_pengadaan,6)) as kd_max from inv_pengadaan where (LEFT(id_pengadaan,14))=$kode_pengadaan");
+        $nourut="";
+        if($q->num_rows()>0)
+        {
+            foreach($q->result() as $k)
+            {
+                $tmp = ((int)$k->kd_max)+1;
+                $nourut = sprintf("%06s", $tmp);
+            }
+        }
+        else
+        {
+            $nourut = "000001";
+        }
+        return $nourut;
     }
     function tanggal($pengadaan){
         $query = $this->db->query("select tgl_pengadaan from inv_pengadaan where id_pengadaan = $pengadaan")->result();
