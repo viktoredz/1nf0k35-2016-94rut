@@ -326,7 +326,7 @@ class Inv_barang_model extends CI_Model {
         if($pilih_table=='inv_inventaris_barang_a'){
 
             $sql= "SELECT inv_inventaris_barang_a.*, inv_inventaris_barang.*,
-                    (SELECT COUNT(*) AS jml FROM inv_inventaris_distribusi WHERE id_inventaris_barang IN 
+                    (SELECT COUNT(DISTINCT(id_inventaris_barang)) AS jml FROM inv_inventaris_distribusi WHERE id_inventaris_barang IN 
                     (SELECT id_inventaris_barang FROM inv_inventaris_barang WHERE barang_kembar_proc = ".'"'.$kembarproc.'"'.")) 
                     AS jumlah
                     FROM inv_inventaris_barang 
@@ -339,7 +339,7 @@ class Inv_barang_model extends CI_Model {
         }else if($pilih_table=='inv_inventaris_barang_b'){
 
             $sql= "SELECT inv_inventaris_barang_b.*, inv_inventaris_barang.*,
-                    (SELECT COUNT(*) AS jml FROM inv_inventaris_distribusi WHERE id_inventaris_barang IN 
+                    (SELECT COUNT(DISTINCT(id_inventaris_barang)) AS jml FROM inv_inventaris_distribusi WHERE id_inventaris_barang IN 
                     (SELECT id_inventaris_barang FROM inv_inventaris_barang WHERE barang_kembar_proc = ".'"'.$kembarproc.'"'.")) 
                     AS jumlah
                     FROM inv_inventaris_barang 
@@ -352,7 +352,7 @@ class Inv_barang_model extends CI_Model {
         }else if($pilih_table=='inv_inventaris_barang_c'){
 
             $sql= "SELECT inv_inventaris_barang_c.*, inv_inventaris_barang.*
-                    (SELECT COUNT(*) AS jml FROM inv_inventaris_distribusi WHERE id_inventaris_barang IN 
+                    (SELECT COUNT(DISTINCT(id_inventaris_barang)) AS jml FROM inv_inventaris_distribusi WHERE id_inventaris_barang IN 
                     (SELECT id_inventaris_barang FROM inv_inventaris_barang WHERE barang_kembar_proc = ".'"'.$kembarproc.'"'.")) 
                     AS jumlah
                     FROM inv_inventaris_barang 
@@ -365,7 +365,7 @@ class Inv_barang_model extends CI_Model {
         }else if($pilih_table=='inv_inventaris_barang_d'){
 
             $sql= "SELECT inv_inventaris_barang_d.*, inv_inventaris_barang.*,
-                    (SELECT COUNT(*) AS jml FROM inv_inventaris_distribusi WHERE id_inventaris_barang IN 
+                    (SELECT COUNT(DISTINCT(id_inventaris_barang)) AS jml FROM inv_inventaris_distribusi WHERE id_inventaris_barang IN 
                     (SELECT id_inventaris_barang FROM inv_inventaris_barang WHERE barang_kembar_proc = ".'"'.$kembarproc.'"'.")) 
                     AS jumlah
                     FROM inv_inventaris_barang 
@@ -378,7 +378,7 @@ class Inv_barang_model extends CI_Model {
         }else if($pilih_table=='inv_inventaris_barang_e'){
 
             $sql= "SELECT inv_inventaris_barang_e.*, inv_inventaris_barang.*,
-                    (SELECT COUNT(*) AS jml FROM inv_inventaris_distribusi WHERE id_inventaris_barang IN 
+                    (SELECT COUNT(DISTINCT(id_inventaris_barang)) AS jml FROM inv_inventaris_distribusi WHERE id_inventaris_barang IN 
                     (SELECT id_inventaris_barang FROM inv_inventaris_barang WHERE barang_kembar_proc = ".'"'.$kembarproc.'"'.")) 
                     AS jumlah
                     FROM inv_inventaris_barang 
@@ -391,7 +391,7 @@ class Inv_barang_model extends CI_Model {
         }else if($pilih_table=='inv_inventaris_barang_f'){   
 
             $sql= "SELECT inv_inventaris_barang_f.*, inv_inventaris_barang.*,
-                    (SELECT COUNT(*) AS jml FROM inv_inventaris_distribusi WHERE id_inventaris_barang IN 
+                    (SELECT COUNT(DISTINCT(id_inventaris_barang)) AS jml FROM inv_inventaris_distribusi WHERE id_inventaris_barang IN 
                     (SELECT id_inventaris_barang FROM inv_inventaris_barang WHERE barang_kembar_proc = ".'"'.$kembarproc.'"'.")) 
                     AS jumlah
                     FROM inv_inventaris_barang 
