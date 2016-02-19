@@ -19,14 +19,30 @@
     <div class="box box-primary">
       <div class="box-body">
         <div class="form-group">
+          <label>Kode Lokasi</label>
+          <div >
+          <?php
+                    $s = array();
+                  $s[0] = substr($id_inv_permohonan_barang, 0,2);
+                  $s[1] = substr($id_inv_permohonan_barang, 2,2);
+                  $s[2] = substr($id_inv_permohonan_barang, 4,2);
+                  $s[3] = substr($id_inv_permohonan_barang, 6,2);
+                  $s[4] = substr($id_inv_permohonan_barang, 8,2);
+                  $s[5] = substr($id_inv_permohonan_barang, 10,2);
+                  $s[6] = substr($id_inv_permohonan_barang, 12,2);
+                  echo implode(".", $s);
+          ?>
+          </div>
+        </div>
+        <div class="form-group">
           <label>Tanggal</label>
           <div >
-			
-			<input type="hidden" id="tanggal" value="<?=$tanggal_permohonan?>">
-			<?php
-              echo ($tanggal_permohonan);
-            ?>
-		  </div>
+      		
+      		<input type="hidden" id="tanggal" value="<?=$tanggal_permohonan?>">
+      		<?php
+                  echo ($tanggal_permohonan);
+          ?>
+      	  </div>
         </div>
         <div class="form-group">
           <label>Puskesmas</label>

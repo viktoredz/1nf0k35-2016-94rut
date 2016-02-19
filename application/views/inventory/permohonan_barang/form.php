@@ -18,7 +18,7 @@
   <div class="col-md-6">
     <div class="box box-primary">
       <div class="box-body">
-      <div class="form-group">
+        <div class="form-group">
           <label>Kode Lokasi</label>
           <input type="text" id="id_inv_permohonan_barang" name="id_inv_permohonan_barang" placeholder="Kode Lokasi"  class="form-control"/>
         </div>

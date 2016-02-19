@@ -19,6 +19,24 @@
     <div class="box box-primary">
       <div class="box-body">
         <div class="form-group">
+          <label>Kode Lokasi</label>
+          <input type="text" id="id_inv_permohonan_barang" name="id_inv_permohonan_barang" placeholder="Kode Lokasi"  class="form-control" value="<?php  
+            if(set_value('id_inv_permohonan_barang')=="" && isset($id_inv_permohonan_barang)){
+                    $s = array();
+                  $s[0] = substr($id_inv_permohonan_barang, 0,2);
+                  $s[1] = substr($id_inv_permohonan_barang, 2,2);
+                  $s[2] = substr($id_inv_permohonan_barang, 4,2);
+                  $s[3] = substr($id_inv_permohonan_barang, 6,2);
+                  $s[4] = substr($id_inv_permohonan_barang, 8,2);
+                  $s[5] = substr($id_inv_permohonan_barang, 10,2);
+                  $s[6] = substr($id_inv_permohonan_barang, 12,2);
+                  echo implode(".", $s);
+            }else{
+              echo  set_value('id_inv_permohonan_barang');
+            }
+          ?>" readonly='' />
+        </div>
+        <div class="form-group">
           <label>Tanggal Permohonan</label>
           <div id='tgl' name="tgl" value="<?php
               echo date("Y-m-d",strtotime($tanggal_permohonan));
@@ -104,7 +122,31 @@ $(function(){
       success : function(data) {
         $('#ruangan').html(data);
       }
-    });
-     
+    }); 
+    document.getElementById("tgl").onchange = function() {
+        kodeInvetaris(document.getElementById("tgl").value);
+    };
   });
+  function kodeInvetaris(tahun=0)
+    {
+      if (tahun!=0) {
+        tahun = tahun.substr(-2);
+      }else{
+        var tahun = <?php echo date("y");?>;  
+      }
+      
+      $.ajax({
+      url: "<?php echo base_url().'inventory/permohonanbarang/kodePermohonan';?>",
+      dataType: "json",
+      success:function(data)
+      { 
+        $.each(data,function(index,elemet){
+          var lokasi = elemet.kodeper.split(".")
+          $("#id_inv_permohonan_barang").val(lokasi[0]+"."+lokasi[1]+"."+lokasi[2]+"."+lokasi[3]+"."+lokasi[4]+"."+tahun+'.'+lokasi[5]);
+        });
+      }
+      });
+
+      return false;
+    }
 </script>
