@@ -449,7 +449,16 @@ class Inv_barang extends CI_Controller {
 
 		show_404();
 	}
-
+	public function kodeInvetaris($id=0){
+		$this->db->where('code',"P".$this->session->userdata('puskesmas'));
+		$query = $this->db->get('cl_phc')->result();
+		foreach ($query as $q) {
+			$kode[] = array(
+				'kodeinv' => $q->cd_kompemilikbarang.'.'.$q->cd_propinsi.'.'.$q->cd_kabkota.'.'.$q->cd_bidang.'.'.$q->cd_unitbidang.'.'.$q->cd_satuankerja, 
+			);
+			echo json_encode($kode);
+		}
+	}
 	function add(){
 		$data['action']			= "add";
         $this->form_validation->set_rules('id_mst_inv_barang', 'Kode Barang', 'trim|required');
@@ -466,9 +475,12 @@ class Inv_barang extends CI_Controller {
 		}else{
 			$jumlah =$this->input->post('jumlah');
 			$id_barang = $this->input->post('id_mst_inv_barang');
-			$kode_proc = $this->inv_barang_model->barang_kembar_proc($id_barang);
+			//$kode_proc = $this->inv_barang_model->barang_kembar_proc($id_barang);
+			$kode_proc = $this->inv_barang_model->barang_kembar_proc_($this->input->post('id_inventaris_barang'));
 			for($i=1;$i<=$jumlah;$i++){
 				$values = array(
+					'id_inventaris_barang'=>$this->inv_barang_model->kode_invetaris($this->input->post('id_inventaris_barang')),
+					'register' 			  => substr($this->inv_barang_model->kode_invetaris($this->input->post('id_inventaris_barang')),-4),
 					'id_mst_inv_barang'=> $id_barang,
 					'nama_barang' => $this->input->post('nama_barang'),
 					'harga' => $this->input->post('harga'),
@@ -478,14 +490,14 @@ class Inv_barang extends CI_Controller {
 					'code_cl_phc' => 'P'.$this->session->userdata('puskesmas')
 				);
 				$simpan=$this->db->insert('inv_inventaris_barang', $values);
-				$id= $this->db->insert_id();
+				$id= $values['id_inventaris_barang'];  //$this->db->insert_id();
 				$id_kembar = $this->distribusibarang_model->get_kembar_id($id);
-				$reg = $this->distribusibarang_model->get_register($id, '', 'P'.$this->session->userdata('puskesmas') );
+				//$reg = $this->distribusibarang_model->get_register($id, '', 'P'.$this->session->userdata('puskesmas') );
 
 				$values = array(
 					'id_inventaris_barang' 		=> $id,
 					'id_inventaris_distribusi'	=> 1,
-					'register'			=> $reg,
+					//'register'			=> $reg,
 					'id_cl_phc'			=> 'P'.$this->session->userdata('puskesmas'),
 					'tgl_distribusi'	=> date('Y-m-d'),
 					'barang_kembar_inv'	=> $id_kembar,

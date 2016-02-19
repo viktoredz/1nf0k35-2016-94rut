@@ -41,6 +41,7 @@ function edit_barang(id_barang,barang_kembar_proc,id_inventaris_barang){
         close_popup();
       }); 
         $('#form-ss').submit(function(){
+          alert($('#v_kode_invetaris').val()+'.'+$('#id_inventaris_barang').val());
             var data = new FormData();
             $('#notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
             $('#notice').show();
@@ -50,6 +51,7 @@ function edit_barang(id_barang,barang_kembar_proc,id_inventaris_barang){
             data.append('jumlah', $('#jumlah').val());
             data.append('harga', $('#harga').val());
             data.append('keterangan_pengadaan', $('#keterangan').val());
+            data.append('id_inventaris_barang', $('#v_kode_invetaris').val()+'.'+$('#id_inventaris_barang').val());
             var id_barang_    = $('#v_kode_barang').val();
             var kd_proc_      = 0;
             $.ajax({
@@ -69,7 +71,8 @@ function edit_barang(id_barang,barang_kembar_proc,id_inventaris_barang){
                       close_popup();
                       var kode_          = res[1]; 
                       var kd_proc_       = res[2];
-                      var id_barang_     = res[2].substring(0,10);
+                      var id_barang_     = res[2].slice(-14,-4);
+                      alert(res[1]+' , '+res[2]+' , '+id_barang_+'----'+kd_proc_+'----'+kode_)
                       edit_barang(id_barang_,kd_proc_,kode_); 
                   }
                   else if(res[0]=="Error"){
@@ -127,6 +130,7 @@ function edit_barang(id_barang,barang_kembar_proc,id_inventaris_barang){
             var res = codebarang.split(" | ");
             $("#v_nama_barang").val(res[1]);
             $("#v_kode_barang").val(res[0].replace(/\./g,""));
+            kodeinventaris(res[0]);
         });
         $("#harga").change(function(){
             var jumlah = document.getElementById("jumlah").value;
@@ -140,8 +144,35 @@ function edit_barang(id_barang,barang_kembar_proc,id_inventaris_barang){
             var subtotal =jumlah*harga;
             document.getElementById("subtotal").value = toRp(subtotal);
         });
-        
+        kodeinventaris();
+     kodeInvetaris();
     });
+    function kodeinventaris(kode=0){
+    if(kode!=0){
+      document.getElementById("id_inventaris_barang").value =kode;
+    }else{
+      document.getElementById("id_inventaris_barang").value ='';
+    }
+    
+  }
+  function kodeInvetaris()
+    { 
+      var tahun = '16';
+      //alert(tahun);
+      $.ajax({
+      url: "<?php echo base_url().'inventory/inv_barang/kodeInvetaris';?>",
+      dataType: "json",
+      success:function(data)
+      { 
+        $.each(data,function(index,elemet){
+          var lokasi = elemet.kodeinv.split(".")
+          $("#v_kode_invetaris").val(lokasi[0]+"."+lokasi[1]+"."+lokasi[2]+"."+lokasi[3]+"."+lokasi[4]+"."+tahun+'.'+lokasi[5]);
+        });
+      }
+      });
+
+      return false;
+    }
 </script>
 
 <div style="padding:15px">
@@ -156,8 +187,42 @@ function edit_barang(id_barang,barang_kembar_proc,id_inventaris_barang){
   <div class="row">
     <?php echo form_open(current_url(), 'id="form-ss"') ?>
           <div class="box-body">
+            <div class="continer">
+              <div class="row">           
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Kode Lokasi</label>
+                    <input type="text" class="form-control" id="v_kode_invetaris" name="v_kode_invetaris"  placeholder="Kode Inventaris Barang" value="<?php
+                    if(set_value('v_kode_invetaris')=="" && isset($id_inventaris_barang)){
+                        echo $id_inventaris_barang;
+                      }else{
+                        echo  set_value('v_kode_invetaris');
+                      }
+                      ?>">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Kode Barang</label>
+                    <input type="text" class="form-control" id="id_inventaris_barang" name="id_inventaris_barang"  placeholder="Kode Inventaris Barang" value="<?php
+                    if(set_value('id_inventaris_barang')=="" && isset($id_mst_inv_barang)){
+                         $s = array();
+                          $s[0] = substr($id_mst_inv_barang, 0,2);
+                          $s[1] = substr($id_mst_inv_barang, 2,2);
+                          $s[2] = substr($id_mst_inv_barang, 4,2);
+                          $s[3] = substr($id_mst_inv_barang, 6,2);
+                          $s[4] = substr($id_mst_inv_barang, 8,2);
+                          echo implode(".", $s);
+                      }else{
+                        echo  set_value('id_inventaris_barang');
+                      }
+                      ?>" readonly=''>
+                  </div>
+                </div>
+              </div>  
+            </div>
             <div class="form-group">
-              <label>Kode Barang</label>
+              <label>Jenis Barang</label>
               <input id="jqxinput" class="form-control" autocomplete="off" name="code_mst_inv" type="text" value="<?php 
                 if(set_value('code_mst_inv')=="" && isset($id_mst_inv_barang)){
                   $s = array();
