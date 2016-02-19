@@ -1,7 +1,7 @@
 </style>
 <script type="text/javascript">
     $(function(){
-
+    
       $('#btn-close').click(function(){
         close_popup();
       });
@@ -23,7 +23,6 @@
             var data = new FormData();
             $('#notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
             $('#notice').show();
-
             data.append('id_inv_permohonan_barang', $('input[name="id_inv_permohonan_barang"]').val());
             data.append('jumlah', $('input[name="jumlah"]').val());
             data.append('nama_barang', $('input[name="nama_barang"]').val());
@@ -105,6 +104,7 @@
             var res = codebarang.split(" | ");
             $("#v_nama_barang").val(res[1]);
             $("#v_kode_barang").val(res[0].replace(/\./g,""));
+           
         });
 
         $("#harga").change(function(){
@@ -125,13 +125,15 @@
         });
             document.getElementById("subtotal").value = document.getElementById("jumlah").value * document.getElementById("harga").value;
     });
-function toRp(a,b,c,d,e){
-    e=function(f){return f.split('').reverse().join('')};b=e(parseInt(a,10).toString());
-    for(c=0,d='';c<b.length;c++){
-      d+=b[c];if((c+1)%3===0&&c!==(b.length-1)){d+='.';}
+    function toRp(a,b,c,d,e){
+      e=function(f){return f.split('').reverse().join('')};b=e(parseInt(a,10).toString());
+      for(c=0,d='';c<b.length;c++){
+        d+=b[c];if((c+1)%3===0&&c!==(b.length-1)){d+='.';}
+      }
+      return'Rp.\t'+e(d)+',00'
     }
-    return'Rp.\t'+e(d)+',00'
-  }
+    
+    
      </script>
 
 <div style="padding:15px">
@@ -146,34 +148,6 @@ function toRp(a,b,c,d,e){
 	<div class="row">
     <?php echo form_open(current_url(), 'id="form-ss"') ?>
           <div class="box-body">
-            <div class="continer">
-              <div class="row">           
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label>Kode Lokasi</label>
-                    <input type="text" class="form-control" id="v_kode_invetaris" name="v_kode_invetaris"  placeholder="Kode Inventaris Barang" value="<?php
-                    if(set_value('v_kode_invetaris')=="" && isset($id_inventaris_barang)){
-                        echo $id_inventaris_barang;
-                      }else{
-                        echo  set_value('v_kode_invetaris');
-                      }
-                      ?>">
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label>Kode Barang</label>
-                    <input type="text" class="form-control" id="id_inventaris_barang" name="id_inventaris_barang"  placeholder="Kode Inventaris Barang" value="<?php
-                    if(set_value('id_inventaris_barang')=="" && isset($id_inventaris_barang)){
-                        echo $id_inventaris_barang;
-                      }else{
-                        echo  set_value('id_inventaris_barang');
-                      }
-                      ?>" readonly=''>
-                  </div>
-                </div>
-              </div>  
-            </div>
             <div class="form-group">
               <label>Kode Barang</label>
               <input id="jqxinput" class="form-control" autocomplete="off" name="code_mst_inv" type="text" value="<?php 

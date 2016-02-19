@@ -139,7 +139,7 @@ var code_cl_phc = '<?php echo $code_cl_phc?>';
 		$("#popup_barang").jqxWindow({
 			theme: theme, resizable: false,
 			width: 700,
-			height: 460,
+			height: 700,
 			isModal: true, autoOpen: false, modalOpacity: 0.2
 		});
 		$("#popup_barang").jqxWindow('open');

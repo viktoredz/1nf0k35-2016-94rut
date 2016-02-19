@@ -13,12 +13,12 @@ class Permohonanbarang extends CI_Controller {
 		$this->load->model('inventory/inv_ruangan_model');
 		$this->load->model('mst/invbarang_model');
 	}
-	public function kodeInvetaris($id=0){
+	public function kodePermohonan($id=0){
 		$this->db->where('code',"P".$this->session->userdata('puskesmas'));
 		$query = $this->db->get('cl_phc')->result();
 		foreach ($query as $q) {
 			$kode[] = array(
-				'kodeinv' => $q->cd_kompemilikbarang.'.'.$q->cd_propinsi.'.'.$q->cd_kabkota.'.'.$q->cd_bidang.'.'.$q->cd_unitbidang.'.'.$q->cd_satuankerja, 
+				'kodeper' => $q->cd_kompemilikbarang.'.'.$q->cd_propinsi.'.'.$q->cd_kabkota.'.'.$q->cd_bidang.'.'.$q->cd_unitbidang.'.'.$q->cd_satuankerja, 
 			);
 			echo json_encode($kode);
 		}
@@ -470,6 +470,7 @@ class Permohonanbarang extends CI_Controller {
 	function add(){
 		$this->authentication->verify('inventory','add');
 
+		$this->form_validation->set_rules('id_inv_permohonan_barang', 'Kode Lokasi', 'trim|required');
         $this->form_validation->set_rules('tgl', 'Tanggal Permohonan', 'trim|required');
         $this->form_validation->set_rules('keterangan', 'Keterangan', 'trim|required');
         $this->form_validation->set_rules('codepus', 'Puskesmas', 'trim|required');
@@ -661,6 +662,8 @@ class Permohonanbarang extends CI_Controller {
         $this->form_validation->set_rules('harga', 'Harga', 'trim|required');
         $this->form_validation->set_rules('keterangan', 'Keterangan', 'trim|required');
         $this->form_validation->set_rules('pilihan_satuan_barang', 'Pilihan Satuan Barang', 'trim|required');
+        $this->form_validation->set_rules('rekening', 'Rekening', 'trim');
+        $this->form_validation->set_rules('merk_tipe', 'Merek Tipe', 'trim');
 
 		if($this->form_validation->run()== FALSE){
 			$data['kodebarang']		= $this->permohonanbarang_model->get_databarang();
@@ -669,7 +672,7 @@ class Permohonanbarang extends CI_Controller {
 			die($this->parser->parse('inventory/permohonan_barang/barang_form', $data));
 		}else{
 			$values = array(
-				'id_inv_permohonan_barang_item'=>$this->permohonanbarang_model->get_permohonanbarangitem_id(),
+				'id_inv_permohonan_barang_item'=>$this->permohonanbarang_model->get_permohonanbarangitem_id($kode),
 				'code_mst_inv_barang' => $this->input->post('code_mst_inv_barang'),
 				'nama_barang' => $this->input->post('nama_barang'),
 				'jumlah' => $this->input->post('jumlah'),

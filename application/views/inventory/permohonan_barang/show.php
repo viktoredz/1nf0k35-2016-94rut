@@ -59,7 +59,7 @@
 			datafields: [
 			{ name: 'no', type: 'number'},
 			{ name: 'code_cl_phc', type: 'string'},
-			{ name: 'id_inv_permohonan_barang', type: 'number'},
+			{ name: 'id_inv_permohonan_barang', type: 'string'},
 			{ name: 'tanggal_permohonan', type: 'date'},
 			{ name: 'jumlah_unit', type: 'string'},
 			{ name: 'nama_ruangan', type: 'string'},

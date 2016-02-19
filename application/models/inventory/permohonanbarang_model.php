@@ -8,6 +8,31 @@ class Permohonanbarang_model extends CI_Model {
         parent::__construct();
 		$this->lang	  = $this->config->item('language');
     }
+    function kode_permohonan($kode){
+        $inv=explode(".", $kode);
+        $kode_permohonan = $inv[0].$inv[1].$inv[2].$inv[3].$inv[4].$inv[5].$inv[6];
+        $tahun          = $inv[6];
+       // $id_barang      = $inv[7].$inv[8].$inv[9].$inv[10].$inv[11];
+        $urut = $this->urut($kode_permohonan);
+        return  $kode_permohonan.$urut;
+    }
+    function urut($kode){
+        $q = $this->db->query("select MAX(RIGHT(id_inv_permohonan_barang,6)) as kd_max from inv_permohonan_barang where (LEFT(id_inv_permohonan_barang,14))=$kode");
+        $nourut="";
+        if($q->num_rows()>0)
+        {
+            foreach($q->result() as $k)
+            {
+                $tmp = ((int)$k->kd_max)+1;
+                $nourut = sprintf("%06s", $tmp);
+            }
+        }
+        else
+        {
+            $nourut = "000001";
+        }
+        return $nourut;
+    }
     function get_detail_ruang($id, $code_cl_phc){
 		$this->db->where('id_inv_permohonan_barang',$id);
 		$this->db->where('inv_permohonan_barang.code_cl_phc',$code_cl_phc);
@@ -98,9 +123,9 @@ class Permohonanbarang_model extends CI_Model {
     		return $permohonan->id;
     	}
 	}
-	function get_permohonanbarangitem_id()
+	function get_permohonanbarangitem_id($kode)
     {
-    	$query  = $this->db->query("SELECT max(id_inv_permohonan_barang_item) as id from inv_permohonan_barang_item ");
+    	$query  = $this->db->query("SELECT max(id_inv_permohonan_barang_item) as id from inv_permohonan_barang_item where id_inv_permohonan_barang = $kode");
     	$res = $query->result();
     	if (empty($res))
     	{
@@ -114,6 +139,7 @@ class Permohonanbarang_model extends CI_Model {
 	}
    function insert_entry()
     {
+    	$data['id_inv_permohonan_barang']	= $this->kode_permohonan($this->input->post('id_inv_permohonan_barang'));
     	$data['tanggal_permohonan']	= date("Y-m-d",strtotime($this->input->post('tgl')));
 		$data['keterangan']			= $this->input->post('keterangan');
 		$data['code_cl_phc']		= $this->input->post('codepus');
@@ -122,7 +148,7 @@ class Permohonanbarang_model extends CI_Model {
 		$data['waktu_dibuat']		= date('Y-m-d');
 		$data['jumlah_unit']      	= 0;
 		$data['app_users_list_username'] 	= $this->session->userdata('username'); 
-		$data['id_inv_permohonan_barang']	= $this->get_permohonan_id($this->input->post('codepus'));
+		//$data['id_inv_permohonan_barang']	= $this->get_permohonan_id($this->input->post('codepus'));
 		if($this->db->insert($this->tabel, $data)){
 			return $data['id_inv_permohonan_barang'];
 		}else{
@@ -197,9 +223,13 @@ class Permohonanbarang_model extends CI_Model {
 	function delete_entry($kode,$code_cl_phc)
 	{
 		$this->db->where('id_inv_permohonan_barang',$kode);
+		$this->db->delete('inv_permohonan_barang_item');
+
+		$this->db->where('id_inv_permohonan_barang',$kode);
 		$this->db->where('code_cl_phc',$code_cl_phc);
 
 		return $this->db->delete($this->tabel);
+
 	}
 	function delete_entryitem($kode,$code_cl_phc,$kode_item)
 	{

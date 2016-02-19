@@ -57,12 +57,6 @@
         </div>
         <table width="100%">
           <tr>
-            <th>Kode Lokasi</td>
-            <td>:</td>
-            <td><input type="text" id="kode_inventaris_" name="kode_inventaris_" placeholder="Kode Lokasi" />
-            </td>
-          </tr>
-          <tr>
             <th width="25%">Total Jumlah</th>
             <td>:</td>
             <td width="70%"><div id="total_jumlah_"></div></td>
@@ -111,31 +105,6 @@ $(function(){
         $('#ruangan').html(data);
       }
     });
-     document.getElementById("tgl").onchange = function() {
-        kodeInvetaris(document.getElementById("tgl").value);
-    };
-    kodeInvetaris()
+     
   });
-  function kodeInvetaris(tahun=0)
-    { 
-      if (tahun!=0) {
-        tahun = tahun.substr(-2);
-      }else{
-        tahun = "<?php echo $tanggal_permohonan?>".substring(2,4);
-      }
-      //alert(tahun);
-      $.ajax({
-      url: "<?php echo base_url().'inventory/permohonanbarang/kodeInvetaris';?>",
-      dataType: "json",
-      success:function(data)
-      { 
-        $.each(data,function(index,elemet){
-          var lokasi = elemet.kodeinv.split(".")
-          $("#kode_inventaris_").val(lokasi[0]+"."+lokasi[1]+"."+lokasi[2]+"."+lokasi[3]+"."+lokasi[4]+"."+tahun+'.'+lokasi[5]);
-        });
-      }
-      });
-
-      return false;
-    }
 </script>
