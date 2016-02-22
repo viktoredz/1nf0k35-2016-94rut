@@ -50,7 +50,7 @@
 			width: '100%',
 			selectionmode: 'singlerow',
 			source: dataadapter, theme: theme,columnsresize: true,showtoolbar: false, pagesizeoptions: ['10', '25', '50', '100'],
-			showfilterrow: false, filterable: false, sortable: false, autoheight: true, pageable: true, virtualmode: true, editable: true,
+			showfilterrow: true, filterable: true, sortable: true, autoheight: true, pageable: true, virtualmode: true, editable: false,
 			rendergridrows: function(obj)
 			{
 				return obj.data;    
@@ -80,7 +80,7 @@
 				{ text: 'Merek Tipe',  align: 'center', cellsalign: 'left', datafield: 'merek_tipe', columntype: 'textbox', filtertype: 'textbox', width: '9%'},
 				{ text: 'Asal Negara', align: 'center', cellsalign: 'left', datafield: 'negara_asal', columntype: 'textbox', filtertype: 'textbox', width: '14%'},
 				{ text: 'Satuan',  align: 'center', cellsalign: 'left', datafield: 'nama_satuan', columntype: 'textbox', filtertype: 'textbox', width: '14%'},
-				{ text: 'Jenis Barang Habis Pakai',  align: 'center', cellsalign: 'left', datafield: 'jenisuraian', columntype: 'textbox', filtertype: 'textbox', width: '19%'},
+				{ text: 'Jenis Barang',  align: 'center', cellsalign: 'left', datafield: 'jenisuraian', columntype: 'textbox', filtertype: 'textbox', width: '19%'},
            				
            ]
 		});

@@ -67,6 +67,7 @@ class Invbaranghabispakai extends CI_Controller {
 			$data[] = array(
 				'no'					=> $no++,
 				'uraian'				=> $act->uraian,
+				'jumlah'				=> $act->jumlah,
 				'id_mst_inv_barang_habispakai_jenis'	=> $act->id_mst_inv_barang_habispakai_jenis,
 				'edit'					=> 1,
 				'delete'				=> 1
@@ -128,7 +129,16 @@ class Invbaranghabispakai extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
-		$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
+		if($this->session->userdata('filter_jenisbarang')!=''){
+			if($this->session->userdata('filter_jenisbarang')=="all"){
+
+			}else{
+				$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$this->session->userdata('filter_jenisbarang'));
+			}
+		}else{
+			$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
+		}
+		
 		
 		$rows_all = $this->invbaranghabispakai_model->get_data_detail();
 
@@ -149,7 +159,15 @@ class Invbaranghabispakai extends CI_Controller {
 			}
 		}
 
-		$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
+		if($this->session->userdata('filter_jenisbarang')!=''){
+			if($this->session->userdata('filter_jenisbarang')=="all"){
+				
+			}else{
+				$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$this->session->userdata('filter_jenisbarang'));
+			}
+		}else{
+			$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
+		}
 		$rows = $this->invbaranghabispakai_model->get_data_detail($this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();
 		$no=1;
@@ -188,7 +206,9 @@ class Invbaranghabispakai extends CI_Controller {
 		$data['title_form'] 	= "Barang Habis Pakai";
 
 		$this->db->like('code','p'.substr($this->session->userdata('puskesmas'),0,7));
-
+		if($this->session->userdata('filter_jenisbarang')!=''){
+			$this->session->set_userdata('filter_jenisbarang','');
+		}
 		$data['content'] = $this->parser->parse("mst/invbaranghabispakai/show",$data,true);
 
 		$this->template->show($data,"home");
@@ -206,7 +226,7 @@ class Invbaranghabispakai extends CI_Controller {
 		$data['title_form']="Detail Jenis Barang Habis Pakai";
 		$data['kode']= $kode;
 
-
+		$data['jenisbarang'] = $this->invbaranghabispakai_model->get_data();
 		$data['kondisi'] = $this->invbaranghabispakai_model->get_pilihan_kondisi()->result();
 		$data['n_kondisi'] = $this->invbaranghabispakai_model->get_pilihan_kondisi()->num_rows();
 	
@@ -215,7 +235,13 @@ class Invbaranghabispakai extends CI_Controller {
 		$this->template->show($data,"home");
 		
 	}
-
+	function filter_jenisbarang(){
+		if($_POST) {
+			if($this->input->post('jenisbarang') != '') {
+				$this->session->set_userdata('filter_jenisbarang',$this->input->post('jenisbarang'));
+			}
+		}
+	}
 	function detail($id="")
 	{
 		$this->session->set_userdata('filter_id_jenis_habispakai',$id);

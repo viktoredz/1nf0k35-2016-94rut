@@ -19,7 +19,7 @@
 
 	      <div class="box-footer">
     		<div class="col-md-8">
-			 	<button type="button" class="btn btn-primary" onclick="document.location.href='<?php echo base_url()?>mst/invbaranghabispakai/add'"><i class='fa fa-plus-square-o'></i> &nbsp; Tambah Ruangan</button>
+			 	<button type="button" class="btn btn-primary" onclick="document.location.href='<?php echo base_url()?>mst/invbaranghabispakai/add'"><i class='fa fa-plus-square-o'></i> &nbsp; Tambah Jenis Barang</button>
 			 	<button type="button" class="btn btn-success" id="btn-refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
 			 </div>
     		<div class="col-md-4">
@@ -60,6 +60,7 @@
 			{ name: 'edit', type: 'string'},
 			{ name: 'delete', type: 'string'},
 			{ name: 'id_mst_inv_barang_habispakai_jenis', type: 'string'},
+			{ name: 'jumlah', type: 'string'},
 			{ name: 'detail', type: 'string'},
 			{ name: 'uraian', type: 'string'}
         ],
@@ -93,7 +94,7 @@
 
 		$("#jqxgrid").jqxGrid(
 		{		
-			width: '50%',
+			width: '100%',
 			selectionmode: 'singlerow',
 			source: dataadapter, theme: theme,columnsresize: true,showtoolbar: false, pagesizeoptions: ['10', '25', '50', '100'],
 			showfilterrow: true, filterable: true, sortable: true, autoheight: true, pageable: true, virtualmode: true, editable: false,
@@ -125,8 +126,9 @@
 					}
                  }
                 },
-				{ text: 'Nomor', datafield: 'no', columntype: 'none', filtertype: 'textbox', width: '20%' },
-				{ text: 'Uraian', filterable: 'textbox', datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '50%' }
+				{ text: 'Nomor', datafield: 'no', columntype: 'none', filtertype: 'none', width: '15%' },
+				{ text: 'Jenis Barang', filterable: 'textbox', datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '30%' },
+				{ text: 'Jumlah Barang', filterable: 'textbox', datafield: 'jumlah', columntype: 'textbox', filtertype: 'textbox', width: '25%' }
             ]
 		});
 

@@ -30,21 +30,31 @@
 
 
 <div class="box box-success">
-  <div class="box-body">
-  	<div class="row"> 
-  		<div class="col-md-6"> 
-		  	<div class="form-group">
-				<h4><label>Uraian :</label>
-				<?php echo $uraian;?></h4>
-			</div>
-		</div>
-		<div class="col-md-6"> 
-		  	<div class="form-group pull-right">					
-				<button onClick="add_barang();" type="button"  class="btn btn-success">Tambah</button>
+		<div class="box-header">
+          <h3 class="box-title">Jenis Barang : <?php echo $uraian;?> </h3>
+	    </div>
+
+      	<div class="box-footer">
+	      <div class="col-md-8">
+		 		<button onClick="add_barang();" type="button"  class="btn btn-success">Tambah</button>
 				<button type="button" class="btn btn-warning" onClick="document.location.href='<?php echo base_url()?>mst/invbaranghabispakai'">Kembali</button>
-			</div>
+	     </div>
+	     <div class="col-md-4">
+	     	<div class="row">
+		     	<div class="col-md-4" style="padding-top:5px;"><label> Jenis Barang </label> </div>
+		     	<div class="col-md-8">
+		     		<select name="jenisbarang" id="jenisbarang" class="form-control">
+		     				<option value="all">All</option>
+						<?php foreach ($jenisbarang as $row ) { ;?>
+						<?php $select = $row->id_mst_inv_barang_habispakai_jenis == $kode ? 'selected=selected' : '' ?>
+							<option value="<?php echo $row->id_mst_inv_barang_habispakai_jenis; ?>"  <?php echo $select ?> ><?php echo $row->uraian; ?></option>
+						<?php	} ;?>
+			     	</select>
+			     </div>	
+	     	</div>
+		  </div>
 		</div>
-	</div>
+  <div class="box-body">
     <div class="div-grid">
         <div id="jqxTabs">
           <?php echo $barang;?>
@@ -58,5 +68,11 @@
 	$(function () {	
 		$("#menu_master_data").addClass("active");
 		$("#menu_mst_invbaranghabispakai").addClass("active");
+
+		$("select[name='jenisbarang']").change(function(){
+		$.post("<?php echo base_url().'mst/invbaranghabispakai/filter_jenisbarang' ?>", 'jenisbarang='+$(this).val(),  function(){
+			$("#jqxgrid_barang").jqxGrid('updatebounddata', 'cells');
+		});
+    });
 	});
 </script>

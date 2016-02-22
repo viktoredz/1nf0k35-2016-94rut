@@ -7,7 +7,7 @@ class Qrcodes extends CI_Controller {
 		$this->load->model('inventory/inv_barang_model');
 	}
 
-	function draw($id_barang=0,$kd_inventaris=0){
+	function draw($kode_proc=0,$id_barang=0,$kd_inventaris=0){
 		$tabel=substr($id_barang, 0,2);
 		if ($tabel=="01") {
 			$tabel ="inv_inventaris_barang_a";
@@ -23,7 +23,7 @@ class Qrcodes extends CI_Controller {
 			$tabel ="inv_inventaris_barang_f";
 		}
 
-		$data = $this->inv_barang_model->get_data_barang_edit_table($id_barang,$kd_inventaris,$tabel); 
+		$data = $this->inv_barang_model->get_data_barang_edit_table($kode_proc,$id_barang,$kd_inventaris,$tabel); 
 
 	      $s = array();
 	      $s[0] = substr($data['barang_kembar_proc'], 0,2);
@@ -32,7 +32,14 @@ class Qrcodes extends CI_Controller {
 	      $s[3] = substr($data['barang_kembar_proc'], 6,2);
 	      $s[4] = substr($data['barang_kembar_proc'], 8,2);
 	      $s[5] = substr($data['barang_kembar_proc'], 10,2);
-	      $s[6] = substr($data['barang_kembar_proc'], 12,1);
+	      $s[6] = substr($data['barang_kembar_proc'], 12,2);
+	      $s[7] = substr($data['barang_kembar_proc'], 14,2);
+	      $s[8] = substr($data['barang_kembar_proc'], 16,2);
+	      $s[9] = substr($data['barang_kembar_proc'], 18,2);
+	      $s[10] = substr($data['barang_kembar_proc'], 20,2);
+	      $s[11] = substr($data['barang_kembar_proc'], 22,2);
+	      $s[12] = substr($data['barang_kembar_proc'], 24,2);
+	      $s[14] = substr($data['barang_kembar_proc'], 26,2);
 	      $kode_proc = implode(".", $s);
 		$data = array(
 			"Nama:".$data['nama_barang'],

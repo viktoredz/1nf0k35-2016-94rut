@@ -4,18 +4,18 @@ class Barcode extends CI_Controller {
     public function __construct(){
 		parent::__construct();
 		require_once(APPPATH.'third_party/barcodegen/html/include/function.php');
-		include_once(APPPATH.'third_party/barcodegen/html/config/BCGean13.php');
+		include_once(APPPATH.'third_party/barcodegen/html/config/BCGcode128.php');
 		require_once(APPPATH.'third_party/barcodegen/class/BCGColor.php');
 		require_once(APPPATH.'third_party/barcodegen/class/BCGBarcode.php');
 		require_once(APPPATH.'third_party/barcodegen/class/BCGDrawing.php');
 		require_once(APPPATH.'third_party/barcodegen/class/BCGFontFile.php');
-		require_once(APPPATH.'third_party/barcodegen/class/BCGean13.barcode.php');
+		require_once(APPPATH.'third_party/barcodegen/class/BCGcode128.barcode.php');
 		require_once(APPPATH.'third_party/barcodegen/class/BCGBarcode1D.php');
 	}
 
 	function draw($text = "1111111111111"){
 		$_GET = array(
-			'code' => "BCGean13",
+			'code' => "BCGcode128",
 			'filetype' => "PNG",
 			'dpi' => 72,
 			'scale' => 1,
@@ -33,7 +33,7 @@ class Barcode extends CI_Controller {
 		    $color_black = new BCGColor(0, 0, 0);
 		    $color_white = new BCGColor(255, 255, 255);
 
-		    $code_generated = new BCGean13();
+		    $code_generated = new BCGcode128();
 
 		    if (function_exists('baseCustomSetup')) {
 		        baseCustomSetup($code_generated, $_GET);

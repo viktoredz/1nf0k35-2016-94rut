@@ -854,6 +854,9 @@ class Inv_barang extends CI_Controller {
    				$data['id_pengadaan'] = "barcode";
    				$data['kd_proc']		= $kd_proc;
    				//echo "kiecci";
+   			$kode_sess=$this->session->userdata('puskesmas');
+   			$data['kd_prov'] = $this->inv_barang_model->get_nama('value','cl_province','code',substr($kode_sess, 0,2));
+   			$data['nama_puskesmas']  = $this->inv_barang_model->get_nama('value','cl_phc','code','P'.$kode_sess);
    				die($this->parser->parse('inventory/inv_barang/barang_form_view', $data));
 		
 		
