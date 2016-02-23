@@ -237,15 +237,15 @@
       <div class="modal-body">
       <div id="print2">   
           <table width="100%" cellpadding='0' cellspacing='0' border="0">
-              <tr >
-              <th  align="right"><h4 align="right"><img src="<?php echo base_url()?>public/themes/sik/dist/img/logo.gif" width="50px" height="50px"></h4></th>
-                <th colspan="4" align="center"><h4 align="center">BARANG MILIK<br>PEMERINTAH PROVINSI DINAS KESEHATAN <?php echo $ditrict; ?></h4></th>
+              <tr> 
+                <th  align="right" colspan="1"><h4 align="right"><img src="<?php echo base_url()?>public/themes/sik/dist/img/logo.gif" width="50px" height="50px"></h4></th>
+                <th colspan="3" align="center"><h4 align="left">BARANG MILIK DINAS KESEHATAN <?php echo $ditrict; ?></h4></th>
               </tr>
-              <tr  align="left">
-                  <th rowspan="4" colspan="2"><img src="<?php echo base_url()?>inventory/qrcodes/draw/<?php echo $kd_proc.'/'.$id_barang.'/'.$kode; ?>" ></th>
-                  <th>Kode Lokasi</th>
-                  <th>:</th>
-                  <th><?php $kodelokasi= substr($kode,0,14);
+              <tr>
+                  <th rowspan="5" align="right"><img src="<?php echo base_url()?>inventory/qrcodes/draw/<?php echo $kd_proc.'/'.$id_barang.'/'.$kode; ?>"></th>
+                  <th align="left">Kode Lokasi</th>
+                  <th align="left">:</th>
+                  <th align="left"><?php $kodelokasi= substr($kode,0,14);
                   $s = array();
                   $s[0] = substr($kodelokasi, 0,2);
                   $s[1] = substr($kodelokasi, 2,2);
@@ -276,8 +276,12 @@
                   <th>:</th>
                   <th><?php echo $nama_barang; ?></th>
               </tr>
+              <tr  align="left">
+                  <th colspan="4">-</th>
+              </tr>
               <tr>
-                  <th colspan="3"><img src="<?php echo base_url()?>inventory/barcode/draw/<?php echo $kode; ?>"></th>
+                  <th colspan="2"></th>
+                  <th colspan="1" align="left"><img src="<?php echo base_url()?>inventory/barcode/draw/<?php echo $kode; ?>"></th>
               </tr>
           </table>
       </div>
