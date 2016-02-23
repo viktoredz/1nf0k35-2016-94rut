@@ -237,12 +237,12 @@
       <div class="modal-body">
       <div id="print2">   
           <table width="100%" cellpadding='0' cellspacing='0' border="0">
-              <tr align="center">
-              <th colspan="1" align="center"><h4 align="center"><img src="<?php echo base_url()?>public/themes/sik/dist/img/logo.gif" width="50px" height="50px"></h4></th>
-                <th colspan="3" align="center"><h4 align="center">BARANG MILIK<br>PEMERINTAH PROVINSI DINAS KESEHATAN <?php echo $ditrict; ?></h4></th>
+              <tr >
+              <th  align="right"><h4 align="right"><img src="<?php echo base_url()?>public/themes/sik/dist/img/logo.gif" width="50px" height="50px"></h4></th>
+                <th colspan="4" align="center"><h4 align="center">BARANG MILIK<br>PEMERINTAH PROVINSI DINAS KESEHATAN <?php echo $ditrict; ?></h4></th>
               </tr>
               <tr  align="left">
-                  <th rowspan="4"><img src="<?php echo base_url()?>inventory/qrcodes/draw/<?php echo $kd_proc.'/'.$id_barang.'/'.$kode; ?>" ></th>
+                  <th rowspan="4" colspan="2"><img src="<?php echo base_url()?>inventory/qrcodes/draw/<?php echo $kd_proc.'/'.$id_barang.'/'.$kode; ?>" ></th>
                   <th>Kode Lokasi</th>
                   <th>:</th>
                   <th><?php $kodelokasi= substr($kode,0,14);
