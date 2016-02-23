@@ -131,6 +131,8 @@
 <input type="hidden" value="<?=$code_cl_phc?>" id="code_cl_phc">
 <script type="text/javascript">
 $(function(){
+    $("#menu_inventory_permohonanbarang").addClass("active");
+    $("#menu_inventory").addClass("active");
     $('#btn-edit').click(function(){
         window.location.href="<?php echo base_url()?>inventory/permohonanbarang/edit/{kode}/{code_cl_phc}";
     });
@@ -139,8 +141,6 @@ $(function(){
         window.location.href="<?php echo base_url()?>inventory/permohonanbarang";
     });
 
-    $("#menu_inventory_permohonanbarang").addClass("active");
-    $("#menu_inventory").addClass("active");
 
     //$("#tgl").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme});
 

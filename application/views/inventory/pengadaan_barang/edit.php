@@ -213,12 +213,12 @@ $(function(){
     };
     <?php } ?>
   });
-    function kodeInvetaris(tahun=0)
+    function kodeInvetaris(tahun)
     { 
-      if (tahun!=0) {
-        tahun = tahun.substr(-2);
+      if (tahun==null) {
+        var tahun = "<?php echo $tgl_pengadaan?>".substring(2,4);
       }else{
-        tahun = "<?php echo $tgl_pengadaan?>".substring(2,4);
+        var tahun = tahun.substr(-2);
       }
       //alert(tahun);
       $.ajax({

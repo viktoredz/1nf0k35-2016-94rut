@@ -29,13 +29,13 @@ function edit_barang(id_inventaris_barang,kodeproc){
     }
     return'Rp.\t'+e(d)+',00'
   }
-  function kodeinventaris(kode=0){
-    if(kode!=0){
-      document.getElementById("v_kode_invetaris").value = document.getElementById("kode_inventaris_").value;
-      document.getElementById("id_inventaris_barang").value =kode;
-    }else{
+  function kodeinventaris(kode){
+    if(kode==null){
       document.getElementById("v_kode_invetaris").value = document.getElementById("kode_inventaris_").value;
       document.getElementById("id_inventaris_barang").value ='';
+    }else{
+      document.getElementById("v_kode_invetaris").value = document.getElementById("kode_inventaris_").value;
+      document.getElementById("id_inventaris_barang").value =kode;
     }
     
   }

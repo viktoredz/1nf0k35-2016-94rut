@@ -160,12 +160,12 @@ $(function(){
     };
   });
   
-  function kodeInvetaris(tahun=0)
+  function kodeInvetaris(tahun)
     {
-      if (tahun!=0) {
-        tahun = tahun.substr(-2);
-      }else{
+      if (tahun==null) {
         var tahun = <?php echo date("y");?>;  
+      }else{
+        var tahun = tahun.substr(-2);
       }
       
       $.ajax({

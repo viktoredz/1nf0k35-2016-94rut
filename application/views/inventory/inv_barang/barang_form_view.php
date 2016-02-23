@@ -208,12 +208,11 @@
           {
             var values = document.getElementById(strid);
             var printing =
-            window.open('','','left=0,top=0,width=550,height=400,toolbar=0,scrollbars=0,sta­?tus=0');
+            window.open('','','left=0,top=0,width=550,height=350,toolbar=0,scrollbars=0,sta­?tus=0');
             printing.document.write(values.innerHTML);
             printing.document.close();
             printing.focus();
             printing.print();
-            printing.close();
           }
         }
         </script>
@@ -231,34 +230,32 @@
       <div id="print2">   
           <table width="100%" cellpadding='0' cellspacing='0' border="0">
               <tr align="center">
-                <th colspan="3" align="center"><h2 align="center">BARANG MILIK<br>PEMERINTAH PROVINSI <?php echo $kd_prov; ?></h2></th>
+                <th colspan="4" align="center"><h4 align="center">BARANG MILIK<br>PEMERINTAH PROVINSI <?php echo $kd_prov; ?></h4></th>
               </tr>
-              <tr>
+              <tr  align="left">
+                  <th rowspan="3"><img src="<?php echo base_url()?>inventory/qrcodes/draw/<?php echo $kd_proc.'/'.$id_barang.'/'.$kode; ?>" ></th>
                   <th>Kode Puskesmas</th>
                   <th>:</th>
                   <th><?php echo 'P'.$this->session->userdata('puskesmas');?></th>
               </tr>
-              <tr>
+              <tr  align="left"> 
                   <th>Nama Puskesmas</th>
                   <th>:</th>
                   <th><?php echo $nama_puskesmas;?></th>
               </tr>
-              <tr>
-                <th colspan="3">-</th>
+              <tr  align="left">
+                  <th>Kode Inventaris</th>
+                  <th>:</th>
+                  <th><?php echo $kode;?></th>
               </tr>
               <tr>
-                  <th colspan="1">Barcode Barang</th>
-                   <th colspan="2">/QR Qode Barang</th>
-              </tr>
-              <tr>
-                  <th colspan="1"><img src="<?php echo base_url()?>inventory/barcode/draw/<?php echo $kd_proc; ?>"></th>
-                  <th colspan="2"><img src="<?php echo base_url()?>inventory/qrcodes/draw/<?php echo $kd_proc.'/'.$id_barang.'/'.$kode; ?>" ></th>
+                  <th colspan="4"><img src="<?php echo base_url()?>inventory/barcode/draw/<?php echo $kd_proc; ?>"></th>
               </tr>
           </table>
       </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" onclick="return print1('print2')" > <i class="glyphicon glyphicon-print"></i>Pilih Barcode</button>
+        <button type="button" class="btn btn-default" onclick="return print1('print2')" > <i class="glyphicon glyphicon-print"></i> Print Barcode</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>

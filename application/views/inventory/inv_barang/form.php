@@ -147,11 +147,11 @@ function edit_barang(id_barang,barang_kembar_proc,id_inventaris_barang){
         kodeinventaris();
      kodeInvetaris();
     });
-    function kodeinventaris(kode=0){
-    if(kode!=0){
-      document.getElementById("id_inventaris_barang").value =kode;
-    }else{
+    function kodeinventaris(kode){
+    if((kode==null)){
       document.getElementById("id_inventaris_barang").value ='';
+    }else{
+      document.getElementById("id_inventaris_barang").value =kode;
     }
     
   }
