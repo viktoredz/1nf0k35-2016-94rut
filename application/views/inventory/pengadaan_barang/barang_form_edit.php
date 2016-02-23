@@ -230,8 +230,7 @@ if(isset($disable)){if($disable='disable'){?>
                   $s[9] = substr($id_inventaris_barang, 18,2);
                   $s[10] = substr($id_inventaris_barang, 20,2);
                   $s[11] = substr($id_inventaris_barang, 22,2);
-                  $s[12] = substr($id_inventaris_barang, 24,2);
-                  $s[13] = substr($id_inventaris_barang, 26,2);
+                  $s[12] = substr($id_inventaris_barang, 24,4);
                   echo implode(".", $s);
                 }else{
                   echo  set_value('id_inventaris_barang');

@@ -111,8 +111,8 @@
                   $s[9] = substr($id_inventaris_barang, 18,2);
                   $s[10] = substr($id_inventaris_barang, 20,2);
                   $s[11] = substr($id_inventaris_barang, 22,2);
-                  $s[12] = substr($id_inventaris_barang, 24,2);
-                  $s[13] = substr($id_inventaris_barang, 26,2);
+                  $s[12] = substr($id_inventaris_barang, 24,4);
+                 // $s[13] = substr($id_inventaris_barang, 26,2);
                   echo implode(".", $s);
                 ?><br><br>
             </div>
@@ -216,6 +216,14 @@
           }
         }
         </script>
+<style type="text/css">
+   #myModal-header{
+    background-color: #3498db;
+}
+#myModal-title{
+    color: white;
+}
+</style>
 <!-- Modal -->
 <div id="myModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
@@ -230,26 +238,46 @@
       <div id="print2">   
           <table width="100%" cellpadding='0' cellspacing='0' border="0">
               <tr align="center">
-                <th colspan="4" align="center"><h4 align="center">BARANG MILIK<br>PEMERINTAH PROVINSI <?php echo $kd_prov; ?></h4></th>
+              <th colspan="1" align="center"><h4 align="center"><img src="<?php echo base_url()?>public/themes/sik/dist/img/logo.gif" width="50px" height="50px"></h4></th>
+                <th colspan="3" align="center"><h4 align="center">BARANG MILIK<br>PEMERINTAH PROVINSI DINAS KESEHATAN <?php echo $ditrict; ?></h4></th>
               </tr>
               <tr  align="left">
-                  <th rowspan="3"><img src="<?php echo base_url()?>inventory/qrcodes/draw/<?php echo $kd_proc.'/'.$id_barang.'/'.$kode; ?>" ></th>
-                  <th>Kode Puskesmas</th>
+                  <th rowspan="4"><img src="<?php echo base_url()?>inventory/qrcodes/draw/<?php echo $kd_proc.'/'.$id_barang.'/'.$kode; ?>" ></th>
+                  <th>Kode Lokasi</th>
                   <th>:</th>
-                  <th><?php echo 'P'.$this->session->userdata('puskesmas');?></th>
+                  <th><?php $kodelokasi= substr($kode,0,14);
+                  $s = array();
+                  $s[0] = substr($kodelokasi, 0,2);
+                  $s[1] = substr($kodelokasi, 2,2);
+                  $s[2] = substr($kodelokasi, 4,2);
+                  $s[3] = substr($kodelokasi, 6,2);
+                  $s[4] = substr($kodelokasi, 8,2);
+                  $s[5] = substr($kodelokasi, 10,2);
+                  $s[6] = substr($kodelokasi, 12,2);
+                  echo implode(".", $s);
+                ?></th>
               </tr>
               <tr  align="left"> 
-                  <th>Nama Puskesmas</th>
+                  <th>Kode Barang</th>
                   <th>:</th>
-                  <th><?php echo $nama_puskesmas;?></th>
+                  <th><?php $rest = substr ($kode,14,28);
+                  $s = array();
+                  $s[0] = substr($rest, 0,2);
+                  $s[1] = substr($rest, 2,2);
+                  $s[2] = substr($rest, 4,2);
+                  $s[3] = substr($rest, 6,2);
+                  $s[4] = substr($rest, 8,2);
+                  $s[5] = substr($rest, 10,4);
+                  echo implode(".", $s);
+                ?></th>
               </tr>
               <tr  align="left">
-                  <th>Kode Inventaris</th>
+                  <th>Nama Barang</th>
                   <th>:</th>
-                  <th><?php echo $kode;?></th>
+                  <th><?php echo $nama_barang; ?></th>
               </tr>
               <tr>
-                  <th colspan="4"><img src="<?php echo base_url()?>inventory/barcode/draw/<?php echo $kd_proc; ?>"></th>
+                  <th colspan="3"><img src="<?php echo base_url()?>inventory/barcode/draw/<?php echo $kode; ?>"></th>
               </tr>
           </table>
       </div>
@@ -267,7 +295,7 @@
                   <label>QR Code / Barcode</label>
                   <br>
                   <img src="<?php echo base_url()?>inventory/qrcodes/draw/<?php echo $kd_proc.'/'.$id_barang.'/'.$kode; ?>" ><br><br>
-                  <img src="<?php echo base_url()?>inventory/barcode/draw/<?php echo $kd_proc; ?>" >
+                  <img src="<?php echo base_url()?>inventory/barcode/draw/<?php echo $kode; ?>" >
                   <button type="button" class="btn btn-info btn-sl" data-toggle="modal" data-target="#myModal" style="float:right;">Print</button>
                 </div>
                 <div class="box-footer">
