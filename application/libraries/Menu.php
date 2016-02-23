@@ -19,6 +19,7 @@
 			}
 
 		}
+
 		function have_child($id){
 			$query=$this->obj->db->query("select count(id) as n from ".$this->app_menus." where sub_id=".$id);			
 			$x=0;
@@ -31,10 +32,8 @@
 			}else{
 				return false;
 			}
-			
-			
-			
 		}
+
 		function create_menu($posisi, $subid){
 			$query=$this->obj->db->query("select app_menus.id, app_files.id as idmenu, filename, module from ".$this->app_menus." inner join ".$this->app_files." on ".$this->app_menus.".file_id = ".$this->app_files.".id inner join ".$this->app_users_access." using(file_id) where level_id='".$this->obj->session->userdata('level')."' and position = ".$posisi." and sub_id =".$subid." and lang = '".$_SESSION['lang']."'  and doshow=1 order by sort asc");
 			$icon = array(
@@ -47,6 +46,7 @@
 				"59" => "fa fa-envelope",
 				"41" => "fa fa-bar-chart-o",
 				"49" => "fa fa-asterisk",
+				"126" => "fa fa-tasks",
 				"6" => "fa fa-table"				
 			);
 			
@@ -80,13 +80,10 @@
 					$text=$text.$this->create_menu($posisi, $q->id);
 					 				
 				}else{
-					
-					
 					$text=$text."<li id=\"menu_".$id_menu."\">
 						<a href=\" ".base_url().$q->module." \">
 							<i class=\" ".$ico."\"></i> <span> ".$q->filename." </span> <i class=\"pull-right\"></i>
 						</a>";
-					
 				}
 				
 				

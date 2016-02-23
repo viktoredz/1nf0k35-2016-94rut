@@ -14,18 +14,6 @@ class Drh_model extends CI_Model {
     }
     
 
-    // function get_data($start=0,$limit=999999,$options=array())
-    // {
-    // 	$this->db->select('*');
-	   //  $this->db->from('pegawai');
-	   //  $this->db->join('mst_agama', 'pegawai.kode_mst_agama = mst_agama.kode', 'inner');
-	   //  $this->db->join('mst_peg_nikah', 'pegawai.kode_mst_nikah = mst_peg_nikah.kode', 'inner');
-	   //  $this->db->join('cl_phc', 'pegawai.code_cl_phc = cl_phc.code_cl_phc', 'inner');
-	   //  $this->db->limit($limit,$start); 
-	   //  $query = $this->db->get();
-    // 	return $query->result();
-
-    // }
 
     public function getItem($t_alamat,$data)
     {
@@ -34,7 +22,7 @@ class Drh_model extends CI_Model {
 
     function get_data($start=0,$limit=999999,$options=array())
     {
-		$this->db->order_by('nip_nit','asc');
+		$this->db->order_by('id_pegawai','asc');
         $query = $this->db->get('pegawai',$limit,$start);
         return $query->result();
     }
@@ -53,7 +41,7 @@ class Drh_model extends CI_Model {
     function get_data_alamat_id($id,$urut=0)
     {
 		$data = array();
-        $options = array('nip_nit'=>$id,'urut' => $urut);
+        $options = array('id_pegawai'=>$id,'urut' => $urut);
 		$query = $this->db->get_where($this->t_alamat,$options);
 		if ($query->num_rows() > 0){
 			$data = $query->row_array();
@@ -65,7 +53,7 @@ class Drh_model extends CI_Model {
 
  	function get_data_row($id){
 		$data = array();
-		$options = array('nip_nit' => $id);
+		$options = array('id_pegawai' => $id);
 		$query = $this->db->get_where($this->tabel,$options);
 		if ($query->num_rows() > 0){
 			$data = $query->row_array();
@@ -187,14 +175,14 @@ class Drh_model extends CI_Model {
 
 	public function getSelectedData($table,$data)
     {
-        return $this->db->get_where($table, array('nip_nit'=>$data));
+        return $this->db->get_where($table, array('id_pegawai'=>$data));
     }
 
 
 // CRUD pegawai
     function insert_entry()
     {
-    	$data['nip_nit']		= $this->input->post('nip_nit');
+    	$data['id_pegawai']		= $this->input->post('id_pegawai');
     	$data['nip_lama']		= $this->input->post('nip_lama');
     	$data['nip_baru']		= $this->input->post('nip_baru');
     	$data['nrk']			= $this->input->post('nrk');
@@ -215,7 +203,7 @@ class Drh_model extends CI_Model {
     	$data['code_cl_phc']	= $this->input->post('code_cl_phc');
     	$data['status_masuk']	= $this->input->post('status_masuk');
 
-		if($this->getSelectedData($this->tabel,$data['nip_nit'])->num_rows() > 0) {
+		if($this->getSelectedData($this->tabel,$data['id_pegawai'])->num_rows() > 0) {
 			return 0;
 		}else{
 			if($this->db->insert($this->tabel, $data)){
@@ -232,7 +220,7 @@ class Drh_model extends CI_Model {
 
     function update_entry($id)
     {
-		$data['nip_nit']		= $this->input->post('nip_nit');
+		$data['id_pegawai']		= $this->input->post('id_pegawai');
     	$data['nip_lama']		= $this->input->post('nip_lama');
     	$data['nip_baru']		= $this->input->post('nip_baru');
     	$data['nrk']			= $this->input->post('nrk');
@@ -253,7 +241,7 @@ class Drh_model extends CI_Model {
     	$data['code_cl_phc']	= $this->input->post('code_cl_phc');
     	$data['status_masuk']	= $this->input->post('status_masuk');
 
-		if($this->db->update($this->tabel, $data, array("nip_nit"=>$id))){
+		if($this->db->update($this->tabel, $data, array("id_pegawai"=>$id))){
 			return true;
 		}else{
 			return mysql_error();
@@ -262,7 +250,7 @@ class Drh_model extends CI_Model {
 
 	function delete_entry($id)
 	{
-		$this->db->where('nip_nit',$id);
+		$this->db->where('id_pegawai',$id);
 
 		return $this->db->delete($this->tabel);
 	}
@@ -274,7 +262,7 @@ class Drh_model extends CI_Model {
     function get_alamat_id($id="")
     {
         $this->db->select('max(urut) as urut');
-        $this->db->where('nip_nit',$id);
+        $this->db->where('id_pegawai',$id);
         $jum = $this->db->get('pegawai')->row();
         
         if (empty($jum)){
@@ -287,7 +275,7 @@ class Drh_model extends CI_Model {
 
     function delete_entry_alamat($id,$urut)
     {
-        $this->db->where('nip_nit',$id);
+        $this->db->where('id_pegawai',$id);
         $this->db->where('urut',$urut);
 
         return $this->db->delete($this->t_alamat);
@@ -305,7 +293,7 @@ class Drh_model extends CI_Model {
     function get_data_diklat_id($id,$id_mst_peg_kursus)
     {
         $data = array();
-        $options = array('nip_nit'=>$id,'id_mst_peg_kursus'=>$id_mst_peg_kursus);
+        $options = array('id_pegawai'=>$id,'id_mst_peg_kursus'=>$id_mst_peg_kursus);
         $query = $this->db->get_where($this->t_diklat,$options);
         if ($query->num_rows() > 0){
             $data = $query->row_array();
@@ -326,7 +314,7 @@ class Drh_model extends CI_Model {
 
     function delete_entry_diklat($id,$id_mst_peg_kursus)
     {
-        $this->db->where('nip_nit',$id);
+        $this->db->where('id_pegawai',$id);
         $this->db->where('id_mst_peg_kursus',$id_mst_peg_kursus);
 
         return $this->db->delete($this->t_diklat);
@@ -335,7 +323,7 @@ class Drh_model extends CI_Model {
 //Pegawai DP3
     function get_data_dp3($start=0,$limit=999999,$options=array())
     {
-        $this->db->order_by('nip_nit','asc');
+        $this->db->order_by('id_pegawai','asc');
         $query = $this->db->get('pegawai_dp3',$limit,$start);
         return $query->result();
     }
@@ -343,7 +331,7 @@ class Drh_model extends CI_Model {
     function get_data_dp3_id($id,$tahun)
     {
         $data = array();
-        $options = array('nip_nit'=>$id,'tahun'=>$tahun);
+        $options = array('id_pegawai'=>$id,'tahun'=>$tahun);
         $query = $this->db->get_where($this->t_dp3,$options);
         if ($query->num_rows() > 0){
             $data = $query->row_array();
@@ -355,7 +343,7 @@ class Drh_model extends CI_Model {
 
     function delete_entry_dp3($id,$dp3)
     {
-        $this->db->where('nip_nit',$id);
+        $this->db->where('id_pegawai',$id);
         $this->db->where('tahun',$tahun);
 
         return $this->db->delete($this->t_dp3);

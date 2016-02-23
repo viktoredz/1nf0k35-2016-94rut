@@ -6,6 +6,17 @@ class Drh extends CI_Controller {
 		$this->load->model('kepegawaian/drh_model');
 		$this->load->model('mst/puskesmas_model');
 	}
+
+	function index(){
+		$this->authentication->verify('kepegawaian','edit');
+		$data['title_group'] = "Kepegawaian";
+		$data['title_form'] = "Daftar Riwayat Hidup";
+
+		$data['content'] = $this->parser->parse("kepegawaian/drh/show",$data,true);
+
+		$this->template->show($data,"home");
+	}
+
 	function json(){
 		$this->authentication->verify('kepegawaian','show');
 
@@ -49,7 +60,7 @@ class Drh extends CI_Controller {
 		$data = array();
 		foreach($rows as $act) {
 			$data[] = array(
-				'nip_nit'		=> $act->nip_nit,
+				'id_pegawai'		=> $act->id_pegawai,
 				'nip_lama'		=> $act->nip_lama,
 				'nip_baru'		=> $act->nip_baru,
 				'nrk'			=> $act->nrk,
@@ -83,24 +94,10 @@ class Drh extends CI_Controller {
 		echo json_encode(array($json));
 	}
 
-	function index(){
-		$this->authentication->verify('kepegawaian','edit');
-		$data['title_group'] = "Parameter";
-		$data['title_form'] = "Master Data - Peg Daftar Riwayat Hidup";
-		// $data= $this->drh_model->get_data();
-		// var_dump($data);
-		// exit();
-
-		$data['content'] = $this->parser->parse("kepegawaian/drh/show",$data,true);
-
-		$this->template->show($data,"home");
-	}
-
-//crud pegawai
 	function add(){
 		$this->authentication->verify('kepegawaian','add');
 
-        $this->form_validation->set_rules('nip_nit', 'Nip / Nit', 'trim|required');
+        $this->form_validation->set_rules('id_pegawai', 'Nip / Nit', 'trim|required');
         $this->form_validation->set_rules('nip_lama', 'Nip Lama', 'trim|');
         $this->form_validation->set_rules('nip_baru', 'Nip Baru', 'trim|');
         $this->form_validation->set_rules('nrk', 'nrk', 'trim|');
@@ -143,7 +140,7 @@ class Drh extends CI_Controller {
 				$this->template->show($data,"home");
 			}elseif($this->drh_model->insert_entry() == 1){
 				$this->session->set_flashdata('alert', 'Save data successful...');
-				redirect(base_url().'kepegawaian/drh/edit'. $id.'/'.$this->input->post('nip_nit'));
+				redirect(base_url().'kepegawaian/drh/edit'. $id.'/'.$this->input->post('id_pegawai'));
 			}else{
 				$this->session->set_flashdata('alert_form', 'Save data failed...');
 				redirect(base_url()."kepegawaian/drh/add");
@@ -155,7 +152,7 @@ class Drh extends CI_Controller {
 	{
 		$this->authentication->verify('kepegawaian','add');
 
-        $this->form_validation->set_rules('nip_nit', 'Nip / Nit', 'trim|required');
+        $this->form_validation->set_rules('id_pegawai', 'Nip / Nit', 'trim|required');
         $this->form_validation->set_rules('nip_lama', 'Nip Lama', 'trim|');
         $this->form_validation->set_rules('nip_baru', 'Nip Baru', 'trim|');
         $this->form_validation->set_rules('nrk', 'nrk', 'trim|');
@@ -197,8 +194,7 @@ class Drh extends CI_Controller {
 				}
 				$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
 			
-			$data['form_tambahan'] = $this->parser->parse("kepegawaian/drh/form_tambahan",$data,true);
-			$data['content'] = $this->parser->parse("kepegawaian/drh/form",$data,true);
+			$data['content'] = $this->parser->parse("kepegawaian/drh/form_detail",$data,true);
 			$this->template->show($data,"home");
 		}elseif($this->drh_model->update_entry($id)){
 			$this->session->set_flashdata('alert_form', 'Save data successful...');
@@ -219,6 +215,34 @@ class Drh extends CI_Controller {
 			$this->session->set_flashdata('alert', 'Delete data error');
 			redirect(base_url()."kepegawaian/drh");
 		}
+	}
+
+	function biodata($pageIndex){
+		$data = array();
+
+		switch ($pageIndex) {
+			case 1:
+
+				die($this->parser->parse("kepegawaian/drh/form_biodata",$data));
+				break;
+			default:
+
+				die($this->parser->parse("kepegawaian/drh/form_keluarga",$data));
+				break;
+		}
+
+	}
+
+	function biodata_sub(){
+		$data = array();
+		die($this->parser->parse("kepegawaian/drh/form_biodata_sub",$data));
+
+	}
+
+	function keluarga_sub(){
+		$data = array();
+		die($this->parser->parse("kepegawaian/drh/form_keluarga_sub",$data));
+
 	}
 
 // CRUD ALAMAT
@@ -280,7 +304,7 @@ class Drh extends CI_Controller {
 	function get_urut_alamat($id="")
     {
     	$this->db->select('max(urut) as id');
-    	$this->db->where('nip_nit',$id);
+    	$this->db->where('id_pegawai',$id);
     	$jum = $this->db->get('pegawai_alamat')->row();
     	
     	if (empty($jum)){
@@ -301,7 +325,7 @@ class Drh extends CI_Controller {
 		$data['action']="add_alamat";
 
 		
-		$this->form_validation->set_rules('nip_nit', 'NIP / NIT', 'trim|required');
+		$this->form_validation->set_rules('id_pegawai', 'NIP / NIT', 'trim|required');
 		// $this->form_validation->set_rules('urut', 'No Urut Alamat', 'trim|required');
 		$this->form_validation->set_rules('alamat', 'Alamat', 'trim|required');
 		$this->form_validation->set_rules('rt', 'RT', 'trim|required');
@@ -334,8 +358,8 @@ class Drh extends CI_Controller {
 			die($this->parser->parse('kepegawaian/drh/form_alamat', $data,true));
 		}else{
 			$values = array(
-				'nip_nit'=>$id,
-				'urut' => $this->get_urut_alamat($this->input->post('nip_nit')),
+				'id_pegawai'=>$id,
+				'urut' => $this->get_urut_alamat($this->input->post('id_pegawai')),
 				'alamat' => $this->input->post('alamat'),
 				'rt' => $this->input->post('rt'),
 				'rw' => $this->input->post('rw'),
@@ -345,7 +369,7 @@ class Drh extends CI_Controller {
 				'code_cl_village' => $this->input->post('code_cl_village')
 			);
 			if($this->db->insert('pegawai_alamat', $values)){
-				$key['nip_nit'] = $id;
+				$key['id_pegawai'] = $id;
         		$this->db->update("pegawai",$key);
 
 				die("OK|");
@@ -367,7 +391,7 @@ class Drh extends CI_Controller {
 		$data['action']="edit_alamat";
 
 		
-		// $this->form_validation->set_rules('nip_nit', 'NIP / NIT', 'trim|required');
+		// $this->form_validation->set_rules('id_pegawai', 'NIP / NIT', 'trim|required');
 		// $this->form_validation->set_rules('urut', 'No Urut Alamat', 'trim|required');
 		$this->form_validation->set_rules('alamat', 'Alamat', 'trim|required');
 		$this->form_validation->set_rules('rt', 'RT', 'trim|required');
@@ -407,7 +431,7 @@ class Drh extends CI_Controller {
 			die($this->parser->parse('kepegawaian/drh/form_alamat_edit', $data,true));
 		}else{
 			$values = array(
-				// 'nip_nit'=>$id,
+				// 'id_pegawai'=>$id,
 				// 'urut' => $this->input->post('urut'),
 				'alamat' => $this->input->post('alamat'),
 				'rt' => $this->input->post('rt'),
@@ -418,7 +442,7 @@ class Drh extends CI_Controller {
 				'code_cl_village' => $this->input->post('code_cl_village')
 			);
 			if($this->db->update('pegawai_alamat', $values,array('urut'=>$urut))){
-				// $key['nip_nit'] = $id;
+				// $key['id_pegawai'] = $id;
     //     		$this->db->update("pegawai_alamat",$key);
 
 				die("OK|");
@@ -452,7 +476,7 @@ class Drh extends CI_Controller {
 		$data['action']="add_diklat";
 
 		
-		// $this->form_validation->set_rules('nip_nit', 'NIP / NIT', 'trim|required');
+		// $this->form_validation->set_rules('id_pegawai', 'NIP / NIT', 'trim|required');
 		// $this->form_validation->set_rules('urut', 'No Urut Alamat', 'trim|required');
 		$this->form_validation->set_rules('id_mst_peg_kursus', 'Jenis Diklat', 'trim|required');
 		$this->form_validation->set_rules('nama_diklat', 'Nama Diklat', 'trim|required');
@@ -472,17 +496,17 @@ class Drh extends CI_Controller {
 			die($this->parser->parse('kepegawaian/drh/form_diklat', $data,true));
 		}else{
 			$values = array(
-				// 'nip_nit'=>$id,
+				// 'id_pegawai'=>$id,
 				// 'urut' => $this->input->post('urut'),
 				'id_mst_peg_kursus' => $this->input->post('id_mst_peg_kursus'),
-				'nip_nit' => $id,
+				'id_pegawai' => $id,
 				'nama_diklat' => $this->input->post('nama_diklat'),
 				'lama_diklat' => $this->input->post('lama_diklat'),
     			'tgl_diklat' => date("Y-m-d",strtotime($this->input->post('tgl_diklat'))),
 				'tar_penyelenggara' => $this->input->post('tar_penyelenggara')
 			);
 			if($this->db->insert('pegawai_diklat', $values)){
-				$key['nip_nit'] = $id;
+				$key['id_pegawai'] = $id;
         		$this->db->update("pegawai_diklat",$key);
 
 				die("OK|");
@@ -502,7 +526,7 @@ class Drh extends CI_Controller {
 		$data['action']="edit_diklat";
 
 		
-		// $this->form_validation->set_rules('nip_nit', 'NIP / NIT', 'trim|required');
+		// $this->form_validation->set_rules('id_pegawai', 'NIP / NIT', 'trim|required');
 		// $this->form_validation->set_rules('urut', 'No Urut Alamat', 'trim|required');
 		$this->form_validation->set_rules('id_mst_peg_kursus', 'Jenis Diklat', 'trim|required');
 		$this->form_validation->set_rules('nama_diklat', 'Nama Diklat', 'trim|required');
@@ -525,17 +549,17 @@ class Drh extends CI_Controller {
 			die($this->parser->parse('kepegawaian/drh/form_diklat_edit', $data,true));
 		}else{
 			$values = array(
-				// 'nip_nit'=>$id,
+				// 'id_pegawai'=>$id,
 				// 'urut' => $this->input->post('urut'),
 				'id_mst_peg_kursus' => $this->input->post('id_mst_peg_kursus'),
-				// 'nip_nit' => $id,
+				// 'id_pegawai' => $id,
 				'nama_diklat' => $this->input->post('nama_diklat'),
 				'lama_diklat' => $this->input->post('lama_diklat'),
     			'tgl_diklat' => date("Y-m-d",strtotime($this->input->post('tgl_diklat'))),
 				'tar_penyelenggara' => $this->input->post('tar_penyelenggara')
 			);
 			if($this->db->update('pegawai_diklat', $values,array('id_mst_peg_kursus'=>$id_mst_peg_kursus))){
-				// $key['nip_nit'] = $id;
+				// $key['id_pegawai'] = $id;
     //     		$this->db->update("pegawai_diklat",$key);
 
 				die("OK|");
@@ -568,7 +592,7 @@ class Drh extends CI_Controller {
 		$data['action']="add_dp3";
 
 		
-		// $this->form_validation->set_rules('nip_nit', 'NIP / NIT', 'trim|required');
+		// $this->form_validation->set_rules('id_pegawai', 'NIP / NIT', 'trim|required');
 		// $this->form_validation->set_rules('urut', 'No Urut Alamat', 'trim|required');
 		$this->form_validation->set_rules('tahun', 'Tahun', 'trim|required');
 		$this->form_validation->set_rules('setia', 'Kesetiaan', 'trim|required');
@@ -594,9 +618,9 @@ class Drh extends CI_Controller {
 			die($this->parser->parse('kepegawaian/drh/form_dp3', $data,true));
 		}else{
 			$values = array(
-				// 'nip_nit'=>$id,
+				// 'id_pegawai'=>$id,
 				// 'urut' => $this->input->post('urut'),
-				'nip_nit' => $id,
+				'id_pegawai' => $id,
 				'tahun' => $this->input->post('tahun'),
 				'setia' => $this->input->post('setia'),
 				'prestasi' => $this->input->post('prestasi'),
@@ -610,7 +634,7 @@ class Drh extends CI_Controller {
 				'ratarata' => ($this->input->post('tahun')+$this->input->post('setia')+$this->input->post('prestasi')+$this->input->post('tanggungjawab')+$this->input->post('taat')+$this->input->post('jujur')+$this->input->post('kerjasama')+$this->input->post('pimpin')+$this->input->post('prakarsa'))*2,
 			);
 			if($this->db->insert('pegawai_dp3', $values)){
-				$key['nip_nit'] = $id;
+				$key['id_pegawai'] = $id;
         		$this->db->update("pegawai_dp3",$key);
 
 				die("OK|");
@@ -619,70 +643,4 @@ class Drh extends CI_Controller {
 			}
 		}
 	}
-
-
-	// function edit_diklat($id="",$id_mst_peg_kursus=0){
-	// 	$this->authentication->verify('kepegawaian','add');
-
-	// 	$data['id']		= $id;
-	// 	$data['title_group'] = "Parameter";
-	// 	$data['title_form']="Tambah Data Diklat Pegawai";
-	// 	$data['action']="edit_diklat";
-
-		
-	// 	// $this->form_validation->set_rules('nip_nit', 'NIP / NIT', 'trim|required');
-	// 	// $this->form_validation->set_rules('urut', 'No Urut Alamat', 'trim|required');
-	// 	$this->form_validation->set_rules('id_mst_peg_kursus', 'Jenis Diklat', 'trim|required');
-	// 	$this->form_validation->set_rules('nama_diklat', 'Nama Diklat', 'trim|required');
-	// 	$this->form_validation->set_rules('lama_diklat', 'Lama Diklat', 'trim|required');
-	// 	$this->form_validation->set_rules('tgl_diklat', 'Tanggal Diklat', 'trim|required');
-	// 	$this->form_validation->set_rules('tar_penyelenggara', 'Penyelenggara', 'trim|required');
-
-	// 	if($this->form_validation->run()== FALSE){
-	// 		$data['notice']			   = validation_errors();
-	// 		$data = $this->drh_model->get_data_diklat_id($id,$id_mst_peg_kursus);
-	// 		// var_dump($data);
-	// 		// exit();
-	// 		$data['peg_kursus'] = $this->drh_model->get_data_diklat1($id);
-	// 		$data['action'] 	= "edit_diklat";
-	// 		$data['id_mst_peg_kursus'] = $id_mst_peg_kursus;
-	// 		$data['id'] = $id;
-			
-	// 		$data['content'] = $this->parser->parse("kepegawaian/drh/form_diklat_edit",$data,true);
-	// 		// echo "string";
-	// 		die($this->parser->parse('kepegawaian/drh/form_diklat_edit', $data,true));
-	// 	}else{
-	// 		$values = array(
-	// 			// 'nip_nit'=>$id,
-	// 			// 'urut' => $this->input->post('urut'),
-	// 			'id_mst_peg_kursus' => $this->input->post('id_mst_peg_kursus'),
-	// 			// 'nip_nit' => $id,
-	// 			'nama_diklat' => $this->input->post('nama_diklat'),
-	// 			'lama_diklat' => $this->input->post('lama_diklat'),
- //    			'tgl_diklat' => date("Y-m-d",strtotime($this->input->post('tgl_diklat'))),
-	// 			'tar_penyelenggara' => $this->input->post('tar_penyelenggara')
-	// 		);
-	// 		if($this->db->update('pegawai_diklat', $values,array('id_mst_peg_kursus'=>$id_mst_peg_kursus))){
-	// 			// $key['nip_nit'] = $id;
- //    //     		$this->db->update("pegawai_diklat",$key);
-
-	// 			die("OK|");
-	// 		}else{
-	// 			die("Error|Proses data gagal");
-	// 		}
-	// 	}
-	// }
-
-	// function dodel_diklat($id="",$id_mst_peg_kursus=0){
-	// 	$this->authentication->verify('kepegawaian','del');
-
-	// 	if($this->drh_model->delete_entry_diklat($id,$id_mst_peg_kursus)){
-	// 		$this->session->set_flashdata('alert','delete data ('.$id.')');
-	// 		redirect(base_url()."kepegawaian/drh/edit/".$id);
-	// 	} else {
-	// 		$this->session->set_flashdata('alert','delete data error');
-	// 		redirect(base_url()."kepegawaian/drh/edit/".$id);
-	// 	}
-	// }
-
 }
