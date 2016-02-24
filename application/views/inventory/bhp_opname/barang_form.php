@@ -8,6 +8,9 @@ if(isset($disable)){if($disable='disable'){?>
 <?php }} ?>
 <script type="text/javascript">  
     $(function(){
+      $(document).ready(function() {
+          $('#tblkondisi').DataTable();
+      } );
       $('#btn-close').click(function(){
         close_popup();
       }); 
@@ -41,7 +44,7 @@ if(isset($disable)){if($disable='disable'){?>
                   }
                   else{
                       $('#popup_content').html(response);
-                      timeline_add_barang(res[1]);
+                       timeline_kondisi_barang($('#kode').val());
                   }
               }
             });
@@ -83,8 +86,8 @@ if(isset($disable)){if($disable='disable'){?>
             <div class="form-group">
               <label>Stok</label>
               <input type="number" class="form-control" name="stok" id="stok" placeholder="Jumlah" value="<?php 
-                if(set_value('stok')=="" && isset($stok)){
-                  echo $stok;
+                if(set_value('stok')=="" && isset($jml)){
+                  echo $jml;
                 }else{
                   echo  set_value('stok');
                 }
@@ -100,7 +103,6 @@ if(isset($disable)){if($disable='disable'){?>
                 }
                 ?>">
             </div>
-            
         </div>
         <div class="box-footer" style="float:right;">
             <button type="submit" class="btn btn-primary">Simpan</button>

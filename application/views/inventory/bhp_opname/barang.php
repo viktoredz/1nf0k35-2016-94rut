@@ -1,4 +1,4 @@
-<table width="80%" align="center" border="1">
+<table width="80%" align="center" border="1" class="table table-striped table-bordered" cellspacing="0" id="tblbarang">
 	<tr>
 		<th>Tanggal</th>
 		<th>Jumlah</th>

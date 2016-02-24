@@ -14,7 +14,7 @@ class Bhp_opname_model extends CI_Model {
     {
         $data = array();
         $this->db->select("mst_inv_barang_habispakai.*,mst_inv_pilihan.value as nama_satuan");
-        $this->db->join('mst_inv_pilihan',"mst_inv_barang_habispakai.pilihan_satuan=mst_inv_pilihan.code and mst_inv_pilihan.tipe='satuan'",'left');
+        $this->db->join('mst_inv_pilihan',"mst_inv_barang_habispakai.pilihan_satuan=mst_inv_pilihan.code and mst_inv_pilihan.tipe='satuan_bhp'",'left');
         $query = $this->db->get('mst_inv_barang_habispakai',$limit,$start);
         return $query->result();
     }
@@ -28,8 +28,22 @@ class Bhp_opname_model extends CI_Model {
         $data = array();
         $this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai",$kode);
         $this->db->select("mst_inv_barang_habispakai.*,mst_inv_pilihan.value as nama_satuan");
-        $this->db->join('mst_inv_pilihan',"mst_inv_barang_habispakai.pilihan_satuan=mst_inv_pilihan.code and mst_inv_pilihan.tipe='satuan'",'left');
+        $this->db->join('mst_inv_pilihan',"mst_inv_barang_habispakai.pilihan_satuan=mst_inv_pilihan.code and mst_inv_pilihan.tipe='satuan_bhp'",'left');
         $query = $this->db->get('mst_inv_barang_habispakai');
+        if ($query->num_rows() > 0){
+            $data = $query->row_array();
+        }
+        $query->free_result();    
+        return $data;
+    }
+    function get_data_detail_edit_barang($kode){
+        $data = array();
+        $this->db->order_by('inv_inventaris_habispakai_opname.tgl_update','desc');
+        $this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai",$kode);
+        $this->db->select("mst_inv_barang_habispakai.*,mst_inv_pilihan.value as nama_satuan");
+        $this->db->join('mst_inv_pilihan',"mst_inv_barang_habispakai.pilihan_satuan=mst_inv_pilihan.code and mst_inv_pilihan.tipe='satuan_bhp'",'left');
+        $this->db->join('inv_inventaris_habispakai_opname',"inv_inventaris_habispakai_opname.id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai",'left');
+        $query = $this->db->get('mst_inv_barang_habispakai',1,0);
         if ($query->num_rows() > 0){
             $data = $query->row_array();
         }

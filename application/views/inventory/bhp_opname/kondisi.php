@@ -1,4 +1,4 @@
-<table width="80%" align="center" border="1">
+<table width="80%" align="center" class="table table-striped table-bordered" cellspacing="0" id="tblkondisi">
   <tr>
     <th>Tanggal</th>
     <th>Baik</th>

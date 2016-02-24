@@ -244,6 +244,7 @@ class Bhp_opname extends CI_Controller {
 				$id=$this->input->post('id_mst_inv_barang_habispakai');
 				die("OK|$id|Tersimpan");
 			}else{
+				$id=$this->input->post('id_mst_inv_barang_habispakai');
 				 die("Error|$id|Proses data gagal");
 			}
 			
@@ -259,7 +260,7 @@ class Bhp_opname extends CI_Controller {
 
 		if($this->form_validation->run()== FALSE){
 
-			$data = $this->bhp_opname_model->get_data_detail_edit($kode); 
+			$data = $this->bhp_opname_model->get_data_detail_edit_barang($kode); 
 			$data['action']			= "kondisi";
 			$data['kode']			= $kode;
 			$data['notice']			= validation_errors();
@@ -270,6 +271,7 @@ class Bhp_opname extends CI_Controller {
 				$id=$this->input->post('id_mst_inv_barang_habispakai');
 				die("OK|$id|Tersimpan");
 			}else{
+				$id=$this->input->post('id_mst_inv_barang_habispakai');
 				 die("Error|$id|Proses data gagal");
 			}
 			

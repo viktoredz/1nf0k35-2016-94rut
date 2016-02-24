@@ -8,6 +8,9 @@ if(isset($disable)){if($disable='disable'){?>
 <?php }} ?>
 <script type="text/javascript">  
     $(function(){
+      $(document).ready(function() {
+          $('#tblbarang').DataTable();
+      } );
       $("#rusak").change(function(){
           document.getElementById("stok").value = document.getElementById("stok").value - document.getElementById("rusak").value;
       });
@@ -33,11 +36,13 @@ if(isset($disable)){if($disable='disable'){?>
                 url : '<?php echo base_url()."inventory/bhp_opname/".$action."_barang/".$kode ?>',
                 data : data,
                 success : function(response){
+                  alert(response);
                   var res  = response.split("|");
                   if(res[0]=="OK"){
                       $('#notice').hide();
                       $('#notice-content').html('<div class="alert">'+res[2]+'</div>');
                       $('#notice').show();
+                      
                       timeline_kondisi_barang(res[1]);
                   }
                   else if(res[0]=="Error"){
@@ -48,7 +53,7 @@ if(isset($disable)){if($disable='disable'){?>
                   }
                   else{
                       $('#popup_content').html(response);
-                      timeline_kondisi_barang(res[1]);
+                      timeline_kondisi_barang($('#kode').val());
                   }
               }
             });
@@ -90,8 +95,8 @@ if(isset($disable)){if($disable='disable'){?>
             <div class="form-group">
               <label>Jumlah Baik</label>
               <input type="number" class="form-control" name="stok" id="stok" placeholder="Jumlah Baik" value="<?php 
-                if(set_value('stok')=="" && isset($stok)){
-                  echo $stok;
+                if(set_value('stok')=="" && isset($jml)){
+                  echo $jml;
                 }else{
                   echo  set_value('stok');
                 }
@@ -116,6 +121,10 @@ if(isset($disable)){if($disable='disable'){?>
                   echo  set_value('stok');
                 }
                 ?>">
+            </div>
+            <div class="form-group">
+              <label>Data Update</label>
+              <div><?php echo date("d-m-Y");?></div>
             </div>
             
         </div>
