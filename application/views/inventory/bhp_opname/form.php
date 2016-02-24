@@ -9,27 +9,57 @@ if(isset($disable)){if($disable='disable'){?>
 <script type="text/javascript">  
     function jml(status) {
         var stok = "<?php echo $jml; ?>";
-      if(document.getElementById("rusak").value < 0 || document.getElementById("tidak").value <0){
-          alert("Maaf, data tidak boleh kurang dari nol");
-          if(status=="rusak"){
-            document.getElementById("rusak").value = "";
-          }else if (status=="tidak") {
-            document.getElementById("tidak").value = "";
-          }
-      }else{
-        if((document.getElementById("tidak").value > document.getElementById("stok").value) ||  (document.getElementById("rusak").value > document.getElementById("stok").value)){
-          alert("Maaf! data tidak boleh lebih besar dari data jumlah baik");
-          document.getElementById("rusak").value = "";
-          document.getElementById("tidak").value = "";
-          document.getElementById("stok").value = stok;
-        }else{
-          if(status=="rusak"){
-            document.getElementById("stok").value = document.getElementById("stok").value - document.getElementById("rusak").value;  
-          }else if (status=="tidak") {
-             document.getElementById("stok").value = document.getElementById("stok").value - document.getElementById("tidak").value;  
+        var jmlbaik = $("#stok").val();
+        var jmlrusak = $("#rusak").val();
+        var jmltidak = $("#tidak").val();
+        if ($("#rusak").val()<0) {
+          alert("data tidak boleh kurang dari nol");
+          $("#rusak").val("<?php echo $jml_rusak;?>");
+          $("#stok").val(stok-$("#rusak").val()-$("#tidak").val());  
+        }
+        if ($("#tidak").val()<0) {
+          alert("data tidak boleh kurang dari nol");
+          $("#tidak").val("<?php echo $jml_tdkdipakai;?>");
+          $("#stok").val(stok-$("#rusak").val()-$("#tidak").val());  
+        }
+        if($("#stok").val()==0){
+          alert("Jumlah baik tidak boleh kurang dari kosong");  
+          if (status=="tidak") {
+             $("#tidak").val("<?php echo $jml_tdkdipakai;?>");
+             $("#stok").val(stok-$("#rusak").val()-$("#tidak").val());
+          }else if (status=="rusak"){
+              $("#rusak").val("<?php echo $jml_rusak;?>");
+              $("#stok").val(stok-$("#rusak").val()-$("#tidak").val());
           }
         }
-      }
+        $("#stok").val(stok-$("#rusak").val()-$("#tidak").val());
+
+      /*if($("#rusak").val() < 0 || $("#tidak").val() <0){
+          alert("Maaf, data tidak boleh kurang dari nol");
+          if(status=="rusak"){
+            $("#rusak").val("");
+            $("#stok").val(stok-jmlrusak-jmltidak);
+          }else if (status=="tidak") {
+            $("#tidak").val("");
+            $("#stok").val(stok-jmlrusak-jmltidak);
+          }
+      }else{
+        if($("#tidak").val() > $("#stok").val()){
+          alert("Maaf! data tidak boleh lebih besar dari data jumlah baik");
+          $("#tidak").val("");
+          $("#stok").val(stok-jmlrusak-jmltidak);
+        }else if($("#rusak").val() > $("#stok").val()){
+          alert("Maaf! data tidak boleh lebih besar dari data jumlah baik");
+          $("#rusak").val("");
+          $("#stok").val(stok-jmlrusak-jmltidak);
+        }else{
+          if(status=="rusak"){
+            document.getElementById("stok").value = stok - jmlrusak - jmltidak;  
+          }else if (status=="tidak") {
+             document.getElementById("stok").value = stok - jmlrusak - jmltidak;  
+          }
+        }
+      }*/
     }
     $(function(){
       var stok = "<?php echo $jml; ?>";
