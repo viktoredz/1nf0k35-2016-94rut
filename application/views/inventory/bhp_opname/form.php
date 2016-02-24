@@ -133,61 +133,78 @@ if(isset($disable)){if($disable='disable'){?>
   <div class="row">
     <?php echo form_open(current_url(), 'id="form-ss"') ?>
           <div class="box-body">
-            <div class="form-group">
-              <label>Nama Barang</label>
-              <div><?php echo $uraian;?></div>
-              <input type="hidden" class="form-control" name="kode" id="kode" placeholder="Kode" value="<?php 
-                if(set_value('kode')=="" && isset($kode)){
-                  echo $kode;
-                }else{
-                  echo  set_value('kode');
-                }
-                ?>">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Nama Barang</label>
+                  <div><?php echo $uraian;?></div>
+                  <input type="hidden" class="form-control" name="kode" id="kode" placeholder="Kode" value="<?php 
+                    if(set_value('kode')=="" && isset($kode)){
+                      echo $kode;
+                    }else{
+                      echo  set_value('kode');
+                    }
+                    ?>">
+                </div>
+              </div>  
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Satuan</label>
+                  <div><?php echo $nama_satuan;?></div>
+                </div>
+              </div>
             </div>
-            <div class="form-group">
-              <label>Satuan</label>
-              <div><?php echo $nama_satuan;?></div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Jumlah Baik</label>
+                  <input type="number" class="form-control" name="stok" id="stok" placeholder="Jumlah Baik" value="<?php 
+                    if(set_value('stok')=="" && isset($jml)){
+                      echo $jml;
+                    }else{
+                      echo  set_value('stok');
+                    }
+                    ?>" readonly="">
+                </div>
+              </div>  
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Jumlah Rusak</label>
+                  <input type="number" class="form-control" name="rusak" id="rusak" placeholder="Jumlah Rusak" value="<?php 
+                    if(set_value('rusak')=="" && isset($jml_rusak)){
+                      echo $jml_rusak;
+                    }else{
+                      echo  set_value('rusak');
+                    }
+                    ?>">
+                </div>
+              </div>
+            </div>  
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Jumlah Tidak dipakai</label>
+                  <input type="number" class="form-control" name="tidak" id="tidak" placeholder="Jumlah Tidak dipakai" value="<?php 
+                    if(set_value('tidak')=="" && isset($jml_tdkdipakai)){
+                      echo $jml_tdkdipakai;
+                    }else{
+                      echo  set_value('tidak');
+                    }
+                    ?>">
+                </div>
+              </div>  
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Data Update</label>
+                  <div><?php echo date("d-m-Y");?></div>
+                </div>
+              </div>
             </div>
-            <div class="form-group">
-              <label>Jumlah Baik</label>
-              <input type="number" class="form-control" name="stok" id="stok" placeholder="Jumlah Baik" value="<?php 
-                if(set_value('stok')=="" && isset($jml)){
-                  echo $jml;
-                }else{
-                  echo  set_value('stok');
-                }
-                ?>" readonly="">
             </div>
-            <div class="form-group">
-              <label>Jumlah Rusak</label>
-              <input type="number" class="form-control" name="rusak" id="rusak" placeholder="Jumlah Rusak" value="<?php 
-                if(set_value('rusak')=="" && isset($jml_rusak)){
-                  echo $jml_rusak;
-                }else{
-                  echo  set_value('rusak');
-                }
-                ?>">
+            <div class="box-footer" style="float:right;">
+                <button type="submit" class="btn btn-primary">Simpan</button>
+                <button type="button" id="btn-close" class="btn btn-warning">Tutup</button>
             </div>
-            <div class="form-group">
-              <label>Jumlah Tidak dipakai</label>
-              <input type="number" class="form-control" name="tidak" id="tidak" placeholder="Jumlah Tidak dipakai" value="<?php 
-                if(set_value('tidak')=="" && isset($jml_tdkdipakai)){
-                  echo $jml_tdkdipakai;
-                }else{
-                  echo  set_value('tidak');
-                }
-                ?>">
-            </div>
-            <div class="form-group">
-              <label>Data Update</label>
-              <div><?php echo date("d-m-Y");?></div>
-            </div>
-            
-        </div>
-        <div class="box-footer" style="float:right;">
-            <button type="submit" class="btn btn-primary">Simpan</button>
-            <button type="button" id="btn-close" class="btn btn-warning">Batal</button>
-        </div>
     </div>
 </form>
 </div>
