@@ -193,8 +193,12 @@ class Bhp_opname extends CI_Controller {
 				'uraian'				=> $act->uraian,
 				'merek_tipe'			=> $act->merek_tipe,
 				'negara_asal'			=> $act->negara_asal,
-				'pilihan_satuan'		=> $act->negara_asal,
-				'nama_satuan'			=> $act->nama_satuan,
+				'jmlbaik'				=> $act->jmlbaik-($act->jml_rusak+$act->jml_tdkdipakai),
+				'jml_rusak'				=> $act->jml_rusak,
+				'jml_tdkdipakai'			=> $act->jml_tdkdipakai,
+				'pilihan_satuan'		=> $act->pilihan_satuan,
+				'value'					=> $act->value,
+				'tgl_update'			=> $act->tgl_update,
 				'harga'					=> number_format($act->harga,2),
 				'id_mst_inv_barang_habispakai'			=> $act->id_mst_inv_barang_habispakai,
 				'id_mst_inv_barang_habispakai_jenis'	=> $act->id_mst_inv_barang_habispakai_jenis
@@ -233,7 +237,7 @@ class Bhp_opname extends CI_Controller {
 
 		if($this->form_validation->run()== FALSE){
 
-			$data = $this->bhp_opname_model->get_data_detail_edit($kode); 
+			$data = $this->bhp_opname_model->get_data_detail_edit_barang($kode); 
 			$data['action']			= "add";
 			$data['kode']			= $kode;
 			$data['notice']			= validation_errors();

@@ -34,6 +34,7 @@ if(isset($disable)){if($disable='disable'){?>
                       $('#notice').hide();
                       $('#notice-content').html('<div class="alert">'+res[2]+'</div>');
                       $('#notice').show();
+                      $("#jqxgrid").jqxGrid('updatebounddata', 'cells');
                       timeline_add_barang(res[1]);
                   }
                   else if(res[0]=="Error"){

@@ -10,7 +10,7 @@
   ?>
    <tr>
     <td><?php echo date("d-m-Y",strtotime($key->tgl_update)); ?></td>
-    <td><?php echo '11'; ?></td>
+    <td><?php echo $key->jml - ($key->jml_rusak + $key->jml_tdkdipakai); ?></td>
     <td><?php echo $key->jml_rusak; ?></td>
     <td><?php echo $key->jml_tdkdipakai; ?></td>
    </tr>

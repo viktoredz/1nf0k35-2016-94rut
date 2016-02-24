@@ -99,10 +99,14 @@
 			{ name: 'code', type: 'string' },
 			{ name: 'negara_asal', type: 'number' },
 			{ name: 'merek_tipe', type: 'string' },
+			{ name: 'jmlbaik', type: 'string' },
+			{ name: 'jml_rusak', type: 'string' },
+			{ name: 'tgl_update', type: 'date' },
+			{ name: 'jml_tdkdipakai', type: 'string' },
 			{ name: 'harga', type: 'double' },
 			{ name: 'jenisuraian', type: 'string' },
 			{ name: 'pilihan_satuan', type: 'string' },
-			{ name: 'nama_satuan', type: 'string' },
+			{ name: 'value', type: 'string' },
         ],
 		url: "<?php echo site_url('inventory/bhp_opname/json'); ?>",
 		cache: false,
@@ -147,7 +151,7 @@
 				{ text: 'Stok', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
 				    if(dataRecord.id_mst_inv_barang_habispakai!=null){
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_add.gif' onclick='stok(\""+dataRecord.id_mst_inv_barang_habispakai+"\");'></a></div>";
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/stok.jpg' onclick='stok(\""+dataRecord.id_mst_inv_barang_habispakai+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lockdo.gif'></a></div>";
 					}
@@ -156,19 +160,19 @@
 				{ text: 'Kondisi', align: 'center', filtertype: 'none', sortable: false, width: '6%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
 				    if(dataRecord.id_mst_inv_barang_habispakai!=null){
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='kondisi(\""+dataRecord.id_mst_inv_barang_habispakai+"\");'></a></div>";
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/condition.jpg' onclick='kondisi(\""+dataRecord.id_mst_inv_barang_habispakai+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}
                  }
                 },
 				{ text: 'Nama Barang', editable:false ,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '25%' },
-				{ text: 'Satuan', editable:false ,align: 'center', cellsalign: 'center', datafield: 'nama_satuan', columntype: 'textbox', filtertype: 'textbox', width: '15%' },
-				{ text: 'Baik', columngroup: 'jumlah',editable:false ,align: 'center', cellsalign: 'right', datafield: 'baik', columntype: 'textbox', filtertype: 'textbox', width: '8%' },
-				{ text: 'Rusak', columngroup: 'jumlah',editable:false ,align: 'center', cellsalign: 'right', datafield: 'rusak', columntype: 'textbox', filtertype: 'textbox', width: '8%' },
-				{ text: 'Tidak Rusak', columngroup: 'jumlah',editable:false ,datafield: 'tidakrusak', columntype: 'textbox', filtertype: 'textbox', width: '8%' },
+				{ text: 'Satuan', editable:false ,align: 'center', cellsalign: 'center', datafield: 'value', columntype: 'textbox', filtertype: 'textbox', width: '15%' },
+				{ text: 'Baik', columngroup: 'jumlah',editable:false ,align: 'center', cellsalign: 'right', datafield: 'jmlbaik', columntype: 'textbox', filtertype: 'none', width: '8%' },
+				{ text: 'Rusak', columngroup: 'jumlah',editable:false ,align: 'center', cellsalign: 'right', datafield: 'jml_rusak', columntype: 'textbox', filtertype: 'none', width: '8%' },
+				{ text: 'Tidak Rusak', columngroup: 'jumlah',editable:false ,datafield: 'jml_tdkdipakai', columntype: 'textbox', filtertype: 'none', width: '8%' ,align: 'center', cellsalign: 'right'},
 				{ text: 'Harga (Rp.)', editable:false ,datafield: 'harga', columntype: 'textbox', filtertype: 'textbox',align: 'center', cellsalign: 'right', width: '15%' },
-				{ text: 'Last Update', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false,datafield: 'status_sertifikat_tanggal', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '10%'},
+				{ text: 'Last Update', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false,datafield: 'tgl_update', columntype: 'date', filtertype: 'none', cellsformat: 'dd-MM-yyyy', width: '10%'},
             ],
             columngroups: 
             [

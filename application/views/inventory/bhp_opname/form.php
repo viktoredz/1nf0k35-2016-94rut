@@ -7,16 +7,42 @@ if(isset($disable)){if($disable='disable'){?>
 </script>
 <?php }} ?>
 <script type="text/javascript">  
+    function jml(status) {
+        var stok = "<?php echo $jml; ?>";
+      if(document.getElementById("rusak").value < 0 || document.getElementById("tidak").value <0){
+          alert("Maaf, data tidak boleh kurang dari nol");
+          if(status=="rusak"){
+            document.getElementById("rusak").value = "";
+          }else if (status=="tidak") {
+            document.getElementById("tidak").value = "";
+          }
+      }else{
+        if((document.getElementById("tidak").value > document.getElementById("stok").value) ||  (document.getElementById("rusak").value > document.getElementById("stok").value)){
+          alert("Maaf! data tidak boleh lebih besar dari data jumlah baik");
+          document.getElementById("rusak").value = "";
+          document.getElementById("tidak").value = "";
+          document.getElementById("stok").value = stok;
+        }else{
+          if(status=="rusak"){
+            document.getElementById("stok").value = document.getElementById("stok").value - document.getElementById("rusak").value;  
+          }else if (status=="tidak") {
+             document.getElementById("stok").value = document.getElementById("stok").value - document.getElementById("tidak").value;  
+          }
+        }
+      }
+    }
     $(function(){
+      var stok = "<?php echo $jml; ?>";
+     document.getElementById("stok").value = stok - document.getElementById("rusak").value - document.getElementById("tidak").value;
+      $("#rusak").change(function(){
+          jml("rusak");
+      });
+       $("#tidak").change(function(){
+          jml("tidak");
+      });
       $(document).ready(function() {
           $('#tblbarang').DataTable();
       } );
-      $("#rusak").change(function(){
-          document.getElementById("stok").value = document.getElementById("stok").value - document.getElementById("rusak").value;
-      });
-       $("#tidak").change(function(){
-          document.getElementById("stok").value = document.getElementById("stok").value - document.getElementById("tidak").value;
-      });
       $('#btn-close').click(function(){
         close_popup();
       }); 
@@ -36,13 +62,13 @@ if(isset($disable)){if($disable='disable'){?>
                 url : '<?php echo base_url()."inventory/bhp_opname/".$action."_barang/".$kode ?>',
                 data : data,
                 success : function(response){
-                  alert(response);
+                //  alert(response);
                   var res  = response.split("|");
                   if(res[0]=="OK"){
                       $('#notice').hide();
                       $('#notice-content').html('<div class="alert">'+res[2]+'</div>');
                       $('#notice').show();
-                      
+                      $("#jqxgrid").jqxGrid('updatebounddata', 'cells');
                       timeline_kondisi_barang(res[1]);
                   }
                   else if(res[0]=="Error"){
@@ -100,25 +126,25 @@ if(isset($disable)){if($disable='disable'){?>
                 }else{
                   echo  set_value('stok');
                 }
-                ?>">
+                ?>" readonly="">
             </div>
             <div class="form-group">
               <label>Jumlah Rusak</label>
               <input type="number" class="form-control" name="rusak" id="rusak" placeholder="Jumlah Rusak" value="<?php 
-                if(set_value('stok')=="" && isset($stok)){
-                  echo $stok;
+                if(set_value('rusak')=="" && isset($jml_rusak)){
+                  echo $jml_rusak;
                 }else{
-                  echo  set_value('stok');
+                  echo  set_value('rusak');
                 }
                 ?>">
             </div>
             <div class="form-group">
               <label>Jumlah Tidak dipakai</label>
               <input type="number" class="form-control" name="tidak" id="tidak" placeholder="Jumlah Tidak dipakai" value="<?php 
-                if(set_value('stok')=="" && isset($stok)){
-                  echo $stok;
+                if(set_value('tidak')=="" && isset($jml_tdkdipakai)){
+                  echo $jml_tdkdipakai;
                 }else{
-                  echo  set_value('stok');
+                  echo  set_value('tidak');
                 }
                 ?>">
             </div>
