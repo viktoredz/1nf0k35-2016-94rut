@@ -200,22 +200,14 @@ class Bhp_pengadaan extends CI_Controller {
 		$search = str_replace("query=","",$search[0]);
 		$search = str_replace("+"," ",$search);
 
-		$this->db->like("code",$search);
-		$this->db->or_like("uraian",$search);
-		$this->db->order_by('code','asc');
+		$this->db->like("uraian",$search);
+		$this->db->order_by('id_mst_inv_barang_habispakai','asc');
 		$this->db->limit(10,0);
-		$query= $this->db->get("mst_inv_barang")->result();
+		$query= $this->db->get("mst_inv_barang_habispakai")->result();
 		foreach ($query as $q) {
-			$s = array();
-			$s[0] = substr($q->code, 0,2);
-			$s[1] = substr($q->code, 2,2);
-			$s[2] = substr($q->code, 4,2);
-			$s[3] = substr($q->code, 6,2);
-			$s[4] = substr($q->code, 8,2);
 			$barang[] = array(
-				'code_tampil' 	=> implode(".", $s), 
-				'code' 			=> $q->code , 
-				'uraian' 		=> $q->uraian, 
+				'id_mst_inv_barang_habispakai' 	=> $q->id_mst_inv_barang_habispakai , 
+				'uraian' 						=> $q->uraian, 
 			);
 		}
 		echo json_encode($barang);
@@ -584,27 +576,17 @@ class Bhp_pengadaan extends CI_Controller {
 
 			die($this->parser->parse('inventory/bhp_pengadaan/barang_form', $data));
 		}else{
-			$jumlah =$this->input->post('jumlah');
-			$id_barang = $this->input->post('id_mst_inv_barang');
-			$kode_proc = $this->bhp_pengadaan_model->barang_kembar_proc_($this->input->post('id_inventaris_barang'));
-			$id_= $this->bhp_pengadaan_model->kode_invetaris($this->input->post('id_inventaris_barang'));
-			$kodepuskesmas = 'P'.$this->session->userdata('puskesmas');
-			$id_inventaris = $this->bhp_pengadaan_model->kode_invetaris($this->input->post('id_inventaris_barang'));
-			$register = substr($id_inventaris, 24,28);
-			for($i=1;$i<=$jumlah;$i++){
 				$values = array(
-					'id_inventaris_barang'=>$this->bhp_pengadaan_model->kode_invetaris($this->input->post('id_inventaris_barang')),
+					'id_inv_hasbispakai_pembelian'=>$this->bhp_pengadaan_model->kode_invetaris($this->input->post('id_inventaris_barang')),
 					'register' 			  => substr($this->bhp_pengadaan_model->kode_invetaris($this->input->post('id_inventaris_barang')),-4),
 					'id_mst_inv_barang'=> $id_barang,
 					'nama_barang' => $this->input->post('nama_barang'),
 					'harga' => $this->input->post('harga'),
-					//'keterangan_pengadaan' => $this->input->post('keterangan_pengadaan'),
 					'barang_kembar_proc' => $kode_proc,
 					'id_pengadaan' => $kode,
 					'code_cl_phc' => $kodepuskesmas,
 				);
-				$simpan=$this->db->insert('inv_inventaris_barang', $values);
-			}
+			$simpan=$this->db->insert('inv_inventaris_habispakai_pembelian_item', $values);
 			if($simpan==true){
 				$dataupdate['terakhir_diubah']= date('Y-m-d H:i:s');
 				$dataupdate['jumlah_unit']= $this->bhp_pengadaan_model->sum_unit($kode)->num_rows();
