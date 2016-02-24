@@ -31,18 +31,18 @@
 
 <div class="box box-success">
 		<div class="box-header">
-          <h3 class="box-title">Jenis Barang : <?php echo $uraian;?> </h3>
+          <h3 class="box-title"><div id="uraian"></div></h3>
 	    </div>
 
       	<div class="box-footer">
-	      <div class="col-md-8">
+	      <div class="col-md-7">
 		 		<button onClick="add_barang();" type="button"  class="btn btn-success">Tambah</button>
 				<button type="button" class="btn btn-warning" onClick="document.location.href='<?php echo base_url()?>mst/invbaranghabispakai'">Kembali</button>
 	     </div>
-	     <div class="col-md-4">
+	     <div class="col-md-5">
 	     	<div class="row">
 		     	<div class="col-md-4" style="padding-top:5px;"><label> Jenis Barang </label> </div>
-		     	<div class="col-md-8">
+		     	<div class="col-md-6" style="float:right">
 		     		<select name="jenisbarang" id="jenisbarang" class="form-control">
 		     				<option value="all">All</option>
 						<?php foreach ($jenisbarang as $row ) { ;?>
@@ -70,9 +70,23 @@
 		$("#menu_mst_invbaranghabispakai").addClass("active");
 
 		$("select[name='jenisbarang']").change(function(){
-		$.post("<?php echo base_url().'mst/invbaranghabispakai/filter_jenisbarang' ?>", 'jenisbarang='+$(this).val(),  function(){
-			$("#jqxgrid_barang").jqxGrid('updatebounddata', 'cells');
-		});
-    });
+			 var e = document.getElementById("jenisbarang");
+        	 var str = e.options[e.selectedIndex].text
+			$.post("<?php echo base_url().'mst/invbaranghabispakai/filter_jenisbarang' ?>", 'jenisbarang='+$(this).val(),  function(){
+				uraian(str);
+				$("#jqxgrid_barang").jqxGrid('updatebounddata', 'cells');
+
+			});
+    	});
+    	uraian();
 	});
+	function uraian(kode){
+		if(kode==null){
+			var e = document.getElementById("jenisbarang");
+        	 var str = e.options[e.selectedIndex].text
+			document.getElementById("uraian").innerHTML="Jenis Barang : "+str;
+		}else{
+			document.getElementById("uraian").innerHTML="Jenis Barang : "+kode;
+		}
+	}
 </script>

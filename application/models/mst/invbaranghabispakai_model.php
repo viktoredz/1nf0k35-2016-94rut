@@ -27,7 +27,7 @@ class Invbaranghabispakai_model extends CI_Model {
 		$data = array();
 		$this->db->select("mst_inv_barang_habispakai_jenis.uraian as jenisuraian,mst_inv_barang_habispakai.*,mst_inv_pilihan.value as nama_satuan");
 		$this->db->join('mst_inv_barang_habispakai_jenis',"mst_inv_barang_habispakai_jenis.id_mst_inv_barang_habispakai_jenis=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis");
-		$this->db->join('mst_inv_pilihan',"mst_inv_barang_habispakai.pilihan_satuan=mst_inv_pilihan.code and mst_inv_pilihan.tipe='satuan'",'left');
+		$this->db->join('mst_inv_pilihan',"mst_inv_barang_habispakai.pilihan_satuan=mst_inv_pilihan.code and mst_inv_pilihan.tipe='satuan_bhp'",'left');
 	    $query = $this->db->get('mst_inv_barang_habispakai',$limit,$start);
     	return $query->result();
 	}
@@ -37,7 +37,7 @@ class Invbaranghabispakai_model extends CI_Model {
 		$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai",$kode);
 		$this->db->select("mst_inv_barang_habispakai_jenis.uraian as jenisuraian,mst_inv_barang_habispakai.*,mst_inv_pilihan.value as nama_satuan");
 		$this->db->join('mst_inv_barang_habispakai_jenis',"mst_inv_barang_habispakai_jenis.id_mst_inv_barang_habispakai_jenis=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis");
-		$this->db->join('mst_inv_pilihan',"mst_inv_barang_habispakai.pilihan_satuan=mst_inv_pilihan.code and mst_inv_pilihan.tipe='satuan'",'left');
+		$this->db->join('mst_inv_pilihan',"mst_inv_barang_habispakai.pilihan_satuan=mst_inv_pilihan.code and mst_inv_pilihan.tipe='satuan_bhp'",'left');
 	    $query = $this->db->get('mst_inv_barang_habispakai');
     	if ($query->num_rows() > 0){
 			$data = $query->row_array();

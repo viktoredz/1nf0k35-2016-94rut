@@ -409,11 +409,16 @@ class Invbaranghabispakai extends CI_Controller {
 		$data['action']			= "add";
 		$data['kode']			= $kode;
         $this->form_validation->set_rules('uraian', 'Uraian', 'trim|required');
+        $this->form_validation->set_rules('code', 'Kode', 'trim');
+        $this->form_validation->set_rules('uraian', 'Uraian', 'trim');
+        $this->form_validation->set_rules('merek_tipe', 'Merek Tipe', 'trim');
+        $this->form_validation->set_rules('negara_asal', 'Negara Asal', 'trim');
+        $this->form_validation->set_rules('pilihan_satuan', 'Satuan', 'trim');
 
 		if($this->form_validation->run()== FALSE){
 			$data['kode']			= $kode;
 			$data['notice']			= validation_errors();
-			$data['pilihan_satuan_barang'] = $this->pengadaanbarang_model->get_data_pilihan('satuan');
+			$data['pilihan_satuan_barang'] = $this->pengadaanbarang_model->get_data_pilihan('satuan_bhp');
 			die($this->parser->parse('mst/invbaranghabispakai/barang_form', $data));
 		}else{
 				$values = array(
@@ -423,6 +428,7 @@ class Invbaranghabispakai extends CI_Controller {
 					'merek_tipe' 	=> $this->input->post('merek_tipe'),
 					'negara_asal' 	=> $this->input->post('negara_asal'),
 					'pilihan_satuan' => $this->input->post('pilihan_satuan'),
+					'harga' => $this->input->post('harga'),
 				);
 				$simpan=$this->db->insert('mst_inv_barang_habispakai', $values);
 				if($simpan==true){

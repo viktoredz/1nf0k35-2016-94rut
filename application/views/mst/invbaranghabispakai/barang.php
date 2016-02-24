@@ -74,7 +74,7 @@
 					}
                  }
                 },
-				{ text: 'No', align: 'center', cellsalign: 'left', datafield: 'no', columntype: 'textbox', filtertype: 'none', width: '4%' },
+				{ text: 'ID', align: 'center', cellsalign: 'left', datafield: 'id_mst_inv_barang_habispakai', columntype: 'textbox', filtertype: 'none', width: '4%' },
 				{ text: 'Kode', align: 'center', cellsalign: 'left', datafield: 'code', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
 				{ text: 'Uraian', datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '22%' },
 				{ text: 'Merek Tipe',  align: 'center', cellsalign: 'left', datafield: 'merek_tipe', columntype: 'textbox', filtertype: 'textbox', width: '9%'},
@@ -111,7 +111,7 @@
 		$("#popup_barang").jqxWindow({
 			theme: theme, resizable: false,
 			width: 500,
-			height: 500,
+			height: 600,
 			isModal: true, autoOpen: false, modalOpacity: 0.2
 		});
 		$("#popup_barang").jqxWindow('open');
@@ -125,7 +125,7 @@
 		$("#popup_barang").jqxWindow({
 			theme: theme, resizable: false,
 			width: 500,
-			height: 500,
+			height: 600,
 			isModal: true, autoOpen: false, modalOpacity: 0.2
 		});
 		$("#popup_barang").jqxWindow('open');

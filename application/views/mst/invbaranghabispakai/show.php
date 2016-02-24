@@ -94,7 +94,7 @@
 
 		$("#jqxgrid").jqxGrid(
 		{		
-			width: '100%',
+			width: '65%',
 			selectionmode: 'singlerow',
 			source: dataadapter, theme: theme,columnsresize: true,showtoolbar: false, pagesizeoptions: ['10', '25', '50', '100'],
 			showfilterrow: true, filterable: true, sortable: true, autoheight: true, pageable: true, virtualmode: true, editable: false,
@@ -103,12 +103,12 @@
 				return obj.data;    
 			},
 			columns: [
-				{ text: 'Detail', align: 'center', filtertype: 'none', sortable: false, width: '10%', cellsrenderer: function (row) {
+				{ text: 'Detail', align: 'center', filtertype: 'none', sortable: false, width: '8%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
 					return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_view.gif' onclick='detail(\""+dataRecord.id_mst_inv_barang_habispakai_jenis+"\");'></a></div>";
                  }
                 },
-				{ text: 'Edit', align: 'center', filtertype: 'none', sortable: false, width: '10%', cellsrenderer: function (row) {
+				{ text: 'Edit', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
 				    if(dataRecord.edit==1){
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='edit(\""+dataRecord.id_mst_inv_barang_habispakai_jenis+"\");'></a></div>";
@@ -117,7 +117,7 @@
 					}
                  }
                 },
-				{ text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '10%', cellsrenderer: function (row) {
+				{ text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
 				    if(dataRecord.delete==1){
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del(\""+dataRecord.id_mst_inv_barang_habispakai_jenis+"\");'></a></div>";
@@ -126,9 +126,9 @@
 					}
                  }
                 },
-				{ text: 'Nomor', datafield: 'no', columntype: 'none', filtertype: 'none', width: '15%' },
-				{ text: 'Jenis Barang', filterable: 'textbox', datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '30%' },
-				{ text: 'Jumlah Barang', filterable: 'textbox', datafield: 'jumlah', columntype: 'textbox', filtertype: 'textbox', width: '25%' }
+				{ text: 'Nomor', datafield: 'id_mst_inv_barang_habispakai_jenis', columntype: 'none', filtertype: 'none', width: '15%' },
+				{ text: 'Jenis Barang', filterable: 'textbox', datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '47%' },
+				{ text: 'Jumlah Barang', filterable: 'textbox', datafield: 'jumlah', columntype: 'textbox', filtertype: 'textbox', width: '20%' }
             ]
 		});
 

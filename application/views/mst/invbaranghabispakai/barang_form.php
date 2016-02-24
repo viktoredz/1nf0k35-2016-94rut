@@ -18,10 +18,11 @@ if(isset($disable)){if($disable='disable'){?>
             $('#notice').show();
             data.append('id_mst_inv_barang_habispakai_jenis', $('#id_jenis').val());
             data.append('code', $('#code').val());
-            data.append('uraian', $('#uraian').val());
+            data.append('uraian', $('#uraian_').val());
             data.append('merek_tipe', $('#merk').val());
             data.append('negara_asal', $('#negara').val());
             data.append('pilihan_satuan', $('#pilihan_satuan_barang').val());
+            data.append('harga', $('#harga').val());
             $.ajax({
                 cache : false,
                 contentType : false,
@@ -88,11 +89,11 @@ if(isset($disable)){if($disable='disable'){?>
             </div>
             <div class="form-group">
               <label>Uraian</label>
-              <input type="text" class="form-control" name="uraian" id="uraian" placeholder="Uraian" value="<?php 
-                if(set_value('uraian')=="" && isset($uraian)){
+              <input type="text" class="form-control" name="uraian_" id="uraian_" placeholder="Uraian" value="<?php 
+                if(set_value('uraian_')=="" && isset($uraian)){
                   echo $uraian;
                 }else{
-                  echo  set_value('uraian');
+                  echo  set_value('uraian_');
                 }
                 ?>">
             </div>
@@ -124,7 +125,17 @@ if(isset($disable)){if($disable='disable'){?>
                   <option value="<?php echo $barang->code ?>" <?php echo $select ?>><?php echo $barang->value ?></option>
                 <?php endforeach ?>
               </select>
-            </div>            
+            </div>       
+            <div class="form-group">
+              <label>Harga</label>
+              <input type="text" class="form-control" name="harga"  id="harga" placeholder="Harga" value="<?php
+              if(set_value('harga')=="" && isset($harga)){
+                  echo $harga;
+                }else{
+                  echo  set_value('harga');
+                }
+                ?>">
+            </div> 
         </div>
         <div class="box-footer">
             <button type="submit" class="btn btn-primary">Simpan</button>
