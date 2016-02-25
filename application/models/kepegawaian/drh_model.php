@@ -22,6 +22,7 @@ class Drh_model extends CI_Model {
 
     function get_data($start=0,$limit=999999,$options=array())
     {
+        $this->db->select("pegawai.*,DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgl_lhr)), '%Y')+0 AS usia",false);
 		$this->db->order_by('id_pegawai','asc');
         $query = $this->db->get('pegawai',$limit,$start);
         return $query->result();
@@ -54,6 +55,7 @@ class Drh_model extends CI_Model {
  	function get_data_row($id){
 		$data = array();
 		$options = array('id_pegawai' => $id);
+        $this->db->select("pegawai.*,DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgl_lhr)), '%Y')+0 AS usia",false);
 		$query = $this->db->get_where($this->tabel,$options);
 		if ($query->num_rows() > 0){
 			$data = $query->row_array();
@@ -66,6 +68,7 @@ class Drh_model extends CI_Model {
 	function get_kode_agama($kode_ag){
 		$this->db->select('*');
 		$this->db->from('mst_agama');
+        $this->db->order_by('value','asc');
 		$query = $this->db->get();
 		return $query->result();
 	}
@@ -73,6 +76,7 @@ class Drh_model extends CI_Model {
 	function get_kode_nikah($kode_nk){
 		$this->db->select('*');
 		$this->db->from('mst_peg_nikah');
+        $this->db->order_by('value','asc');
 		$query = $this->db->get();
 		return $query->result();
 	}
@@ -178,68 +182,70 @@ class Drh_model extends CI_Model {
         return $this->db->get_where($table, array('id_pegawai'=>$data));
     }
 
+    function getIdPegawai($tgl_lhr){
+        $tgl = explode("-", $tgl_lhr);
+        $id  = substr($this->session->userdata('puskesmas'),0,4).$tgl[2];
 
-// CRUD pegawai
-    function insert_entry()
-    {
-    	$data['id_pegawai']		= $this->input->post('id_pegawai');
-    	$data['nip_lama']		= $this->input->post('nip_lama');
-    	$data['nip_baru']		= $this->input->post('nip_baru');
-    	$data['nrk']			= $this->input->post('nrk');
-    	$data['karpeg']			= $this->input->post('karpeg');
-    	$data['nit']			= $this->input->post('nit');
-    	$data['nit_phl']		= $this->input->post('nit_phl');
-    	$data['gelar']			= $this->input->post('gelar');
-    	$data['nama']			= $this->input->post('nama');
-    	$data['tar_sex']		= $this->input->post('tar_sex');
-    	$data['tgl_lhr']		= $this->input->post('tgl_lhr');
-    	$data['tmp_lahir']		= $this->input->post('tmp_lahir');
-    	$data['kode_mst_agama']	= $this->input->post('kode_mst_agama');
-    	$data['kode_mst_nikah']	= $this->input->post('kode_mst_nikah');
-    	$data['tar_npwp']		= $this->input->post('tar_npwp');
-    	$data['tar_npwp_tgl']	= $this->input->post('tar_npwp_tgl');
-    	$data['ktp']			= $this->input->post('ktp');
-    	$data['goldar']			= $this->input->post('goldar');
-    	$data['code_cl_phc']	= $this->input->post('code_cl_phc');
-    	$data['status_masuk']	= $this->input->post('status_masuk');
+        $this->db->select('MAX(id_pegawai) AS id');
+        $this->db->like('id_pegawai',$id);
+        $query = $this->db->get('pegawai');
+        if ($query->num_rows() > 0){
+            $data = $query->row_array();
+            $lastid = substr($data['id'],8,4) + 1;
 
-		if($this->getSelectedData($this->tabel,$data['id_pegawai'])->num_rows() > 0) {
-			return 0;
-		}else{
-			if($this->db->insert($this->tabel, $data)){
-			//$id= mysql_insert_id();
-				return 1; 
-			}else{
-				return mysql_error();
-			}
-			
-		}
+            return $id.str_repeat("0", (4-strlen($lastid))).$lastid;
+        }else{
+            return $id.'0001';
+        }
 
 
     }
 
+// CRUD pegawai
+    function insert_entry()
+    {
+        $data['id_pegawai']     = $this->getIdPegawai($this->input->post('tgl_lhr'));
+        $data['nik']            = $this->input->post('nik');
+        $data['gelar_depan']    = $this->input->post('gelar_depan');
+    	$data['gelar_belakang']	= $this->input->post('gelar_belakang');
+    	$data['nama']			= $this->input->post('nama');
+    	$data['jenis_kelamin'] 	= $this->input->post('jenis_kelamin');
+    	$data['tgl_lhr']        = date("Y-m-d",strtotime($this->input->post('tgl_lhr')));
+        $data['tmp_lahir']      = $this->input->post('tmp_lahir');
+        $data['kode_mst_agama'] = $this->input->post('kode_mst_agama');
+        $data['kedudukan_hukum']= $this->input->post('kedudukan_hukum');
+        $data['alamat']         = $this->input->post('alamat');
+        $data['npwp']           = $this->input->post('npwp');
+        $data['npwp_tgl']       = date("Y-m-d",strtotime($this->input->post('npwp_tgl')));
+        $data['kartu_pegawai']  = $this->input->post('kartu_pegawai');
+    	$data['goldar']			= $this->input->post('goldar');
+        $data['kode_mst_nikah'] = $this->input->post('kode_mst_nikah');
+        $data['code_cl_phc']    = $this->session->userdata('puskesmas');
+
+		if($this->db->insert($this->tabel, $data)){
+			return $data['id_pegawai']; 
+		}else{
+			return mysql_error();
+		}
+    }
+
     function update_entry($id)
     {
-		$data['id_pegawai']		= $this->input->post('id_pegawai');
-    	$data['nip_lama']		= $this->input->post('nip_lama');
-    	$data['nip_baru']		= $this->input->post('nip_baru');
-    	$data['nrk']			= $this->input->post('nrk');
-    	$data['karpeg']			= $this->input->post('karpeg');
-    	$data['nit']			= $this->input->post('nit');
-    	$data['nit_phl']		= $this->input->post('nit_phl');
-    	$data['gelar']			= $this->input->post('gelar');
-    	$data['nama']			= $this->input->post('nama');
-    	$data['tar_sex']		= $this->input->post('tar_sex');
-    	$data['tgl_lhr']		= $this->input->post('tgl_lhr');
-    	$data['tmp_lahir']		= $this->input->post('tmp_lahir');
-    	$data['kode_mst_agama']	= $this->input->post('kode_mst_agama');
-    	$data['kode_mst_nikah']	= $this->input->post('kode_mst_nikah');
-    	$data['tar_npwp']		= $this->input->post('tar_npwp');
-    	$data['tar_npwp_tgl']	= $this->input->post('tar_npwp_tgl');
-    	$data['ktp']			= $this->input->post('ktp');
-    	$data['goldar']			= $this->input->post('goldar');
-    	$data['code_cl_phc']	= $this->input->post('code_cl_phc');
-    	$data['status_masuk']	= $this->input->post('status_masuk');
+        $data['nik']            = $this->input->post('nik');
+        $data['gelar_depan']    = $this->input->post('gelar_depan');
+        $data['gelar_belakang'] = $this->input->post('gelar_belakang');
+        $data['nama']           = $this->input->post('nama');
+        $data['jenis_kelamin']  = $this->input->post('jenis_kelamin');
+        $data['tgl_lhr']        = date("Y-m-d",strtotime($this->input->post('tgl_lhr')));
+        $data['tmp_lahir']      = $this->input->post('tmp_lahir');
+        $data['kode_mst_agama'] = $this->input->post('kode_mst_agama');
+        $data['kedudukan_hukum']= $this->input->post('kedudukan_hukum');
+        $data['alamat']         = $this->input->post('alamat');
+        $data['npwp']           = $this->input->post('npwp');
+        $data['npwp_tgl']       = date("Y-m-d",strtotime($this->input->post('npwp_tgl')));
+        $data['kartu_pegawai']  = $this->input->post('kartu_pegawai');
+        $data['goldar']         = $this->input->post('goldar');
+        $data['kode_mst_nikah'] = $this->input->post('kode_mst_nikah');
 
 		if($this->db->update($this->tabel, $data, array("id_pegawai"=>$id))){
 			return true;

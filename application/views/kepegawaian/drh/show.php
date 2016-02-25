@@ -38,27 +38,26 @@
 		$("#menu_kepegawaian").addClass("active");
 	});
 
+	function detail(id_pegawai){
+      document.location.href="<?php echo base_url()?>kepegawaian/drh/detail/" + id_pegawai;
+	}
+
 	   var source = {
 			datatype: "json",
 			type	: "POST",
 			datafields: [
-			{ name: 'nip_nit', type: 'string'},
+			{ name: 'id_pegawai', type: 'string'},
 			{ name: 'nip_lama', type: 'string'},
 			{ name: 'nip_baru', type: 'string'},
-			{ name: 'nrk', type: 'string'},
-			{ name: 'kerpeg', type: 'string'},
-			{ name: 'nit', type: 'string'},
-			{ name: 'nit_phl', type: 'string'},
-			{ name: 'gelar', type: 'string'},
+			{ name: 'nik', type: 'string'},
 			{ name: 'nama', type: 'string'},
-			{ name: 'tar_sex', type: 'string'},
-			{ name: 'tgl_lhr', type: 'string'},
+			{ name: 'jenis_kelamin', type: 'string'},
+			{ name: 'tgl_lhr', type: 'date'},
 			{ name: 'tmp_lhr', type: 'string'},
 			{ name: 'kode_mst_agama', type: 'string'},
 			{ name: 'kode_mst_nikah', type: 'string'},
-			{ name: 'ktp', type: 'string'},
+			{ name: 'usia', type: 'string'},
 			{ name: 'goldar', type: 'string'},
-			{ name: 'status_masuk', type: 'string'},
 			{ name: 'edit', type: 'number'},
 			{ name: 'delete', type: 'number'}
         ],
@@ -101,10 +100,10 @@
 				return obj.data;    
 			},
 			columns: [
-				{ text: 'View', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
+				{ text: 'Detail', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
-				    if(dataRecord.view==1){
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='detail(\""+dataRecord.nip_nit+"\");'></a></div>";
+				    if(dataRecord.edit==1){
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='detail(\""+dataRecord.id_pegawai+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_view.gif'></a></div>";
 					}
@@ -113,16 +112,18 @@
 				{ text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
 				    if(dataRecord.delete==1){
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del(\""+dataRecord.nip_nit+"\");'></a></div>";
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del(\""+dataRecord.id_pegawai+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}
                  }
                 },
-				{ text: 'NIP/NIT', datafield: 'nip_nit', columntype: 'textbox', filtertype: 'textbox', width: '30%' },
-				{ text: 'Nama', datafield: 'nama', columntype: 'textbox', filtertype: 'textbox', width: '20%' },
-				{ text: 'Jenis Kelamin', datafield: 'tar_sex', columntype: 'textbox', filtertype: 'textbox', width: '20%' },
-				{ text: 'Tanggal Lahir', datafield: 'tgl_lhr', columntype: 'textbox', filtertype: 'textbox', width: '20%' },
+				{ text: 'NIP', datafield: 'nip_baru', columntype: 'textbox', filtertype: 'textbox', width: '20%' },
+				{ text: 'Nama', datafield: 'nama', columntype: 'textbox', filtertype: 'textbox', width: '29%' },
+				{ text: 'Jenis Kelamin', datafield: 'jenis_kelamin', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '10%' },
+				{ text: 'Usia', datafield: 'usia', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '6%' },
+				{ text: 'Tanggal Lahir', datafield: 'tgl_lhr', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', align: 'center', cellsalign: 'center', width: '10%' },
+				{ text: 'Tempat Lahir', datafield: 'tmp_lhr', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '15%' }
             ]
 		});
 
