@@ -316,6 +316,21 @@ class Bhp_pengadaan_model extends CI_Model {
         }
         return  $jumlah;
     }
+    function sum_jumlah_item_jumlah($kode,$tipe){
+        $query=$this->db->query("SELECT SUM(jml*harga) as totalharga FROM inv_inventaris_habispakai_pembelian_item WHERE id_inv_hasbispakai_pembelian = $kode");
+        if($query->num_rows()>0)
+        {
+            foreach($query->result() as $k)
+            {
+                $jumlah = $k->totalharga;
+            }
+        }
+        else
+        {
+            $jumlah = 0;
+        }
+        return  $jumlah;
+    }
    
     function sum_unit($kode)
     {

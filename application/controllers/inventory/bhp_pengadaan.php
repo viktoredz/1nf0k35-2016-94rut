@@ -622,7 +622,7 @@ class Bhp_pengadaan extends CI_Controller {
 		}
 				$dataupdate['terakhir_diubah']= date('Y-m-d H:i:s');
 				$dataupdate['jumlah_unit']=  $this->bhp_pengadaan_model->sum_jumlah_item( $kode,'jml');
-				$dataupdate['nilai_pembelian']= $this->bhp_pengadaan_model->sum_jumlah_item( $kode,'harga');
+				$dataupdate['nilai_pembelian']= $this->bhp_pengadaan_model->sum_jumlah_item_jumlah( $kode,'harga');
 				$key['id_inv_hasbispakai_pembelian'] = $kode;
         		$this->db->update("inv_inventaris_habispakai_pembelian",$dataupdate,$key);
 	}
@@ -668,7 +668,7 @@ class Bhp_pengadaan extends CI_Controller {
 			if($simpan==true){
 				$dataupdate['terakhir_diubah']= date('Y-m-d H:i:s');
 				$dataupdate['jumlah_unit']=  $this->bhp_pengadaan_model->sum_jumlah_item( $kode,'jml');
-				$dataupdate['nilai_pembelian']= $this->bhp_pengadaan_model->sum_jumlah_item( $kode,'harga');
+				$dataupdate['nilai_pembelian']= $this->bhp_pengadaan_model->sum_jumlah_item_jumlah( $kode,'harga');
 				$key['id_inv_hasbispakai_pembelian'] = $kode;
         		$this->db->update("inv_inventaris_habispakai_pembelian",$dataupdate,$key);
 				die("OK|Data Tersimpan");
@@ -714,7 +714,7 @@ class Bhp_pengadaan extends CI_Controller {
 			if($simpan==true){
 				$dataupdate['terakhir_diubah']= date('Y-m-d H:i:s');
 				$dataupdate['jumlah_unit']=  $this->bhp_pengadaan_model->sum_jumlah_item( $id_permohonan,'jml');
-				$dataupdate['nilai_pembelian']= $this->bhp_pengadaan_model->sum_jumlah_item( $id_permohonan,'harga');
+				$dataupdate['nilai_pembelian']= $this->bhp_pengadaan_model->sum_jumlah_item_jumlah( $id_permohonan,'harga');
 				$key['id_inv_hasbispakai_pembelian'] = $id_permohonan;
         		$this->db->update("inv_inventaris_habispakai_pembelian",$dataupdate,$key);
 				die("OK|Data Telah di Ubah");

@@ -68,11 +68,8 @@
 			<?php if(!isset($viewreadonly)){?>	{ text: 'Edit', align: 'center', filtertype: 'none', sortable: false,editable: false, width: '4%', cellsrenderer: function (row) {
 					var statupembelian = "<?php echo $pilihan_status_pembelian; ?>";
 				    var dataRecord = $("#jqxgrid_barang").jqxGrid('getrowdata', row);
-				    if (statupembelian!=2) {
-				    	if(dataRecord.edit==1){
-						
+				    if ((statupembelian!=2)&&(dataRecord.edit==1)) {
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='edit_barang(\""+dataRecord.id_inv_hasbispakai_pembelian+"\",\""+dataRecord.id_mst_inv_barang_habispakai+"\");'></a></div>";
-						}
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}
@@ -81,29 +78,25 @@
 				{ text: 'Del', align: 'center', editable: false,filtertype: 'none', sortable: false, width: '4%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid_barang").jqxGrid('getrowdata', row);
 				    var statupembelian = "<?php echo $pilihan_status_pembelian; ?>";
-				    if (statupembelian!=2) {
-				    	if(dataRecord.delete==1){
+				    if ((statupembelian!=2)&&(dataRecord.edit==1)) {
 				    	
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del_barang(\""+dataRecord.id_inv_hasbispakai_pembelian+"\",\""+dataRecord.id_mst_inv_barang_habispakai+"\");'></a></div>";
-						}
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}
                  }
                 },
-				{ text: 'Kode Barang', align: 'center',cellsalign: 'left',editable: false, datafield: 'id_mst_inv_barang_habispakai', columntype: 'textbox', filtertype: 'none', width: '10%' },
-				{ text: 'Nama Barang ', editable: false,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '26%'},
+				{ text: 'Nama Barang ', editable: false,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '31%'},
 				{ text: 'Jumlah ', align: 'center',cellsalign: 'right',editable: false,datafield: 'jml', columntype: 'textbox', filtertype: 'textbox', width: '10%'},
 				{ text: 'Harga Satuan (Rp.)', align: 'center',cellsalign: 'right',editable: false, datafield: 'harga', columntype: 'textbox', filtertype: 'textbox', width: '15%'},
-				{ text: 'Sub Total (Rp.)', align: 'center',cellsalign: 'right',editable: false,datafield: 'subtotal', columntype: 'textbox', filtertype: 'none', width: '17%'},
+				{ text: 'Sub Total (Rp.)', align: 'center',cellsalign: 'right',editable: false,datafield: 'subtotal', columntype: 'textbox', filtertype: 'none', width: '20%'},
             <?php }else{ ?>
-				{ text: 'Kode Barang', align: 'left',cellsalign: 'center',editable: false, datafield: 'id_mst_inv_barang_habispakai', columntype: 'textbox', filtertype: 'none', width: '10%' },
-				{ text: 'Nama Barang ', editable: false,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '31%'},
+				{ text: 'Nama Barang ', editable: false,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '36%'},
 				{ text: 'Jumlah ', align: 'center',cellsalign: 'right',editable: false,datafield: 'jml', columntype: 'textbox', filtertype: 'textbox', width: '11%'},
 				{ text: 'Harga Satuan (Rp.)', align: 'center',cellsalign: 'right',editable: false, datafield: 'harga', columntype: 'textbox', filtertype: 'textbox', width: '17%'},
-				{ text: 'Sub Total (Rp.)', align: 'center',cellsalign: 'right',editable: false,datafield: 'subtotal', columntype: 'textbox', filtertype: 'none', width: '17%'},
+				{ text: 'Sub Total (Rp.)', align: 'center',cellsalign: 'right',editable: false,datafield: 'subtotal', columntype: 'textbox', filtertype: 'none', width: '20%'},
             <?php } ?>
-				{ text: 'Tanggal Update',align: 'center',cellsalign: 'center', editable: false,datafield: 'tgl_update', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '14%'}
+				{ text: 'Tanggal Update',align: 'center',cellsalign: 'center', editable: false,datafield: 'tgl_update', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '16%'}
            ]
 		});
         
@@ -230,7 +223,7 @@
 <div>
 	<div style="width:100%;">
 		<div style="padding:5px" class="pull-right">
-			<?php if(!isset($viewreadonly)){ if($pilihan_status_pembelian!=2){?><button class="btn btn-success" id='btn_add_barang' type='button'><i class='fa fa-plus-square'></i> Tambah Barang</button><?php } } ?>
+			<?php if((!isset($viewreadonly))&&($pilihan_status_pembelian!=2)){?><button class="btn btn-success" id='btn_add_barang' type='button'><i class='fa fa-plus-square'></i> Tambah Barang</button><?php  } ?>
 		</div>
         <div id="jqxgrid_barang"></div>
 	</div>
