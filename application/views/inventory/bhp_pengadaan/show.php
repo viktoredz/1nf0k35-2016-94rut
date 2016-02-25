@@ -144,7 +144,7 @@
                 },
 				{ text: 'No. Kontrak', editable:false ,datafield: 'nomor_kontrak', columntype: 'textbox', filtertype: 'textbox', width: '15%' },
 				{ text: 'Tgl. Pengadaan',editable:false , align: 'center', cellsalign: 'center', datafield: 'tgl_permohonan', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '11%' },
-				{ text: 'Status Pengadaan', editable:false ,align: 'center', cellsalign: 'center', datafield: 'value', columntype: 'textbox', filtertype: 'textbox', width: '12%' },
+				{ text: 'Status Pengadaan', editable:false ,align: 'center', cellsalign: 'left', datafield: 'value', columntype: 'textbox', filtertype: 'textbox', width: '12%' },
 				{ text: 'Jumlah Unit', editable:false ,align: 'center', cellsalign: 'right', datafield: 'jumlah_unit', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
 				{ text: 'Total Harga (Rp.)', editable:false ,align: 'center', cellsalign: 'right', datafield: 'nilai_pembelian', columntype: 'textbox', filtertype: 'textbox', width: '15%' },
 				{ text: 'Keterangan', editable:false ,datafield: 'keterangan', columntype: 'textbox', filtertype: 'textbox', width: '25%' }

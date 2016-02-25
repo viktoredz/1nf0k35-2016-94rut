@@ -23,13 +23,13 @@
           <input type="text" class="form-control" name="kode_inventaris_" id="kode_inventaris_" placeholder="Kode Lokasi" value="<?php 
             if(set_value('kode_inventaris_')=="" && isset($id_pengadaan)){
                $s = array();
-                  $s[0] = substr($id_pengadaan, 0,2);
-                  $s[1] = substr($id_pengadaan, 2,2);
-                  $s[2] = substr($id_pengadaan, 4,2);
-                  $s[3] = substr($id_pengadaan, 6,2);
-                  $s[4] = substr($id_pengadaan, 8,2);
-                  $s[5] = substr($id_pengadaan, 10,2);
-                  $s[6] = substr($id_pengadaan, 12,2);
+                  $s[0] = substr($id_inv_habispakai_pembelian, 0,2);
+                  $s[1] = substr($id_inv_habispakai_pembelian, 2,2);
+                  $s[2] = substr($id_inv_habispakai_pembelian, 4,2);
+                  $s[3] = substr($id_inv_habispakai_pembelian, 6,2);
+                  $s[4] = substr($id_inv_habispakai_pembelian, 8,2);
+                  $s[5] = substr($id_inv_habispakai_pembelian, 10,2);
+                  $s[6] = substr($id_inv_habispakai_pembelian, 12,2);
                   echo implode(".", $s);
             }else{
               echo  set_value('kode_inventaris_');
@@ -67,32 +67,6 @@
           <div id='tgl2' name="tgl2" value="<?php
               echo (set_value('tgl2')!="") ? date("Y-m-d",strtotime(set_value('tgl2'))) : "";
             ?>"></div>
-        </div>
-        <div class="form-group">
-          <label>No. Kontrak</label>
-          <input type="text" class="form-control" name="nomor_kontrak" placeholder="Nomor Kontrak" value="<?php 
-            if(set_value('nomor_kontrak')=="" && isset($nomor_kontrak)){
-              echo $nokontrak;
-            }else{
-              echo  set_value('nomor_kontrak');
-            }
-            ?>">
-        </div>
-        <div class="form-group">
-          <label>Tanggal Kwitansi</label>
-          <div id='tgl1' name="tgl1" value="<?php
-              echo (set_value('tgl1')!="") ? date("Y-m-d",strtotime(set_value('tgl1'))) : "";
-            ?>"></div>
-        </div>
-        <div class="form-group">
-          <label>Nomor Kwitansi</label>
-          <input type="text" class="form-control" name="nomor_kwitansi" placeholder="Nomor Kwitansi" value="<?php 
-            if(set_value('nomor_kwitansi')=="" && isset($nomor_kwitansi)){
-              echo $nokontrak;
-            }else{
-              echo  set_value('nomor_kwitansi');
-            }
-            ?>">
         </div>
         <div class="form-group">
           <label>Keterangan</label>
@@ -160,7 +134,6 @@ $(function(){
     $("#menu_inventory_bhp_pengadaan").addClass("active");
 
     $("#tgl").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme});
-    $("#tgl1").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme});
     $("#tgl2").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme});
     document.getElementById("tgl").onchange = function() {
         kodeInvetaris(document.getElementById("tgl").value);

@@ -87,15 +87,17 @@ class Bhp_pengadaan_model extends CI_Model {
     }
     function get_data($start=0,$limit=999999,$options=array())
     {
-        $this->db->order_by('id_inv_hasbispakai_pembelian','desc');
+        $this->db->order_by('tgl_permohonan','desc');
         $this->db->select("$this->tabel.*,mst_inv_pilihan.value");
         $this->db->join('mst_inv_pilihan', "inv_inventaris_habispakai_pembelian.pilihan_status_pembelian = mst_inv_pilihan.code AND mst_inv_pilihan.tipe='status_pembelian'",'left');
         $query = $this->db->get($this->tabel,$limit,$start);
         return $query->result();
     }
     public function getItem($table,$data){
-        $this->db->select("$table.*");
-        return $this->db->get_where($table, $data);
+        $this->db->order_by('tgl_update','desc');
+        $this->db->select("inv_inventaris_habispakai_pembelian_item.*,mst_inv_barang_habispakai.uraian");
+        $this->db->join("mst_inv_barang_habispakai","mst_inv_barang_habispakai.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai");
+        return $this->db->get_where("inv_inventaris_habispakai_pembelian_item", $data);
     }
 
  	function get_data_row($kode){
@@ -143,63 +145,13 @@ class Bhp_pengadaan_model extends CI_Model {
 		$query->free_result();    
 		return $data;
 	}
-    function get_data_barang_edit_table($kd_inventaris,$pilih_table){
+    function get_data_barang_edit_table($kd_permohonan,$id_barang){
         $data = array();
-        if($pilih_table=='inv_inventaris_barang_a'){
-
-            $sql= "SELECT inv_inventaris_barang_a.*, inv_inventaris_barang.*,COUNT(inv_inventaris_barang.barang_kembar_proc) AS jumlah 
-FROM inv_inventaris_barang 
-LEFT JOIN inv_inventaris_barang_a ON (inv_inventaris_barang.id_inventaris_barang = inv_inventaris_barang_a.id_inventaris_barang 
-AND inv_inventaris_barang.id_mst_inv_barang=inv_inventaris_barang_a.id_mst_inv_barang)
-WHERE inv_inventaris_barang.barang_kembar_proc = (SELECT barang_kembar_proc FROM inv_inventaris_barang WHERE id_inventaris_barang= ? )
-";           $query= $this->db->query($sql, array($kd_inventaris));
-
-        }else if($pilih_table=='inv_inventaris_barang_b'){
-
-            $sql= "SELECT inv_inventaris_barang_b.*, inv_inventaris_barang.*,COUNT(inv_inventaris_barang.barang_kembar_proc) AS jumlah 
-FROM inv_inventaris_barang 
-LEFT JOIN inv_inventaris_barang_b ON (inv_inventaris_barang.id_inventaris_barang = inv_inventaris_barang_b.id_inventaris_barang 
-AND inv_inventaris_barang.id_mst_inv_barang=inv_inventaris_barang_b.id_mst_inv_barang)
-WHERE inv_inventaris_barang.barang_kembar_proc = (SELECT barang_kembar_proc FROM inv_inventaris_barang WHERE id_inventaris_barang= ? )
-";           $query= $this->db->query($sql, array($kd_inventaris));
-
-        }else if($pilih_table=='inv_inventaris_barang_c'){
-
-            $sql= "SELECT inv_inventaris_barang_c.*, inv_inventaris_barang.*,COUNT(inv_inventaris_barang.barang_kembar_proc) AS jumlah 
-FROM inv_inventaris_barang 
-LEFT JOIN inv_inventaris_barang_c ON (inv_inventaris_barang.id_inventaris_barang = inv_inventaris_barang_c.id_inventaris_barang 
-AND inv_inventaris_barang.id_mst_inv_barang=inv_inventaris_barang_c.id_mst_inv_barang)
-WHERE inv_inventaris_barang.barang_kembar_proc = (SELECT barang_kembar_proc FROM inv_inventaris_barang WHERE id_inventaris_barang= ? )
-";           $query= $this->db->query($sql, array($kd_inventaris));            
-
-        }else if($pilih_table=='inv_inventaris_barang_d'){
-
-            $sql= "SELECT inv_inventaris_barang_d.*, inv_inventaris_barang.*,COUNT(inv_inventaris_barang.barang_kembar_proc) AS jumlah 
-FROM inv_inventaris_barang 
-LEFT JOIN inv_inventaris_barang_d ON (inv_inventaris_barang.id_inventaris_barang = inv_inventaris_barang_d.id_inventaris_barang 
-AND inv_inventaris_barang.id_mst_inv_barang=inv_inventaris_barang_d.id_mst_inv_barang)
-WHERE inv_inventaris_barang.barang_kembar_proc = (SELECT barang_kembar_proc FROM inv_inventaris_barang WHERE id_inventaris_barang= ? )
-";           $query= $this->db->query($sql, array($kd_inventaris));
-
-        }else if($pilih_table=='inv_inventaris_barang_e'){
-
-            $sql= "SELECT inv_inventaris_barang_e.*, inv_inventaris_barang.*,COUNT(inv_inventaris_barang.barang_kembar_proc) AS jumlah 
-FROM inv_inventaris_barang 
-LEFT JOIN inv_inventaris_barang_e ON (inv_inventaris_barang.id_inventaris_barang = inv_inventaris_barang_e.id_inventaris_barang 
-AND inv_inventaris_barang.id_mst_inv_barang=inv_inventaris_barang_e.id_mst_inv_barang)
-WHERE inv_inventaris_barang.barang_kembar_proc = (SELECT barang_kembar_proc FROM inv_inventaris_barang WHERE id_inventaris_barang= ? )
-";           $query= $this->db->query($sql, array($kd_inventaris));
-
-        }else if($pilih_table=='inv_inventaris_barang_f'){   
-
-            $sql= "SELECT inv_inventaris_barang_f.*, inv_inventaris_barang.*,COUNT(inv_inventaris_barang.barang_kembar_proc) AS jumlah 
-FROM inv_inventaris_barang 
-LEFT JOIN inv_inventaris_barang_f ON (inv_inventaris_barang.id_inventaris_barang = inv_inventaris_barang_f.id_inventaris_barang 
-AND inv_inventaris_barang.id_mst_inv_barang=inv_inventaris_barang_f.id_mst_inv_barang)
-WHERE inv_inventaris_barang.barang_kembar_proc = (SELECT barang_kembar_proc FROM inv_inventaris_barang WHERE id_inventaris_barang= ? )
-";           $query= $this->db->query($sql, array($kd_inventaris));
-
-        }
+        $this->db->where('inv_inventaris_habispakai_pembelian_item.id_inv_hasbispakai_pembelian',$kd_permohonan);
+        $this->db->where('inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai',$id_barang);
+        $this->db->join("mst_inv_barang_habispakai","mst_inv_barang_habispakai.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai");
+        $this->db->select("inv_inventaris_habispakai_pembelian_item.*,mst_inv_barang_habispakai.uraian");
+        $query= $this->db->get("inv_inventaris_habispakai_pembelian_item");
         
         if ($query->num_rows() > 0){
             $data = $query->row_array();
@@ -246,9 +198,6 @@ WHERE inv_inventaris_barang.barang_kembar_proc = (SELECT barang_kembar_proc FROM
         $data['tgl_pembelian']              = date("Y-m-d",strtotime($this->input->post('tgl2')));
 		$data['pilihan_status_pembelian']	= $this->input->post('status');
 		$data['keterangan']		            = $this->input->post('keterangan');
-        $data['nomor_kontrak']              = $this->input->post('nomor_kontrak');
-        $data['tgl_kwitansi']               = date("Y-m-d",strtotime($this->input->post('tgl1')));
-        $data['nomor_kwitansi']             = $this->input->post('nomor_kwitansi');
 		$data['waktu_dibuat']		        = date('Y-m-d H:i:s');
         $data['terakhir_diubah']            = "0000-00-00 00:00:00";
 		$data['jumlah_unit']      	        = 0;
@@ -284,30 +233,9 @@ WHERE inv_inventaris_barang.barang_kembar_proc = (SELECT barang_kembar_proc FROM
         return $nourut;
     }
     function tanggal($pengadaan){
-        $query = $this->db->query("select tgl_pengadaan from inv_pengadaan where id_pengadaan = $pengadaan")->result();
+        $query = $this->db->query("select tgl_pembelian from inv_inventaris_habispakai_pembelian where id_inv_hasbispakai_pembelian = $pengadaan")->result();
         foreach ($query as $key) {
-            return $key->tgl_pengadaan;
-        }
-    }
-    function insert_data_from($id_barang,$kode_proc,$tanggal_diterima,$kode)
-    {   $tanggal = $this->tanggal($kode);
-        $values = array(
-            'id_mst_inv_barang'     => $id_barang,
-            'nama_barang'           => $this->input->post('nama_barang'),
-            'harga'                 => $this->input->post('harga'),
-            'keterangan_pengadaan'  => $this->input->post('keterangan_pengadaan'),
-            'pilihan_status_invetaris'  => $this->input->post('pilihan_status_invetaris'),
-            'tanggal_pembelian'     => $tanggal,
-            'tanggal_pengadaan'     => $tanggal,
-            'id_pengadaan'          => $kode,
-            'tanggal_diterima'      => $tanggal_diterima,
-            'barang_kembar_proc'    => $kode_proc,
-            'code_cl_phc'           => 'P'.$this->session->userdata('puskesmas'),
-        );
-        if($this->db->insert('inv_inventaris_barang', $values)){
-            return $this->db->insert_id();
-        }else{
-            return mysql_error();
+            return $key->tgl_pembelian;
         }
     }
     function update_entry($kode)
@@ -324,28 +252,18 @@ WHERE inv_inventaris_barang.barang_kembar_proc = (SELECT barang_kembar_proc FROM
 		$this->db->where('id_inv_hasbispakai_pembelian',$kode);
 
 		if($this->db->update($this->tabel, $data)){
+            $this->db->select("*");
+            $this->db->where('id_inv_hasbispakai_pembelian',$kode);
+            $query = $this->db->get("inv_inventaris_habispakai_pembelian_item");
+            if($query->num_rows()>0){
+                $dataupdateitem['tgl_update']              = date("Y-m-d",strtotime($this->input->post('tgl2')));
+                $this->db->where('id_inv_hasbispakai_pembelian',$kode);
+                $this->db->update("inv_inventaris_habispakai_pembelian_item",$dataupdateitem);
+            }
 			return true;
 		}else{
 			return mysql_error();
 		}
-    }
-    function tampil_id($status){
-    	$this->db->select('code');
-    	$this->db->where('value',$status);
-		$this->db->where('tipe','status_pengadaan');
-		$query=$this->db->get('mst_inv_pilihan');
-		if($query->num_rows()>0)
-        {
-            foreach($query->result() as $k)
-            {
-                $id = $k->code;
-            }
-        }
-        else
-        {
-            $id = 1;
-        }
-        	return  $id;
     }
 
     function tampilstatus_id($status,$tipe){
@@ -379,29 +297,16 @@ WHERE inv_inventaris_barang.barang_kembar_proc = (SELECT barang_kembar_proc FROM
         }
     }
 
-    function update_status()
-    {	
-        $pilihan_inv  = $this->input->post('pilihan_inv');
-    	$kode_proc= $this->input->post('kode_proc');
-        $id_pengadaan= $this->input->post('id_pengadaan');
-
-        $id = $this->db->query("SELECT id_inventaris_barang FROM inv_inventaris_barang WHERE barang_kembar_proc =$kode_proc and id_pengadaan=$id_pengadaan")->result(); 
-        foreach ($id as $key) {
-            $data['pilihan_status_invetaris']   = $this->tampilstatus_id($pilihan_inv,'status_inventaris');
-            $this->db->update('inv_inventaris_barang', $data,array('barang_kembar_proc'=> $this->input->post('kode_proc')));
-        }
-            
-
-    }
+    
     function sum_jumlah_item($kode,$tipe){
     	$this->db->select_sum($tipe);
-    	$this->db->where('id_pengadaan',$kode);
-		$query=$this->db->get('inv_inventaris_barang');
+    	$this->db->where('id_inv_hasbispakai_pembelian',$kode);
+		$query=$this->db->get('inv_inventaris_habispakai_pembelian_item');
 		if($query->num_rows()>0)
         {
             foreach($query->result() as $k)
             {
-                $jumlah = $k->harga;
+                $jumlah = $k->$tipe;
             }
         }
         else
@@ -410,34 +315,18 @@ WHERE inv_inventaris_barang.barang_kembar_proc = (SELECT barang_kembar_proc FROM
         }
         return  $jumlah;
     }
-    function barang_kembar_proc($kode){
-        $q = $this->db->query("SELECT  MAX(RIGHT(barang_kembar_proc,4)) as kd_max FROM inv_inventaris_barang WHERE id_mst_inv_barang=$kode ORDER BY barang_kembar_proc DESC");
-        $kd = "";
-        if($q->num_rows()>0)
-        {
-           foreach($q->result() as $k)
-            {
-                $tmp = ((int)$k->kd_max)+1;
-                $kd = sprintf("%04s", $tmp);
-            }
-        }
-        else
-        {
-            $kd = "0001";
-        }
-        return $kode.$kd;
-    }
+   
     function sum_unit($kode)
     {
         $this->db->select("*");
-        $this->db->where('id_pengadaan',$kode);  
-        return $query = $this->db->get("inv_inventaris_barang"); 
+        $this->db->where('id_inv_hasbispakai_pembelian',$kode);  
+        return $query = $this->db->get("inv_inventaris_habispakai_pembelian_item"); 
     }
 	function delete_entry($kode)
 	{
-		$this->db->where('id_pengadaan',$kode);
+		$this->db->where('id_inv_hasbispakai_pembelian',$kode);
 
-		return $this->db->delete($this->tabel);
+		return $this->db->delete('inv_inventaris_habispakai_pembelian');
 	}
     function jumlahtable($table,$id_inventaris_barang){
 
@@ -454,33 +343,11 @@ WHERE inv_inventaris_barang.barang_kembar_proc = (SELECT barang_kembar_proc FROM
         }
         return $kd;
     }
-	function delete_entryitem($kode,$kd_proc)
-	{   $id = $this->db->query("SELECT * FROM inv_inventaris_barang WHERE id_inventaris_barang =$kode")->result(); 
-        foreach ($id as $key) {
-              $this->db->where('barang_kembar_proc',$kd_proc);
-              $this->db->delete('inv_inventaris_barang');
-                $kodebarang_ = substr($kode, -14,-12);
-                if($kodebarang_=='01') {
-                    $this->db->where('id_inventaris_barang',$key->id_inventaris_barang);
-                    $this->db->delete('inv_inventaris_barang_a');
-                }else if($kodebarang_=='02') {  
-                    $this->db->where('id_inventaris_barang',$key->id_inventaris_barang);
-                    $this->db->delete('inv_inventaris_barang_b');
-                }else if($kodebarang_=='03') {  
-                    $this->db->where('id_inventaris_barang',$key->id_inventaris_barang);
-                    $this->db->delete('inv_inventaris_barang_c');
-                }else if($kodebarang_=='04') {                 
-                    $this->db->where('id_inventaris_barang',$key->id_inventaris_barang);
-                    $this->db->delete('inv_inventaris_barang_d');
-                }else if($kodebarang_=='05') {  
-                    $this->db->where('id_inventaris_barang',$key->id_inventaris_barang);
-                    $this->db->delete('inv_inventaris_barang_e');
-                }else if($kodebarang_=='06') {  
-                    $this->db->where('id_inventaris_barang',$key->id_inventaris_barang);
-                    $this->db->delete('inv_inventaris_barang_f');
-                }
-        }
-        
+	function delete_entryitem($kode,$barang)
+	{   
+        $this->db->where('id_inv_hasbispakai_pembelian',$kode);
+        $this->db->where('id_mst_inv_barang_habispakai',$barang);
+        $this->db->delete('inv_inventaris_habispakai_pembelian_item');
 	}
     function delete_entryitem_table($kode,$id_barang,$table)
     {    

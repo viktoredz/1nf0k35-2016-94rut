@@ -8,19 +8,6 @@ if(isset($disable)){if($disable='disable'){?>
 <?php }} ?>
 <script type="text/javascript">
 
-function edit_barang(id_inventaris_barang,kodeproc){
-    $("#popup_barang #popup_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-    $.get("<?php echo base_url().'inventory/bhp_pengadaan/edit_barang/'.$kode.'/';?>"+id_inventaris_barang+'/'+kodeproc, function(data) {
-      $("#popup_content").html(data);
-    });
-    $("#popup_barang").jqxWindow({
-      theme: theme, resizable: false,
-      width: 1000,
-      height: 600,
-      isModal: true, autoOpen: false, modalOpacity: 0.2
-    });
-    $("#popup_barang").jqxWindow('open');
-  } 
   
   function toRp(a,b,c,d,e){
     e=function(f){return f.split('').reverse().join('')};b=e(parseInt(a,10).toString());
@@ -42,14 +29,9 @@ function edit_barang(id_inventaris_barang,kodeproc){
             data.append('id_mst_inv_barang', $('#v_kode_barang').val());
             data.append('tanggal_diterima', $('#dateInput').val());
             data.append('nama_barang', $('#v_nama_barang').val());
-            data.append('nama_barang', $('#v_nama_barang').val());
             data.append('jumlah', $('#jumlah').val());
             data.append('harga', $('#harga').val());
-            data.append('id_inventaris_barang', $('#v_kode_invetaris').val()+'.'+$('#id_inventaris_barang').val());
-            //data.append('keterangan_pengadaan', $('#keterangan').val());
-            var id_pengadaan_ = '<?php echo $kode; ?>'; 
-            var id_barang_    = $('#v_kode_barang').val();
-            var kd_proc_      = 0;
+            data.append('id_permohonan_barang', "<?php echo $kode;?>");
             $.ajax({
                 cache : false,
                 contentType : false,
@@ -65,7 +47,6 @@ function edit_barang(id_inventaris_barang,kodeproc){
                       $('#notice').show();
                       $("#jqxgrid_barang").jqxGrid('updatebounddata', 'cells');
                       close_popup();
-                      edit_barang(res[1],res[2]); 
                   }
                   else if(res[0]=="Error"){
                       $('#notice').hide();
@@ -95,8 +76,9 @@ function edit_barang(id_inventaris_barang,kodeproc){
                 datatype: "json",
                   datafields: [
                   { name: 'uraian', type: 'string'},
-                  { name: 'code', type: 'string'},
-                  { name: 'code_tampil', type: 'string'}
+                  { name: 'id_mst_inv_barang_habispakai', type: 'string'},
+                  { name: 'hargaterakhir', type: 'string'},
+                  { name: 'harga', type: 'string'},
                 ],
                 url: '<?php echo base_url().'inventory/bhp_pengadaan/autocomplite_barang'; ?>'
               },
@@ -109,7 +91,12 @@ function edit_barang(id_inventaris_barang,kodeproc){
                 loadComplete: function (data) {
                   if (data.length > 0) {
                     response($.map(data, function (item) {
-                      return item.uraian;
+                      if (item.hargaterakhir==null) {
+                        var hargabarang = item.harga;
+                      }else{
+                        var hargabarang = item.hargaterakhir;
+                      }
+                      return item.uraian+' | '+item.id_mst_inv_barang_habispakai+' | '+hargabarang;
                     }));
                   }
                 }
@@ -120,8 +107,8 @@ function edit_barang(id_inventaris_barang,kodeproc){
         $("#jqxinput").select(function(){
             var codebarang = $(this).val();
             var res = codebarang.split(" | ");
-            $("#v_nama_barang").val(res[1]);
-            $("#v_kode_barang").val(res[0].replace(/\./g,""));
+            $("#v_kode_barang").val(res[1]);
+            $("#harga").val(res[2]);
         });
         $("#harga").change(function(){
             var jumlah = document.getElementById("jumlah").value;
@@ -151,32 +138,31 @@ function edit_barang(id_inventaris_barang,kodeproc){
 	<div class="row">
     <?php echo form_open(current_url(), 'id="form-ss"') ?>
           <div class="box-body">
+          <div class="row">
+          <div class="col-md-10">
             <div class="form-group">
               <label>Nama Barang</label>
-              <input id="jqxinput" class="form-control" autocomplete="off" name="code_mst_inv" type="text" value="<?php 
-                  $nama_barang;
+              <input id="jqxinput" class="form-control" autocomplete="off" name="jqxinput" type="text" value="<?php 
+                if(set_value('jqxinput')=="" && isset($id_mst_inv_barang_habispakai)){ 
+                  echo $id_mst_inv_barang_habispakai;
                 }else{
-                  echo  set_value('code_mst_inv');
+                  echo  set_value('jqxinput');
                 }
                 ?>" <?php if(isset($disable)){if($disable='disable'){echo "readonly";}} ?>/>
-              <input id="v_kode_barang" class="form-control" name="code_mst_inv_barang" type="hidden" value="<?php 
-                if(set_value('code_mst_inv_barang')=="" && isset($id_mst_inv_barang)){
-                  echo $id_mst_inv_barang;
+            </div>
+          </div>
+          <div class="col-md-2" style="padding-top:25px; ">
+            <a href="<?php echo base_url()?>mst/invbaranghabispakai" target="blank"><img src="<?php echo base_url()?>media/images/16_add.gif"></a>
+          </div>
+          </div>
+              <input id="v_kode_barang" class="form-control" name="v_kode_barang" type="hidden" value="<?php 
+                if(set_value('v_kode_barang')=="" && isset($id_mst_inv_barang_habispakai)){
+                  echo $id_mst_inv_barang_habispakai;
                 }else{
-                  echo  set_value('code_mst_inv_barang');
+                  echo  set_value('v_kode_barang');
                 }
                 ?>" />
-            </div>
-            <div class="form-group">
-              <label>Nama Barang</label>
-              <input type="text" class="autocomplete form-control" id="v_nama_barang" name="nama_barang"  placeholder="Nama Barang" value="<?php
-              if(set_value('nama_barang')=="" && isset($nama_barang)){
-                  echo $nama_barang;
-                }else{
-                  echo  set_value('nama_barang');
-                }
-                ?>">
-            </div>
+
             <div class="form-group">
               <label>Jumlah</label>
               <input type="number" class="form-control" name="jumlah" id="jumlah" placeholder="Jumlah" value="<?php 

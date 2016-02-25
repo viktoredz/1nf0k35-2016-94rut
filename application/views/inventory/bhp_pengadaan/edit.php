@@ -23,13 +23,13 @@
           <input type="text" class="form-control" name="kode_inventaris_" id="kode_inventaris_" placeholder="Kode Lokasi" value="<?php 
             if(set_value('kode_inventaris_')=="" && isset($id_pengadaan)){
                   $s = array();
-                  $s[0] = substr($id_pengadaan, 0,2);
-                  $s[1] = substr($id_pengadaan, 2,2);
-                  $s[2] = substr($id_pengadaan, 4,2);
-                  $s[3] = substr($id_pengadaan, 6,2);
-                  $s[4] = substr($id_pengadaan, 8,2);
-                  $s[5] = substr($id_pengadaan, 10,2);
-                  $s[6] = substr($id_pengadaan, 12,2);
+                  $s[0] = substr($id_inv_habispakai_pembelian, 0,2);
+                  $s[1] = substr($id_inv_habispakai_pembelian, 2,2);
+                  $s[2] = substr($id_inv_habispakai_pembelian, 4,2);
+                  $s[3] = substr($id_inv_habispakai_pembelian, 6,2);
+                  $s[4] = substr($id_inv_habispakai_pembelian, 8,2);
+                  $s[5] = substr($id_inv_habispakai_pembelian, 10,2);
+                  $s[6] = substr($id_inv_habispakai_pembelian, 12,2);
                   echo implode(".", $s);
             }else{
               echo  set_value('kode_inventaris_');
@@ -56,7 +56,7 @@
           </select>
           <?php }else{ 
               foreach($kodestatus as $stat) : 
-                if($stat->code == $pilihan_status_pengadaan ){
+                if($stat->code == $pilihan_status_pembelian ){
                   echo "<br>".$stat->value ;
                 }
               endforeach;
@@ -88,6 +88,28 @@
              <?php  }?>
         </div>
         <div class="form-group">
+          <label>Keterangan</label>
+          <?php if(!isset($viewreadonly)){ ?>
+          <textarea class="form-control" id="keterangan" name="keterangan" placeholder="Keterangan"><?php 
+              if(set_value('keterangan')=="" && isset($keterangan)){
+                echo $keterangan;
+              }else{
+                echo  set_value('keterangan');
+              }
+              ?></textarea>
+          <?php }else{ 
+              echo "<br>".$nomor_kontrak;
+          } ?>
+        </div>
+      </div>
+    </div>
+  </div><!-- /.form-box -->
+
+  <div class="col-md-6">
+    <div class="box box-warning">
+      <div class="box-body">
+      <div id="success"> 
+      <div class="form-group">
           <label>Nomor Kontrak</label>
           <?php if(!isset($viewreadonly)){ ?>
           <input type="text" class="form-control" name="nomor_kontrak" placeholder="Nomor Kontrak" value="<?php 
@@ -123,28 +145,6 @@
               echo "<br>".$nomor_kwitansi;
           } ?>
         </div>
-        <div class="form-group">
-          <label>Keterangan</label>
-          <?php if(!isset($viewreadonly)){ ?>
-          <textarea class="form-control" id="keterangan" name="keterangan" placeholder="Keterangan"><?php 
-              if(set_value('keterangan')=="" && isset($keterangan)){
-                echo $keterangan;
-              }else{
-                echo  set_value('keterangan');
-              }
-              ?></textarea>
-          <?php }else{ 
-              echo "<br>".$nomor_kontrak;
-          } ?>
-        </div>
-      </div>
-    </div>
-  </div><!-- /.form-box -->
-
-  <div class="col-md-6">
-    <div class="box box-warning">
-      <div class="box-body">
-      <div id="success"> 
           <table class="table table-condensed">
               <tr>
                 <td>Jumlah Unit</td>
