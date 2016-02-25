@@ -22,7 +22,7 @@ if(isset($disable)){if($disable='disable'){?>
           $("#tidak").val("<?php echo $jml_tdkdipakai;?>");
           $("#stok").val(stok-$("#rusak").val()-$("#tidak").val());  
         }
-        if($("#stok").val()==0){
+        if($("#stok").val()<0){
           alert("Jumlah baik tidak boleh kurang dari kosong");  
           if (status=="tidak") {
              $("#tidak").val("<?php echo $jml_tdkdipakai;?>");
