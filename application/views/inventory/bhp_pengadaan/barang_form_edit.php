@@ -26,11 +26,13 @@ if(isset($disable)){if($disable='disable'){?>
             var data = new FormData();
             $('#notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
             $('#notice').show();
-            data.append('id_mst_inv_barang', $('#v_kode_barang').val());
+            data.append('id_mst_inv_barang', $('#id_mst_inv_barang').val());
             data.append('tanggal_diterima', $('#dateInput').val());
+             data.append('jqxinput', $('#jqxinput').val());
             data.append('nama_barang', $('#v_nama_barang').val());
             data.append('jumlah', $('#jumlah').val());
             data.append('harga', $('#harga').val());
+            data.append('subtotal', $('#subtotal').val());
             data.append('id_permohonan_barang', "<?php echo $kode;?>");
             $.ajax({
                 cache : false,
@@ -107,7 +109,7 @@ if(isset($disable)){if($disable='disable'){?>
         $("#jqxinput").select(function(){
             var codebarang = $(this).val();
             var res = codebarang.split(" | ");
-            $("#v_kode_barang").val(res[1]);
+            $("#id_mst_inv_barang").val(res[1]);
             $("#harga").val(res[2]);
         });
         $("#harga").change(function(){
@@ -147,11 +149,11 @@ if(isset($disable)){if($disable='disable'){?>
                   echo  set_value('jqxinput');
                 }
                 ?>"  <?php if(isset($disable)){if($disable='disable'){echo "readonly";}} ?>/>
-              <input id="v_kode_barang" class="form-control" name="v_kode_barang" type="hidden" value="<?php 
-                if(set_value('v_kode_barang')=="" && isset($id_mst_inv_barang_habispakai)){
+              <input id="id_mst_inv_barang" class="form-control" name="id_mst_inv_barang" type="hidden" value="<?php 
+                if(set_value('id_mst_inv_barang')=="" && isset($id_mst_inv_barang_habispakai)){
                   echo $id_mst_inv_barang_habispakai;
                 }else{
-                  echo  set_value('v_kode_barang');
+                  echo  set_value('id_mst_inv_barang');
                 }
                 ?>" />
             </div>

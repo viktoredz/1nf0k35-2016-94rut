@@ -17,7 +17,19 @@ if(isset($disable)){if($disable='disable'){?>
     return'Rp.\t'+e(d)+',00'
   }
   
-
+  function tambahmaster(){
+    $("#popup_masterbarang #popup_mastercontent").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
+    $.get("<?php echo base_url().'inventory/bhp_pengadaan/add_barang_master/'; ?>" , function(data) {
+      $("#popup_mastercontent").html(data);
+    });
+    $("#popup_masterbarang").jqxWindow({
+      theme: theme, resizable: false,
+      width: 500,
+      height: 500,
+      isModal: true, autoOpen: false, modalOpacity: 0.2
+    });
+    $("#popup_masterbarang").jqxWindow('open');
+  }
     $(function(){
       $('#btn-close').click(function(){
         close_popup();
@@ -26,11 +38,13 @@ if(isset($disable)){if($disable='disable'){?>
             var data = new FormData();
             $('#notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
             $('#notice').show();
-            data.append('id_mst_inv_barang', $('#v_kode_barang').val());
+            data.append('id_mst_inv_barang', $('#id_mst_inv_barang').val());
+            data.append('jqxinput', $('#jqxinput').val());
             data.append('tanggal_diterima', $('#dateInput').val());
             data.append('nama_barang', $('#v_nama_barang').val());
             data.append('jumlah', $('#jumlah').val());
             data.append('harga', $('#harga').val());
+            data.append('subtotal', $('#subtotal').val());
             data.append('id_permohonan_barang', "<?php echo $kode;?>");
             $.ajax({
                 cache : false,
@@ -107,7 +121,7 @@ if(isset($disable)){if($disable='disable'){?>
         $("#jqxinput").select(function(){
             var codebarang = $(this).val();
             var res = codebarang.split(" | ");
-            $("#v_kode_barang").val(res[1]);
+            $("#id_mst_inv_barang").val(res[1]);
             $("#harga").val(res[2]);
         });
         $("#harga").change(function(){
@@ -152,14 +166,14 @@ if(isset($disable)){if($disable='disable'){?>
             </div>
           </div>
           <div class="col-md-2" style="padding-top:25px; ">
-            <a href="<?php echo base_url()?>mst/invbaranghabispakai" target="blank"><img src="<?php echo base_url()?>media/images/16_add.gif"></a>
+            <img src="<?php echo base_url()?>media/images/16_add.gif" onclick="tambahmaster()">
           </div>
           </div>
-              <input id="v_kode_barang" class="form-control" name="v_kode_barang" type="hidden" value="<?php 
-                if(set_value('v_kode_barang')=="" && isset($id_mst_inv_barang_habispakai)){
+              <input id="id_mst_inv_barang" class="form-control" name="id_mst_inv_barang" type="hidden" value="<?php 
+                if(set_value('id_mst_inv_barang')=="" && isset($id_mst_inv_barang_habispakai)){
                   echo $id_mst_inv_barang_habispakai;
                 }else{
-                  echo  set_value('v_kode_barang');
+                  echo  set_value('id_mst_inv_barang');
                 }
                 ?>" />
 
@@ -218,4 +232,8 @@ if(isset($disable)){if($disable='disable'){?>
         </div>
     </div>
 </form>
+</div>
+<div id="popup_masterbarang" style="display:none">
+  <div id="popup_mastertitle">Data master Barang</div>
+  <div id="popup_mastercontent">&nbsp;</div>
 </div>

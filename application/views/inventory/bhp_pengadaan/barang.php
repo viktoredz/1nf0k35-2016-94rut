@@ -8,9 +8,9 @@
 			type	: "POST",
 			datafields: [
 			{ name: 'id_inv_hasbispakai_pembelian', type: 'string' },
-			{ name: 'id_mst_inv_barang_habispakai', type: 'string' },
+			{ name: 'id_mst_inv_barang_habispakai', type: 'number' },
 			{ name: 'uraian', type: 'string' },
-			{ name: 'jml', type: 'string' },
+			{ name: 'jml', type: 'number' },
 			{ name: 'harga', type: 'string' },
 			{ name: 'subtotal', type: 'string' },
 			{ name: 'harga', type: 'double' },
@@ -66,9 +66,13 @@
 
 			columns: [
 			<?php if(!isset($viewreadonly)){?>	{ text: 'Edit', align: 'center', filtertype: 'none', sortable: false,editable: false, width: '4%', cellsrenderer: function (row) {
+					var statupembelian = "<?php echo $pilihan_status_pembelian; ?>";
 				    var dataRecord = $("#jqxgrid_barang").jqxGrid('getrowdata', row);
-				    if(dataRecord.edit==1){
+				    if (statupembelian!=2) {
+				    	if(dataRecord.edit==1){
+						
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='edit_barang(\""+dataRecord.id_inv_hasbispakai_pembelian+"\",\""+dataRecord.id_mst_inv_barang_habispakai+"\");'></a></div>";
+						}
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}
@@ -76,8 +80,12 @@
                 },
 				{ text: 'Del', align: 'center', editable: false,filtertype: 'none', sortable: false, width: '4%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid_barang").jqxGrid('getrowdata', row);
-				    if(dataRecord.delete==1){
+				    var statupembelian = "<?php echo $pilihan_status_pembelian; ?>";
+				    if (statupembelian!=2) {
+				    	if(dataRecord.delete==1){
+				    	
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del_barang(\""+dataRecord.id_inv_hasbispakai_pembelian+"\",\""+dataRecord.id_mst_inv_barang_habispakai+"\");'></a></div>";
+						}
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}
@@ -222,7 +230,7 @@
 <div>
 	<div style="width:100%;">
 		<div style="padding:5px" class="pull-right">
-			<?php if(!isset($viewreadonly)){?><button class="btn btn-success" id='btn_add_barang' type='button'><i class='fa fa-plus-square'></i> Tambah Barang</button><?php } ?>
+			<?php if(!isset($viewreadonly)){ if($pilihan_status_pembelian!=2){?><button class="btn btn-success" id='btn_add_barang' type='button'><i class='fa fa-plus-square'></i> Tambah Barang</button><?php } } ?>
 		</div>
         <div id="jqxgrid_barang"></div>
 	</div>

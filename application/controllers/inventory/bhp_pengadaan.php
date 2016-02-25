@@ -232,7 +232,6 @@ class Bhp_pengadaan extends CI_Controller {
 	function json(){
 		$this->authentication->verify('inventory','show');
 
-
 		if($_POST) {
 			$fil = $this->input->post('filterscount');
 			$ord = $this->input->post('sortdatafield');
@@ -325,7 +324,143 @@ class Bhp_pengadaan extends CI_Controller {
 
 		echo json_encode(array($json));
 	}
-	
+	public function barang($id = 0){
+		$this->authentication->verify('inventory','show');
+
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl_update' ) {
+					$value = date("Y-m-d",strtotime($value));
+
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		$this->db->where('id_inv_hasbispakai_pembelian',$id);
+		$rows_all_activity = $this->bhp_pengadaan_model->getItem();
+
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl_update' ) {
+					$value = date("Y-m-d",strtotime($value));
+
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
+		$this->db->where('id_inv_hasbispakai_pembelian',$id);
+		$activity = $this->bhp_pengadaan_model->getItem($this->input->post('recordstartindex'), $this->input->post('pagesize'));
+		$data = array();
+
+		$kodepuskesmas = $this->session->userdata('puskesmas');
+		if(substr($kodepuskesmas, -2)=="01"){
+			$unlock = 1;
+		}else{
+			$unlock = 0;
+		}
+		
+		foreach($activity as $act) {
+			$data[] = array(
+				'id_inv_hasbispakai_pembelian'   		=> $act->id_inv_hasbispakai_pembelian,
+				'id_mst_inv_barang_habispakai'   		=> $act->id_mst_inv_barang_habispakai,
+				'uraian'								=> $act->uraian,
+				'jml'								=> $act->jml,
+				'harga'									=> number_format($act->harga,2),
+				'subtotal'								=> number_format($act->jml*$act->harga,2),
+				'tgl_update'							=> $act->tgl_update,
+				'edit'		=> 1,
+				'delete'	=> 1
+			);
+		}
+
+
+		
+		$size = sizeof($rows_all_activity);
+		$json = array(
+			'TotalRows' => (int) $size,
+			'Rows' => $data
+		);
+
+		echo json_encode(array($json));
+	}
+	public function barang__($id = 0)
+	{
+		$data	  	= array();
+		$filter 	= array();
+		$filterLike = array();
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl_update' ) {
+					$value = date("Y-m-d",strtotime($value));
+
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		$activity = $this->bhp_pengadaan_model->getItem('inv_inventaris_habispakai_pembelian_item', array('id_inv_hasbispakai_pembelian'=>$id))->result();
+		foreach($activity as $act) {
+			$data[] = array(
+				'id_inv_hasbispakai_pembelian'   		=> $act->id_inv_hasbispakai_pembelian,
+				'id_mst_inv_barang_habispakai'   		=> $act->id_mst_inv_barang_habispakai,
+				'uraian'								=> $act->uraian,
+				'jml'								=> $act->jml,
+				'harga'									=> number_format($act->harga,2),
+				'subtotal'								=> number_format($act->jml*$act->harga,2),
+				'tgl_update'							=> $act->tgl_update,
+				'edit'		=> 1,
+				'delete'	=> 1
+			);
+		}
+
+		$json = array(
+			'TotalRows' => sizeof($data),
+			'Rows' => $data
+		);
+
+		echo json_encode(array($json));
+	}
 	function index(){
 		$this->authentication->verify('inventory','edit');
 		$data['title_group'] = "Barang Habis Pakai";
@@ -492,55 +627,7 @@ class Bhp_pengadaan extends CI_Controller {
         		$this->db->update("inv_inventaris_habispakai_pembelian",$dataupdate,$key);
 	}
 
-	public function barang($id = 0)
-	{
-		$data	  	= array();
-		$filter 	= array();
-		$filterLike = array();
 
-		if($_POST) {
-			$fil = $this->input->post('filterscount');
-			$ord = $this->input->post('sortdatafield');
-
-			for($i=0;$i<$fil;$i++) {
-				$field = $this->input->post('filterdatafield'.$i);
-				$value = $this->input->post('filtervalue'.$i);
-
-				if($field == 'tgl_update' ) {
-					$value = date("Y-m-d",strtotime($value));
-
-					$this->db->where($field,$value);
-				}elseif($field != 'year') {
-					$this->db->like($field,$value);
-				}
-			}
-
-			if(!empty($ord)) {
-				$this->db->order_by($ord, $this->input->post('sortorder'));
-			}
-		}
-		$activity = $this->bhp_pengadaan_model->getItem('inv_inventaris_habispakai_pembelian_item', array('id_inv_hasbispakai_pembelian'=>$id))->result();
-		foreach($activity as $act) {
-			$data[] = array(
-				'id_inv_hasbispakai_pembelian'   		=> $act->id_inv_hasbispakai_pembelian,
-				'id_mst_inv_barang_habispakai'   		=> $act->id_mst_inv_barang_habispakai,
-				'uraian'								=> $act->uraian,
-				'jml'								=> $act->jml,
-				'harga'									=> number_format($act->harga,2),
-				'subtotal'								=> number_format($act->jml*$act->harga,2),
-				'tgl_update'							=> $act->tgl_update,
-				'edit'		=> 1,
-				'delete'	=> 1
-			);
-		}
-
-		$json = array(
-			'TotalRows' => sizeof($data),
-			'Rows' => $data
-		);
-
-		echo json_encode(array($json));
-	}
 	public function kodeInvetaris($id=0){
 		$this->db->where('code',"P".$this->session->userdata('puskesmas'));
 		$query = $this->db->get('cl_phc')->result();
@@ -559,6 +646,9 @@ class Bhp_pengadaan extends CI_Controller {
         $this->form_validation->set_rules('nama_barang', 'Nama Barang', 'trim|required');
         $this->form_validation->set_rules('jumlah', 'Jumlah', 'trim|required');
         $this->form_validation->set_rules('harga', 'Harga Satuan', 'trim|required');
+        $this->form_validation->set_rules('jqxinput', 'Nama Barang', 'trim');
+        $this->form_validation->set_rules('subtotal', 'subtotal', 'trim');
+        $this->form_validation->set_rules('id_mst_inv_barang', 'barang', 'trim');
 
 		if($this->form_validation->run()== FALSE){
 			$data['kodebarang']		= $this->bhp_pengadaan_model->get_databarang();
@@ -596,6 +686,9 @@ class Bhp_pengadaan extends CI_Controller {
         $this->form_validation->set_rules('nama_barang', 'Nama Barang', 'trim|required');
         $this->form_validation->set_rules('jumlah', 'Jumlah', 'trim|required');
         $this->form_validation->set_rules('harga', 'Harga Satuan', 'trim|required');
+        $this->form_validation->set_rules('jqxinput', 'Nama Barang', 'trim');
+        $this->form_validation->set_rules('subtotal', 'subtotal', 'trim');
+        $this->form_validation->set_rules('id_mst_inv_barang', 'barang', 'trim');
 		if($this->form_validation->run()== FALSE){
 			$data = $this->bhp_pengadaan_model->get_data_barang_edit_table($id_permohonan,$kd_barang); 
 			$data['action']			= "edit";
@@ -631,6 +724,7 @@ class Bhp_pengadaan extends CI_Controller {
 		}
 		
 	}
+
 	function dodel_barang($kode=0,$id_barang="",$table=0){
 		$this->authentication->verify('inventory','del');
 
@@ -657,5 +751,40 @@ class Bhp_pengadaan extends CI_Controller {
         }
         echo json_encode($kota);      //data array yang telah kota deklarasikan dibawa menggunakan json
     }
+	public function add_barang_master($kode=0)
+	{	
+		$data['action']			= "add";
+		$data['kode']			= $kode;
+        $this->form_validation->set_rules('uraian', 'Uraian', 'trim|required');
+        $this->form_validation->set_rules('code', 'Kode', 'trim');
+        $this->form_validation->set_rules('uraian', 'Uraian', 'trim');
+        $this->form_validation->set_rules('merek_tipe', 'Merek Tipe', 'trim');
+        $this->form_validation->set_rules('negara_asal', 'Negara Asal', 'trim');
+        $this->form_validation->set_rules('pilihan_satuan', 'Satuan', 'trim');
 
+		if($this->form_validation->run()== FALSE){
+			$data['kode']			= $kode;
+			$data['noticemaster']		= validation_errors();
+			$data['pilihan_jenis_barang'] = $this->bhp_pengadaan_model->getnamajenis();
+			$data['pilihan_satuan_barang'] = $this->bhp_pengadaan_model->pilih_data_status('satuan_bhp');
+			die($this->parser->parse('inventory/bhp_pengadaan/form_masterbarang', $data));
+		}else{
+				$values = array(
+					'id_mst_inv_barang_habispakai_jenis'=> $this->input->post('id_mst_inv_barang_habispakai_jenis'),
+					'code' 			=> $this->input->post('code'),
+					'uraian'		=> $this->input->post('uraian'),
+					'merek_tipe' 	=> $this->input->post('merek_tipe'),
+					'negara_asal' 	=> $this->input->post('negara_asal'),
+					'pilihan_satuan' => $this->input->post('pilihan_satuan'),
+					'harga' => $this->input->post('harga'),
+				);
+				$simpan=$this->db->insert('mst_inv_barang_habispakai', $values);
+				if($simpan==true){
+				die("OK|Data disimpan");
+			}else{
+				 die("Error|Proses data gagal");
+			}
+			
+		}
+	}
 }

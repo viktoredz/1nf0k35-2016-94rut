@@ -93,11 +93,12 @@ class Bhp_pengadaan_model extends CI_Model {
         $query = $this->db->get($this->tabel,$limit,$start);
         return $query->result();
     }
-    public function getItem($table,$data){
+    public function getItem($start=0,$limit=999999,$options=array()){
         $this->db->order_by('tgl_update','desc');
         $this->db->select("inv_inventaris_habispakai_pembelian_item.*,mst_inv_barang_habispakai.uraian");
         $this->db->join("mst_inv_barang_habispakai","mst_inv_barang_habispakai.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai");
-        return $this->db->get_where("inv_inventaris_habispakai_pembelian_item", $data);
+        $query = $this->db->get("inv_inventaris_habispakai_pembelian_item",$limit,$start);
+        return $query->result();
     }
 
  	function get_data_row($kode){
@@ -359,6 +360,12 @@ class Bhp_pengadaan_model extends CI_Model {
     {
 		$this->db->order_by('uraian','asc');
         $query = $this->db->get('mst_inv_barang',$limit,$start);
+        return $query->result();
+    }
+    public function getnamajenis()
+    {
+        $this->db->select("*");
+        $query = $this->db->get("mst_inv_barang_habispakai_jenis");
         return $query->result();
     }
 }
