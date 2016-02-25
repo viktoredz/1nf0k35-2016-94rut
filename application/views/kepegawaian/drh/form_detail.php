@@ -1,3 +1,4 @@
+<script type="text/javascript" language="javascript" src="<?php echo base_url()?>plugins/js/ajaxupload.3.5.js"></script>
 <script>
   $(function() {
         $('#jqxTabs').jqxTabs({ width: '100%', height: '1000'});
@@ -18,6 +19,30 @@
             loadPage('<?php echo base_url()?>kepegawaian/drh/biodata/'+pageIndex+'/{id}', pageIndex);
         });
 
+        var divalert = '<div class="alert alert-warning alert-dismissable"><button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button><div>';
+
+        new AjaxUpload($('#linkimages'), {
+          action: '<?php echo base_url()?>kepegawaian/drh/douploadphoto/{id}',
+          name: 'uploadfile',
+          onSubmit: function(file, ext){
+            $('#linkimages_alert').show('fold');
+             if (! (ext && /^(jpg|png|jpeg|gif)$/.test(ext))){ 
+              $('#msg_alert').html(divalert +'Only JPG, PNG or GIF files are allowed</div></div>');
+              return false;
+            }
+            $('#msg_alert').html(divalert +'Uploading image...</div></div>');
+          },
+          onComplete: function(file, response){
+            stat = response.substr(0,7)
+            filename = response.substr(10)
+            if(stat==="success"){
+              $('#linkimages').attr("src", "<?php echo base_url()?>media/images/photos/{id}/"+filename);
+              $('#msg_alert').html(divalert + 'Upload Image OK</div></div>');
+            } else{
+              $('#msg_alert').html(divalert + response + '</div></div>');
+            }
+          }
+        });
   });
 </script>
 
@@ -32,9 +57,15 @@
       </div>
 
       <div class="box-footer" >
+
+        <div class="row" id="linkimages_alert" style="display: none">
+          <div class="col-sm-12 col-md-6" id="msg_alert">
+          </div>
+        </div>
+
         <div class="row">
           <div class="col-sm-12 col-md-2" style="text-align:  center">
-              <img src="" height="100">
+              <img src="<?php echo base_url()?>kepegawaian/drh/getphoto/{id}" id='linkimages' style='border:1px solid #ECECEC' height='100'>
           </div>
           <div class="col-sm-12 col-md-4" style="padding-top: 10px">
             <div class="row">

@@ -163,10 +163,19 @@ class Drh extends CI_Controller {
 
 	function biodata($pageIndex,$pegawai_id){
 		$data = array();
+		$data['id']=$pegawai_id;
 
 		switch ($pageIndex) {
 			case 1:
 				$this->biodata_biodata($pegawai_id);
+
+				break;
+			case 2:
+				die($this->parser->parse("kepegawaian/drh/form_keluarga",$data));
+
+				break;
+			case 3:
+				die($this->parser->parse("kepegawaian/drh/form_pendidikan",$data));
 
 				break;
 			default:
@@ -175,6 +184,76 @@ class Drh extends CI_Controller {
 				break;
 		}
 
+	}
+
+	function getphoto($id){
+        $path = 'media/images/photos/'.$id; 
+		if (is_dir($path)){
+		  if ($dh = opendir($path)){
+		    while (($file = readdir($dh)) !== false){
+		    	if($file !="." && $file !=".."){
+			      readfile($path.'/'.$file);
+			      die();
+		    	}
+		    }
+		    closedir($dh);
+		  }
+		}
+      	
+      	readfile('media/images/profile.jpeg');
+	}
+
+	function douploadphoto($id,$resize_width=0){
+		$this->authentication->verify('kepegawaian','add');
+        
+        $path = 'media/images/photos/'.$id; 
+        if(!file_exists($path)){
+        	mkdir($path);
+        }
+
+       	$config['upload_path'] = $path;
+
+		$config['allowed_types'] = 'gif|jpg|png|jpeg';
+		$config['max_size']	= '1000';
+
+		$config['max_width']  = '10000';
+		$config['max_height']  = '8000';
+
+		$this->load->library('upload', $config);
+	
+		if (!$this->upload->do_upload('uploadfile')){
+			echo $this->upload->display_errors();
+		}	
+		else
+		{
+			$data = $this->upload->data();
+
+			if($resize_width>0){
+				$resize['image_library'] = 'gd2';
+				$resize['source_image'] = $data['full_path'];
+				$resize['width'] = $resize_width;
+			}else{
+			    $resize['image_library'] = 'gd2';
+				$resize['source_image'] = $data['full_path'];
+			}
+
+			$this->load->library('image_lib', $resize);
+
+			$this->image_lib->resize();		
+
+			if (is_dir($path)){
+			  if ($dh = opendir($path)){
+			    while (($file = readdir($dh)) !== false){
+			    	if($data['file_name'] != $file && $file !="." && $file !=".."){
+				      unlink($path.'/'.$file);
+			    	}
+			    }
+			    closedir($dh);
+			  }
+			}
+
+			echo "success | ".$data['file_name'];
+		}
 	}
 
 	function biodata_biodata($id){
@@ -204,6 +283,10 @@ class Drh extends CI_Controller {
 		if($this->form_validation->run()== FALSE){
 			die($this->parser->parse("kepegawaian/drh/form_biodata",$data));
 		}elseif($this->drh_model->update_entry($id)){
+			$data = $this->drh_model->get_data_row($id); 
+			$data['id']=$id;
+			$data['kode_ag'] = $this->drh_model->get_kode_agama('kode_ag');
+			$data['kode_nk'] = $this->drh_model->get_kode_nikah('kode_nk');
 			$data['alert_form'] = 'Save data successful...';
 		}else{
 			$data['alert_form'] = 'Save data failed...';
@@ -212,9 +295,65 @@ class Drh extends CI_Controller {
 		die($this->parser->parse("kepegawaian/drh/form_biodata",$data));
 	}
 
-	function keluarga_sub(){
+	function biodata_keluarga($pageIndex,$id){
 		$data = array();
-		die($this->parser->parse("kepegawaian/drh/form_keluarga_sub",$data));
+		$data['id']=$id;
+
+		switch ($pageIndex) {
+			case 1:
+				die($this->parser->parse("kepegawaian/drh/form_keluarga_ortu",$data));
+				break;
+			case 2:
+				die($this->parser->parse("kepegawaian/drh/form_keluarga_suamiistri",$data));
+				break;
+			default:
+				die($this->parser->parse("kepegawaian/drh/form_keluarga_anak",$data));
+				break;
+		}
+	}
+
+	function biodata_keluarga_ortu_add($id){
+        $this->form_validation->set_rules('nama', 'Nama', 'trim|required');
+        $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'trim|required');
+        $this->form_validation->set_rules('nik', 'NIK', 'trim|required');
+        $this->form_validation->set_rules('gelar_depan', 'Gelar Depan', 'trim');
+        $this->form_validation->set_rules('gelar_belakang', 'Gelar Belakang', 'trim');
+        $this->form_validation->set_rules('tgl_lhr', 'Tanggal Lahir', 'trim');
+        $this->form_validation->set_rules('tmp_lahir', 'Tempat Lahir', 'trim');
+        $this->form_validation->set_rules('kode_mst_agama', 'Agama', 'trim');
+        $this->form_validation->set_rules('kedudukan_hukum', 'Kedudukan Hukum', 'trim');
+        $this->form_validation->set_rules('alamat', 'Alamat', 'trim');
+        $this->form_validation->set_rules('npwp', 'NPWP', 'trim');
+        $this->form_validation->set_rules('npwp_tgl', 'Tanggal NPWP', 'trim');
+        $this->form_validation->set_rules('kartu_pegawai', 'Kartu Pegawai', 'trim');
+        $this->form_validation->set_rules('goldar', 'Golongan Darah', 'trim');
+        $this->form_validation->set_rules('kode_mst_nikah', 'Status Nikah', 'trim');
+
+		$data = $this->drh_model->get_data_row($id); 
+
+		$data['id']=$id;
+		$data['kode_ag'] = $this->drh_model->get_kode_agama('kode_ag');
+		$data['kode_nk'] = $this->drh_model->get_kode_nikah('kode_nk');
+		$data['alert_form'] = '';
+
+		if($this->form_validation->run()== FALSE){
+			die($this->parser->parse("kepegawaian/drh/form_keluarga_ortu_form",$data));
+		}elseif($this->drh_model->update_entry($id)){
+			$data = $this->drh_model->get_data_row($id); 
+			$data['id']=$id;
+			$data['kode_ag'] = $this->drh_model->get_kode_agama('kode_ag');
+			$data['kode_nk'] = $this->drh_model->get_kode_nikah('kode_nk');
+			$data['alert_form'] = 'Save data successful...';
+		}else{
+			$data['alert_form'] = 'Save data failed...';
+		}
+
+		die($this->parser->parse("kepegawaian/drh/form_keluarga_ortu_form",$data));
+	}
+
+	function biodata_pendidikan(){
+		$data = array();
+		die($this->parser->parse("kepegawaian/drh/form_pendidikan_sub",$data));
 
 	}
 

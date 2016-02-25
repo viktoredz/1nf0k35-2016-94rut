@@ -1,25 +1,25 @@
 <script>
   $(function() {
-        $('#jqxTabsKeluarga').jqxTabs({ width: '100%', height: '500'});
+        $('#jqxTabsPendidikan').jqxTabs({ width: '100%', height: '500'});
 
         var loadPage = function (url, tabIndex) {
             $.get(url, function (data) {
-                $('#keluargasub' + tabIndex).html(data);
+                $('#pendidikansub' + tabIndex).html(data);
             });
         }
 
-        loadPage('<?php echo base_url()?>kepegawaian/drh/biodata_keluarga/1/{id}', 1);
-        $('#jqxTabsKeluarga').on('selected', function (event) {
+        loadPage('<?php echo base_url()?>kepegawaian/drh/biodata_pendidikan/1/{id}', 1);
+        $('#jqxTabsPendidikan').on('selected', function (event) {
             var pageIndex = event.args.item + 1;
-            loadPage('<?php echo base_url()?>kepegawaian/drh/biodata_keluarga/'+pageIndex+'/{id}', pageIndex);
+            loadPage('<?php echo base_url()?>kepegawaian/drh/biodata_pendidikan/'+pageIndex+'/{id}', pageIndex);
         });
 
   });
 </script>
 
 <section class="content">
-<div id='jqxWidgetKeluarga'>
-    <div id='jqxTabsKeluarga'>
+<div id='jqxWidgetPendidikan'>
+    <div id='jqxTabsPendidikan'>
         <ul>
             <li style="margin-left: 15px;">
               <div style="height: 20px; margin-top: 5px;">
@@ -27,7 +27,7 @@
                       <i class="icon fa fa-plus" style="font-size: 18px"></i>
                   </div>
                   <div style="margin-left: 10px; vertical-align: middle; text-align: center; float: left;">
-                      Orang Tua</div>
+                      Pendidikan Formal</div>
               </div>
             </li>
             <li style="margin-left: 15px;">
@@ -36,7 +36,7 @@
                       <i class="icon fa fa-plus" style="font-size: 18px"></i>
                   </div>
                   <div style="margin-left: 10px; vertical-align: middle; text-align: center; float: left;">
-                      Suami / Istri</div>
+                      Diklat</div>
               </div>
             </li>
             <li style="margin-left: 15px;">
@@ -45,15 +45,15 @@
                       <i class="icon fa fa-plus" style="font-size: 18px"></i>
                   </div>
                   <div style="margin-left: 10px; vertical-align: middle; text-align: center; float: left;">
-                      Anak</div>
+                      Kursus</div>
               </div>
             </li>
         </ul>
-        <div id="keluargasub1" style="background: #FAFAFA">
+        <div id="pendidikansub1" style="background: #FAFAFA">
         </div>
-        <div id="keluargasub2" style="background: #FAFAFA">
+        <div id="pendidikansub2" style="background: #FAFAFA">
         </div>
-        <div id="keluargasub3" style="background: #FAFAFA">
+        <div id="pendidikansub3" style="background: #FAFAFA">
         </div>
     </div>
 </div>
