@@ -755,12 +755,12 @@ class Bhp_pengadaan extends CI_Controller {
 	{	
 		$data['action']			= "add";
 		$data['kode']			= $kode;
-        $this->form_validation->set_rules('uraian', 'Uraian', 'trim|required');
-        $this->form_validation->set_rules('code', 'Kode', 'trim');
-        $this->form_validation->set_rules('uraian', 'Uraian', 'trim');
-        $this->form_validation->set_rules('merek_tipe', 'Merek Tipe', 'trim');
-        $this->form_validation->set_rules('negara_asal', 'Negara Asal', 'trim');
-        $this->form_validation->set_rules('pilihan_satuan', 'Satuan', 'trim');
+        $this->form_validation->set_rules('uraian_master', 'Uraian', 'trim|required');
+        $this->form_validation->set_rules('code_master', 'Kode', 'trim');
+        $this->form_validation->set_rules('merk_master', 'Merek Tipe', 'trim');
+        $this->form_validation->set_rules('negara_master', 'Negara Asal', 'trim');
+        $this->form_validation->set_rules('pilihan_satuan_barang_master', 'Satuan', 'trim');
+        $this->form_validation->set_rules('harga_master', 'Harga', 'trim');
 
 		if($this->form_validation->run()== FALSE){
 			$data['kode']			= $kode;
@@ -771,12 +771,12 @@ class Bhp_pengadaan extends CI_Controller {
 		}else{
 				$values = array(
 					'id_mst_inv_barang_habispakai_jenis'=> $this->input->post('id_mst_inv_barang_habispakai_jenis'),
-					'code' 			=> $this->input->post('code'),
-					'uraian'		=> $this->input->post('uraian'),
-					'merek_tipe' 	=> $this->input->post('merek_tipe'),
-					'negara_asal' 	=> $this->input->post('negara_asal'),
-					'pilihan_satuan' => $this->input->post('pilihan_satuan'),
-					'harga' => $this->input->post('harga'),
+					'code' 			=> $this->input->post('code_master'),
+					'uraian'		=> $this->input->post('uraian_master'),
+					'merek_tipe' 	=> $this->input->post('merk_master'),
+					'negara_asal' 	=> $this->input->post('negara_master'),
+					'pilihan_satuan' => $this->input->post('pilihan_satuan_barang_master'),
+					'harga' => $this->input->post('harga_master'),
 				);
 				$simpan=$this->db->insert('mst_inv_barang_habispakai', $values);
 				if($simpan==true){

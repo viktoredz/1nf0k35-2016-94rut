@@ -1,11 +1,7 @@
-</style>
-<?php
-if(isset($disable)){if($disable='disable'){?>
 
 <script type="text/javascript">
-  $("#dateInput").jqxDateTimeInput({ width: '300px', height: '25px' });
+  $("#tgl_update").jqxDateTimeInput({ width: '300px', height: '25px' });
 </script>
-<?php }} ?>
 <script type="text/javascript">
 
   
@@ -19,7 +15,7 @@ if(isset($disable)){if($disable='disable'){?>
   
   function tambahmaster(){
     $("#popup_masterbarang #popup_mastercontent").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-    $.get("<?php echo base_url().'inventory/bhp_pengadaan/add_barang_master/'; ?>" , function(data) {
+    $.get("<?php echo base_url().'inventory/bhp_pengeluaran/add_barang_master/'; ?>" , function(data) {
       $("#popup_mastercontent").html(data);
     });
     $("#popup_masterbarang").jqxWindow({
@@ -40,18 +36,16 @@ if(isset($disable)){if($disable='disable'){?>
             $('#notice').show();
             data.append('id_mst_inv_barang', $('#id_mst_inv_barang').val());
             data.append('jqxinput', $('#jqxinput').val());
-            data.append('tanggal_diterima', $('#dateInput').val());
-            data.append('nama_barang', $('#v_nama_barang').val());
-            data.append('jumlah', $('#jumlah').val());
-            data.append('harga', $('#harga').val());
-            data.append('subtotal', $('#subtotal').val());
-            data.append('id_permohonan_barang', "<?php echo $kode;?>");
+            data.append('tgl_update', $('#tgl_update').val());
+            data.append('jumlahawal', $('#jumlahawal').val());
+            data.append('dikeluarkan', $('#dikeluarkan').val());
+            data.append('jumlahakhir', $('#jumlahakhir').val());
             $.ajax({
                 cache : false,
                 contentType : false,
                 processData : false,
                 type : 'POST',
-                url : '<?php echo base_url()."inventory/bhp_pengadaan/".$action."_barang/".$kode."/" ?>',
+                url : '<?php echo base_url()."inventory/bhp_pengeluaran/".$action."_barang/".$kode."/" ?>',
                 data : data,
                 success : function(response){
                   var res  = response.split("|");
@@ -91,10 +85,10 @@ if(isset($disable)){if($disable='disable'){?>
                   datafields: [
                   { name: 'uraian', type: 'string'},
                   { name: 'id_mst_inv_barang_habispakai', type: 'string'},
-                  { name: 'hargaterakhir', type: 'string'},
-                  { name: 'harga', type: 'string'},
+                  { name: 'jmlbaik', type: 'string'},
+                  { name: 'totaljumlah', type: 'string'},
                 ],
-                url: '<?php echo base_url().'inventory/bhp_pengadaan/autocomplite_barang'; ?>'
+                url: '<?php echo base_url().'inventory/bhp_pengeluaran/autocomplite_barang'; ?>'
               },
               {
                 autoBind: true,
@@ -105,38 +99,43 @@ if(isset($disable)){if($disable='disable'){?>
                 loadComplete: function (data) {
                   if (data.length > 0) {
                     response($.map(data, function (item) {
-                      if (item.hargaterakhir==null) {
-                        var hargabarang = item.harga;
+                      if (item.totaljumlah==null) {
+                        var jumlahbaik = item.jmlbaik;
                       }else{
-                        var hargabarang = item.hargaterakhir;
+                        var jumlahbaik = item.jmlbaik+item.totaljumlah;
                       }
-                      return item.uraian+' | '+item.id_mst_inv_barang_habispakai+' | '+hargabarang;
+                      return item.uraian+' | '+item.id_mst_inv_barang_habispakai+' | '+jumlahbaik;
                     }));
                   }
                 }
               });
           }
         });
-      
+        var jumlahawal  = $("#jumlahawal__").val();
+        $("#jumlahawal").val(jumlahawal-$("#dikeluarkan").val());
         $("#jqxinput").select(function(){
             var codebarang = $(this).val();
             var res = codebarang.split(" | ");
             $("#id_mst_inv_barang").val(res[1]);
-            $("#harga").val(res[2]);
+            $("#jumlahawal").val(res[2]);
         });
-        $("#harga").change(function(){
-            var jumlah = document.getElementById("jumlah").value;
-            var harga = document.getElementById("harga").value;
-            var subtotal =jumlah*harga;
-            document.getElementById("subtotal").value = toRp(subtotal);
+        $("#dikeluarkan").change(function(){
+            var jumlahawal  = $("#jumlahawal").val();
+            var jumlahakhir = $("#jumlahakhir").val();
+            var dikeluarkan = $("#dikeluarkan").val();
+            if ($("#dikeluarkan").val()<0) {
+              alert("data tidak boleh kurang dari nol");
+              $("#dikeluarkan").val("");
+              $("#jumlahakhir").val(jumlahawal-$("#dikeluarkan").val());  
+            }
+            if ($("#jumlahawal").val()<0) {
+              alert("Jumlah Awal tidak boleh kurang dari kosong");
+              $("#dikeluarkan").val("");
+              $("#jumlahakhir").val(jumlahawal-$("#dikeluarkan").val());
+            }
+            
+            $("#jumlahakhir").val(jumlahawal-$("#dikeluarkan").val());
         });
-        $("#jumlah").change(function(){
-            var jumlah = document.getElementById("jumlah").value;
-            var harga = document.getElementById("harga").value;
-            var subtotal =jumlah*harga;
-            document.getElementById("subtotal").value = toRp(subtotal);
-        });
-        
     });
 </script>
 
@@ -149,7 +148,7 @@ if(isset($disable)){if($disable='disable'){?>
     </h4>
     <div id="notice-content">{notice}</div>
   </div>
-	<div class="row">
+  <div class="row">
     <?php echo form_open(current_url(), 'id="form-ss"') ?>
           <div class="box-body">
           <div class="row">
@@ -157,8 +156,8 @@ if(isset($disable)){if($disable='disable'){?>
             <div class="form-group">
               <label>Nama Barang</label>
               <input id="jqxinput" class="form-control" autocomplete="off" name="jqxinput" type="text" value="<?php 
-                if(set_value('jqxinput')=="" && isset($id_mst_inv_barang_habispakai)){ 
-                  echo $id_mst_inv_barang_habispakai;
+                if(set_value('jqxinput')=="" && isset($nama_barang)){ 
+                  echo $nama_barang;
                 }else{
                   echo  set_value('jqxinput');
                 }
@@ -169,7 +168,7 @@ if(isset($disable)){if($disable='disable'){?>
             <button type="button" class="btn btn-success" id="btn-refresh" onclick="tambahmaster()"><i class='fa fa-plus-square-o'></i> &nbsp; Tambah</button>
           </div>
           </div>
-              <input id="id_mst_inv_barang" class="form-control" name="id_mst_inv_barang" type="hidden" value="<?php 
+              <input id="id_mst_inv_barang" class="form-control" name="id_mst_inv_barang" type="text" value="<?php 
                 if(set_value('id_mst_inv_barang')=="" && isset($id_mst_inv_barang_habispakai)){
                   echo $id_mst_inv_barang_habispakai;
                 }else{
@@ -178,53 +177,42 @@ if(isset($disable)){if($disable='disable'){?>
                 ?>" />
 
             <div class="form-group">
-              <label>Jumlah</label>
-              <input type="number" class="form-control" name="jumlah" id="jumlah" placeholder="Jumlah" value="<?php 
-                if(set_value('jumlah')=="" && isset($jumlah)){
-                  echo $jumlah;
-                }else{
-                  echo  set_value('jumlah');
-                }
-                ?>">
-            </div>
-            <div class="form-group">
-              <label>Harga Satuan</label>
-              <input type="number" class="form-control" name="harga" id="harga" placeholder="Harga Satuan" value="<?php 
-                if(set_value('harga')=="" && isset($harga)){
-                  echo $harga;
-                }else{
-                  echo  set_value('harga');
-                }
-                ?>">
-            </div>
-            <div class="form-group">
-              <label>Sub Total</label>
-              <input type="text" class="form-control" name="subtotal"  id="subtotal" placeholder="Sub Total" readonly="" value="<?php
-              if(set_value('subtotal')=="" && isset($harga)){
-                  echo $jumlah*$harga;
-                }else{
-                  echo  set_value('subtotal');
-                }
-                ?>">
-            </div>
-            <?php if(isset($disable)){if($disable='disable'){?>
-            <div class="form-group">
               <label>Tanggal</label>
-              <div id='dateInput' name="tanggal_diterima" value="<?php
-              echo (!empty($tanggal_diterima)) ? date("Y-m-d",strtotime($tanggal_diterima)) :  date("d-m-Y");
+              <div id='tgl_update' name="tgl_update" value="<?php
+              echo (!empty($tgl_update)) ? date("Y-m-d",strtotime($tgl_update)) :  date("d-m-Y");
             ?>"></div>
             </div>
-            <?php }} ?>
-           <!-- <div class="form-group">
-              <label>Keterangan</label>
-              <textarea class="form-control" id="keterangan" name="keterangan" placeholder="Keterangan"><?php 
-               /*   if(set_value('keterangan')=="" && isset($keterangan_pengadaan)){
-                    echo $keterangan_pengadaan;
-                  }else{
-                    echo  set_value('keterangan');
-                  }*/
-                  ?></textarea>
-            </div>-->
+            <div class="form-group">
+              <label>Jumlah Awal</label>
+              <input type="number" class="form-control" name="jumlahawal" id="jumlahawal" placeholder="Jumlah Awal" value="<?php 
+                if(set_value('jumlahawal')=="" && isset($jumlahawal)){
+                  echo $jumlahawal;
+                }else{
+                  echo  set_value('jumlahawal');
+                }
+                ?>" readonly="">
+            </div>
+            <div class="form-group">
+              <label>Dikeluarkan</label>
+              <input type="number" class="form-control" name="dikeluarkan"  id="dikeluarkan" placeholder="di Keluarkan"  value="<?php
+              if(set_value('dikeluarkan')=="" && isset($dikeluarkan)){
+                  echo $dikeluarkan;
+                }else{
+                  echo  set_value('dikeluarkan');
+                }
+                ?>">
+            </div>
+            <div class="form-group">
+              <label>Jumlah Akhir</label>
+              <input type="number" class="form-control" name="jumlahakhir"  id="jumlahakhir" placeholder="Jumlah Akhir" readonly="" value="<?php
+              if(set_value('jumlahakhir')=="" && isset($jumlahakhir)){
+                  echo $jumlahakhir;
+                }else{
+                  echo  set_value('jumlahakhir');
+                }
+                ?>">
+            </div>
+           
         </div>
         <div class="box-footer">
             <button type="submit" class="btn btn-primary">Simpan</button>

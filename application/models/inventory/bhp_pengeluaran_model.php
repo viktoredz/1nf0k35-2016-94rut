@@ -1,5 +1,5 @@
 <?php
-class Bhp_opname_model extends CI_Model {
+class Bhp_pengeluaran_model extends CI_Model {
 
     var $tabel    = 'mst_inv_barang_habispakai';
 	var $lang	  = '';
@@ -14,10 +14,15 @@ class Bhp_opname_model extends CI_Model {
     {
         $kodepuskesmas = "P".$this->session->userdata("puskesmas");
         $data = array();
-        $this->db->select("mst_inv_barang_habispakai.*,mst_inv_pilihan.value as value, (select jml as jml from  inv_inventaris_habispakai_opname where id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai and code_cl_phc=".'"'.$kodepuskesmas.'"'." order by tgl_update desc limit 1) as jmlbaik,
-            (select jml_rusak as jmlrusak from  inv_inventaris_habispakai_kondisi where id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai  and code_cl_phc=".'"'.$kodepuskesmas.'"'." order by tgl_update desc limit 1) as jml_rusak,
-            (select jml_tdkdipakai as jmltdkdipakai from  inv_inventaris_habispakai_kondisi where id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai and code_cl_phc=".'"'.$kodepuskesmas.'"'." order by tgl_update desc limit 1) as jml_tdkdipakai,
-            (select tgl_update as tglupdate from  inv_inventaris_habispakai_kondisi where id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai and code_cl_phc=".'"'.$kodepuskesmas.'"'." order by tgl_update desc limit 1) as tgl_update
+        $this->db->select("mst_inv_barang_habispakai.uraian,mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis,mst_inv_barang_habispakai.id_mst_inv_barang_habispakai,
+            mst_inv_pilihan.value as value, 
+            (select jml as jml from  inv_inventaris_habispakai_opname where id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai and code_cl_phc=".'"'.$kodepuskesmas.'"'." order by tgl_update desc limit 1) as jmlbaik,
+            (select sum(jml) as jmltotal from inv_inventaris_habispakai_pembelian_item 
+            JOIN inv_inventaris_habispakai_pembelian ON(inv_inventaris_habispakai_pembelian.id_inv_hasbispakai_pembelian = inv_inventaris_habispakai_pembelian_item.id_inv_hasbispakai_pembelian AND inv_inventaris_habispakai_pembelian.code_cl_phc = inv_inventaris_habispakai_pembelian_item.code_cl_phc AND inv_inventaris_habispakai_pembelian.pilihan_status_pembelian=2)  
+            where inv_inventaris_habispakai_pembelian_item.code_cl_phc=".'"'.$kodepuskesmas.'"'." and id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai ) as totaljumlah,
+            (select jml_rusak as jmlrusak from  inv_inventaris_habispakai_kondisi where id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai order by tgl_update desc limit 1) as jml_rusak,
+            (select jml_tdkdipakai as jmltdkdipakai from  inv_inventaris_habispakai_kondisi where id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai order by tgl_update desc limit 1) as jml_tdkdipakai,
+            (select tgl_update as tglupdate from  inv_inventaris_habispakai_pengeluaran where id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai and code_cl_phc=".'"'.$kodepuskesmas.'"'." order by tgl_update desc limit 1) as tgl_update
              ");
         $this->db->join('mst_inv_pilihan',"mst_inv_barang_habispakai.pilihan_satuan=mst_inv_pilihan.code and mst_inv_pilihan.tipe='satuan_bhp'",'left');
         $query = $this->db->get('mst_inv_barang_habispakai',$limit,$start);
@@ -42,14 +47,13 @@ class Bhp_opname_model extends CI_Model {
         return $data;
     }
     function get_data_detail_edit_barang($kode){
-        $kodepuskesmas = "P".$this->session->userdata("puskesmas");
         $data = array();
         //$this->db->order_by('inv_inventaris_habispakai_opname.tgl_update','desc');- ((select jml_rusak as jmlrusak from  inv_inventaris_habispakai_kondisi where id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai order by tgl_update desc limit 1)+(select jml_tdkdipakai as jmltdkdipakai from  inv_inventaris_habispakai_kondisi where id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai order by tgl_update desc limit 1))
         $this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai",$kode);
         $this->db->select("mst_inv_barang_habispakai.*,mst_inv_pilihan.value as nama_satuan,
-            (select jml  as jumlah from inv_inventaris_habispakai_opname where id_mst_inv_barang_habispakai = mst_inv_barang_habispakai.id_mst_inv_barang_habispakai and code_cl_phc=".'"'.$kodepuskesmas.'"'." order by tgl_update desc limit 1) as jml,
-            (select jml_rusak as jmlrusak from  inv_inventaris_habispakai_kondisi where id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai and code_cl_phc=".'"'.$kodepuskesmas.'"'." order by tgl_update desc limit 1) as jml_rusak,
-            (select jml_tdkdipakai as jmltdkdipakai from  inv_inventaris_habispakai_kondisi where id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai and code_cl_phc=".'"'.$kodepuskesmas.'"'." order by tgl_update desc limit 1) as jml_tdkdipakai
+            (select jml  as jumlah from inv_inventaris_habispakai_opname where id_mst_inv_barang_habispakai = mst_inv_barang_habispakai.id_mst_inv_barang_habispakai order by tgl_update desc limit 1) as jml,
+            (select jml_rusak as jmlrusak from  inv_inventaris_habispakai_kondisi where id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai order by tgl_update desc limit 1) as jml_rusak,
+            (select jml_tdkdipakai as jmltdkdipakai from  inv_inventaris_habispakai_kondisi where id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai order by tgl_update desc limit 1) as jml_tdkdipakai
             ");
         $this->db->join('mst_inv_pilihan',"mst_inv_barang_habispakai.pilihan_satuan=mst_inv_pilihan.code and mst_inv_pilihan.tipe='satuan_bhp'",'left');
         /*$this->db->join('inv_inventaris_habispakai_opname',"inv_inventaris_habispakai_opname.id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai",'left');*/
@@ -148,5 +152,19 @@ class Bhp_opname_model extends CI_Model {
                 }
             }
             
+    }
+    public function getnamajenis()
+    {
+        $this->db->select("*");
+        $query = $this->db->get("mst_inv_barang_habispakai_jenis");
+        return $query->result();
+    }
+    function pilih_data_status($status)
+    {   
+        $this->db->where("mst_inv_pilihan.tipe",$status);
+        $this->db->select('mst_inv_pilihan.*');     
+        $this->db->order_by('mst_inv_pilihan.code','asc');
+        $query = $this->db->get('mst_inv_pilihan'); 
+        return $query->result();    
     }
 }
