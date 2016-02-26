@@ -9,7 +9,7 @@
 	?>
 	 <tr>
 	 	<td><?php echo date("d-m-Y",strtotime($key->tgl_update)); ?></td>
-	 	<td><?php echo $key->jml; ?></td>
+	 	<td><?php echo ($key->jml+$key->totaljumlah)-$key->jmlpengeluaran; ?></td>
 	 	<td><?php echo number_format($key->harga,2); ?></td>
 	 </tr>
 	<?php

@@ -45,7 +45,7 @@ if(isset($disable)){if($disable='disable'){?>
                   }
                   else{
                       $('#popup_content').html(response);
-                       timeline_kondisi_barang($('#kode').val());
+                       timeline_add_barang($('#kode').val());
                   }
               }
             });
@@ -96,7 +96,7 @@ if(isset($disable)){if($disable='disable'){?>
                 <label>Stok</label>
                 <input type="number" class="form-control" name="stok" id="stok" placeholder="Jumlah" value="<?php 
                   if(set_value('stok')=="" && isset($jml)){
-                    echo $jml;
+                    echo $jmlstok = ($jml+$totaljumlah)-$jmlpengeluaran;
                   }else{
                     echo  set_value('stok');
                   }

@@ -8,7 +8,7 @@ if(isset($disable)){if($disable='disable'){?>
 <?php }} ?>
 <script type="text/javascript">  
     function jml(status) {
-        var stok = "<?php echo $jml; ?>";
+        var stok = "<?php echo $jmlstok = ($jml+$totaljumlah)-$jmlpengeluaran; ?>";
         var jmlbaik = $("#stok").val();
         var jmlrusak = $("#rusak").val();
         var jmltidak = $("#tidak").val();
@@ -62,7 +62,7 @@ if(isset($disable)){if($disable='disable'){?>
       }*/
     }
     $(function(){
-      var stok = "<?php echo $jml; ?>";
+      var stok = "<?php echo $jmlstok = ($jml+$totaljumlah)-$jmlpengeluaran; ?>";
      document.getElementById("stok").value = stok - document.getElementById("rusak").value - document.getElementById("tidak").value;
       $("#rusak").change(function(){
           jml("rusak");
@@ -158,9 +158,10 @@ if(isset($disable)){if($disable='disable'){?>
               <div class="col-md-6">
                 <div class="form-group">
                   <label>Jumlah Baik</label>
+                  <?php // echo 'sotk : '.$jml.'pengeluaran ; '.$jmlpengeluaran.'total :'.$totaljumlah?>
                   <input type="number" class="form-control" name="stok" id="stok" placeholder="Jumlah Baik" value="<?php 
                     if(set_value('stok')=="" && isset($jml)){
-                      echo $jml;
+                      echo $jmlstok = ($jml+$totaljumlah)-$jmlpengeluaran;
                     }else{
                       echo  set_value('stok');
                     }
