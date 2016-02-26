@@ -191,11 +191,11 @@ class Bhp_pengeluaran extends CI_Controller {
 				'no'					=> $no++,
 				//'code'					=> $act->code,
 				'uraian'				=> $act->uraian,
-				//'merek_tipe'			=> $act->merek_tipe,
+				'merek_tipe'			=> $act->merek_tipe,
 				//'negara_asal'			=> $act->negara_asal,
 				'jmlawal'				=> ($act->totaljumlah+$act->jmlbaik)-($act->jml_rusak+$act->jml_tdkdipakai),
-				'jml_akhir'				=> $act->jml_rusak,
-				'jml_selisih'			=> $act->jml_tdkdipakai,
+				'jml_akhir'				=> ($act->totaljumlah+$act->jmlbaik)-($act->jml_rusak+$act->jml_tdkdipakai+$act->jmlpengeluaran),
+				'jml_selisih'			=> $act->jmlpengeluaran,
 				//'pilihan_satuan'		=> $act->pilihan_satuan,
 				'value'					=> $act->value,
 				'tgl_update'			=> $act->tgl_update,
@@ -213,7 +213,85 @@ class Bhp_pengeluaran extends CI_Controller {
 
 		echo json_encode(array($json));
 	}
-	
+	function jsonpengeluaran($id=0){
+		$this->authentication->verify('inventory','show');
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl_update') {
+					$value = date("Y-m-d",strtotime($value));
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		
+		if ($id!=0) {
+			$this->db->where("inv_inventaris_habispakai_pengeluaran.id_mst_inv_barang_habispakai",$id);
+		}
+		
+		$rows_all = $this->bhp_pengeluaran_model->get_datapengeluaran();
+
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl_update') {
+					$value = date("Y-m-d",strtotime($value));
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+
+		if ($id!=0) {
+			$this->db->where("inv_inventaris_habispakai_pengeluaran.id_mst_inv_barang_habispakai",$id);
+		}
+		$rows = $this->bhp_pengeluaran_model->get_datapengeluaran($this->input->post('recordstartindex'), $this->input->post('pagesize'));
+		$data = array();
+		$no=1;
+		//$unlock = 1;
+		foreach($rows as $act) {
+			$data[] = array(
+				'uraian'				=> $act->uraian,
+				'tgl_update'			=> $act->tgl_update,
+				/*'jmlawal'				=> ($act->totaljumlah+$act->jmlbaik)-($act->jml_rusak+$act->jml_tdkdipakai),
+				'jml_akhir'				=> ($act->totaljumlah+$act->jmlbaik)-($act->jml_rusak+$act->jml_tdkdipakai+$act->jmlpengeluaran),*/
+				'harga'					=> $act->harga,
+				'jml'			=> $act->jml,
+				'id_mst_inv_barang_habispakai'			=> $act->id_mst_inv_barang_habispakai,
+			);
+		}
+
+		$size = sizeof($rows_all);
+		$json = array(
+			'TotalRows' => (int) $size,
+			'Rows' => $data
+		);
+
+		echo json_encode(array($json));
+	}
 	function index(){
 		$this->authentication->verify('inventory','edit');
 		$data['title_group'] = "Barang Habis Pakai";
@@ -251,6 +329,7 @@ class Bhp_pengeluaran extends CI_Controller {
 				'uraian' 						=> $q->uraian, 
 				'jmlbaik' 						=> $q->jmlbaik-($q->jml_rusak+$q->jml_tdkdipakai), 
 				'totaljumlah' 					=> $q->totaljumlah, 
+				'harga' 						=> $q->harga, 
 
 			);
 		}
@@ -263,8 +342,9 @@ class Bhp_pengeluaran extends CI_Controller {
         $this->form_validation->set_rules('id_mst_inv_barang', 'ID Barang', 'trim|required');
         $this->form_validation->set_rules('jqxinput', 'Nama Barang', 'trim|required');
         $this->form_validation->set_rules('jumlahawal', 'Jumlah Awal', 'trim|required');
-        $this->form_validation->set_rules('dikeluarkan', 'Di Keluarkan', 'trim|required');
+        $this->form_validation->set_rules('dikeluarkan__', 'Di Keluarkan', 'trim|required');
         $this->form_validation->set_rules('jumlahakhir', 'Jumlah Akhir', 'trim');
+        $this->form_validation->set_rules('harga', 'harga', 'trim');
 
 		if($this->form_validation->run()== FALSE){
 
@@ -276,162 +356,26 @@ class Bhp_pengeluaran extends CI_Controller {
 			die($this->parser->parse('inventory/bhp_pengeluaran/barang_form', $data));
 		}else{
 			if($simpan=$this->bhp_pengeluaran_model->insertdata()){
-				$id=$this->input->post('id_mst_inv_barang_habispakai');
+				$id=$this->input->post('id_mst_inv_barang');
 				die("OK|$id|Tersimpan");
 			}else{
-				$id=$this->input->post('id_mst_inv_barang_habispakai');
+				$id=$this->input->post('id_mst_inv_barang');
 				 die("Error|$id|Proses data gagal");
 			}
 			
 		}
 	}
-	public function kondisi_barang($kode=0)
-	{	
-		$data['action']			= "kondisi";
-		$data['kode']			= $kode;
-        $this->form_validation->set_rules('jml', 'Jumlah Baik', 'trim|required');
-        $this->form_validation->set_rules('jml_rusak', 'Jumlah Rusak', 'trim');
-        $this->form_validation->set_rules('jml_tdkdipakai', 'Tidak dipakai', 'trim');
-
-		if($this->form_validation->run()== FALSE){
-
-			$data = $this->bhp_pengeluaran_model->get_data_detail_edit_barang($kode); 
-			$data['action']			= "kondisi";
-			$data['kode']			= $kode;
-			$data['notice']			= validation_errors();
-
-			die($this->parser->parse('inventory/bhp_pengeluaran/form', $data));
-		}else{
-			if($simpan=$this->bhp_pengeluaran_model->insertdatakondisi()){
-				$id=$this->input->post('id_mst_inv_barang_habispakai');
-				die("OK|$id|Tersimpan");
-			}else{
-				$id=$this->input->post('id_mst_inv_barang_habispakai');
-				 die("Error|$id|Proses data gagal");
-			}
-			
-		}
-	}
-	public function edit_barang($id_pengadaan=0,$kd_inventaris=0,$kode_proc=0)
-	{
-		$data['action']			= "edit";
-		$data['kode']			= $kd_inventaris;
-		$this->form_validation->set_rules('id_mst_inv_barang', 'Kode Barang', 'trim|required');
-        $this->form_validation->set_rules('nama_barang', 'Nama Barang', 'trim|required');
-        $this->form_validation->set_rules('jumlah', 'Jumlah', 'trim|required');
-        $this->form_validation->set_rules('harga', 'Harga Satuan', 'trim|required');
-
-		if($this->form_validation->run()== FALSE){
-			
-			
-   			$data = $this->bhp_pengeluaran_model->get_data_barang_edit_table($kd_inventaris,'inv_inventaris_barang_a'); 
-   			$data['pilihan_satuan_barang_']			= $this->bhp_pengeluaran_model->get_data_pilihan('satuan');
-   			$data['pilihan_status_hak_']			= $this->bhp_pengeluaran_model->get_data_pilihan('status_hak');
-   			$data['pilihan_penggunaan_']			= $this->bhp_pengeluaran_model->get_data_pilihan('penggunaan');
-			//$data = $this->bhp_pengeluaran_model->get_data_barang_edit($id_barang,$kd_proc,$kd_inventaris); 
-   			$data['kodebarang']		= $this->bhp_pengeluaran_model->get_databarang();
-   			$data['kodestatus_inv'] = $this->bhp_pengeluaran_model->pilih_data_status('status_inventaris');
-			$data['action']			= "edit";
-			$data['kode']			= $kd_inventaris;
-			$data['id_pengadaan']	= $id_pengadaan;
-			$data['kode_proc']		= $kode_proc;
-			$data['disable']		= "disable";
-			$data['notice']			= validation_errors();
-   			/*end mengirim status pada masing2 form*/
-			die($this->parser->parse('inventory/bhp_pengeluaran/barang_form_edit', $data));
-		}else{
-			$jumlah =$this->input->post('jumlah');
-			$tanggalterima = explode("/",$this->input->post('tanggal_diterima'));
-			$kodebarang_ = substr($kd_inventaris, -14,-12);
-			$tanggal_diterima = $tanggalterima[2].'-'.$tanggalterima[1].'-'.$tanggalterima[0];
-			$tanggal = $this->bhp_pengeluaran_model->tanggal($id_pengadaan);
-			$data_update = array(
-					'nama_barang' 			=> $this->input->post('nama_barang'),
-					'harga' 				=> $this->input->post('harga'),
-				//	'keterangan_pengadaan' 	=> $this->input->post('keterangan_pengadaan'),
-					'pilihan_status_invetaris'  => $this->input->post('pilihan_status_invetaris'),
-		            'tanggal_pembelian'     => $tanggal,
-		            'tanggal_pengadaan'     => $tanggal,
-		            'tanggal_diterima'      => $tanggal_diterima,
-			);
-			$key_update = array('barang_kembar_proc' => $kode_proc,
-			 );
-			$this->db->update('inv_inventaris_barang',$data_update,$key_update);
-			
-			if($simpan==true){
-				$dataupdate__['terakhir_diubah']= date('Y-m-d H:i:s');
-				$dataupdate__['nilai_pengadaan']= $this->bhp_pengeluaran_model->sum_jumlah_item( $id_pengadaan,'harga');
-				$dataupdate__['jumlah_unit']= $this->bhp_pengeluaran_model->sum_unit($id_pengadaan)->num_rows();
-				$key__['id_pengadaan'] = $id_pengadaan;
-        		$this->db->update("inv_pengadaan",$dataupdate__,$key__);
-				die("OK|");
-			}else{
-				 die("Error|Proses data gagal");
-			}
-		}
-		
-	}
-	public function timeline_comment($id_barang = 0){
+	
+  	public function timeline_pengeluaran_barang($id_barang = 0){
   		$data = array();
-       	$data['data_barang'] 	= $this->bhp_pengeluaran_model->get_barang($id_barang);
-  		echo $this->parser->parse("inventory/bhp_pengeluaran/barang",$data);
-
-
-  		die();
-  	}
-  	public function timeline_kondisi_barang($id_barang = 0){
-  		$data = array();
+  		$data['kode'] = $id_barang;
        	$data['data_kondisi'] 	= $this->bhp_pengeluaran_model->get_kondisi_barang($id_barang);
   		echo $this->parser->parse("inventory/bhp_pengeluaran/kondisi",$data);
 
 
   		die();
   	}
-	function dodel_barang($kode=0,$id_barang="",$table=0){
-		$this->authentication->verify('inventory','del');
+	
 
-		if($this->bhp_pengeluaran_model->delete_entryitem_table($kode,$id_barang,$table)){
-			$this->session->set_flashdata('alert', 'Delete data ('.$kode.')');
-		}else{
-			$this->session->set_flashdata('alert', 'Delete data error');
-		}
-	}
-
-	public function add_barang_master($kode=0)
-	{	
-		$data['action']			= "add";
-		$data['kode']			= $kode;
-        $this->form_validation->set_rules('uraian_master', 'Uraian', 'trim|required');
-        $this->form_validation->set_rules('code_master', 'Kode', 'trim');
-        $this->form_validation->set_rules('merk_master', 'Merek Tipe', 'trim');
-        $this->form_validation->set_rules('negara_master', 'Negara Asal', 'trim');
-        $this->form_validation->set_rules('pilihan_satuan_barang_master', 'Satuan', 'trim');
-        $this->form_validation->set_rules('harga_master', 'Harga', 'trim');
-
-		if($this->form_validation->run()== FALSE){
-			$data['kode']			= $kode;
-			$data['noticemaster']		= validation_errors();
-			$data['pilihan_jenis_barang'] = $this->bhp_pengeluaran_model->getnamajenis();
-			$data['pilihan_satuan_barang'] = $this->bhp_pengeluaran_model->pilih_data_status('satuan_bhp');
-			die($this->parser->parse('inventory/bhp_pengadaan/form_masterbarang', $data));
-		}else{
-				$values = array(
-					'id_mst_inv_barang_habispakai_jenis'=> $this->input->post('pilihan_jenis_barang_master'),
-					'code' 			=> $this->input->post('code_master'),
-					'uraian'		=> $this->input->post('uraian_master'),
-					'merek_tipe' 	=> $this->input->post('merk_master'),
-					'negara_asal' 	=> $this->input->post('negara_master'),
-					'pilihan_satuan' => $this->input->post('pilihan_satuan_barang_master'),
-					'harga' => $this->input->post('harga_master'),
-				);
-				$simpan=$this->db->insert('mst_inv_barang_habispakai', $values);
-				if($simpan==true){
-				die("OK|Data disimpan");
-			}else{
-				 die("Error|Proses data gagal");
-			}
-			
-		}
-	}
-
+	
 }

@@ -1,6 +1,6 @@
 
 <script type="text/javascript">
-  $("#tgl_update").jqxDateTimeInput({ width: '300px', height: '25px' });
+  $("#tgl_update").jqxDateTimeInput({ width: '200px', height: '25px' });
 </script>
 <script type="text/javascript">
 
@@ -31,6 +31,9 @@
         close_popup();
       }); 
         $('#form-ss').submit(function(){
+          if (($('#jumlahawal').val()==0) || ($('#jumlahawal').val() == null)||($('#dikeluarkan__').val()==0)) {
+            alert("Maaf data awal tidak boleh kosong");
+          }else{
             var data = new FormData();
             $('#notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
             $('#notice').show();
@@ -38,8 +41,10 @@
             data.append('jqxinput', $('#jqxinput').val());
             data.append('tgl_update', $('#tgl_update').val());
             data.append('jumlahawal', $('#jumlahawal').val());
-            data.append('dikeluarkan', $('#dikeluarkan').val());
+            data.append('dikeluarkan__', $('#dikeluarkan__').val());
             data.append('jumlahakhir', $('#jumlahakhir').val());
+            data.append('harga', $('#harga').val());
+            //alert('keluar '+$('#dikeluarkan__').val()+'awal : '+$('#jumlahawal').val()+"akhir : "+$('#jumlahakhir').val());
             $.ajax({
                 cache : false,
                 contentType : false,
@@ -51,22 +56,24 @@
                   var res  = response.split("|");
                   if(res[0]=="OK"){
                       $('#notice').hide();
-                      $('#notice-content').html('<div class="alert">'+res[1]+'</div>');
+                      $('#notice-content').html('<div class="alert">'+res[2]+'</div>');
                       $('#notice').show();
-                      $("#jqxgrid_barang").jqxGrid('updatebounddata', 'cells');
-                      close_popup();
+                      $("#jqxgrid").jqxGrid('updatebounddata', 'cells');
+                      timeline_pengeluaran_barang(res[1]);
                   }
                   else if(res[0]=="Error"){
                       $('#notice').hide();
-                      $('#notice-content').html('<div class="alert">'+res[1]+'</div>');
+                      $('#notice-content').html('<div class="alert">'+res[2]+'</div>');
                       $('#notice').show();
+                      timeline_pengeluaran_barang(res[1]);
                   }
                   else{
                       $('#popup_content').html(response);
+                      timeline_pengeluaran_barang($("#id_mst_inv_barang").val());
                   }
               }
             });
-
+          }
             return false;
         });
 
@@ -87,6 +94,7 @@
                   { name: 'id_mst_inv_barang_habispakai', type: 'string'},
                   { name: 'jmlbaik', type: 'string'},
                   { name: 'totaljumlah', type: 'string'},
+                  { name: 'harga', type: 'string'},
                 ],
                 url: '<?php echo base_url().'inventory/bhp_pengeluaran/autocomplite_barang'; ?>'
               },
@@ -111,30 +119,30 @@
               });
           }
         });
-        var jumlahawal  = $("#jumlahawal__").val();
-        $("#jumlahawal").val(jumlahawal-$("#dikeluarkan").val());
+        
+      //  $("#jumlahawal").val(jumlahawal-$("#dikeluarkan__").val());
         $("#jqxinput").select(function(){
             var codebarang = $(this).val();
             var res = codebarang.split(" | ");
             $("#id_mst_inv_barang").val(res[1]);
             $("#jumlahawal").val(res[2]);
         });
-        $("#dikeluarkan").change(function(){
+        $("#dikeluarkan__").change(function(){
             var jumlahawal  = $("#jumlahawal").val();
             var jumlahakhir = $("#jumlahakhir").val();
-            var dikeluarkan = $("#dikeluarkan").val();
-            if ($("#dikeluarkan").val()<0) {
+            var dikeluarkan = $("#dikeluarkan__").val();
+            if ($("#dikeluarkan__").val()<0) {
               alert("data tidak boleh kurang dari nol");
-              $("#dikeluarkan").val("");
-              $("#jumlahakhir").val(jumlahawal-$("#dikeluarkan").val());  
+              $("#dikeluarkan__").val("");
+              $("#jumlahakhir").val(jumlahawal-$("#dikeluarkan__").val());  
             }
-            if ($("#jumlahawal").val()<0) {
+            if ($("#jumlahakhir").val()<0) {
               alert("Jumlah Awal tidak boleh kurang dari kosong");
-              $("#dikeluarkan").val("");
-              $("#jumlahakhir").val(jumlahawal-$("#dikeluarkan").val());
+              $("#dikeluarkan__").val("");
+              $("#jumlahakhir").val(jumlahawal-$("#dikeluarkan__").val());
             }
             
-            $("#jumlahakhir").val(jumlahawal-$("#dikeluarkan").val());
+            $("#jumlahakhir").val(jumlahawal-$("#dikeluarkan__").val());
         });
     });
 </script>
@@ -151,72 +159,105 @@
   <div class="row">
     <?php echo form_open(current_url(), 'id="form-ss"') ?>
           <div class="box-body">
-          <div class="row">
-          <div class="col-md-9">
-            <div class="form-group">
-              <label>Nama Barang</label>
-              <input id="jqxinput" class="form-control" autocomplete="off" name="jqxinput" type="text" value="<?php 
-                if(set_value('jqxinput')=="" && isset($nama_barang)){ 
-                  echo $nama_barang;
-                }else{
-                  echo  set_value('jqxinput');
-                }
-                ?>" <?php if(isset($disable)){if($disable='disable'){echo "readonly";}} ?>/>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Nama Barang</label>
+                  <input id="jqxinput" class="form-control" autocomplete="off" name="jqxinput" type="text" value="<?php 
+                    if(set_value('jqxinput')=="" && isset($uraian)){ 
+                      echo $uraian;
+                    }else{
+                      echo  set_value('jqxinput');
+                    }
+                    ?>" readonly="readonly"/>
+                </div>
+                    <input id="id_mst_inv_barang" class="form-control" name="id_mst_inv_barang" type="text" value="<?php 
+                      if(set_value('id_mst_inv_barang')=="" && isset($id_mst_inv_barang_habispakai)){
+                        echo $id_mst_inv_barang_habispakai;
+                      }else{
+                        echo  set_value('id_mst_inv_barang');
+                      }
+                      ?>"  readonly="readonly"/>
+              </div>
+              <div class="col-md-4">
+                  <div class="form-group">
+                    <label>Tanggal</label>
+                    <div id='tgl_update' name="tgl_update" value="<?php
+                    echo (!empty($tgl_update)) ? date("Y-m-d",strtotime($tgl_update)) :  date("d-m-Y");
+                  ?>"></div>
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="form-group">
+                    <label>Jumlah Awal <?php echo $jmlbaik;?></label>
+                    <input type="number" class="form-control" name="jumlahawal" id="jumlahawal" placeholder="Jumlah Awal" value="<?php 
+                      if(set_value('jumlahawal')=="" && isset($jmlbaik)){
+                        echo $jml_awal=($totaljumlah+$jmlbaik)-($jml_rusak+$jml_tdkdipakai);
+                      }else{
+                        echo  set_value('jumlahawal');
+                      }
+                      ?>" readonly="">
+                  </div>
+              </div>
             </div>
-          </div>
-          <div class="col-md-3" style="padding-top:20px;">
-            <button type="button" class="btn btn-success" id="btn-refresh" onclick="tambahmaster()"><i class='fa fa-plus-square-o'></i> &nbsp; Tambah</button>
-          </div>
-          </div>
-              <input id="id_mst_inv_barang" class="form-control" name="id_mst_inv_barang" type="text" value="<?php 
-                if(set_value('id_mst_inv_barang')=="" && isset($id_mst_inv_barang_habispakai)){
-                  echo $id_mst_inv_barang_habispakai;
-                }else{
-                  echo  set_value('id_mst_inv_barang');
-                }
-                ?>" />
-
-            <div class="form-group">
-              <label>Tanggal</label>
-              <div id='tgl_update' name="tgl_update" value="<?php
-              echo (!empty($tgl_update)) ? date("Y-m-d",strtotime($tgl_update)) :  date("d-m-Y");
-            ?>"></div>
+            <div class="row">
+              <div class="col-md-4">
+                  <div class="form-group">
+                    <label>Dikeluarkan</label>
+                    <input type="number" class="form-control" name="dikeluarkan__"  id="dikeluarkan__" placeholder="di Keluarkan"  value="<?php
+                    if(set_value('dikeluarkan__')=="" && isset($jmlpengeluaran)){
+                        echo $jmlpengeluaran;
+                      }else{
+                        echo  set_value('dikeluarkan__');
+                      }
+                      ?>">
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="form-group">
+                    <label>Jumlah Akhir</label>
+                    <input type="number" class="form-control" name="jumlahakhir"  id="jumlahakhir" placeholder="Jumlah Akhir" readonly="" value="<?php
+                    if(set_value('jumlahakhir')=="" && isset($jmlpengeluaran)){
+                        echo $jml_awal=($totaljumlah+$jmlbaik)-($jml_rusak+$jml_tdkdipakai+$jmlpengeluaran);;
+                      }else{
+                        echo  set_value('jumlahakhir');
+                      }
+                      ?>">
+                  </div>
+              </div>
+              <div class="col-md-4">
+              <div class="form-group">
+                    <label>Harga</label>
+                    <?php //echo $tgl_pembelian.' opname :'.$tgl_opname?>
+                    <input type="text" class="form-control" name="harga"  id="harga" placeholder="Harga" readonly="" value="<?php
+                    if(set_value('harga')=="" && isset($hargaasli)){
+                          if((isset($tgl_pembelian))||(isset($tgl_opname))){
+                            if ($tgl_pembelian >= $tgl_opname) {
+                              echo $harga_pembelian;
+                            }else{
+                              echo $harga_opname;
+                            }
+                          }else{
+                            echo $hargaasli;
+                          }
+                      }else{
+                        echo  set_value('jumlahakhir');
+                      }
+                      ?>">
+                  </div>
+              </div>
             </div>
-            <div class="form-group">
-              <label>Jumlah Awal</label>
-              <input type="number" class="form-control" name="jumlahawal" id="jumlahawal" placeholder="Jumlah Awal" value="<?php 
-                if(set_value('jumlahawal')=="" && isset($jumlahawal)){
-                  echo $jumlahawal;
-                }else{
-                  echo  set_value('jumlahawal');
-                }
-                ?>" readonly="">
-            </div>
-            <div class="form-group">
-              <label>Dikeluarkan</label>
-              <input type="number" class="form-control" name="dikeluarkan"  id="dikeluarkan" placeholder="di Keluarkan"  value="<?php
-              if(set_value('dikeluarkan')=="" && isset($dikeluarkan)){
-                  echo $dikeluarkan;
-                }else{
-                  echo  set_value('dikeluarkan');
-                }
-                ?>">
-            </div>
-            <div class="form-group">
-              <label>Jumlah Akhir</label>
-              <input type="number" class="form-control" name="jumlahakhir"  id="jumlahakhir" placeholder="Jumlah Akhir" readonly="" value="<?php
-              if(set_value('jumlahakhir')=="" && isset($jumlahakhir)){
-                  echo $jumlahakhir;
-                }else{
-                  echo  set_value('jumlahakhir');
-                }
-                ?>">
-            </div>
-           
         </div>
-        <div class="box-footer">
+        <div class="box-footer" style="float:right;">
             <button type="submit" class="btn btn-primary">Simpan</button>
-            <button type="button" id="btn-close" class="btn btn-warning">Batal</button>
+            <button type="button" id="btn-close" class="btn btn-warning">Tutup</button>
+        </div>
+        <div class="box-body">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="timeline-messages" id="timeline-barang"></div>
+              </div>
+            </div>
         </div>
     </div>
 </form>

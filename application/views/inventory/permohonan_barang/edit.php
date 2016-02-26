@@ -64,6 +64,15 @@
     <div class="box box-warning">
       <div class="box-body">
         <div class="form-group">
+          <label>Status Permohonan</label>
+          <select  name="statuspengadaan" id="statuspengadaan" class="form-control">
+              <?php foreach($statusdata as $stat) : ?>
+                <?php $select = $stat['code']  == $pilihan_status_pengadaan ? 'selected=selected' : '' ?>
+                <option value="<?php echo $stat['code'] ?>"<?php echo $select ?> ><?php echo $stat['value'] ?></option>
+              <?php endforeach ?>
+          </select>
+        </div>
+        <div class="form-group">
           <label>Keterangan</label>
           <textarea class="form-control" name="keterangan" placeholder="Keterangan"><?php 
               if(set_value('keterangan')=="" && isset($keterangan)){

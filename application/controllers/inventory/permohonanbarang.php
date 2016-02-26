@@ -507,7 +507,8 @@ class Permohonanbarang extends CI_Controller {
         $this->form_validation->set_rules('tgl', 'Tanggal Permohonan', 'trim|required');
         $this->form_validation->set_rules('keterangan', 'Keterangan', 'trim|required');
         $this->form_validation->set_rules('codepus', 'Puskesmas', 'trim|required');
-        $this->form_validation->set_rules('ruangan', 'Ruangan', 'trim|required');
+        $this->form_validation->set_rules('ruangan', 'Ruangan', 'trim');
+        $this->form_validation->set_rules('statuspengadaan', 'Status Permohonan', 'trim|required');
 
 		if($this->form_validation->run()== FALSE){
 			$data 	= $this->permohonanbarang_model->get_data_row($code_cl_phc,$kode); 
@@ -520,6 +521,7 @@ class Permohonanbarang extends CI_Controller {
 
 			$this->db->where('code',$code_cl_phc);
 			$data['kodepuskesmas'] 	= $this->puskesmas_model->get_data();
+			$data['statusdata'] = $this->permohonanbarang_model->get_data_status();
 
 			$data['barang']	  	= $this->parser->parse('inventory/permohonan_barang/barang', $data, TRUE);
 			$data['content'] 	= $this->parser->parse("inventory/permohonan_barang/edit",$data,true);

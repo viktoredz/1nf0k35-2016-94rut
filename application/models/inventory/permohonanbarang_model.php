@@ -162,6 +162,7 @@ class Permohonanbarang_model extends CI_Model {
 		$data['keterangan']			= $this->input->post('keterangan');
 		$data['code_cl_phc']		= $this->input->post('codepus');
 		$data['id_mst_inv_ruangan']	= $this->input->post('ruangan');
+        $data['pilihan_status_pengadaan'] = $this->input->post('statuspengadaan');
 
 		$this->db->where('id_inv_permohonan_barang',$kode);
 		$this->db->where('code_cl_phc',$code_cl_phc);
