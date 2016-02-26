@@ -13,6 +13,7 @@
       datafields: [
       { name: 'id_mst_inv_barang_habispakai', type: 'string' },
       { name: 'uraian', type: 'string' },
+      { name: 'nama_pilihan', type: 'string' },
       { name: 'tgl_update', type: 'date' },
       { name: 'jml', type: 'string' },
       { name: 'harga', type: 'double' },
@@ -66,11 +67,12 @@
             }
           }
         },*/
-        { text: 'Kode Barang', editable:false ,datafield: 'id_mst_inv_barang_habispakai', columntype: 'textbox', filtertype: 'none', width: '20%' },
+      //  { text: 'Kode Barang', editable:false ,datafield: 'id_mst_inv_barang_habispakai', columntype: 'textbox', filtertype: 'none', width: '20%' },
         { text: 'Tanggal Pengeluaran', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false,datafield: 'tgl_update', columntype: 'date', filtertype: 'none', cellsformat: 'dd-MM-yyyy', width: '20%'},
         { text: 'Nama Barang', editable:false ,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '40%' },
        /* { text: 'Jumlah Awal',editable:false ,align: 'center', cellsalign: 'right', datafield: 'jmlawal', columntype: 'textbox', filtertype: 'none', width: '13%' },
         { text: 'Jumlah Akhir',editable:false ,align: 'center', cellsalign: 'right', datafield: 'jml_akhir', columntype: 'textbox', filtertype: 'none', width: '13%' },*/
+        { text: 'Satuan', editable:false ,datafield: 'nama_pilihan', columntype: 'textbox', filtertype: 'none', width: '20%' },
         { text: 'Jumlah Keluar',editable:false ,datafield: 'jml', columntype: 'textbox', filtertype: 'none', width: '20%' ,align: 'center', cellsalign: 'right'}
             ]
     });

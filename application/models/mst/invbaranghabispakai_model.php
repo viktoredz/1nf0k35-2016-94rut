@@ -25,7 +25,7 @@ class Invbaranghabispakai_model extends CI_Model {
 
 	function get_data_detail($start=0, $limit=9999999, $options=array()){
 		$data = array();
-		$this->db->select("mst_inv_barang_habispakai_jenis.uraian as jenisuraian,mst_inv_barang_habispakai.*,mst_inv_pilihan.value as nama_satuan");
+		$this->db->select("mst_inv_barang_habispakai_jenis.uraian as jenisuraian,mst_inv_barang_habispakai.*,mst_inv_pilihan.value as value");
 		$this->db->join('mst_inv_barang_habispakai_jenis',"mst_inv_barang_habispakai_jenis.id_mst_inv_barang_habispakai_jenis=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis");
 		$this->db->join('mst_inv_pilihan',"mst_inv_barang_habispakai.pilihan_satuan=mst_inv_pilihan.code and mst_inv_pilihan.tipe='satuan_bhp'",'left');
 	    $query = $this->db->get('mst_inv_barang_habispakai',$limit,$start);

@@ -276,6 +276,7 @@ class Bhp_pengeluaran extends CI_Controller {
 			$data[] = array(
 				'uraian'				=> $act->uraian,
 				'tgl_update'			=> $act->tgl_update,
+				'nama_pilihan'			=> $act->nama_pilihan,
 				/*'jmlawal'				=> ($act->totaljumlah+$act->jmlbaik)-($act->jml_rusak+$act->jml_tdkdipakai),
 				'jml_akhir'				=> ($act->totaljumlah+$act->jmlbaik)-($act->jml_rusak+$act->jml_tdkdipakai+$act->jmlpengeluaran),*/
 				'harga'					=> $act->harga,

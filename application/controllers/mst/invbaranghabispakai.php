@@ -91,7 +91,7 @@ class Invbaranghabispakai extends CI_Controller {
 			$data['action']="edit";
 			$data['kode']= $kode;
 			$data['notice']			= validation_errors();
-			$data['pilihan_satuan_barang'] = $this->pengadaanbarang_model->get_data_pilihan('satuan');
+			$data['pilihan_satuan_barang'] = $this->pengadaanbarang_model->get_data_pilihan('satuan_bhp');
 			die($this->parser->parse('mst/invbaranghabispakai/barang_form',$data));
 		}else{
 			$dataupdate = array(
@@ -121,8 +121,14 @@ class Invbaranghabispakai extends CI_Controller {
 			for($i=0;$i<$fil;$i++) {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
-
-				$this->db->like($field,$value);
+				if($field=="jenisuraian"){
+					$this->db->like("mst_inv_barang_habispakai_jenis.uraian",$value);
+				}else if($field=="uraian"){
+					$this->db->like("mst_inv_barang_habispakai.uraian",$value);
+				}else{
+					$this->db->like($field,$value);	
+				}
+				
 			}
 
 			if(!empty($ord)) {
@@ -139,7 +145,6 @@ class Invbaranghabispakai extends CI_Controller {
 			$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
 		}
 		
-		
 		$rows_all = $this->invbaranghabispakai_model->get_data_detail();
 
 
@@ -151,7 +156,13 @@ class Invbaranghabispakai extends CI_Controller {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
 
-				$this->db->like($field,$value);
+				if($field=="jenisuraian"){
+					$this->db->like("mst_inv_barang_habispakai_jenis.uraian",$value);
+				}else if($field=="uraian"){
+					$this->db->like("mst_inv_barang_habispakai.uraian",$value);
+				}else{
+					$this->db->like($field,$value);	
+				}
 			}
 
 			if(!empty($ord)) {
@@ -175,12 +186,12 @@ class Invbaranghabispakai extends CI_Controller {
 		foreach($rows as $act) {
 			$data[] = array(
 				'no'					=> $no++,
-				'code'					=> $act->code,
+				//'code'					=> $act->code,
 				'uraian'				=> $act->uraian,
 				'merek_tipe'			=> $act->merek_tipe,
 				'negara_asal'			=> $act->negara_asal,
 				'pilihan_satuan'		=> $act->negara_asal,
-				'nama_satuan'			=> $act->nama_satuan,
+				'value'					=> $act->value,
 				'jenisuraian'			=> $act->jenisuraian,
 				'id_mst_inv_barang_habispakai'			=> $act->id_mst_inv_barang_habispakai,
 				'id_mst_inv_barang_habispakai_jenis'	=> $act->id_mst_inv_barang_habispakai_jenis,

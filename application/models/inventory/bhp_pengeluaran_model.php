@@ -34,8 +34,10 @@ class Bhp_pengeluaran_model extends CI_Model {
         $kodepuskesmas = "P".$this->session->userdata("puskesmas");
         $data = array();
         $this->db->where("inv_inventaris_habispakai_pengeluaran.code_cl_phc",$kodepuskesmas);
-        $this->db->select("mst_inv_barang_habispakai.uraian,inv_inventaris_habispakai_pengeluaran.id_mst_inv_barang_habispakai,inv_inventaris_habispakai_pengeluaran.tgl_update,inv_inventaris_habispakai_pengeluaran.harga,inv_inventaris_habispakai_pengeluaran.jml");
+        $this->db->select("mst_inv_barang_habispakai.uraian,inv_inventaris_habispakai_pengeluaran.id_mst_inv_barang_habispakai,inv_inventaris_habispakai_pengeluaran.tgl_update,inv_inventaris_habispakai_pengeluaran.harga,inv_inventaris_habispakai_pengeluaran.jml,
+            mst_inv_barang_habispakai.pilihan_satuan,mst_inv_pilihan.value as nama_pilihan");
         $this->db->join('mst_inv_barang_habispakai',"mst_inv_barang_habispakai.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_pengeluaran.id_mst_inv_barang_habispakai");
+        $this->db->join('mst_inv_pilihan',"mst_inv_barang_habispakai.pilihan_satuan=mst_inv_pilihan.code and mst_inv_pilihan.tipe='satuan_bhp'",'left');
         $query = $this->db->get('inv_inventaris_habispakai_pengeluaran',$limit,$start);
         return $query->result();
     }

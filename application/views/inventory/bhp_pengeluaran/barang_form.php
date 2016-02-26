@@ -238,6 +238,18 @@
             <div class="row">
               <div class="col-md-4">
                   <div class="form-group">
+                    <label>Jumlah Awal</label>
+                    <input type="number" class="form-control" name="jumlahawal" id="jumlahawal" placeholder="Jumlah Awal" value="<?php 
+                      if(set_value('jumlahawal')=="" && isset($jmlbaik)){
+                        echo $jml_awal=($totaljumlah+$jmlbaik)-($jml_rusak+$jml_tdkdipakai);
+                      }else{
+                        echo  set_value('jumlahawal');
+                      }
+                      ?>" readonly="">
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="form-group">
                     <label>Dikeluarkan</label>
                     <input type="number" class="form-control" name="dikeluarkan__"  id="dikeluarkan__" placeholder="di Keluarkan"  value="<?php
                     if(set_value('dikeluarkan__')=="" && isset($jmlpengeluaran)){
@@ -258,18 +270,6 @@
                         echo  set_value('jumlahakhir');
                       }
                       ?>">
-                  </div>
-              </div>
-              <div class="col-md-4">
-                  <div class="form-group">
-                    <label>Jumlah Awal</label>
-                    <input type="number" class="form-control" name="jumlahawal" id="jumlahawal" placeholder="Jumlah Awal" value="<?php 
-                      if(set_value('jumlahawal')=="" && isset($jmlbaik)){
-                        echo $jml_awal=($totaljumlah+$jmlbaik)-($jml_rusak+$jml_tdkdipakai);
-                      }else{
-                        echo  set_value('jumlahawal');
-                      }
-                      ?>" readonly="">
                   </div>
               </div>
             </div>

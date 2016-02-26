@@ -16,7 +16,7 @@
 			{ name: 'merek_tipe', type: 'string' },
 			{ name: 'jenisuraian', type: 'string' },
 			{ name: 'pilihan_satuan', type: 'string' },
-			{ name: 'nama_satuan', type: 'string' },
+			{ name: 'value', type: 'string' },
 			{ name: 'edit', type: 'number' },
 			{ name: 'delete', type: 'number' },
 			
@@ -74,13 +74,13 @@
 					}
                  }
                 },
-				{ text: 'ID', align: 'center', cellsalign: 'left', datafield: 'id_mst_inv_barang_habispakai', columntype: 'textbox', filtertype: 'none', width: '4%' },
-				{ text: 'Kode', align: 'center', cellsalign: 'left', datafield: 'code', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
-				{ text: 'Uraian', datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '22%' },
-				{ text: 'Merek Tipe',  align: 'center', cellsalign: 'left', datafield: 'merek_tipe', columntype: 'textbox', filtertype: 'textbox', width: '9%'},
-				{ text: 'Asal Negara', align: 'center', cellsalign: 'left', datafield: 'negara_asal', columntype: 'textbox', filtertype: 'textbox', width: '14%'},
-				{ text: 'Satuan',  align: 'center', cellsalign: 'left', datafield: 'nama_satuan', columntype: 'textbox', filtertype: 'textbox', width: '14%'},
-				{ text: 'Jenis Barang',  align: 'center', cellsalign: 'left', datafield: 'jenisuraian', columntype: 'textbox', filtertype: 'textbox', width: '19%'},
+				{ text: 'ID', align: 'center', cellsalign: 'left', datafield: 'id_mst_inv_barang_habispakai', columntype: 'textbox', filtertype: 'none', width: '7%' },
+				//{ text: 'Kode', align: 'center', cellsalign: 'left', datafield: 'code', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
+				{ text: 'Uraian', datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '25%' },
+				{ text: 'Merek Tipe',  align: 'center', cellsalign: 'left', datafield: 'merek_tipe', columntype: 'textbox', filtertype: 'textbox', width: '11%'},
+				{ text: 'Asal Negara', align: 'center', cellsalign: 'left', datafield: 'negara_asal', columntype: 'textbox', filtertype: 'textbox', width: '15%'},
+				{ text: 'Satuan',  align: 'center', cellsalign: 'left', datafield: 'value', columntype: 'textbox', filtertype: 'textbox', width: '14%'},
+				{ text: 'Jenis Barang',  align: 'center', cellsalign: 'left', datafield: 'jenisuraian', columntype: 'textbox', filtertype: 'textbox', width: '20%'},
            				
            ]
 		});
