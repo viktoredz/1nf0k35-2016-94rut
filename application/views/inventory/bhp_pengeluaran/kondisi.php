@@ -66,12 +66,12 @@
             }
           }
         },*/
-        { text: 'Kode Barang', editable:false ,datafield: 'id_mst_inv_barang_habispakai', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
-        { text: 'Nama Barang', editable:false ,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '25%' },
-        { text: 'Last Update', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false,datafield: 'tgl_update', columntype: 'date', filtertype: 'none', cellsformat: 'dd-MM-yyyy', width: '10%'},
+        { text: 'Kode Barang', editable:false ,datafield: 'id_mst_inv_barang_habispakai', columntype: 'textbox', filtertype: 'none', width: '20%' },
+        { text: 'Nama Barang', editable:false ,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '40%' },
+        { text: 'Last Update', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false,datafield: 'tgl_update', columntype: 'date', filtertype: 'none', cellsformat: 'dd-MM-yyyy', width: '20%'},
        /* { text: 'Jumlah Awal',editable:false ,align: 'center', cellsalign: 'right', datafield: 'jmlawal', columntype: 'textbox', filtertype: 'none', width: '13%' },
         { text: 'Jumlah Akhir',editable:false ,align: 'center', cellsalign: 'right', datafield: 'jml_akhir', columntype: 'textbox', filtertype: 'none', width: '13%' },*/
-        { text: 'Selisih',editable:false ,datafield: 'jml', columntype: 'textbox', filtertype: 'none', width: '13%' ,align: 'center', cellsalign: 'right'}
+        { text: 'Keluar',editable:false ,datafield: 'jml', columntype: 'textbox', filtertype: 'none', width: '20%' ,align: 'center', cellsalign: 'right'}
             ]
     });
 
