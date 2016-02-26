@@ -118,8 +118,8 @@ if(isset($disable)){if($disable='disable'){?>
           </div>
           <div class=col-md-12"">
         <div class="box-footer" style="float:right;">
-            <button type="submit" class="btn btn-primary">Simpan</button>
-            <button type="button" id="btn-close" class="btn btn-warning">Tutup</button>
+            <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-disk"></i>Simpan</button>
+            <button type="button" id="btn-close" class="btn btn-warning"><i class="glyphicon glyphicon-remove"></i>Tutup</button>
         </div>
         </div>
     </div>

@@ -32,7 +32,7 @@
       }); 
         $('#form-ss').submit(function(){
           if (($('#jumlahawal').val()==0) || ($('#jumlahawal').val() == null)||($('#dikeluarkan__').val()==0)) {
-            alert("Maaf data awal tidak boleh kosong");
+            alert("Maaf data awal atau data pengeluaran tidak boleh kosong");
           }else{
             var data = new FormData();
             $('#notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
@@ -160,7 +160,7 @@
     <?php echo form_open(current_url(), 'id="form-ss"') ?>
           <div class="box-body">
             <div class="row">
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <div class="form-group">
                   <label>Nama Barang</label>
                   <input id="jqxinput" class="form-control" autocomplete="off" name="jqxinput" type="text" value="<?php 
@@ -171,13 +171,39 @@
                     }
                     ?>" readonly="readonly"/>
                 </div>
-                    <input id="id_mst_inv_barang" class="form-control" name="id_mst_inv_barang" type="text" value="<?php 
+                    <input id="id_mst_inv_barang" class="form-control" name="id_mst_inv_barang" type="hidden" value="<?php 
                       if(set_value('id_mst_inv_barang')=="" && isset($id_mst_inv_barang_habispakai)){
                         echo $id_mst_inv_barang_habispakai;
                       }else{
                         echo  set_value('id_mst_inv_barang');
                       }
                       ?>"  readonly="readonly"/>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Merek Barang</label>
+                  <input id="merek_tipe" class="form-control" autocomplete="off" name="merek_tipe" type="text" value="<?php 
+                    if(set_value('merek_tipe')=="" && isset($merek_tipe)){ 
+                      echo $merek_tipe;
+                    }else{
+                      echo  set_value('merek_tipe');
+                    }
+                    ?>" readonly="readonly"/>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                    <label>Jenis Barang</label>
+                    <input type="text" class="form-control" name="jenisbarang"  id="jenisbarang" placeholder="Jenis Barang" readonly="" value="<?php
+                    if(set_value('jenisbarang')=="" && isset($jenisbarang)){
+                            echo $jenisbarang;
+                      }else{
+                        echo  set_value('jumlahakhir');
+                      }
+                      ?>">
+                  </div>
               </div>
               <div class="col-md-4">
                   <div class="form-group">
@@ -188,15 +214,24 @@
                   </div>
               </div>
               <div class="col-md-4">
-                  <div class="form-group">
-                    <label>Jumlah Awal <?php echo $jmlbaik;?></label>
-                    <input type="number" class="form-control" name="jumlahawal" id="jumlahawal" placeholder="Jumlah Awal" value="<?php 
-                      if(set_value('jumlahawal')=="" && isset($jmlbaik)){
-                        echo $jml_awal=($totaljumlah+$jmlbaik)-($jml_rusak+$jml_tdkdipakai);
+                <div class="form-group">
+                    <label>Harga</label>
+                    <?php //echo $tgl_pembelian.' opname :'.$tgl_opname?>
+                    <input type="text" class="form-control" name="harga"  id="harga" placeholder="Harga" readonly="" value="<?php
+                    if(set_value('harga')=="" && isset($hargaasli)){
+                          if((isset($tgl_pembelian))||(isset($tgl_opname))){
+                            if ($tgl_pembelian >= $tgl_opname) {
+                              echo $harga_pembelian;
+                            }else{
+                              echo $harga_opname;
+                            }
+                          }else{
+                            echo $hargaasli;
+                          }
                       }else{
-                        echo  set_value('jumlahawal');
+                        echo  set_value('jumlahakhir');
                       }
-                      ?>" readonly="">
+                      ?>">
                   </div>
               </div>
             </div>
@@ -226,31 +261,22 @@
                   </div>
               </div>
               <div class="col-md-4">
-              <div class="form-group">
-                    <label>Harga</label>
-                    <?php //echo $tgl_pembelian.' opname :'.$tgl_opname?>
-                    <input type="text" class="form-control" name="harga"  id="harga" placeholder="Harga" readonly="" value="<?php
-                    if(set_value('harga')=="" && isset($hargaasli)){
-                          if((isset($tgl_pembelian))||(isset($tgl_opname))){
-                            if ($tgl_pembelian >= $tgl_opname) {
-                              echo $harga_pembelian;
-                            }else{
-                              echo $harga_opname;
-                            }
-                          }else{
-                            echo $hargaasli;
-                          }
+                  <div class="form-group">
+                    <label>Jumlah Awal</label>
+                    <input type="number" class="form-control" name="jumlahawal" id="jumlahawal" placeholder="Jumlah Awal" value="<?php 
+                      if(set_value('jumlahawal')=="" && isset($jmlbaik)){
+                        echo $jml_awal=($totaljumlah+$jmlbaik)-($jml_rusak+$jml_tdkdipakai);
                       }else{
-                        echo  set_value('jumlahakhir');
+                        echo  set_value('jumlahawal');
                       }
-                      ?>">
+                      ?>" readonly="">
                   </div>
               </div>
             </div>
         </div>
         <div class="box-footer" style="float:right;">
-            <button type="submit" class="btn btn-primary">Simpan</button>
-            <button type="button" id="btn-close" class="btn btn-warning">Tutup</button>
+            <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-disk"></i> Simpan</button>
+            <button type="button" id="btn-close" class="btn btn-warning"><i class="glyphicon glyphicon-remove"></i>Tutup</button>
         </div>
         <div class="box-body">
             <div class="row">

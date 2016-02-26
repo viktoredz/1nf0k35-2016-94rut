@@ -148,10 +148,10 @@
 				return obj.data;    
 			},
 			columns: [
-				{ text: 'Edit', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
+				{ text: 'Detail', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
 				    if(dataRecord.id_mst_inv_barang_habispakai!=null){
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='add(\""+dataRecord.id_mst_inv_barang_habispakai+"\");'></a></div>";
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_view.gif' onclick='add(\""+dataRecord.id_mst_inv_barang_habispakai+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lockdo.gif'></a></div>";
 					}
@@ -169,9 +169,9 @@
 				{ text: 'Nama Barang', editable:false ,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '30%' },
 				{ text: 'Merek', editable:false ,datafield: 'merek_tipe', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
 				{ text: 'Last Update', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false,datafield: 'tgl_update', columntype: 'date', filtertype: 'none', cellsformat: 'dd-MM-yyyy', width: '10%'},
-				{ text: 'Jumlah Awal',editable:false ,align: 'center', cellsalign: 'right', datafield: 'jmlawal', columntype: 'textbox', filtertype: 'none', width: '13%' },
-				{ text: 'Jumlah Akhir',editable:false ,align: 'center', cellsalign: 'right', datafield: 'jml_akhir', columntype: 'textbox', filtertype: 'none', width: '13%' },
-				{ text: 'Selisih',editable:false ,datafield: 'jml_selisih', columntype: 'textbox', filtertype: 'none', width: '13%' ,align: 'center', cellsalign: 'right'}
+				{ text: 'Jumlah Awal',sortable: false,editable:false ,align: 'center', cellsalign: 'right', datafield: 'jmlawal', columntype: 'textbox', filtertype: 'none', width: '13%' },
+				{ text: 'Jumlah Akhir',sortable: false,editable:false ,align: 'center', cellsalign: 'right', datafield: 'jml_akhir', columntype: 'textbox', filtertype: 'none', width: '13%' },
+				{ text: 'Selisih',sortable: false,editable:false ,datafield: 'jml_selisih', columntype: 'textbox', filtertype: 'none', width: '13%' ,align: 'center', cellsalign: 'right'}
             ]
 		});
 	 /*function timeline_add_barang(id){

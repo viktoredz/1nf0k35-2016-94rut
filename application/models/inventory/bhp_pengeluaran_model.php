@@ -61,8 +61,8 @@ class Bhp_pengeluaran_model extends CI_Model {
         $kodepuskesmas = "P".$this->session->userdata("puskesmas");
         $data = array();
         $this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai",$kode);
-       $this->db->select("mst_inv_barang_habispakai.uraian,mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis,mst_inv_barang_habispakai.id_mst_inv_barang_habispakai,mst_inv_barang_habispakai.merek_tipe,,mst_inv_barang_habispakai.harga as hargaasli,
-            mst_inv_pilihan.value as value, 
+       $this->db->select("mst_inv_barang_habispakai.uraian,mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis,mst_inv_barang_habispakai.id_mst_inv_barang_habispakai,mst_inv_barang_habispakai.merek_tipe,mst_inv_barang_habispakai.harga as hargaasli,
+            mst_inv_pilihan.value as value,mst_inv_barang_habispakai_jenis.uraian as jenisbarang,
             (select jml as jml from  inv_inventaris_habispakai_opname where id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai and code_cl_phc=".'"'.$kodepuskesmas.'"'." order by tgl_update desc limit 1) as jmlbaik,
             (select sum(jml) as jmltotal from inv_inventaris_habispakai_pembelian_item 
             JOIN inv_inventaris_habispakai_pembelian ON(inv_inventaris_habispakai_pembelian.id_inv_hasbispakai_pembelian = inv_inventaris_habispakai_pembelian_item.id_inv_hasbispakai_pembelian AND inv_inventaris_habispakai_pembelian.code_cl_phc = inv_inventaris_habispakai_pembelian_item.code_cl_phc AND inv_inventaris_habispakai_pembelian.pilihan_status_pembelian=2)  
@@ -77,6 +77,7 @@ class Bhp_pengeluaran_model extends CI_Model {
             (select harga as hargaopname from  inv_inventaris_habispakai_opname where id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai and code_cl_phc=".'"'.$kodepuskesmas.'"'." order by tgl_update desc limit 1) as harga_opname
              ");
         $this->db->join('mst_inv_pilihan',"mst_inv_barang_habispakai.pilihan_satuan=mst_inv_pilihan.code and mst_inv_pilihan.tipe='satuan_bhp'",'left');
+        $this->db->join('mst_inv_barang_habispakai_jenis',"mst_inv_barang_habispakai_jenis.id_mst_inv_barang_habispakai_jenis=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis");
         $query = $this->db->get('mst_inv_barang_habispakai',1,0);
         if ($query->num_rows() > 0){
             $data = $query->row_array();
