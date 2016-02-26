@@ -44,7 +44,9 @@
 				alert(error);
 			}
 		});
-     
+     	$('#btn-refresh').click(function () {
+			$("#jqxgrid_barang").jqxGrid('clearfilters');
+		});
 		$("#jqxgrid_barang").jqxGrid(
 		{	
 			width: '100%',

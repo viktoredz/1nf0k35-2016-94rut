@@ -36,8 +36,9 @@
 
       	<div class="box-footer">
 	      <div class="col-md-7">
-		 		<button onClick="add_barang();" type="button"  class="btn btn-success">Tambah</button>
-				<button type="button" class="btn btn-warning" onClick="document.location.href='<?php echo base_url()?>mst/invbaranghabispakai'">Kembali</button>
+		 		<button onClick="add_barang();" type="button"  class="btn btn-success"><i class='fa fa-plus-square-o'></i> Tambah</button>
+		 		<button type="button" class="btn btn-primary" id="btn-refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
+				<button type="button" class="btn btn-warning" onClick="document.location.href='<?php echo base_url()?>mst/invbaranghabispakai'"><i class="fa fa-reply"></i> Kembali</button>
 	     </div>
 	     <div class="col-md-5">
 	     	<div class="row">
