@@ -5,8 +5,8 @@
     <div class="info-box">
       <span class="info-box-icon bg-red"><i class="fa fa-ambulance"></i></span>
       <div class="info-box-content">
-        <span class="info-box-text">Jumlah Puskesmas</span>
-        <span class="info-box-number"><?php echo $j_puskesmas ;?><br>Puskesmas</span>
+        <span class="info-box-text">Pus Kecamatan</span>
+        <span class="info-box-number" style="font-size:14px;"><?php echo $j_puskesmas ;?><br>Puskesmas</span>
       </div><!-- /.info-box-content -->
     </div><!-- /.info-box -->
   </div><!-- /.col -->
@@ -15,7 +15,7 @@
       <span class="info-box-icon bg-blue"><i class="fa fa-bank"></i></span>
       <div class="info-box-content">
         <span class="info-box-text">Jumlah Ruangan </span>
-        <span class="info-box-number"><?php foreach ($j_ruangan as $row) { 
+        <span class="info-box-number" style="font-size:14px;"><?php foreach ($j_ruangan as $row) { 
         echo number_format($row->jml);  
         }?><br>Ruangan</span>
       </div><!-- /.info-box-content -->
@@ -41,7 +41,7 @@
       <span class="info-box-icon bg-yellow"><i class="fa fa-archive"></i></span>
       <div class="info-box-content">
         <span class="info-box-text">Jumlah Aset</span>
-        <span class="info-box-number">
+        <span class="info-box-number" style="font-size:14px;">
         <?php foreach ($j_asset as $row) { 
         echo number_format($row->jml);  
         }?>
@@ -52,10 +52,10 @@
 </div><!-- /.row -->
 
 <div class="row">
-  <div class="col-md-8">
+  <div class="col-md-7">
     <div class="box">
       <div class="box-header with-border">
-        <h3 class="box-title">Kondisi Aset per Puskesmas </h3>
+        <h3 class="box-title">Kondisi Aset Puskesmas </h3>
           <select name="bar_tipe" id="type" class="form-control" style="width:25%;float:right;margin-top:30px">
             <option value="jml">Jumlah Aset</option>
             <option value="nilai">Nilai Aset</option>
@@ -91,11 +91,11 @@
       </div><!-- /.box-body -->
     </div><!-- /.box -->
   </div><!-- /.col -->
-  <div class="col-md-4">
+  <div class="col-md-5">
     <div class="box">
       <div class="box-header with-border">
-        <h3 class="box-title">Nilai Aset per Puskesmas </h3>        
-          <select name="pie_tioe" id="type1" class="form-control" style="width:40%;float:right;margin-top:10px">
+        <h3 class="box-title">Nilai Aset Puskesmas </h3>        
+          <select name="pie_tioe" id="type1" class="form-control" style="width:40%;float:right;margin-top:30px">
             <option value="jml">Jumlah Aset </option>
             <option value="nilai" >Nilai Aset</option>
           </select>

@@ -62,7 +62,7 @@ var code_cl_phc = '<?php echo $code_cl_phc?>';
 				{ text: 'Jumlah Barang', align: 'center', cellsalign: 'center', datafield: 'jumlah', columntype: 'textbox', filtertype: 'textbox', width: '10%'},
 				{ text: 'Harga Barang (Rp.)', align: 'center', cellsalign: 'right', datafield: 'harga', columntype: 'textbox', filtertype: 'textbox', width: '14%'},
 				{ text: 'Sub Total (Rp.)',  align: 'center', cellsalign: 'right', datafield: 'subtotal', columntype: 'textbox', filtertype: 'textbox', width: '14%'},
-				{ text: 'Keterangan',datafield: 'keterangan', columntype: 'textbox', filtertype: 'textbox', width: '30%'}
+				{ text: 'Keterangan',datafield: 'keterangan', columntype: 'textbox', filtertype: 'textbox', width: '19%'}
            ]
 		});
         

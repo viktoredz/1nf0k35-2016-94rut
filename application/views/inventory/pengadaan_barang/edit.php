@@ -80,6 +80,28 @@
           } ?>
         </div>
         <div class="form-group">
+          <label>Keterangan</label>
+          <?php if(!isset($viewreadonly)){ ?>
+          <textarea class="form-control" id="keterangan" name="keterangan" placeholder="Keterangan"><?php 
+              if(set_value('keterangan')=="" && isset($keterangan)){
+                echo $keterangan;
+              }else{
+                echo  set_value('keterangan');
+              }
+              ?></textarea>
+          <?php }else{ 
+              echo "<br>".$nomor_kontrak;
+          } ?>
+        </div>
+      </div>
+    </div>
+  </div><!-- /.form-box -->
+
+  <div class="col-md-6">
+    <div class="box box-warning">
+      <div class="box-body">
+      <div id="success"> 
+        <div class="form-group">
           <label>Nomor Kontrak</label>
           <?php if(!isset($viewreadonly)){ ?>
           <input type="text" class="form-control" name="nomor_kontrak" placeholder="Nomor Kontrak" value="<?php 
@@ -115,57 +137,35 @@
               echo "<br>".$nomor_kwitansi;
           } ?>
         </div>
-        <div class="form-group">
-          <label>Keterangan</label>
-          <?php if(!isset($viewreadonly)){ ?>
-          <textarea class="form-control" id="keterangan" name="keterangan" placeholder="Keterangan"><?php 
-              if(set_value('keterangan')=="" && isset($keterangan)){
-                echo $keterangan;
-              }else{
-                echo  set_value('keterangan');
-              }
-              ?></textarea>
-          <?php }else{ 
-              echo "<br>".$nomor_kontrak;
-          } ?>
-        </div>
+        <table class="table table-condensed">
+            <tr>
+              <td>Jumlah Unit</td>
+              <td>
+                  <div id="jumlah_unit_"></div>
+              </td>
+            </tr>
+            <tr>
+              <td>Nilai Pengadaan</td>
+              <td>
+                <div id="nilai_pengadaan_"></div>
+              </td>
+            </tr>
+            <tr>
+              <td>Waktu dibuat</td>
+              <td>
+                <div id="waktu_dibuat_"></div>
+              </td>
+            </tr>
+            <tr>
+              <td>Terakhir di edit</td>
+              <td>
+                <div id="terakhir_diubah_"></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-    </div>
-  </div><!-- /.form-box -->
-
-  <div class="col-md-6">
-    <div class="box box-warning">
-      <div class="box-body">
-      <div id="success"> 
-          <table class="table table-condensed">
-              <tr>
-                <td>Jumlah Unit</td>
-                <td>
-                    <div id="jumlah_unit_"></div>
-                </td>
-              </tr>
-              <tr>
-                <td>Nilai Pengadaan</td>
-                <td>
-                  <div id="nilai_pengadaan_"></div>
-                </td>
-              </tr>
-              <tr>
-                <td>Waktu dibuat</td>
-                <td>
-                  <div id="waktu_dibuat_"></div>
-                </td>
-              </tr>
-              <tr>
-                <td>Terakhir di edit</td>
-                <td>
-                  <div id="terakhir_diubah_"></div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-      </div>
-      <div class="box-footer">
+      <div style="text-align: right">
         <?php if(!isset($viewreadonly)){?>
           <button type="submit" class="btn btn-primary"><i class='fa fa-floppy-o'></i> &nbsp; Simpan</button>
         <?php }else{ ?>

@@ -149,7 +149,7 @@
     <?php echo form_open(current_url(), 'id="form-ss"') ?>
           <div class="box-body">
             <div class="form-group">
-              <label>Kode Barang</label>
+              <label>Pilih Jenis Barang</label>
               <input id="jqxinput" class="form-control" autocomplete="off" name="code_mst_inv" type="text" value="<?php 
                 if(set_value('code_mst_inv')=="" && isset($code_mst_inv_barang)){
                   $s = array();

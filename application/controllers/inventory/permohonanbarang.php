@@ -472,7 +472,7 @@ class Permohonanbarang extends CI_Controller {
 
 		$this->form_validation->set_rules('id_inv_permohonan_barang', 'Kode Lokasi', 'trim|required');
         $this->form_validation->set_rules('tgl', 'Tanggal Permohonan', 'trim|required');
-        $this->form_validation->set_rules('keterangan', 'Keterangan', 'trim|required');
+        $this->form_validation->set_rules('keterangan', 'Keterangan', 'trim');
         $this->form_validation->set_rules('codepus', 'Puskesmas', 'trim|required');
 
 		if($this->form_validation->run()== FALSE){
@@ -660,10 +660,13 @@ class Permohonanbarang extends CI_Controller {
         $this->form_validation->set_rules('nama_barang', 'Nama Barang', 'trim|required');
         $this->form_validation->set_rules('jumlah', 'Jumlah', 'trim|required');
         $this->form_validation->set_rules('harga', 'Harga', 'trim|required');
-        $this->form_validation->set_rules('keterangan', 'Keterangan', 'trim|required');
+        $this->form_validation->set_rules('keterangan', 'Keterangan', 'trim');
         $this->form_validation->set_rules('pilihan_satuan_barang', 'Pilihan Satuan Barang', 'trim|required');
         $this->form_validation->set_rules('rekening', 'Rekening', 'trim');
         $this->form_validation->set_rules('merk_tipe', 'Merek Tipe', 'trim');
+
+        $this->form_validation->set_rules('v_kode_barang', 'v_kode_barang', 'trim');
+        $this->form_validation->set_rules('code_mst_inv', 'code_mst_inv', 'trim');
 
 		if($this->form_validation->run()== FALSE){
 			$data['kodebarang']		= $this->permohonanbarang_model->get_databarang();
@@ -705,7 +708,7 @@ class Permohonanbarang extends CI_Controller {
         $this->form_validation->set_rules('nama_barang', 'Nama Barang', 'trim|required');
         $this->form_validation->set_rules('jumlah', 'Jumlah', 'trim|required');
         $this->form_validation->set_rules('harga', 'Harga', 'trim|required');
-        $this->form_validation->set_rules('keterangan', 'Keterangan', 'trim|required');
+        $this->form_validation->set_rules('keterangan', 'Keterangan', 'trim');
         $this->form_validation->set_rules('pilihan_satuan_barang', 'Pilihan Satuan Barang', 'trim|required');
 
 		if($this->form_validation->run()== FALSE){

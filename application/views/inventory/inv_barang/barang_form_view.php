@@ -208,7 +208,7 @@
           {
             var values = document.getElementById(strid);
             var printing =
-            window.open('','','left=0,top=0,width=550,height=350,toolbar=0,scrollbars=0,sta­?tus=0');
+            window.open('','','left=0,top=0,width=500,height=350,toolbar=0,scrollbars=0,sta­?tus=0');
             printing.document.write(values.innerHTML);
             printing.document.close();
             printing.focus();
@@ -217,12 +217,12 @@
         }
         </script>
 <style type="text/css">
-   #myModal-header{
+  #myModal-header{
     background-color: #3498db;
-}
-#myModal-title{
-    color: white;
-}
+  }
+  #myModal-title{
+      color: white;
+  }
 </style>
 <!-- Modal -->
 <div id="myModal" class="modal fade" role="dialog">
@@ -236,16 +236,24 @@
       </div>
       <div class="modal-body">
       <div id="print2">   
-          <table width="100%" cellpadding='0' cellspacing='0' border="0">
+          <table width="100%" cellpadding='2' cellspacing='2' border="0">
               <tr> 
-                <th  align="center" colspan="1"><h4 align="center"><img src="<?php echo base_url()?>public/themes/sik/dist/img/logo.gif" width="50px" height="50px"></h4></th>
-                <th colspan="3" align="center"><h4 align="center">BARANG MILIK DINAS KESEHATAN <?php echo $ditrict; ?></h4></th>
+                <th  align="center" colspan="1">
+                  <h4 align="center">
+                    <img src="<?php echo base_url()?>public/themes/sik/dist/img/logo.gif" width="50px" height="50px">
+                  </h4>
+                </th>
+                <th colspan="3" align="center"><h4>BARANG MILIK DINAS KESEHATAN <BR> KABUPATEN<?php echo $ditrict; ?></h4></th>
               </tr>
+          </table>
+          <table width="100%" cellpadding='2' cellspacing='2' border="0">
               <tr>
-                  <th rowspan="5" align="right"><img src="<?php echo base_url()?>inventory/qrcodes/draw/<?php echo $kd_proc.'/'.$id_barang.'/'.$kode; ?>"></th>
-                  <th align="left">Kode Lokasi</th>
-                  <th align="left">:</th>
-                  <th align="left"><?php $kodelokasi= substr($kode,0,14);
+                  <th rowspan="4" width="30%">
+                    <img src="<?php echo base_url()?>inventory/qrcodes/draw/<?php echo $kd_proc.'/'.$id_barang.'/'.$kode; ?>">
+                  </th>
+                  <th align="left" width="20%">Kode Lokasi</th>
+                  <th align="left" width="2%">:&nbsp;</th>
+                  <th align="left" width="48%"><?php $kodelokasi= substr($kode,0,14);
                   $s = array();
                   $s[0] = substr($kodelokasi, 0,2);
                   $s[1] = substr($kodelokasi, 2,2);
@@ -259,7 +267,7 @@
               </tr>
               <tr  align="left"> 
                   <th>Kode Barang</th>
-                  <th>:</th>
+                  <th>:&nbsp;</th>
                   <th><?php $rest = substr ($kode,14,28);
                   $s = array();
                   $s[0] = substr($rest, 0,2);
@@ -272,16 +280,10 @@
                 ?></th>
               </tr>
               <tr  align="left">
-                  <th>Nama Barang</th>
-                  <th>:</th>
-                  <th><?php echo $nama_barang; ?></th>
-              </tr>
-              <tr  align="left">
-                  <th colspan="4">-</th>
+                  <th colspan="3"><?php echo $nama_barang; ?></th>
               </tr>
               <tr>
-                  <th colspan="2"></th>
-                  <th colspan="1" align="left"><img src="<?php echo base_url()?>inventory/barcode/draw/<?php echo $kode; ?>"></th>
+                  <th colspan="4" align="right"><img src="<?php echo base_url()?>inventory/barcode/draw/<?php echo $kode; ?>"></th>
               </tr>
           </table>
       </div>
