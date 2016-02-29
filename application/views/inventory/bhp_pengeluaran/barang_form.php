@@ -246,7 +246,7 @@
                   <div class="form-group">
                     <label>Jumlah Awal</label>
                     <input type="text" class="form-control" name="jumlahawal" id="jumlahawal" placeholder="Jumlah Awal" value="<?php 
-                      if(set_value('jumlahawal')=="" && isset($jmlbaik)){
+                      if(set_value('jumlahawal')=="" && (isset($jmlbaik)||isset($totaljumlah))){
                         echo $jml_awal=($totaljumlah+$jmlbaik);//-($jml_rusak+$jml_tdkdipakai);
                       }else{
                         echo  set_value('jumlahawal');

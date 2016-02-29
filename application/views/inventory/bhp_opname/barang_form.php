@@ -95,12 +95,12 @@ if(isset($disable)){if($disable='disable'){?>
               <div class="form-group">
                 <label>Stok</label>
                 <input type="number" class="form-control" name="stok" id="stok" placeholder="Jumlah" value="<?php 
-                  if(set_value('stok')=="" && isset($jml)){
-                    if($tgl_update==date("Y-m-d")){
-                      echo $jmlstok = $jml;
-                    }else{
-                      echo $jmlstok = ($jml+$totaljumlah)-$jmlpengeluaran;  
-                    }
+                  if(set_value('stok')=="" && (isset($jml)||isset($totaljumlah)||isset($jmlpengeluaran))){
+                      if($tgl_update==date("Y-m-d")){
+                        echo $jmlstok = $jml;
+                      }else{
+                        echo $jmlstok = ($jml+$totaljumlah)-$jmlpengeluaran;  
+                      }
                   }else{
                     echo  set_value('stok');
                   }
