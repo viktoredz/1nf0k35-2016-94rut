@@ -193,8 +193,8 @@ class Bhp_pengeluaran extends CI_Controller {
 				'uraian'				=> $act->uraian,
 				'merek_tipe'			=> $act->merek_tipe,
 				//'negara_asal'			=> $act->negara_asal,
-				'jmlawal'				=> ($act->totaljumlah+$act->jmlbaik)-($act->jml_rusak+$act->jml_tdkdipakai),
-				'jml_akhir'				=> ($act->totaljumlah+$act->jmlbaik)-($act->jml_rusak+$act->jml_tdkdipakai+$act->jmlpengeluaran),
+				'jmlawal'				=> ($act->totaljumlah+$act->jmlbaik),//-($act->jml_rusak+$act->jml_tdkdipakai),
+				'jml_akhir'				=> ($act->totaljumlah+$act->jmlbaik)-(/*$act->jml_rusak+$act->jml_tdkdipakai+*/$act->jmlpengeluaran),
 				'jml_selisih'			=> $act->jmlpengeluaran,
 				//'pilihan_satuan'		=> $act->pilihan_satuan,
 				'value'					=> $act->value,
@@ -346,6 +346,7 @@ class Bhp_pengeluaran extends CI_Controller {
         $this->form_validation->set_rules('dikeluarkan__', 'Di Keluarkan', 'trim|required');
         $this->form_validation->set_rules('jumlahakhir', 'Jumlah Akhir', 'trim');
         $this->form_validation->set_rules('harga', 'harga', 'trim');
+        $this->form_validation->set_rules('rusakdipakai', 'rusakdipakai', 'trim');
 
 		if($this->form_validation->run()== FALSE){
 

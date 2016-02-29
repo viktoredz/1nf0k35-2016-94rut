@@ -41,6 +41,7 @@
             data.append('jqxinput', $('#jqxinput').val());
             data.append('tgl_update', $('#tgl_update').val());
             data.append('jumlahawal', $('#jumlahawal').val());
+            data.append('rusakdipakai', $('#rusakdipakai').val());
             data.append('dikeluarkan__', $('#dikeluarkan__').val());
             data.append('jumlahakhir', $('#jumlahakhir').val());
             data.append('harga', $('#harga').val());
@@ -120,7 +121,7 @@
           }
         });
         
-      //  $("#jumlahawal").val(jumlahawal-$("#dikeluarkan__").val());
+        $("#jumlahakhir").val( $("#jumlahawal").val()-$("#dikeluarkan__").val());
         $("#jqxinput").select(function(){
             var codebarang = $(this).val();
             var res = codebarang.split(" | ");
@@ -131,17 +132,22 @@
             var jumlahawal  = $("#jumlahawal").val();
             var jumlahakhir = $("#jumlahakhir").val();
             var dikeluarkan = $("#dikeluarkan__").val();
-            if ($("#dikeluarkan__").val()<0) {
+            if($("#dikeluarkan__").val()>$("#jumlahawal").val()){
+              alert("Maaf data pengeluaran tidak boleh lebih dari data awal");
+              $("#dikeluarkan__").val("");
+            }
+            else if ($("#dikeluarkan__").val()<0) {
               alert("data tidak boleh kurang dari nol");
               $("#dikeluarkan__").val("");
               $("#jumlahakhir").val(jumlahawal-$("#dikeluarkan__").val());  
-            }
-            if ($("#jumlahakhir").val()<0) {
+            }else if ($("#jumlahakhir").val()<0) {
               alert("Jumlah Awal tidak boleh kurang dari kosong");
               $("#dikeluarkan__").val("");
               $("#jumlahakhir").val(jumlahawal-$("#dikeluarkan__").val());
+            }else if (jumlahakhir<$('#rusakdipakai').val()+1) {
+              alert("Maaf! data dikeluarkan tidak boleh kurang dari jumlah data rusak dan dipakai, yaitu :"+$('#rusakdipakai').val());
+              $("#dikeluarkan__").val("");
             }
-            
             $("#jumlahakhir").val(jumlahawal-$("#dikeluarkan__").val());
         });
     });
@@ -239,11 +245,18 @@
               <div class="col-md-4">
                   <div class="form-group">
                     <label>Jumlah Awal</label>
-                    <input type="number" class="form-control" name="jumlahawal" id="jumlahawal" placeholder="Jumlah Awal" value="<?php 
+                    <input type="text" class="form-control" name="jumlahawal" id="jumlahawal" placeholder="Jumlah Awal" value="<?php 
                       if(set_value('jumlahawal')=="" && isset($jmlbaik)){
-                        echo $jml_awal=($totaljumlah+$jmlbaik)-($jml_rusak+$jml_tdkdipakai);
+                        echo $jml_awal=($totaljumlah+$jmlbaik);//-($jml_rusak+$jml_tdkdipakai);
                       }else{
                         echo  set_value('jumlahawal');
+                      }
+                      ?>" readonly="">
+                      <input type="hidden" class="form-control" name="rusakdipakai" id="rusakdipakai" placeholder="Jumlah Rusak Tidak dipakai" value="<?php 
+                      if(set_value('rusakdipakai')=="" && isset($jml_rusak)){
+                        echo $jmlrusak=($jml_rusak+$jml_tdkdipakai);//-($jml_rusak+$jml_tdkdipakai);
+                      }else{
+                        echo  set_value('rusakdipakai');
                       }
                       ?>" readonly="">
                   </div>
@@ -263,9 +276,9 @@
               <div class="col-md-4">
                   <div class="form-group">
                     <label>Jumlah Akhir</label>
-                    <input type="number" class="form-control" name="jumlahakhir"  id="jumlahakhir" placeholder="Jumlah Akhir" readonly="" value="<?php
+                    <input type="text" class="form-control" name="jumlahakhir"  id="jumlahakhir" placeholder="Jumlah Akhir" readonly="" value="<?php
                     if(set_value('jumlahakhir')=="" && isset($jmlpengeluaran)){
-                        echo $jml_awal=($totaljumlah+$jmlbaik)-($jml_rusak+$jml_tdkdipakai+$jmlpengeluaran);;
+                        echo $jml_awal=($totaljumlah+$jmlbaik)-(/*$jml_rusak+$jml_tdkdipakai+*/$jmlpengeluaran);;
                       }else{
                         echo  set_value('jumlahakhir');
                       }

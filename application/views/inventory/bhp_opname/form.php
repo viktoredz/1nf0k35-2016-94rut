@@ -159,7 +159,7 @@ if(isset($disable)){if($disable='disable'){?>
                 <div class="form-group">
                   <label>Jumlah Baik</label>
                   <?php // echo 'sotk : '.$jml.'pengeluaran ; '.$jmlpengeluaran.'total :'.$totaljumlah?>
-                  <input type="number" class="form-control" name="stok" id="stok" placeholder="Jumlah Baik" value="<?php 
+                  <input type="text" class="form-control" name="stok" id="stok" placeholder="Jumlah Baik" value="<?php 
                     if(set_value('stok')=="" && isset($jml)){
                       echo $jmlstok = ($jml+$totaljumlah)-$jmlpengeluaran;
                     }else{
