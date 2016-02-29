@@ -15,11 +15,8 @@ class Bhp_opname extends CI_Controller {
 
 	function pengadaan_export(){
 		$this->authentication->verify('inventory','show');
-		
 		$TBS = new clsTinyButStrong;		
 		$TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN);
-		
-
 
 		if($_POST) {
 			$fil = $this->input->post('filterscount');
@@ -29,21 +26,24 @@ class Bhp_opname extends CI_Controller {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
 
-				if($field == 'tgl_pengadaan') {
-					$value = date("Y-m-d",strtotime($value));
-					$this->db->where($field,$value);
-				}elseif($field != 'year') {
-					$this->db->like($field,$value);
-				}
+				$this->db->like($field,$value);
 			}
 
 			if(!empty($ord)) {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
-		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
-			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		if($this->session->userdata('filter_jenisbarang')!=''){
+			if($this->session->userdata('filter_jenisbarang')=="all"){
+
+			}else{
+				$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$this->session->userdata('filter_jenisbarang'));
+			}
+		}else{
+			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
 		}
+		$kodepuskesmas = "P".$this->session->userdata("puskesmas");
+		$this->db->join('inv_inventaris_habispakai_pembelian_item',"mst_inv_barang_habispakai.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai and inv_inventaris_habispakai_pembelian_item.code_cl_phc=".'"'.$kodepuskesmas.'"'."");
 		$rows_all = $this->bhp_opname_model->get_data();
 
 
@@ -55,63 +55,78 @@ class Bhp_opname extends CI_Controller {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
 
-				if($field == 'tgl_pengadaan') {
-					$value = date("Y-m-d",strtotime($value));
-					$this->db->where($field,$value);
-				}elseif($field != 'year') {
-					$this->db->like($field,$value);
-				}
-
+				$this->db->like($field,$value);
 			}
 
 			if(!empty($ord)) {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
-		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
-			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+
+		if($this->session->userdata('filter_jenisbarang')!=''){
+			if($this->session->userdata('filter_jenisbarang')=="all"){
+				
+			}else{
+				$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$this->session->userdata('filter_jenisbarang'));
+			}
+		}else{
+			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
 		}
-		//$rows = $this->bhp_opname_model->get_data($this->input->post('recordstartindex'), $this->input->post('pagesize'));
+		$kodepuskesmas = "P".$this->session->userdata("puskesmas");
+		$this->db->join('inv_inventaris_habispakai_pembelian_item',"mst_inv_barang_habispakai.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai and inv_inventaris_habispakai_pembelian_item.code_cl_phc=".'"'.$kodepuskesmas.'"'."");
+		//$rows = $this->bhp_opname_model->get_data(/*$this->input->post('recordstartindex'), $this->input->post('pagesize')*/);
 		$rows = $this->bhp_opname_model->get_data();
 		$data = array();
 		$no=1;
+		//$unlock = 1;
 		
 
 		$data_tabel = array();
 		foreach($rows as $act) {
+			if (($act->harga_opname==0)||$act->harga_opname==null) {
+				$harga = $act->harga;
+			}else{
+				$harga = $act->harga_opname;
+			}
 			$data_tabel[] = array(
-				'tgl_pengadaan' 			=> date("d-m-Y",strtotime($act->tgl_pengadaan)),
-				'nomor_kontrak' 			=> $act->nomor_kontrak,
-				'nomor_kwitansi' 			=> $act->nomor_kwitansi,
-				'tgl_kwitansi' 				=> date("d-m-Y",strtotime($act->tgl_kwitansi)),
-				'pilihan_status_pengadaan' 	=> $this->bhp_opname_model->getPilihan("status_pengadaan",$act->pilihan_status_pengadaan),
-				'jumlah_unit'				=> $act->jumlah_unit,
-				'nilai_pengadaan'			=> number_format($act->nilai_pengadaan,2),
-				'keterangan'				=> $act->keterangan,
-				'detail'					=> 1,
-				'edit'						=> 1,
-				'delete'					=> 1
+				'no'					=> $no++,
+				'code'					=> $act->code,
+				'uraian'				=> $act->uraian,
+				'merek_tipe'			=> $act->merek_tipe,
+				'negara_asal'			=> $act->negara_asal,
+				'jmlbaik'				=> ($act->jmlbaik+$act->totaljumlah)-($act->jml_rusak+$act->jml_tdkdipakai+$act->jmlpengeluaran),
+				'jml_rusak'				=> $act->jml_rusak,
+				'jml_tdkdipakai'		=> $act->jml_tdkdipakai,
+				'pilihan_satuan'		=> $act->pilihan_satuan,
+				'value'					=> $act->value,
+				'totaljumlah'			=> $act->totaljumlah,
+				'jmlpengeluaran'		=> $act->jmlpengeluaran,
+				'tgl_update'			=> $act->tgl_update,
+				'harga'					=> number_format($harga,2),
+				'id_mst_inv_barang_habispakai'			=> $act->id_mst_inv_barang_habispakai,
+				'id_mst_inv_barang_habispakai_jenis'	=> $act->id_mst_inv_barang_habispakai_jenis
 			);
 		}
 
 
-		$puskes = $this->input->post('puskes');
+		$puskes = $this->input->post('puskes'); 
 		if(empty($puskes) or $puskes == 'Pilih Puskesmas'){
 			$nama = 'Semua Data Puskesmas';
 		}else{
 			$nama = $this->input->post('puskes');
 		}
 		$data_puskesmas[] = array('nama_puskesmas' => $nama);
+		
 		$dir = getcwd().'/';
-		$template = $dir.'public/files/template/inventory/pengadaan_barang.xlsx';		
+		$template = $dir.'public/files/template/inventory/permohonan_pengadaan_barang.xlsx';		
 		$TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8);
 
 		// Merge data in the first sheet
 		$TBS->MergeBlock('a', $data_tabel);
 		$TBS->MergeBlock('b', $data_puskesmas);
 		
-		$code = date('Y-m-d-H-i-s');
-		$output_file_name = 'public/files/hasil/hasil_export_'.$code.'.xlsx';
+		$code = uniqid();
+		$output_file_name = 'public/files/hasil/hasil_permohonaneksport_'.$code.'.xlsx';
 		$output = $dir.$output_file_name;
 		$TBS->Show(OPENTBS_FILE, $output); // Also merges all [onshow] automatic fields.
 		
