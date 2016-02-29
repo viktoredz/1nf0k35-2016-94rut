@@ -186,7 +186,13 @@ class Bhp_opname extends CI_Controller {
 		$data = array();
 		$no=1;
 		//$unlock = 1;
+		
 		foreach($rows as $act) {
+			if (($act->harga_opname==0)||$act->harga_opname==null) {
+				$harga = $act->harga;
+			}else{
+				$harga = $act->harga_opname;
+			}
 			$data[] = array(
 				'no'					=> $no++,
 				'code'					=> $act->code,
@@ -201,7 +207,7 @@ class Bhp_opname extends CI_Controller {
 				'totaljumlah'					=> $act->totaljumlah,
 				'jmlpengeluaran'					=> $act->jmlpengeluaran,
 				'tgl_update'			=> $act->tgl_update,
-				'harga'					=> number_format($act->harga,2),
+				'harga'					=> number_format($harga,2),
 				'id_mst_inv_barang_habispakai'			=> $act->id_mst_inv_barang_habispakai,
 				'id_mst_inv_barang_habispakai_jenis'	=> $act->id_mst_inv_barang_habispakai_jenis
 			);

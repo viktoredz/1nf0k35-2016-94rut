@@ -93,6 +93,10 @@ if(isset($disable)){if($disable='disable'){?>
                   { name: 'id_mst_inv_barang_habispakai', type: 'string'},
                   { name: 'hargaterakhir', type: 'string'},
                   { name: 'harga', type: 'string'},
+                  { name: 'harga_opname', type: 'string'},
+                  { name: 'harga_pembelian', type: 'string'},
+                  { name: 'tgl_opname', type: 'date'},
+                  { name: 'tgl_pembelian', type: 'date'},
                 ],
                 url: '<?php echo base_url().'inventory/bhp_pengadaan/autocomplite_barang'; ?>'
               },
@@ -105,10 +109,25 @@ if(isset($disable)){if($disable='disable'){?>
                 loadComplete: function (data) {
                   if (data.length > 0) {
                     response($.map(data, function (item) {
-                      if (item.hargaterakhir==null) {
-                        var hargabarang = item.harga;
+                      if ((item.tgl_pembelian!=null)||(item.tgl_opname!=null)) {
+                        if(item.tgl_opname==null){
+                          tgl_opname = 0;
+                        }else{
+                          tgl_opname = Date.parse(item.tgl_opname);
+                        }
+
+                        if (item.tgl_pembelian==null) {
+                          tgl_pembelian = 0
+                        }else{
+                          tgl_pembelian = Date.parse(item.tgl_pembelian);
+                        }
+                        if( tgl_pembelian>= tgl_opname){
+                          var hargabarang = item.harga_pembelian;  
+                        }else{
+                          var hargabarang = item.harga_opname;  
+                        }
                       }else{
-                        var hargabarang = item.hargaterakhir;
+                        var hargabarang = item.harga;
                       }
                       return item.uraian+' | '+item.id_mst_inv_barang_habispakai+' | '+hargabarang;
                     }));

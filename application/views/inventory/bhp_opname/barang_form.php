@@ -112,7 +112,15 @@ if(isset($disable)){if($disable='disable'){?>
                 <label>Harga</label>
                 <input type="number" class="form-control" name="harga" id="harga" placeholder="Harga Satuan" value="<?php 
                   if(set_value('harga')=="" && isset($harga)){
-                    echo $harga;
+                    if((isset($tgl_pembelian))||(isset($tgl_opname))){
+                      if ($tgl_pembelian >= $tgl_opname) {
+                        echo $harga_pembelian;
+                      }else{
+                        echo $harga_opname;
+                      }
+                    }else{
+                      echo $harga;
+                    }
                   }else{
                     echo  set_value('harga');
                   }

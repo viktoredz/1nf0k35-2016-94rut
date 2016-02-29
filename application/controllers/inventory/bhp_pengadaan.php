@@ -196,6 +196,7 @@ class Bhp_pengadaan extends CI_Controller {
 	}
 
 	function autocomplite_barang(){
+		$kodepuskesmas = "P".$this->session->userdata("puskesmas");
 		$search = explode("&",$this->input->server('QUERY_STRING'));
 		$search = str_replace("query=","",$search[0]);
 		$search = str_replace("+"," ",$search);
@@ -203,14 +204,23 @@ class Bhp_pengadaan extends CI_Controller {
 		$this->db->like("uraian",$search);
 		$this->db->order_by('id_mst_inv_barang_habispakai','asc');
 		$this->db->limit(10,0);
-		$this->db->select("mst_inv_barang_habispakai.*,(select harga as hrg from inv_inventaris_habispakai_opname where id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai order by tgl_update desc limit 1) as hargaterakhir");
+		$this->db->select("mst_inv_barang_habispakai.*,
+			(select harga as hrg from inv_inventaris_habispakai_opname where code_cl_phc=".'"'.$kodepuskesmas.'"'."  and id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai order by tgl_update desc limit 1) as harga_opname,
+			(select harga as hargapembelian from inv_inventaris_habispakai_pembelian_item 
+            where code_cl_phc=".'"'.$kodepuskesmas.'"'." and id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai ) as harga_pembelian,
+            (select tgl_update  as tglopname from inv_inventaris_habispakai_opname where id_mst_inv_barang_habispakai = mst_inv_barang_habispakai.id_mst_inv_barang_habispakai and code_cl_phc=".'"'.$kodepuskesmas.'"'." order by tgl_update desc limit 1) as tgl_opname,
+            (select tgl_update  as tglpembelian from inv_inventaris_habispakai_pembelian_item where id_mst_inv_barang_habispakai = mst_inv_barang_habispakai.id_mst_inv_barang_habispakai and code_cl_phc=".'"'.$kodepuskesmas.'"'." order by tgl_update desc limit 1) as tgl_pembelian
+			");
 		$query= $this->db->get("mst_inv_barang_habispakai")->result();
 		foreach ($query as $q) {
 			$barang[] = array(
 				'id_mst_inv_barang_habispakai' 	=> $q->id_mst_inv_barang_habispakai , 
 				'uraian' 						=> $q->uraian, 
-				'hargaterakhir' 				=> $q->hargaterakhir, 
+				'harga_opname' 					=> $q->harga_opname, 
 				'harga' 						=> $q->harga, 
+				'harga_pembelian' 				=> $q->harga_pembelian, 
+				'tgl_pembelian' 				=> $q->tgl_pembelian, 
+				'tgl_opname' 					=> $q->tgl_opname, 
 			);
 		}
 		echo json_encode($barang);
