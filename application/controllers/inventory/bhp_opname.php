@@ -10,13 +10,14 @@ class Bhp_opname extends CI_Controller {
 		$this->load->model('inventory/bhp_opname_model');
 		$this->load->model('mst/puskesmas_model');
 		$this->load->model('inventory/inv_ruangan_model');
+		$this->load->model('inventory/inv_barang_model');
 		$this->load->model('mst/invbarang_model');
 	}
 
 	function pengadaan_export(){
-		$this->authentication->verify('inventory','show');
 		$TBS = new clsTinyButStrong;		
 		$TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN);
+		$this->authentication->verify('inventory','show');
 
 		if($_POST) {
 			$fil = $this->input->post('filterscount');
@@ -42,9 +43,9 @@ class Bhp_opname extends CI_Controller {
 		}else{
 			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
 		}
-		$kodepuskesmas = "P".$this->session->userdata("puskesmas");
-		$this->db->join('inv_inventaris_habispakai_pembelian_item',"mst_inv_barang_habispakai.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai and inv_inventaris_habispakai_pembelian_item.code_cl_phc=".'"'.$kodepuskesmas.'"'."");
-		$rows_all = $this->bhp_opname_model->get_data();
+		
+		
+		$rows_all = $this->bhp_opname_model->get_data_export();
 
 
 		if($_POST) {
@@ -72,16 +73,11 @@ class Bhp_opname extends CI_Controller {
 		}else{
 			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
 		}
-		$kodepuskesmas = "P".$this->session->userdata("puskesmas");
-		$this->db->join('inv_inventaris_habispakai_pembelian_item',"mst_inv_barang_habispakai.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai and inv_inventaris_habispakai_pembelian_item.code_cl_phc=".'"'.$kodepuskesmas.'"'."");
-		//$rows = $this->bhp_opname_model->get_data(/*$this->input->post('recordstartindex'), $this->input->post('pagesize')*/);
-		$rows = $this->bhp_opname_model->get_data();
-		$data = array();
+		$rows = $this->bhp_opname_model->get_data_export(/*$this->input->post('recordstartindex'), $this->input->post('pagesize')*/);
+		$data_tabel = array();
 		$no=1;
 		//$unlock = 1;
 		
-
-		$data_tabel = array();
 		foreach($rows as $act) {
 			if (($act->harga_opname==0)||$act->harga_opname==null) {
 				$harga = $act->harga;
@@ -93,30 +89,25 @@ class Bhp_opname extends CI_Controller {
 				'code'					=> $act->code,
 				'uraian'				=> $act->uraian,
 				'merek_tipe'			=> $act->merek_tipe,
+				'nama_jenis'			=> $act->nama_jenis,
 				'negara_asal'			=> $act->negara_asal,
 				'jmlbaik'				=> ($act->jmlbaik+$act->totaljumlah)-($act->jml_rusak+$act->jml_tdkdipakai+$act->jmlpengeluaran),
 				'jml_rusak'				=> $act->jml_rusak,
-				'jml_tdkdipakai'		=> $act->jml_tdkdipakai,
+				'jml_tdkdipakai'			=> $act->jml_tdkdipakai,
 				'pilihan_satuan'		=> $act->pilihan_satuan,
 				'value'					=> $act->value,
-				'totaljumlah'			=> $act->totaljumlah,
-				'jmlpengeluaran'		=> $act->jmlpengeluaran,
+				'totaljumlah'					=> $act->totaljumlah,
+				'jmlpengeluaran'					=> $act->jmlpengeluaran,
 				'tgl_update'			=> $act->tgl_update,
 				'harga'					=> number_format($harga,2),
 				'id_mst_inv_barang_habispakai'			=> $act->id_mst_inv_barang_habispakai,
 				'id_mst_inv_barang_habispakai_jenis'	=> $act->id_mst_inv_barang_habispakai_jenis
 			);
 		}
-
-
-		$puskes = $this->input->post('puskes'); 
-		if(empty($puskes) or $puskes == 'Pilih Puskesmas'){
-			$nama = 'Semua Data Puskesmas';
-		}else{
-			$nama = $this->input->post('puskes');
-		}
-		$data_puskesmas[] = array('nama_puskesmas' => $nama);
 		
+		$puskes = $this->input->post('puskes'); 
+		$tahun = date("Y");
+		$data_puskesmas[] = array('nama_puskesmas' => $puskes,'tahun' => $tahun);
 		$dir = getcwd().'/';
 		$template = $dir.'public/files/template/inventory/permohonan_pengadaan_barang.xlsx';		
 		$TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8);
@@ -126,7 +117,7 @@ class Bhp_opname extends CI_Controller {
 		$TBS->MergeBlock('b', $data_puskesmas);
 		
 		$code = uniqid();
-		$output_file_name = 'public/files/hasil/hasil_permohonaneksport_'.$code.'.xlsx';
+		$output_file_name = 'public/files/hasil/hasil_export_permohonan_pengadaan_barang'.$code.'.xlsx';
 		$output = $dir.$output_file_name;
 		$TBS->Show(OPENTBS_FILE, $output); // Also merges all [onshow] automatic fields.
 		
