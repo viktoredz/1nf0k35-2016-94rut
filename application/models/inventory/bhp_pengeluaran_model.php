@@ -33,6 +33,7 @@ class Bhp_pengeluaran_model extends CI_Model {
     {
         $kodepuskesmas = "P".$this->session->userdata("puskesmas");
         $data = array();
+        $this->db->order_by('inv_inventaris_habispakai_pengeluaran.tgl_update','desc');
         $this->db->where("inv_inventaris_habispakai_pengeluaran.code_cl_phc",$kodepuskesmas);
         $this->db->select("mst_inv_barang_habispakai.uraian,inv_inventaris_habispakai_pengeluaran.id_mst_inv_barang_habispakai,inv_inventaris_habispakai_pengeluaran.tgl_update,inv_inventaris_habispakai_pengeluaran.harga,inv_inventaris_habispakai_pengeluaran.jml,
             mst_inv_barang_habispakai.pilihan_satuan,mst_inv_pilihan.value as nama_pilihan");

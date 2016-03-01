@@ -61,6 +61,7 @@
                       $('#notice').show();
                       $("#jqxgrid").jqxGrid('updatebounddata', 'cells');
                       timeline_pengeluaran_barang(res[1]);
+                       $("#jumlahawal").val("<?php echo $jml_awal=($totaljumlah+$jmlbaik) ?>");
                   }
                   else if(res[0]=="Error"){
                       $('#notice').hide();
@@ -120,7 +121,11 @@
               });
           }
         });
-        
+        <?php if (isset($jmlpengeluaran)) { ?>
+                  var dikeluarkan = "<?php echo $jmlpengeluaran;?>";
+        <?php }else{ ?>
+                  var dikeluarkan = 0;
+        <?php }  ?>
         $("#jumlahakhir").val( $("#jumlahawal").val()-$("#dikeluarkan__").val());
         $("#jqxinput").select(function(){
             var codebarang = $(this).val();
@@ -131,7 +136,6 @@
         $("#dikeluarkan__").change(function(){
             var jumlahawal  = $("#jumlahawal").val();
             var jumlahakhir = $("#jumlahakhir").val();
-            var dikeluarkan = $("#dikeluarkan__").val();
             if($("#dikeluarkan__").val()>$("#jumlahawal").val()){
               alert("Maaf data pengeluaran tidak boleh lebih dari data awal");
               $("#dikeluarkan__").val("");
@@ -145,7 +149,7 @@
               $("#dikeluarkan__").val("");
               $("#jumlahakhir").val(jumlahawal-$("#dikeluarkan__").val());
             }else if (jumlahakhir<$('#rusakdipakai').val()+1) {
-              alert("Maaf! data dikeluarkan tidak boleh kurang dari jumlah data rusak dan dipakai, yaitu :"+$('#rusakdipakai').val());
+              alert("Maaf! data dikeluarkan tidak boleh kurang dari jumlah data rusak dan tidak dipakai, yaitu :"+$('#rusakdipakai').val());
               $("#dikeluarkan__").val("");
             }
             $("#jumlahakhir").val(jumlahawal-$("#dikeluarkan__").val());
@@ -247,7 +251,16 @@
                     <label>Jumlah Awal</label>
                     <input type="text" class="form-control" name="jumlahawal" id="jumlahawal" placeholder="Jumlah Awal" value="<?php 
                       if(set_value('jumlahawal')=="" && (isset($jmlbaik)||isset($totaljumlah))){
-                        echo $jml_awal=($totaljumlah+$jmlbaik);//-($jml_rusak+$jml_tdkdipakai);
+                        if(isset($tgl_update)){
+                            if ($tgl_update==date("Y-m-d")) {
+                                echo $jml_awal=($totaljumlah+$jmlbaik);//-($jml_rusak+$jml_tdkdipakai);
+                              }  else{
+                                echo $jml_awal=($totaljumlah+$jmlbaik)-$jmlpengeluaran;
+                              }
+                        }else{
+                            echo $jml_awal=($totaljumlah+$jmlbaik);//-($jml_rusak+$jml_tdkdipakai);
+                        }
+                        
                       }else{
                         echo  set_value('jumlahawal');
                       }
@@ -266,7 +279,16 @@
                     <label>Dikeluarkan</label>
                     <input type="number" class="form-control" name="dikeluarkan__"  id="dikeluarkan__" placeholder="di Keluarkan"  value="<?php
                     if(set_value('dikeluarkan__')=="" && isset($jmlpengeluaran)){
-                        echo $jmlpengeluaran;
+                        if (isset($jmlpengeluaran)) {
+                          if ($tgl_update==date('Y-m-d')) {
+                            echo $jmlpengeluaran;
+                          }else{
+                            echo '';
+                          }
+                        }else{
+                          echo  '';
+                        } 
+                        
                       }else{
                         echo  set_value('dikeluarkan__');
                       }
