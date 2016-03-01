@@ -136,11 +136,7 @@
         $("#dikeluarkan__").change(function(){
             var jumlahawal  = $("#jumlahawal").val();
             var jumlahakhir = $("#jumlahakhir").val();
-            if($("#dikeluarkan__").val()>$("#jumlahawal").val()){
-              alert("Maaf data pengeluaran tidak boleh lebih dari data awal");
-              $("#dikeluarkan__").val("");
-            }
-            else if ($("#dikeluarkan__").val()<0) {
+            if ($("#dikeluarkan__").val()<0) {
               alert("data tidak boleh kurang dari nol");
               $("#dikeluarkan__").val("");
               $("#jumlahakhir").val(jumlahawal-$("#dikeluarkan__").val());  
