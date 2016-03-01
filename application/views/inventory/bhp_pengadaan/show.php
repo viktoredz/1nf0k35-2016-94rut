@@ -188,7 +188,7 @@
 			var condition	= fltr.filter.getfilters()[0].condition;
 			var filteroperation	= fltr.filter.getfilters()[0].operation;
 			var filterdatafield	= fltr.filtercolumn;
-			if(filterdatafield=="tgl"){
+			if(filterdatafield=="tgl_permohonan"){
 				var d = new Date(value);
 				var day = d.getDate();
 				var month = d.getMonth();

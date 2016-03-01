@@ -8,6 +8,7 @@ class Bhp_pengadaan extends CI_Controller {
 		require_once(APPPATH.'third_party/tbs_plugin_opentbs_1.8.0/tbs_plugin_opentbs.php');
 
 		$this->load->model('inventory/bhp_pengadaan_model');
+		$this->load->model('inventory/inv_barang_model');
 		$this->load->model('mst/puskesmas_model');
 		$this->load->model('inventory/inv_ruangan_model');
 		$this->load->model('mst/invbarang_model');
@@ -29,7 +30,7 @@ class Bhp_pengadaan extends CI_Controller {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
 
-				if($field == 'tgl_pengadaan') {
+				if($field == 'tgl_permohonan') {
 					$value = date("Y-m-d",strtotime($value));
 					$this->db->where($field,$value);
 				}elseif($field != 'year') {
@@ -44,6 +45,7 @@ class Bhp_pengadaan extends CI_Controller {
 		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
 			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
 		}
+
 		$rows_all = $this->bhp_pengadaan_model->get_data();
 
 
@@ -55,13 +57,12 @@ class Bhp_pengadaan extends CI_Controller {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
 
-				if($field == 'tgl_pengadaan') {
+				if($field == 'tgl_permohonan') {
 					$value = date("Y-m-d",strtotime($value));
 					$this->db->where($field,$value);
 				}elseif($field != 'year') {
 					$this->db->like($field,$value);
 				}
-
 			}
 
 			if(!empty($ord)) {
@@ -71,39 +72,41 @@ class Bhp_pengadaan extends CI_Controller {
 		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
 			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
 		}
-		//$rows = $this->bhp_pengadaan_model->get_data($this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$rows = $this->bhp_pengadaan_model->get_data();
-		$data = array();
-		$no=1;
-		
-
+		//$rows = $this->bhp_pengadaan_model->get_data($this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data_tabel = array();
+
+		$kodepuskesmas = $this->session->userdata('puskesmas');
+		$no=1;
 		foreach($rows as $act) {
 			$data_tabel[] = array(
-				'tgl_pengadaan' 			=> date("d-m-Y",strtotime($act->tgl_pengadaan)),
-				'nomor_kontrak' 			=> $act->nomor_kontrak,
-				'nomor_kwitansi' 			=> $act->nomor_kwitansi,
-				'tgl_kwitansi' 				=> date("d-m-Y",strtotime($act->tgl_kwitansi)),
-				'pilihan_status_pengadaan' 	=> $this->bhp_pengadaan_model->getPilihan("status_pengadaan",$act->pilihan_status_pengadaan),
-				'jumlah_unit'				=> $act->jumlah_unit,
-				'nilai_pengadaan'			=> number_format($act->nilai_pengadaan,2),
-				'keterangan'				=> $act->keterangan,
-				'detail'					=> 1,
-				'edit'						=> 1,
-				'delete'					=> 1
+				'no'							=>$no++,
+				'id_inv_hasbispakai_pembelian' 	=> $act->id_inv_hasbispakai_pembelian,
+				'code_cl_phc' 					=> $act->code_cl_phc,
+				'pilihan_status_pembelian' 		=> $act->pilihan_status_pembelian,
+				'tgl_permohonan' 				=> date("Y-m-d",strtotime($act->tgl_permohonan)),
+				'tgl_pembelian' 				=> $act->tgl_pembelian,
+				'tgl_kwitansi'					=> $act->tgl_kwitansi,
+				'nomor_kwitansi'				=> $act->nomor_kwitansi,
+				'nomor_kontrak'					=> $act->nomor_kontrak,
+				'jumlah_unit'					=> $act->jumlah_unit,
+				'nilai_pembelian'				=> number_format($act->nilai_pembelian,2),
+				'value'							=> $act->value,
+				'keterangan'					=> $act->keterangan
 			);
 		}
 
 
+
 		$puskes = $this->input->post('puskes');
-		if(empty($puskes) or $puskes == 'Pilih Puskesmas'){
-			$nama = 'Semua Data Puskesmas';
-		}else{
-			$nama = $this->input->post('puskes');
-		}
-		$data_puskesmas[] = array('nama_puskesmas' => $nama);
+		$kode_sess=$this->session->userdata('puskesmas');
+		$kd_prov = $this->inv_barang_model->get_nama('value','cl_province','code',substr($kode_sess, 0,2));
+		$kd_kab  = $this->inv_barang_model->get_nama('value','cl_district','code',substr($kode_sess, 0,4));
+		$kd_kec  = 'KEC. '.$this->inv_barang_model->get_nama('nama','cl_kec','code',substr($kode_sess, 0,7));
+		$tahun_ = date("Y");
+		$data_puskesmas[] = array('nama_puskesmas' => $puskes,'kd_prov' => $kd_prov,'kd_kab' => $kd_kab,'tahun' => $tahun_);
 		$dir = getcwd().'/';
-		$template = $dir.'public/files/template/inventory/pengadaan_barang.xlsx';		
+		$template = $dir.'public/files/template/inventory/pengadaan_permohonan_habispakai.xlsx';		
 		$TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8);
 
 		// Merge data in the first sheet
@@ -111,7 +114,7 @@ class Bhp_pengadaan extends CI_Controller {
 		$TBS->MergeBlock('b', $data_puskesmas);
 		
 		$code = date('Y-m-d-H-i-s');
-		$output_file_name = 'public/files/hasil/hasil_export_'.$code.'.xlsx';
+		$output_file_name = 'public/files/hasil/hasil_export_bhppengadaan'.$code.'.xlsx';
 		$output = $dir.$output_file_name;
 		$TBS->Show(OPENTBS_FILE, $output); // Also merges all [onshow] automatic fields.
 		
@@ -135,8 +138,9 @@ class Bhp_pengadaan extends CI_Controller {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
 
-				if($field == 'tgl_pengadaan') {
+				if($field == 'tgl_update' ) {
 					$value = date("Y-m-d",strtotime($value));
+
 					$this->db->where($field,$value);
 				}elseif($field != 'year') {
 					$this->db->like($field,$value);
@@ -147,45 +151,76 @@ class Bhp_pengadaan extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
-		
-		$data = array();
+		$this->db->where('id_inv_hasbispakai_pembelian',$id);
+		$rows_all_activity = $this->bhp_pengadaan_model->getItem();
 
-		$activity = $this->bhp_pengadaan_model->getItem('inv_inventaris_barang', array('id_pengadaan'=>$id))->result();
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl_update' ) {
+					$value = date("Y-m-d",strtotime($value));
+
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
+		$this->db->where('id_inv_hasbispakai_pembelian',$id);
+		$activity = $this->bhp_pengadaan_model->getItem(/*$this->input->post('recordstartindex'), $this->input->post('pagesize')*/);
+		$no=1;
+		$datadetail = array();
 		foreach($activity as $act) {
-			$data[] = array(
-				'id_inventaris_barang'   		=> $act->id_inventaris_barang,
-				'id_mst_inv_barang'   			=> substr(chunk_split($act->id_mst_inv_barang, 2, '.'),0,14),
-				'nama_barang'					=> $act->nama_barang,
-				'jumlah'						=> $act->jumlah,
-				'harga'							=> number_format($act->harga,2),
-				'totalharga'					=> number_format($act->totalharga,2),
-				'keterangan'					=> $act->keterangan_pengadaan,
-				'pilihan_status_invetaris'		=> $this->bhp_pengadaan_model->getPilihan("status_inventaris",$act->pilihan_status_invetaris),
-				'barang_kembar_proc'			=> $act->barang_kembar_proc,
-				'tanggal_diterima'				=> date("d-m-Y",strtotime($act->tanggal_diterima)),
-				'waktu_dibuat'					=> $act->waktu_dibuat,
-				'terakhir_diubah'				=> $act->terakhir_diubah,
-				'value'							=> $act->value
+			$datadetail[] = array(
+				'no'									=> $no++,
+				'id_inv_hasbispakai_pembelian'   		=> $act->id_inv_hasbispakai_pembelian,
+				'id_mst_inv_barang_habispakai'   		=> $act->id_mst_inv_barang_habispakai,
+				'uraian'								=> $act->uraian,
+				'jml'									=> $act->jml,
+				'harga'									=> number_format($act->harga,2),
+				'subtotal'								=> number_format($act->jml*$act->harga,2),
+				'tgl_update'							=> $act->tgl_update,
+				'edit'		=> 1,
+				'delete'	=> 1
 			);
 		}
 
 		$data_puskesmas	= $this->bhp_pengadaan_model->get_data_row($id);
 		$nama_puskesmas	= $this->bhp_pengadaan_model->get_data_nama($data_puskesmas['code_cl_phc']);
-		$data_puskesmas['puskesmas']		= $nama_puskesmas['value'];
-		$data_puskesmas['tgl_pengadaan']	= date("d-m-Y",strtotime($data_puskesmas['tgl_pengadaan']));
-		$data_puskesmas['tgl_kwitansi']		= date("d-m-Y",strtotime($data_puskesmas['tgl_kwitansi']));
-		$data_puskesmas['nomor_kwitansi']	= $data_puskesmas['nomor_kwitansi'];
-		$data_puskesmas['nilai_pengadaan']	= number_format($data_puskesmas['nilai_pengadaan'],2);
-		$data_puskesmas['pilihan_status_pengadaan']	= $this->bhp_pengadaan_model->getPilihan("status_pengadaan",$data_puskesmas['pilihan_status_pengadaan']);
-
+		$onshow['puskesmas']		= $nama_puskesmas['value'];
+		$onshow['tgl_permohonan']	= date("d-m-Y",strtotime($data_puskesmas['tgl_permohonan']));
+		$onshow['tgl_kwitansi']		= date("d-m-Y",strtotime($data_puskesmas['tgl_kwitansi']));
+		$onshow['nomor_kwitansi']	= $data_puskesmas['nomor_kwitansi'];
+		$onshow['nomor_kontrak']	= $data_puskesmas['nomor_kontrak'];
+		$onshow['keterangan']		= $data_puskesmas['keterangan'];
+		$onshow['jumlah_unit']		= $data_puskesmas['jumlah_unit'];
+		$onshow['nilai_pembelian']	= number_format($data_puskesmas['nilai_pembelian'],2);
+		$onshow['tahun']			= date("Y");
+		$onshow['pilihan_status_pembelian']	= $this->bhp_pengadaan_model->getPilihan("status_pembelian",$data_puskesmas['pilihan_status_pembelian']);
+		$kode_sess=$this->session->userdata('puskesmas');
+		$onshow['kd_prov'] = $this->inv_barang_model->get_nama('value','cl_province','code',substr($kode_sess, 0,2));
+		$onshow['kd_kab']  = $this->inv_barang_model->get_nama('value','cl_district','code',substr($kode_sess, 0,4));
 		$TBS->ResetVarRef(false);
-		$TBS->VarRef =  &$data_puskesmas;	
+		$TBS->VarRef =  &$onshow;	
 		$dir = getcwd().'/';
-		$template = $dir.'public/files/template/inventory/pengadaan_barang_detail.xlsx';		
+		$template = $dir.'public/files/template/inventory/bhp_pengadaanpermohonan.xlsx';		
 		$TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8);
 
 		
-		$TBS->MergeBlock('a', $data);
+		$TBS->MergeBlock('a', $datadetail);
 		
 		$code = date('Y-m-d-H-i-s');
 		$output_file_name = 'public/files/hasil/hasil_detail_export_'.$code.'.xlsx';

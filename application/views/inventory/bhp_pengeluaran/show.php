@@ -238,14 +238,6 @@
 			var condition	= fltr.filter.getfilters()[0].condition;
 			var filteroperation	= fltr.filter.getfilters()[0].operation;
 			var filterdatafield	= fltr.filtercolumn;
-			if(filterdatafield=="tgl"){
-				var d = new Date(value);
-				var day = d.getDate();
-				var month = d.getMonth();
-				var year = d.getYear();
-				value = year+'-'+month+'-'+day;
-				
-			}
 			post = post+'&filtervalue'+i+'='+value;
 			post = post+'&filtercondition'+i+'='+condition;
 			post = post+'&filteroperation'+i+'='+filteroperation;
@@ -263,9 +255,9 @@
 			post = post+'&sortorder='+sortorder;
 			
 		}
-		post = post+'&puskes='+$("#puskesmas option:selected").text();
+		post = post+'&jenisbarang='+$("#jenisbarang option:selected").text()+'&nama_puskesmas='+$("#puskesmas option:selected").text();
 		
-		$.post("<?php echo base_url()?>inventory/bhp_pengeluaran/pengadaan_export",post,function(response	){
+		$.post("<?php echo base_url()?>inventory/bhp_pengeluaran/pengeluaran_export",post,function(response	){
 			window.location.href=response;
 		});
 	});
