@@ -210,6 +210,10 @@
 		  
 		  {menu}
         </section>
+        <section class="sidebar" style="text-align: center;">
+            <img src="<?php echo base_url()?>public/themes/sik/dist/img/hati.png"/>
+        </section>
+        
         <!-- /.sidebar -->
       </aside>
 

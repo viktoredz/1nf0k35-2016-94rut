@@ -73,7 +73,7 @@
                 <label>Nama : </label>
               </div>
               <div class="col-md-8 col-xs-6">
-                  {nama}
+                  {gelar_depan} {nama} {gelar_belakang}
               </div>
             </div>
 

@@ -130,6 +130,7 @@
                     }else{
                       $tgl_lhr = strtotime(set_value('tgl_lhr'));
                     }
+                    if($tgl_lhr=="") $tgl_lhr = time();
                     echo date("Y-m-d",$tgl_lhr);
                   ?>" >
                   </div>
@@ -218,6 +219,7 @@
                     }else{
                       $npwp_tgl = strtotime(set_value('npwp_tgl'));
                     }
+                    if($npwp_tgl=="") $npwp_tgl = time();
                     echo date("Y-m-d",$npwp_tgl);
                   ?>" >
                   </div>

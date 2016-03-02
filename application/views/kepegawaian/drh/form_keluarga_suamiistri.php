@@ -1,21 +1,21 @@
 <div class="row" style="margin: 0">
   <div class="col-md-12">
     <div class="box-footer" style="background: #FAFAFA;text-align: right">
-      <button type="button" class="btn btn-primary" id="btn-ortu-refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
-      <button type="button" class="btn btn-warning" id="btn-ortu-tambah"><i class='fa fa-plus-circle'></i> &nbsp; Tambah Data Orang Tua</button>
+      <button type="button" class="btn btn-primary" id="btn-pasangan-refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
+      <button type="button" class="btn btn-warning" id="btn-pasangan-tambah"><i class='fa fa-plus-circle'></i> &nbsp; Tambah Data Pasangan</button>
        </div>
         <div class="box-body">
           <div class="div-grid">
-              <div id="jqxgridKeluarga"></div>
+              <div id="jqxgridPasangan"></div>
           </div>
         </div>
       </div>
     </div>
 </div>
 
-<div id="popup_keluarga_ortu" style="display:none">
-  <div id="popup_title">Data Keluarga Orang Tua</div>
-  <div id="popup_keluarga_ortu_content">&nbsp;</div>
+<div id="popup_keluarga_pasangan" style="display:none">
+  <div id="popup_title">Data Pasangan</div>
+  <div id="popup_keluarga_pasangan_content">&nbsp;</div>
 </div>
 
 <script type="text/javascript">
@@ -31,20 +31,20 @@
       { name: 'code_cl_district', type: 'string'},
       { name: 'usia', type: 'string'},
       { name: 'bpjs', type: 'string'},
-      { name: 'hidup', type: 'string'},
-      { name: 'status_pns', type: 'string'},
+      { name: 'status_menikah', type: 'string'},
+      { name: 'pns', type: 'string'},
       { name: 'edit', type: 'number'},
       { name: 'delete', type: 'number'}
         ],
-    url: "<?php echo site_url('kepegawaian/drh_keluarga/json_ortu/{id}'); ?>",
+    url: "<?php echo site_url('kepegawaian/drh_keluarga/json_pasangan/{id}'); ?>",
     cache: false,
     updaterow: function (rowid, rowdata, commit) {
       },
     filter: function(){
-      $("#jqxgridKeluarga").jqxGrid('updatebounddata', 'filter');
+      $("#jqxgridPasangan").jqxGrid('updatebounddata', 'filter');
     },
     sort: function(){
-      $("#jqxgridKeluarga").jqxGrid('updatebounddata', 'sort');
+      $("#jqxgridPasangan").jqxGrid('updatebounddata', 'sort');
     },
     root: 'Rows',
         pagesize: 10,
@@ -60,11 +60,11 @@
       }
     });
      
-    $('#btn-ortu-refresh').click(function () {
-      $("#jqxgridKeluarga").jqxGrid('clearfilters');
+    $('#btn-pasangan-refresh').click(function () {
+      $("#jqxgridPasangan").jqxGrid('clearfilters');
     });
 
-    $("#jqxgridKeluarga").jqxGrid(
+    $("#jqxgridPasangan").jqxGrid(
     {   
       width: '100%',
       selectionmode: 'singlerow',
@@ -76,7 +76,7 @@
       },
       columns: [
         { text: 'Detail', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
-            var dataRecord = $("#jqxgridKeluarga").jqxGrid('getrowdata', row);
+            var dataRecord = $("#jqxgridPasangan").jqxGrid('getrowdata', row);
             if(dataRecord.edit==1){
             return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='detail(\""+dataRecord.id_pegawai+"\");'></a></div>";
           }else{
@@ -85,7 +85,7 @@
                  }
                 },
         { text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
-            var dataRecord = $("#jqxgridKeluarga").jqxGrid('getrowdata', row);
+            var dataRecord = $("#jqxgridPasangan").jqxGrid('getrowdata', row);
             if(dataRecord.delete==1){
             return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del(\""+dataRecord.id_pegawai+"\");'></a></div>";
           }else{
@@ -98,8 +98,8 @@
         { text: 'Jenis Kelamin', datafield: 'jenis_kelamin', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '10%' },
         { text: 'Usia', datafield: 'usia', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '8%' },
         { text: 'Tanggal Lahir', datafield: 'tgl_lahir', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', align: 'center', cellsalign: 'center', width: '10%' },
-        { text: 'BPJS', datafield: 'bpjs', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '15%' },
-        { text: 'Status Hidup', datafield: 'hidup', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '10%' }
+        { text: 'Status', datafield: 'status_menikah', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '15%' },
+        { text: 'PNS', datafield: 'pns', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '10%' }
             ]
     });
 
@@ -113,24 +113,24 @@
       $.post("<?php echo base_url().'kepegawaian/drh_keluarga/dodel' ?>/" + id,  function(){
         alert('data berhasil dihapus');
 
-        $("#jqxgridKeluarga").jqxGrid('updatebounddata', 'cells');
+        $("#jqxgridPasangan").jqxGrid('updatebounddata', 'cells');
       });
     }
   }
 
   $(function () { 
-    $("#btn-ortu-tambah").click(function(){
-      $("#popup_keluarga_ortu #popup_keluarga_ortu_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-      $.get("<?php echo base_url().'kepegawaian/drh_keluarga/biodata_keluarga_ortu_add/'.$id;?>" , function(data) {
-        $("#popup_keluarga_ortu_content").html(data);
+    $("#btn-pasangan-tambah").click(function(){
+      $("#popup_keluarga_pasangan #popup_keluarga_pasangan_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
+      $.get("<?php echo base_url().'kepegawaian/drh_keluarga/biodata_keluarga_pasangan_add/'.$id;?>" , function(data) {
+        $("#popup_keluarga_pasangan_content").html(data);
       });
-      $("#popup_keluarga_ortu").jqxWindow({
+      $("#popup_keluarga_pasangan").jqxWindow({
         theme: theme, resizable: false,
         width: 600,
         height: 500,
         isModal: true, autoOpen: false, modalOpacity: 0.2
       });
-      $("#popup_keluarga_ortu").jqxWindow('open');
+      $("#popup_keluarga_pasangan").jqxWindow('open');
     });
   });
 
