@@ -242,7 +242,7 @@ class Bhp_pengadaan extends CI_Controller {
 		$this->db->select("mst_inv_barang_habispakai.*,
 			(select harga as hrg from inv_inventaris_habispakai_opname where code_cl_phc=".'"'.$kodepuskesmas.'"'."  and id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai order by tgl_update desc limit 1) as harga_opname,
 			(select harga as hargapembelian from inv_inventaris_habispakai_pembelian_item 
-            where code_cl_phc=".'"'.$kodepuskesmas.'"'." and id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai ) as harga_pembelian,
+            where code_cl_phc=".'"'.$kodepuskesmas.'"'." and id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai order by tgl_update desc limit 1 ) as harga_pembelian,
             (select tgl_update  as tglopname from inv_inventaris_habispakai_opname where id_mst_inv_barang_habispakai = mst_inv_barang_habispakai.id_mst_inv_barang_habispakai and code_cl_phc=".'"'.$kodepuskesmas.'"'." order by tgl_update desc limit 1) as tgl_opname,
             (select tgl_update  as tglpembelian from inv_inventaris_habispakai_pembelian_item where id_mst_inv_barang_habispakai = mst_inv_barang_habispakai.id_mst_inv_barang_habispakai and code_cl_phc=".'"'.$kodepuskesmas.'"'." order by tgl_update desc limit 1) as tgl_pembelian
 			");
@@ -690,6 +690,14 @@ class Bhp_pengadaan extends CI_Controller {
 			);
 			echo json_encode($kode);
 		}
+	}
+	public function tanggalopnamecondisi($id='')
+	{
+		$query = $this->bhp_pengadaan_model->gettgl_opname($id);
+			$totalpengadaan[] = array(
+				'tgl_opname' => date("Y-m-d",strtotime($query)), 
+			);
+			echo json_encode($totalpengadaan);
 	}
 	public function add_barang($kode=0)
 	{	

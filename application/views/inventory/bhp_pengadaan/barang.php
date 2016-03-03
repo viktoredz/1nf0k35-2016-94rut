@@ -3,6 +3,7 @@
 
 	$(function(){
 		ambil_total();
+		ambil_tanggalopname()
 	   var source = {
 			datatype: "json",
 			type	: "POST",
@@ -118,11 +119,11 @@
  		$('#btn_add_barang').click(function () {
  			
 			//alert("<?php echo date("d-m-Y",strtotime($tgl_opnamecond)); ?>");
- 			if ($("#tgl2").val()<="<?php echo date("d-m-Y",strtotime($tgl_opnamecond)); ?>") {
+ 			/*if ($("#tgl2").val()<="<?php echo date("d-m-Y",strtotime($tgl_opnamecond)); ?>") {
  				alert("Maaf! Data pembelian sudah di stock opname pada "+"<?php echo date('d-m-Y',strtotime($tgl_opnamecond)); ?>"+"\n"+"Silahkan ganti tanggal pembelian ke hari berikutnya!");
- 			}else{
+ 			}else{*/
  				add_barang();
- 			}	
+ 			//}	
 			
 		});
 
@@ -161,7 +162,21 @@
 			});
 		});
 	});
-	
+	function ambil_tanggalopname()
+	{
+		$.ajax({
+		url: "<?php echo base_url().'inventory/bhp_pengadaan/tanggalopnamecondisi/'.$kode ?>",
+		dataType: "json",
+		success:function(data)
+		{ 
+			$.each(data,function(index,elemet){
+				$("#tgl__opname_").val(elemet.tgl_opname);
+			});
+		}
+		});
+
+		return false;
+	}
 	function ambil_total()
 	{
 		$.ajax({
@@ -184,6 +199,7 @@
 	function close_popup(){
 		$("#popup_barang").jqxWindow('close');
 		ambil_total();
+		ambil_tanggalopname()
 	}
 
 	function add_barang(){
@@ -222,6 +238,7 @@
 
 				$("#jqxgrid_barang").jqxGrid('updatebounddata', 'cells');
 				ambil_total();
+				ambil_tanggalopname()
 			});
 			
 		}

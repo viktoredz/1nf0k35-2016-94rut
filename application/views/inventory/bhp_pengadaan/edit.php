@@ -16,10 +16,10 @@
 <script>
 
 function validateForm() {
-  //alert("<?php echo $tgl_opnamecond; ?>");
-   // var x = document.forms["editform"]["tgl2"].value;
-     if ($("#tgl2").val()<="<?php echo date('d-m-Y',strtotime($tgl_opnamecond)); ?>") {
-        alert("Maaf! Data pembelian sudah di stock opname pada "+"<?php echo date('d-m-Y',strtotime($tgl_opnamecond)); ?>"+"\n"+"Silahkan ganti tanggal pembelian ke hari berikutnya!");
+    var tanggalopname = $("#tgl2").val().split('-');
+  //  alert(Date.parse(tanggalopname[2]-tanggalopname[1]-tanggalopname[0])+'<='+Date.parse($("#tgl__opname_").val()));
+     if (Date.parse(tanggalopname[2]-tanggalopname[1]-tanggalopname[0])<=Date.parse($("#tgl__opname_").val())) {
+        alert("Maaf! Data pembelian sudah di stock opname pada "+$("#tgl__opname_").val()+"\n"+"Silahkan ganti tanggal pembelian ke hari berikutnya!");
         return false;
     }
 }
@@ -179,6 +179,7 @@ function validateForm() {
                 <td>Terakhir di edit</td>
                 <td>
                   <div id="terakhir_diubah_"></div>
+                  <input type="hidden" id="tgl__opname_" />
                 </td>
               </tr>
             </tbody>
@@ -211,6 +212,7 @@ function validateForm() {
 </div>
 
 <script type="text/javascript">
+
 $(function(){
   kodeInvetaris();
     $('#btn-kembali').click(function(){

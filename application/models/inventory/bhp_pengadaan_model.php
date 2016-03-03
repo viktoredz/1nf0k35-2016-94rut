@@ -392,19 +392,23 @@ class Bhp_pengadaan_model extends CI_Model {
     public function gettgl_opname($id=0)
     {
         $nmpuskes = "P".$this->session->userdata("puskesmas");
-        $sql = "SELECT inv_inventaris_habispakai_opname.tgl_update as tgl_opname
+        $sql = "SELECT inv_inventaris_habispakai_pembelian_item.id_inv_hasbispakai_pembelian, inv_inventaris_habispakai_opname.tgl_update AS tgl_opname
                 FROM inv_inventaris_habispakai_pembelian_item
                 JOIN inv_inventaris_habispakai_opname 
                     ON inv_inventaris_habispakai_opname.id_mst_inv_barang_habispakai = inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai
                     AND inv_inventaris_habispakai_opname.code_cl_phc = inv_inventaris_habispakai_pembelian_item.code_cl_phc
-                JOIN inv_inventaris_habispakai_pembelian 
+                WHERE inv_inventaris_habispakai_pembelian_item.code_cl_phc=".'"'.$nmpuskes.'"'."
+                AND inv_inventaris_habispakai_pembelian_item.id_inv_hasbispakai_pembelian = ".'"'.$id.'"'."
+                ORDER BY inv_inventaris_habispakai_opname.tgl_update DESC
+                LIMIT 1";
+                /*  JOIN inv_inventaris_habispakai_pembelian 
                     ON inv_inventaris_habispakai_pembelian.id_inv_hasbispakai_pembelian=inv_inventaris_habispakai_pembelian_item.id_inv_hasbispakai_pembelian
                     AND inv_inventaris_habispakai_pembelian.pilihan_status_pembelian=2
-                    AND inv_inventaris_habispakai_pembelian.id_inv_hasbispakai_pembelian = ".'"'.$id.'"'."
-                where inv_inventaris_habispakai_pembelian_item.code_cl_phc=".'"'.$nmpuskes.'"'."
-                order by inv_inventaris_habispakai_opname.tgl_update desc
-                LIMIT 1";
-
+                    AND inv_inventaris_habispakai_pembelian.id_inv_hasbispakai_pembelian = "12100307041601000004"*/
+                /*
+                inv_inventaris_habispakai_opname.tgl_update desc,
+                inv_inventaris_habispakai_pembelian_item.id_inv_hasbispakai_pembelian
+                */
         if ($this->db->query($sql)->num_rows()>0) {
             foreach ($this->db->query($sql)->result() as $key) {
                 return $key->tgl_opname;
