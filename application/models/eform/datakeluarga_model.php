@@ -18,11 +18,30 @@ class Datakeluarga_model extends CI_Model {
         
         return $query->result();
     }
-
+    
+    function get_data_anggotaKeluarga($start=0,$limit=999999,$options=array()){
+        $this->db->select("data_keluarga_anggota.*");
+        $this->db->order_by('data_keluarga_anggota.no_anggota','asc');
+        $query =$this->db->get("data_keluarga_anggota",$limit,$start);
+        
+        return $query->result();
+    }
     function get_data_row($id){
         $data = array();
         $options = array('id_data_keluarga' => $id);
         $query = $this->db->get_where($this->tabel,$options);
+        if ($query->num_rows() > 0){
+            $data = $query->row_array();
+        }
+
+        $query->free_result();    
+        return $data;
+    }
+    function get_data_row_anggota($idkeluarga,$noanggota){
+        $data = array();
+        $options = array('id_data_keluarga' => $idkeluarga);
+        $options = array('no_anggota' => $noanggota);
+        $query = $this->db->get_where("data_keluarga_anggota",$options);
         if ($query->num_rows() > 0){
             $data = $query->row_array();
         }
@@ -111,7 +130,47 @@ class Datakeluarga_model extends CI_Model {
         }
 
     }
+    function noanggota($id_data_keluarga){
+        $q = $this->db->query("select MAX(no_anggota) as kd_max from data_keluarga_anggota");
+        $kd = "";
+        if($q->num_rows()>0)
+        {
+            foreach($q->result() as $k)
+            {
+                $kd = ((int)$k->kd_max)+1;
+            }
+        }
+        else
+        {
+            $kd = "1";
+        }
+        return $kd;
+    }
+    function insert_dataAnggotaKeluarga(){
 
+        $data=array(
+            'id_data_keluarga'  => $this->input->post('id_data_keluarga'),
+            'no_anggota'        => $this->noanggota($this->input->post('id_data_keluarga')),
+            'nama'              => $this->input->post('nama'),
+            'nik'               => $this->input->post('nik'),
+            'tmpt_lahir'        => $this->input->post('tmpt_lahir'),
+            'tgl_lahir'              => date("Y-m-d", strtotime($this->input->post('tgl_lahir'))),
+            'id_pilihan_hubungan'   => $this->input->post('id_pilihan_hubungan'),
+            'id_pilihan_kelamin'    => $this->input->post('id_pilihan_kelamin'),
+            'id_pilihan_agama'      => $this->input->post('id_pilihan_agama'),
+            'id_pilihan_pendidikan' => $this->input->post('id_pilihan_pendidikan'),
+            'id_pilihan_pekerjaan'  => $this->input->post('id_pilihan_pekerjaan'),
+            'id_pilihan_kawin'      => $this->input->post('id_pilihan_kawin'),
+            'id_pilihan_jkn'        => $this->input->post('id_pilihan_jkn'),
+            'suku'                  => $this->input->post('suku'),
+            'no_hp'                 => $this->input->post('no_hp')
+        );
+        if($this->db->insert('data_keluarga_anggota',$data)){
+            return $data['no_anggota'];
+        }else{
+            return mysql_error();
+        }
+    }
     function update_entry($id_data_keluarga){
         $data=array(
             'alamat'            => $this->input->post('alamat'),
@@ -152,6 +211,12 @@ class Datakeluarga_model extends CI_Model {
         $this->db->where('id_data_keluarga',$kode);
 
         return $this->db->delete($this->tabel);
+    }
+    function delete_Anggotakeluarga($kode,$noanggota){
+        $this->db->where('id_data_keluarga',$kode);
+        $this->db->where('no_anggota',$noanggota);
+
+        return $this->db->delete("data_keluarga_anggota");
     }
     
     function get_provinsi($provinsi=""){
@@ -223,5 +288,10 @@ class Datakeluarga_model extends CI_Model {
         $query = $this->db->get_where('mas_pkk',array('id_pkk'=>$id));
         
         return $query->row_array();
+    }
+    function get_pilihan($pilihan){
+        $query = $this->db->get_where('mst_keluarga_pilihan',array('tipe'=>$pilihan));
+        
+        return $query->result();
     }
 }

@@ -37,6 +37,7 @@
         <button type="button" id="btn-up" class="btn btn-success"><i class='fa  fa-arrow-circle-o-up'></i> &nbsp;Kembali</button>
     </div>
 
+    <input type="text" name="id_data_keluarga" value="{id_data_keluarga}">
     <div class="row">
       <div class="col-md-6">
         <div class="box box-primary">
@@ -45,11 +46,11 @@
           <div class="row" style="margin: 5px">
             <div class="col-md-4" style="padding: 5px">NIK</div>
             <div class="col-md-8">
-              <input type="text" name="norumah" id="norumah" placeholder="Nomor Rumah" value="<?php 
-                if(set_value('norumah')=="" && isset($norumah)){
-                  echo $norumah;
+              <input type="text" name="nik" id="nik" placeholder="Nomor Induk Keluarga" value="<?php 
+                if(set_value('nik')=="" && isset($nik)){
+                  echo $nik;
                 }else{
-                  echo  set_value('norumah');
+                  echo  set_value('nik');
                 }
                 ?>" class="form-control">
             </div>
@@ -58,11 +59,11 @@
           <div class="row" style="margin: 5px">
             <div class="col-md-4" style="padding: 5px">Nama</div>
             <div class="col-md-8">
-              <input type="text" name="norumah" id="norumah" placeholder="Nomor Rumah" value="<?php 
-                if(set_value('norumah')=="" && isset($norumah)){
-                  echo $norumah;
+              <input type="text" name="nama" id="nama" placeholder="Nama" value="<?php 
+                if(set_value('nama')=="" && isset($nama)){
+                  echo $nama;
                 }else{
-                  echo  set_value('norumah');
+                  echo  set_value('nama');
                 }
                 ?>" class="form-control">
             </div>
@@ -71,11 +72,11 @@
           <div class="row" style="margin: 5px">
             <div class="col-md-4" style="padding: 5px">Tempat Lahir</div>
             <div class="col-md-8">
-              <input type="text" name="norumah" id="norumah" placeholder="Nomor Rumah" value="<?php 
-                if(set_value('norumah')=="" && isset($norumah)){
-                  echo $norumah;
+              <input type="text" name="tmpt_lahir" id="tmpt_lahir" placeholder="Tempat Lahir" value="<?php 
+                if(set_value('tmpt_lahir')=="" && isset($tmpt_lahir)){
+                  echo $tmpt_lahir;
                 }else{
-                  echo  set_value('norumah');
+                  echo  set_value('tmpt_lahir');
                 }
                 ?>" class="form-control">
             </div>
@@ -100,18 +101,18 @@
           <div class="row" style="margin: 5px">
             <div class="col-md-4" style="padding: 5px">Hubungan Dengan KK</div>
             <div class="col-md-8">
-              <select  name="kelurahan" id="kelurahan" class="form-control">
+              <select  name="id_pilihan_hubungan" id="id_pilihan_hubungan" class="form-control">
                 <?php
-                if(set_value('kelurahan')=="" && isset($kelurahan)){
-                  $kelurahan = $kelurahan;
+                if(set_value('id_pilihan_hubungan')=="" && isset($id_pilihan_hubungan)){
+                  $pilihan_hubungan = $id_pilihan_hubungan;
                 }else{
-                  $kelurahan = set_value('kelurahan');
+                  $pilihan_hubungan = set_value('id_pilihan_hubungan');
                 }
 
-                foreach($data_desa as $row_desa){
-                $select = $row_desa->code == $kelurahan ? 'selected' : '' ;
+                foreach($data_pilihan_hubungan as $row_hub){
+                $select = $row_hub->id_pilihan == $pilihan_hubungan ? 'selected' : '' ;
                 ?>
-                    <option value="<?php echo $row_desa->code; ?>" <?php echo $select; ?>><?php echo ucwords(strtolower($row_desa->value)); ?></option>
+                    <option value="<?php echo $row_hub->id_pilihan; ?>" <?php echo $select; ?>><?php echo ucwords(strtolower($row_hub->value)); ?></option>
                 <?php
                 }    
                 ?>
@@ -122,18 +123,18 @@
           <div class="row" style="margin: 5px">
             <div class="col-md-4" style="padding: 5px">Jenis Kelamin</div>
             <div class="col-md-8">
-              <select  name="kelurahan" id="kelurahan" class="form-control">
+              <select  name="id_pilihan_kelamin" id="id_pilihan_kelamin" class="form-control">
                 <?php
-                if(set_value('kelurahan')=="" && isset($kelurahan)){
-                  $kelurahan = $kelurahan;
+                if(set_value('id_pilihan_kelamin')=="" && isset($id_pilihan_kelamin)){
+                  $pilihan_kelamin = $id_pilihan_kelamin;
                 }else{
-                  $kelurahan = set_value('kelurahan');
+                  $pilihan_kelamin = set_value('id_pilihan_kelamin');
                 }
 
-                foreach($data_desa as $row_desa){
-                $select = $row_desa->code == $kelurahan ? 'selected' : '' ;
+                foreach($data_pilihan_kelamin as $row_kelamin){
+                $select = $row_kelamin->id_pilihan == $pilihan_kelamin ? 'selected' : '' ;
                 ?>
-                    <option value="<?php echo $row_desa->code; ?>" <?php echo $select; ?>><?php echo ucwords(strtolower($row_desa->value)); ?></option>
+                    <option value="<?php echo $row_kelamin->id_pilihan; ?>" <?php echo $select; ?>><?php echo ucwords(strtolower($row_kelamin->value)); ?></option>
                 <?php
                 }    
                 ?>
@@ -144,18 +145,18 @@
           <div class="row" style="margin: 5px">
             <div class="col-md-4" style="padding: 5px">Agama</div>
             <div class="col-md-8">
-              <select  name="kelurahan" id="kelurahan" class="form-control">
+              <select  name="id_pilihan_agama" id="id_pilihan_agama" class="form-control">
                 <?php
-                if(set_value('kelurahan')=="" && isset($kelurahan)){
-                  $kelurahan = $kelurahan;
+                if(set_value('id_pilihan_agama')=="" && isset($id_pilihan_agama)){
+                  $pilihan_agama = $id_pilihan_agama;
                 }else{
-                  $kelurahan = set_value('kelurahan');
+                  $pilihan_agama = set_value('id_pilihan_agama');
                 }
 
-                foreach($data_desa as $row_desa){
-                $select = $row_desa->code == $kelurahan ? 'selected' : '' ;
+                foreach($data_pilihan_agama as $row_agama){
+                $select = $row_agama->id_pilihan == $pilihan_agama ? 'selected' : '' ;
                 ?>
-                    <option value="<?php echo $row_desa->code; ?>" <?php echo $select; ?>><?php echo ucwords(strtolower($row_desa->value)); ?></option>
+                    <option value="<?php echo $row_agama->id_pilihan; ?>" <?php echo $select; ?>><?php echo ucwords(strtolower($row_agama->value)); ?></option>
                 <?php
                 }    
                 ?>
@@ -166,18 +167,18 @@
           <div class="row" style="margin: 5px">
             <div class="col-md-4" style="padding: 5px">Pendidikan</div>
             <div class="col-md-8">
-              <select  name="kelurahan" id="kelurahan" class="form-control">
+              <select  name="id_pilihan_pendidikan" id="id_pilihan_pendidikan" class="form-control">
                 <?php
-                if(set_value('kelurahan')=="" && isset($kelurahan)){
-                  $kelurahan = $kelurahan;
+                if(set_value('id_pilihan_pendidikan')=="" && isset($id_pilihan_pendidikan)){
+                  $pilihan_pendidikan = $id_pilihan_pendidikan;
                 }else{
-                  $kelurahan = set_value('kelurahan');
+                  $pilihan_pendidikan = set_value('id_pilihan_pendidikan');
                 }
 
-                foreach($data_desa as $row_desa){
-                $select = $row_desa->code == $kelurahan ? 'selected' : '' ;
+                foreach($data_pilihan_pendidikan as $row_pendidikan){
+                $select = $row_pendidikan->id_pilihan == $pilihan_pendidikan ? 'selected' : '' ;
                 ?>
-                    <option value="<?php echo $row_desa->code; ?>" <?php echo $select; ?>><?php echo ucwords(strtolower($row_desa->value)); ?></option>
+                    <option value="<?php echo $row_pendidikan->id_pilihan; ?>" <?php echo $select; ?>><?php echo ucwords(strtolower($row_pendidikan->value)); ?></option>
                 <?php
                 }    
                 ?>
@@ -188,18 +189,18 @@
           <div class="row" style="margin: 5px">
             <div class="col-md-4" style="padding: 5px">Pekerjaan</div>
             <div class="col-md-8">
-              <select  name="kelurahan" id="kelurahan" class="form-control">
+              <select  name="id_pilihan_pekerjaan" id="id_pilihan_pekerjaan" class="form-control">
                 <?php
-                if(set_value('kelurahan')=="" && isset($kelurahan)){
-                  $kelurahan = $kelurahan;
+                if(set_value('id_pilihan_pekerjaan')=="" && isset($id_pilihan_pekerjaan)){
+                  $pilihan_pekerjaan = $id_pilihan_pekerjaan;
                 }else{
-                  $kelurahan = set_value('kelurahan');
+                  $pilihan_pekerjaan = set_value('id_pilihan_pekerjaan');
                 }
 
-                foreach($data_desa as $row_desa){
-                $select = $row_desa->code == $kelurahan ? 'selected' : '' ;
+                foreach($data_pilihan_pekerjaan as $row_pekerjaan){
+                $select = $row_pekerjaan->id_pilihan == $pilihan_pekerjaan ? 'selected' : '' ;
                 ?>
-                    <option value="<?php echo $row_desa->code; ?>" <?php echo $select; ?>><?php echo ucwords(strtolower($row_desa->value)); ?></option>
+                    <option value="<?php echo $row_pekerjaan->id_pilihan; ?>" <?php echo $select; ?>><?php echo ucwords(strtolower($row_pekerjaan->value)); ?></option>
                 <?php
                 }    
                 ?>
@@ -210,18 +211,18 @@
           <div class="row" style="margin: 5px">
             <div class="col-md-4" style="padding: 5px">Status Kawin</div>
             <div class="col-md-8">
-              <select  name="kelurahan" id="kelurahan" class="form-control">
+              <select  name="id_pilihan_kawin" id="id_pilihan_kawin" class="form-control">
                 <?php
-                if(set_value('kelurahan')=="" && isset($kelurahan)){
-                  $kelurahan = $kelurahan;
+                if(set_value('id_pilihan_kawin')=="" && isset($id_pilihan_kawin)){
+                  $pilihan_kawin = $id_pilihan_kawin;
                 }else{
-                  $kelurahan = set_value('kelurahan');
+                  $pilihan_kawin = set_value('id_pilihan_kawin');
                 }
 
-                foreach($data_desa as $row_desa){
-                $select = $row_desa->code == $kelurahan ? 'selected' : '' ;
+                foreach($data_pilihan_kawin as $row_kawin){
+                $select = $row_kawin->id_pilihan == $pilihan_kawin ? 'selected' : '' ;
                 ?>
-                    <option value="<?php echo $row_desa->code; ?>" <?php echo $select; ?>><?php echo ucwords(strtolower($row_desa->value)); ?></option>
+                    <option value="<?php echo $row_kawin->id_pilihan; ?>" <?php echo $select; ?>><?php echo ucwords(strtolower($row_kawin->value)); ?></option>
                 <?php
                 }    
                 ?>
@@ -232,18 +233,18 @@
           <div class="row" style="margin: 5px">
             <div class="col-md-4" style="padding: 5px">JKN</div>
             <div class="col-md-8">
-              <select  name="kelurahan" id="kelurahan" class="form-control">
+              <select  name="id_pilihan_jkn" id="id_pilihan_jkn" class="form-control">
                 <?php
-                if(set_value('kelurahan')=="" && isset($kelurahan)){
-                  $kelurahan = $kelurahan;
+                if(set_value('id_pilihan_jkn')=="" && isset($id_pilihan_jkn)){
+                  $pilihan_jkn = $id_pilihan_jkn;
                 }else{
-                  $kelurahan = set_value('kelurahan');
+                  $pilihan_jkn = set_value('id_pilihan_jkn');
                 }
 
-                foreach($data_desa as $row_desa){
-                $select = $row_desa->code == $kelurahan ? 'selected' : '' ;
+                foreach($data_pilihan_jkn as $row_jkn){
+                $select = $row_jkn->id_pilihan == $pilihan_jkn ? 'selected' : '' ;
                 ?>
-                    <option value="<?php echo $row_desa->code; ?>" <?php echo $select; ?>><?php echo ucwords(strtolower($row_desa->value)); ?></option>
+                    <option value="<?php echo $row_jkn->id_pilihan; ?>" <?php echo $select; ?>><?php echo ucwords(strtolower($row_jkn->value)); ?></option>
                 <?php
                 }    
                 ?>
@@ -254,11 +255,11 @@
           <div class="row" style="margin: 5px">
             <div class="col-md-4" style="padding: 5px">Suku</div>
             <div class="col-md-8">
-              <input type="text" name="norumah" id="norumah" placeholder="Nomor Rumah" value="<?php 
-                if(set_value('norumah')=="" && isset($norumah)){
-                  echo $norumah;
+              <input type="text" name="suku" id="suku" placeholder="Suku" value="<?php 
+                if(set_value('suku')=="" && isset($suku)){
+                  echo $suku;
                 }else{
-                  echo  set_value('norumah');
+                  echo  set_value('suku');
                 }
                 ?>" class="form-control">
             </div>
@@ -267,11 +268,11 @@
           <div class="row" style="margin: 5px">
             <div class="col-md-4" style="padding: 5px">Nomor HP</div>
             <div class="col-md-8">
-              <input type="text" name="norumah" id="norumah" placeholder="Nomor Rumah" value="<?php 
-                if(set_value('norumah')=="" && isset($norumah)){
-                  echo $norumah;
+              <input type="text" name="no_hp" id="no_hp" placeholder="Nomor Rumah" value="<?php 
+                if(set_value('no_hp')=="" && isset($no_hp)){
+                  echo $no_hp;
                 }else{
-                  echo  set_value('norumah');
+                  echo  set_value('no_hp');
                 }
                 ?>" class="form-control">
             </div>

@@ -6,6 +6,7 @@ class Data_kepala_keluarga extends CI_Controller {
 		$this->load->model('eform/datakeluarga_model');
 		$this->load->model('eform/pembangunan_keluarga_model');
 		$this->load->model('eform/anggota_keluarga_kb_model');
+		$this->load->model('eform/DataForm_model');
 	}
     
 	function json(){
@@ -80,6 +81,83 @@ class Data_kepala_keluarga extends CI_Controller {
 
 		echo json_encode(array($json));
 	}
+	function json_anggotaKeluarga($anggota){
+		$this->authentication->verify('eform','show');
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+				if($field=="tgl_lahir"){
+					$this->db->like("tgl_lahir",date("Y-m-d",strtotime($value)));
+				}else{
+					$this->db->like($field,$value);	
+				}
+				
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		$this->db->where("data_keluarga_anggota.id_data_keluarga",$anggota);
+		$rows_all = $this->datakeluarga_model->get_data_anggotaKeluarga();
+
+    	if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field=="tgl_lahir"){
+					$this->db->like("tgl_lahir",date("Y-m-d",strtotime($value)));
+				}else{
+					$this->db->like($field,$value);	
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		$this->db->where("data_keluarga_anggota.id_data_keluarga",$anggota);
+		$rows = $this->datakeluarga_model->get_data_anggotaKeluarga($this->input->post('recordstartindex'), $this->input->post('pagesize'));
+		$data = array();
+		foreach($rows as $act) {
+			$data[] = array(
+				'id_data_keluarga'		=> $act->id_data_keluarga,
+				'no_anggota'			=> $act->no_anggota,
+				'nama'					=> $act->nama,
+				'nik'					=> $act->nik,
+				'tmpt_lahir'			=> $act->tmpt_lahir,
+				'tgl_lahir'				=> $act->tgl_lahir,
+				'id_pilihan_hubungan'	=> $act->id_pilihan_hubungan,
+				'id_pilihan_kelamin'	=> $act->id_pilihan_kelamin,
+				'id_pilihan_agama'		=> $act->id_pilihan_agama,
+				'id_pilihan_pendidikan'	=> $act->id_pilihan_pendidikan,
+				'id_pilihan_pekerjaan'	=> $act->id_pilihan_pekerjaan,
+				'id_pilihan_kawin'		=> $act->id_pilihan_kawin,
+				'id_pilihan_jkn'		=> $act->id_pilihan_jkn,
+				'suku'					=> $act->suku,
+				'no_hp'					=> $act->no_hp,
+				'edit'					=> 1,
+				'delete'				=> 1
+			);
+		}
+
+		$size = sizeof($rows_all);
+		$json = array(
+			'TotalRows' => (int) $size,
+			'Rows' => $data
+		);
+
+		echo json_encode(array($json));
+	}
 
 	function index(){
 		$this->authentication->verify('eform','edit');
@@ -90,7 +168,9 @@ class Data_kepala_keluarga extends CI_Controller {
 
 		$this->template->show($data,"home");
 	}
-
+	function adddataform_profile(){
+		 $this->DataForm_model->insertDataForm_profile();
+	}
 
 	function add(){
 		$this->authentication->verify('eform','add');
@@ -171,7 +251,7 @@ class Data_kepala_keluarga extends CI_Controller {
             $data['jabatan_pkk'] = $this->datakeluarga_model->get_pkk_value($data['id_pkk']);
 
 			$data['data_profile']  = $this->datakeluarga_model->get_data_profile($id_data_keluarga); 
-            $data['data_print'] = $this->parser->parse("eform/datakeluarga/print", $data, true);
+            //$data['data_print'] = $this->parser->parse("eform/datakeluarga/print", $data, true);
 
 			$data['content'] = $this->parser->parse("eform/datakeluarga/form_detail",$data,true);
 			$this->template->show($data,"home");
@@ -219,6 +299,17 @@ class Data_kepala_keluarga extends CI_Controller {
 			redirect(base_url()."eform/data_kepala_keluarga/");
 		}
 	}
+	function anggota_dodel($idkeluarga=0,$noanggota=0){
+		$this->authentication->verify('eform','del');
+
+		if($this->datakeluarga_model->delete_Anggotakeluarga($idkeluarga,$noanggota)){
+			$data['alert_form'] = 'Delete data ('.$kode.')';
+			die($this->parser->parse("eform/datakeluarga/form_anggota_form",$data));
+		}else{
+			$data['alert_form'] = 'Delete data error';
+			die($this->parser->parse("eform/datakeluarga/form_anggota_form",$data));
+		}
+	}
 
 	function anggota($kode=0)
 	{
@@ -229,27 +320,79 @@ class Data_kepala_keluarga extends CI_Controller {
 
 		die($this->parser->parse("eform/datakeluarga/form_anggota",$data));
 	}
-
+	
 	function anggota_add($kode=0)
 	{
 		$this->authentication->verify('eform','edit');
 
-		$data['action']="edit";
+		$this->form_validation->set_rules('nik', 'NIK ', 'trim|required');
+        $this->form_validation->set_rules('nama', 'Nama', 'trim|required');
+        $this->form_validation->set_rules('tmpt_lahir', 'Tempat Lahir', 'trim|required');
+        $this->form_validation->set_rules('suku', 'Suku', 'trim|required');
+        $this->form_validation->set_rules('no_hp', 'No HP', 'trim|required');
+
+        $data['action']="add";
 		$data['id_data_keluarga'] = $kode;
 		$data['alert_form'] = "";
 
-		die($this->parser->parse("eform/datakeluarga/form_anggota_add",$data));
+        $data['data_pilihan_hubungan'] = $this->datakeluarga_model->get_pilihan("hubungan");
+      	$data['data_pilihan_kelamin'] = $this->datakeluarga_model->get_pilihan("jk");
+      	$data['data_pilihan_agama'] = $this->datakeluarga_model->get_pilihan("agama");
+      	$data['data_pilihan_pendidikan'] = $this->datakeluarga_model->get_pilihan("pendidikan");
+      	$data['data_pilihan_pekerjaan'] = $this->datakeluarga_model->get_pilihan("pekerjaan");
+      	$data['data_pilihan_kawin'] = $this->datakeluarga_model->get_pilihan("kawin");
+      	$data['data_pilihan_jkn'] = $this->datakeluarga_model->get_pilihan("jkn");
+
+      	$data['alert_form'] = '';
+
+        if($this->form_validation->run()== FALSE){
+			die($this->parser->parse("eform/datakeluarga/form_anggota_add",$data));
+		}elseif($noanggota=$this->datakeluarga_model->insert_dataAnggotaKeluarga($kode)){
+			$this->anggota_edit($this->input->post('id_data_keluarga'),$noanggota);
+		}else{
+			$data['alert_form'] = 'Save data failed...';
+			die($this->parser->parse("eform/datakeluarga/form_anggota_add",$data));
+		}
+
+		
 	}
 
-	function anggota_edit($kode=0)
+	function anggota_edit($idkeluarga=0,$noanggota=0)
 	{
 		$this->authentication->verify('eform','edit');
+		$data = $this->datakeluarga_model->get_data_row_anggota($idkeluarga,$noanggota);
+	$this->form_validation->set_rules('nik', 'NIK ', 'trim|required');
+        $this->form_validation->set_rules('nama', 'Nama', 'trim|required');
+        $this->form_validation->set_rules('tmpt_lahir', 'Tempat Lahir', 'trim|required');
+        $this->form_validation->set_rules('suku', 'Suku', 'trim|required');
+        $this->form_validation->set_rules('no_hp', 'No HP', 'trim|required');
 
-		$data['action']="edit";
-		$data['id_data_keluarga'] = $kode;
+        $data['action']="edit";
+		$data['id_data_keluarga'] = $idkeluarga;
 		$data['alert_form'] = "";
 
-		die($this->parser->parse("eform/datakeluarga/form_anggota_form",$data));
+        $data['data_pilihan_hubungan'] = $this->datakeluarga_model->get_pilihan("hubungan");
+      	$data['data_pilihan_kelamin'] = $this->datakeluarga_model->get_pilihan("jk");
+      	$data['data_pilihan_agama'] = $this->datakeluarga_model->get_pilihan("agama");
+      	$data['data_pilihan_pendidikan'] = $this->datakeluarga_model->get_pilihan("pendidikan");
+      	$data['data_pilihan_pekerjaan'] = $this->datakeluarga_model->get_pilihan("pekerjaan");
+      	$data['data_pilihan_kawin'] = $this->datakeluarga_model->get_pilihan("kawin");
+      	$data['data_pilihan_jkn'] = $this->datakeluarga_model->get_pilihan("jkn");
+
+      	$data['alert_form'] = '';
+
+        if($this->form_validation->run()== FALSE){
+			die($this->parser->parse("eform/datakeluarga/form_anggota_form",$data));
+		}elseif($noanggota=$this->datakeluarga_model->insert_dataAnggotaKeluarga($idkeluarga)){
+			die($this->parser->parse("eform/datakeluarga/form_anggota_form",$data));
+		}else{
+			$data['alert_form'] = 'Save data failed...';
+			die($this->parser->parse("eform/datakeluarga/form_anggota_form",$data));
+		}
+			
+
+			
+		//}
 	}
 
 	function profile($kode=0)
@@ -271,6 +414,7 @@ class Data_kepala_keluarga extends CI_Controller {
 		}else{
 			$data['alert_form'] = 'Save data successful...';
 		}
+		$data['data_formprofile']  = $this->DataForm_model->get_data_formprofile($kode); 
 		die($this->parser->parse("eform/datakeluarga/form_profile",$data));
 	}
 

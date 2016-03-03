@@ -32,27 +32,24 @@
 			type	: "POST",
 			datafields: [
 			{ name: 'id_data_keluarga', type: 'string'},
-			{ name: 'tanggal_pengisian', type: 'date'},
-			{ name: 'jam_data', type: 'string'},
-			{ name: 'alamat', type: 'string'},
-			{ name: 'id_propinsi', type: 'string'},
-			{ name: 'id_kota', type: 'string'},
-			{ name: 'id_kecamatan', type: 'string'},
-			{ name: 'value', type: 'string'},
-			{ name: 'rt', type: 'string'},
-			{ name: 'rw', type: 'string'},
-			{ name: 'norumah', type: 'string'},
-			{ name: 'nourutkel', type: 'string'},
-			{ name: 'id_kodepos', type: 'string'},
-			{ name: 'namadesawisma', type: 'string'},
-			{ name: 'id_pkk', type: 'string'},
-			{ name: 'namakepalakeluarga', type: 'string'},
-			{ name: 'nama_komunitas', type: 'string'},
-			{ name: 'notlp', type: 'string'},
+			{ name: 'no_anggota', type: 'string'},
+			{ name: 'nama', type: 'string'},
+			{ name: 'nik', type: 'string'},
+			{ name: 'tmpt_lahir', type: 'string'},
+			{ name: 'tgl_lahir', type: 'date'},
+			{ name: 'id_pilihan_hubungan', type: 'string'},
+			{ name: 'id_pilihan_kelamin', type: 'string'},
+			{ name: 'id_pilihan_agama', type: 'string'},
+			{ name: 'id_pilihan_pendidikan', type: 'string'},
+			{ name: 'id_pilihan_pekerjaan', type: 'string'},
+			{ name: 'id_pilihan_kawin', type: 'string'},
+			{ name: 'id_pilihan_jkn', type: 'string'},
+			{ name: 'suku', type: 'string'},
+			{ name: 'no_hp', type: 'string'},
 			{ name: 'edit', type: 'number'},
 			{ name: 'delete', type: 'number'}
         ],
-		url: "<?php echo site_url('eform/data_kepala_keluarga/json'); ?>",
+		url: "<?php echo site_url('eform/data_kepala_keluarga/json_anggotaKeluarga/{id_data_keluarga}'); ?>",
 		cache: false,
 		updaterow: function (rowid, rowdata, commit) {
 			},
@@ -93,7 +90,7 @@
 				{ text: 'Edit', align: 'center', filtertype: 'none', sortable: false, width: '4%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
 				    if(dataRecord.edit==1){
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='edit(\""+dataRecord.id_data_keluarga+"\");'></a></div>";
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='edit(\""+dataRecord.no_anggota+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}
@@ -102,32 +99,36 @@
 				{ text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '4%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
 				    if(dataRecord.delete==1){
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del(\""+dataRecord.id_data_keluarga+"\");'></a></div>";
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del(\""+dataRecord.no_anggota+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}
                  }
                 },
-				{ text: 'NIK', datafield: 'nourutkel', columntype: 'textbox', align:'center', cellsalign:'center', filtertype: 'textbox', width: '16%' },
-				{ text: 'Nama', datafield: 'namakepalakeluarga', columntype: 'textbox', filtertype: 'textbox', width: '26%' },
-                { text: 'Tgl Lahir', datafield: 'tanggal_pengisian', columntype: 'textbox', align:'center', cellsalign:'center', filtertype: 'date',cellsformat: 'dd-MM-yyyy', width: '10%' },
-				{ text: 'Usia', datafield: 'rw', columntype: 'textbox', filtertype: 'textbox', align:'center', cellsalign:'center', width: '8%' },
-				{ text: 'Hubungan', datafield: 'id_pkk', columntype: 'textbox', filtertype: 'textbox', align:'center', cellsalign:'center', width: '12%' },
-				{ text: 'Agama', datafield: 'value', columntype: 'textbox', filtertype: 'textbox', align:'center', cellsalign:'center', width: '10%' },
-				{ text: 'Jenis Kelamin', datafield: 'rt', columntype: 'textbox', filtertype: 'textbox', align:'center', cellsalign:'center', width: '10%' }
+				{ text: 'Nama', datafield: 'nama', columntype: 'textbox', align:'center', cellsalign:'center', filtertype: 'textbox', width: '16%' },
+				{ text: 'NIK', datafield: 'nik', columntype: 'textbox', filtertype: 'textbox', width: '15%' },
+				{ text: 'Tempat Lahir', datafield: 'tmpt_lahir', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
+                { text: 'Tgl Lahir', datafield: 'tgl_lahir', columntype: 'textbox', align:'center', cellsalign:'center', filtertype: 'date',cellsformat: 'dd-MM-yyyy', width: '10%' },
+				{ text: 'Hubungan', datafield: 'id_pilihan_hubungan', columntype: 'textbox', filtertype: 'textbox', align:'center', cellsalign:'center', width: '8%' },
+				{ text: 'Kelamin', datafield: 'id_pilihan_kelamin', columntype: 'textbox', filtertype: 'textbox', align:'center', cellsalign:'center', width: '12%' },
+				{ text: 'Pendidikan', datafield: 'id_pilihan_pendidikan', columntype: 'textbox', filtertype: 'textbox', align:'center', cellsalign:'center', width: '10%' },
+				{ text: 'Pekerjaan', datafield: 'id_pilihan_pekerjaan', columntype: 'textbox', filtertype: 'textbox', align:'center', cellsalign:'center', width: '10%' },
+				{ text: 'Status', datafield: 'id_pilihan_kawin', columntype: 'textbox', filtertype: 'textbox', align:'center', cellsalign:'center', width: '10%' },
+				{ text: 'JKN', datafield: 'id_pilihan_jkn', columntype: 'textbox', filtertype: 'textbox', align:'center', cellsalign:'center', width: '10%' },
+				{ text: 'No Hp', datafield: 'no_hp', columntype: 'textbox', filtertype: 'textbox', align:'center', cellsalign:'center', width: '10%' }
 			]
 		});
 
-	function edit(id){
-        $.get('<?php echo base_url()?>eform/data_kepala_keluarga/anggota_edit/{id_data_keluarga}/'+id, function (data) {
+	function edit(noanggota){
+        $.get('<?php echo base_url()?>eform/data_kepala_keluarga/anggota_edit/{id_data_keluarga}/'+noanggota, function (data) {
             $('#content2').html(data);
         });
 	}
 
-	function del(id){
+	function del(noanggota){
 		var confirms = confirm("Hapus Data ?");
 		if(confirms == true){
-			$.post("<?php echo base_url().'eform/data_kepala_keluarga/anggota_dodel/'.$id_data_keluarga ?>/" + id,  function(){
+			$.post("<?php echo base_url().'eform/data_kepala_keluarga/anggota_dodel/'.$id_data_keluarga ?>/" + noanggota,  function(){
 				$("#jqxgrid").jqxGrid('updatebounddata', 'cells');
 			});
 		}
