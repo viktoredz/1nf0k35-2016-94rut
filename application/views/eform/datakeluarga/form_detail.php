@@ -1,11 +1,25 @@
 <script>
   	$(function () { 
-    	$("#tgl_pengisian").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme, height: '30px'});
-		$("#jam_data").jqxDateTimeInput({ height: '30px', theme: theme, formatString: 'T', showTimeButton: true, showCalendarButton: false});
-
-       	$('#btn-kembali').click(function(){
+     	$('#btn-kembali').click(function(){
 	        window.location.href="<?php echo base_url()?>eform/data_kepala_keluarga";
 	    });
+
+      <?php
+      if(set_value('jam_selesai')=="" && isset($jam_selesai)){
+        $jam_selesai = strtotime($jam_selesai);
+      }else{
+        $jam_selesai = strtotime(set_value('jam_selesai'));
+      }
+      if($jam_selesai=="") $jam_selesai = time();
+      ?>
+
+      var date = new Date();
+      date.setHours(<?php echo date("H", $jam_selesai)?>);
+      date.setMinutes(<?php echo date("i", $jam_selesai)?>);
+      date.setSeconds(<?php echo date("s", $jam_selesai)?>);
+      $("#jam_selesai").jqxDateTimeInput({ height: '30px', theme: theme, formatString: 'HH:mm:ss', showTimeButton: true, showCalendarButton: false});
+      $("#jam_selesai").jqxDateTimeInput('setDate', date);
+
 	});
 </script>
 
@@ -28,87 +42,62 @@
 <form action="<?php echo base_url()?>eform/data_kepala_keluarga/{action}/{id_data_keluarga}" method="post">
   <div class="col-md-6">
     <div class="box box-primary">
-      <div class="box-footer">
-        <button type="submit" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Simpan</button>
-        <button type="button" id="btn-kembali" class="btn btn-success"><i class='fa fa-arrow-circle-left'></i> &nbsp;Kembali</button>
-      </div>
       <div class="box-body">
 
       <div class="row" style="margin: 5px">
-        <div class="col-md-4" style="padding: 5px">Tanggal Pengisian</div>
-        <div class="col-md-8">
-          <div id='tgl_pengisian' name="tgl_pengisian" value="<?php
-            if(set_value('tgl_pengisian')=="" && isset($tgl_pengisian)){
-              $tgl_pengisian = strtotime($tgl_pengisian);
-            }else{
-              $tgl_pengisian = strtotime(set_value('tgl_pengisian'));
-            }
-            if($tgl_pengisian=="") $tgl_pengisian = time();
-            echo date("Y-m-d",$tgl_pengisian);
-          ?>" >
-          </div>
-        </div>
+        <div class="col-md-4 col-xs-4" style="padding: 5px"><b>Nomor Urut</b></div>
+        <div class="col-md-8 col-xs-8"><b> : {nourutkel}</b></div>
+      </div>
+
+      <div class="row" style="margin: 5px">
+        <div class="col-md-4 col-xs-4" style="padding: 5px">Tanggal Pengisian</div>
+        <div class="col-md-8 col-xs-8"> : <?php echo date("d-m-Y", strtotime($tanggal_pengisian));?></div>
       </div>
       
       <div class="row" style="margin: 5px">
-        <div class="col-md-4" style="padding: 5px">Jam Mulai Mendata</div>
-        <div class="col-md-8">
-          <div id='jam_data' name="jam_data" value="<?php
-            if(set_value('jam_data')=="" && isset($jam_data)){
-              $jam_data = strtotime($jam_data);
-            }else{
-              $jam_data = strtotime(set_value('jam_data'));
-            }
-            if($jam_data=="") $jam_data = time();
-            echo date("Y-m-d",$jam_data);
-          ?>" >
-          </div>
-        </div>
+        <div class="col-md-4 col-xs-4" style="padding: 5px">Jam Mulai Mendata</div>
+        <div class="col-md-8 col-xs-8">: {jam_data} </div>
       </div>
         
       <div class="row" style="margin: 5px">
-        <div class="col-md-4" style="padding: 5px">Provinsi</div>
-        <div class="col-md-8">
-          <select  name="provinsi" id="provinsi" placeholder="provinsi"  class="form-control">
-			 <option value="31">DKI Jakarta</option>
-		  </select>
-        </div>
-      </div>
-
-      <div class="row" style="margin: 5px">
-        <div class="col-md-4" style="padding: 5px">Kabupaten / Kota</div>
-        <div class="col-md-8">
-          <select  name="kota" id="kota" placeholder="kota" class="form-control">
-          		<option value="3172">Jakarta Timur</option>
-      		</select>
-        </div>
-      </div>
-
-      <div class="row" style="margin: 5px">
-        <div class="col-md-4" style="padding: 5px">Kecamatan</div>
-        <div class="col-md-8">
-        	<select  name="id_kecamatan" id="id_kecamatan" placeholder="Desa" class="form-control">
-          		<option value="3172100">Matraman</option>
-      		</select>
-        </div>
-      </div>
-
-      <div class="row" style="margin: 5px">
-        <div class="col-md-4" style="padding: 5px">Desa / Kelurahan</div>
-        <div class="col-md-8">
-          <select  name="kelurahan" id="kelurahan" placeholder="kelurahan" class="form-control">
-          	<?php
-	        if(set_value('kelurahan')=="" && isset($kelurahan)){
-	          $kelurahan = $kelurahan;
-	        }else{
-	          $kelurahan = set_value('kelurahan');
-	        }
-
-            foreach($data_desa as $row_desa){
-	 	        $select = $row_desa->code == $kelurahan ? 'selected' : '' ;
-            ?>
-                <option value="<?php echo $row_desa->code; ?>" <?php echo $select; ?>><?php echo ucwords(strtolower($row_desa->value)); ?></option>
+        <div class="col-md-4 col-xs-4" style="padding: 5px">Provinsi</div>
+        <div class="col-md-8 col-xs-8"> :
             <?php
+            foreach($data_provinsi as $row_provinsi){
+                echo ucwords(strtolower($row_provinsi->value));
+            }    
+            ?>
+        </div>
+      </div>
+
+      <div class="row" style="margin: 5px">
+        <div class="col-md-4 col-xs-4" style="padding: 5px">Kabupaten / Kota</div>
+        <div class="col-md-8 col-xs-8"> :
+            <?php
+            foreach($data_kotakab as $row_kotakab){
+                echo ucwords(strtolower($row_kotakab->value));
+            }    
+            ?>
+        </div>
+      </div>
+
+      <div class="row" style="margin: 5px">
+        <div class="col-md-4 col-xs-4" style="padding: 5px">Kecamatan</div>
+        <div class="col-md-8 col-xs-8"> :
+            <?php
+            foreach($data_kecamatan as $row_kecamatan){
+              echo ucwords(strtolower($row_kecamatan->nama));
+            }    
+            ?>
+        </div>
+      </div>
+
+      <div class="row" style="margin: 5px">
+        <div class="col-md-4 col-xs-4" style="padding: 5px">Desa / Kelurahan</div>
+        <div class="col-md-8 col-xs-8"> : 
+          	<?php
+            foreach($data_desa as $row_desa){
+	 	           if($row_desa->code == $id_desa) echo ucwords(strtolower($row_desa->value));
             }    
           	?>
 	      </select>
@@ -116,43 +105,60 @@
       </div>
 
       <div class="row" style="margin: 5px">
-        <div class="col-md-4" style="padding: 5px">Dusun / RW</div>
-        <div class="col-md-8">
+        <div class="col-md-4 col-xs-4" style="padding: 5px">Dusun / RW</div>
+        <div class="col-md-8 col-xs-8">
           <input type="number" name="dusun"  id="dusun" placeholder="RW" value="<?php 
-			if(set_value('dusun')=="" && isset($rw)){
-				echo $rw;
-			}else{
-				echo  set_value('dusun');
-			}
-			?>" class="form-control">
+            if(set_value('dusun')=="" && isset($rw)){
+              echo $rw;
+            }else{
+              echo  set_value('dusun');
+            }
+            ?>" class="form-control">
         </div>
       </div>
 
       <div class="row" style="margin: 5px">
-        <div class="col-md-4" style="padding: 5px">RT</div>
-        <div class="col-md-8">
+        <div class="col-md-4 col-xs-4" style="padding: 5px">RT</div>
+        <div class="col-md-8 col-xs-8">
           <input type="number" name="rt" id="rt" placeholder="RT" value="<?php 
-			if(set_value('rt')=="" && isset($rt)){
-				echo $rt;
-			}else{
-				echo  set_value('rt');
-			}
-			?>" class="form-control">
+            if(set_value('rt')=="" && isset($rt)){
+              echo $rt;
+            }else{
+              echo  set_value('rt');
+            }
+            ?>" class="form-control">
         </div>
       </div>
 
       <div class="row" style="margin: 5px">
-        <div class="col-md-4" style="padding: 5px">Nomor Rumah</div>
-        <div class="col-md-8">
+        <div class="col-md-4 col-xs-4" style="padding: 5px">Nomor Rumah</div>
+        <div class="col-md-8 col-xs-8">
           <input type="text" name="norumah" id="norumah" placeholder="Nomor Rumah" value="<?php 
-			if(set_value('norumah')=="" && isset($norumah)){
-				echo $norumah;
-			}else{
-				echo  set_value('norumah');
-			}
-			?>" class="form-control">
+            if(set_value('norumah')=="" && isset($norumah)){
+              echo $norumah;
+            }else{
+              echo  set_value('norumah');
+            }
+            ?>" class="form-control">
         </div>
       </div>
+ 
+      <div class="row" style="margin: 5px">
+        <div class="col-md-4 col-xs-4" style="padding: 5px">Kode Pos</div>
+        <div class="col-md-8 col-xs-8">
+          <select  name="kodepos" id="kodepos" class="form-control">
+            <?php
+            foreach($data_pos as $row_pos){
+            $select = $row_pos->pos == $id_kodepos ? 'selected' : '' ;
+            ?>
+                <option value="<?php echo $row_pos->pos; ?>" <?php echo $select; ?>><?php echo chunk_split($row_pos->pos, 1, ' '); ?></option>
+            <?php
+            }    
+            ?>
+          </select>
+        </div>
+      </div>
+
     </div>
   </div><!-- /.form-box -->
 </div><!-- /.form-box -->
@@ -173,39 +179,17 @@
 			?></textarea>
         </div>
       </div>
- 
-      <div class="row" style="margin: 5px">
-        <div class="col-md-5" style="padding: 5px">Kode Pos</div>
-        <div class="col-md-7">
-          <select  name="kodepos" id="kodepos" class="form-control">
-            <?php
-          if(set_value('kodepos')=="" && isset($kodepos)){
-            $kodepos = $kodepos;
-          }else{
-            $kodepos = set_value('kodepos');
-          }
-
-            foreach($data_pos as $row_pos){
-            $select = $row_pos->pos == $kodepos ? 'selected' : '' ;
-            ?>
-                <option value="<?php echo $row_pos->pos; ?>" <?php echo $select; ?>><?php echo $row_pos->pos; ?></option>
-            <?php
-            }    
-            ?>
-          </select>
-        </div>
-      </div>
        
       <div class="row" style="margin: 5px">
         <div class="col-md-5" style="padding: 5px">Nama Komunitas</div>
         <div class="col-md-7">
           <input type="text" name="namakomunitas" id="namakomunitas" value="<?php 
-			if(set_value('namakomunitas')=="" && isset($nama_komunitas)){
-				echo $nama_komunitas;
-			}else{
-				echo  set_value('namakomunitas');
-			}
-			?>" class="form-control">
+      			if(set_value('namakomunitas')=="" && isset($nama_komunitas)){
+      				echo $nama_komunitas;
+      			}else{
+      				echo  set_value('namakomunitas');
+      			}
+      			?>" class="form-control">
         </div>
       </div>
         
@@ -213,12 +197,12 @@
         <div class="col-md-5" style="padding: 5px">Nama Kepala Rumah Tangga</div>
         <div class="col-md-7">
           <input type="text" name="namakepalakeluarga" id="namakepalakeluarga" value="<?php 
-			if(set_value('namakepalakeluarga')=="" && isset($namakepalakeluarga)){
-				echo $namakepalakeluarga;
-			}else{
-				echo  set_value('namakepalakeluarga');
-			}
-			?>" class="form-control">
+      			if(set_value('namakepalakeluarga')=="" && isset($namakepalakeluarga)){
+      				echo $namakepalakeluarga;
+      			}else{
+      				echo  set_value('namakepalakeluarga');
+      			}
+      			?>" class="form-control">
         </div>
       </div>
         
@@ -226,12 +210,12 @@
         <div class="col-md-5" style="padding: 5px">No. HP / Telepon</div>
         <div class="col-md-7">
           <input type="text" name="notlp" id="notlp" value="<?php 
-			if(set_value('notlp')=="" && isset($notlp)){
-				echo $notlp;
-			}else{
-				echo  set_value('notlp');
-			}
-			?>" class="form-control">
+      			if(set_value('notlp')=="" && isset($notlp)){
+      				echo $notlp;
+      			}else{
+      				echo  set_value('notlp');
+      			}
+      			?>" class="form-control">
         </div>
       </div>
         
@@ -239,12 +223,12 @@
         <div class="col-md-5" style="padding: 5px">Nama Dasa Wisma</div>
         <div class="col-md-7">
           <input type="text" name="namadesawisma" id="namadesawisma" value="<?php 
-			if(set_value('namadesawisma')=="" && isset($namadesawisma)){
-				echo $namadesawisma;
-			}else{
-				echo  set_value('namadesawisma');
-			}
-			?>" class="form-control">
+      			if(set_value('namadesawisma')=="" && isset($namadesawisma)){
+      				echo $namadesawisma;
+      			}else{
+      				echo  set_value('namadesawisma');
+      			}
+      			?>" class="form-control">
         </div>
       </div>
         
@@ -253,23 +237,55 @@
         <div class="col-md-7">
           <select  name="jabatanstuktural" id="jabatanstuktural" class="form-control">
           	<?php
-	        if(set_value('jabatanstuktural')=="" && isset($jabatanstuktural)){
-	          $jabatanstuktural = $jabatanstuktural;
-	        }else{
-	          $jabatanstuktural = set_value('jabatanstuktural');
-	        }
-
             foreach($data_pkk as $row_pkk){
-	 	        $select = $row_pkk->id_pkk == $jabatanstuktural ? 'selected' : '' ;
+	 	        $select = $row_pkk->id_pkk == $id_pkk ? 'selected' : '' ;
             ?>
                 <option value="<?php echo $row_pkk->id_pkk; ?>" <?php echo $select; ?>><?php echo $row_pkk->value; ?></option>
             <?php
             }    
           	?>
-		  </select>
+		      </select>
         </div>
       </div>
 
+      <div class="row" style="margin: 5px">
+        <div class="col-md-5" style="padding: 5px">Jam Selesai Mendata</div>
+        <div class="col-md-7">
+          <div id='jam_selesai' name="jam_selesai"></div>
+        </div>
+      </div>
+        
+      <div class="row" style="margin: 5px">
+        <div class="col-md-5" style="padding: 5px">Nama Koordinator</div>
+        <div class="col-md-7">
+          <input type="text" name="nama_koordinator" id="nama_koordinator" value="<?php 
+            if(set_value('nama_koordinator')=="" && isset($nama_koordinator)){
+              echo $nama_koordinator;
+            }else{
+              echo  set_value('nama_koordinator');
+            }
+            ?>" class="form-control">
+        </div>
+      </div>
+        
+      <div class="row" style="margin: 5px">
+        <div class="col-md-5" style="padding: 5px">Nama Pendata</div>
+        <div class="col-md-7">
+          <input type="text" name="nama_pendata" id="nama_pendata" value="<?php 
+            if(set_value('nama_pendata')=="" && isset($nama_pendata)){
+              echo $nama_pendata;
+            }else{
+              echo  set_value('nama_pendata');
+            }
+            ?>" class="form-control">
+        </div>
+      </div>
+        
+      <div class="box-footer" style="float: right">
+        <button type="submit" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Simpan Data Keluarga</button>
+        <button type="submit" class="btn btn-primary"><i class='fa fa-print'></i> &nbsp; Cetak</button>
+        <button type="button" id="btn-kembali" class="btn btn-success"><i class='fa fa-arrow-circle-left'></i> &nbsp;Kembali</button>
+      </div>
       </div>
     </form>        
   </div><!-- /.form-box -->
@@ -282,7 +298,7 @@
             <li style="margin-left: 15px;">
               <div style="height: 20px; margin-top: 5px;">
                   <div style="float: left;">
-                      <i class="icon fa fa-list-alt" style="font-size: 18px"></i>
+                      <i class="icon fa fa-home" style="font-size: 18px"></i>
                   </div>
                   <div style="margin-left: 8px; vertical-align: middle; text-align: center; float: left;">
                       Profile Keluarga</div>
@@ -291,7 +307,7 @@
             <li style="margin-left: 15px;">
               <div style="height: 20px; margin-top: 5px;">
                   <div style="float: left;">
-                      <i class="icon fa fa-list-alt" style="font-size: 18px"></i>
+                      <i class="icon fa fa-group" style="font-size: 18px"></i>
                   </div>
                   <div style="margin-left: 8px; vertical-align: middle; text-align: center; float: left;">
                       Anggota Keluarga</div>
@@ -300,7 +316,7 @@
             <li style="margin-left: 15px;">
               <div style="height: 20px; margin-top: 5px;">
                   <div style="float: left;">
-                      <i class="icon fa fa-list-alt" style="font-size: 18px"></i>
+                      <i class="icon fa fa-female" style="font-size: 18px"></i>
                   </div>
                   <div style="margin-left: 8px; vertical-align: middle; text-align: center; float: left;">
                       Keluarga Berencana</div>
@@ -309,7 +325,7 @@
             <li style="margin-left: 15px;">
               <div style="height: 20px; margin-top: 5px;">
                   <div style="float: left;">
-                      <i class="icon fa fa-list-alt" style="font-size: 18px"></i>
+                      <i class="icon fa fa-headphones" style="font-size: 18px"></i>
                   </div>
                   <div style="margin-left: 8px; vertical-align: middle; text-align: center; float: left;">
                       Pembangunan Keluarga</div>
@@ -325,7 +341,7 @@
 
 <script>
 $(function () { 
-    $('#jqxTabs').jqxTabs({ width: '100%', height: '1250'});
+    $('#jqxTabs').jqxTabs({ width: '100%', height: '1700'});
 
     var loadPage = function (url, tabIndex) {
         $.get(url, function (data) {
@@ -351,7 +367,7 @@ $(function () {
     });
         
 
-    $("#menu_eform_data_kepala_keluarga").addClass("active");
+    $("#menu_ketuk_pintu").addClass("active");
     $("#menu_eform_data_kepala_keluarga").addClass("active");
 });
 </script>

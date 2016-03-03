@@ -4,6 +4,8 @@ class Data_kepala_keluarga extends CI_Controller {
     public function __construct(){
 		parent::__construct();
 		$this->load->model('eform/datakeluarga_model');
+		$this->load->model('eform/pembangunan_keluarga_model');
+		$this->load->model('eform/anggota_keluarga_kb_model');
 	}
     
 	function json(){
@@ -58,7 +60,6 @@ class Data_kepala_keluarga extends CI_Controller {
 				'rt'					=> $act->rt,
 				'rw'					=> $act->rw,
 				'norumah'				=> $act->norumah,
-				'nokeluarga'			=> $act->nokeluarga,
 				'nourutkel'				=> $act->nourutkel,
 				'id_kodepos'			=> $act->id_kodepos,
 				'namakepalakeluarga'	=> $act->namakepalakeluarga,
@@ -112,9 +113,12 @@ class Data_kepala_keluarga extends CI_Controller {
 			$data['title_group'] = "eForm - Ketuk Pintu";
 			$data['title_form']="Tambah Data Keluarga";
 			$data['action']="add";
-			$data['kode']="";
-          	$data['data_desa'] = $this->datakeluarga_model->get_desa(3172100);
-          	$data['data_pos'] = $this->datakeluarga_model->get_pos(3172100);
+			$data['id_data_keluarga']="";
+          	$data['data_provinsi'] = $this->datakeluarga_model->get_provinsi();
+          	$data['data_kotakab'] = $this->datakeluarga_model->get_kotakab();
+          	$data['data_kecamatan'] = $this->datakeluarga_model->get_kecamatan();
+          	$data['data_desa'] = $this->datakeluarga_model->get_desa();
+          	$data['data_pos'] = $this->datakeluarga_model->get_pos();
           	$data['data_pkk'] = $this->datakeluarga_model->get_pkk();
 
 			$data['content'] = $this->parser->parse("eform/datakeluarga/form",$data,true);
@@ -133,11 +137,9 @@ class Data_kepala_keluarga extends CI_Controller {
 		 $this->datakeluarga_model->insertDataTable();
 	}
     
-	function edit($kode=0){
+	function edit($id_data_keluarga=0){
 		$this->authentication->verify('eform','edit');
 
-        $this->form_validation->set_rules('tgl_pengisian', 'Tanggal Pengisian', 'trim|required');
-        $this->form_validation->set_rules('jam_data', 'Jam Pendataan', 'trim|required');
         $this->form_validation->set_rules('alamat', 'Alamat', 'trim|required');
         $this->form_validation->set_rules('dusun', 'Dusun / RW', 'trim|required');
         $this->form_validation->set_rules('rt', 'RT', 'trim|required');
@@ -149,30 +151,36 @@ class Data_kepala_keluarga extends CI_Controller {
         $this->form_validation->set_rules('jabatanstuktural', '', 'trim');
         $this->form_validation->set_rules('kelurahan', '', 'trim');
         $this->form_validation->set_rules('kodepos', '', 'trim');
+        $this->form_validation->set_rules('nama_koordinator', '', 'trim');
+        $this->form_validation->set_rules('nama_pendata', '', 'trim');
+        $this->form_validation->set_rules('jam_selesai', '', 'trim');
 
 		if($this->form_validation->run()== FALSE){
-			$data = $this->datakeluarga_model->get_data_row($kode); 
+			$data = $this->datakeluarga_model->get_data_row($id_data_keluarga); 
 
-			$data['title_group'] = "eForm";
+			$data['title_group'] = "eForm - Ketuk Pintu";
 			$data['title_form']="Ubah Data Keluarga";
 			$data['action']="edit";
-			$data['id_data_keluarga'] = $kode;
-          	$data['data_desa'] = $this->datakeluarga_model->get_desa(3172100);
-          	$data['data_pos'] = $this->datakeluarga_model->get_pos(3172100);
+			$data['id_data_keluarga'] = $id_data_keluarga;
+          	$data['data_provinsi'] = $this->datakeluarga_model->get_provinsi();
+          	$data['data_kotakab'] = $this->datakeluarga_model->get_kotakab();
+          	$data['data_kecamatan'] = $this->datakeluarga_model->get_kecamatan();
+          	$data['data_desa'] = $this->datakeluarga_model->get_desa();
+          	$data['data_pos'] = $this->datakeluarga_model->get_pos();
           	$data['data_pkk'] = $this->datakeluarga_model->get_pkk();
-			$data['data_profile']  = $this->datakeluarga_model->get_data_profile($kode); 
             $data['jabatan_pkk'] = $this->datakeluarga_model->get_pkk_value($data['id_pkk']);
+
+			$data['data_profile']  = $this->datakeluarga_model->get_data_profile($id_data_keluarga); 
             $data['data_print'] = $this->parser->parse("eform/datakeluarga/print", $data, true);
 
-		
 			$data['content'] = $this->parser->parse("eform/datakeluarga/form_detail",$data,true);
 			$this->template->show($data,"home");
-		}elseif($this->datakeluarga_model->update_entry($kode)){
+		}elseif($this->datakeluarga_model->update_entry($id_data_keluarga)){
 			$this->session->set_flashdata('alert_form', 'Save data successful...');
-			redirect(base_url()."eform/data_kepala_keluarga/edit/".$this->input->post('id_data_keluarga'));
+			redirect(base_url()."eform/data_kepala_keluarga/edit/".$id_data_keluarga);
 		}else{
 			$this->session->set_flashdata('alert_form', 'Save data failed...');
-			redirect(base_url()."eform/data_kepala_keluarga/edit/".$kode);
+			redirect(base_url()."eform/data_kepala_keluarga/edit/".$id_data_keluarga);
 		}
 	}
 
@@ -182,20 +190,19 @@ class Data_kepala_keluarga extends CI_Controller {
 
 		switch ($pageIndex) {
 			case 1:
-				die($this->parser->parse("eform/datakeluarga/form_profile",$data));
+				$this->profile($id_data_keluarga);
 
 				break;
 			case 2:
-				die($this->parser->parse("eform/datakeluarga/form_profile",$data));
+				$this->anggota($id_data_keluarga);
 
 				break;
 			case 3:
-				die($this->parser->parse("eform/datakeluarga/form_profile",$data));
+				$this->kb($id_data_keluarga);
 
 				break;
 			default:
-
-				die($this->parser->parse("eform/datakeluarga/form_profile",$data));
+				$this->pembangunan($id_data_keluarga);
 				break;
 		}
 
@@ -212,4 +219,104 @@ class Data_kepala_keluarga extends CI_Controller {
 			redirect(base_url()."eform/data_kepala_keluarga/");
 		}
 	}
+
+	function anggota($kode=0)
+	{
+		$this->authentication->verify('eform','edit');
+
+		$data['action']="edit";
+		$data['id_data_keluarga'] = $kode;
+
+		die($this->parser->parse("eform/datakeluarga/form_anggota",$data));
+	}
+
+	function anggota_add($kode=0)
+	{
+		$this->authentication->verify('eform','edit');
+
+		$data['action']="edit";
+		$data['id_data_keluarga'] = $kode;
+		$data['alert_form'] = "";
+
+		die($this->parser->parse("eform/datakeluarga/form_anggota_add",$data));
+	}
+
+	function anggota_edit($kode=0)
+	{
+		$this->authentication->verify('eform','edit');
+
+		$data['action']="edit";
+		$data['id_data_keluarga'] = $kode;
+		$data['alert_form'] = "";
+
+		die($this->parser->parse("eform/datakeluarga/form_anggota_form",$data));
+	}
+
+	function profile($kode=0)
+	{
+		$this->authentication->verify('eform','edit');
+
+        $this->form_validation->set_rules('xx', '', 'trim|required');
+
+		if($this->form_validation->run()== FALSE){
+			$data = $this->anggota_keluarga_kb_model->get_data_row($kode); 
+
+			$data['action']="edit";
+			$data['id_data_keluarga'] = $kode;
+			$data['data_keluarga_kb']  = $this->anggota_keluarga_kb_model->get_data_profile($kode); 
+			$data['alert_form'] = "";
+		
+		}elseif($this->anggota_keluarga_kb_model->update_entry($kode)){
+			$data['alert_form'] = 'Save data successful...';
+		}else{
+			$data['alert_form'] = 'Save data successful...';
+		}
+		die($this->parser->parse("eform/datakeluarga/form_profile",$data));
+	}
+
+	function kb($kode=0)
+	{
+		$this->authentication->verify('eform','edit');
+
+        $this->form_validation->set_rules('xx', '', 'trim|required');
+
+		if($this->form_validation->run()== FALSE){
+			$data = $this->anggota_keluarga_kb_model->get_data_row($kode); 
+
+			$data['action']="edit";
+			$data['id_data_keluarga'] = $kode;
+			$data['data_keluarga_kb']  = $this->anggota_keluarga_kb_model->get_data_profile($kode); 
+			$data['alert_form'] = "";
+		
+		}elseif($this->anggota_keluarga_kb_model->update_entry($kode)){
+			$data['alert_form'] = 'Save data successful...';
+		}else{
+			$data['alert_form'] = 'Save data successful...';
+		}
+		die($this->parser->parse("eform/datakeluarga/form_kb",$data));
+	}
+
+	function pembangunan($kode=0)
+	{
+		$this->authentication->verify('eform','edit');
+
+        $this->form_validation->set_rules('xx', '', 'trim|required');
+
+		if($this->form_validation->run()== FALSE){
+			$data = $this->pembangunan_keluarga_model->get_data_row($kode); 
+
+			$data['action']="edit";
+			$data['id_data_keluarga'] = $kode;
+			$data['data_pembangunan']  = $this->pembangunan_keluarga_model->get_data_profile($kode); 
+			$data['alert_form'] = "";
+
+		}elseif($this->pembangunan_keluarga_model->update_entry($kode)){
+			$data['alert_form'] = 'Save data successful...';
+		}else{
+			$data['alert_form'] = 'Save data successful...';
+		}
+
+		die($this->parser->parse("eform/datakeluarga/form_pembangunan",$data));
+	}
+
 }
