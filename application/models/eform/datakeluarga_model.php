@@ -40,74 +40,95 @@ class Datakeluarga_model extends CI_Model {
         $kode = $this->input->post('kode');
         $value = $this->input->post('value');
         $this->db->select('*');
-        $this->db->from('data_profile');
+        $this->db->from('data_keluarga_profile');
         $this->db->where('id', 'D');
         $this->db->where('id_data_keluarga', $id_data_keluarga);
         $this->db->where('kode', $kode);
         $query = $this->db->get();
         if($query->num_rows() == 1){
-            $this->db->query("update data_profile set value='$value' where id='D' and id_data_keluarga='$id_data_keluarga' and kode='$kode'")->result();
-         }else{
+            $this->db->query("update data_keluarga_profile set value='$value' where id='D' and id_data_keluarga='$id_data_keluarga' and kode='$kode'")->result();
+        }else{
             $data=array(
                         'id' => 'D',
                         'id_data_keluarga'=> $id_data_keluarga,
                         'kode'=>$kode,
                         'value'=>$value,
                         );
-            $this->db->insert('data_profile',$data);
-         }
+            $this->db->insert('data_keluarga_profile',$data);
+        }
+    }
+
+    function getNourutkel($kelurahan){
+        $this->db->where('id_desa', $kelurahan);
+        $this->db->order_by('id_data_keluarga', 'DESC');
+        $id = $this->db->get('data_keluarga')->row();
+
+        if(empty($id->id_data_keluarga)){
+            $data = array(
+                'id_data_keluarga'  => $kelurahan."001",
+                'nourutkel'         => "001"
+            );            
+        }else{
+            $last_id = substr($id->id_data_keluarga, -3) + 1;
+            $last_id = str_repeat("0",3-strlen($last_id)).$last_id;
+
+            $data = array(
+                'id_data_keluarga'  => $kelurahan.$last_id,
+                'nourutkel'         => $last_id
+            );            
+        }
+
+        return $data;
     }
     
-   function insert_entry(){
+    function insert_entry(){
+        $id = $this->getNourutkel($this->input->post('kelurahan'));
+
         $data=array(
-            'tanggal_pengisian'=>$this->input->post('tgl_pengisian'),
-            'jam_data'=>$this->input->post('jam_data'),
-            'alamat'=>$this->input->post('alamat'),
-            'id_propinsi'=>$this->input->post('provinsi'),
-            'id_kota'=>$this->input->post('kota'),
-            'id_kecamatan'=>$this->input->post('id_kecamatan'),
-            'id_desa'=>$this->input->post('kelurahan'),
-            'rw'=>$this->input->post('dusun'),
-            'rt'=>$this->input->post('rt'),
-            'norumah'=>$this->input->post('norumah'),
-            'nokeluarga'=>$this->input->post('nokeluarga'),
-            'nourutkel'=>$this->input->post('nourutkel'),
-            'id_kodepos'=>$this->input->post('kodepos'),
-            'nama_komunitas'=>$this->input->post('namakomunitas'),
-            'namakepalakeluarga'=>$this->input->post('namakepalakeluarga'),
-            'notlp'=>$this->input->post('notlp'),
-            'namadesawisma'=>$this->input->post('namadesawisma'),
-            'id_pkk'=>$this->input->post('jabatanstuktural'),
+            'id_data_keluarga'  => $id['id_data_keluarga'],
+            'nourutkel'         => $id['nourutkel'],
+            'tanggal_pengisian' => date("Y-m-d", strtotime($this->input->post('tgl_pengisian'))),
+            'jam_data'          => $this->input->post('jam_data'),
+            'alamat'            => $this->input->post('alamat'),
+            'id_propinsi'       => $this->input->post('provinsi'),
+            'id_kota'           => $this->input->post('kota'),
+            'id_kecamatan'      => $this->input->post('id_kecamatan'),
+            'id_desa'           => $this->input->post('kelurahan'),
+            'id_kodepos'        => $this->input->post('kodepos'),
+            'rw'                => $this->input->post('dusun'),
+            'rt'                => $this->input->post('rt'),
+            'norumah'           => $this->input->post('norumah'),
+            'nama_komunitas'    => $this->input->post('namakomunitas'),
+            'namakepalakeluarga'=> $this->input->post('namakepalakeluarga'),
+            'notlp'             => $this->input->post('notlp'),
+            'namadesawisma'     => $this->input->post('namadesawisma'),
+            'id_pkk'            => $this->input->post('jabatanstuktural'),
         );
         if($this->db->insert('data_keluarga',$data)){
-            return $this->db->insert_id();
+            return $id['id_data_keluarga'];
         }else{
             return mysql_error();
         }
 
     }
 
-    function update_entry($kode){
+    function update_entry($id_data_keluarga){
         $data=array(
-            'id_data_keluarga'=>$this->input->post('id_data_keluarga'),
-            'alamat'=>$this->input->post('alamat'),
-            'id_propinsi'=>$this->input->post('provinsi'),
-            'id_kota'=>$this->input->post('kota'),
-            'id_kecamatan'=>$this->input->post('id_kecamatan'),
-            'id_desa'=>$this->input->post('kelurahan'),
-            'rw'=>$this->input->post('dusun'),
-            'rt'=>$this->input->post('rt'),
-            'norumah'=>$this->input->post('norumah'),
-            'nokeluarga'=>$this->input->post('nokeluarga'),
-            'nourutkel'=>$this->input->post('nourutkel'),
-            'id_kodepos'=>$this->input->post('kodepos'),
-            'nama_komunitas'=>$this->input->post('namakomunitas'),
-            'namakepalakeluarga'=>$this->input->post('namakepalakeluarga'),
-            'notlp'=>$this->input->post('notlp'),
-            'namadesawisma'=>$this->input->post('namadesawisma'),
-            'id_pkk'=>$this->input->post('jabatanstuktural'),
+            'alamat'            => $this->input->post('alamat'),
+            'id_kodepos'        => $this->input->post('kodepos'),
+            'rw'                => $this->input->post('dusun'),
+            'rt'                => $this->input->post('rt'),
+            'norumah'           => $this->input->post('norumah'),
+            'nama_komunitas'    => $this->input->post('namakomunitas'),
+            'namakepalakeluarga'=> $this->input->post('namakepalakeluarga'),
+            'notlp'             => $this->input->post('notlp'),
+            'namadesawisma'     => $this->input->post('namadesawisma'),
+            'id_pkk'            => $this->input->post('jabatanstuktural'),
+            'nama_koordinator'  => $this->input->post('nama_koordinator'),
+            'nama_pendata'      => $this->input->post('nama_pendata'),
+            'jam_selesai'       => $this->input->post('jam_selesai')
         );
-        if($this->db->update('data_keluarga',$data,array('id_data_keluarga' => $this->input->post('id_data_keluarga')))){
+        if($this->db->update('data_keluarga',$data,array('id_data_keluarga' => $id_data_keluarga))){
             return true;
         }else{
             return mysql_error();
@@ -116,7 +137,7 @@ class Datakeluarga_model extends CI_Model {
     
     function get_data_profile($id){
         $this->db->select('*');
-        $this->db->from('data_profile');
+        $this->db->from('data_keluarga_profile');
         $this->db->where('id', 'D');
         $this->db->where('id_data_keluarga', $id);
         $query = $this->db->get();
@@ -133,14 +154,60 @@ class Datakeluarga_model extends CI_Model {
         return $this->db->delete($this->tabel);
     }
     
-    function get_desa($kecamatan){
-        $query = $this->db->query("SELECT * FROM cl_village WHERE code LIKE '".$kecamatan."%'");
+    function get_provinsi($provinsi=""){
+        if($provinsi==""){
+            $provinsi = substr($this->session->userdata('puskesmas'),0,2);
+        }
+
+        $this->db->where('code',$provinsi);
+        $query = $this->db->get("cl_province");
+        
+        return $query->result();
+    }
+
+    function get_kotakab($kotakab=""){
+        if($kotakab==""){
+            $kotakab = substr($this->session->userdata('puskesmas'),0,4);
+        }
+
+        $this->db->where('code',$kotakab);
+        $query = $this->db->get("cl_district");
+        
+        return $query->result();
+    }
+
+    function get_kecamatan($kecamatan=""){
+        if($kecamatan==""){
+            $kecamatan = substr($this->session->userdata('puskesmas'),0,7);
+        }
+
+        $this->db->where('code',$kecamatan);
+        $query = $this->db->get("cl_kec");
         
         return $query->result();
     }
     
-    function get_pos($kecamatan){
-        $query = $this->db->query("SELECT distinct pos FROM cl_village WHERE code LIKE '".$kecamatan."%' ORDER BY pos ASC");
+    function get_desa($kecamatan=""){
+        if($kecamatan==""){
+            $kecamatan = substr($this->session->userdata('puskesmas'),0,7);
+        }
+
+        $this->db->like('code',$kecamatan);
+        $query = $this->db->get("cl_village");
+        
+        return $query->result();
+    }
+    
+    function get_pos($kecamatan=""){
+        if($kecamatan==""){
+            $kecamatan = substr($this->session->userdata('puskesmas'),0,7);
+        }
+
+        $this->db->select('distinct pos',false);
+        $this->db->order_by('pos','ASC');
+
+        $this->db->like('code',$kecamatan);
+        $query = $this->db->get("cl_village");
         
         return $query->result();
     }

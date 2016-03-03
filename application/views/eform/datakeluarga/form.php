@@ -1,7 +1,23 @@
 <script>
   	$(function () { 
+
+		<?php
+        if(set_value('jam_data')=="" && isset($jam_data)){
+          $jam_data = strtotime($jam_data);
+        }else{
+          $jam_data = strtotime(set_value('jam_data'));
+        }
+        if($jam_data=="") $jam_data = time();
+      	?>
+
+		var date = new Date();
+	      	date.setHours(<?php echo date("H", $jam_data)?>);
+			date.setMinutes(<?php echo date("i", $jam_data)?>);
+			date.setSeconds(<?php echo date("s", $jam_data)?>);
+		$("#jam_data").jqxDateTimeInput({ height: '30px', theme: theme, formatString: 'HH:mm:ss', showTimeButton: true, showCalendarButton: false});
+		$("#jam_data").jqxDateTimeInput('setDate', date);
+		
     	$("#tgl_pengisian").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme, height: '30px'});
-		$("#jam_data").jqxDateTimeInput({ height: '30px', theme: theme, formatString: 'T', showTimeButton: true, showCalendarButton: false});
 
        	$('#btn-kembali').click(function(){
 	        window.location.href="<?php echo base_url()?>eform/data_kepala_keluarga";
@@ -53,50 +69,59 @@
       <div class="row" style="margin: 5px">
         <div class="col-md-4" style="padding: 5px">Jam Mulai Mendata</div>
         <div class="col-md-8">
-          <div id='jam_data' name="jam_data" value="<?php
-            if(set_value('jam_data')=="" && isset($jam_data)){
-              $jam_data = strtotime($jam_data);
-            }else{
-              $jam_data = strtotime(set_value('jam_data'));
-            }
-            if($jam_data=="") $jam_data = time();
-            echo date("Y-m-d",$jam_data);
-          ?>" >
-          </div>
+          <div id='jam_data' name="jam_data"></div>
         </div>
       </div>
         
       <div class="row" style="margin: 5px">
         <div class="col-md-4" style="padding: 5px">Provinsi</div>
         <div class="col-md-8">
-          <select  name="provinsi" id="provinsi" placeholder="provinsi"  class="form-control">
-			 <option value="31">DKI Jakarta</option>
-		  </select>
+          <select  name="provinsi" id="provinsi" class="form-control">
+          	<?php
+            foreach($data_provinsi as $row_provinsi){
+            ?>
+                <option value="<?php echo $row_provinsi->code; ?>" ><?php echo ucwords(strtolower($row_provinsi->value)); ?></option>
+            <?php
+            }    
+          	?>
+	      </select>
         </div>
       </div>
 
       <div class="row" style="margin: 5px">
         <div class="col-md-4" style="padding: 5px">Kabupaten / Kota</div>
         <div class="col-md-8">
-          <select  name="kota" id="kota" placeholder="kota" class="form-control">
-          		<option value="3172">Jakarta Timur</option>
-      		</select>
+          <select  name="kota" id="kota" class="form-control">
+          	<?php
+            foreach($data_kotakab as $row_kotakab){
+            ?>
+                <option value="<?php echo $row_kotakab->code; ?>" ><?php echo ucwords(strtolower($row_kotakab->value)); ?></option>
+            <?php
+            }    
+          	?>
+	      </select>
         </div>
       </div>
 
       <div class="row" style="margin: 5px">
         <div class="col-md-4" style="padding: 5px">Kecamatan</div>
         <div class="col-md-8">
-        	<select  name="id_kecamatan" id="id_kecamatan" placeholder="Desa" class="form-control">
-          		<option value="3172100">Matraman</option>
-      		</select>
+          <select  name="id_kecamatan" id="id_kecamatan" class="form-control">
+          	<?php
+            foreach($data_kecamatan as $row_kecamatan){
+            ?>
+                <option value="<?php echo $row_kecamatan->code; ?>" ><?php echo ucwords(strtolower($row_kecamatan->nama)); ?></option>
+            <?php
+            }    
+          	?>
+	      </select>
         </div>
       </div>
 
       <div class="row" style="margin: 5px">
         <div class="col-md-4" style="padding: 5px">Desa / Kelurahan</div>
         <div class="col-md-8">
-          <select  name="kelurahan" id="kelurahan" placeholder="kelurahan" class="form-control">
+          <select  name="kelurahan" id="kelurahan" class="form-control">
           	<?php
 	        if(set_value('kelurahan')=="" && isset($kelurahan)){
 	          $kelurahan = $kelurahan;
@@ -188,7 +213,7 @@
             foreach($data_pos as $row_pos){
 	 	        $select = $row_pos->pos == $kodepos ? 'selected' : '' ;
             ?>
-                <option value="<?php echo $row_pos->pos; ?>" <?php echo $select; ?>><?php echo $row_pos->pos; ?></option>
+                <option value="<?php echo $row_pos->pos; ?>" <?php echo $select; ?>><?php echo chunk_split($row_pos->pos, 1, ' '); ?></option>
             <?php
             }    
           	?>
@@ -277,8 +302,7 @@
 
 <script>
 $(function () { 
-
-    $("#menu_eform_data_kepala_keluarga").addClass("active");
-    $("#menu_eform_data_kepala_keluarga").addClass("active");
+	$("#menu_ketuk_pintu").addClass("active");
+	$("#menu_eform_data_kepala_keluarga").addClass("active");
 });
 </script>

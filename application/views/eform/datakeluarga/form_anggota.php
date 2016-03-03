@@ -1,41 +1,30 @@
-<?php if($this->session->flashdata('alert')!=""){ ?>
-<div class="alert alert-success alert-dismissable">
-	<button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-	<h4>	<i class="icon fa fa-check"></i> Information!</h4>
-	<?php echo $this->session->flashdata('alert')?>
-</div>
-<?php } ?>
-
-<section class="content">
-<form action="<?php echo base_url()?>mst/data_keluarga/dodel_multi" method="POST" name="">
-  <div class="row">
-    <!-- left column -->
-    <div class="col-md-12">
-      <!-- general form elements -->
-      <div class="box box-primary">
-        <div class="box-header">
-          <h3 class="box-title">{title_form}</h3>
-	    </div>
-
-	      <div class="box-footer">
-		 	<button type="button" class="btn btn-primary" onclick="document.location.href='<?php echo base_url()?>eform/data_kepala_keluarga/add'"><i class='fa fa-plus-square-o'></i> &nbsp; Tambah</button>
-		 	<button type="button" class="btn btn-success" id="btn-refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
-		 </div>
-        <div class="box-body">
+<div class="row" style="margin: 0">
+  	<div class="col-md-12">
+	  <div class="box-footer" style="text-align: right">
+	 	<button type="button" class="btn btn-primary" id="btn-tambah-anggota"><i class='fa fa-plus-square-o'></i> &nbsp; Tambah Anggota Keluarga</button>
+	 	<button type="button" class="btn btn-success" id="btn-refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
+	  </div>
+	  <div class="box box-primary">
+	    <div class="box-body">
 		    <div class="div-grid">
 		        <div id="jqxgrid"></div>
 			</div>
 	    </div>
 	  </div>
 	</div>
-  </div>
-</form>
-</section>
+</div>
 
 <script type="text/javascript">
 	$(function () {	
 		$("#menu_ketuk_pintu").addClass("active");
 		$("#menu_eform_data_kepala_keluarga").addClass("active");
+
+		$("#btn-tambah-anggota").click(function(){
+	        $.get('<?php echo base_url()?>eform/data_kepala_keluarga/anggota_add/{id_data_keluarga}', function (data) {
+	            $('#content2').html(data);
+	        });
+		});
+
 	});
 		
 	   var source = {
@@ -119,25 +108,26 @@
 					}
                  }
                 },
-				{ text: 'No. Urut', datafield: 'nourutkel', columntype: 'textbox', align:'center', cellsalign:'center', filtertype: 'textbox', width: '6%' },
-                { text: 'Tgl Pengisian', datafield: 'tanggal_pengisian', columntype: 'textbox', align:'center', cellsalign:'center', filtertype: 'date',cellsformat: 'dd-MM-yyyy', width: '10%' },
-				{ text: 'Kepala Keluarga', datafield: 'namakepalakeluarga', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
-				{ text: 'Desa', datafield: 'value', columntype: 'textbox', filtertype: 'textbox', width: '19%' },
-				{ text: 'RT', datafield: 'rt', columntype: 'textbox', filtertype: 'textbox', width: '6%' },
-				{ text: 'RW', datafield: 'rw', columntype: 'textbox', filtertype: 'textbox', width: '6%' },
-				{ text: 'No. Rumah', datafield: 'norumah', columntype: 'textbox', filtertype: 'textbox', width: '8%' },
-				{ text: 'Alamat', datafield: 'alamat', columntype: 'textbox', filtertype: 'textbox', width: '21%' }
+				{ text: 'NIK', datafield: 'nourutkel', columntype: 'textbox', align:'center', cellsalign:'center', filtertype: 'textbox', width: '16%' },
+				{ text: 'Nama', datafield: 'namakepalakeluarga', columntype: 'textbox', filtertype: 'textbox', width: '26%' },
+                { text: 'Tgl Lahir', datafield: 'tanggal_pengisian', columntype: 'textbox', align:'center', cellsalign:'center', filtertype: 'date',cellsformat: 'dd-MM-yyyy', width: '10%' },
+				{ text: 'Usia', datafield: 'rw', columntype: 'textbox', filtertype: 'textbox', align:'center', cellsalign:'center', width: '8%' },
+				{ text: 'Hubungan', datafield: 'id_pkk', columntype: 'textbox', filtertype: 'textbox', align:'center', cellsalign:'center', width: '12%' },
+				{ text: 'Agama', datafield: 'value', columntype: 'textbox', filtertype: 'textbox', align:'center', cellsalign:'center', width: '10%' },
+				{ text: 'Jenis Kelamin', datafield: 'rt', columntype: 'textbox', filtertype: 'textbox', align:'center', cellsalign:'center', width: '10%' }
 			]
 		});
 
 	function edit(id){
-		document.location.href="<?php echo base_url().'eform/data_kepala_keluarga/edit';?>/" + id;
+        $.get('<?php echo base_url()?>eform/data_kepala_keluarga/anggota_edit/{id_data_keluarga}/'+id, function (data) {
+            $('#content2').html(data);
+        });
 	}
 
 	function del(id){
 		var confirms = confirm("Hapus Data ?");
 		if(confirms == true){
-			$.post("<?php echo base_url().'eform/data_kepala_keluarga/dodel' ?>/" + id,  function(){
+			$.post("<?php echo base_url().'eform/data_kepala_keluarga/anggota_dodel/'.$id_data_keluarga ?>/" + id,  function(){
 				$("#jqxgrid").jqxGrid('updatebounddata', 'cells');
 			});
 		}
