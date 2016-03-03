@@ -36,6 +36,7 @@ class Bhp_opname_model extends CI_Model {
     {
         $kodepuskesmas = "P".$this->session->userdata("puskesmas");
         $data = array();
+        $this->db->distinct();
         $this->db->select("mst_inv_barang_habispakai.*,mst_inv_pilihan.value as value, mst_inv_barang_habispakai_jenis.uraian as nama_jenis,
             (select jml as jml from  inv_inventaris_habispakai_opname where id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai and code_cl_phc=".'"'.$kodepuskesmas.'"'." order by tgl_update desc limit 1) as jmlbaik,
             (select jml_rusak as jmlrusak from  inv_inventaris_habispakai_kondisi where id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai  and code_cl_phc=".'"'.$kodepuskesmas.'"'." order by tgl_update desc limit 1) as jml_rusak,

@@ -192,7 +192,7 @@ class Bhp_pengadaan extends CI_Controller {
 				'jml'									=> $act->jml,
 				'harga'									=> number_format($act->harga,2),
 				'subtotal'								=> number_format($act->jml*$act->harga,2),
-				'tgl_update'							=> $act->tgl_update,
+				'tgl_update'							=> date("d-m-Y",strtotime($act->tgl_update)),
 				'edit'		=> 1,
 				'delete'	=> 1
 			);
@@ -350,7 +350,7 @@ class Bhp_pengadaan extends CI_Controller {
 				'jumlah_unit'					=> $act->jumlah_unit,
 				'nilai_pembelian'				=> $act->nilai_pembelian,
 				'jumlah_unit'					=> $act->jumlah_unit,
-				'nilai_pembelian'				=> $act->nilai_pembelian,
+				'nilai_pembelian'				=> number_format($act->nilai_pembelian),
 				'value'							=> $act->value,
 				'keterangan'					=> $act->keterangan,
 				'detail'						=> 1,
@@ -646,6 +646,7 @@ class Bhp_pengadaan extends CI_Controller {
 			$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
 			$data['kodestatus'] = $this->bhp_pengadaan_model->get_data_status();
 			$data['kodestatus_inv'] = $this->bhp_pengadaan_model->pilih_data_status('status_pembelian');
+			$data['tgl_opnamecond']		= $this->bhp_pengadaan_model->gettgl_opname($id_permohonan);
 			$data['barang']	  	= $this->parser->parse('inventory/bhp_pengadaan/barang', $data, TRUE);
 			$data['content'] 	= $this->parser->parse("inventory/bhp_pengadaan/edit",$data,true);
 			$this->template->show($data,"home");

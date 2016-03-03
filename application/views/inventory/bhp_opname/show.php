@@ -102,6 +102,7 @@
 			{ name: 'jmlbaik', type: 'string' },
 			{ name: 'jml_rusak', type: 'string' },
 			{ name: 'tgl_update', type: 'date' },
+			{ name: 'tgl_opname', type: 'date' },
 			{ name: 'jml_tdkdipakai', type: 'string' },
 			{ name: 'harga', type: 'double' },
 			{ name: 'jenisuraian', type: 'string' },
@@ -172,7 +173,7 @@
 				{ text: 'Rusak', columngroup: 'jumlah',editable:false ,align: 'center', cellsalign: 'right', datafield: 'jml_rusak', columntype: 'textbox', filtertype: 'none', width: '8%' },
 				{ text: 'Tidak dipakai', columngroup: 'jumlah',editable:false ,datafield: 'jml_tdkdipakai', columntype: 'textbox', filtertype: 'none', width: '8%' ,align: 'center', cellsalign: 'right'},
 				{ text: 'Harga Satuan (Rp.)', editable:false ,datafield: 'harga', columntype: 'textbox', filtertype: 'textbox',align: 'center', cellsalign: 'right', width: '15%' },
-				{ text: 'Last Update', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false,datafield: 'tgl_update', columntype: 'date', filtertype: 'none', cellsformat: 'dd-MM-yyyy', width: '10%'},
+				{ text: 'Last Update', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false,datafield: 'tgl_opname', columntype: 'date', filtertype: 'none', cellsformat: 'dd-MM-yyyy', width: '10%'},
             ],
             columngroups: 
             [

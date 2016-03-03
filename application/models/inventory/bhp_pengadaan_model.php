@@ -303,8 +303,10 @@ class Bhp_pengadaan_model extends CI_Model {
 
     
     function sum_jumlah_item($kode,$tipe){
+        $namapus = "P".$this->session->userdata('puskesmas');
     	$this->db->select_sum($tipe);
     	$this->db->where('id_inv_hasbispakai_pembelian',$kode);
+        $this->db->where('code_cl_phc',$namapus);
 		$query=$this->db->get('inv_inventaris_habispakai_pembelian_item');
 		if($query->num_rows()>0)
         {
@@ -320,7 +322,8 @@ class Bhp_pengadaan_model extends CI_Model {
         return  $jumlah;
     }
     function sum_jumlah_item_jumlah($kode,$tipe){
-        $query=$this->db->query("SELECT SUM(jml*harga) as totalharga FROM inv_inventaris_habispakai_pembelian_item WHERE id_inv_hasbispakai_pembelian = $kode");
+        $namapus = "P".$this->session->userdata('puskesmas');
+        $query=$this->db->query("SELECT SUM(jml*harga) as totalharga FROM inv_inventaris_habispakai_pembelian_item WHERE id_inv_hasbispakai_pembelian = ".'"'.$kode.'"'." and code_cl_phc= ".'"'.$namapus.'"'."");
         if($query->num_rows()>0)
         {
             foreach($query->result() as $k)
