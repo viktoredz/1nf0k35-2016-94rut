@@ -211,6 +211,7 @@ class Bhp_pengeluaran extends CI_Controller {
 				//'pilihan_satuan'		=> $act->pilihan_satuan,
 				'value'					=> $act->value,
 				'tgl_update'			=> $act->tgl_update,
+				'tgl_opname'			=> $act->tgl_opname,
 				//'harga'					=> number_format($act->harga,2),
 				'id_mst_inv_barang_habispakai'			=> $act->id_mst_inv_barang_habispakai,
 				'id_mst_inv_barang_habispakai_jenis'	=> $act->id_mst_inv_barang_habispakai_jenis

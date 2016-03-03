@@ -194,11 +194,15 @@ class Bhp_opname extends CI_Controller {
 		//$unlock = 1;
 		
 		foreach($rows as $act) {
-			if (($act->harga_opname==0)||$act->harga_opname==null) {
-				$harga = $act->harga;
-			}else{
-				$harga = $act->harga_opname;
-			}
+			if((isset($act->tgl_pembelian))||(isset($act->tgl_opname))){
+	          if ($act->tgl_pembelian >= $act->tgl_opname) {
+	            $harga = $act->harga_pembelian;
+	          }else{
+	            $harga =$act->harga_opname;
+	          }
+	        }else{
+	          $harga = $act->harga;
+	        }
 			$data[] = array(
 				'no'					=> $no++,
 				'code'					=> $act->code,

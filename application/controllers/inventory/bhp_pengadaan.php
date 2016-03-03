@@ -394,7 +394,10 @@ class Bhp_pengadaan extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
-		$this->db->where('id_inv_hasbispakai_pembelian',$id);
+		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
+			$this->db->where('inv_inventaris_habispakai_pembelian_item.code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
+		$this->db->where('inv_inventaris_habispakai_pembelian_item.id_inv_hasbispakai_pembelian',$id);
 		$rows_all_activity = $this->bhp_pengadaan_model->getItem();
 
 
@@ -420,9 +423,9 @@ class Bhp_pengadaan extends CI_Controller {
 			}
 		}
 		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
-			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+			$this->db->where('inv_inventaris_habispakai_pembelian_item.code_cl_phc','P'.$this->session->userdata('puskesmas'));
 		}
-		$this->db->where('id_inv_hasbispakai_pembelian',$id);
+		$this->db->where('inv_inventaris_habispakai_pembelian_item.id_inv_hasbispakai_pembelian',$id);
 		$activity = $this->bhp_pengadaan_model->getItem($this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();
 
@@ -442,6 +445,7 @@ class Bhp_pengadaan extends CI_Controller {
 				'harga'									=> number_format($act->harga,2),
 				'subtotal'								=> number_format($act->jml*$act->harga,2),
 				'tgl_update'							=> $act->tgl_update,
+				'tgl_opname'							=> $act->tgl_opname,
 				'edit'		=> 1,
 				'delete'	=> 1
 			);
@@ -594,13 +598,14 @@ class Bhp_pengadaan extends CI_Controller {
         $this->form_validation->set_rules('status', 'Status Pengadaan', 'trim|required');
         $this->form_validation->set_rules('keterangan', 'Keterangan', 'trim|required');
         $this->form_validation->set_rules('nomor_kontrak', 'Nomor Kontrak', 'trim|required');
-
+        
 		if($this->form_validation->run()== FALSE){
 			$data 	= $this->bhp_pengadaan_model->get_data_row($id_pengadaan);
 			$data['title_group'] 	= "Barang Habis Pakai";
 			$data['title_form']		= "Ubah Permohonan/Pengadaan Barang";
 			$data['action']			= "edit";
 			$data['kode']			= $id_pengadaan;
+
 			
 			$kodepuskesmas = $this->session->userdata('puskesmas');
 			$this->db->where('code','P'.$kodepuskesmas);
@@ -608,6 +613,8 @@ class Bhp_pengadaan extends CI_Controller {
 			$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
 			$data['kodestatus'] = $this->bhp_pengadaan_model->get_data_status();
 			$data['kodestatus_inv'] = $this->bhp_pengadaan_model->pilih_data_status('status_pembelian');
+			$data['tgl_opnamecond']		= $this->bhp_pengadaan_model->gettgl_opname($id_pengadaan);
+
 			$data['barang']	  	= $this->parser->parse('inventory/bhp_pengadaan/barang', $data, TRUE);
 			$data['content'] 	= $this->parser->parse("inventory/bhp_pengadaan/edit",$data,true);
 		}elseif($this->bhp_pengadaan_model->update_entry($id_pengadaan)){

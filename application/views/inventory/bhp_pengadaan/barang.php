@@ -11,6 +11,7 @@
 			{ name: 'id_mst_inv_barang_habispakai', type: 'number' },
 			{ name: 'uraian', type: 'string' },
 			{ name: 'jml', type: 'number' },
+			{ name: 'tgl_opname', type: 'string' },
 			{ name: 'harga', type: 'string' },
 			{ name: 'subtotal', type: 'string' },
 			{ name: 'harga', type: 'double' },
@@ -69,7 +70,11 @@
 					var statupembelian = "<?php echo $pilihan_status_pembelian; ?>";
 				    var dataRecord = $("#jqxgrid_barang").jqxGrid('getrowdata', row);
 				    if ((statupembelian!=2)&&(dataRecord.edit==1)) {
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='edit_barang(\""+dataRecord.id_inv_hasbispakai_pembelian+"\",\""+dataRecord.id_mst_inv_barang_habispakai+"\");'></a></div>";
+				    	//if (dataRecord.tgl_opname!="<?php echo date('Y-m-d')?>") {
+				    		return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='edit_barang(\""+dataRecord.id_inv_hasbispakai_pembelian+"\",\""+dataRecord.id_mst_inv_barang_habispakai+"\");'></a></div>";	
+				    	/*}else{
+				    		return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php// echo base_url(); ?>media/images/16_lock.gif'></a></div>";	
+				    	}*/
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}
@@ -79,8 +84,11 @@
 				    var dataRecord = $("#jqxgrid_barang").jqxGrid('getrowdata', row);
 				    var statupembelian = "<?php echo $pilihan_status_pembelian; ?>";
 				    if ((statupembelian!=2)&&(dataRecord.edit==1)) {
-				    	
+				    	//if (dataRecord.tgl_opname!="<?php echo date('Y-m-d')?>") {
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del_barang(\""+dataRecord.id_inv_hasbispakai_pembelian+"\",\""+dataRecord.id_mst_inv_barang_habispakai+"\");'></a></div>";
+						/*}else{
+							return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php// echo base_url(); ?>media/images/16_lock.gif'></a></div>";	
+						}*/
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}
@@ -107,9 +115,15 @@
  		$('#refreshdatabutton').click(function () {
 			$("#jqxgrid_barang").jqxGrid('updatebounddata', 'cells');
 		});
-
  		$('#btn_add_barang').click(function () {
-			add_barang();
+ 			
+			//alert("<?php echo date("d-m-Y",strtotime($tgl_opnamecond)); ?>");
+ 			if ($("#tgl2").val()<="<?php echo date("d-m-Y",strtotime($tgl_opnamecond)); ?>") {
+ 				alert("Maaf! Data pembelian sudah di stock opname pada "+"<?php echo date('d-m-Y',strtotime($tgl_opnamecond)); ?>"+"\n"+"Silahkan ganti tanggal pembelian ke hari berikutnya!");
+ 			}else{
+ 				add_barang();
+ 			}	
+			
 		});
 
 

@@ -12,9 +12,20 @@
   <h4>  <i class="icon fa fa-check"></i> Information!</h4>
   <?php echo $this->session->flashdata('alert_form')?>
 </div>
-<?php } ?>
+<?php } //print_r($tgl_opname_);echo "<h1>hai</h1>"; ?>
+<script>
+
+function validateForm() {
+  //alert("<?php echo $tgl_opnamecond; ?>");
+   // var x = document.forms["editform"]["tgl2"].value;
+     if ($("#tgl2").val()<="<?php echo date('d-m-Y',strtotime($tgl_opnamecond)); ?>") {
+        alert("Maaf! Data pembelian sudah di stock opname pada "+"<?php echo date('d-m-Y',strtotime($tgl_opnamecond)); ?>"+"\n"+"Silahkan ganti tanggal pembelian ke hari berikutnya!");
+        return false;
+    }
+}
+</script>
 <div class="row">
-  <form action="<?php echo base_url()?>inventory/bhp_pengadaan/{action}/{kode}/" method="post">
+  <form action="<?php echo base_url()?>inventory/bhp_pengadaan/{action}/{kode}/" method="post" onsubmit="return validateForm()" name="editform">
   <div class="col-md-6">
     <div class="box box-primary">
       <div class="box-body">
@@ -175,14 +186,14 @@
       </div>
       <div class="box-footer">
         <?php if(!isset($viewreadonly)){?>
-          <button type="submit" class="btn btn-primary"><i class='fa fa-floppy-o'></i> &nbsp; Simpan</button>
+          <button type="submit" class="btn btn-primary" id="btn-submit"><i class='fa fa-floppy-o'></i> &nbsp; Simpan</button>
         <?php }else{ ?>
           <button type="button" id="btn-export" class="btn btn-primary"><i class='fa fa-save'></i> &nbsp; Export</button>
           <?php if($unlock==1){ ?>
             <button type="button" id="btn-edit" class="btn btn-success"><i class='fa fa-pencil-square-o'></i> &nbsp; Ubah Pengadaan</button>
           <?php } ?>
         <?php } ?>
-        <button type="button" id="btn-kembali" class="btn btn-warning"><i class='fa fa-reply'></i> &nbsp; Kembali</button>
+        <button type="button" id="btn-kembali" class="btn btn-warning"><i class='fa fa-reply'></i> &nbsp; Kembali </button>
       </div>
       </div>
     </form>        
@@ -198,6 +209,7 @@
     </div>
   </div>
 </div>
+
 <script type="text/javascript">
 $(function(){
   kodeInvetaris();

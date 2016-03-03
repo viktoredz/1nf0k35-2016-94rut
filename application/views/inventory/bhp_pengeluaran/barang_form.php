@@ -1,6 +1,6 @@
 
 <script type="text/javascript">
-  $("#tgl_update").jqxDateTimeInput({ width: '200px', height: '25px' });
+  $("#tgl_update").jqxDateTimeInput({ width: '200px', height: '25px',readonly:true });
 </script>
 <script type="text/javascript">
 
