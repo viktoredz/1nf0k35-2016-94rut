@@ -47,6 +47,7 @@
 				"41" => "fa fa-bar-chart-o",
 				"49" => "fa fa-asterisk",
 				"126" => "fa fa-tasks",
+				"136" => "fa fa-heart",
 				"6" => "fa fa-table"				
 			);
 			

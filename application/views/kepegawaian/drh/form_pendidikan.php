@@ -8,10 +8,10 @@
             });
         }
 
-        loadPage('<?php echo base_url()?>kepegawaian/drh/biodata_pendidikan/1/{id}', 1);
+        loadPage('<?php echo base_url()?>kepegawaian/drh_pedidikan/biodata_pendidikan/1/{id}', 1);
         $('#jqxTabsPendidikan').on('selected', function (event) {
             var pageIndex = event.args.item + 1;
-            loadPage('<?php echo base_url()?>kepegawaian/drh/biodata_pendidikan/'+pageIndex+'/{id}', pageIndex);
+            loadPage('<?php echo base_url()?>kepegawaian/drh_pedidikan/biodata_pendidikan/'+pageIndex+'/{id}', pageIndex);
         });
 
   });
@@ -36,7 +36,7 @@
                       <i class="icon fa fa-plus" style="font-size: 18px"></i>
                   </div>
                   <div style="margin-left: 10px; vertical-align: middle; text-align: center; float: left;">
-                      Diklat</div>
+                      Diklat Struktural</div>
               </div>
             </li>
             <li style="margin-left: 15px;">
@@ -45,7 +45,7 @@
                       <i class="icon fa fa-plus" style="font-size: 18px"></i>
                   </div>
                   <div style="margin-left: 10px; vertical-align: middle; text-align: center; float: left;">
-                      Kursus</div>
+                      Diklat Fungsional</div>
               </div>
             </li>
         </ul>

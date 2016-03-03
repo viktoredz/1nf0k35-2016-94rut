@@ -178,6 +178,14 @@ class Drh extends CI_Controller {
 				die($this->parser->parse("kepegawaian/drh/form_pendidikan",$data));
 
 				break;
+			case 4:
+				die($this->parser->parse("kepegawaian/drh/form_pangkat",$data));
+
+				break;
+			case 5:
+				die($this->parser->parse("kepegawaian/drh/form_jabatan",$data));
+
+				break;
 			default:
 
 				die($this->parser->parse("kepegawaian/drh/form_keluarga",$data));
@@ -295,68 +303,6 @@ class Drh extends CI_Controller {
 		die($this->parser->parse("kepegawaian/drh/form_biodata",$data));
 	}
 
-	function biodata_keluarga($pageIndex,$id){
-		$data = array();
-		$data['id']=$id;
-
-		switch ($pageIndex) {
-			case 1:
-				die($this->parser->parse("kepegawaian/drh/form_keluarga_ortu",$data));
-				break;
-			case 2:
-				die($this->parser->parse("kepegawaian/drh/form_keluarga_suamiistri",$data));
-				break;
-			default:
-				die($this->parser->parse("kepegawaian/drh/form_keluarga_anak",$data));
-				break;
-		}
-	}
-
-	function biodata_keluarga_ortu_add($id){
-        $this->form_validation->set_rules('nama', 'Nama', 'trim|required');
-        $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'trim|required');
-        $this->form_validation->set_rules('nik', 'NIK', 'trim|required');
-        $this->form_validation->set_rules('gelar_depan', 'Gelar Depan', 'trim');
-        $this->form_validation->set_rules('gelar_belakang', 'Gelar Belakang', 'trim');
-        $this->form_validation->set_rules('tgl_lhr', 'Tanggal Lahir', 'trim');
-        $this->form_validation->set_rules('tmp_lahir', 'Tempat Lahir', 'trim');
-        $this->form_validation->set_rules('kode_mst_agama', 'Agama', 'trim');
-        $this->form_validation->set_rules('kedudukan_hukum', 'Kedudukan Hukum', 'trim');
-        $this->form_validation->set_rules('alamat', 'Alamat', 'trim');
-        $this->form_validation->set_rules('npwp', 'NPWP', 'trim');
-        $this->form_validation->set_rules('npwp_tgl', 'Tanggal NPWP', 'trim');
-        $this->form_validation->set_rules('kartu_pegawai', 'Kartu Pegawai', 'trim');
-        $this->form_validation->set_rules('goldar', 'Golongan Darah', 'trim');
-        $this->form_validation->set_rules('kode_mst_nikah', 'Status Nikah', 'trim');
-
-		$data = $this->drh_model->get_data_row($id); 
-
-		$data['id']=$id;
-		$data['kode_ag'] = $this->drh_model->get_kode_agama('kode_ag');
-		$data['kode_nk'] = $this->drh_model->get_kode_nikah('kode_nk');
-		$data['alert_form'] = '';
-
-		if($this->form_validation->run()== FALSE){
-			die($this->parser->parse("kepegawaian/drh/form_keluarga_ortu_form",$data));
-		}elseif($this->drh_model->update_entry($id)){
-			$data = $this->drh_model->get_data_row($id); 
-			$data['id']=$id;
-			$data['kode_ag'] = $this->drh_model->get_kode_agama('kode_ag');
-			$data['kode_nk'] = $this->drh_model->get_kode_nikah('kode_nk');
-			$data['alert_form'] = 'Save data successful...';
-		}else{
-			$data['alert_form'] = 'Save data failed...';
-		}
-
-		die($this->parser->parse("kepegawaian/drh/form_keluarga_ortu_form",$data));
-	}
-
-	function biodata_pendidikan(){
-		$data = array();
-		die($this->parser->parse("kepegawaian/drh/form_pendidikan_sub",$data));
-
-	}
-
 // CRUD ALAMAT
 
 	function kota($kode_provinsi="",$kode_kota="")
@@ -412,6 +358,25 @@ class Drh extends CI_Controller {
 		echo json_encode($data);
 		exit;
 	}
+
+	function autocomplite_kota(){
+		$search = explode("&",$this->input->server('QUERY_STRING'));
+		$search = str_replace("query=","",$search[0]);
+		$search = str_replace("+"," ",$search);
+
+		$this->db->like("value",$search);
+		$this->db->order_by('value','asc');
+		$this->db->limit(20,0);
+		$kota= $this->db->get("cl_district")->result();
+		foreach ($kota as $q) {
+			$kotas[] = array(
+				'value' => $q->value 
+			);
+		}
+		echo json_encode($kotas);
+	}
+
+	
 // Alamat
 	function get_urut_alamat($id="")
     {

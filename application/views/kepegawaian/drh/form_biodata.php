@@ -43,10 +43,10 @@
               </div>
 
               <div class="row" style="margin: 5px">
-                <div class="col-md-4" style="padding: 5px">
-                  Gelar Depan
+                <div class="col-sm-4 col-xs-12" style="padding: 5px">
+                  Gelar 
                 </div>
-                <div class="col-md-8">
+                <div class="col-sm-4 col-xs-6">
                   <input type="text" class="form-control" name="gelar_depan" placeholder="Gelar Depan" value="<?php 
                   if(set_value('gelar_depan')=="" && isset($gelar_depan)){
                     echo $gelar_depan;
@@ -55,18 +55,27 @@
                   }
                   ?>">
                 </div>
-              </div>
-
-              <div class="row" style="margin: 5px">
-                <div class="col-md-4" style="padding: 5px">
-                  Gelar Belakang
-                </div>
-                <div class="col-md-8">
+                <div class="col-sm-4 col-xs-6">
                   <input type="text" class="form-control" name="gelar_belakang" placeholder="Gelar Belakang" value="<?php 
                   if(set_value('gelar_belakang')=="" && isset($gelar_belakang)){
                     echo $gelar_belakang;
                   }else{
                     echo  set_value('gelar_belakang');
+                  }
+                  ?>">
+                </div>
+              </div>
+
+              <div class="row" style="margin: 5px">
+                <div class="col-md-4" style="padding: 5px">
+                  NIK *
+                </div>
+                <div class="col-md-8">
+                  <input type="text" class="form-control" name="nik" placeholder="NIK" value="<?php 
+                  if(set_value('nik')=="" && isset($nik)){
+                    echo $nik;
+                  }else{
+                    echo  set_value('nik');
                   }
                   ?>">
                 </div>
@@ -89,13 +98,19 @@
                   Tempat Lahir
                 </div>
                 <div class="col-md-8">
-                  <input type="text" class="form-control" name="tmp_lahir" placeholder="Tempat Lahir" value="<?php 
-                  if(set_value('tmp_lahir')=="" && isset($tmp_lahir)){
-                    echo $tmp_lahir;
-                  }else{
-                    echo  set_value('tmp_lahir');
-                  }
-                  ?>">
+                  <div class="input-group">
+                    <input type="text" class="form-control" name="tmp_lahir" placeholder="Tempat Lahir" value="<?php 
+                    if(set_value('tmp_lahir')=="" && isset($tmp_lahir)){
+                      echo $tmp_lahir;
+                    }else{
+                      echo  set_value('tmp_lahir');
+                    }
+                    ?>" style="text-indent: 13px;" autocomplete="off">                  
+                    <div class="input-group-addon">
+                      <i class="fa fa-search"></i>
+                    </div>
+                  </div>
+
                 </div>
               </div>
 
@@ -137,21 +152,6 @@
 
           <div class="col-md-6">
             <div class="box box-success">
-
-              <div class="row" style="margin: 5px">
-                <div class="col-md-4" style="padding: 5px">
-                  NIK *
-                </div>
-                <div class="col-md-8">
-                  <input type="text" class="form-control" name="nik" placeholder="NIK" value="<?php 
-                  if(set_value('nik')=="" && isset($nik)){
-                    echo $nik;
-                  }else{
-                    echo  set_value('nik');
-                  }
-                  ?>">
-                </div>
-              </div>
 
               <div class="row" style="margin: 5px">
                 <div class="col-md-4" style="padding: 5px">
@@ -316,6 +316,41 @@
 
         return false;
     });
+
+    $("[name='tmp_lahir']").jqxInput(
+      {
+      placeHolder: " Kota Kelahiran ",
+      theme: 'classic',
+      width: '100%',
+      height: '30px',
+      minLength: 2,
+      source: function (query, response) {
+        var dataAdapter = new $.jqx.dataAdapter
+        (
+          {
+            datatype: "json",
+              datafields: [
+              { name: 'value', type: 'string'}
+            ],
+            url: '<?php echo base_url().'kepegawaian/drh/autocomplite_kota'; ?>'
+          },
+          {
+            autoBind: true,
+            formatData: function (data) {
+              data.query = query;
+              return data;
+            },
+            loadComplete: function (data) {
+              if (data.length > 0) {
+                response($.map(data, function (item) {
+                  return item.value;
+                }));
+              }
+            }
+          });
+      }
+    });
+  
 
     $("#tgl_lhr").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme, height:30});
     $("#npwp_tgl").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme, height:30});
