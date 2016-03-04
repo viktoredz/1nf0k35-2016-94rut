@@ -1,23 +1,7 @@
-<?php if(validation_errors()!=""){ ?>
-<div class="alert alert-warning alert-dismissable">
-  <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-  <h4>  <i class="icon fa fa-check"></i> Information!</h4>
-  <?php echo validation_errors()?>
-</div>
-<?php } ?>
-
-<?php if($alert_form!=""){ ?>
-<div class="alert alert-success alert-dismissable">
-  <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-  <h4>  <i class="icon fa fa-check"></i> Information!</h4>
-  <?php echo $alert_form?>
-</div>
-<?php } ?>
 <div class="row" style="margin: 0">
   <div class="col-md-12">
   	<div class="box-footer" style="background: #FAFAFA;text-align: left;">
-      <!--<button type="button" class="btn btn-warning" id="btn-kb-simpan"><i class='fa fa-save'></i> &nbsp; Simpan Keluarga Berencana</button>-->
-      <h3>Keluarga Berencana</h3>
+      <h4><i class="icon fa fa-female"></i> Keluarga Berencana</h4>
     </div>
 	<div class="box box-success">
 	  <div class="box-body">

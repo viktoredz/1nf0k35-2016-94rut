@@ -1,26 +1,8 @@
-<?php if(validation_errors()!=""){ ?>
-<div class="alert alert-warning alert-dismissable">
-  <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-  <h4>  <i class="icon fa fa-check"></i> Information!</h4>
-  <?php echo validation_errors()?>
-</div>
-<?php } ?>
-
-<?php if($alert_form!=""){ ?>
-<div class="alert alert-success alert-dismissable">
-  <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-  <h4>  <i class="icon fa fa-check"></i> Information!</h4>
-  <?php echo $alert_form?>
-</div>
-<?php } ?>
-		
 <div class="row" style="margin: 0">
   <div class="col-md-12">
   	<div class="box-footer" style="background: #FAFAFA;text-align: left">
-      <!--<button type="button" class="btn btn-warning" id="btn-pembangunan-simpan"><i class='fa fa-save'></i> &nbsp; Simpan Pembangunan Keluarga</button>-->
-      <h3>Pembangunan Keluarga</h3>
+      <h4><i class="icon fa fa-headphones"></i> Pembangunan Keluarga</h4>
     </div>
-    <?php// print_r($data_pembangunan);?>
 	<div class="box box-primary">
 	  <div class="box-body">
 		  <div class="panel panel-default">

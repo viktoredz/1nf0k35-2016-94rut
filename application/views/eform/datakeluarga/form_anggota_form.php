@@ -86,29 +86,25 @@
       });
 
       $("#keluarga6_tgl_lahir").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme, height: '30px'});
+      $("#keluarga6_tgl_lahir").on('change', function (event) { 
+        var noanggota = "<?php echo $noanggota;?>";
+        var id_data_keluarga = "<?php echo $id_data_keluarga; ?>";
+          $.post("<?php echo base_url()?>eform/data_kepala_keluarga/update_kepala",{kode:$(this).attr('name'),id_data_keluarga:id_data_keluarga,value:$(this).val(),noanggota:noanggota},function(data,status){;
+          });
+      }); 
 	});
 </script>
 
-<?php if(validation_errors()!=""){ ?>
-<div class="alert alert-warning alert-dismissable">
-  <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-  <h4>  <i class="icon fa fa-check"></i> Information!</h4>
-  <?php echo validation_errors()?>
-</div>
-<?php } ?>
-
-<?php if($alert_form!=""){ ?>
-<div class="alert alert-success alert-dismissable">
-  <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-  <h4>  <i class="icon fa fa-check"></i> Information!</h4>
-  <?php echo $alert_form?>
-</div>
-<?php } ?>
 <form action="<?php echo base_url()?>eform/data_kepala_keluarga/{action}/{id_data_keluarga}" method="post">
 <div class="row" style="margin: 0" id="tops">
   <div class="col-md-12">
-    <div class="box-footer" style="text-align: right">
+    <div class="box-footer">
+      <div class="col-md-6">
+        <h4><i class="icon fa fa-group" ></i> Ubah Data Anggota Keluarga</h4>
+      </div>
+      <div class="col-md-6" style="text-align: right">
         <button type="button" id="btn-up" class="btn btn-success"><i class='fa  fa-arrow-circle-o-up'></i> &nbsp;Kembali</button>
+     </div>
     </div>
 
     <input type="hidden" name="keluarga6_id_data_keluarga" value="{id_data_keluarga}">
@@ -1079,7 +1075,7 @@ menegakkan diagnosa TB?</div>
           <div class="row" style="margin: 5px;border-bottom:1px solid #EEEEEE;">
             <div class="col-xs-11" style="padding: 5px 5px 5px 24px">f. Kanker nasofaring?</div>
             <div class="col-xs-1">
-              <input type="checkbox">
+              <input type="checkbox" name="kesehatan_3_g_3_kk_f_cebox" id="kesehatan_3_g_3_kk_f_cebox" value="1">
             </div>
           </div>
 

@@ -1,25 +1,8 @@
-<?php if(validation_errors()!=""){ ?>
-<div class="alert alert-warning alert-dismissable">
-  <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-  <h4>  <i class="icon fa fa-check"></i> Information!</h4>
-  <?php echo validation_errors()?>
-</div>
-<?php } ?>
-
-<?php if($alert_form!=""){ ?>
-<div class="alert alert-success alert-dismissable">
-  <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-  <h4>  <i class="icon fa fa-check"></i> Information!</h4>
-  <?php echo $alert_form?>
-</div>
-<?php } ?>
 <div class="row" style="margin: 0">
   <div class="col-md-12">
   	<div class="box-footer" style="background: #FAFAFA;text-align: left;">
-  	<h3>Profile Keluarga</h3>
-      <!--<button type="button" class="btn btn-warning" id="btn-profile-simpan"><i class='fa fa-save'></i> &nbsp; Simpan Profile</button>-->
+  	<h4><i class="icon fa fa-home" ></i> Profile Keluarga</h4>
     </div>
-        	
 			<div class="box box-success">
 			  <div class="box-body">
 			    <div class="div-grid">
@@ -281,7 +264,6 @@ $(function () {
 					});
 		})
 	<?php
-//	echo $data_formprofile;echo "<h1>ha</h1>";
 	  	 if(isset($data_formprofile) and $data_formprofile!="salah"){
 		    foreach($data_formprofile as $row){?>
 		    	var kode = "<?php echo $row->kode;?>";

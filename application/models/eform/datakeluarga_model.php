@@ -13,6 +13,8 @@ class Datakeluarga_model extends CI_Model {
         $this->db->select("$this->tabel.*,cl_village.value");
 		$this->db->join('cl_village', "data_keluarga.id_desa = cl_village.code",'inner');
 
+        $kec = substr($this->session->userdata('puskesmas'), 0,7);
+        $this->db->like('id_data_keluarga',$kec);
 		$this->db->order_by('data_keluarga.tanggal_pengisian','asc');
 		$query =$this->db->get($this->tabel,$limit,$start);
         
@@ -306,6 +308,9 @@ class Datakeluarga_model extends CI_Model {
         $kode = str_replace('keluarga6_','', $this->input->post('kode'));
         $noanggota = $this->input->post('noanggota');
         $value = $this->input->post('value');
+        if($kode == "tgl_lahir"){
+            $value = date('Y-m-d',strtotime($value));
+        }
         $dataubah = array($kode => $value);
         $keyubah = array(
                          'id_data_keluarga' => $id_data_keluarga,

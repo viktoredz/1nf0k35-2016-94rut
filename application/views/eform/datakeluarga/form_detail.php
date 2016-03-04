@@ -283,7 +283,7 @@
         
       <div class="box-footer" style="float: right">
         <button type="submit" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Simpan Data Keluarga</button>
-        <button type="submit" class="btn btn-primary"><i class='fa fa-print'></i> &nbsp; Cetak</button>
+        <!--<button type="submit" class="btn btn-primary"><i class='fa fa-print'></i> &nbsp; Cetak</button>-->
         <button type="button" id="btn-kembali" class="btn btn-success"><i class='fa fa-arrow-circle-left'></i> &nbsp;Kembali</button>
       </div>
       </div>

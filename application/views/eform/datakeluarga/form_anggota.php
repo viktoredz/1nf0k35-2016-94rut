@@ -1,8 +1,13 @@
 <div class="row" style="margin: 0">
   	<div class="col-md-12">
-	  <div class="box-footer" style="text-align: right">
-	 	<button type="button" class="btn btn-primary" id="btn-tambah-anggota"><i class='fa fa-plus-square-o'></i> &nbsp; Tambah Anggota Keluarga</button>
-	 	<button type="button" class="btn btn-success" id="btn-refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
+	  <div class="box-footer">
+	  	<div class="col-md-6">
+	  		<h4><i class="icon fa fa-group" ></i> Daftar Anggota Keluarga</h4>
+	  	</div>
+	  	<div class="col-md-6" style="text-align: right">
+		 	<button type="button" class="btn btn-primary" id="btn-tambah-anggota"><i class='fa fa-plus-square-o'></i> &nbsp; Tambah Anggota Keluarga</button>
+		 	<button type="button" class="btn btn-success" id="btn-refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
+		 </div>
 	  </div>
 	  <div class="box box-primary">
 	    <div class="box-body">

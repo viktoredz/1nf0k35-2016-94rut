@@ -399,6 +399,7 @@ class Data_kepala_keluarga extends CI_Controller {
 	function update_kepala(){
 		$this->datakeluarga_model->update_kepala();
 	}
+	
 	function profile($kode=0)
 	{
 		$this->authentication->verify('eform','edit');

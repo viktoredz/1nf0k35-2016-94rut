@@ -67,9 +67,14 @@
 <form action="<?php echo base_url()?>eform/data_kepala_keluarga/{action}/{id_data_keluarga}" method="post">
 <div class="row" style="margin: 0">
   <div class="col-md-12">
-    <div class="box-footer" style="text-align: right">
+    <div class="box-footer">
+      <div class="col-md-6">
+        <h4><i class="icon fa fa-group" ></i> Tambah Anggota Keluarga</h4>
+      </div>
+      <div class="col-md-6" style="text-align: right">
         <button type="button" id="btn-save-add" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Simpan & Lanjutkan</button>
         <button type="button" id="btn-up" class="btn btn-success"><i class='fa  fa-arrow-circle-o-up'></i> &nbsp;Kembali</button>
+     </div>
     </div>
     <input type="hidden" name="id_data_keluarga" value="{id_data_keluarga}">
     <div class="row">
