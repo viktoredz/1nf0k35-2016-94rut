@@ -1,5 +1,5 @@
 <?php
-class DataForm_model extends CI_Model {
+class Dataform_model extends CI_Model {
 
     var $tabel    = 'data_keluarga';
     var $lang     = '';
@@ -9,7 +9,7 @@ class DataForm_model extends CI_Model {
         $this->lang   = $this->config->item('language');
     }
     
-    function insertDataForm_profile(){
+    function insertdataform_profile(){
         $id_data_keluarga = $this->input->post('id_data_keluarga');
         $kode = $this->input->post('kode');
         $value = $this->input->post('value');

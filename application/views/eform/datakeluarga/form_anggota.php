@@ -38,6 +38,9 @@
 			{ name: 'tmpt_lahir', type: 'string'},
 			{ name: 'tgl_lahir', type: 'date'},
 			{ name: 'id_pilihan_hubungan', type: 'string'},
+			{ name: 'usia', type: 'string'},
+			{ name: 'jeniskelamin', type: 'string'},
+			{ name: 'hubungan', type: 'string'},
 			{ name: 'id_pilihan_kelamin', type: 'string'},
 			{ name: 'id_pilihan_agama', type: 'string'},
 			{ name: 'id_pilihan_pendidikan', type: 'string'},
@@ -105,17 +108,12 @@
 					}
                  }
                 },
-				{ text: 'Nama', datafield: 'nama', columntype: 'textbox', align:'center', cellsalign:'center', filtertype: 'textbox', width: '16%' },
-				{ text: 'NIK', datafield: 'nik', columntype: 'textbox', filtertype: 'textbox', width: '15%' },
-				{ text: 'Tempat Lahir', datafield: 'tmpt_lahir', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
+				{ text: 'Nik', datafield: 'nik', columntype: 'textbox', align:'center', cellsalign:'center', filtertype: 'textbox', width: '20%' },
+				{ text: 'Nama', datafield: 'nama', columntype: 'textbox', filtertype: 'textbox', width: '24%',align:'center', cellsalign:'left' },
                 { text: 'Tgl Lahir', datafield: 'tgl_lahir', columntype: 'textbox', align:'center', cellsalign:'center', filtertype: 'date',cellsformat: 'dd-MM-yyyy', width: '10%' },
-				{ text: 'Hubungan', datafield: 'id_pilihan_hubungan', columntype: 'textbox', filtertype: 'textbox', align:'center', cellsalign:'center', width: '8%' },
-				{ text: 'Kelamin', datafield: 'id_pilihan_kelamin', columntype: 'textbox', filtertype: 'textbox', align:'center', cellsalign:'center', width: '12%' },
-				{ text: 'Pendidikan', datafield: 'id_pilihan_pendidikan', columntype: 'textbox', filtertype: 'textbox', align:'center', cellsalign:'center', width: '10%' },
-				{ text: 'Pekerjaan', datafield: 'id_pilihan_pekerjaan', columntype: 'textbox', filtertype: 'textbox', align:'center', cellsalign:'center', width: '10%' },
-				{ text: 'Status', datafield: 'id_pilihan_kawin', columntype: 'textbox', filtertype: 'textbox', align:'center', cellsalign:'center', width: '10%' },
-				{ text: 'JKN', datafield: 'id_pilihan_jkn', columntype: 'textbox', filtertype: 'textbox', align:'center', cellsalign:'center', width: '10%' },
-				{ text: 'No Hp', datafield: 'no_hp', columntype: 'textbox', filtertype: 'textbox', align:'center', cellsalign:'center', width: '10%' }
+				{ text: 'Usia', datafield: 'usia', columntype: 'textbox', filtertype: 'textbox',align:'center', cellsalign:'right', width: '8%' },
+				{ text: 'Jenis Kelamin', datafield: 'jeniskelamin', columntype: 'textbox', filtertype: 'textbox', width: '15%',align:'center', cellsalign:'left' },
+				{ text: 'status', datafield: 'hubungan', columntype: 'textbox', filtertype: 'textbox', width: '15%',align:'center', cellsalign:'left' },
 			]
 		});
 

@@ -32,7 +32,7 @@ class Anggota_keluarga_kb_model extends CI_Model {
     {
         return $this->db->get_where($table, array('code'=>$data));
     }
-    function insertDataTable(){
+    function insertDataKeluargaBerencana(){
         $id_data_keluarga = $this->input->post('id_data_keluarga');
         $kode = $this->input->post('kode');
         $value = $this->input->post('value');
@@ -75,64 +75,7 @@ class Anggota_keluarga_kb_model extends CI_Model {
              }
         }
     }
-   function insert_entry()
-    {
-        $data=array(
-            'tanggal_pengisian'=>$this->input->post('tgl_pengisian'),
-            'jam_data'=>$this->input->post('jam_data'),
-            'alamat'=>$this->input->post('alamat'),
-            'id_propinsi'=>$this->input->post('provinsi'),
-            'id_kota'=>$this->input->post('kota'),
-            'id_kecamatan'=>$this->input->post('id_kecamatan'),
-            'id_desa'=>$this->input->post('id_desa'),
-            'rw'=>$this->input->post('dusun'),
-            'rt'=>$this->input->post('rt'),
-            'norumah'=>$this->input->post('norumah'),
-            'nokeluarga'=>$this->input->post('nokeluarga'),
-            'nourutkel'=>$this->input->post('nourutkel'),
-            'id_kodepos'=>$this->input->post('kodepos'),
-            'nama_komunitas'=>$this->input->post('namakomunitas'),
-            'namakepalakeluarga'=>$this->input->post('namakepalakeluarga'),
-            'notlp'=>$this->input->post('notlp'),
-            'namadesawisma'=>$this->input->post('namadesawisma'),
-            'id_pkk'=>$this->input->post('jabatanstuktural'),
-        );
-        if($this->db->insert('data_keluarga',$data)){
-            return $this->db->insert_id();
-        }else{
-            return mysql_error();
-        }
-
-    }
-
-    function update_entry($kode)
-    {
-        $data=array(
-            'id_data_keluarga'=>$this->input->post('id_data_keluarga'),
-            'alamat'=>$this->input->post('alamat'),
-            'id_propinsi'=>$this->input->post('provinsi'),
-            'id_kota'=>$this->input->post('kota'),
-            'id_kecamatan'=>$this->input->post('id_kecamatan'),
-            'id_desa'=>$this->input->post('kelurahan'),
-            'rw'=>$this->input->post('dusun'),
-            'rt'=>$this->input->post('rt'),
-            'norumah'=>$this->input->post('norumah'),
-            'nokeluarga'=>$this->input->post('nokeluarga'),
-            'nourutkel'=>$this->input->post('nourutkel'),
-            'id_kodepos'=>$this->input->post('kodepos'),
-            'nama_komunitas'=>$this->input->post('namakomunitas'),
-            'namakepalakeluarga'=>$this->input->post('namakepalakeluarga'),
-            'notlp'=>$this->input->post('notlp'),
-            'namadesawisma'=>$this->input->post('namadesawisma'),
-            'id_pkk'=>$this->input->post('jabatanstuktural'),
-        );
-        if($this->db->update('data_keluarga',$data,array('id_data_keluarga' => $this->input->post('id_data_keluarga')))){
-            return true;
-        }else{
-            return mysql_error();
-        }
-    }
-    function get_data_profile($id){
+    function get_data_keluargaberencana($id){
         $this->db->select('*');
         $this->db->from('data_keluarga_kb');
         $this->db->where('id', 'II');
@@ -145,10 +88,4 @@ class Anggota_keluarga_kb_model extends CI_Model {
          }
     }
 
-    function delete_entry($kode)
-    {
-        $this->db->where('id_data_keluarga',$kode);
-
-        return $this->db->delete($this->tabel);
-    }
 }

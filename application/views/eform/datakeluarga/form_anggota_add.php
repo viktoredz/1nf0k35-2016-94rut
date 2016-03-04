@@ -71,7 +71,7 @@
         <button type="button" id="btn-save-add" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Simpan & Lanjutkan</button>
         <button type="button" id="btn-up" class="btn btn-success"><i class='fa  fa-arrow-circle-o-up'></i> &nbsp;Kembali</button>
     </div>
-    <input type="text" name="id_data_keluarga" value="{id_data_keluarga}">
+    <input type="hidden" name="id_data_keluarga" value="{id_data_keluarga}">
     <div class="row">
       <div class="col-md-6">
         <div class="box box-primary">

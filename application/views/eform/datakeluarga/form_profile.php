@@ -15,8 +15,9 @@
 <?php } ?>
 <div class="row" style="margin: 0">
   <div class="col-md-12">
-  	<div class="box-footer" style="background: #FAFAFA;text-align: right">
-      <button type="button" class="btn btn-warning" id="btn-profile-simpan"><i class='fa fa-save'></i> &nbsp; Simpan Profile</button>
+  	<div class="box-footer" style="background: #FAFAFA;text-align: left;">
+  	<h3>Profile Keluarga</h3>
+      <!--<button type="button" class="btn btn-warning" id="btn-profile-simpan"><i class='fa fa-save'></i> &nbsp; Simpan Profile</button>-->
     </div>
         	
 			<div class="box box-success">
@@ -279,27 +280,26 @@ $(function () {
 			$.post("<?php echo base_url()?>eform/data_kepala_keluarga/adddataform_profile",{kode:$(this).attr('name'),id_data_keluarga:id_data_keluarga,value:$(this).val()},function(data,status){;
 					});
 		})
-		<?php
-	//	echo $data_formprofile;echo "<h1>ha</h1>";
-	//	print_r($data_formprofile);
-		  	 if(isset($data_formprofile) and $data_formprofile!="salah"){
-			    foreach($data_formprofile as $row){?>
-			    	var kode = "<?php echo $row->kode;?>";
-			    	var value= "<?php echo $row->value; ?>";
-			    	if(kode.slice(-5)=="radio")
-			    	{
-			    		if(value=="1"){
-			    			document.getElementById("<?php echo $row->kode.'_ya';?>").checked = true;	
-			    		}else{
-			    			document.getElementById("<?php echo $row->kode.'_tidak';?>").checked = true;
-			    		}
-			    	}else{
-					    document.getElementById("<?php echo $row->kode;?>").value = "<?php echo $row->value; ?>";
-			    	}
-		<?php
-		   	 }
-		    }
-	    ?>
+	<?php
+//	echo $data_formprofile;echo "<h1>ha</h1>";
+	  	 if(isset($data_formprofile) and $data_formprofile!="salah"){
+		    foreach($data_formprofile as $row){?>
+		    	var kode = "<?php echo $row->kode;?>";
+		    	var value= "<?php echo $row->value; ?>";
+		    	if(kode.slice(-5)=="radio")
+		    	{
+		    		if(value=="1"){
+		    			document.getElementById("<?php echo $row->kode.'_ya';?>").checked = true;	
+		    		}else{
+		    			document.getElementById("<?php echo $row->kode.'_tidak';?>").checked = true;
+		    		}
+		    	}else{
+				    document.getElementById("<?php echo $row->kode;?>").value = "<?php echo $row->value; ?>";
+		    	}
+	<?php
+	   	 }
+	    }
+    ?>
     $("#btn-profile-simpan").click(function(){
         $.get('<?php echo base_url()?>eform/data_kepala_keluarga/tab/1/{id_data_keluarga}', function (data) {
             $('#content1').html(data);

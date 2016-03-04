@@ -15,8 +15,9 @@
 <?php } ?>
 <div class="row" style="margin: 0">
   <div class="col-md-12">
-  	<div class="box-footer" style="background: #FAFAFA;text-align: right">
-      <button type="button" class="btn btn-warning" id="btn-kb-simpan"><i class='fa fa-save'></i> &nbsp; Simpan Keluarga Berencana</button>
+  	<div class="box-footer" style="background: #FAFAFA;text-align: left;">
+      <!--<button type="button" class="btn btn-warning" id="btn-kb-simpan"><i class='fa fa-save'></i> &nbsp; Simpan Keluarga Berencana</button>-->
+      <h3>Keluarga Berencana</h3>
     </div>
 	<div class="box box-success">
 	  <div class="box-body">
@@ -131,7 +132,89 @@ $(function () {
             $('#content3').html(data);
         });
     })
+    $("input[name^=berencana]").change(function(){
+		//alert($(this).attr('name')+' ' +$(this).val());
 
+			var id_data_keluarga = "<?php echo $id_data_keluarga; ?>";
+			$.post("<?php echo base_url()?>eform/data_kepala_keluarga/addkeluargaberencana",{kode:$(this).attr('name'),id_data_keluarga:id_data_keluarga,value:$(this).val()},function(data,status){;
+					});
+		})
+		<?php
+		  	 if(isset($data_keluarga_kb) and $data_keluarga_kb!="salah"){
+			    foreach($data_keluarga_kb as $row){?>
+			    	var kode = "<?php echo $row->kode;?>";
+			    	var value= "<?php echo $row->value; ?>";
+			    	if(kode.slice(-5)=="radio")
+			    	{
+			    		if(value=="0"){
+			    			document.getElementById("<?php echo $row->kode.'_satu';?>").checked = true;	
+			    		}else if(value=="1"){
+			    			document.getElementById("<?php echo $row->kode.'_dua';?>").checked = true;
+			    		}else if(value=="2"){
+			    			document.getElementById("<?php echo $row->kode.'_tiga';?>").checked = true;
+			    		}
+
+			    	}else if(kode.slice(-5)=="sepsi"){
+			    		if(value=="0"){
+			    			document.getElementById("<?php echo $row->kode.'_iud';?>").checked = true;	
+			    		}else if(value=="1"){
+			    			document.getElementById("<?php echo $row->kode.'_mow';?>").checked = true;
+			    		}else if(value=="2"){
+			    			document.getElementById("<?php echo $row->kode.'_mop';?>").checked = true;
+			    		}else if(value=="3"){
+			    			document.getElementById("<?php echo $row->kode.'_sutik';?>").checked = true;
+			    		}else if(value=="4"){
+			    			document.getElementById("<?php echo $row->kode.'_batalpilih';?>").checked = true;
+			    		}else if(value=="5"){
+			    			document.getElementById("<?php echo $row->kode.'_kondom';?>").checked = true;
+			    		}else if(value=="6"){
+			    			document.getElementById("<?php echo $row->kode.'_implan';?>").checked = true;
+			    		}else if(value=="7"){
+			    			document.getElementById("<?php echo $row->kode.'_pil';?>").checked = true;
+			    		}else if(value=="8"){
+			    			document.getElementById("<?php echo $row->kode.'_tradisional';?>").checked = true;
+			    		}
+			    	}else if(kode.slice(-5)=="cebox"){
+			    		document.getElementById("<?php echo $row->kode;?>").checked = true;
+			    	}
+			    	else if(kode.slice(-5)=="radkb"){
+			    		if(value=="0"){
+			    			document.getElementById("<?php echo $row->kode.'_rsup';?>").checked = true;	
+			    		}else if(value=="1"){
+			    			document.getElementById("<?php echo $row->kode.'_tni';?>").checked = true;
+			    		}else if(value=="2"){
+			    			document.getElementById("<?php echo $row->kode.'_porli';?>").checked = true;
+			    		}else if(value=="3"){
+			    			document.getElementById("<?php echo $row->kode.'_swasta';?>").checked = true;
+			    		}else if(value=="4"){
+			    			document.getElementById("<?php echo $row->kode.'_utama';?>").checked = true;
+			    		}else if(value=="5"){
+			    			document.getElementById("<?php echo $row->kode.'_puskesmas';?>").checked = true;
+			    		}else if(value=="6"){
+			    			document.getElementById("<?php echo $row->kode.'_klinik';?>").checked = true;
+			    		}else if(value=="7"){
+			    			document.getElementById("<?php echo $row->kode.'_dokter';?>").checked = true;
+			    		}else if(value=="8"){
+			    			document.getElementById("<?php echo $row->kode.'_pratama';?>").checked = true;
+			    		}else if(value=="9"){
+			    			document.getElementById("<?php echo $row->kode.'_pustu';?>").checked = true;
+			    		}else if(value=="10"){
+			    			document.getElementById("<?php echo $row->kode.'_poskesdes';?>").checked = true;
+			    		}else if(value=="11"){
+			    			document.getElementById("<?php echo $row->kode.'_praktek';?>").checked = true;
+			    		}else if(value=="12"){
+			    			document.getElementById("<?php echo $row->kode.'_pelayanan';?>").checked = true;
+			    		}else if(value=="13"){
+			    			document.getElementById("<?php echo $row->kode.'_lainnya';?>").checked = true;
+			    		}
+			    	}else{
+					    document.getElementById("<?php echo $row->kode;?>").value = "<?php echo $row->value; ?>";
+			    	}
+
+		<?php
+		   	 }
+		    }
+	    ?>
   	$('#btn-up3').click(function(){
       	window.scrollTo(0, 600);
   	});

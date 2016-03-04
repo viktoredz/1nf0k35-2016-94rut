@@ -20,7 +20,14 @@ class Datakeluarga_model extends CI_Model {
     }
     
     function get_data_anggotaKeluarga($start=0,$limit=999999,$options=array()){
-        $this->db->select("data_keluarga_anggota.*");
+        $this->db->select("data_keluarga_anggota.*, hubungan.value as hubungan,jeniskelamin.value as jeniskelamin,(year(curdate())-year(data_keluarga_anggota.tgl_lahir)) as usia");
+        $this->db->join("mst_keluarga_pilihan hubungan","data_keluarga_anggota.id_pilihan_hubungan = hubungan.id_pilihan and hubungan.tipe='hubungan'",'left');
+        $this->db->join("mst_keluarga_pilihan jeniskelamin","data_keluarga_anggota.id_pilihan_kelamin = jeniskelamin.id_pilihan and jeniskelamin.tipe ='jk'",'left');
+        $this->db->join("mst_keluarga_pilihan agama","data_keluarga_anggota.id_pilihan_agama = agama.id_pilihan and agama.tipe ='agama'",'left');
+        $this->db->join("mst_keluarga_pilihan pendidikan","data_keluarga_anggota.id_pilihan_pendidikan = pendidikan.id_pilihan and pendidikan.tipe= 'pendidikan'",'left');
+        $this->db->join("mst_keluarga_pilihan pekerjaan","data_keluarga_anggota.id_pilihan_pekerjaan = pekerjaan.id_pilihan and pekerjaan.tipe = 'pekerjaan'" ,'left');
+        $this->db->join("mst_keluarga_pilihan kawin","data_keluarga_anggota.id_pilihan_kawin = kawin.id_pilihan and kawin.tipe='kawin'",'left');
+        $this->db->join("mst_keluarga_pilihan jkn","data_keluarga_anggota.id_pilihan_jkn = jkn.id_pilihan and jkn.tipe='jkn'",'left');
         $this->db->order_by('data_keluarga_anggota.no_anggota','asc');
         $query =$this->db->get("data_keluarga_anggota",$limit,$start);
         
@@ -293,5 +300,78 @@ class Datakeluarga_model extends CI_Model {
         $query = $this->db->get_where('mst_keluarga_pilihan',array('tipe'=>$pilihan));
         
         return $query->result();
+    }
+    function update_kepala(){
+        $id_data_keluarga = $this->input->post('id_data_keluarga');
+        $kode = str_replace('keluarga6_','', $this->input->post('kode'));
+        $noanggota = $this->input->post('noanggota');
+        $value = $this->input->post('value');
+        $dataubah = array($kode => $value);
+        $keyubah = array(
+                         'id_data_keluarga' => $id_data_keluarga,
+                         'no_anggota' => $noanggota,
+                         );
+        $this->db->update("data_keluarga_anggota",$dataubah,$keyubah);
+
+    }
+     function addanggotaprofile(){
+        $id_data_keluarga = $this->input->post('id_data_keluarga');
+        $kode = $this->input->post('kode');
+        $value = $this->input->post('value');
+        $noanggota = $this->input->post('noanggota');
+        $this->db->select('*');
+        $this->db->from('data_keluarga_anggota_profile');
+        $this->db->where('id', 'G');
+        $this->db->where('no_anggota', $noanggota);
+        $this->db->where('id_data_keluarga', $id_data_keluarga);
+        $this->db->where('kode', $kode);
+        $query = $this->db->get();
+        if(substr($kode, -5) == "cebox"){
+            if($query->num_rows() > 0){
+                $this->db->where('id','G');
+                $this->db->where('no_anggota',$noanggota);
+                $this->db->where('id_data_keluarga',$id_data_keluarga);
+                $this->db->where('kode',$kode);
+                $this->db->delete('data_keluarga_anggota_profile');
+             }else{
+                $data=array(
+                            'id' => 'G',
+                            'id_data_keluarga'=> $id_data_keluarga,
+                            'kode'=>$kode,
+                            'no_anggota'=>$noanggota,
+                            'value'=>$value,
+                            );
+                $this->db->insert('data_keluarga_anggota_profile',$data);
+            }
+        }else{
+            if($query->num_rows() > 0){
+                $values = array(
+                    'value'          => $value,
+                );
+                $this->db->update('data_keluarga_anggota_profile', $values, array('id' => 'G','id_data_keluarga'=>$id_data_keluarga,'no_anggota'=>$noanggota,'kode'=>$kode));
+             }else{
+                $data=array(
+                            'id' => 'G',
+                            'id_data_keluarga'=> $id_data_keluarga,
+                            'kode'=>$kode,
+                            'no_anggota'=>$noanggota,
+                            'value'=>$value,
+                            );
+                $this->db->insert('data_keluarga_anggota_profile',$data);
+             }
+        }
+    }
+    function get_data_anggotaprofile($idkeluarga,$noanggota){
+        $this->db->select('*');
+        $this->db->from('data_keluarga_anggota_profile');
+        $this->db->where('id', 'G');
+        $this->db->where('id_data_keluarga', $idkeluarga);
+        $this->db->where('no_anggota', $noanggota);
+        $query = $this->db->get();
+        if($query->num_rows() >= 1){
+            return $query->result(); 
+         }else{
+            return 'salah';
+         }
     }
 }

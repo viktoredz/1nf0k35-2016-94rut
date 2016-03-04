@@ -16,9 +16,11 @@
 		
 <div class="row" style="margin: 0">
   <div class="col-md-12">
-  	<div class="box-footer" style="background: #FAFAFA;text-align: right">
-      <button type="button" class="btn btn-warning" id="btn-pembangunan-simpan"><i class='fa fa-save'></i> &nbsp; Simpan Pembangunan Keluarga</button>
+  	<div class="box-footer" style="background: #FAFAFA;text-align: left">
+      <!--<button type="button" class="btn btn-warning" id="btn-pembangunan-simpan"><i class='fa fa-save'></i> &nbsp; Simpan Pembangunan Keluarga</button>-->
+      <h3>Pembangunan Keluarga</h3>
     </div>
+    <?php// print_r($data_pembangunan);?>
 	<div class="box box-primary">
 	  <div class="box-body">
 		  <div class="panel panel-default">
@@ -228,6 +230,46 @@
 </div>
 <script>
 $(function () { 
+	$("input[name^=pembangunan]").change(function(){
+			//alert($(this).attr('name')+' ' +$(this).val());
+			var id_data_keluarga = "<?php echo $id_data_keluarga; ?>";
+			$.post("<?php echo base_url()?>eform/data_kepala_keluarga/addpembangunan",{kode:$(this).attr('name'),id_data_keluarga:id_data_keluarga,value:$(this).val()},function(data,status){;
+					});
+		})
+	<?php
+//	echo $data_formprofile;echo "<h1>ha</h1>";
+	  	 if(isset($data_pembangunan) and $data_pembangunan!="salah"){
+		    foreach($data_pembangunan as $row){?>
+		    	var kode = "<?php echo $row->kode;?>";
+		    	var value= "<?php echo $row->value; ?>";
+		    	if(kode.slice(-5)=="radio")
+		    	{
+		    		if(value=="0"){
+		    			document.getElementById("<?php echo $row->kode.'_ya';?>").checked = true;	
+		    		}else if(value=="1"){
+		    			document.getElementById("<?php echo $row->kode.'_tidak';?>").checked = true;
+		    		}else{
+		    			document.getElementById("<?php echo $row->kode.'_tidakberlaku';?>").checked = true;
+		    		}
+		    	}else if(kode.slice(-5)=="cebo4"){
+		    		document.getElementById("<?php echo $row->kode;?>").checked = true;
+		    	}else if(kode.slice(-5)=="radi4"){
+		    		if(value=="0"){
+		    			document.getElementById("<?php echo $row->kode.'_1';?>").checked = true;	
+		    		}else if(value=="1"){
+		    			document.getElementById("<?php echo $row->kode.'_2';?>").checked = true;
+		    		}else if(value=="2"){
+		    			document.getElementById("<?php echo $row->kode.'_3';?>").checked = true;
+		    		}else{
+		    			document.getElementById("<?php echo $row->kode.'_4';?>").checked = true;
+		    		}
+		    	}else{
+				    document.getElementById("<?php echo $row->kode;?>").value = "<?php echo $row->value; ?>";
+		    	}
+	<?php
+	   	 }
+	    }
+    ?>
     $("#btn-pembangunan-simpan").click(function(){
         $.get('<?php echo base_url()?>eform/data_kepala_keluarga/tab/4/{id_data_keluarga}', function (data) {
             $('#content4').html(data);
