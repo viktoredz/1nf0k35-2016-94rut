@@ -399,6 +399,10 @@ class Morganisasi extends CI_Controller {
 
 		if($this->form_validation->run()){
 			$this->user->login();
+		}else{
+			if($this->session->userdata('username')!=""){
+				redirect(base_url());
+			}
 		}
 
 		$data['title_group']	="Login";
