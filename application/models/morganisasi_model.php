@@ -6,6 +6,34 @@ class Morganisasi_model extends CI_Model {
     function __construct() {
         parent::__construct();
     }
+
+    function get_data_kelurahan(){
+    	$kode_kecamatan = substr($this->session->userdata('puskesmas'),0,7);
+		$query = $this->db->like('code',$kode_kecamatan);
+		$data = $query->get('cl_village')->result_array();
+
+		return $data;
+    }
+    
+    function get_data_kk(){
+		$data = $this->db->get('data_keluarga')->result_array();
+
+		return $data;
+    }
+    
+    function get_data_penduduk(){
+		$data = $this->db->get('data_keluarga_anggota')->result_array();
+
+		return $data;
+    }
+    
+    function get_data_kel($id_data_keluarga, $jk){
+    	$this->db->like('id_data_keluarga',$id_data_keluarga);
+    	$this->db->where('id_pilihan_kelamin',$jk);
+		$data = $this->db->get('data_keluarga_anggota')->result_array();
+
+		return count($data);
+    }
     
 	function get_profile($username=""){
 		$data = array();
