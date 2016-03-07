@@ -7,7 +7,7 @@ class Lap_bhp_pengeluaran extends CI_Controller {
 		require_once(APPPATH.'third_party/tbs_plugin_opentbs_1.8.0/demo/tbs_class.php');
 		require_once(APPPATH.'third_party/tbs_plugin_opentbs_1.8.0/tbs_plugin_opentbs.php');		
 		
-		$this->load->model('inventory/Lap_bhp_pengeluaran_model');
+		$this->load->model('inventory/lap_bhp_pengeluaran_model');
 		$this->load->model('inventory/inv_barang_model');
 		$this->load->model('inventory/permohonanbarang_model');
 		$this->load->model('inventory/distribusibarang_model');
@@ -59,13 +59,7 @@ class Lap_bhp_pengeluaran extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
-		if($this->input->post('puskes') != '') {
-			$this->db->where("inv_permohonan_barang.code_cl_phc",$this->input->post('puskes'));
-		}
-		if($this->input->post('ruang') != '') {
-			$this->db->where("inv_permohonan_barang.id_mst_inv_ruangan",$this->input->post('ruang'));
-		}
-		$rows_all = $this->lap_rkbu_model->get_data_permohonan();
+		$rows_all = $this->lap_bhp_pengeluaran_model->get_data_permohonan();
 		
 
 		if($_POST) {
@@ -88,14 +82,8 @@ class Lap_bhp_pengeluaran extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
-		if($this->input->post('puskes') != '') {
-			$this->db->where("inv_permohonan_barang.code_cl_phc",$this->input->post('puskes'));
-		}
-		if($this->input->post('ruang') != '') {
-			$this->db->where("inv_permohonan_barang.id_mst_inv_ruangan",$this->input->post('ruang'));
-		}
 		#$rows = $this->permohonanbarang_model->get_data($this->input->post('recordstartindex'), $this->input->post('pagesize'));
-		$rows = $this->lap_rkbu_model->get_data_permohonan();
+		$rows = $this->lap_bhp_pengeluaran_model->get_data_permohonan();
 		$data = array();
 		$no=1;
 		
@@ -104,7 +92,7 @@ class Lap_bhp_pengeluaran extends CI_Controller {
 			
 			$data_tabel[] = array(
 				'no'				=> $no++,								
-				'nama_barang'		=> $act->nama_barang,				
+				'uraian'			=> $act->uraian,				
 				'merk_tipe'			=> $act->merk_tipe,
 				'jumlah'			=> $act->jumlah,
 				'harga'				=> $act->harga,
@@ -139,16 +127,15 @@ class Lap_bhp_pengeluaran extends CI_Controller {
 			$tanggals1 = explode("-", $this->input->post('filter_tanggal1'));
 			$tanggal1 = $tanggals1[2].'-'.$tanggals1[1].'-'.$tanggals1[0];
 		}
-		$ruang = $this->input->post('ruang');
-		if(empty($ruang) or $ruang == 'Pilih Ruangan'){
-			$ruang = '-';
-		}else{
-			$ruang = $this->inv_barang_model->get_nama('nama_ruangan','mst_inv_ruangan','id_mst_inv_ruangan',$this->input->post('ruang'));
-		}
-		$data_puskesmas[] = array('nama_puskesmas' => $nama,'tanggal' => $tanggal,'tanggal1' => $tanggal1,'ruang' => $ruang);
+		$kode_sess=$this->session->userdata('puskesmas');
+		$kd_prov = $this->inv_barang_model->get_nama('value','cl_province','code',substr($kode_sess, 0,2));
+		$kd_kab  = $this->inv_barang_model->get_nama('value','cl_district','code',substr($kode_sess, 0,4));
+		$kd_kec  = 'KEC. '.$this->inv_barang_model->get_nama('nama','cl_kec','code',substr($kode_sess, 0,7));
+		$tgl = date("d-m-Y");
+		$data_puskesmas[] = array('nama_puskesmas' => $nama,'tgl1' => $tanggal,'tgl2' => $tanggal1,'kd_prov' => $kd_prov,'kd_kab' => $kd_kab,'tanggal_export'=>$tgl);
 		
 		$dir = getcwd().'/';
-		$template = $dir.'public/files/template/inventory/rkbu.xlsx';		
+		$template = $dir.'public/files/template/inventory/lap_bhp_pengeluaran.xlsx';		
 		$TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8);
 
 		// Merge data in the first sheet
@@ -156,7 +143,7 @@ class Lap_bhp_pengeluaran extends CI_Controller {
 		$TBS->MergeBlock('b', $data_puskesmas);
 		
 		$code = uniqid();
-		$output_file_name = 'public/files/hasil/laporan_rkbu_'.$code.'.xlsx';
+		$output_file_name = 'public/files/hasil/laporan_bhp_pengeluaran_'.$code.'.xlsx';
 		$output = $dir.$output_file_name;
 		$TBS->Show(OPENTBS_FILE, $output); // Also merges all [onshow] automatic fields.
 		

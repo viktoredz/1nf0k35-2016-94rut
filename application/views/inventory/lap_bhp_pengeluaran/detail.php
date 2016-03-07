@@ -111,9 +111,9 @@
 		var t1 = tanggal1.split('-');
 		var tgl1 = t1[2]+'-'+t1[1]+'-'+t1[0];
 		$.ajax({
-		        url : '<?php echo site_url('inventory/lap_rkbu/permohonan_export') ?>',
+		        url : '<?php echo site_url('inventory/lap_bhp_pengeluaran/permohonan_export') ?>',
 		        type : 'POST',
-		        data : 'namepuskes='+namepuskes+'&puskes=' + puskes+'&ruang=' + ruang +'&filter_tanggal='+tgl+'&filter_tanggal1='+tgl1,
+		        data : 'namepuskes='+namepuskes+'&puskes=' + puskes+'&filter_tanggal='+tgl+'&filter_tanggal1='+tgl1,
 		        success : function(data) {
 					if(data != ""){
 						location.href = data;

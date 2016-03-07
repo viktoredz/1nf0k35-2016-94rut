@@ -43,14 +43,6 @@
 				  		</div>
 				  	</div>
 				  	<div class="col-md-12">
-						<div class="form-group">
-							<label>Pilih Ruangan</label>
-				     		<select name="code_ruangan" class="form-control" id="code_ruangan">
-			     			<option value="">Pilih Ruangan</option>
-			     		</select>
-				  		</div>
-				  	</div>
-				  	<div class="col-md-12">
 				  	<div class="form-group">
 							<label>Jenis Barang</label>
 					  		<select name="jenisbarang" id="jenisbarang" class="form-control">

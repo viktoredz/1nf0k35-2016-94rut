@@ -86,12 +86,6 @@ class Lap_bhp_pengadaan extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
-		if($this->input->post('puskes') != '') {
-			$this->db->where("inv_permohonan_barang.code_cl_phc",$this->input->post('puskes'));
-		}
-		if($this->input->post('ruang') != '') {
-			$this->db->where("inv_permohonan_barang.id_mst_inv_ruangan",$this->input->post('ruang'));
-		}
 		$rows_all = $this->lap_bhp_pengadaan_model->get_data_permohonan();
 		
 
@@ -115,12 +109,6 @@ class Lap_bhp_pengadaan extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
-		if($this->input->post('puskes') != '') {
-			$this->db->where("inv_permohonan_barang.code_cl_phc",$this->input->post('puskes'));
-		}
-		if($this->input->post('ruang') != '') {
-			$this->db->where("inv_permohonan_barang.id_mst_inv_ruangan",$this->input->post('ruang'));
-		}
 		#$rows = $this->permohonanbarang_model->get_data($this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$rows = $this->lap_bhp_pengadaan_model->get_data_permohonan();
 		$data = array();
@@ -131,8 +119,8 @@ class Lap_bhp_pengadaan extends CI_Controller {
 			
 			$data_tabel[] = array(
 				'no'				=> $no++,								
-				'nama_barang'		=> $act->nama_barang,				
-				'merk_tipe'			=> $act->merk_tipe,
+				'uraian'			=> $act->uraian,				
+				'value'				=> $act->value,
 				'jumlah'			=> $act->jumlah,
 				'harga'				=> $act->harga,
 				'jumlah_biaya'		=> $act->harga*$act->jumlah,

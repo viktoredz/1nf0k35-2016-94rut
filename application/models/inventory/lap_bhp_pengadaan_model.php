@@ -21,12 +21,7 @@ class Lap_bhp_pengadaan_model extends CI_Model {
 		$q = $this->db->get('mst_inv_pilihan');
 		return $q;
 	}
-	function get_data_permohonan($start=0,$limit=999999,$options=array())
-    {	
-    	$tanggal1 = $this->input->post('');
-    	$tanggal1 = $this->input->post('');
-    	$pusksmas = "P".$this->session->userdata('puskesmas');
-    	/*$this->db->select("inv_permohonan_barang_item.*");
+	/*$this->db->select("inv_permohonan_barang_item.*");
     	$this->db->join('inv_permohonan_barang', "inv_permohonan_barang.id_inv_permohonan_barang = inv_permohonan_barang_item.id_inv_permohonan_barang",'inner');
 		$this->db->join('mst_inv_ruangan', "inv_permohonan_barang.id_mst_inv_ruangan = mst_inv_ruangan.id_mst_inv_ruangan and inv_permohonan_barang.code_cl_phc = mst_inv_ruangan.code_cl_phc ",'left');
 		$this->db->join('mst_inv_pilihan', "inv_permohonan_barang.pilihan_status_pengadaan = mst_inv_pilihan.code AND mst_inv_pilihan.tipe='status_pengadaan'",'left');
@@ -34,11 +29,18 @@ class Lap_bhp_pengadaan_model extends CI_Model {
 		$this->db->where('inv_permohonan_barang.tanggal_permohonan <=', $this->input->post('filter_tanggal1'));
 		$this->db->order_by('inv_permohonan_barang.id_inv_permohonan_barang','desc');
 		$query =$this->db->get('inv_permohonan_barang_item',$limit,$start);*/
-		$query = "
+	function get_data_permohonan($start=0,$limit=999999,$options=array())
+    {	
+    	$tanggal1 = $this->input->post('filter_tanggal');
+    	$tanggal1 = $this->input->post('filter_tanggal1');
+    	$pusksmas = "P".$this->session->userdata('puskesmas');
+    	
+    	
+		$query = $this->db->query("
 			SELECT b.id_mst_inv_barang_habispakai,mst_inv_barang_habispakai.uraian,mst_inv_pilihan.value, 
 			mst_inv_barang_habispakai.harga AS harga_asli, 
 			b.harga AS harga_beli,
-			DATE_FORMAT(tgl_update, ".'"'.%m-%Y.'"'.") AS MONTH, SUM(jml)  AS jmlpengeluaran,
+			DATE_FORMAT(tgl_update, \" %m-%Y \") AS MONTH, SUM(jml)  AS jmlpengeluaran,
 			  (SELECT jml AS jml
 			   FROM inv_inventaris_habispakai_opname
 			   WHERE id_mst_inv_barang_habispakai=b.id_mst_inv_barang_habispakai
@@ -87,8 +89,8 @@ class Lap_bhp_pengadaan_model extends CI_Model {
 			LEFT JOIN mst_inv_pilihan ON (mst_inv_barang_habispakai.pilihan_satuan=mst_inv_pilihan.code AND mst_inv_pilihan.tipe='satuan_bhp' )
 			WHERE b.tgl_update >=".'"'.$tanggal1.'"'." AND
 			b.tgl_update <= ".'"'.$tanggal1.'"'."
-			GROUP BY DATE_FORMAT(b.tgl_update, ".'"'.%m-%Y.'"'.") ,b.id_mst_inv_barang_habispakai
-		";
+			GROUP BY DATE_FORMAT(b.tgl_update, \" %m-%Y \") ,b.id_mst_inv_barang_habispakai
+		");
 
         return $query->result();
     }
