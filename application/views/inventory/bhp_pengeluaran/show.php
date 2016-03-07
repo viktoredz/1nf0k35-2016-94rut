@@ -52,7 +52,7 @@
 				     		<select name="jenisbarang" id="jenisbarang" class="form-control">
 				     				<option value="all">All</option>
 								<?php foreach ($jenisbaranghabis as $row ) { ;?>
-								<?php $select = $row->id_mst_inv_barang_habispakai_jenis == set_value('jenisbarang') ? 'selected=selected' : '' ?>
+								<?php $select = $row->id_mst_inv_barang_habispakai_jenis == $this->session->userdata('filter_jenisbarang') ? 'selected=selected' : '' ?>
 									<option value="<?php echo $row->id_mst_inv_barang_habispakai_jenis; ?>"  <?php echo $select ?> ><?php echo $row->uraian; ?></option>
 								<?php	} ;?>
 					     	</select>

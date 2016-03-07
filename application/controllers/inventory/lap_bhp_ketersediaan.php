@@ -103,26 +103,32 @@ class Lap_bhp_ketersediaan extends CI_Controller {
 		//$unlock = 1;
 		
 		foreach($rows as $act) {
-			if (($act->harga_opname==0)||$act->harga_opname==null) {
-				$harga = $act->harga;
-			}else{
-				$harga = $act->harga_opname;
-			}
+			if((isset($act->tgl_pembelian))||(isset($act->tgl_opname))){
+	          if ($act->tgl_pembelian >= $act->tgl_opname) {
+	            $harga = $act->harga_pembelian;
+	          }else{
+	            $harga =$act->harga_opname;
+	          }
+	        }else{
+	          $harga = $act->harga;
+	        }
 			$data_tabel[] = array(
 				'no'					=> $no++,
 				'code'					=> $act->code,
 				'uraian'				=> $act->uraian,
 				'merek_tipe'			=> $act->merek_tipe,
-				'nama_jenis'			=> $act->nama_jenis,
+			//	'nama_jenis'			=> $act->nama_jenis,
 				'negara_asal'			=> $act->negara_asal,
 				'jmlbaik'				=> ($act->jmlbaik+$act->totaljumlah)-($act->jml_rusak+$act->jml_tdkdipakai+$act->jmlpengeluaran),
 				'jml_rusak'				=> $act->jml_rusak,
-				'jml_tdkdipakai'			=> $act->jml_tdkdipakai,
+				'jml_tdkdipakai'		=> $act->jml_tdkdipakai,
 				'pilihan_satuan'		=> $act->pilihan_satuan,
 				'value'					=> $act->value,
-				'totaljumlah'					=> $act->totaljumlah,
-				'jmlpengeluaran'					=> $act->jmlpengeluaran,
+				'nilaiakhirpersidiaan'  => number_format(((($act->jmlbaik+$act->totaljumlah)-($act->jml_rusak+$act->jml_tdkdipakai+$act->jmlpengeluaran))*($harga)),2),
+				'totaljumlah'			=> $act->totaljumlah,
+				'jmlpengeluaran'		=> $act->jmlpengeluaran,
 				'tgl_update'			=> $act->tgl_update,
+				'keterangan'			=> '-',
 				'harga'					=> number_format($harga,2),
 				'id_mst_inv_barang_habispakai'			=> $act->id_mst_inv_barang_habispakai,
 				'id_mst_inv_barang_habispakai_jenis'	=> $act->id_mst_inv_barang_habispakai_jenis
@@ -130,24 +136,29 @@ class Lap_bhp_ketersediaan extends CI_Controller {
 		}
 
 		
-		/*
-		$nama = $this->inv_barang_model->get_nama('value','cl_phc','code',$this->input->post('puskes'));
-		$tanggal = $this->input->post('filter_tanggal'); 
-		$tanggal1 = $this->input->post('filter_tanggal1'); 
-		if(empty($tanggal) or $tanggal == '' or empty($tanggal1) or $tanggal1 == ''){
-			$tanggal = date('d-m-Y');
+		$puskes = $this->input->post('namepuskes'); 
+		$kode_sess=$this->session->userdata('puskesmas');
+		$kd_prov = $this->inv_barang_model->get_nama('value','cl_province','code',substr($kode_sess, 0,2));
+		$kd_kab  = $this->inv_barang_model->get_nama('value','cl_district','code',substr($kode_sess, 0,4));
+		$kd_kec  = 'KEC. '.$this->inv_barang_model->get_nama('nama','cl_kec','code',substr($kode_sess, 0,7));
+		$bidang = 'Bidang Kesehatan';
+		$unit = 'Bidang Kesehatan';
+		$subunit = 'Bidang Kesehatan';
+		$upb = 'Bidang Kesehatan';
+		$tanggal1 = $this->input->post('filter_tanggal');
+		$tanggal2 = $this->input->post('filter_tanggal1');
+		if(empty($tanggal2) or $tanggal1 == ''){
+			$tanggal2 = date('d-m-Y');
 			$tanggal1 = date('d-m-Y');
 		}else{
-			$tanggals = explode("-", $this->input->post('filter_tanggal'));
-			$tanggal = $tanggals[2].'-'.$tanggals[1].'-'.$tanggals[0];
-			$tanggals1 = explode("-", $this->input->post('filter_tanggal1'));
+			$tanggals = explode("-", $this->input->post('filter_tanggal1'));
+			$tanggal2 = $tanggals[2].'-'.$tanggals[1].'-'.$tanggals[0];
+			$tanggals1 = explode("-", $this->input->post('filter_tanggal'));
 			$tanggal1 = $tanggals1[2].'-'.$tanggals1[1].'-'.$tanggals1[0];
 		}
-
-		$data_puskesmas[] = array('nama_puskesmas' => $nama,'tanggal' => $tanggal,'tanggal1' => $tanggal1);
-		
+		$data_puskesmas[] = array('nm_puskesmas' => $puskes,'prov' => $kd_prov,'kab'=>$kd_kab,'tanggal1'=>$tanggal1,'tanggal2'=>$tanggal2);
 		$dir = getcwd().'/';
-		$template = $dir.'public/files/template/inventory/rkbu.xlsx';		
+		$template = $dir.'public/files/template/inventory/lap_bhp_ketersediaan.xlsx';		
 		$TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8);
 
 		// Merge data in the first sheet
@@ -155,25 +166,7 @@ class Lap_bhp_ketersediaan extends CI_Controller {
 		$TBS->MergeBlock('b', $data_puskesmas);
 		
 		$code = uniqid();
-		$output_file_name = 'public/files/hasil/laporan_rkbu_'.$code.'.xlsx';
-		$output = $dir.$output_file_name;
-		$TBS->Show(OPENTBS_FILE, $output); // Also merges all [onshow] automatic fields.
-		
-		echo base_url().$output_file_name ;
-		*/
-		$puskes = $this->input->post('puskes'); 
-		$tahun = date("Y");
-		$data_puskesmas[] = array('nama_puskesmas' => $puskes,'tahun' => $tahun);
-		$dir = getcwd().'/';
-		$template = $dir.'public/files/template/inventory/permohonan_pengadaan_barang.xlsx';		
-		$TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8);
-
-		// Merge data in the first sheet
-		$TBS->MergeBlock('a', $data_tabel);
-		$TBS->MergeBlock('b', $data_puskesmas);
-		
-		$code = uniqid();
-		$output_file_name = 'public/files/hasil/hasil_export_permohonan_pengadaan_barang'.$code.'.xlsx';
+		$output_file_name = 'public/files/hasil/hasil_export_lap_bhp_ketersediaan'.$code.'.xlsx';
 		$output = $dir.$output_file_name;
 		$TBS->Show(OPENTBS_FILE, $output); // Also merges all [onshow] automatic fields.
 		

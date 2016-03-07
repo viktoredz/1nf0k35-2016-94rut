@@ -42,7 +42,7 @@
 				     		</select>
 				  		</div>
 				  		<div class="form-group">
-							<label>Pilih Puskesmas</label>
+							<label>Jenis Barang</label>
 					  		<select name="jenisbarang" id="jenisbarang" class="form-control">
 				     				<option value="all">All</option>
 								<?php foreach ($jenisbaranghabis as $row ) { ;?>

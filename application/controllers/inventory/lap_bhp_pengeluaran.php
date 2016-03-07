@@ -1,5 +1,5 @@
 <?php
-class Lap_rkbu extends CI_Controller {
+class Lap_bhp_pengeluaran extends CI_Controller {
 
     public function __construct(){
 		parent::__construct();
