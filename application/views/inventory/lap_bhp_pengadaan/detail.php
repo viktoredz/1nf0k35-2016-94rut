@@ -51,6 +51,18 @@
 				  		</div>
 				  	</div>
 				  	<div class="col-md-12">
+				  	<div class="form-group">
+							<label>Jenis Barang</label>
+					  		<select name="jenisbarang" id="jenisbarang" class="form-control">
+				     				<option value="all">All</option>
+								<?php foreach ($jenisbaranghabis as $row ) { ;?>
+								<?php $select = $row->id_mst_inv_barang_habispakai_jenis == set_value('jenisbarang') ? 'selected=selected' : '' ?>
+									<option value="<?php echo $row->id_mst_inv_barang_habispakai_jenis; ?>"  <?php echo $select ?> ><?php echo $row->uraian; ?></option>
+								<?php	} ;?>
+					     	</select>
+				     	</div>
+				     </div>
+				  	<div class="col-md-12">
 						<div class="form-group pull-right">
             				<button onClick="doExport();" type="button"  class="btn btn-warning"><i class='fa fa-file-excel-o'></i> &nbsp; Export</button>
 						</div>
@@ -64,7 +76,7 @@
 <script>
 	$(function () {	
 		$("#menu_laporan").addClass("active");
-		$("#menu_inventory_lap_rkbu").addClass("active");
+		$("#menu_inventory_lap_bhp_pengadaan").addClass("active");
 
 		$("#tgl").jqxDateTimeInput({
 			formatString: 'dd-MM-yyyy', 
@@ -72,13 +84,13 @@
 			height: '31px', width: '100%'
  		});	
  		var date = new Date();
-		$('#tgl ').jqxDateTimeInput('setDate', new Date(date.getFullYear(), date.getMonth(), 1));
+		$('#tgl ').jqxDateTimeInput('setDate', new Date(date.getFullYear(), 0, 1));
 		$("#tgl1").jqxDateTimeInput({
 			formatString: 'dd-MM-yyyy', 
 			theme: theme, 
 			height: '31px', width: '100%'
  		});	
-    	$("#tgl1").jqxDateTimeInput('setDate', new Date(date.getFullYear(), date.getMonth()+1,0));
+    	$("#tgl1").jqxDateTimeInput('setDate', new Date(date.getFullYear(), 11+1,0));
 
 	});
 	$('#code_cl_phc').change(function(){
@@ -89,7 +101,7 @@
         type : 'POST',
         data : 'code_cl_phc=' + code_cl_phc+'&id_mst_inv_ruangan=' + id_mst_inv_ruangan,
         success : function(data) {
-          $('#code_ruangan').html(data);
+          //$('#code_ruangan').html(data);
         }
     });
       return false;
@@ -98,7 +110,6 @@
 	function doExport(){
 		var namepuskes	= $("#code_cl_phc option:selected").text()
 		var puskes 		= $("#code_cl_phc").val();
-		var ruang 		= $("#code_ruangan").val();
 		var tanggal		= $("#tgl").val();
 		var tanggal1 	= $("#tgl1").val();
 		
@@ -107,9 +118,9 @@
 		var t1 = tanggal1.split('-');
 		var tgl1 = t1[2]+'-'+t1[1]+'-'+t1[0];
 		$.ajax({
-		        url : '<?php echo site_url('inventory/lap_rkbu/permohonan_export') ?>',
+		        url : '<?php echo site_url('inventory/lap_bhp_pengadaan/permohonan_export') ?>',
 		        type : 'POST',
-		        data : 'namepuskes='+namepuskes+'&puskes=' + puskes+'&ruang=' + ruang +'&filter_tanggal='+tgl+'&filter_tanggal1='+tgl1,
+		        data : 'namepuskes='+namepuskes+'&puskes=' + puskes +'&filter_tanggal='+tgl+'&filter_tanggal1='+tgl1,
 		        success : function(data) {
 					if(data != ""){
 						location.href = data;

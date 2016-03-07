@@ -7,7 +7,7 @@ class Lap_bhp_pengeluaran extends CI_Controller {
 		require_once(APPPATH.'third_party/tbs_plugin_opentbs_1.8.0/demo/tbs_class.php');
 		require_once(APPPATH.'third_party/tbs_plugin_opentbs_1.8.0/tbs_plugin_opentbs.php');		
 		
-		$this->load->model('inventory/lap_rkbu_model');
+		$this->load->model('inventory/Lap_bhp_pengeluaran_model');
 		$this->load->model('inventory/inv_barang_model');
 		$this->load->model('inventory/permohonanbarang_model');
 		$this->load->model('inventory/distribusibarang_model');
@@ -21,44 +21,15 @@ class Lap_bhp_pengeluaran extends CI_Controller {
 		$this->db->like('code','p'.substr($this->session->userdata('puskesmas'),0,7));
 
 		$kodepuskesmas = $this->session->userdata('puskesmas');
-		if(strlen($kodepuskesmas) == 4){
-			$this->db->like('code','P'.substr($kodepuskesmas, 0,4));
-		}else {
 			$this->db->where('code','P'.$kodepuskesmas);
-		}
 		$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
-		$data['content'] = $this->parser->parse("inventory/lap_rkbu/detail",$data,true);
+		$data['jenisbaranghabis'] = $this->Lap_bhp_pengeluaran_model->get_data_jenis();
+		$data['content'] = $this->parser->parse("inventory/lap_bhp_pengeluaran/detail",$data,true);
 
 		$this->template->show($data,"home");
 	}
 	
-	public function get_ruangan()
-	{
-		if($this->input->is_ajax_request()) {
-			$code_cl_phc = $this->input->post('code_cl_phc');
-			$id_mst_lap_rkbu = $this->input->post('id_mst_lap_rkbu');
-
-			$kode 	= $this->lap_rkbu_model->getSelectedData('mst_lap_rkbu',$code_cl_phc)->result();
-			
-			if($this->input->post('code_cl_phc') != '') {
-				$this->session->set_userdata('filter_cl_phc',$this->input->post('code_cl_phc'));
-				$this->session->set_userdata('filterruangan','');
-			}else{
-				$this->session->set_userdata('filter_cl_phc','');
-				$this->session->set_userdata('filterruangan','');
-			}
-			echo "<option value=\"999999\">Pilih Ruangan</option>";
-			foreach($kode as $kode) :
-				$ruangan = $this->distribusibarang_model->get_count($code_cl_phc,$kode->id_mst_lap_rkbu);
-				echo $select = $kode->id_mst_lap_rkbu == $id_mst_lap_rkbu ? 'selected' : '';
-				echo '<option value="'.$kode->id_mst_lap_rkbu.'" '.$select.'>' . $kode->nama_ruangan .' '. $ruangan. '</option>';
-			endforeach;
-
-			return FALSE;
-		}
-
-		show_404();
-	}
+	
 	function permohonan_export(){
 		
 		$TBS = new clsTinyButStrong;		

@@ -1,5 +1,5 @@
 <?php
-class Lap_rkbu_model extends CI_Model {
+class Lap_bhp_pengadaan_model extends CI_Model {
 
     var $tabel       = 'mst_inv_ruangan';
     var $t_puskesmas = 'cl_phc';
@@ -9,7 +9,12 @@ class Lap_rkbu_model extends CI_Model {
         parent::__construct();
 		$this->lang	  = $this->config->item('language');
     }
-    
+    function get_data_jenis()
+    {
+        $this->db->select('*');
+        $query = $this->db->get('mst_inv_barang_habispakai_jenis');
+        return $query->result();
+    }
 	function get_pilihan_kondisi(){
 		$this->db->select('code as id, value as val');
 		$this->db->where('tipe','keadaan_barang');
@@ -18,327 +23,74 @@ class Lap_rkbu_model extends CI_Model {
 	}
 	function get_data_permohonan($start=0,$limit=999999,$options=array())
     {	
-    	$this->db->select("inv_permohonan_barang_item.*");
+    	$tanggal1 = $this->input->post('');
+    	$tanggal1 = $this->input->post('');
+    	$pusksmas = "P".$this->session->userdata('puskesmas');
+    	/*$this->db->select("inv_permohonan_barang_item.*");
     	$this->db->join('inv_permohonan_barang', "inv_permohonan_barang.id_inv_permohonan_barang = inv_permohonan_barang_item.id_inv_permohonan_barang",'inner');
 		$this->db->join('mst_inv_ruangan', "inv_permohonan_barang.id_mst_inv_ruangan = mst_inv_ruangan.id_mst_inv_ruangan and inv_permohonan_barang.code_cl_phc = mst_inv_ruangan.code_cl_phc ",'left');
 		$this->db->join('mst_inv_pilihan', "inv_permohonan_barang.pilihan_status_pengadaan = mst_inv_pilihan.code AND mst_inv_pilihan.tipe='status_pengadaan'",'left');
 		$this->db->where('inv_permohonan_barang.tanggal_permohonan >=', $this->input->post('filter_tanggal'));
 		$this->db->where('inv_permohonan_barang.tanggal_permohonan <=', $this->input->post('filter_tanggal1'));
 		$this->db->order_by('inv_permohonan_barang.id_inv_permohonan_barang','desc');
-		$query =$this->db->get('inv_permohonan_barang_item',$limit,$start);
+		$query =$this->db->get('inv_permohonan_barang_item',$limit,$start);*/
+		$query = "
+			SELECT b.id_mst_inv_barang_habispakai,mst_inv_barang_habispakai.uraian,mst_inv_pilihan.value, 
+			mst_inv_barang_habispakai.harga AS harga_asli, 
+			b.harga AS harga_beli,
+			DATE_FORMAT(tgl_update, ".'"'.%m-%Y.'"'.") AS MONTH, SUM(jml)  AS jmlpengeluaran,
+			  (SELECT jml AS jml
+			   FROM inv_inventaris_habispakai_opname
+			   WHERE id_mst_inv_barang_habispakai=b.id_mst_inv_barang_habispakai
+			     AND code_cl_phc=b.code_cl_phc
+			   ORDER BY tgl_update DESC LIMIT 1) AS jmlbaik,
+			(SELECT SUM(jml) AS jmltotal
+			   FROM inv_inventaris_habispakai_pembelian_item
+			   JOIN inv_inventaris_habispakai_pembelian ON (inv_inventaris_habispakai_pembelian.id_inv_hasbispakai_pembelian = inv_inventaris_habispakai_pembelian_item.id_inv_hasbispakai_pembelian
+			                                                AND inv_inventaris_habispakai_pembelian.code_cl_phc = inv_inventaris_habispakai_pembelian_item.code_cl_phc
+			                                                AND inv_inventaris_habispakai_pembelian.pilihan_status_pembelian=2)
+			   WHERE inv_inventaris_habispakai_pembelian_item.code_cl_phc=b.code_cl_phc
+			     AND id_mst_inv_barang_habispakai=b.id_mst_inv_barang_habispakai
+			     AND inv_inventaris_habispakai_pembelian_item.tgl_update > IF(
+			                                                                    (SELECT MAX(tgl_update)
+			                                                                     FROM inv_inventaris_habispakai_opname
+			                                                                     WHERE inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_opname.id_mst_inv_barang_habispakai
+			                                                                       AND inv_inventaris_habispakai_pembelian_item.code_cl_phc=inv_inventaris_habispakai_opname.code_cl_phc) IS NOT NULL,
+			                                                                    (SELECT MAX(tgl_update)
+			                                                                     FROM inv_inventaris_habispakai_opname
+			                                                                     WHERE inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_opname.id_mst_inv_barang_habispakai
+			                                                                       AND inv_inventaris_habispakai_pembelian_item.code_cl_phc=inv_inventaris_habispakai_opname.code_cl_phc),
+			                                                                    (SELECT MIN(tgl_update- INTERVAL 1 DAY)
+			                                                                     FROM inv_inventaris_habispakai_pembelian_item))
+			     AND inv_inventaris_habispakai_pembelian_item.tgl_update <= CURDATE()) AS totaljumlah,
+			     (SELECT SUM(jml) AS jmlpeng
+			   FROM inv_inventaris_habispakai_pengeluaran a
+			   WHERE a.id_mst_inv_barang_habispakai=b.id_mst_inv_barang_habispakai
+			     AND a.code_cl_phc=b.code_cl_phc
+			     AND a.tgl_update > IF(
+			                                                                 (SELECT MAX(tgl_update)
+			                                                                  FROM inv_inventaris_habispakai_opname
+			                                                                  WHERE a.id_mst_inv_barang_habispakai = inv_inventaris_habispakai_opname.id_mst_inv_barang_habispakai
+			                                                                    AND a.code_cl_phc = inv_inventaris_habispakai_opname.code_cl_phc) IS NOT NULL,
+			                                                                 (SELECT MAX(tgl_update)
+			                                                                  FROM inv_inventaris_habispakai_opname
+			                                                                  WHERE a.id_mst_inv_barang_habispakai = inv_inventaris_habispakai_opname.id_mst_inv_barang_habispakai
+			                                                                    AND a.code_cl_phc = inv_inventaris_habispakai_opname.code_cl_phc),
+			                                                                 (SELECT MIN(tgl_update - INTERVAL 1 DAY)
+			                                                                  FROM inv_inventaris_habispakai_pengeluaran))
+			     AND a.tgl_update <= CURDATE()
+			   ORDER BY a.tgl_update DESC LIMIT 1) AS jmlpengeluaran
+			     
+			FROM inv_inventaris_habispakai_pengeluaran b
+			JOIN mst_inv_barang_habispakai ON (mst_inv_barang_habispakai.id_mst_inv_barang_habispakai = 
+			b.id_mst_inv_barang_habispakai AND code_cl_phc=".'"'.$pusksmas.'"'." )
+			LEFT JOIN mst_inv_pilihan ON (mst_inv_barang_habispakai.pilihan_satuan=mst_inv_pilihan.code AND mst_inv_pilihan.tipe='satuan_bhp' )
+			WHERE b.tgl_update >=".'"'.$tanggal1.'"'." AND
+			b.tgl_update <= ".'"'.$tanggal1.'"'."
+			GROUP BY DATE_FORMAT(b.tgl_update, ".'"'.%m-%Y.'"'.") ,b.id_mst_inv_barang_habispakai
+		";
+
         return $query->result();
     }
-	function get_data_detail($start=0, $limit=9999999, $options=array()){
-		$txt = "SELECT * FROM(
-			SELECT * FROM
-				(
-					SELECT * FROM
-						(
-							SELECT * FROM
-								(
-									SELECT * FROM inv_inventaris_distribusi
-									ORDER BY tgl_distribusi DESC,id_inventaris_distribusi DESC
-								) AS a
-							WHERE a.tgl_distribusi <= ?
-							GROUP BY a.id_inventaris_barang
-						) AS b
-					WHERE
-						id_ruangan = ?
-				) z
-			INNER JOIN (
-				SELECT
-					id_inventaris_barang,
-					id_mst_inv_barang,
-					nama_barang,
-					tanggal_pengadaan,
-					year(tanggal_diterima) as tahun,
-					barang_kembar_proc,
-					harga,
-					keterangan_inventory as keterangan,
-					IFNULL(
-						b.pilihan_keadaan_barang,
-						a.pilihan_keadaan_barang
-					) AS kondisi
-				FROM
-					inv_inventaris_barang a
-				LEFT JOIN (
-					SELECT * FROM inv_keadaan_barang
-					WHERE tanggal <= ?
-					ORDER BY tanggal DESC,id_keadaan_barang DESC
-				) b USING (id_inventaris_barang)	
-				GROUP BY id_inventaris_barang
-				ORDER BY tanggal DESC
-			) x USING (id_inventaris_barang)
-			WHERE
-			tgl_distribusi <= ?
-			AND id_cl_phc = ?
-			AND id_ruangan = ?) as inv ";
-
-		$tgl 		= $this->session->userdata('filter_tanggal');
-		$id_cl_phc 	= $this->session->userdata('filter_code_cl_phc');
-		$id_ruang 	= $this->session->userdata('filter_id_ruang');
-		$query 		= $this->db->query($txt, array($tgl, $id_ruang, $tgl, $tgl, $id_cl_phc,$id_ruang));
-		
-		$rows = array();
-		$data = $query->result_array();
-		$kondisi = $this->get_pilihan_kondisi()->result();
-		foreach ($data as $row) {
-			$real_kondisi = $this->get_detail_kondisi($row['id_inventaris_barang'], $tgl);
-			foreach($kondisi as $k){
-				$row[$k->id] = ($real_kondisi==$k->id ? 1:0);
-			}
-			$detail = $this->get_detail_inventaris($row['id_inventaris_barang']);
-			$row = array_merge($row,$detail);
-			$row['jml'] = 1;
-			$rows[] = $row;
-		}
-
-		return $rows;
-	}
-
-	function get_data_detail_group($start=0,$limit=9999999, $options=array()){
-		$txt = "SELECT  * FROM (
-			SELECT  * FROM (
-					SELECT * FROM (
-							SELECT * FROM (
-									SELECT * FROM
-										inv_inventaris_distribusi
-									ORDER BY
-										tgl_distribusi DESC,id_inventaris_distribusi DESC
-								) AS a
-							WHERE a.tgl_distribusi <= ?
-							GROUP BY a.id_inventaris_barang
-						) AS b
-					WHERE id_ruangan = ?
-				) z
-			INNER JOIN (
-				SELECT
-					id_inventaris_barang,
-					id_mst_inv_barang,
-					nama_barang,
-					tanggal_pengadaan,
-					year(tanggal_diterima) as tahun,
-					barang_kembar_proc,
-					harga,
-					IFNULL(
-						b.pilihan_keadaan_barang,
-						a.pilihan_keadaan_barang
-					) AS kondisi
-				FROM
-					inv_inventaris_barang a
-				LEFT JOIN (
-					SELECT * FROM inv_keadaan_barang
-					WHERE tanggal <= ?
-					ORDER BY tanggal DESC,id_keadaan_barang DESC
-				) b USING (id_inventaris_barang)	
-				GROUP BY id_inventaris_barang
-				ORDER BY tanggal DESC
-			) x USING (id_inventaris_barang)
-			WHERE
-			tgl_distribusi <= ?
-			AND id_cl_phc = ?
-			AND id_ruangan = ?
-			group by barang_kembar_proc
-		) as inv";
-		$tgl = $this->session->userdata('filter_tanggal');
-		$id_cl_phc = $this->session->userdata('filter_code_cl_phc');
-		$id_ruang = $this->session->userdata('filter_id_ruang');
-
-		$query = $this->db->query($txt, array($tgl, $id_ruang, $tgl, $tgl, $id_cl_phc,$id_ruang));
-		
-		$jml = 0;
-		$rows = array();
-		$data = $query->result_array();
-		$kondisi = $this->get_pilihan_kondisi()->result();
-		foreach ($data as $row) {
-			foreach($kondisi as $k){
-				$n = $this->get_jumlah_kondisi($k->id, $row['barang_kembar_proc']);
-				$row[$k->id] = $n;
-				$jml += $n;
-			}
-
-			$detail = $this->get_detail_inventaris($row['id_inventaris_barang']);
-			$row = array_merge($row,$detail);
-			$row['jml'] = $jml;
-			$rows[] = $row;
-		}
-
-		return $rows;
-	}
-
-
-	function get_detail_inventaris($id){
-		$this->db->select('inv_inventaris_barang_b.*,bahan.value as bahan');
-		$this->db->join('mst_inv_pilihan as bahan','bahan.code=inv_inventaris_barang_b.pilihan_bahan AND bahan.tipe="bahan"','left');
-		$this->db->where('id_inventaris_barang',$id);
-		$q = $this->db->get('inv_inventaris_barang_b');
-		$datab = $q->row_array();
-
-		$this->db->where('id_inventaris_barang',$id);
-		$q = $this->db->get('inv_inventaris_barang_e');
-		$datae = $q->row_array();
-
-		$data = array_merge($datab,$datae);
-
-		if(!empty($data)){
-			return $data;
-		}else{
-			$data = array(
-				'merek_type'		=>'',
-				'identitas_barang'	=>'',
-				'ukuran_barang'		=>'',
-				'merek_type'		=>'',
-				'merek_type'		=>'',
-				);
-			return $data;
-		}
-	}
-
-	function get_jumlah_kondisi($kondisi, $kembar){
-		$tgl = $this->session->userdata('filter_tanggal');
-			
-		$txt = "select * from (SELECT * FROM 
-				(
-				SELECT * FROM
-				(SELECT * FROM inv_inventaris_distribusi ORDER BY tgl_distribusi DESC,id_inventaris_distribusi DESC) AS a WHERE a.tgl_distribusi <= ? 
-				GROUP BY a.id_inventaris_barang
-				) 
-				AS b WHERE id_ruangan=?) z 
-				inner JOIN (SELECT
-					id_inventaris_barang, IFNULL(b.pilihan_keadaan_barang,a.pilihan_keadaan_barang) as kondisi
-				FROM
-					inv_inventaris_barang a
-				LEFT JOIN (
-					SELECT
-						*
-					FROM
-						inv_keadaan_barang
-					WHERE
-						tanggal <= ?
-					ORDER BY
-						tanggal DESC,id_keadaan_barang DESC
-				) b USING (id_inventaris_barang)
-				where a.barang_kembar_proc = ?
-				GROUP BY
-					id_inventaris_barang
-				ORDER BY tanggal desc) x using(id_inventaris_barang)
-				where barang_kembar_inv = ? and tgl_distribusi <= ?
-				and id_cl_phc = ? and id_ruangan = ? and kondisi = ?";
-		$code_cl_phc = $this->session->userdata('filter_code_cl_phc');
-		$id_ruangan = $this->session->userdata('filter_id_ruang');
-		$query = $this->db->query($txt,array($tgl, $id_ruangan, $tgl, $kembar, $kembar, $tgl, $code_cl_phc, $id_ruangan, $kondisi))->result_array();
-		return count($query);		
-	}
-
-	function get_data_detail_groupxxx($start=0,$limit=999999,$options=array()){
-		//filter puskes
-		$filter_code_cl_phc = $this->session->userdata('filter_code_cl_phc');
-		$filter_id_ruang = $this->session->userdata('filter_id_ruang');
-		$filter_tanggal = $this->session->userdata('filter_tanggal');
-
-		if(!empty($filter_code_cl_phc) and $filter_code_cl_phc != 'none'){		
-			$this->db->where('inv_inventaris_distribusi.id_cl_phc',$this->session->userdata('filter_code_cl_phc'));
-			
-			//filter ruang
-			if(!empty($filter_id_ruang) and $filter_id_ruang != '0'){
-				if($this->session->userdata('filter_id_ruang') == 'none'){
-					$this->db->where('inv_inventaris_distribusi.id_ruangan','0');
-				}else if($this->session->userdata('filter_id_ruang') == 'all'){
-					
-				}else{
-					$this->db->where('inv_inventaris_distribusi.id_ruangan',$this->session->userdata('filter_id_ruang'));
-				}
-			}					
-			
-		}else{
-			$this->db->where('inv_inventaris_distribusi.id_ruangan');
-		}
-		//filter date
-		if(!empty($filter_tanggal) and $filter_tanggal != '0'){
-			$this->db->where('inv_inventaris_distribusi.tgl_distribusi',$this->session->userdata('filter_tanggal'));
-		}else{
-			$this->db->where('inv_inventaris_distribusi.status','1');
-		}
-		
-		$this->db->select('inv_inventaris_barang.id_inventaris_barang, id_mst_inv_barang, nama_barang, register, year(tanggal_pembelian) as tahun,  harga, barang_kembar_inv ');
-		$this->db->join('inv_inventaris_distribusi','inv_inventaris_distribusi.id_inventaris_barang = inv_inventaris_barang.id_inventaris_barang ');
-		$this->db->order_by('barang_kembar_inv');
-		$this->db->group_by('barang_kembar_proc');
-		$q = $this->db->get('inv_inventaris_barang', $limit, $start);
-		return $q->result_array();
-	}
 	
-    function get_data($start=0,$limit=999999,$options=array())
-    {
-    	$this->db->select('mst_inv_ruangan.*,`cl_phc`.`value` AS puskesmas, count(inv_inventaris_distribusi.id_inventaris_distribusi) as jml, sum(inv_inventaris_barang.harga) as nilai');
-	    $this->db->join('cl_phc', 'mst_inv_ruangan.code_cl_phc = cl_phc.code', 'inner'); 
-	    $this->db->join('inv_inventaris_distribusi', 'inv_inventaris_distribusi.id_cl_phc = mst_inv_ruangan.code_cl_phc AND inv_inventaris_distribusi.id_ruangan = mst_inv_ruangan.id_mst_inv_ruangan AND inv_inventaris_distribusi.status=1', 'left'); 
-	    $this->db->join('inv_inventaris_barang', 'inv_inventaris_barang.id_inventaris_barang = inv_inventaris_distribusi.id_inventaris_barang', 'left'); 
-	    $query = $this->db->group_by('`mst_inv_ruangan`.code_cl_phc,`mst_inv_ruangan`.id_mst_inv_ruangan');
-	    $query = $this->db->get('mst_inv_ruangan',$limit,$start);
-    	return $query->result();
-    }
-
-    function get_data_puskesmas($start=0,$limit=999999,$options=array())
-    {
-    	$this->db->order_by('value','asc');
-    	// $this->db->where(code)
-        $query = $this->db->get($this->t_puskesmas,$limit,$start);
-        return $query->result();
-    }
-
-    function get_ruangan_id($puskesmas="")
-    {
-    	$this->db->select('max(id_mst_inv_ruangan) as id');
-    	$this->db->where('code_cl_phc',$puskesmas);
-    	$jum = $this->db->get('mst_inv_ruangan')->row();
-    	
-    	if (empty($jum)){
-    		return 1;
-    	}else {
-			return $jum->id+1;
-    	}
-
-	}
-	
-	function get_data_deskripsi($kode, $id){
-		$this->db->select("IFNULL(value,'-') as value, IFNULL(nama_ruangan,'-') as nama_ruangan, IFNULL(keterangan,'-') as keterangan",false);
-		$this->db->where("code_cl_phc",$kode);
-		$this->db->where("id_mst_inv_ruangan",$id);
-		$this->db->join("mst_inv_ruangan", 'mst_inv_ruangan.code_cl_phc=cl_phc.code','left');
-		$query = $this->db->get("cl_phc");
-		return $query->result();
-	}
-	
- 	function get_data_row($kode,$id){
-		$data = array();
-		$this->db->where("code_cl_phc",$kode);
-		$this->db->where("id_mst_inv_ruangan",$id);
-		$query = $this->db->get_where($this->tabel);
-		if ($query->num_rows() > 0){
-			$data = $query->row_array();
-		}
-
-		$query->free_result();    
-		return $data;
-	}
-
-	public function getSelectedData($tabel,$data)
-    {
-        return $this->db->get_where($tabel, array('code_cl_phc'=>$data));
-    }
-
-	function get_detail_kondisi($id_barang, $tgl){
-		$this->db->select('id_inventaris_barang, pilihan_keadaan_barang');
-		$this->db->where('tanggal <=', $tgl);
-		$this->db->where('id_inventaris_barang', $id_barang);
-		$this->db->order_by('tanggal','desc');
-		$this->db->order_by('id_keadaan_barang','desc');
-		$q = $this->db->get('inv_keadaan_barang')->row();
-		if(!empty($q)){
-			return $q->pilihan_keadaan_barang;
-		}else{
-			return "B";
-		}
-	}
 }

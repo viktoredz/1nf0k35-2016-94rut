@@ -43,13 +43,17 @@
 				  		</div>
 				  	</div>
 				  	<div class="col-md-12">
-						<div class="form-group">
-							<label>Pilih Ruangan</label>
-				     		<select name="code_ruangan" class="form-control" id="code_ruangan">
-			     			<option value="">Pilih Ruangan</option>
-			     		</select>
-				  		</div>
-				  	</div>
+				  	<div class="form-group">
+							<label>Jenis Barang</label>
+					  		<select name="jenisbarang" id="jenisbarang" class="form-control">
+				     				<option value="all">All</option>
+								<?php foreach ($jenisbaranghabis as $row ) { ;?>
+								<?php $select = $row->id_mst_inv_barang_habispakai_jenis == set_value('jenisbarang') ? 'selected=selected' : '' ?>
+									<option value="<?php echo $row->id_mst_inv_barang_habispakai_jenis; ?>"  <?php echo $select ?> ><?php echo $row->uraian; ?></option>
+								<?php	} ;?>
+					     	</select>
+				     	</div>
+				     </div>
 				  	<div class="col-md-12">
 						<div class="form-group pull-right">
             				<button onClick="doExport();" type="button"  class="btn btn-warning"><i class='fa fa-file-excel-o'></i> &nbsp; Export</button>
@@ -64,7 +68,7 @@
 <script>
 	$(function () {	
 		$("#menu_laporan").addClass("active");
-		$("#menu_inventory_lap_rkbu").addClass("active");
+		$("#menu_inventory_lap_bhp_pengeluaran").addClass("active");
 
 		$("#tgl").jqxDateTimeInput({
 			formatString: 'dd-MM-yyyy', 

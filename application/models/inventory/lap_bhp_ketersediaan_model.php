@@ -18,6 +18,8 @@ class Lap_bhp_ketersediaan_model extends CI_Model {
 	function get_data_export($start=0,$limit=999999,$options=array())
     {
         $kodepuskesmas = "P".$this->session->userdata("puskesmas");
+        $tanggal1 = $this->input->post('filter_tanggal');
+        $tanggal2 = $this->input->post('filter_tanggal1');
         $data = array();
         $this->db->distinct();
        $this->db->select("mst_inv_barang_habispakai.*,mst_inv_pilihan.value as value, 
