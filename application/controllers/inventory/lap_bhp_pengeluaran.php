@@ -23,7 +23,7 @@ class Lap_bhp_pengeluaran extends CI_Controller {
 		$kodepuskesmas = $this->session->userdata('puskesmas');
 			$this->db->where('code','P'.$kodepuskesmas);
 		$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
-		$data['jenisbaranghabis'] = $this->Lap_bhp_pengeluaran_model->get_data_jenis();
+		$data['jenisbaranghabis'] = $this->lap_bhp_pengeluaran_model->get_data_jenis();
 		$data['content'] = $this->parser->parse("inventory/lap_bhp_pengeluaran/detail",$data,true);
 
 		$this->template->show($data,"home");
@@ -31,7 +31,7 @@ class Lap_bhp_pengeluaran extends CI_Controller {
 	
 	
 	function permohonan_export(){
-		
+		$rows_all = $this->lap_bhp_pengeluaran_model->get_data_permohonan();
 		$TBS = new clsTinyButStrong;		
 		$TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN);
 		//[data_tabel.no;block=tbs:row]	[data_tabel.tgl]	[data_tabel.ruangan]	[data_tabel.jumlah]	[data_tabel.keterangan]	[data_tabel.status]

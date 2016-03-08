@@ -85,6 +85,14 @@
     	$("#tgl1").jqxDateTimeInput('setDate', new Date(date.getFullYear(), date.getMonth()+1,0));
 
 	});
+	$('#tgl ').change(function(){
+		var tgl = $(this).val().split("-") ;
+		var bulan = parseInt(tgl[1]) + parseInt(1);
+		var tang = tgl[0];
+		var th = tgl[2];
+		//alert(tgl[2]+'-'+tgl[0]+'-'+tgl[1]+' = '+th+'-'+bulan+'-'+tang);parseInt(days)
+		$("#tgl1").val(tgl[2]+'-'+bulan+'-'+0);		
+	});
 	$('#code_cl_phc').change(function(){
       var code_cl_phc = $(this).val();
       var id_mst_inv_ruangan = '<?php echo set_value('code_ruangan')?>';
@@ -116,7 +124,8 @@
 		        data : 'namepuskes='+namepuskes+'&puskes=' + puskes+'&filter_tanggal='+tgl+'&filter_tanggal1='+tgl1,
 		        success : function(data) {
 					if(data != ""){
-						location.href = data;
+						alert(data);
+						//location.href = data;
 					}
         		}
 	    	});
