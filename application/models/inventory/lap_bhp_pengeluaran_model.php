@@ -17,27 +17,26 @@ class Lap_bhp_pengeluaran_model extends CI_Model {
 		return $q;
 	}
 	
-	function get_data_permohonan($start=0,$limit=999999,$options=array())
+	function get_data_permohonan($bulan,$tahun,$start=0,$limit=999999,$options=array())
     {	
     	
-		$tanggals = explode("-", $this->input->post('filter_tanggal'));
-		$tanggal =  $this->input->post('filter_tanggal');
-		$tanggals1 = explode("-", $this->input->post('filter_tanggal1'));
-		$tanggal1 = $this->input->post('filter_tanggal1');
-
-    	
     	$data = array();
-		for($i=0; $i<=$tanggals1[0];$i++){
+		for($i=1; $i<=31;$i++){
+			$tanggal = date("Y-m-d",mktime(0, 0, 0, $bulan, $i, $tahun));
 			$pusksmas = "P".$this->session->userdata('puskesmas');
-			$newdate = strtotime("+$i day",strtotime($tanggal));
-			$newdate = date('Y-m-d', $newdate);
+			//$newdate = strtotime("+$i day",strtotime($tanggal));
+			//$newdate = date('Y-m-d', $newdate);
 			$this->db->where('code_cl_phc',$pusksmas);
-			$this->db->where('tglkeluar >=',$tanggal);
-			$this->db->where('tglkeluar <=',$newdate);
+			$this->db->where('tglkeluar',$tanggal);
 			$query = $this->db->get("lap_bhp_pengeluaran");
+	        $datas = $query->result_array();  
+	       // print_r($datas);
+	        foreach ($datas as $brg) {
+	        	$data[$brg['uraian']][$i] = $brg;;
+	        }
 		}
-        $data = $query->result_array();  
-        die(print_r($data));
+		//die();
+       	return $data;
     }
 	function get_data_jenis()
     {

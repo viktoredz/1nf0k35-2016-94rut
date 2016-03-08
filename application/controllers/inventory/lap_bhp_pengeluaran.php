@@ -31,7 +31,7 @@ class Lap_bhp_pengeluaran extends CI_Controller {
 	
 	
 	function permohonan_export(){
-		$rows_all = $this->lap_bhp_pengeluaran_model->get_data_permohonan();
+		//$rows_all = $this->lap_bhp_pengeluaran_model->get_data_permohonan();
 		$TBS = new clsTinyButStrong;		
 		$TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN);
 		//[data_tabel.no;block=tbs:row]	[data_tabel.tgl]	[data_tabel.ruangan]	[data_tabel.jumlah]	[data_tabel.keterangan]	[data_tabel.status]
@@ -59,7 +59,8 @@ class Lap_bhp_pengeluaran extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
-		$rows_all = $this->lap_bhp_pengeluaran_model->get_data_permohonan();
+		$tanggals = explode("-", $this->input->post('filter_tanggal'));
+		$rows_all = $this->lap_bhp_pengeluaran_model->get_data_permohonan($tanggals[1],$tanggals[0]);
 		
 
 		if($_POST) {
@@ -83,23 +84,34 @@ class Lap_bhp_pengeluaran extends CI_Controller {
 			}
 		}
 		#$rows = $this->permohonanbarang_model->get_data($this->input->post('recordstartindex'), $this->input->post('pagesize'));
-		$rows = $this->lap_bhp_pengeluaran_model->get_data_permohonan();
+		$tanggals = explode("-", $this->input->post('filter_tanggal'));
+		$rows = $this->lap_bhp_pengeluaran_model->get_data_permohonan($tanggals[1],$tanggals[0]);
 		$data = array();
-		$no=1;
 		
+	//	die(print_r($rows));
 		$data_tabel = array();
-		foreach($rows as $act) {
-			
-			$data_tabel[] = array(
-				'no'				=> $no++,								
-				'uraian'			=> $act->uraian,				
-				'merk_tipe'			=> $act->merk_tipe,
-				'jumlah'			=> $act->jumlah,
-				'harga'				=> $act->harga,
-				'jumlah_biaya'		=> $act->harga*$act->jumlah,
-				'rekening'			=> $act->rekening,
-				'keterangan'		=> $act->keterangan			
-			);
+		foreach ($rows as $key => $val) {
+			$no=0;
+			echo $key." : ";
+			foreach ($val as $act => $value) {
+				echo  'keluar'.$act.'='.$value['pengeluaranperhari'].'/';
+			}
+			/*for ($kolom=0; $kolom < count($rows)-1 ; $kolom++) { 
+
+				$data_tabel[] = array(
+					'no'				=> $no+$kolom,								
+					'uraian'			=> $key[$kolom]['uraian'],				
+					);
+			}
+				/*$data_tabel[] = array(
+					'no'				=> $no++,								
+					'uraian'			=> $key->uraian,				
+					'value'				=> $key->value,
+					'keluar'.$key		=> $key->pengeluaranperhari,
+					'hargamaster'		=> $key->hargamaster,
+					'tglkeluar'			=> $key->tglkeluar,
+					'hargakeluar'		=> $key->hargakeluar
+				);*/
 		}
 
 		
@@ -110,6 +122,7 @@ class Lap_bhp_pengeluaran extends CI_Controller {
 		$data_tabel[] = array('no'=> '3', 'tgl'=>'10/10/2010' , 'ruangan'=>'Hill'      , 'jumlah'=>'19', 'keterangan'=>'bagus', 'status'=>'bagus');
 		$data_tabel[] = array('no'=> '4', 'tgl'=>'10/10/2010' , 'ruangan'=>'Hill'      , 'jumlah'=>'19', 'keterangan'=>'bagus', 'status'=>'bagus');
 		*/
+		die(print_r($data_tabel));
 		$puskes = $this->input->post('puskes'); 
 		if(empty($puskes) or $puskes == 'Pilih Puskesmas'){	
 				$nama = 'Semua Data Puskesmas';
