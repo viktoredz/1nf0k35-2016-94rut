@@ -32,7 +32,7 @@ class Lap_bhp_pengeluaran_model extends CI_Model {
 	        $datas = $query->result_array();  
 	       // print_r($datas);
 	        foreach ($datas as $brg) {
-	        	$data[$brg['inv_inventaris_habispakai_pengeluaran']][$i] = $brg;
+	        	$data[$brg['uraian']][$i] = $brg;
 	        }
 		}
 		//die(print_r($data));

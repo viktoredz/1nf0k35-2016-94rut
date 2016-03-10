@@ -146,7 +146,7 @@ class Lap_bhp_pengeluaran extends CI_Controller {
 			}
 		}
 
-		die(print_r($data_tabel['285']['keluar6']));
+	//	die(print_r($data_tabel['285']['keluar6']));
 		
 		/*
 		$data_tabel[] = array('no'=> '1', 'tgl'=>'10/10/2010' , 'ruangan'=>'Hill'      , 'jumlah'=>'19', 'keterangan'=>'bagus', 'status'=>'bagus');
