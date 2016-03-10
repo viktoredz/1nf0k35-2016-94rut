@@ -88,7 +88,7 @@ class Lap_bhp_pengeluaran extends CI_Controller {
 		$rows = $this->lap_bhp_pengeluaran_model->get_data_permohonan($tanggals[1],$tanggals[0]);
 		$data = array();
 		
-	//	die(print_r($rows));
+		//die(print_r($rows));
 		$no=0;
 		$data_tabel = array();
 		foreach ($rows as $key => $val) {
@@ -105,7 +105,7 @@ class Lap_bhp_pengeluaran extends CI_Controller {
 					'uraian'			=> $key[$kolom]['uraian'],				
 					);
 			}*/
-				$data_tabel[] = array(
+				$data_tabel[$key] = array(
 					'no'				=> $no,								
 					'uraian'			=> $key,				
 					//'value'				=> $key->value,
@@ -117,7 +117,7 @@ class Lap_bhp_pengeluaran extends CI_Controller {
 					'keluar4'			=> $act == 4 ? $value['pengeluaranperhari'] : '',
 					'keluar5'			=> $act == 5 ? $value['pengeluaranperhari'] : '',
 					'keluar6'			=> $act == 6 ? $value['pengeluaranperhari'] : '',
-					'keluar7'			=> $act == 7 ? $value['pengeluaranperhari'] : '',
+					'keluar7'			=> $act == 6 ? $data_tabel[$key]['keluar6'] : '',
 					'keluar8'			=> $act == 8 ? $value['pengeluaranperhari'] : '',
 					'keluar9'			=> $act == 9 ? $value['pengeluaranperhari'] : '',
 					'keluar10'			=> $act == 10 ? $value['pengeluaranperhari'] : '',
@@ -146,7 +146,7 @@ class Lap_bhp_pengeluaran extends CI_Controller {
 			}
 		}
 
-		
+		die(print_r($data_tabel['285']['keluar6']));
 		
 		/*
 		$data_tabel[] = array('no'=> '1', 'tgl'=>'10/10/2010' , 'ruangan'=>'Hill'      , 'jumlah'=>'19', 'keterangan'=>'bagus', 'status'=>'bagus');
