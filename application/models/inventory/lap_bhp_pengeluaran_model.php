@@ -32,10 +32,10 @@ class Lap_bhp_pengeluaran_model extends CI_Model {
 	        $datas = $query->result_array();  
 	       // print_r($datas);
 	        foreach ($datas as $brg) {
-	        	$data[$brg['uraian']][$i] = $brg;;
+	        	$data[$brg['uraian']][$i] = $brg;
 	        }
 		}
-		//die();
+		//die(print_r($data));
        	return $data;
     }
 	function get_data_jenis()

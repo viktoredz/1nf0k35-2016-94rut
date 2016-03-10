@@ -32,7 +32,8 @@ class Lap_bhp_pengadaan_model extends CI_Model {
 				WHERE inv_inventaris_habispakai_pembelian_item.tgl_update >=".'"'.$tanggal1.'"'." AND
 							inv_inventaris_habispakai_pembelian_item.tgl_update <= ".'"'.$tanggal1.'"'."
 				GROUP BY DATE_FORMAT(tgl_update, \" %m-%Y \") ,inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai*/
-	function get_data_permohonan($start=0,$limit=999999,$options=array())
+			
+	function get_data_permohonan($bulan=0,$start=0,$limit=999999,$options=array())
     {	
     	$tanggals = explode("-", $this->input->post('filter_tanggal'));
 		$tanggal = $this->input->post('filter_tanggal');
@@ -40,17 +41,21 @@ class Lap_bhp_pengadaan_model extends CI_Model {
 		$tanggal1 = $this->input->post('filter_tanggal1');
     	$pusksmas = "P".$this->session->userdata('puskesmas');
     	$data = array();
-    	for($i=0; $i<=$tanggals1[1];$i++){
+    	for($i=1; $i<=12;$i++){
     		$pusksmas = "P".$this->session->userdata('puskesmas');
 			$newdate = strtotime("+$i MONTH",strtotime($tanggal));
-			$newdate = date('Y-m-d', $newdate);
+			$newdate = date('m', $newdate);
+			$tanggal = date("m",mktime(0, 0, 0, $i, $tanggals[2], $tanggals[0]));
     		$this->db->where('code_cl_phc',$pusksmas);
-			$this->db->where('tglbeli >=',$tanggal);
-			$this->db->where('tglbeli <=',$newdate);
+			$this->db->where('MONTH(tglbeli)',$tanggal);
 			$query =$this->db->get("lap_bhp_pengadaan");
+			$datas = $query->result_array(); 
+			foreach ($datas as $brg) {
+	        	$data[$brg['uraian']][$brg['tglbeli']] = $brg;
+	        }
 		}
-        $data = $query->result_array();
-        die(print_r($data)) ;
+        //die(print_r($data)) ;
+        return $data;
     }
 	
 }

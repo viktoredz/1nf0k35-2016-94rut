@@ -89,29 +89,61 @@ class Lap_bhp_pengeluaran extends CI_Controller {
 		$data = array();
 		
 	//	die(print_r($rows));
+		$no=0;
 		$data_tabel = array();
 		foreach ($rows as $key => $val) {
-			$no=0;
-			echo $key." : ";
+		/*	$no=0;
+			echo $key." : ";*/
+			$no++;
 			foreach ($val as $act => $value) {
-				echo  'keluar'.$act.'='.$value['pengeluaranperhari'].'/';
+			/*	echo  'keluar'.$act.'='.$value['pengeluaranperhari'].'/';
 			}
-			/*for ($kolom=0; $kolom < count($rows)-1 ; $kolom++) { 
+			for ($kolom=0; $kolom < count($rows)-1 ; $kolom++) { 
 
 				$data_tabel[] = array(
 					'no'				=> $no+$kolom,								
 					'uraian'			=> $key[$kolom]['uraian'],				
 					);
+			}*/
+				$data_tabel[] = array(
+					'no'				=> $no,								
+					'uraian'			=> $key,				
+					//'value'				=> $key->value,
+					'harga'				=> $value['hargamaster'],
+					'jumlah'			=> $value['jmlopname']*$value['totaljumlah'],
+					'keluar1'			=> $act == 1 ? $value['pengeluaranperhari'] : '',
+					'keluar2'			=> $act == 2 ? $value['pengeluaranperhari'] : '',
+					'keluar3'			=> $act == 3 ? $value['pengeluaranperhari'] : '',
+					'keluar4'			=> $act == 4 ? $value['pengeluaranperhari'] : '',
+					'keluar5'			=> $act == 5 ? $value['pengeluaranperhari'] : '',
+					'keluar6'			=> $act == 6 ? $value['pengeluaranperhari'] : '',
+					'keluar7'			=> $act == 7 ? $value['pengeluaranperhari'] : '',
+					'keluar8'			=> $act == 8 ? $value['pengeluaranperhari'] : '',
+					'keluar9'			=> $act == 9 ? $value['pengeluaranperhari'] : '',
+					'keluar10'			=> $act == 10 ? $value['pengeluaranperhari'] : '',
+					'keluar11'			=> $act == 11 ? $value['pengeluaranperhari'] : '',
+					'keluar12'			=> $act == 12 ? $value['pengeluaranperhari'] : '',
+					'keluar13'			=> $act == 13 ? $value['pengeluaranperhari'] : '',
+					'keluar14'			=> $act == 14 ? $value['pengeluaranperhari'] : '',
+					'keluar15'			=> $act == 15 ? $value['pengeluaranperhari'] : '',
+					'keluar16'			=> $act == 16 ? $value['pengeluaranperhari'] : '',
+					'keluar17'			=> $act == 17 ? $value['pengeluaranperhari'] : '',
+					'keluar18'			=> $act == 18 ? $value['pengeluaranperhari'] : '',
+					'keluar19'			=> $act == 19 ? $value['pengeluaranperhari'] : '',
+					'keluar20'			=> $act == 20 ? $value['pengeluaranperhari'] : '',
+					'keluar21'			=> $act == 21 ? $value['pengeluaranperhari'] : '',
+					'keluar22'			=> $act == 22 ? $value['pengeluaranperhari'] : '',
+					'keluar23'			=> $act == 23 ? $value['pengeluaranperhari'] : '',
+					'keluar24'			=> $act == 24 ? $value['pengeluaranperhari'] : '',
+					'keluar25'			=> $act == 25 ? $value['pengeluaranperhari'] : '',
+					'keluar26'			=> $act == 26 ? $value['pengeluaranperhari'] : '',
+					'keluar27'			=> $act == 27 ? $value['pengeluaranperhari'] : '',
+					'keluar28'			=> $act == 28 ? $value['pengeluaranperhari'] : '',
+					'keluar29'			=> $act == 29 ? $value['pengeluaranperhari'] : '',
+					'keluar30'			=> $act == 30 ? $value['pengeluaranperhari'] : '',
+					'keluar31'			=> $act == 31 ? $value['pengeluaranperhari'] : '',
+				);
 			}
-				/*$data_tabel[] = array(
-					'no'				=> $no++,								
-					'uraian'			=> $key->uraian,				
-					'value'				=> $key->value,
-					'keluar'.$key		=> $key->pengeluaranperhari,
-					'hargamaster'		=> $key->hargamaster,
-					'tglkeluar'			=> $key->tglkeluar,
-					'hargakeluar'		=> $key->hargakeluar
-				);*/
 		}
 
 		
@@ -122,7 +154,7 @@ class Lap_bhp_pengeluaran extends CI_Controller {
 		$data_tabel[] = array('no'=> '3', 'tgl'=>'10/10/2010' , 'ruangan'=>'Hill'      , 'jumlah'=>'19', 'keterangan'=>'bagus', 'status'=>'bagus');
 		$data_tabel[] = array('no'=> '4', 'tgl'=>'10/10/2010' , 'ruangan'=>'Hill'      , 'jumlah'=>'19', 'keterangan'=>'bagus', 'status'=>'bagus');
 		*/
-		die(print_r($data_tabel));
+		//die(print_r($data_tabel));
 		$puskes = $this->input->post('puskes'); 
 		if(empty($puskes) or $puskes == 'Pilih Puskesmas'){	
 				$nama = 'Semua Data Puskesmas';
