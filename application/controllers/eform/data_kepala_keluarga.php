@@ -348,7 +348,7 @@ class Data_kepala_keluarga extends CI_Controller {
 		$this->session->set_userdata('filter_code_rukunwarga','');
 		$this->session->set_userdata('filter_code_cl_rukunrumahtangga','');
 		$kode_sess = $this->session->userdata("puskesmas");
-		$data['datakecamatan'] = $this->datakeluarga_model->get_datawhere(substr($kode_sess, 0,4),"code","cl_kec");
+		$data['datakecamatan'] = $this->datakeluarga_model->get_datawhere(substr($kode_sess, 0,7),"code","cl_kec");
 		$data['content'] = $this->parser->parse("eform/datakeluarga/show",$data,true);
 		$this->template->show($data,"home");
 	}

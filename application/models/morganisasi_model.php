@@ -20,7 +20,11 @@ class Morganisasi_model extends CI_Model {
 
 		return $data;
     }
-    
+    function get_datawhere($code,$condition,$table){
+        $this->db->select("*");
+        $this->db->like($condition,$code);
+        return $this->db->get($table)->result();
+    }
     function get_data_penduduk(){
 		$data = $this->db->get('data_keluarga_anggota')->result_array();
 
