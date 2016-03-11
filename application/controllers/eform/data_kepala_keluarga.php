@@ -3,13 +3,22 @@ class Data_kepala_keluarga extends CI_Controller {
 
     public function __construct(){
 		parent::__construct();
+		$this->load->add_package_path(APPPATH.'third_party/tbs_plugin_opentbs_1.8.0/');
+		require_once(APPPATH.'third_party/tbs_plugin_opentbs_1.8.0/demo/tbs_class.php');
+		require_once(APPPATH.'third_party/tbs_plugin_opentbs_1.8.0/tbs_plugin_opentbs.php');
+
+
+
 		$this->load->model('eform/datakeluarga_model');
+		$this->load->model('inventory/inv_barang_model');
 		$this->load->model('eform/pembangunan_keluarga_model');
 		$this->load->model('eform/anggota_keluarga_kb_model');
 		$this->load->model('eform/dataform_model');
 	}
-    
-	function json(){
+    function datakepalakeluaraexport(){
+    	$TBS = new clsTinyButStrong;		
+		$TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN);
+
 		$this->authentication->verify('eform','show');
 
 		if($_POST) {
@@ -27,8 +36,19 @@ class Data_kepala_keluarga extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
-
-		$rows_all = $this->datakeluarga_model->get_data();
+		
+		if($this->session->userdata('filter_code_kelurahan') != '') {
+			$this->db->where('data_keluarga.id_desa',$this->session->userdata('filter_code_kelurahan'));
+		}else if($this->session->userdata('filter_code_kecamatan') != '') {
+			$this->db->where('data_keluarga.id_kecamatan',$this->session->userdata('filter_code_kecamatan'));
+		}
+		if($this->session->userdata('filter_code_rukunwarga') != '') {
+			$this->db->where('data_keluarga.rw',$this->session->userdata('filter_code_rukunwarga'));
+		}
+		if($this->session->userdata('filter_code_cl_rukunrumahtangga') != '') {
+			$this->db->where('data_keluarga.rt',$this->session->userdata('filter_code_cl_rukunrumahtangga'));
+		}
+		$rows_all = $this->datakeluarga_model->get_data_export();
 
     	if($_POST) {
 			$fil = $this->input->post('filterscount');
@@ -44,6 +64,163 @@ class Data_kepala_keluarga extends CI_Controller {
 			if(!empty($ord)) {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
+		}
+		
+		if($this->session->userdata('filter_code_kelurahan') != '') {
+			$this->db->where('data_keluarga.id_desa',$this->session->userdata('filter_code_kelurahan'));
+		}else if($this->session->userdata('filter_code_kecamatan') != '') {
+			$this->db->where('data_keluarga.id_kecamatan',$this->session->userdata('filter_code_kecamatan'));
+		}
+		if($this->session->userdata('filter_code_rukunwarga') != '') {
+			$this->db->where('data_keluarga.rw',$this->session->userdata('filter_code_rukunwarga'));
+		}
+		if($this->session->userdata('filter_code_cl_rukunrumahtangga') != '') {
+			$this->db->where('data_keluarga.rt',$this->session->userdata('filter_code_cl_rukunrumahtangga'));
+		}
+
+		$rows = $this->datakeluarga_model->get_data_export(/*$this->input->post('recordstartindex'), $this->input->post('pagesize')*/);
+		$no=1;
+		$data_tabel = array();
+		foreach($rows as $act) {
+			$data_tabel[] = array(
+				'no'					=> $no++,
+				'id_data_keluarga'		=> $act->id_data_keluarga,
+				'tanggal_pengisian'		=> $act->tanggal_pengisian,
+				'jam_data'				=> $act->jam_data,
+				'alamat'				=> $act->alamat,
+				'id_propinsi'			=> $act->id_propinsi,
+				'id_kota'				=> $act->id_kota,
+				'id_kecamatan'			=> $act->id_kecamatan,
+				'value'					=> $act->value,
+				'rt'					=> $act->rt,
+				'rw'					=> $act->rw,
+				'norumah'				=> $act->norumah,
+				'nourutkel'				=> $act->nourutkel,
+				'id_kodepos'			=> $act->id_kodepos,
+				'namakepalakeluarga'	=> $act->namakepalakeluarga,
+				'notlp'					=> $act->notlp,
+				'namadesawisma'			=> $act->namadesawisma,
+				'id_pkk'				=> $act->id_pkk,
+				'nama_komunitas'		=> $act->nama_komunitas,
+				'laki'					=> $act->laki,
+				'pr'					=> $act->pr,
+				'jmljiwa'				=> $act->jmljiwa,
+				'edit'					=> 1,
+				'delete'				=> 1
+			);
+		}
+
+				$kode='P '.$this->session->userdata('puskesmas');
+				$kd_prov = $this->inv_barang_model->get_nama('value','cl_province','code',substr($kode, 2,2));
+				$kd_kab  = $this->inv_barang_model->get_nama('value','cl_district','code',substr($kode, 2,4));
+				$nama  = $this->inv_barang_model->get_nama('value','cl_phc','code',$kode);
+				$kd_kec  = 'KEC. '.$this->inv_barang_model->get_nama('nama','cl_kec','code',substr($kode, 2,7));
+				$kd_upb  = 'KEC. '.$this->inv_barang_model->get_nama('nama','cl_kec','code',substr($kode, 2,7));
+
+		if ($this->input->post('kecamatan')!='' || $this->input->post('kecamatan')!='null') {
+			$kecamatan = $this->input->post('kecamatan');
+		}else{
+			$kecamatan = '-';
+		}
+		if ($this->input->post('kelurahan')!='' || $this->input->post('kelurahan')!='null') {
+			$kelurahan = $this->input->post('kelurahan');
+		}else{
+			$kelurahan = '-';
+		}
+		if ($this->input->post('rukunwarga')!='' || $this->input->post('rukunwarga')!='null') {
+			$rukunwarga = $this->input->post('rukunwarga');
+		}else{
+			$rukunwarga = '-';
+		}
+		if ($this->input->post('rukunrumahtangga')!='' || $this->input->post('rukunrumahtangga')!='null') {
+			$rukunrumahtangga = $this->input->post('rukunrumahtangga');
+		}else{
+			$rukunrumahtangga = '-';
+		}
+		$tanggal_export = date("Y-m-d");
+		$data_puskesmas[] = array('nama_puskesmas' => $nama,'kd_prov' => $kd_prov,'kd_kab' => $kd_kab,'tanggal_export' => $tanggal_export,'kd_kab' => $kd_kab,'rw' => $rukunwarga,'rt' => $rukunrumahtangga);
+		
+		$dir = getcwd().'/';
+		$template = $dir.'public/files/template/inventory/data_kepala_keluarga.xlsx';		
+		$TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8);
+
+		// Merge data in the first sheet
+		$TBS->MergeBlock('a', $data_tabel);
+		$TBS->MergeBlock('b', $data_puskesmas);
+		
+		$code = uniqid();
+		$output_file_name = 'public/files/hasil/hasil_ketokpintu_'.$code.'.xlsx';
+		$output = $dir.$output_file_name;
+		$TBS->Show(OPENTBS_FILE, $output); // Also merges all [onshow] automatic fields.
+		
+		echo base_url().$output_file_name ;
+	}
+	function json(){
+		$this->authentication->verify('eform','show');
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+				if ($field=="tanggal_pengisian") {
+					$this->db->like("tanggal_pengisian",date("Y-m-d",strtotime($value)));
+				}else{
+					$this->db->like($field,$value);	
+				}
+				
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		
+		if($this->session->userdata('filter_code_kelurahan') != '') {
+			$this->db->where('data_keluarga.id_desa',$this->session->userdata('filter_code_kelurahan'));
+		}else if($this->session->userdata('filter_code_kecamatan') != '') {
+			$this->db->where('data_keluarga.id_kecamatan',$this->session->userdata('filter_code_kecamatan'));
+		}
+		if($this->session->userdata('filter_code_rukunwarga') != '') {
+			$this->db->where('data_keluarga.rw',$this->session->userdata('filter_code_rukunwarga'));
+		}
+		if($this->session->userdata('filter_code_cl_rukunrumahtangga') != '') {
+			$this->db->where('data_keluarga.rt',$this->session->userdata('filter_code_cl_rukunrumahtangga'));
+		}
+		$rows_all = $this->datakeluarga_model->get_data();
+
+    	if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if ($field=="tanggal_pengisian") {
+					$this->db->like("tanggal_pengisian",date("Y-m-d",strtotime($value)));
+				}else{
+					$this->db->like($field,$value);	
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		
+		if($this->session->userdata('filter_code_kelurahan') != '') {
+			$this->db->where('data_keluarga.id_desa',$this->session->userdata('filter_code_kelurahan'));
+		}else if($this->session->userdata('filter_code_kecamatan') != '') {
+			$this->db->where('data_keluarga.id_kecamatan',$this->session->userdata('filter_code_kecamatan'));
+		}
+		if($this->session->userdata('filter_code_rukunwarga') != '') {
+			$this->db->where('data_keluarga.rw',$this->session->userdata('filter_code_rukunwarga'));
+		}
+		if($this->session->userdata('filter_code_cl_rukunrumahtangga') != '') {
+			$this->db->where('data_keluarga.rt',$this->session->userdata('filter_code_cl_rukunrumahtangga'));
 		}
 
 		$rows = $this->datakeluarga_model->get_data($this->input->post('recordstartindex'), $this->input->post('pagesize'));
@@ -166,9 +343,13 @@ class Data_kepala_keluarga extends CI_Controller {
 		$this->authentication->verify('eform','edit');
 		$data['title_group'] = "eForm - Ketuk Pintu";
 		$data['title_form'] = "Data Kepala Keluarga";
-
+		$this->session->set_userdata('filter_code_kecamatan','');
+		$this->session->set_userdata('filter_code_kelurahan','');
+		$this->session->set_userdata('filter_code_rukunwarga','');
+		$this->session->set_userdata('filter_code_cl_rukunrumahtangga','');
+		$kode_sess = $this->session->userdata("puskesmas");
+		$data['datakecamatan'] = $this->datakeluarga_model->get_datawhere(substr($kode_sess, 0,4),"code","cl_kec");
 		$data['content'] = $this->parser->parse("eform/datakeluarga/show",$data,true);
-
 		$this->template->show($data,"home");
 	}
 	function adddataform_profile(){
@@ -473,5 +654,75 @@ class Data_kepala_keluarga extends CI_Controller {
 	function addpembangunan(){
 		$this->pembangunan_keluarga_model->insertdatatable_pembangunan();
 	}
+	function get_kecamatanfilter(){
+	
+	if ($this->input->post('kecamatan')!="null") {
+		if($this->input->is_ajax_request()) {
+			$kecamatan = $this->input->post('kecamatan');
+			$this->session->set_userdata('filter_code_kecamatan',$this->input->post('kecamatan'));
+			$kode 	= $this->datakeluarga_model->get_datawhere($kecamatan,"code","cl_village");
 
+				echo '<option value="">Pilih Keluarahan</option>';
+			foreach($kode as $kode) :
+				echo $select = $kode->code == set_value('kelurahan') ? 'selected' : '';
+				echo '<option value="'.$kode->code.'" '.$select.'>' . $kode->value . '</option>';
+			endforeach;
+
+			return FALSE;
+		}
+
+		show_404();
+	}
+	}
+	function get_kelurahanfilter(){
+	if ($this->input->post('kelurahan')!="null") {
+		if($this->input->is_ajax_request()) {
+			$kelurahan = $this->input->post('kelurahan');
+			$this->session->set_userdata('filter_code_kelurahan',$this->input->post('kelurahan'));
+			$kode 	= $this->datakeluarga_model->get_datawhere($kelurahan,"id_desa","data_keluarga");
+
+				echo '<option value="">Pilih Keluarahan</option>';
+			foreach($kode as $kode) :
+				echo $select = $kode->rw == set_value('rukuwarga') ? 'selected' : '';
+				echo '<option value="'.$kode->rw.'" '.$select.'>' . $kode->rw . '</option>';
+			endforeach;
+
+			return FALSE;
+		}
+
+		show_404();
+	}
+	}
+	function get_rukunwargafilter(){
+	if ($this->input->post('rukunwarga')!="null" || $this->input->post('kelurahan')!="null") {	
+		if($this->input->is_ajax_request()) {
+			$rukunwarga = $this->input->post('rukunwarga');
+			$kelurahan = $this->input->post('kelurahan');
+			$this->session->set_userdata('filter_code_rukunwarga',$this->input->post('rukunwarga'));
+
+			$this->db->where("id_desa",$kelurahan);
+			$kode 	= $this->datakeluarga_model->get_datawhere($rukunwarga,"rw","data_keluarga");
+
+				echo '<option value="">Pilih Keluarahan</option>';
+			foreach($kode as $kode) :
+				echo $select = $kode->code == set_value('rukunrumahtangga') ? 'selected' : '';
+				echo '<option value="'.$kode->rt.'" '.$select.'>' . $kode->rt . '</option>';
+			endforeach;
+
+			return FALSE;
+		}
+		
+
+		show_404();
+	}
+	}
+	function get_rukunrumahtanggafilter(){
+	if ($this->input->post('rukunrumahtangga')!="null") {
+		if($_POST) {
+			if($this->input->post('rukunrumahtangga') != '') {
+				$this->session->set_userdata('filter_code_cl_rukunrumahtangga',$this->input->post('rukunrumahtangga'));
+			}
+		}
+	}
+	}
 }

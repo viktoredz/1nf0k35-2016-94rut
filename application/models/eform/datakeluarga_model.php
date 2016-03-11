@@ -20,7 +20,22 @@ class Datakeluarga_model extends CI_Model {
         
         return $query->result();
     }
-    
+    public function get_data_export($start=0,$limit=999999,$options=array())
+    {
+        $this->db->select("$this->tabel.*,cl_village.value,
+            (SELECT COUNT(no_anggota) l FROM data_keluarga_anggota WHERE id_pilihan_kelamin='5' AND id_data_keluarga=data_keluarga.id_data_keluarga) AS laki,
+            (SELECT COUNT(no_anggota) p FROM data_keluarga_anggota WHERE id_pilihan_kelamin='6' AND id_data_keluarga=data_keluarga.id_data_keluarga) AS pr,
+            (SELECT COUNT(no_anggota) jml FROM data_keluarga_anggota WHERE id_data_keluarga=data_keluarga.id_data_keluarga) AS jmljiwa,
+            ");
+        $this->db->join('cl_village', "data_keluarga.id_desa = cl_village.code",'inner');
+
+        $kec = substr($this->session->userdata('puskesmas'), 0,7);
+        $this->db->like('id_data_keluarga',$kec);
+        $this->db->order_by('data_keluarga.tanggal_pengisian','asc');
+        $query =$this->db->get($this->tabel,$limit,$start);
+        
+        return $query->result();
+    }
     function get_data_anggotaKeluarga($start=0,$limit=999999,$options=array()){
         $this->db->select("data_keluarga_anggota.*, hubungan.value as hubungan,jeniskelamin.value as jeniskelamin,(year(curdate())-year(data_keluarga_anggota.tgl_lahir)) as usia");
         $this->db->join("mst_keluarga_pilihan hubungan","data_keluarga_anggota.id_pilihan_hubungan = hubungan.id_pilihan and hubungan.tipe='hubungan'",'left');
@@ -399,5 +414,10 @@ class Datakeluarga_model extends CI_Model {
          }else{
             return 'salah';
          }
+    }
+     function get_datawhere ($code,$condition,$table){
+        $this->db->select("*");
+        $this->db->like($condition,$code);
+        return $this->db->get($table)->result();
     }
 }

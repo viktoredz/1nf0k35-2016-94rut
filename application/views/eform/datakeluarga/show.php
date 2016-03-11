@@ -18,8 +18,45 @@
 	    </div>
 
 	      <div class="box-footer">
-		 	<button type="button" class="btn btn-primary" onclick="document.location.href='<?php echo base_url()?>eform/data_kepala_keluarga/add'"><i class='fa fa-plus-square-o'></i> &nbsp; Tambah</button>
-		 	<button type="button" class="btn btn-success" id="btn-refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
+	      	<div class="row">
+	      		<div class="col-md-12">
+				 	<button type="button" class="btn btn-primary" onclick="document.location.href='<?php echo base_url()?>eform/data_kepala_keluarga/add'"><i class='fa fa-plus-square-o'></i> &nbsp; Tambah</button>
+				 	<button type="button" class="btn btn-warning" id="btn-refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
+				 	<button type="button" class="btn btn-success" id="btn-export"><i class='fa fa-file-excel-o'></i> &nbsp; Export</button>
+				 </div>
+			</div>
+			<div class="box-body">
+			<?php
+			//	echo $this->session->userdata("filter_code_kecamatan")." || kel";
+			//	echo $this->session->userdata("filter_code_kelurahan");
+			?>
+			<div class="row">
+				 <div class="col-md-3">
+				 	<label> Kecamatan </label>
+				 	<select name="kecamatan" id="kecamatan" class="form-control">
+						<?php foreach ($datakecamatan as $kec ) { ;?>
+						<?php $select = $kec->code == substr($this->session->userdata('puskesmas'), 0,7)  ? 'selected=selected' : '' ?>
+							<option value="<?php echo $kec->code; ?>" <?php echo $select ?>><?php echo $kec->nama; ?></option>
+						<?php	} ;?>
+			     	</select>
+				 </div>
+				 <div class="col-md-3">
+				 <label> Kelurahan </label>
+				 	<select name="kelurahan" id="kelurahan" class="form-control">
+			     	</select>
+				 </div>
+				 <div class="col-md-3">
+				 <label> Rukun Warga </label>
+				 	<select name="rukunwarga" id="rukunwarga" class="form-control">
+			     	</select>
+				 </div>
+				 <div class="col-md-3">
+				 <label> Rukun Rumah Tangga </label>
+				 	<select name="rukunrumahtangga" id="rukunrumahtangga" class="form-control">
+			     	</select>
+				 </div>
+		 	</div>
+		 </div>	
 		 </div>
         <div class="box-body">
 		    <div class="div-grid">
@@ -142,4 +179,92 @@
 			});
 		}
 	}
+	$('#kecamatan').change(function(){
+      var kecamatan = $(this).val();
+     // var id_mst_inv_ruangan = '<?php echo set_value('ruangan')?>';
+      $.ajax({
+        url : '<?php echo site_url('eform/data_kepala_keluarga/get_kecamatanfilter') ?>',
+        type : 'POST',
+        data : 'kecamatan=' + kecamatan,
+        success : function(data) {
+          $('#kelurahan').html(data);
+          $("#jqxgrid").jqxGrid('updatebounddata', 'cells');
+        }
+      });
+
+      return false;
+    }).change();
+    $('#kelurahan').change(function(){
+      var kelurahan = $(this).val();
+     // var id_mst_inv_ruangan = '<?php echo set_value('ruangan')?>';
+      $.ajax({
+        url : '<?php echo site_url('eform/data_kepala_keluarga/get_kelurahanfilter') ?>',
+        type : 'POST',
+        data : 'kelurahan=' + kelurahan,
+        success : function(data) {
+          $('#rukunwarga').html(data);
+          $("#jqxgrid").jqxGrid('updatebounddata', 'cells');
+        }
+      });
+
+      return false;
+    }).change();
+    $('#rukunwarga').change(function(){
+      var rukunwarga = $(this).val();
+      var kelurahan = $("#kelurahan").val();
+      $.ajax({
+        url : '<?php echo site_url('eform/data_kepala_keluarga/get_rukunwargafilter') ?>',
+        type : 'POST',
+        data : 'rukunwarga=' + rukunwarga +'&kelurahan='+kelurahan,
+        success : function(data) {
+          $('#rukunrumahtangga').html(data);
+          $("#jqxgrid").jqxGrid('updatebounddata', 'cells');
+        }
+      });
+
+      return false;
+    }).change();
+    $("#btn-export").click(function(){
+		
+		var post = "";
+		var filter = $("#jqxgrid").jqxGrid('getfilterinformation');
+		for(i=0; i < filter.length; i++){
+			var fltr 	= filter[i];
+			var value	= fltr.filter.getfilters()[0].value;
+			var condition	= fltr.filter.getfilters()[0].condition;
+			var filteroperation	= fltr.filter.getfilters()[0].operation;
+			var filterdatafield	= fltr.filtercolumn;
+			if(filterdatafield=="tanggal_pengisian"){
+				var d = new Date(value);
+				var day = d.getDate();
+				var month = d.getMonth();
+				var year = d.getFullYear();
+				value = year+'-'+month+'-'+day;
+				
+			}
+			//alert(value);
+			post = post+'&filtervalue'+i+'='+value;
+			post = post+'&filtercondition'+i+'='+condition;
+			post = post+'&filteroperation'+i+'='+filteroperation;
+			post = post+'&filterdatafield'+i+'='+filterdatafield;
+			post = post+'&'+filterdatafield+'operator=and';
+		}
+		post = post+'&filterscount='+i;
+		
+		var sortdatafield = $("#jqxgrid").jqxGrid('getsortcolumn');
+		if(sortdatafield != "" && sortdatafield != null){
+			post = post + '&sortdatafield='+sortdatafield;
+		}
+		if(sortdatafield != null){
+			var sortorder = $("#jqxgrid").jqxGrid('getsortinformation').sortdirection.ascending ? "asc" : ($("#jqxgrid").jqxGrid('getsortinformation').sortdirection.descending ? "desc" : "");
+			post = post+'&sortorder='+sortorder;
+			
+		}
+		post = post+'&kecamatan='+$("#kecamatan option:selected").text()+'&kelurahan='+$("#kelurahan option:selected").text()+'&rukunwarga='+$("#rukunwarga option:selected").text()+'&rukunrumahtangga='+$("#rukunrumahtangga option:selected").text();
+		
+		$.post("<?php echo base_url()?>eform/data_kepala_keluarga/datakepalakeluaraexport",post,function(response	){
+			//alert(response);
+			window.location.href=response;
+		});
+	});
 </script>
