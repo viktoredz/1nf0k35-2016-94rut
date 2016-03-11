@@ -132,7 +132,7 @@
 <script type="text/javascript">
 $(function(){
     $("#menu_inventory_permohonanbarang").addClass("active");
-    $("#menu_inventory").addClass("active");
+    $("#menu_aset_tetap").addClass("active");
     $('#btn-edit').click(function(){
         window.location.href="<?php echo base_url()?>inventory/permohonanbarang/edit/{kode}/{code_cl_phc}";
     });

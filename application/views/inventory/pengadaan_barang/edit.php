@@ -202,7 +202,7 @@ $(function(){
     });
 
     $("#menu_inventory_pengadaanbarang").addClass("active");
-    $("#menu_inventory").addClass("active");
+    $("#menu_aset_tetap").addClass("active");
 
     <?php if(!isset($viewreadonly)){?>
       $("#tgl").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme});

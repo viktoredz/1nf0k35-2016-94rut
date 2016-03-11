@@ -150,7 +150,7 @@ $(function(){
         window.location.href="<?php echo base_url()?>inventory/pengadaanbarang";
     });
 
-    $("#menu_inventory").addClass("active");
+    $("#menu_aset_tetap").addClass("active");
     $("#menu_inventory_pengadaanbarang").addClass("active");
 
     $("#tgl").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme});

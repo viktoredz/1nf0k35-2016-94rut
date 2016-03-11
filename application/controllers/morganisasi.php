@@ -11,7 +11,7 @@ class Morganisasi extends CI_Controller {
 		$this->load->library('image_CRUD');
 	}
 	
-	function index(){
+	function dashboard_ketukpintu(){
 		$this->authentication->verify('morganisasi','show');
 		$data = array();
 		$data['title_group'] 	= "Dashboard";
@@ -53,7 +53,7 @@ class Morganisasi extends CI_Controller {
 	}
 
 
-	function dashboard_inventory(){
+	function index(){
 		if($this->session->userdata('level')=="sms"){
 			redirect(base_url()."sms/sms");
 		}

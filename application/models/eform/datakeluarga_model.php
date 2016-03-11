@@ -163,7 +163,7 @@ class Datakeluarga_model extends CI_Model {
             'nama'              => $this->input->post('nama'),
             'nik'               => $this->input->post('nik'),
             'tmpt_lahir'        => $this->input->post('tmpt_lahir'),
-            'tgl_lahir'              => date("Y-m-d", strtotime($this->input->post('tgl_lahir'))),
+            'tgl_lahir'             => date("Y-m-d", strtotime($this->input->post('tgl_lahir'))),
             'id_pilihan_hubungan'   => $this->input->post('id_pilihan_hubungan'),
             'id_pilihan_kelamin'    => $this->input->post('id_pilihan_kelamin'),
             'id_pilihan_agama'      => $this->input->post('id_pilihan_agama'),
@@ -171,6 +171,7 @@ class Datakeluarga_model extends CI_Model {
             'id_pilihan_pekerjaan'  => $this->input->post('id_pilihan_pekerjaan'),
             'id_pilihan_kawin'      => $this->input->post('id_pilihan_kawin'),
             'id_pilihan_jkn'        => $this->input->post('id_pilihan_jkn'),
+            'bpjs'                  => $this->input->post('bpjs'),
             'suku'                  => $this->input->post('suku'),
             'no_hp'                 => $this->input->post('no_hp')
         );
@@ -218,10 +219,30 @@ class Datakeluarga_model extends CI_Model {
 
     function delete_entry($kode){
         $this->db->where('id_data_keluarga',$kode);
+        $this->db->delete('data_keluarga_anggota');
 
+        $this->db->where('id_data_keluarga',$kode);
+        $this->db->delete('data_keluarga_anggota_profile');
+
+        $this->db->where('id_data_keluarga',$kode);
+        $this->db->delete('data_keluarga_kb');
+
+        $this->db->where('id_data_keluarga',$kode);
+        $this->db->delete('data_keluarga_pembangunan');
+
+        $this->db->where('id_data_keluarga',$kode);
+        $this->db->delete('data_keluarga_profile');
+
+        $this->db->where('id_data_keluarga',$kode);
         return $this->db->delete($this->tabel);
     }
+
     function delete_Anggotakeluarga($kode,$noanggota){
+        $this->db->where('id_data_keluarga',$kode);
+        $this->db->where('no_anggota',$noanggota);
+
+        $this->db->delete("data_keluarga_anggota_profile");
+
         $this->db->where('id_data_keluarga',$kode);
         $this->db->where('no_anggota',$noanggota);
 

@@ -26,6 +26,7 @@
         data.append('id_pilihan_pekerjaan', $("[name='id_pilihan_pekerjaan']").val());
         data.append('id_pilihan_kawin', $("[name='id_pilihan_kawin']").val());
         data.append('id_pilihan_jkn', $("[name='id_pilihan_jkn']").val());
+        data.append('bpjs', $("[name='bpjs']").val());
         data.append('suku', $("[name='suku']").val());
         data.append('no_hp', $("[name='no_hp']").val());
 
@@ -292,6 +293,21 @@
           </div>
 
           <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Nomor BPJS</div>
+            <div class="col-md-8">
+              <input type="text" name="bpjs" id="bpjs" placeholder="Nomor BPJS" value="<?php 
+                if(set_value('bpjs')=="" && isset($bpjs)){
+                  echo $bpjs;
+                }else{
+                  echo  set_value('bpjs');
+                }
+                ?>" class="form-control">
+            </div>
+            <div class="col-md-8">
+            </div>
+          </div>
+
+          <div class="row" style="margin: 5px">
             <div class="col-md-4" style="padding: 5px">Suku</div>
             <div class="col-md-8">
               <input type="text" name="suku" id="suku" placeholder="Suku" value="<?php 
@@ -307,7 +323,7 @@
           <div class="row" style="margin: 5px">
             <div class="col-md-4" style="padding: 5px">Nomor HP</div>
             <div class="col-md-8">
-              <input type="text" name="no_hp" id="no_hp" placeholder="Nomor Rumah" value="<?php 
+              <input type="text" name="no_hp" id="no_hp" placeholder="Nomor HP" value="<?php 
                 if(set_value('no_hp')=="" && isset($no_hp)){
                   echo $no_hp;
                 }else{

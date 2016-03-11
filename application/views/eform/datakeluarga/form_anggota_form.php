@@ -51,17 +51,17 @@
       }
       ?>
       $("input[name^=keluarga6]").change(function(){
-
-      //alert($(this).attr('name')+' ' +$(this).val());
-      var noanggota = "<?php echo $noanggota;?>";
-      var id_data_keluarga = "<?php echo $id_data_keluarga; ?>";
+        //alert($(this).attr('name')+' ' +$(this).val());
+        var noanggota = "<?php echo $noanggota;?>";
+        var id_data_keluarga = "<?php echo $id_data_keluarga; ?>";
         $.post("<?php echo base_url()?>eform/data_kepala_keluarga/update_kepala",{kode:$(this).attr('name'),id_data_keluarga:id_data_keluarga,value:$(this).val(),noanggota:noanggota},function(data,status){;
             });
       });
+
       $("select").change(function(){
         //alert($(this).attr('name')+' ' +$(this).val());
-      var noanggota = "<?php echo $noanggota;?>";
-      var id_data_keluarga = "<?php echo $id_data_keluarga; ?>";
+        var noanggota = "<?php echo $noanggota;?>";
+        var id_data_keluarga = "<?php echo $id_data_keluarga; ?>";
         $.post("<?php echo base_url()?>eform/data_kepala_keluarga/update_kepala",{kode:$(this).attr('name'),id_data_keluarga:id_data_keluarga,value:$(this).val(),noanggota:noanggota},function(data,status){;
             });
       });
@@ -320,6 +320,21 @@
                 }    
                 ?>
             </select>
+            </div>
+          </div>
+
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Nomor BPJS</div>
+            <div class="col-md-8">
+              <input type="text" name="keluarga6_bpjs "id="keluarga6_bpjs" placeholder="Nomor BPJS" value="<?php 
+                if(set_value('bpjs')=="" && isset($bpjs)){
+                  echo $bpjs;
+                }else{
+                  echo  set_value('bpjs');
+                }
+                ?>" class="form-control">
+            </div>
+            <div class="col-md-8">
             </div>
           </div>
 
@@ -1744,7 +1759,7 @@ darah tinggi oleh tenaga kesehatan (dokter/ perawat/ bidan)?</div>
             </div>
             <div class="col-md-6" style="padding: 5px 5px 5px 24px">Tidur</div>
             <div class="col-md-6">
-              <input type="text" placeholder="Olahraga" class="form-control" name="kesehatan_6_g_2_td_text" id="kesehatan_6_g_2_td_text">
+              <input type="text" placeholder="Tidur" class="form-control" name="kesehatan_6_g_2_td_text" id="kesehatan_6_g_2_td_text">
             </div>
           </div>
 
@@ -1752,19 +1767,19 @@ darah tinggi oleh tenaga kesehatan (dokter/ perawat/ bidan)?</div>
             <div class="col-md-12" style="padding: 5px">3. TTV (Tanda-Tanda Vital)?</div>
             <div class="col-md-6" style="padding: 5px 5px 5px 24px">TD : Tekanan Darah</div>
             <div class="col-md-6">
-              <input type="number" placeholder="Olahraga" class="form-control" name="kesehatan_6_g_3_td_text" id="kesehatan_6_g_3_td_text">
+              <input type="text" placeholder="Tekanan Darah" class="form-control" name="kesehatan_6_g_3_td_text" id="kesehatan_6_g_3_td_text">
             </div>
             <div class="col-md-6" style="padding: 5px 5px 5px 24px">N : Nadi</div>
             <div class="col-md-6">
-              <input type="number" placeholder="Olahraga" class="form-control" name="kesehatan_6_g_3_tn_text" id="kesehatan_6_g_3_tn_text">
+              <input type="text" placeholder="Nadi" class="form-control" name="kesehatan_6_g_3_tn_text" id="kesehatan_6_g_3_tn_text">
             </div>
             <div class="col-md-6" style="padding: 5px 5px 5px 24px">P: Pernapasan</div>
             <div class="col-md-6">
-              <input type="number" placeholder="Olahraga" class="form-control" name="kesehatan_6_g_3_p_text" id="kesehatan_6_g_3_p_text">
+              <input type="text" placeholder="Pernapasan" class="form-control" name="kesehatan_6_g_3_p_text" id="kesehatan_6_g_3_p_text">
             </div>
             <div class="col-md-6" style="padding: 5px 5px 5px 24px">S: Suhu</div>
             <div class="col-md-6">
-              <input type="number" placeholder="Olahraga" class="form-control" name="kesehatan_6_g_3_s_text" id="kesehatan_6_g_3_s_text">
+              <input type="number" placeholder="Suhu" class="form-control" name="kesehatan_6_g_3_s_text" id="kesehatan_6_g_3_s_text">
             </div>
           </div>
 
@@ -1773,15 +1788,15 @@ darah tinggi oleh tenaga kesehatan (dokter/ perawat/ bidan)?</div>
             <div class="col-md-12" style="padding: 5px">4. Antropometri?</div>
             <div class="col-md-6" style="padding: 5px 5px 5px 24px">TB: Tinggi Badan</div>
             <div class="col-md-6">
-              <input type="number" placeholder="Olahraga" class="form-control" name="kesehatan_6_g_4_at_text" id="kesehatan_6_g_4_at_text">
+              <input type="number" placeholder="Tinggi Badan" class="form-control" name="kesehatan_6_g_4_at_text" id="kesehatan_6_g_4_at_text">
             </div>
             <div class="col-md-6" style="padding: 5px 5px 5px 24px">BB: Berat Badan</div>
             <div class="col-md-6">
-              <input type="number" placeholder="Olahraga" class="form-control" name="kesehatan_6_g_4_bb_text" id="kesehatan_6_g_4_bb_text">
+              <input type="number" placeholder="Berat Badan" class="form-control" name="kesehatan_6_g_4_bb_text" id="kesehatan_6_g_4_bb_text">
             </div>
             <div class="col-md-6" style="padding: 5px 5px 5px 24px">Status Gizi</div>
             <div class="col-md-6">
-              <input type="number" placeholder="Olahraga" class="form-control" name="kesehatan_6_g_4_sg_text" id="kesehatan_6_g_4_sg_text">
+              <input type="text" placeholder="Status Gizi" class="form-control" name="kesehatan_6_g_4_sg_text" id="kesehatan_6_g_4_sg_text">
             </div>
           </div>
 
@@ -1799,14 +1814,14 @@ darah tinggi oleh tenaga kesehatan (dokter/ perawat/ bidan)?</div>
           <div class="row" style="margin: 5px;border-top:1px solid #EEEEEE;">
             <div class="col-md-12" style="padding: 5px">6. Riwayat Kesehatan?</div>
             <div class="col-md-12">
-              <input type="text" placeholder="Olahraga" class="form-control" name="kesehatan_6_g_6_text" id="kesehatan_6_g_6_text">
+              <input type="text" placeholder="Riwayat Kesehatan" class="form-control" name="kesehatan_6_g_6_text" id="kesehatan_6_g_6_text">
             </div>
           </div>
 
           <div class="row" style="margin: 5px;border-top:1px solid #EEEEEE;">
             <div class="col-md-12" style="padding: 5px">7. Analisa Masalah Kesehatan?</div>
             <div class="col-md-12">
-              <input type="text" placeholder="Olahraga" class="form-control" name="kesehatan_6_g_7_text" id="kesehatan_6_g_7_text">
+              <input type="text" placeholder="Analisa Masalah Kesehatan" class="form-control" name="kesehatan_6_g_7_text" id="kesehatan_6_g_7_text">
             </div>
           </div>
 

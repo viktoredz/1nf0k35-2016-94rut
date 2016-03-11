@@ -142,6 +142,7 @@ class Drh extends CI_Controller {
 
 		$data = $this->drh_model->get_data_row($id); 
 		$data['id']=$id;
+		$data['nip']="1111 2222 3333 4444";
 		$data['title_group'] = "Kepegawaian";
 		$data['title_form']="Ubah Data Pegawai";
 
