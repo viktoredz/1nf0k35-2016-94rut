@@ -31,6 +31,11 @@
 			//	echo $this->session->userdata("filter_code_kelurahan");
 			?>
 			<div class="row">
+				<div class="col-md-3">
+				 <!--<<label> Rukun Rumah Tangga </label>
+				 	select name="rukunrumahtangga" id="rukunrumahtangga" class="form-control">
+			     	</select>-->
+				 </div>
 				 <div class="col-md-3">
 				 	<label> Kecamatan </label>
 				 	<select name="kecamatan" id="kecamatan" class="form-control">
@@ -48,11 +53,6 @@
 				 <div class="col-md-3">
 				 <label> Rukun Warga </label>
 				 	<select name="rukunwarga" id="rukunwarga" class="form-control">
-			     	</select>
-				 </div>
-				 <div class="col-md-3">
-				 <label> Rukun Rumah Tangga </label>
-				 	<select name="rukunrumahtangga" id="rukunrumahtangga" class="form-control">
 			     	</select>
 				 </div>
 		 	</div>

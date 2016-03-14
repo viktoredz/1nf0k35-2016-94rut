@@ -45,9 +45,9 @@ class Data_kepala_keluarga extends CI_Controller {
 		if($this->session->userdata('filter_code_rukunwarga') != '') {
 			$this->db->where('data_keluarga.rw',$this->session->userdata('filter_code_rukunwarga'));
 		}
-		if($this->session->userdata('filter_code_cl_rukunrumahtangga') != '') {
+	/*	if($this->session->userdata('filter_code_cl_rukunrumahtangga') != '') {
 			$this->db->where('data_keluarga.rt',$this->session->userdata('filter_code_cl_rukunrumahtangga'));
-		}
+		}*/
 		$rows_all = $this->datakeluarga_model->get_data_export();
 
     	if($_POST) {
@@ -74,10 +74,10 @@ class Data_kepala_keluarga extends CI_Controller {
 		if($this->session->userdata('filter_code_rukunwarga') != '') {
 			$this->db->where('data_keluarga.rw',$this->session->userdata('filter_code_rukunwarga'));
 		}
-		if($this->session->userdata('filter_code_cl_rukunrumahtangga') != '') {
+	/*	if($this->session->userdata('filter_code_cl_rukunrumahtangga') != '') {
 			$this->db->where('data_keluarga.rt',$this->session->userdata('filter_code_cl_rukunrumahtangga'));
 		}
-
+*/
 		$rows = $this->datakeluarga_model->get_data_export(/*$this->input->post('recordstartindex'), $this->input->post('pagesize')*/);
 		$no=1;
 		$data_tabel = array();
@@ -696,10 +696,10 @@ class Data_kepala_keluarga extends CI_Controller {
 	function get_rukunwargafilter(){
 	if ($this->input->post('rukunwarga')!="null" || $this->input->post('kelurahan')!="null") {	
 		if($this->input->is_ajax_request()) {
-			$rukunwarga = $this->input->post('rukunwarga');
-			$kelurahan = $this->input->post('kelurahan');
+			/*$rukunwarga = $this->input->post('rukunwarga');
+			$kelurahan = $this->input->post('kelurahan');*/
 			$this->session->set_userdata('filter_code_rukunwarga',$this->input->post('rukunwarga'));
-
+/*
 			$this->db->where("id_desa",$kelurahan);
 			$kode 	= $this->datakeluarga_model->get_datawhere($rukunwarga,"rw","data_keluarga");
 
@@ -709,14 +709,14 @@ class Data_kepala_keluarga extends CI_Controller {
 				echo '<option value="'.$kode->rt.'" '.$select.'>' . $kode->rt . '</option>';
 			endforeach;
 
-			return FALSE;
+			return FALSE;*/
 		}
 		
 
-		show_404();
+		//show_404();
 	}
 	}
-	function get_rukunrumahtanggafilter(){
+	/*function get_rukunrumahtanggafilter(){
 	if ($this->input->post('rukunrumahtangga')!="null") {
 		if($_POST) {
 			if($this->input->post('rukunrumahtangga') != '') {
@@ -724,5 +724,5 @@ class Data_kepala_keluarga extends CI_Controller {
 			}
 		}
 	}
-	}
+	}*/
 }
