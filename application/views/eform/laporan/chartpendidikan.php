@@ -1,4 +1,4 @@
-<table class="table">
+<table class="table table-bordered table-hover">
   <tr>
     <th>Tingkat Pendidikan</th>
     <th>Jumlah</th>
@@ -11,62 +11,62 @@
   <tr>
     <td><?php echo "Belum Sekolah"; ?></td>
     <td><?php echo (isset($rows['blmsekolah'])) ? $rows['blmsekolah']:0;?></td>
-    <td><?php echo (isset($rows['blmsekolah'])) ? number_format($rows['blmsekolah']/$rows['totalblmsekolah']*100) : 0;?></td>
+    <td><?php echo (isset($rows['blmsekolah'])) ? number_format($rows['blmsekolah']/$rows['totalorang']*100,2) : 0;?></td>
   </tr>
   <tr>
     <td><?php echo "Tidak Sekolah"; ?></td>
     <td><?php echo (isset($rows['tidaksekolah'])) ? $rows['tidaksekolah'] : 0;?></td>
-    <td><?php echo (isset($rows['tidaksekolah'])) ? number_format($rows['tidaksekolah']/$rows['totaltidaksekolah']*100) : 0;?></td>
+    <td><?php echo (isset($rows['tidaksekolah'])) ? number_format($rows['tidaksekolah']/$rows['totalorang']*100,2) : 0;?></td>
   </tr>
   <tr>
     <td><?php echo "Tidak Tamat SD"; ?></td>
     <td><?php echo (isset($rows['tdktamatsd'])) ? $rows['tdktamatsd'] : 0;?></td>
-    <td><?php echo (isset($rows['tdktamatsd'])) ? number_format($rows['tdktamatsd']/$rows['totaltdktamatsd']*100): 0;?></td>
+    <td><?php echo (isset($rows['tdktamatsd'])) ? number_format($rows['tdktamatsd']/$rows['totalorang']*100,2): 0;?></td>
   </tr>
   <tr>
     <td><?php echo "Masih SD"; ?></td>
     <td><?php echo (isset($rows['masihsd'])) ? $rows['masihsd'] : 0;?></td>
-    <td><?php echo (isset($rows['masihsd'])) ? number_format($rows['masihsd']/$rows['totalmasihsd']*100): 0;?></td>
+    <td><?php echo (isset($rows['masihsd'])) ? number_format($rows['masihsd']/$rows['totalorang']*100,2): 0;?></td>
   </tr>
   <tr>
     <td><?php echo "Tamat SD"; ?></td>
     <td><?php echo (isset($rows['tamatsd'])) ? $rows['tamatsd'] : 0;?></td>
-    <td><?php echo (isset($rows['tamatsd'])) ? number_format($rows['tamatsd']/$rows['totaltamatsd']*100): 0;?></td>
+    <td><?php echo (isset($rows['tamatsd'])) ? number_format($rows['tamatsd']/$rows['totalorang']*100,2): 0;?></td>
   </tr>
   <tr>
     <td><?php echo "Masih SMP"; ?></td>
     <td><?php echo (isset($rows['masihsmp'])) ? $rows['masihsmp'] : 0;?></td>
-    <td><?php echo (isset($rows['masihsmp'])) ? number_format($rows['masihsmp']/$rows['totalmasihsmp']*100): 0;?></td>
+    <td><?php echo (isset($rows['masihsmp'])) ? number_format($rows['masihsmp']/$rows['totalorang']*100,2): 0;?></td>
   </tr>
   <tr>
     <td><?php echo "Tamat SMP"; ?></td>
     <td><?php echo (isset($rows['tamatsmp'])) ? $rows['tamatsmp'] : 0;?></td>
-    <td><?php echo (isset($rows['tamatsmp'])) ? number_format($rows['tamatsmp']/$rows['totaltamatsmp']*100):0;?></td>
+    <td><?php echo (isset($rows['tamatsmp'])) ? number_format($rows['tamatsmp']/$rows['totalorang']*100,2):0;?></td>
   </tr>
   <tr>
     <td><?php echo "Masih SMA"; ?></td>
     <td><?php echo (isset($rows['masihsma'])) ? $rows['masihsma'] : 0;?></td>
-    <td><?php echo (isset($rows['masihsma'])) ? number_format($rows['masihsma']/$rows['totalmasihsma']*100): 0;?></td>
+    <td><?php echo (isset($rows['masihsma'])) ? number_format($rows['masihsma']/$rows['totalorang']*100,2): 0;?></td>
   </tr>
   <tr>
     <td><?php echo "Tamat SMA"; ?></td>
     <td><?php echo (isset($rows['tamatsma'])) ? $rows['tamatsma'] : 0;?></td>
-    <td><?php echo (isset($rows['tamatsma'])) ? number_format($rows['tamatsma']/$rows['totaltamatsma']*100): 0;?></td>
+    <td><?php echo (isset($rows['tamatsma'])) ? number_format($rows['tamatsma']/$rows['totalorang']*100,2): 0;?></td>
   </tr>
   <tr>
     <td><?php echo "Masih PT/Akademi"; ?></td>
     <td><?php echo (isset($rows['masihpt'])) ? $rows['masihpt'] : 0;?></td>
-    <td><?php echo (isset($rows['masihpt'])) ? number_format($rows['masihpt']/$rows['totalmasihpt']*100): 0;?></td>
+    <td><?php echo (isset($rows['masihpt'])) ? number_format($rows['masihpt']/$rows['totalorang']*100,2): 0;?></td>
   </tr>
   <tr>
     <td><?php echo "Tamat PT/Akademi"; ?></td>
     <td><?php echo (isset($rows['tamatpt'])) ? $rows['tamatpt'] : 0;?></td>
-    <td><?php echo (isset($rows['tamatpt'])) ? number_format($rows['tamatpt']/$rows['totaltamatpt']*100): 0;?></td>
+    <td><?php echo (isset($rows['tamatpt'])) ? number_format($rows['tamatpt']/$rows['totalorang']*100,2): 0;?></td>
   </tr>
   <tr>
     <th><?php echo "Total"; ?></th>
     <th><?php echo (isset($rows['totalorang'])) ? $rows['totalorang'] : 0;?></th>
-    <th><?php echo (isset($rows['totalorang'])) ? number_format($rows['totalorang']/$rows['totalorang']*100): 0;echo " %";?></th>
+    <th><?php echo (isset($rows['totalorang'])) ? number_format($rows['totalorang']/$rows['totalorang']*100,2): 0;echo " %";?></th>
   </tr>
   <?php }else{}?>
   <?php }
@@ -74,7 +74,7 @@
   
 </table>
 <div class="chart">
-  <canvas id="barChart" height="240" width="511" style="width: 511px; height: 240px;"></canvas>
+  <canvas id="barChart" height="500" width="511" style="width: 511px; height: 240px;"></canvas>
 </div>
 <div class="row">
   <div class="col-md-2">
@@ -218,7 +218,7 @@ $(function(){
             data: [<?php 
             $i=0;
             foreach ($bar as $row ) { 
-              if(isset($row['blmsekolah']))  $x = ($row['blmsekolah']/$row['totalblmsekolah']*100);
+              if(isset($row['blmsekolah']))  $x = number_format(($row['blmsekolah']/$row['totalorang']*100),2);
               else                              $x = 0;
 
               if($i>0) echo ",";
@@ -236,7 +236,7 @@ $(function(){
             data: [<?php 
             $i=0;
             foreach ($bar as $row ) { 
-              if(isset($row['tidaksekolah']))  $x = ($row['tidaksekolah']/$row['totaltidaksekolah']*100);
+              if(isset($row['tidaksekolah']))  $x = number_format(($row['tidaksekolah']/$row['totalorang']*100),2);
               else                              $x = 0;
 
               if($i>0) echo ",";
@@ -255,7 +255,7 @@ $(function(){
             data: [<?php 
             $i=0;
             foreach ($bar as $row ) { 
-              if(isset($row['tdktamatsd']))  $x = ($row['tdktamatsd']/$row['totaltdktamatsd']*100);
+              if(isset($row['tdktamatsd']))  $x = number_format(($row['tdktamatsd']/$row['totalorang']*100),2);
               else                              $x = 0;
 
               if($i>0) echo ",";
@@ -274,7 +274,7 @@ $(function(){
             data: [<?php 
             $i=0;
             foreach ($bar as $row ) { 
-              if(isset($row['masihsd']))  $x = ($row['masihsd']/$row['totalmasihsd']*100);
+              if(isset($row['masihsd']))  $x = number_format(($row['masihsd']/$row['totalorang']*100),2);
               else                              $x = 0;
 
               if($i>0) echo ",";
@@ -293,7 +293,7 @@ $(function(){
             data: [<?php 
             $i=0;
             foreach ($bar as $row ) { 
-              if(isset($row['tamatsd']))  $x = ($row['tamatsd']/$row['totaltamatsd']*100);
+              if(isset($row['tamatsd']))  $x = number_format(($row['tamatsd']/$row['totalorang']*100),2);
               else                              $x = 0;
 
               if($i>0) echo ",";
@@ -312,7 +312,7 @@ $(function(){
             data: [<?php 
             $i=0;
             foreach ($bar as $row ) { 
-              if(isset($row['masihsmp']))  $x = ($row['masihsmp']/$row['totalmasihsmp']*100);
+              if(isset($row['masihsmp']))  $x = number_format(($row['masihsmp']/$row['totalorang']*100),2);
               else                              $x = 0;
 
               if($i>0) echo ",";
@@ -331,7 +331,7 @@ $(function(){
             data: [<?php 
             $i=0;
             foreach ($bar as $row ) { 
-              if(isset($row['tamatsmp']))  $x = ($row['tamatsmp']/$row['totaltamatsmp']*100);
+              if(isset($row['tamatsmp']))  $x = number_format(($row['tamatsmp']/$row['totalorang']*100),2);
               else                              $x = 0;
 
               if($i>0) echo ",";
@@ -350,7 +350,7 @@ $(function(){
             data: [<?php 
             $i=0;
             foreach ($bar as $row ) { 
-              if(isset($row['masihsma']))  $x = ($row['masihsma']/$row['totalmasihsma']*100);
+              if(isset($row['masihsma']))  $x = number_format(($row['masihsma']/$row['totalorang']*100),2);
               else                              $x = 0;
 
               if($i>0) echo ",";
@@ -369,7 +369,7 @@ $(function(){
             data: [<?php 
             $i=0;
             foreach ($bar as $row ) { 
-              if(isset($row['tamatsma']))  $x = ($row['tamatsma']/$row['totaltamatsma']*100);
+              if(isset($row['tamatsma']))  $x = number_format(($row['tamatsma']/$row['totalorang']*100),2);
               else                              $x = 0;
 
               if($i>0) echo ",";
@@ -388,7 +388,7 @@ $(function(){
             data: [<?php 
             $i=0;
             foreach ($bar as $row ) { 
-              if(isset($row['masihpt']))  $x = ($row['masihpt']/$row['totalmasihpt']*100);
+              if(isset($row['masihpt']))  $x = number_format(($row['masihpt']/$row['totalorang']*100),2);
               else                              $x = 0;
 
               if($i>0) echo ",";
@@ -407,7 +407,7 @@ $(function(){
             data: [<?php 
             $i=0;
             foreach ($bar as $row ) { 
-              if(isset($row['tamatpt']))  $x = ($row['tamatpt']/$row['totaltamatpt']*100);
+              if(isset($row['tamatpt']))  $x = number_format(($row['tamatpt']/$row['totalorang']*100),2);
               else                              $x = 0;
 
               if($i>0) echo ",";

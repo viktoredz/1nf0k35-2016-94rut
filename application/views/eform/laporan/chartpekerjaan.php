@@ -1,4 +1,4 @@
-<table class="table">
+<table class="table table-bordered table-hover">
   <tr>
     <th>Pekerjaan</th>
     <th>Jumlah</th>
@@ -11,81 +11,81 @@
   <tr>
     <td><?php echo "Petani"; ?></td>
     <td><?php echo (isset($rows['petani'])) ? $rows['petani']:0;?></td>
-    <td><?php echo (isset($rows['petani'])) ? number_format($rows['petani']/$rows['totalpetani']*100) : 0;?></td>
+    <td><?php echo (isset($rows['petani'])) ? number_format($rows['petani']/$rows['totalorang']*100,2) : 0;?></td>
   </tr>
   <tr>
     <td><?php echo "Nelayan"; ?></td>
     <td><?php echo (isset($rows['nelayan'])) ? $rows['nelayan'] : 0;?></td>
-    <td><?php echo (isset($rows['nelayan'])) ? number_format($rows['nelayan']/$rows['totalnelayan']*100) : 0;?></td>
+    <td><?php echo (isset($rows['nelayan'])) ? number_format($rows['nelayan']/$rows['totalorang']*100,2) : 0;?></td>
   </tr>
   <tr>
     <td><?php echo "PNS / Porli / TNI"; ?></td>
     <td><?php echo (isset($rows['pnstniporli'])) ? $rows['pnstniporli'] : 0;?></td>
-    <td><?php echo (isset($rows['pnstniporli'])) ? number_format($rows['pnstniporli']/$rows['totalpnstniporli']*100): 0;?></td>
+    <td><?php echo (isset($rows['pnstniporli'])) ? number_format($rows['pnstniporli']/$rows['totalorang']*100,2): 0;?></td>
   </tr>
   <tr>
     <td><?php echo "Swasta"; ?></td>
     <td><?php echo (isset($rows['swasta'])) ? $rows['swasta'] : 0;?></td>
-    <td><?php echo (isset($rows['swasta'])) ? number_format($rows['swasta']/$rows['totalswasta']*100): 0;?></td>
+    <td><?php echo (isset($rows['swasta'])) ? number_format($rows['swasta']/$rows['totalorang']*100,2): 0;?></td>
   </tr>
   <tr>
     <td><?php echo "Wiraswasta"; ?></td>
     <td><?php echo (isset($rows['wiraswasta'])) ? $rows['wiraswasta'] : 0;?></td>
-    <td><?php echo (isset($rows['wiraswasta'])) ? number_format($rows['wiraswasta']/$rows['totalwiraswasta']*100): 0;?></td>
+    <td><?php echo (isset($rows['wiraswasta'])) ? number_format($rows['wiraswasta']/$rows['totalorang']*100,2): 0;?></td>
   </tr>
   <tr>
     <td><?php echo "Pensiunan"; ?></td>
     <td><?php echo (isset($rows['pensiunan'])) ? $rows['pensiunan'] : 0;?></td>
-    <td><?php echo (isset($rows['pensiunan'])) ? number_format($rows['pensiunan']/$rows['totalpensiunan']*100): 0;?></td>
+    <td><?php echo (isset($rows['pensiunan'])) ? number_format($rows['pensiunan']/$rows['totalorang']*100,2): 0;?></td>
   </tr>
   <tr>
     <td><?php echo "Pekerja Lepas"; ?></td>
     <td><?php echo (isset($rows['pekerjalepas'])) ? $rows['pekerjalepas'] : 0;?></td>
-    <td><?php echo (isset($rows['pekerjalepas'])) ? number_format($rows['pekerjalepas']/$rows['totalpekerjalepas']*100):0;?></td>
+    <td><?php echo (isset($rows['pekerjalepas'])) ? number_format($rows['pekerjalepas']/$rows['totalorang']*100,2):0;?></td>
   </tr>
   <tr>
     <td><?php echo "Tidak / Belum Bekerja"; ?></td>
     <td><?php echo (isset($rows['tidakbelumkerja'])) ? $rows['tidakbelumkerja'] : 0;?></td>
-    <td><?php echo (isset($rows['tidakbelumkerja'])) ? number_format($rows['tidakbelumkerja']/$rows['totaltidakbelumkerja']*100): 0;?></td>
+    <td><?php echo (isset($rows['tidakbelumkerja'])) ? number_format($rows['tidakbelumkerja']/$rows['totalorang']*100,2): 0;?></td>
   </tr>
   <tr>
     <td><?php echo "Bekerja"; ?></td>
     <td><?php echo (isset($rows['bekerja'])) ? $rows['bekerja'] : 0;?></td>
-    <td><?php echo (isset($rows['bekerja'])) ? number_format($rows['bekerja']/$rows['totalbekerja']*100): 0;?></td>
+    <td><?php echo (isset($rows['bekerja'])) ? number_format($rows['bekerja']/$rows['totalorang']*100,2): 0;?></td>
   </tr>
   <tr>
     <td><?php echo "Belum Kerja"; ?></td>
     <td><?php echo (isset($rows['belumkerja'])) ? $rows['belumkerja'] : 0;?></td>
-    <td><?php echo (isset($rows['belumkerja'])) ? number_format($rows['belumkerja']/$rows['totalbelumkerja']*100): 0;?></td>
+    <td><?php echo (isset($rows['belumkerja'])) ? number_format($rows['belumkerja']/$rows['totalorang']*100,2): 0;?></td>
   </tr>
   <tr>
     <td><?php echo "Tidak Kerja"; ?></td>
     <td><?php echo (isset($rows['tidakkerja'])) ? $rows['tidakkerja'] : 0;?></td>
-    <td><?php echo (isset($rows['tidakkerja'])) ? number_format($rows['tidakkerja']/$rows['totaltidakkerja']*100): 0;?></td>
+    <td><?php echo (isset($rows['tidakkerja'])) ? number_format($rows['tidakkerja']/$rows['totalorang']*100,2): 0;?></td>
   </tr>
   <tr>
     <td><?php echo "IRT"; ?></td>
     <td><?php echo (isset($rows['irt'])) ? $rows['irt'] : 0;?></td>
-    <td><?php echo (isset($rows['irt'])) ? number_format($rows['irt']/$rows['totalirt']*100): 0;?></td>
+    <td><?php echo (isset($rows['irt'])) ? number_format($rows['irt']/$rows['totalorang']*100,2): 0;?></td>
   </tr>
   <tr>
     <td><?php echo "Lainnya"; ?></td>
     <td><?php echo (isset($rows['lainnya'])) ? $rows['lainnya'] : 0;?></td>
-    <td><?php echo (isset($rows['lainnya'])) ? number_format($rows['lainnya']/$rows['totallainnya']*100): 0;?></td>
+    <td><?php echo (isset($rows['lainnya'])) ? number_format($rows['lainnya']/$rows['totalorang']*100,2): 0;?></td>
   </tr>
   <tr>
     <th><?php echo "Total"; ?></th>
     <th><?php echo (isset($rows['totalorang'])) ? $rows['totalorang'] : 0;?></th>
-    <th><?php echo (isset($rows['totalorang'])) ? number_format($rows['totalorang']/$rows['totalorang']*100): 0;echo " %";?></th>
+    <th><?php echo (isset($rows['totalorang'])) ? number_format($rows['totalorang']/$rows['totalorang']*100,2): 0;echo " %";?></th>
   </tr>
   <?php }else{ }?>
   <?php }
-  print_r($bar);
+ // print_r($bar);
    ?>
   
 </table>
 <div class="chart">
-  <canvas id="barChart" height="240" width="511" style="width: 511px; height: 240px;"></canvas>
+  <canvas id="barChart" height="500" width="511" style="width: 511px; height: 240px;"></canvas>
 </div>
 <div class="row">
   <div class="col-md-2">
@@ -112,7 +112,7 @@
       <div class="bux6"></div> &nbsp; <label>Pekerja Lepas</label>
   </div>
   <div class="col-md-2">
-      <div class="bux8"></div> &nbsp; <label>Tidak / Belum Bekerja</label>
+      <div class="bux8"></div> &nbsp; <label>Tidak/Belum Bekerja</label>
   </div>
   <div class="col-md-2">
       <div class="bux9"></div> &nbsp; <label>Bekerja</label>
@@ -251,7 +251,7 @@ $(function(){
             data: [<?php 
             $i=0;
             foreach ($bar as $row ) { 
-              if(isset($row['petani']))  $x = ($row['petani']/$row['totalpetani']*100);
+              if(isset($row['petani']))  $x = number_format(($row['petani']/$row['totalorang']*100),2);
               else                              $x = 0;
 
               if($i>0) echo ",";
@@ -269,7 +269,7 @@ $(function(){
             data: [<?php 
             $i=0;
             foreach ($bar as $row ) { 
-              if(isset($row['nelayan']))  $x = ($row['nelayan']/$row['totalnelayan']*100);
+              if(isset($row['nelayan']))  $x = number_format(($row['nelayan']/$row['totalorang']*100),2);
               else                              $x = 0;
 
               if($i>0) echo ",";
@@ -288,7 +288,7 @@ $(function(){
             data: [<?php 
             $i=0;
             foreach ($bar as $row ) { 
-              if(isset($row['pnstniporli']))  $x = ($row['pnstniporli']/$row['totalpnstniporli']*100);
+              if(isset($row['pnstniporli']))  $x = number_format(($row['pnstniporli']/$row['totalorang']*100),2);
               else                              $x = 0;
 
               if($i>0) echo ",";
@@ -307,7 +307,7 @@ $(function(){
             data: [<?php 
             $i=0;
             foreach ($bar as $row ) { 
-              if(isset($row['swasta']))  $x = ($row['swasta']/$row['totalswasta']*100);
+              if(isset($row['swasta']))  $x = number_format(($row['swasta']/$row['totalorang']*100),2);
               else                              $x = 0;
 
               if($i>0) echo ",";
@@ -326,7 +326,7 @@ $(function(){
             data: [<?php 
             $i=0;
             foreach ($bar as $row ) { 
-              if(isset($row['wiraswasta']))  $x = ($row['wiraswasta']/$row['totalwiraswasta']*100);
+              if(isset($row['wiraswasta']))  $x = number_format(($row['wiraswasta']/$row['totalorang']*100),2);
               else                              $x = 0;
 
               if($i>0) echo ",";
@@ -345,7 +345,7 @@ $(function(){
             data: [<?php 
             $i=0;
             foreach ($bar as $row ) { 
-              if(isset($row['pensiunan']))  $x = ($row['pensiunan']/$row['totalpensiunan']*100);
+              if(isset($row['pensiunan']))  $x = number_format(($row['pensiunan']/$row['totalorang']*100),2);
               else                              $x = 0;
 
               if($i>0) echo ",";
@@ -364,7 +364,7 @@ $(function(){
             data: [<?php 
             $i=0;
             foreach ($bar as $row ) { 
-              if(isset($row['pekerjalepas']))  $x = ($row['pekerjalepas']/$row['totalpekerjalepas']*100);
+              if(isset($row['pekerjalepas']))  $x = number_format(($row['pekerjalepas']/$row['totalorang']*100),2);
               else                              $x = 0;
 
               if($i>0) echo ",";
@@ -383,7 +383,7 @@ $(function(){
             data: [<?php 
             $i=0;
             foreach ($bar as $row ) { 
-              if(isset($row['tidakbelumkerja']))  $x = ($row['tidakbelumkerja']/$row['totaltidakbelumkerja']*100);
+              if(isset($row['tidakbelumkerja']))  $x = number_format(($row['tidakbelumkerja']/$row['totalorang']*100),2);
               else                              $x = 0;
 
               if($i>0) echo ",";
@@ -402,7 +402,7 @@ $(function(){
             data: [<?php 
             $i=0;
             foreach ($bar as $row ) { 
-              if(isset($row['bekerja']))  $x = ($row['bekerja']/$row['totalbekerja']*100);
+              if(isset($row['bekerja']))  $x = number_format(($row['bekerja']/$row['totalorang']*100),2);
               else                              $x = 0;
 
               if($i>0) echo ",";
@@ -421,7 +421,7 @@ $(function(){
             data: [<?php 
             $i=0;
             foreach ($bar as $row ) { 
-              if(isset($row['belumkerja']))  $x = ($row['belumkerja']/$row['totalbelumkerja']*100);
+              if(isset($row['belumkerja']))  $x = number_format(($row['belumkerja']/$row['totalorang']*100),2);
               else                              $x = 0;
 
               if($i>0) echo ",";
@@ -440,7 +440,7 @@ $(function(){
             data: [<?php 
             $i=0;
             foreach ($bar as $row ) { 
-              if(isset($row['tidakkerja']))  $x = ($row['tidakkerja']/$row['totaltidakkerja']*100);
+              if(isset($row['tidakkerja']))  $x = number_format(($row['tidakkerja']/$row['totalorang']*100),2);
               else                              $x = 0;
 
               if($i>0) echo ",";
@@ -459,7 +459,7 @@ $(function(){
             data: [<?php 
             $i=0;
             foreach ($bar as $row ) { 
-              if(isset($row['irt']))  $x = ($row['irt']/$row['totalirt']*100);
+              if(isset($row['irt']))  $x = number_format(($row['irt']/$row['totalorang']*100),2);
               else                              $x = 0;
 
               if($i>0) echo ",";
@@ -478,7 +478,7 @@ $(function(){
             data: [<?php 
             $i=0;
             foreach ($bar as $row ) { 
-              if(isset($row['lainnya']))  $x = ($row['lainnya']/$row['totallainnya']*100);
+              if(isset($row['lainnya']))  $x = number_format(($row['lainnya']/$row['totalorang']*100),2);
               else                              $x = 0;
 
               if($i>0) echo ",";

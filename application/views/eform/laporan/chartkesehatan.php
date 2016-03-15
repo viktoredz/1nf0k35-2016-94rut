@@ -9,11 +9,11 @@
 
       <?php 
       $total =0;
-      foreach ($showkelamin as $rows) { 
+      foreach ($showjkn as $rows) { 
         $total = $rows->total;
       ?>
       <tr>
-        <td><?php echo $rows->kelamin; ?></td>
+        <td><?php echo $rows->jkn; ?></td>
         <td><?php echo $rows->jumlah;?></td>
         <td><?php echo number_format($rows->jumlah/$jumlahorang*100,2); echo " %";?></td>
       </tr>
@@ -45,29 +45,15 @@
         var pieChartCanvas = $("#pieChart").get(0).getContext("2d");
         var pieChart = new Chart(pieChartCanvas);
         var PieData = [<?php 
-           /* $i=0;
-            foreach ($bar as $row ) { 
-              if(isset($row['jumlah'])) $x = ($row['jumlah']);
-              else                          $x = 0;
-              if($i>0) echo ",";
-              echo "
-              {
-              value: ".$x.",
-              color: \"".$color[$i]."\",
-              highlight: \"".$color[$i]."\",
-              label: \"".$row['kelamin']."\"
-              }";
-              $i++;
-            }*/
             $i=0;
-         foreach ($showkelamin as $row) {
+         foreach ($showjkn as $row) {
             if($i>0) echo ",";
             echo "
               {
               value: ";echo number_format($row->jumlah/$jumlahorang*100,2).",
               color: \"".$color[$i]."\",
               highlight: \"".$color[$i]."\",
-              label: \"".$row->kelamin."\"
+              label: \"".$row->jkn."\"
               }"; 
             $i++;
           }

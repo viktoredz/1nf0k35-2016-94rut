@@ -11,9 +11,15 @@
 				     		<select name="laporan" class="form-control" id="laporan">
 				     			<option value="">Pilih Laporan</option>
 				     			<option value="1">Distribusi Penduduk Berdasarkan Jenis Kelamin</option>
-				     			<option value="2">Distribusi Penduduk Menurut Usia </option>
-				     			<option value="3">Distribusi Penduduk Menurut Tingkat Pendidikan </option>
-				     			<option value="4">Distribusi Penduduk Berdasarkan Pekerjaan </option>
+				     			<option value="2">Distribusi Penduduk Menurut Usia</option>
+				     			<option value="3">Distribusi Penduduk Menurut Tingkat Pendidikan</option>
+				     			<option value="4">Distribusi Penduduk Berdasarkan Pekerjaan</option>
+				     			<option value="5">Distribusi Penduduk Mengikuti Kegiatan Posyandu</option>
+				     			<option value="6">Distribusi Penduduk Penyandang Disabilitas</option>
+				     			<option value="7">Distribusi Penduduk Jaminan Kesehatan</option>
+				     			<option value="8">Distribusi Penduduk Keikutsertaan KB</option>
+				     			<option value="9">Distribusi Penduduk Alasan Tidak KB</option>
+
 				     		</select>
 				  		</div>
 				  	</div>				  	
@@ -47,6 +53,7 @@
 				  	</div>
 				  	<div class="col-md-12">
 						<div class="form-group pull-right">
+							<button id="btn-export" type="button"  class="btn btn-success"><i class='fa fa-file-excel-o'></i> &nbsp; Export</button>
             				<button id="btn-preview" type="button"  class="btn btn-warning"><i class='fa fa-bar-chart-o'></i> &nbsp; Tampilkan Laporan & Chart</button>
 						</div>
 				  	</div>
@@ -151,5 +158,18 @@
 
        
 	});
-	
+	$("#btn-export").click(function(){
+  		var judul = $('[name=laporan] :selected').text();
+  		var kecamatanbar = $("#kecamatan").val();
+  		var kelurahanbar = $("#kelurahan").val();
+  		var rw = $("#rw").val();
+
+		var post = "";
+		post = post+'judul='+judul+'&kecamatan='+ kecamatanbar+'&kelurahan=' + kelurahanbar+'&rw=' + rw;
+		
+		$.post("<?php echo base_url()?>eform/export_data/pilih_export",post,function(response){
+			//window.location.href=response;
+			alert(response);
+		});
+	});
 </script>

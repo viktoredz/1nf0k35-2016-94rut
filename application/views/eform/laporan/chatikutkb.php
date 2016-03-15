@@ -2,22 +2,25 @@
   <div class="col-md-6">
     <table class="table table-bordered table-hover">
       <tr>
-        <th>Jenis Kelamin</th>
+        <th>Disabilitas</th>
         <th>Jumlah</th>
         <th>Persentase</th>
       </tr>
-
-      <?php 
-      $total =0;
-      foreach ($showkelamin as $rows) { 
-        $total = $rows->total;
-      ?>
       <tr>
-        <td><?php echo $rows->kelamin; ?></td>
-        <td><?php echo $rows->jumlah;?></td>
-        <td><?php echo number_format($rows->jumlah/$jumlahorang*100,2); echo " %";?></td>
+        <td>Sedang</td>
+        <td><?php echo $sedang;?></td>
+        <td><?php echo ($sedang>0) ? number_format($sedang/$jumlahorang*100,2):0; echo " %";?></td>
       </tr>
-      <?php } ?>
+      <tr>
+        <td>Pernah</td>
+        <td><?php echo $pernah;?></td>
+        <td><?php echo ($pernah>0) ? number_format($pernah/$jumlahorang*100,2):0; echo " %";?></td>
+      </tr>
+      <tr>
+        <td>Tidak Pernah</td>
+        <td><?php echo $tidakpernah;?></td>
+        <td><?php echo ($tidakpernah>0) ? number_format($tidakpernah/$jumlahorang*100,2):0; echo " %";?></td>
+      </tr>
       <tr>
         <th>Total</th>
         <th><?php echo $jumlahorang; ?></th>
@@ -45,32 +48,26 @@
         var pieChartCanvas = $("#pieChart").get(0).getContext("2d");
         var pieChart = new Chart(pieChartCanvas);
         var PieData = [<?php 
-           /* $i=0;
-            foreach ($bar as $row ) { 
-              if(isset($row['jumlah'])) $x = ($row['jumlah']);
-              else                          $x = 0;
-              if($i>0) echo ",";
-              echo "
-              {
-              value: ".$x.",
-              color: \"".$color[$i]."\",
-              highlight: \"".$color[$i]."\",
-              label: \"".$row['kelamin']."\"
-              }";
-              $i++;
-            }*/
-            $i=0;
-         foreach ($showkelamin as $row) {
-            if($i>0) echo ",";
+            
             echo "
               {
-              value: ";echo number_format($row->jumlah/$jumlahorang*100,2).",
-              color: \"".$color[$i]."\",
-              highlight: \"".$color[$i]."\",
-              label: \"".$row->kelamin."\"
+              value: ";echo number_format(($sedang>0) ? $sedang/$jumlahorang*100:0,2).",
+              color: \"".'#e02a11'."\",
+              highlight: \"".'#e02a11'."\",
+              label: \"".'Sedang'."\"
+              },
+              {
+              value: ";echo number_format(($pernah>0) ? $pernah/$jumlahorang*100:0,2).",
+              color: \"".'#800080'."\",
+              highlight: \"".'#800080'."\",
+              label: \"".'Pernah'."\"
+              },
+              {
+              value: ";echo number_format(($tidakpernah>0) ? $tidakpernah/$jumlahorang*100:0,2).",
+              color: \"".'#00BFFF'."\",
+              highlight: \"".'#00BFFF'."\",
+              label:  \"".'Tidak Pernah'."\"
               }"; 
-            $i++;
-          }
             ?>
 
         ];

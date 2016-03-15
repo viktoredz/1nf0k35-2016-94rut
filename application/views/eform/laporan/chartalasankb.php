@@ -1,6 +1,6 @@
 <table class="table table-bordered table-hover">
   <tr>
-    <th>Usia</th>
+    <th>Alasan Tidak KB</th>
     <th>Jumlah</th>
     <th>Persentase</th>
   </tr>
@@ -9,44 +9,44 @@
   	if(isset($rows['total'])){
   ?>
   <tr>
-    <td><?php echo "Infant  (0-12 bulan)"; ?></td>
-    <td><?php echo (isset($rows['jmlinfant'])) ? $rows['jmlinfant']:0;?></td>
-    <td><?php echo (($rows['jmlinfant'])!=0) ? number_format($rows['jmlinfant']/$rows['total']*100,2) : 0;?></td>
+    <td><?php echo "Sedang Hamil"; ?></td>
+    <td><?php echo (isset($rows['sedanghamil'])) ? $rows['sedanghamil']:0;?></td>
+    <td><?php echo (($rows['sedanghamil'])!=0) ? number_format($rows['sedanghamil']/$rows['total']*100,2) : 0;?></td>
   </tr>
   <tr>
-    <td><?php echo "Toddler  (1-3 tahun)"; ?></td>
-    <td><?php echo (isset($rows['jmltoddler'])) ? $rows['jmltoddler'] : 0;?></td>
-    <td><?php echo (($rows['jmltoddler'])!=0) ? number_format($rows['jmltoddler']/$rows['total']*100,2) : 0;?></td>
+    <td><?php echo "Tidak Setuju"; ?></td>
+    <td><?php echo (isset($rows['tidaksetuju'])) ? $rows['tidaksetuju'] : 0;?></td>
+    <td><?php echo (($rows['tidaksetuju'])!=0) ? number_format($rows['tidaksetuju']/$rows['total']*100,2) : 0;?></td>
   </tr>
   <tr>
-    <td><?php echo "Preschool (4 tahun-5 tahun)"; ?></td>
-    <td><?php echo (isset($rows['jmlpreschool'])) ? $rows['jmlpreschool'] : 0;?></td>
-    <td><?php echo (($rows['jmlpreschool'])!=0) ? number_format($rows['jmlpreschool']/$rows['total']*100,2) : 0;?></td>
+    <td><?php echo "Tidak Tahu"; ?></td>
+    <td><?php echo (isset($rows['tidaktahu'])) ? $rows['tidaktahu'] : 0;?></td>
+    <td><?php echo (($rows['tidaktahu'])!=0) ? number_format($rows['tidaktahu']/$rows['total']*100,2) : 0;?></td>
   </tr>
   <tr>
-    <td><?php echo "Usia sekolah (6 tahun- 12 tahun)"; ?></td>
-    <td><?php echo (isset($rows['jmlsekolah'])) ? $rows['jmlsekolah'] : 0;?></td>
-    <td><?php echo (($rows['jmlsekolah'])!=0) ? number_format($rows['jmlsekolah']/$rows['total']*100,2) : 0;?></td>
+    <td><?php echo "Takut Efek KB"; ?></td>
+    <td><?php echo (isset($rows['takutefekkb'])) ? $rows['takutefekkb'] : 0;?></td>
+    <td><?php echo (($rows['takutefekkb'])!=0) ? number_format($rows['takutefekkb']/$rows['total']*100,2) : 0;?></td>
   </tr>
   <tr>
-    <td><?php echo "Remaja ( 13 tahun-20 tahun)"; ?></td>
-    <td><?php echo (isset($rows['jmlremaja'])) ? $rows['jmlremaja'] : 0;?></td>
-    <td><?php echo (($rows['jmlremaja'])!=0) ? number_format($rows['jmlremaja']/$rows['total']*100,2) : 0;?></td>
+    <td><?php echo "Pelayanan KB Jauh"; ?></td>
+    <td><?php echo (isset($rows['pelayanankb'])) ? $rows['pelayanankb'] : 0;?></td>
+    <td><?php echo (($rows['pelayanankb'])!=0) ? number_format($rows['pelayanankb']/$rows['total']*100,2) : 0;?></td>
   </tr>
   <tr>
-    <td><?php echo "Dewasa (21 tahun-44 tahun)"; ?></td>
-    <td><?php echo (isset($rows['jmldewasa'])) ? $rows['jmldewasa'] : 0;?></td>
-    <td><?php echo (($rows['jmldewasa'])!=0) ? number_format($rows['jmldewasa']/$rows['total']*100,2) : 0;?></td>
+    <td><?php echo "Tidak Mampu / Mahal"; ?></td>
+    <td><?php echo (isset($rows['mahalkb'])) ? $rows['mahalkb'] : 0;?></td>
+    <td><?php echo (($rows['mahalkb'])!=0) ? number_format($rows['mahalkb']/$rows['total']*100,2) : 0;?></td>
   </tr>
   <tr>
-    <td><?php echo "Prelansia (45 tahun-59 tahun)"; ?></td>
-    <td><?php echo (isset($rows['jmlprelansia'])) ? $rows['jmlprelansia'] : 0;?></td>
-    <td><?php echo (($rows['jmlprelansia'])!=0) ? number_format($rows['jmlprelansia']/$rows['total']*100,2) :0;?></td>
+    <td><?php echo "Fertilasi "; ?></td>
+    <td><?php echo (isset($rows['fertilasi'])) ? $rows['fertilasi'] : 0;?></td>
+    <td><?php echo (($rows['fertilasi'])!=0) ? number_format($rows['fertilasi']/$rows['total']*100,2) :0;?></td>
   </tr>
   <tr>
-    <td><?php echo "Lansia (>60 tahun)"; ?></td>
-    <td><?php echo (isset($rows['jmllansia'])) ? $rows['jmllansia'] : 0;?></td>
-    <td><?php echo (($rows['jmllansia'])!=0) ? number_format($rows['jmllansia']/$rows['total']*100,2) : 0;?></td>
+    <td><?php echo "Lainnya"; ?></td>
+    <td><?php echo (isset($rows['lainnyakb'])) ? $rows['lainnyakb'] : 0;?></td>
+    <td><?php echo (($rows['lainnyakb'])!=0) ? number_format($rows['lainnyakb']/$rows['total']*100,2) : 0;?></td>
   </tr>
   <tr>
     <th><?php echo "Total"; ?></th>
@@ -65,30 +65,30 @@
 </div>
 <div class="row">
   <div class="col-md-3">
-      <div class="bux"></div> &nbsp; <label>Infant (0-12 bulan)</label>
+      <div class="bux"></div> &nbsp; <label>Sedang Hamil</label>
   </div>
   <div class="col-md-3">
-      <div class="bux1"></div> &nbsp; <label>Toddler (1-3 tahun)</label>
+      <div class="bux1"></div> &nbsp; <label>Tidak Setuju</label>
   </div>
   <div class="col-md-3">
-      <div class="bux2"></div> &nbsp; <label>Preschool (4 tahun-5 tahun)</label>
+      <div class="bux2"></div> &nbsp; <label>Tidak Tahu</label>
   </div>
   <div class="col-md-3">
-      <div class="bux3"></div> &nbsp; <label>Usia sekolah (6 tahun- 12 tahun)</label>
+      <div class="bux3"></div> &nbsp; <label>Takut Efek KB</label>
   </div>
 </div>
 <div class="row">
   <div class="col-md-3">
-      <div class="bux4"></div> &nbsp; <label>Remaja ( 13 tahun-20 tahun)</label>
+      <div class="bux4"></div> &nbsp; <label>Pelayanan KB Jauh</label>
   </div>
   <div class="col-md-3">
-      <div class="bux5"></div> &nbsp; <label>Dewasa (21 tahun-44 tahun)</label>
+      <div class="bux5"></div> &nbsp; <label>Tidak Mampu / Mahal</label>
   </div>
   <div class="col-md-3">
-      <div class="bux6"></div> &nbsp; <label>Prelansia (45 tahun-59 tahun)</label>
+      <div class="bux6"></div> &nbsp; <label>Fertilasi</label>
   </div>
   <div class="col-md-3">
-      <div class="bux7"></div> &nbsp; <label>Lansia (>60 tahun)</label>
+      <div class="bux7"></div> &nbsp; <label>Lainnya</label>
   </div>
 </div>
 
@@ -175,7 +175,7 @@ $(function(){
             data: [<?php 
             $i=0;
             foreach ($bar as $row ) { 
-              if(isset($row['jmlinfant']))  $x = (($rows['total'])!=0) ? number_format(($row['jmlinfant']/$row['total']*100),2):0;
+              if(isset($row['sedanghamil']))  $x = (($rows['total'])!=0) ? number_format(($row['sedanghamil']/$row['total']*100),2):0;
               else                              $x = 0;
 
               if($i>0) echo ",";
@@ -193,7 +193,7 @@ $(function(){
             data: [<?php 
             $i=0;
             foreach ($bar as $row ) { 
-              if(isset($row['jmltoddler']))  $x = (($rows['total'])!=0) ? number_format(($row['jmltoddler']/$row['total']*100),2):0;
+              if(isset($row['tidaksetuju']))  $x = (($rows['total'])!=0) ? number_format(($row['tidaksetuju']/$row['total']*100),2):0;
               else                              $x = 0;
 
               if($i>0) echo ",";
@@ -212,7 +212,7 @@ $(function(){
             data: [<?php 
             $i=0;
             foreach ($bar as $row ) { 
-              if(isset($row['jmlpreschool']))  $x = (($rows['total'])!=0) ? number_format(($row['jmlpreschool']/$row['total']*100),2):0;
+              if(isset($row['tidaktahu']))  $x = (($rows['total'])!=0) ? number_format(($row['tidaktahu']/$row['total']*100),2):0;
               else                              $x = 0;
 
               if($i>0) echo ",";
@@ -231,7 +231,7 @@ $(function(){
             data: [<?php 
             $i=0;
             foreach ($bar as $row ) { 
-              if(isset($row['jmlsekolah']))  $x = (($rows['total'])!=0) ? number_format(($row['jmlsekolah']/$row['total']*100),2):0;
+              if(isset($row['takutefekkb']))  $x = (($rows['total'])!=0) ? number_format(($row['takutefekkb']/$row['total']*100),2):0;
               else                              $x = 0;
 
               if($i>0) echo ",";
@@ -250,7 +250,7 @@ $(function(){
             data: [<?php 
             $i=0;
             foreach ($bar as $row ) { 
-              if(isset($row['jmlremaja']))  $x = (($rows['total'])!=0) ? number_format(($row['jmlremaja']/$row['total']*100),2):0;
+              if(isset($row['pelayanankb']))  $x = (($rows['total'])!=0) ? number_format(($row['pelayanankb']/$row['total']*100),2):0;
               else                              $x = 0;
 
               if($i>0) echo ",";
@@ -269,7 +269,7 @@ $(function(){
             data: [<?php 
             $i=0;
             foreach ($bar as $row ) { 
-              if(isset($row['jmldewasa']))  $x = (($rows['total'])!=0) ? number_format(($row['jmldewasa']/$row['total']*100),2):0;
+              if(isset($row['mahalkb']))  $x = (($rows['total'])!=0) ? number_format(($row['mahalkb']/$row['total']*100),2):0;
               else                              $x = 0;
 
               if($i>0) echo ",";
@@ -288,7 +288,7 @@ $(function(){
             data: [<?php 
             $i=0;
             foreach ($bar as $row ) { 
-              if(isset($row['jmlprelansia']))  $x = (($rows['total'])!=0) ? number_format(($row['jmlprelansia']/$row['total']*100),2):0;
+              if(isset($row['fertilasi']))  $x = (($rows['total'])!=0) ? number_format(($row['fertilasi']/$row['total']*100),2):0;
               else                              $x = 0;
 
               if($i>0) echo ",";
@@ -307,7 +307,7 @@ $(function(){
             data: [<?php 
             $i=0;
             foreach ($bar as $row ) { 
-              if(isset($row['jmllansia']))  $x = (($rows['total'])!=0) ? number_format(($row['jmllansia']/$row['total']*100),2):0;
+              if(isset($row['lainnyakb']))  $x = (($rows['total'])!=0) ? number_format(($row['lainnyakb']/$row['total']*100),2):0;
               else                              $x = 0;
 
               if($i>0) echo ",";

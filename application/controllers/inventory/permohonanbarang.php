@@ -146,7 +146,8 @@ class Permohonanbarang extends CI_Controller {
 		$dir = getcwd().'/';
 		$template = $dir.'public/files/template/inventory/permohonan_barang.xlsx';		
 		$TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8);
-
+		//print_r($data_tabel);
+		//die();
 		// Merge data in the first sheet
 		$TBS->MergeBlock('a', $data_tabel);
 		$TBS->MergeBlock('b', $data_puskesmas);
