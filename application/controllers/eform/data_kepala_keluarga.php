@@ -132,13 +132,15 @@ class Data_kepala_keluarga extends CI_Controller {
 		}else{
 			$rukunwarga = '-';
 		}
-		if ($this->input->post('rukunrumahtangga')!='' || $this->input->post('rukunrumahtangga')!='null') {
+		/*if ($this->input->post('rukunrumahtangga')!='' || $this->input->post('rukunrumahtangga')!='null') {
 			$rukunrumahtangga = $this->input->post('rukunrumahtangga');
 		}else{
 			$rukunrumahtangga = '-';
 		}
+			'rt' => $rukunrumahtangga
+		*/
 		$tanggal_export = date("Y-m-d");
-		$data_puskesmas[] = array('nama_puskesmas' => $nama,'kd_prov' => $kd_prov,'kd_kab' => $kd_kab,'tanggal_export' => $tanggal_export,'kd_kab' => $kd_kab,'rw' => $rukunwarga,'rt' => $rukunrumahtangga);
+		$data_puskesmas[] = array('nama_puskesmas' => $nama,'kd_prov' => $kd_prov,'kd_kab' => $kd_kab,'tanggal_export' => $tanggal_export,'kd_kab' => $kd_kab,'rw' => $rukunwarga);
 		
 		$dir = getcwd().'/';
 		$template = $dir.'public/files/template/inventory/data_kepala_keluarga.xlsx';		
@@ -186,9 +188,9 @@ class Data_kepala_keluarga extends CI_Controller {
 		if($this->session->userdata('filter_code_rukunwarga') != '') {
 			$this->db->where('data_keluarga.rw',$this->session->userdata('filter_code_rukunwarga'));
 		}
-		if($this->session->userdata('filter_code_cl_rukunrumahtangga') != '') {
+	/*	if($this->session->userdata('filter_code_cl_rukunrumahtangga') != '') {
 			$this->db->where('data_keluarga.rt',$this->session->userdata('filter_code_cl_rukunrumahtangga'));
-		}
+		}*/
 		$rows_all = $this->datakeluarga_model->get_data();
 
     	if($_POST) {
@@ -219,9 +221,9 @@ class Data_kepala_keluarga extends CI_Controller {
 		if($this->session->userdata('filter_code_rukunwarga') != '') {
 			$this->db->where('data_keluarga.rw',$this->session->userdata('filter_code_rukunwarga'));
 		}
-		if($this->session->userdata('filter_code_cl_rukunrumahtangga') != '') {
+		/*if($this->session->userdata('filter_code_cl_rukunrumahtangga') != '') {
 			$this->db->where('data_keluarga.rt',$this->session->userdata('filter_code_cl_rukunrumahtangga'));
-		}
+		}*/
 
 		$rows = $this->datakeluarga_model->get_data($this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();
