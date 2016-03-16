@@ -48,8 +48,9 @@ class Invbaranghabispakai_model extends CI_Model {
 	
     function get_data($start=0,$limit=999999,$options=array())
     {
-    	$this->db->select('*');
-    	$this->db->select("(select count(id_mst_inv_barang_habispakai_jenis) as jum from mst_inv_barang_habispakai where id_mst_inv_barang_habispakai_jenis=mst_inv_barang_habispakai_jenis.id_mst_inv_barang_habispakai_jenis) as jumlah");
+    	$this->db->select('mst_inv_barang_habispakai_jenis.*,COUNT(*) AS jumlah');
+    	$this->db->join('mst_inv_barang_habispakai','mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis=mst_inv_barang_habispakai_jenis.id_mst_inv_barang_habispakai_jenis');
+    	$this->db->group_by('mst_inv_barang_habispakai_jenis.id_mst_inv_barang_habispakai_jenis');
 	    $query = $this->db->get($this->tabel,$limit,$start);
     	return $query->result();
     }

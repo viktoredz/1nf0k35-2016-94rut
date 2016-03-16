@@ -22,14 +22,14 @@
           <label>Kode Lokasi</label>
           <div >
           <?php
-                    $s = array();
+                  $s = array();
                   $s[0] = substr($id_inv_permohonan_barang, 0,2);
                   $s[1] = substr($id_inv_permohonan_barang, 2,2);
                   $s[2] = substr($id_inv_permohonan_barang, 4,2);
                   $s[3] = substr($id_inv_permohonan_barang, 6,2);
                   $s[4] = substr($id_inv_permohonan_barang, 8,2);
                   $s[5] = substr($id_inv_permohonan_barang, 10,2);
-                  $s[6] = substr($id_inv_permohonan_barang, 12,2);
+                  $s[6] = substr($id_inv_permohonan_barang, 12,3);
                   echo implode(".", $s);
           ?>
           </div>
@@ -40,7 +40,7 @@
       		
       		<input type="hidden" id="tanggal" value="<?=$tanggal_permohonan?>">
       		<?php
-                  echo ($tanggal_permohonan);
+                  echo date('d-m-Y',strtotime($tanggal_permohonan));
           ?>
       	  </div>
         </div>
@@ -48,25 +48,22 @@
           <label>Puskesmas</label>
           <br/>
             <?php 
-			$nama_pus = "";
-			foreach($kodepuskesmas as $pus) {
-				$nama_pus = $pus->value;
-                echo $pus->value ;
+      			$nama_pus = "";
+      			foreach($kodepuskesmas as $pus) {
+      				$nama_pus = $pus->value;
+              echo $pus->value ;
             }?>
-			<input type="hidden" id="nama_puskesmas" value="<?=$pus->value?>">
+    			<input type="hidden" id="nama_puskesmas" value="<?=$pus->value?>">
         </div>
         <div class="form-group">
           <label>Ruangan</label>
 		  <br/>
-		  
-          <?php
-			$nama_ruang = "";
-			foreach($ruang as $r){
-				$nama_ruang = $r->nama_ruangan;
-				echo $r->nama_ruangan;
-			}
-			
-		  ?>
+            <?php
+      			$nama_ruang = "";
+      			foreach($ruang as $r){
+      				$nama_ruang = $r->nama_ruangan;
+      				echo $r->nama_ruangan;
+      			}?>
 		  <input type="hidden" id="ruang" value="<?=$nama_ruang?>">
         </div>
       </div>
@@ -165,12 +162,12 @@ $(function(){
       }
       //alert(tahun);
       $.ajax({
-      url: "<?php echo base_url().'inventory/permohonanbarang/kodeInvetaris';?>",
+      url: "<?php echo base_url().'inventory/permohonanbarang/kodePermohonan';?>",
       dataType: "json",
       success:function(data)
       { 
         $.each(data,function(index,elemet){
-          var lokasi = elemet.kodeinv.split(".")
+          var lokasi = elemet.kodeper.split(".")
           $("#kode_inventaris_").html(lokasi[0]+"."+lokasi[1]+"."+lokasi[2]+"."+lokasi[3]+"."+lokasi[4]+"."+tahun+'.'+lokasi[5]);
         });
       }

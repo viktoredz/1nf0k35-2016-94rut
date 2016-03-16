@@ -76,13 +76,12 @@
 					}
                  }
                 },
-				{ text: 'ID', align: 'center', cellsalign: 'left', datafield: 'id_mst_inv_barang_habispakai', columntype: 'textbox', filtertype: 'none', width: '7%' },
+				{ text: 'Kode', align: 'center', cellsalign: 'left', datafield: 'code', columntype: 'textbox', filtertype: 'none', width: '12%' },
 				//{ text: 'Kode', align: 'center', cellsalign: 'left', datafield: 'code', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
-				{ text: 'Uraian', datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '25%' },
+				{ text: 'Uraian', datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '30%' },
 				{ text: 'Merek Tipe',  align: 'center', cellsalign: 'left', datafield: 'merek_tipe', columntype: 'textbox', filtertype: 'textbox', width: '11%'},
-				{ text: 'Asal Negara', align: 'center', cellsalign: 'left', datafield: 'negara_asal', columntype: 'textbox', filtertype: 'textbox', width: '15%'},
-				{ text: 'Satuan',  align: 'center', cellsalign: 'left', datafield: 'value', columntype: 'textbox', filtertype: 'textbox', width: '14%'},
-				{ text: 'Jenis Barang',  align: 'center', cellsalign: 'left', datafield: 'jenisuraian', columntype: 'textbox', filtertype: 'textbox', width: '20%'},
+				{ text: 'Satuan',  datafield: 'pilihan_satuan', align: 'center', cellsalign: 'left', columntype: 'textbox', filtertype: 'textbox', width: '24%'},
+				{ text: 'Jenis Barang',  align: 'center', cellsalign: 'left', datafield: 'jenisuraian', columntype: 'textbox', filtertype: 'textbox', width: '15%'},
            				
            ]
 		});
