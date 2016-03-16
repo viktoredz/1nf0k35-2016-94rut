@@ -10,6 +10,7 @@ class Laporan_kpldh extends CI_Controller {
 		$this->load->model('eform/laporan_kpldh_model');
 		$this->load->model('admin_model');
 		$this->load->model('inventory/inv_ruangan_model');
+		$this->load->model('inventory/inv_barang_model');
 	}
 
 	function index(){
@@ -79,24 +80,60 @@ class Laporan_kpldh extends CI_Controller {
 		$kecamatan = $this->input->post("kecamatan");
 		$kelurahan = $this->input->post("kelurahan");
 		$rw = $this->input->post("rw");
-		if($judul=="Distribusi Penduduk Berdasarkan Jenis Kelamin"){
+		$id_judul = $this->input->post("id_judul");
+
+		if($id_judul=="1"){
 			$this->datakelamin($kecamatan,$kelurahan,$rw);
-		}else if($judul=="Distribusi Penduduk Menurut Usia"){
+		}else if($id_judul=="2"){
 			$this->datausia($kecamatan,$kelurahan,$rw);
-		}else if($judul=="Distribusi Penduduk Menurut Tingkat Pendidikan"){
+		}else if($id_judul=="3"){
 			$this->datapendidikan($kecamatan,$kelurahan,$rw);
-		}else if($judul=="Distribusi Penduduk Berdasarkan Pekerjaan"){
+		}else if($id_judul=="4"){
 			$this->datapekerjaan($kecamatan,$kelurahan,$rw);
-		}else if($judul=="Distribusi Penduduk Mengikuti Kegiatan Posyandu"){
+		}else if($id_judul=="5"){
 			$this->datakegiatanposyandu($kecamatan,$kelurahan,$rw);
-		}else if($judul=="Distribusi Penduduk Penyandang Disabilitas"){
+		}else if($id_judul=="6"){
 			$this->datadisabilitas($kecamatan,$kelurahan,$rw);
-		}else if($judul=="Distribusi Penduduk Jaminan Kesehatan"){
+		}else if($id_judul=="7"){
 			$this->datajaminankesehatan($kecamatan,$kelurahan,$rw);
-		}else if($judul=="Distribusi Penduduk Keikutsertaan KB"){
+		}else if($id_judul=="8"){
 			$this->datakeikutsertaankb($kecamatan,$kelurahan,$rw);
-		}else if($judul=="Distribusi Penduduk Alasan Tidak KB"){
+		}else if($id_judul=="9"){
 			$this->dataalsantidakkb($kecamatan,$kelurahan,$rw);
+		}else if($id_judul=="10"){
+			$this->datakepemilikanrumah($kecamatan,$kelurahan,$rw);
+		}else if($id_judul=="11"){
+			$this->dataataprumah($kecamatan,$kelurahan,$rw);
+		}else if($id_judul=="12"){
+			$this->datadindingrumah($kecamatan,$kelurahan,$rw);
+		}else if($id_judul=="13"){
+			$this->datalantairumah($kecamatan,$kelurahan,$rw);
+		}else if($id_judul=="14"){
+			$this->datasumberpenerangan($kecamatan,$kelurahan,$rw);
+		}else if($id_judul=="15"){
+			$this->datasumberairminum($kecamatan,$kelurahan,$rw);
+		}else if($id_judul=="16"){
+			$this->databahanbakar($kecamatan,$kelurahan,$rw);
+		}else if($id_judul=="17"){
+			$this->datafasilitasbab($kecamatan,$kelurahan,$rw);
+		}else if($id_judul=="18"){
+			$this->datakebiasaancucitangan($kecamatan,$kelurahan,$rw);
+		}else if($id_judul=="19"){
+			$this->datalokasibab($kecamatan,$kelurahan,$rw);
+		}else if($id_judul=="20"){
+			$this->datasikatgigi($kecamatan,$kelurahan,$rw);
+		}else if($id_judul=="21"){
+			$this->datamerokok($kecamatan,$kelurahan,$rw);
+		}else if($id_judul=="22"){
+			$this->datausiamerokok($kecamatan,$kelurahan,$rw);
+		}else if($id_judul=="23"){
+			$this->dataginjal($kecamatan,$kelurahan,$rw);
+		}else if($id_judul=="24"){
+			$this->datatbparu($kecamatan,$kelurahan,$rw);
+		}else if($id_judul=="25"){
+			$this->datadm($kecamatan,$kelurahan,$rw);
+		}else if($id_judul=="26"){
+			$this->datahipertensi($kecamatan,$kelurahan,$rw);
 		}else{
 			return $judul;
 		}
@@ -463,7 +500,7 @@ class Laporan_kpldh extends CI_Controller {
 		foreach ($sedang_hamil as $row) {
 			$bar[$kecamatan]['sedanghamil'] = $row->jumlah;
 			if($row->jumlah!=0){
-				$temp1=1;
+				$temp1=$row->jumlah;
 			}else{
 				$temp1=0;
 			}
@@ -473,7 +510,7 @@ class Laporan_kpldh extends CI_Controller {
 		foreach ($tidak_setuju as $row) {
 			$bar[$kecamatan]['tidaksetuju'] = $row->jumlah;
 			if($row->jumlah!=0){
-				$temp2=1;
+				$temp2=$row->jumlah;
 			}else{
 				$temp2=0;
 			}
@@ -484,7 +521,7 @@ class Laporan_kpldh extends CI_Controller {
 		foreach ($tidak_tahu as $row) {
 			$bar[$kecamatan]['tidaktahu'] = $row->jumlah;
 			if($row->jumlah!=0){
-				$temp3=1;
+				$temp3=$row->jumlah;
 			}else{
 				$temp3=0;
 			}
@@ -494,7 +531,7 @@ class Laporan_kpldh extends CI_Controller {
 		foreach ($takut_efekkb as $row) {
 			$bar[$kecamatan]['takutefekkb'] = $row->jumlah;
 			if($row->jumlah!=0){
-				$temp4=1;
+				$temp4=$row->jumlah;
 			}else{
 				$temp4=0;
 			}
@@ -505,7 +542,7 @@ class Laporan_kpldh extends CI_Controller {
 		foreach ($pelayanan_kb as $row) {
 			$bar[$kecamatan]['pelayanankb'] = $row->jumlah;
 			if($row->jumlah!=0){
-				$temp5=1;
+				$temp5=$row->jumlah;
 			}else{
 				$temp5=0;
 			}
@@ -515,7 +552,7 @@ class Laporan_kpldh extends CI_Controller {
 		foreach ($mahal_kb as $row) {
 			$bar[$kecamatan]['mahalkb'] = $row->jumlah;
 			if($row->jumlah!=0){
-				$temp6=1;
+				$temp6=$row->jumlah;
 			}else{
 				$temp6=0;
 			}
@@ -525,7 +562,7 @@ class Laporan_kpldh extends CI_Controller {
 		foreach ($fertilasi_kb as $row) {
 			$bar[$kecamatan]['fertilasi'] = $row->jumlah;
 			if($row->jumlah!=0){
-				$temp7=1;
+				$temp7=$row->jumlah;
 			}else{
 				$temp7=0;
 			}
@@ -536,7 +573,7 @@ class Laporan_kpldh extends CI_Controller {
 		foreach ($lainnya_kb as $row) {
 			$bar[$kecamatan]['lainnyakb'] = $row->jumlah;
 			if($row->jumlah!=0){
-				$temp8=1;
+				$temp8=$row->jumlah;
 			}else{
 				$temp8=0;
 			}
@@ -553,5 +590,507 @@ class Laporan_kpldh extends CI_Controller {
 		$data['bar']	= $bar;
 		$data['color']	= $color;
 		die($this->parser->parse("eform/laporan/chartalasankb",$data));
+	}
+	function datakepemilikanrumah($kecamatan=0,$kelurahan=0,$rw=0)
+	{
+		$data = array();
+		
+		
+		$data['miliksendiri'] = $this->laporan_kpldh_model->get_data_kepemilikan('pembangunan_III_26_1_cebo4',$kecamatan,$kelurahan,$rw);
+		$data['sewa']= $this->laporan_kpldh_model->get_data_kepemilikan('pembangunan_III_26_2_cebo4',$kecamatan,$kelurahan,$rw);
+		$data['menumpang']= $this->laporan_kpldh_model->get_data_kepemilikan('pembangunan_III_26_3_cebo4',$kecamatan,$kelurahan,$rw);
+		$data['lainnya']= $this->laporan_kpldh_model->get_data_kepemilikan('pembangunan_III_26_4_cebo4',$kecamatan,$kelurahan,$rw);	
+		if ($data['miliksendiri']!=0) {
+			$temp1=$data['miliksendiri'];
+		}else{
+			$temp1=0;
+		}
+		if ($data['sewa']!=0) {
+			$temp2=$data['sewa'];
+		}else{
+			$temp2=0;
+		}
+		if ($data['menumpang']!=0) {
+			$temp3=$data['menumpang'];
+		}else{
+			$temp3=0;
+		}
+		if ($data['lainnya']!=0) {
+			$temp4=$data['lainnya'];
+		}else{
+			$temp4=0;
+		}
+		$data['jumlahorang'] = $temp1+$temp2+$temp3+$temp4;
+		die($this->parser->parse("eform/laporan/chartmilikrumah",$data));
+	}
+	function dataataprumah($kecamatan=0,$kelurahan=0,$rw=0)
+	{
+		$data = array();
+		$data['daun'] = $this->laporan_kpldh_model->get_data_ataprumah('pembangunan_III_1_19_cebo4',$kecamatan,$kelurahan,$rw);
+		$data['seng']= $this->laporan_kpldh_model->get_data_ataprumah('pembangunan_III_2_19_cebo4',$kecamatan,$kelurahan,$rw);
+		$data['genteng']= $this->laporan_kpldh_model->get_data_ataprumah('pembangunan_III_3_19_cebo4',$kecamatan,$kelurahan,$rw);
+		$data['lainnya']= $this->laporan_kpldh_model->get_data_ataprumah('pembangunan_III_4_19_cebo4',$kecamatan,$kelurahan,$rw);	
+		if ($data['daun']!=0) {
+			$temp1=$data['daun'];
+		}else{
+			$temp1=0;
+		}
+		if ($data['seng']!=0) {
+			$temp2=$data['seng'];
+		}else{
+			$temp2=0;
+		}
+		if ($data['genteng']!=0) {
+			$temp3=$data['genteng'];
+		}else{
+			$temp3=0;
+		}
+		if ($data['lainnya']!=0) {
+			$temp4=$data['lainnya'];
+		}else{
+			$temp4=0;
+		}
+		$data['jumlahorang'] = $temp1+$temp2+$temp3+$temp4;
+		die($this->parser->parse("eform/laporan/chartataprumah",$data));
+	}
+	function datadindingrumah($kecamatan=0,$kelurahan=0,$rw=0)
+	{
+		$data = array();
+		$data['tembok'] = $this->laporan_kpldh_model->get_data_dindingrumah('pembangunan_III_1_20_cebo4',$kecamatan,$kelurahan,$rw);
+		$data['kayu']= $this->laporan_kpldh_model->get_data_dindingrumah('pembangunan_III_2_20_cebo4',$kecamatan,$kelurahan,$rw);
+		$data['bambu']= $this->laporan_kpldh_model->get_data_dindingrumah('pembangunan_III_3_20_cebo4',$kecamatan,$kelurahan,$rw);
+		$data['lainnya']= $this->laporan_kpldh_model->get_data_dindingrumah('pembangunan_III_4_20_cebo4',$kecamatan,$kelurahan,$rw);	
+		if ($data['tembok']!=0) {
+			$temp1=$data['tembok'];
+		}else{
+			$temp1=0;
+		}
+		if ($data['kayu']!=0) {
+			$temp2=$data['kayu'];
+		}else{
+			$temp2=0;
+		}
+		if ($data['bambu']!=0) {
+			$temp3=$data['bambu'];
+		}else{
+			$temp3=0;
+		}
+		if ($data['lainnya']!=0) {
+			$temp4=$data['lainnya'];
+		}else{
+			$temp4=0;
+		}
+		$data['jumlahorang'] = $temp1+$temp2+$temp3+$temp4;
+		die($this->parser->parse("eform/laporan/chartdindingrumah",$data));
+	}
+	function datalantairumah($kecamatan=0,$kelurahan=0,$rw=0)
+	{
+		$data = array();
+		$data['ubin'] = $this->laporan_kpldh_model->get_data_jenislantairumah('pembangunan_III_1_21_cebo4',$kecamatan,$kelurahan,$rw);
+		$data['semen']= $this->laporan_kpldh_model->get_data_jenislantairumah('pembangunan_III_2_21_cebo4',$kecamatan,$kelurahan,$rw);
+		$data['tanah']= $this->laporan_kpldh_model->get_data_jenislantairumah('pembangunan_III_3_21_cebo4',$kecamatan,$kelurahan,$rw);
+		$data['lainnya']= $this->laporan_kpldh_model->get_data_jenislantairumah('pembangunan_III_4_21_cebo4',$kecamatan,$kelurahan,$rw);	
+		if ($data['ubin']!=0) {
+			$temp1=$data['ubin'];
+		}else{
+			$temp1=0;
+		}
+		if ($data['semen']!=0) {
+			$temp2=$data['semen'];
+		}else{
+			$temp2=0;
+		}
+		if ($data['tanah']!=0) {
+			$temp3=$data['tanah'];
+		}else{
+			$temp3=0;
+		}
+		if ($data['lainnya']!=0) {
+			$temp4=$data['lainnya'];
+		}else{
+			$temp4=0;
+		}
+		$data['jumlahorang'] = $temp1+$temp2+$temp3+$temp4;
+		die($this->parser->parse("eform/laporan/chartlantairumah",$data));
+	}
+	function datasumberpenerangan($kecamatan=0,$kelurahan=0,$rw=0)
+	{
+		$data = array();
+		$data['listrik'] = $this->laporan_kpldh_model->get_data_jenispeneranganrumah('pembangunan_III_22_1_cebo4',$kecamatan,$kelurahan,$rw);
+		$data['genset']= $this->laporan_kpldh_model->get_data_jenispeneranganrumah('pembangunan_III_22_2_cebo4',$kecamatan,$kelurahan,$rw);
+		$data['minyak']= $this->laporan_kpldh_model->get_data_jenispeneranganrumah('pembangunan_III_22_3_cebo4',$kecamatan,$kelurahan,$rw);
+		$data['lainnya']= $this->laporan_kpldh_model->get_data_jenispeneranganrumah('pembangunan_III_22_4_cebo4',$kecamatan,$kelurahan,$rw);	
+		if ($data['listrik']!=0) {
+			$temp1=$data['listrik'];
+		}else{
+			$temp1=0;
+		}
+		if ($data['genset']!=0) {
+			$temp2=$data['genset'];
+		}else{
+			$temp2=0;
+		}
+		if ($data['minyak']!=0) {
+			$temp3=$data['minyak'];
+		}else{
+			$temp3=0;
+		}
+		if ($data['lainnya']!=0) {
+			$temp4=$data['lainnya'];
+		}else{
+			$temp4=0;
+		}
+		$data['jumlahorang'] = $temp1+$temp2+$temp3+$temp4;
+		die($this->parser->parse("eform/laporan/chartpeneranganrumah",$data));
+	}
+	function datasumberairminum($kecamatan=0,$kelurahan=0,$rw=0)
+	{
+		$data = array();
+		$data['ledeng'] = $this->laporan_kpldh_model->get_data_sumberair('pembangunan_III_23_1_cebo4',$kecamatan,$kelurahan,$rw);
+		$data['sumur']= $this->laporan_kpldh_model->get_data_sumberair('pembangunan_III_23_2_cebo4',$kecamatan,$kelurahan,$rw);
+		$data['hujan']= $this->laporan_kpldh_model->get_data_sumberair('pembangunan_III_23_3_cebo4',$kecamatan,$kelurahan,$rw);
+		$data['lainnya']= $this->laporan_kpldh_model->get_data_sumberair('pembangunan_III_23_4_cebo4',$kecamatan,$kelurahan,$rw);	
+		if ($data['ledeng']!=0) {
+			$temp1=$data['ledeng'];
+		}else{
+			$temp1=0;
+		}
+		if ($data['sumur']!=0) {
+			$temp2=$data['sumur'];
+		}else{
+			$temp2=0;
+		}
+		if ($data['hujan']!=0) {
+			$temp3=$data['hujan'];
+		}else{
+			$temp3=0;
+		}
+		if ($data['lainnya']!=0) {
+			$temp4=$data['lainnya'];
+		}else{
+			$temp4=0;
+		}
+		$data['jumlahorang'] = $temp1+$temp2+$temp3+$temp4;
+		die($this->parser->parse("eform/laporan/chartsumberair",$data));
+	}
+	function databahanbakar($kecamatan=0,$kelurahan=0,$rw=0)
+	{
+		$data = array();
+		$data['listrik'] = $this->laporan_kpldh_model->get_data_bahanbakar('pembangunan_III_24_1_cebo4',$kecamatan,$kelurahan,$rw);
+		$data['minyak']= $this->laporan_kpldh_model->get_data_bahanbakar('pembangunan_III_24_2_cebo4',$kecamatan,$kelurahan,$rw);
+		$data['arang']= $this->laporan_kpldh_model->get_data_bahanbakar('pembangunan_III_24_3_cebo4',$kecamatan,$kelurahan,$rw);
+		$data['lainnya']= $this->laporan_kpldh_model->get_data_bahanbakar('pembangunan_III_24_4_cebo4',$kecamatan,$kelurahan,$rw);	
+		if ($data['listrik']!=0) {
+			$temp1=$data['listrik'];
+		}else{
+			$temp1=0;
+		}
+		if ($data['minyak']!=0) {
+			$temp2=$data['minyak'];
+		}else{
+			$temp2=0;
+		}
+		if ($data['arang']!=0) {
+			$temp3=$data['arang'];
+		}else{
+			$temp3=0;
+		}
+		if ($data['lainnya']!=0) {
+			$temp4=$data['lainnya'];
+		}else{
+			$temp4=0;
+		}
+		$data['jumlahorang'] = $temp1+$temp2+$temp3+$temp4;
+		die($this->parser->parse("eform/laporan/chartbahanbakar",$data));
+	}
+	function datafasilitasbab($kecamatan=0,$kelurahan=0,$rw=0)
+	{
+		$data = array();
+		$data['sendiri'] = $this->laporan_kpldh_model->get_data_fasilitasbab('pembangunan_III_25_radi4','0',$kecamatan,$kelurahan,$rw);
+		$data['bersama']= $this->laporan_kpldh_model->get_data_fasilitasbab('pembangunan_III_25_radi4','1',$kecamatan,$kelurahan,$rw);
+		$data['umum']= $this->laporan_kpldh_model->get_data_fasilitasbab('pembangunan_III_25_radi4','2',$kecamatan,$kelurahan,$rw);
+		$data['lainnya']= $this->laporan_kpldh_model->get_data_fasilitasbab('pembangunan_III_25_radi4','3',$kecamatan,$kelurahan,$rw);	
+		if ($data['sendiri']!=0) {
+			$temp1=$data['sendiri'];
+		}else{
+			$temp1=0;
+		}
+		if ($data['bersama']!=0) {
+			$temp2=$data['bersama'];
+		}else{
+			$temp2=0;
+		}
+		if ($data['umum']!=0) {
+			$temp3=$data['umum'];
+		}else{
+			$temp3=0;
+		}
+		if ($data['lainnya']!=0) {
+			$temp4=$data['lainnya'];
+		}else{
+			$temp4=0;
+		}
+		$data['jumlahorang'] = $temp1+$temp2+$temp3+$temp4;
+		die($this->parser->parse("eform/laporan/chartfasilitasbab",$data));
+	}
+	function datakebiasaancucitangan($kecamatan=0,$kelurahan=0,$rw=0)
+	{
+		$bar = array();
+
+		$bar['pakaisabun'] = $this->laporan_kpldh_model->get_data_cucitangan('kesehatan_1_g_1_a_cebox',$kecamatan,$kelurahan,$rw);
+		$bar['tangankotor']= $this->laporan_kpldh_model->get_data_cucitangan('kesehatan_1_g_1_b_cebox',$kecamatan,$kelurahan,$rw);
+		$bar['bab']= $this->laporan_kpldh_model->get_data_cucitangan('kesehatan_1_g_1_c_cebox',$kecamatan,$kelurahan,$rw);
+		$bar['cebok']= $this->laporan_kpldh_model->get_data_cucitangan('kesehatan_1_g_1_d_cebox',$kecamatan,$kelurahan,$rw);	
+		$bar['pestisida']= $this->laporan_kpldh_model->get_data_cucitangan('kesehatan_1_g_1_e_cebox',$kecamatan,$kelurahan,$rw);	
+		$bar['menyusui']= $this->laporan_kpldh_model->get_data_cucitangan('kesehatan_1_g_1_f_cebox',$kecamatan,$kelurahan,$rw);	
+		/*if ($bar['pakaisabun']!=0) {
+			$temp1=$bar['pakaisabun'];
+		}else{
+			$temp1=0;
+		}
+		if ($bar['tangankotor']!=0) {
+			$temp2=$bar['tangankotor'];
+		}else{
+			$temp2=0;
+		}
+		if ($bar['bab']!=0) {
+			$temp3=$bar['bab'];
+		}else{
+			$temp3=0;
+		}
+		if ($bar['cebok']!=0) {
+			$temp4=$bar['cebok'];
+		}else{
+			$temp4=0;
+		}
+		if ($bar['pestisida']!=0) {
+			$temp5=$bar['pestisida'];
+		}else{
+			$temp5=0;
+		}
+		if ($bar['menyusui']!=0) {
+			$temp6=$bar['menyusui'];
+		}else{
+			$temp6=0;
+		}*/
+		$kode_sess = $this->session->userdata("puskesmas");
+		$bar['puskesmas'] = $this->inv_barang_model->get_nama('nama','cl_kec','code',substr($kode_sess, 0,7));
+		$bar['totalorang'] = $this->laporan_kpldh_model->get_data_anggotaprofile();//$temp1+$temp2+$temp3+$temp4+$temp5+$temp6;
+		die($this->parser->parse("eform/laporan/chartcucitangan",$bar));
+
+	}
+	function datalokasibab($kecamatan=0,$kelurahan=0,$rw=0)
+	{
+		$data = array();
+		$data['jamban'] = $this->laporan_kpldh_model->get_data_lokasibab('kesehatan_1_g_2_radi5','0',$kecamatan,$kelurahan,$rw);
+		$data['kolam']= $this->laporan_kpldh_model->get_data_lokasibab('kesehatan_1_g_2_radi5','1',$kecamatan,$kelurahan,$rw);
+		$data['sungai']= $this->laporan_kpldh_model->get_data_lokasibab('kesehatan_1_g_2_radi5','2',$kecamatan,$kelurahan,$rw);
+		$data['lubang']= $this->laporan_kpldh_model->get_data_lokasibab('kesehatan_1_g_2_radi5','3',$kecamatan,$kelurahan,$rw);	
+		$data['pantai']= $this->laporan_kpldh_model->get_data_lokasibab('kesehatan_1_g_2_radi5','4',$kecamatan,$kelurahan,$rw);	
+		if ($data['jamban']!=0) {
+			$temp1=$data['jamban'];
+		}else{
+			$temp1=0;
+		}
+		if ($data['kolam']!=0) {
+			$temp2=$data['kolam'];
+		}else{
+			$temp2=0;
+		}
+		if ($data['sungai']!=0) {
+			$temp3=$data['sungai'];
+		}else{
+			$temp3=0;
+		}
+		if ($data['lubang']!=0) {
+			$temp4=$data['lubang'];
+		}else{
+			$temp4=0;
+		}
+		if ($data['pantai']!=0) {
+			$temp5=$data['pantai'];
+		}else{
+			$temp5=0;
+		}
+		$data['jumlahorang'] = $temp1+$temp2+$temp3+$temp4+$temp5;
+		die($this->parser->parse("eform/laporan/chartlokasibab",$data));
+	}
+	function datasikatgigi($kecamatan=0,$kelurahan=0,$rw=0){
+		$bar = array();
+
+		$bar['mandipagi'] = $this->laporan_kpldh_model->get_data_sikatgigi('kesehatan_1_g_4_a_cebox',$kecamatan,$kelurahan,$rw);
+		$bar['mandisore']= $this->laporan_kpldh_model->get_data_sikatgigi('kesehatan_1_g_4_b_cebox',$kecamatan,$kelurahan,$rw);
+		$bar['makanpagi']= $this->laporan_kpldh_model->get_data_sikatgigi('kesehatan_1_g_4_c_cebox',$kecamatan,$kelurahan,$rw);
+		$bar['banguntidur']= $this->laporan_kpldh_model->get_data_sikatgigi('kesehatan_1_g_4_d_cebox',$kecamatan,$kelurahan,$rw);	
+		$bar['sebelumtidur']= $this->laporan_kpldh_model->get_data_sikatgigi('kesehatan_1_g_4_e_cebox',$kecamatan,$kelurahan,$rw);	
+		$bar['sesudahmakan']= $this->laporan_kpldh_model->get_data_sikatgigi('kesehatan_1_g_4_f_cebox',$kecamatan,$kelurahan,$rw);	
+		/*if ($bar['mandipagi']!=0) {
+			$temp1=$bar['mandipagi'];
+		}else{
+			$temp1=0;
+		}
+		if ($bar['mandisore']!=0) {
+			$temp2=$bar['mandisore'];
+		}else{
+			$temp2=0;
+		}
+		if ($bar['makanpagi']!=0) {
+			$temp3=$bar['makanpagi'];
+		}else{
+			$temp3=0;
+		}
+		if ($bar['banguntidur']!=0) {
+			$temp4=$bar['banguntidur'];
+		}else{
+			$temp4=0;
+		}
+		if ($bar['sebelumtidur']!=0) {
+			$temp5=$bar['sebelumtidur'];
+		}else{
+			$temp5=0;
+		}
+		if ($bar['sesudahmakan']!=0) {
+			$temp6=$bar['sesudahmakan'];
+		}else{
+			$temp6=0;
+		}*/
+		$kode_sess = $this->session->userdata("puskesmas");
+		$bar['puskesmas'] = $this->inv_barang_model->get_nama('nama','cl_kec','code',substr($kode_sess, 0,7));
+		$bar['totalorang'] = $this->laporan_kpldh_model->get_data_anggotaprofile();//$temp1+$temp2+$temp3+$temp4+$temp5+$temp6;
+		die($this->parser->parse("eform/laporan/chartsikatgigi",$bar));
+	}
+	function datamerokok($kecamatan=0,$kelurahan=0,$rw=0){
+		$bar = array();
+
+		$bar['tiaphari'] = $this->laporan_kpldh_model->get_data_merokok('kesehatan_1_g_1_radi5','0',$kecamatan,$kelurahan,$rw);
+		$bar['kadang']= $this->laporan_kpldh_model->get_data_merokok('kesehatan_1_g_1_radi5','1',$kecamatan,$kelurahan,$rw);
+		$bar['dulu']= $this->laporan_kpldh_model->get_data_merokok('kesehatan_1_g_1_radi5','2',$kecamatan,$kelurahan,$rw);
+		$bar['dulukadang']= $this->laporan_kpldh_model->get_data_merokok('kesehatan_1_g_1_radi5','3',$kecamatan,$kelurahan,$rw);	
+		$bar['tidakpernah']= $this->laporan_kpldh_model->get_data_merokok('kesehatan_1_g_1_radi5','4',$kecamatan,$kelurahan,$rw);	
+		if ($bar['tiaphari']!=0) {
+			$temp1=$bar['tiaphari'];
+		}else{
+			$temp1=0;
+		}
+		if ($bar['kadang']!=0) {
+			$temp2=$bar['kadang'];
+		}else{
+			$temp2=0;
+		}
+		if ($bar['dulu']!=0) {
+			$temp3=$bar['dulu'];
+		}else{
+			$temp3=0;
+		}
+		if ($bar['dulukadang']!=0) {
+			$temp4=$bar['dulukadang'];
+		}else{
+			$temp4=0;
+		}
+		if ($bar['tidakpernah']!=0) {
+			$temp5=$bar['tidakpernah'];
+		}else{
+			$temp5=0;
+		}
+		$kode_sess = $this->session->userdata("puskesmas");
+		$bar['puskesmas'] = $this->inv_barang_model->get_nama('nama','cl_kec','code',substr($kode_sess, 0,7));
+		$bar['totalorang'] = $temp1+$temp2+$temp3+$temp4+$temp5;
+		die($this->parser->parse("eform/laporan/chartkebiasaanmerokok",$bar));
+	}
+	public function datausiamerokok($kecamatan=0,$kelurahan=0,$rw=0)
+	{
+		$data = array();
+		$data['remaja'] = $this->laporan_kpldh_model->get_data_usiamerokok('13','20',$kecamatan,$kelurahan,$rw);
+		$data['dewasa']= $this->laporan_kpldh_model->get_data_usiamerokok('21','40',$kecamatan,$kelurahan,$rw);
+		if ($data['remaja']!=0) {
+			$temp1=$data['remaja'];
+		}else{
+			$temp1=0;
+		}
+		if ($data['dewasa']!=0) {
+			$temp2=$data['dewasa'];
+		}else{
+			$temp2=0;
+		}
+		$data['jumlahorang'] = $temp1+$temp2;
+		die($this->parser->parse("eform/laporan/chatpertamamerokok",$data));
+	}
+	function dataginjal($kecamatan=0,$kelurahan=0,$rw=0)
+	{
+		$data = array();
+		$data['ya'] = $this->laporan_kpldh_model->get_data_ginjal('kesehatan_2_g_2_radio','0',$kecamatan,$kelurahan,$rw);
+		$data['tidak']= $this->laporan_kpldh_model->get_data_ginjal('kesehatan_2_g_2_radio','1',$kecamatan,$kelurahan,$rw);
+		if ($data['ya']!=0) {
+			$temp1=$data['ya'];
+		}else{
+			$temp1=0;
+		}
+		if ($data['tidak']!=0) {
+			$temp2=$data['tidak'];
+		}else{
+			$temp2=0;
+		}
+		$data['jumlahorang'] = $temp1+$temp2;
+		die($this->parser->parse("eform/laporan/chatginjal",$data));
+	}
+	function datatbparu($kecamatan=0,$kelurahan=0,$rw=0)
+	{
+		$data = array();
+		$data['kurang'] = $this->laporan_kpldh_model->get_data_paru('kesehatan_2_g_1_tb_radi3','0',$kecamatan,$kelurahan,$rw);
+		$data['lebih']= $this->laporan_kpldh_model->get_data_paru('kesehatan_2_g_1_tb_radi3','1',$kecamatan,$kelurahan,$rw);
+		$data['tidak']= $this->laporan_kpldh_model->get_data_paru('kesehatan_2_g_1_tb_radi3','2',$kecamatan,$kelurahan,$rw);
+		if ($data['kurang']!=0) {
+			$temp1=$data['kurang'];
+		}else{
+			$temp1=0;
+		}
+		if ($data['lebih']!=0) {
+			$temp2=$data['lebih'];
+		}else{
+			$temp2=0;
+		}
+		if ($data['tidak']!=0) {
+			$temp3=$data['tidak'];
+		}else{
+			$temp3=0;
+		}
+		$data['jumlahorang'] = $temp1+$temp2+$temp3;
+		die($this->parser->parse("eform/laporan/chartparu",$data));
+	}
+	function datadm($kecamatan=0,$kelurahan=0,$rw=0)
+	{
+		$data = array();
+		$data['ya'] = $this->laporan_kpldh_model->get_data_dm('kesehatan_4_g_1_radio','0',$kecamatan,$kelurahan,$rw);
+		$data['tidak']= $this->laporan_kpldh_model->get_data_dm('kesehatan_4_g_1_radio','1',$kecamatan,$kelurahan,$rw);
+		if ($data['ya']!=0) {
+			$temp1=$data['ya'];
+		}else{
+			$temp1=0;
+		}
+		if ($data['tidak']!=0) {
+			$temp2=$data['tidak'];
+		}else{
+			$temp2=0;
+		}
+		$data['jumlahorang'] = $temp1+$temp2;
+		die($this->parser->parse("eform/laporan/chartdm",$data));
+	}
+	function datahipertensi($kecamatan=0,$kelurahan=0,$rw=0)
+	{
+		$data = array();
+		$data['ya'] = $this->laporan_kpldh_model->get_data_hipertensi('kesehatan_4_g_1_hp_radio','0',$kecamatan,$kelurahan,$rw);
+		$data['tidak']= $this->laporan_kpldh_model->get_data_hipertensi('kesehatan_4_g_1_hp_radio','1',$kecamatan,$kelurahan,$rw);
+		if ($data['ya']!=0) {
+			$temp1=$data['ya'];
+		}else{
+			$temp1=0;
+		}
+		if ($data['tidak']!=0) {
+			$temp2=$data['tidak'];
+		}else{
+			$temp2=0;
+		}
+		$data['jumlahorang'] = $temp1+$temp2;
+		die($this->parser->parse("eform/laporan/charthipertensi",$data));
 	}
 }

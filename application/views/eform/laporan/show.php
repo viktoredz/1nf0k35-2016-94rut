@@ -19,7 +19,24 @@
 				     			<option value="7">Distribusi Penduduk Jaminan Kesehatan</option>
 				     			<option value="8">Distribusi Penduduk Keikutsertaan KB</option>
 				     			<option value="9">Distribusi Penduduk Alasan Tidak KB</option>
-
+				     			<option value="10">Distribusi Penduduk Berdasarkan Kepemilikan Rumah</option>
+				     			<option value="11">Distribusi Penduduk Berdasarkan Jenis Atap Rumah</option>
+				     			<option value="12">Distribusi Penduduk Berdasarkan Jenis Dinding Rumah</option>
+				     			<option value="13">Distribusi Penduduk Berdasarkan Jenis Lantai Rumah</option>
+				     			<option value="14">Distribusi Penduduk Berdasarkan Sumber Penerangan</option>
+				     			<option value="15">Distribusi Penduduk Berdasarkan Sumber Air Minum</option>
+				     			<option value="16">Distribusi Penduduk Berdasarkan Bahan Bakar untuk Memasak</option>
+				     			<option value="17">Distribusi Penduduk Berdasarkan Fasilitas BAB</option>
+				     			<option value="18">Distribusi Penduduk Kebiasaan Mencuci Tangan dengan Sabun</option>
+				     			<option value="19">Distribusi Penduduk Berdasarkan Lokasi BAB</option>
+				     			<option value="20">Distribusi Penduduk Kebiasaan Sikat Gigi</option>
+				     			<option value="21">Distribusi Penduduk Berdasarkan Kebiasaan Merokok</option>
+				     			<option value="22">Distribusi Penduduk Berdasarkan Usia Mulai Merokok</option>
+				     			<option value="23">Distribusi Penduduk Berdasarkan Penderita Sakit Ginjal</option>
+				     			<option value="24">Distribusi Penduduk Berdasarkan Sakit TB Paru </option>
+				     			<option value="25">Distribusi Penduduk Berdasarkan Penderita Diabetes Melitus (DM)</option>
+				     			<option value="26">Distribusi Penduduk Berdasarkan Penderita Hipertensi</option>
+				     			<option value=""></option>
 				     		</select>
 				  		</div>
 				  	</div>				  	
@@ -96,11 +113,12 @@
       		var judul = $('[name=laporan] :selected').text();
       		var kecamatanbar = $("#kecamatan").val();
       		var kelurahanbar = $("#kelurahan").val();
+      		var id_judul = $("#laporan").val();
       		var rw = $("#rw").val();
       		$.ajax({
 	        url : '<?php echo site_url('eform/laporan_kpldh/pilihchart/') ?>',
 	        type : 'POST',
-	        data : 'judul=' + judul+'&kecamatan=' + kecamatanbar+'&kelurahan=' + kelurahanbar+'&rw=' + rw,
+	        data : 'judul=' + judul+'&kecamatan=' + kecamatanbar+'&kelurahan=' + kelurahanbar+'&rw=' + rw+'&id_judul=' + id_judul,
 	        success : function(data) {
 	          $('#tampilchart').html(data);
 	        }
@@ -160,12 +178,13 @@
 	});
 	$("#btn-export").click(function(){
   		var judul = $('[name=laporan] :selected').text();
+  		var id_judul = $("#laporan").val();
   		var kecamatanbar = $("#kecamatan").val();
   		var kelurahanbar = $("#kelurahan").val();
   		var rw = $("#rw").val();
 
 		var post = "";
-		post = post+'judul='+judul+'&kecamatan='+ kecamatanbar+'&kelurahan=' + kelurahanbar+'&rw=' + rw;
+		post = post+'judul='+judul+'&kecamatan='+ kecamatanbar+'&kelurahan=' + kelurahanbar+'&rw=' + rw+'&id_judul=' + id_judul;
 		
 		$.post("<?php echo base_url()?>eform/export_data/pilih_export",post,function(response){
 			//window.location.href=response;

@@ -305,7 +305,310 @@ class Laporan_kpldh_model extends CI_Model {
         }
         
     }
-    function totalalasankb($ecamatan=0,$kelurahan=0,$rw=0){
+    function get_data_kepemilikan($kode=0,$kecamatan=0,$kelurahan=0,$rw=0)
+    {
+        if ($kecamatan!=0) {
+            $this->db->where("data_keluarga.id_kecamatan",$kecamatan);
+        }
+        if ($kelurahan!=0) {
+            $this->db->where("data_keluarga.id_desa",$kelurahan);
+        }
+        if ($rw!=0) {
+            $this->db->where("data_keluarga.rw",$rw);
+        }
+        $this->db->where("kode",$kode);
+        $this->db->select("COUNT(*) AS jumlah");
+         $this->db->join("data_keluarga","data_keluarga.id_data_keluarga=data_keluarga_pembangunan.id_data_keluarga");
+        $query = $this->db->get('data_keluarga_pembangunan');
+        if ($query->num_rows()>0) {
+            foreach ($query->result() as $key) {
+                return $key->jumlah;
+             } 
+
+        }else{
+            return 0;
+        }
+        
+    }
+    function get_data_ataprumah($kode=0,$kecamatan=0,$kelurahan=0,$rw=0)
+    {
+        if ($kecamatan!=0) {
+            $this->db->where("data_keluarga.id_kecamatan",$kecamatan);
+        }
+        if ($kelurahan!=0) {
+            $this->db->where("data_keluarga.id_desa",$kelurahan);
+        }
+        if ($rw!=0) {
+            $this->db->where("data_keluarga.rw",$rw);
+        }
+        $this->db->where("kode",$kode);
+        $this->db->select("COUNT(*) AS jumlah");
+         $this->db->join("data_keluarga","data_keluarga.id_data_keluarga=data_keluarga_pembangunan.id_data_keluarga");
+        $query = $this->db->get('data_keluarga_pembangunan');
+        if ($query->num_rows()>0) {
+            foreach ($query->result() as $key) {
+                return $key->jumlah;
+             } 
+
+        }else{
+            return 0;
+        }
+        
+    }
+    function get_data_dindingrumah($kode=0,$kecamatan=0,$kelurahan=0,$rw=0)
+    {
+        if ($kecamatan!=0) {
+            $this->db->where("data_keluarga.id_kecamatan",$kecamatan);
+        }
+        if ($kelurahan!=0) {
+            $this->db->where("data_keluarga.id_desa",$kelurahan);
+        }
+        if ($rw!=0) {
+            $this->db->where("data_keluarga.rw",$rw);
+        }
+        $this->db->where("kode",$kode);
+        $this->db->select("COUNT(*) AS jumlah");
+         $this->db->join("data_keluarga","data_keluarga.id_data_keluarga=data_keluarga_pembangunan.id_data_keluarga");
+        $query = $this->db->get('data_keluarga_pembangunan');
+        if ($query->num_rows()>0) {
+            foreach ($query->result() as $key) {
+                return $key->jumlah;
+             } 
+
+        }else{
+            return 0;
+        }
+        
+    }
+    function get_data_jenislantairumah($kode=0,$kecamatan=0,$kelurahan=0,$rw=0)
+    {
+        if ($kecamatan!=0) {
+            $this->db->where("data_keluarga.id_kecamatan",$kecamatan);
+        }
+        if ($kelurahan!=0) {
+            $this->db->where("data_keluarga.id_desa",$kelurahan);
+        }
+        if ($rw!=0) {
+            $this->db->where("data_keluarga.rw",$rw);
+        }
+        $this->db->where("kode",$kode);
+        $this->db->select("COUNT(*) AS jumlah");
+         $this->db->join("data_keluarga","data_keluarga.id_data_keluarga=data_keluarga_pembangunan.id_data_keluarga");
+        $query = $this->db->get('data_keluarga_pembangunan');
+        if ($query->num_rows()>0) {
+            foreach ($query->result() as $key) {
+                return $key->jumlah;
+             } 
+
+        }else{
+            return 0;
+        }
+        
+    }
+    function get_data_jenispeneranganrumah($kode=0,$kecamatan=0,$kelurahan=0,$rw=0)
+    {
+        if ($kecamatan!=0) {
+            $this->db->where("data_keluarga.id_kecamatan",$kecamatan);
+        }
+        if ($kelurahan!=0) {
+            $this->db->where("data_keluarga.id_desa",$kelurahan);
+        }
+        if ($rw!=0) {
+            $this->db->where("data_keluarga.rw",$rw);
+        }
+        $this->db->where("kode",$kode);
+        $this->db->select("COUNT(*) AS jumlah");
+         $this->db->join("data_keluarga","data_keluarga.id_data_keluarga=data_keluarga_pembangunan.id_data_keluarga");
+        $query = $this->db->get('data_keluarga_pembangunan');
+        if ($query->num_rows()>0) {
+            foreach ($query->result() as $key) {
+                return $key->jumlah;
+             } 
+
+        }else{
+            return 0;
+        }
+        
+    }
+    function get_data_sumberair($kode=0,$kecamatan=0,$kelurahan=0,$rw=0)
+    {
+        if ($kecamatan!=0) {
+            $this->db->where("data_keluarga.id_kecamatan",$kecamatan);
+        }
+        if ($kelurahan!=0) {
+            $this->db->where("data_keluarga.id_desa",$kelurahan);
+        }
+        if ($rw!=0) {
+            $this->db->where("data_keluarga.rw",$rw);
+        }
+        $this->db->where("kode",$kode);
+        $this->db->select("COUNT(*) AS jumlah");
+         $this->db->join("data_keluarga","data_keluarga.id_data_keluarga=data_keluarga_pembangunan.id_data_keluarga");
+        $query = $this->db->get('data_keluarga_pembangunan');
+        if ($query->num_rows()>0) {
+            foreach ($query->result() as $key) {
+                return $key->jumlah;
+             } 
+
+        }else{
+            return 0;
+        }
+        
+    }
+    function get_data_bahanbakar($kode=0,$kecamatan=0,$kelurahan=0,$rw=0)
+    {
+        if ($kecamatan!=0) {
+            $this->db->where("data_keluarga.id_kecamatan",$kecamatan);
+        }
+        if ($kelurahan!=0) {
+            $this->db->where("data_keluarga.id_desa",$kelurahan);
+        }
+        if ($rw!=0) {
+            $this->db->where("data_keluarga.rw",$rw);
+        }
+        $this->db->where("kode",$kode);
+        $this->db->select("COUNT(*) AS jumlah");
+         $this->db->join("data_keluarga","data_keluarga.id_data_keluarga=data_keluarga_pembangunan.id_data_keluarga");
+        $query = $this->db->get('data_keluarga_pembangunan');
+        if ($query->num_rows()>0) {
+            foreach ($query->result() as $key) {
+                return $key->jumlah;
+             } 
+
+        }else{
+            return 0;
+        }
+        
+    }
+    function get_data_fasilitasbab($kode=0,$value=7,$kecamatan=0,$kelurahan=0,$rw=0)
+    {
+        if ($kecamatan!=0) {
+            $this->db->where("data_keluarga.id_kecamatan",$kecamatan);
+        }
+        if ($kelurahan!=0) {
+            $this->db->where("data_keluarga.id_desa",$kelurahan);
+        }
+        if ($rw!=0) {
+            $this->db->where("data_keluarga.rw",$rw);
+        }
+        $this->db->where("kode",$kode);
+        $this->db->where("value",$value);
+        $this->db->select("COUNT(*) AS jumlah");
+         $this->db->join("data_keluarga","data_keluarga.id_data_keluarga=data_keluarga_pembangunan.id_data_keluarga");
+        $query = $this->db->get('data_keluarga_pembangunan');
+        if ($query->num_rows()>0) {
+            foreach ($query->result() as $key) {
+                return $key->jumlah;
+             } 
+
+        }else{
+            return 0;
+        }
+        
+    }
+    function get_data_cucitangan($kode=0,$kecamatan=0,$kelurahan=0,$rw=0)
+    {
+        if ($kecamatan!=0) {
+            $this->db->where("data_keluarga.id_kecamatan",$kecamatan);
+        }
+        if ($kelurahan!=0) {
+            $this->db->where("data_keluarga.id_desa",$kelurahan);
+        }
+        if ($rw!=0) {
+            $this->db->where("data_keluarga.rw",$rw);
+        }
+        $this->db->where("kode",$kode);
+        $this->db->select("COUNT(*) AS jumlah");
+         $this->db->join("data_keluarga","data_keluarga.id_data_keluarga=data_keluarga_anggota_profile.id_data_keluarga");
+        $query = $this->db->get('data_keluarga_anggota_profile');
+        if ($query->num_rows()>0) {
+            foreach ($query->result() as $key) {
+                return $key->jumlah;
+             } 
+
+        }else{
+            return 0;
+        }
+        
+    }
+    function get_data_lokasibab($kode=0,$value=7,$kecamatan=0,$kelurahan=0,$rw=0)
+    {
+        if ($kecamatan!=0) {
+            $this->db->where("data_keluarga.id_kecamatan",$kecamatan);
+        }
+        if ($kelurahan!=0) {
+            $this->db->where("data_keluarga.id_desa",$kelurahan);
+        }
+        if ($rw!=0) {
+            $this->db->where("data_keluarga.rw",$rw);
+        }
+        $this->db->where("kode",$kode);
+        $this->db->where("value",$value);
+        $this->db->select("COUNT(*) AS jumlah");
+         $this->db->join("data_keluarga","data_keluarga.id_data_keluarga=data_keluarga_anggota_profile.id_data_keluarga");
+        $query = $this->db->get('data_keluarga_anggota_profile');
+        if ($query->num_rows()>0) {
+            foreach ($query->result() as $key) {
+                return $key->jumlah;
+             } 
+
+        }else{
+            return 0;
+        }
+        
+    }
+     function get_data_sikatgigi($kode=0,$kecamatan=0,$kelurahan=0,$rw=0)
+    {
+        if ($kecamatan!=0) {
+            $this->db->where("data_keluarga.id_kecamatan",$kecamatan);
+        }
+        if ($kelurahan!=0) {
+            $this->db->where("data_keluarga.id_desa",$kelurahan);
+        }
+        if ($rw!=0) {
+            $this->db->where("data_keluarga.rw",$rw);
+        }
+        $this->db->where("kode",$kode);
+        $this->db->select("COUNT(*) AS jumlah");
+         $this->db->join("data_keluarga","data_keluarga.id_data_keluarga=data_keluarga_anggota_profile.id_data_keluarga");
+        $query = $this->db->get('data_keluarga_anggota_profile');
+        if ($query->num_rows()>0) {
+            foreach ($query->result() as $key) {
+                return $key->jumlah;
+             } 
+
+        }else{
+            return 0;
+        }
+        
+    }
+    function get_data_merokok($kode=0,$value=7,$kecamatan=0,$kelurahan=0,$rw=0)
+    {
+        if ($kecamatan!=0) {
+            $this->db->where("data_keluarga.id_kecamatan",$kecamatan);
+        }
+        if ($kelurahan!=0) {
+            $this->db->where("data_keluarga.id_desa",$kelurahan);
+        }
+        if ($rw!=0) {
+            $this->db->where("data_keluarga.rw",$rw);
+        }
+        $this->db->where("kode",$kode);
+        $this->db->where("value",$value);
+        $this->db->select("COUNT(*) AS jumlah");
+         $this->db->join("data_keluarga","data_keluarga.id_data_keluarga=data_keluarga_anggota_profile.id_data_keluarga");
+        $query = $this->db->get('data_keluarga_anggota_profile');
+        if ($query->num_rows()>0) {
+            foreach ($query->result() as $key) {
+                return $key->jumlah;
+             } 
+
+        }else{
+            return 0;
+        }
+        
+    }
+    function totalalasankb($kecamatan=0,$kelurahan=0,$rw=0){
         if ($kecamatan!=0) {
             $this->db->where("data_keluarga.id_kecamatan",$kecamatan);
         }
@@ -346,6 +649,182 @@ class Laporan_kpldh_model extends CI_Model {
         $this->db->join("mst_keluarga_pilihan",'data_keluarga_anggota.id_pilihan_jkn = mst_keluarga_pilihan.id_pilihan AND tipe="jkn"');
         $query = $this->db->get('data_keluarga_anggota');
         return $query->result();
+        
+    }
+    public function get_data_usiamerokok($usia1=0,$usia2=0,$kecamatan=0,$kelurahan=0,$rw=0)
+    {
+        if ($kecamatan!=0) {
+            $this->db->where("data_keluarga.id_kecamatan",$kecamatan);
+        }
+        if ($kelurahan!=0) {
+            $this->db->where("data_keluarga.id_desa",$kelurahan);
+        }
+        if ($rw!=0) {
+            $this->db->where("data_keluarga.rw",$rw);
+        }
+        $this->db->where("data_keluarga_anggota_profile.value >=",$usia1);
+        $this->db->where("data_keluarga_anggota_profile.value <=",$usia2);
+        $this->db->where("data_keluarga_anggota_profile.kode","kesehatan_1_g_3_text");
+        $this->db->select("COUNT(VALUE) as jumlah");
+        $this->db->join("data_keluarga","data_keluarga_anggota_profile.id_data_keluarga = data_keluarga.id_data_keluarga");
+        $query = $this->db->get('data_keluarga_anggota_profile');
+        if ($query->num_rows()>0) {
+            foreach ($query->result() as $key) {
+                return $key->jumlah;
+             } 
+
+        }else{
+            return 0;
+        }
+        
+    }
+    function get_data_ginjal($kode=0,$value=7,$kecamatan=0,$kelurahan=0,$rw=0)
+    {
+        if ($kecamatan!=0) {
+            $this->db->where("data_keluarga.id_kecamatan",$kecamatan);
+        }
+        if ($kelurahan!=0) {
+            $this->db->where("data_keluarga.id_desa",$kelurahan);
+        }
+        if ($rw!=0) {
+            $this->db->where("data_keluarga.rw",$rw);
+        }
+        $this->db->where("kode",$kode);
+        $this->db->where("value",$value);
+        $this->db->select("COUNT(*) AS jumlah");
+         $this->db->join("data_keluarga","data_keluarga.id_data_keluarga=data_keluarga_anggota_profile.id_data_keluarga");
+        $query = $this->db->get('data_keluarga_anggota_profile');
+        if ($query->num_rows()>0) {
+            foreach ($query->result() as $key) {
+                return $key->jumlah;
+             } 
+
+        }else{
+            return 0;
+        }
+        
+    }
+    function get_data_paru($kode=0,$value=7,$kecamatan=0,$kelurahan=0,$rw=0)
+    {
+        if ($kecamatan!=0) {
+            $this->db->where("data_keluarga.id_kecamatan",$kecamatan);
+        }
+        if ($kelurahan!=0) {
+            $this->db->where("data_keluarga.id_desa",$kelurahan);
+        }
+        if ($rw!=0) {
+            $this->db->where("data_keluarga.rw",$rw);
+        }
+        $this->db->where("kode",$kode);
+        $this->db->where("value",$value);
+        $this->db->select("COUNT(*) AS jumlah");
+         $this->db->join("data_keluarga","data_keluarga.id_data_keluarga=data_keluarga_anggota_profile.id_data_keluarga");
+        $query = $this->db->get('data_keluarga_anggota_profile');
+        if ($query->num_rows()>0) {
+            foreach ($query->result() as $key) {
+                return $key->jumlah;
+             } 
+
+        }else{
+            return 0;
+        }
+        
+    }
+    function get_data_dm($kode=0,$value=7,$kecamatan=0,$kelurahan=0,$rw=0)
+    {
+        if ($kecamatan!=0) {
+            $this->db->where("data_keluarga.id_kecamatan",$kecamatan);
+        }
+        if ($kelurahan!=0) {
+            $this->db->where("data_keluarga.id_desa",$kelurahan);
+        }
+        if ($rw!=0) {
+            $this->db->where("data_keluarga.rw",$rw);
+        }
+        $this->db->where("kode",$kode);
+        $this->db->where("value",$value);
+        $this->db->select("COUNT(*) AS jumlah");
+         $this->db->join("data_keluarga","data_keluarga.id_data_keluarga=data_keluarga_anggota_profile.id_data_keluarga");
+        $query = $this->db->get('data_keluarga_anggota_profile');
+        if ($query->num_rows()>0) {
+            foreach ($query->result() as $key) {
+                return $key->jumlah;
+             } 
+
+        }else{
+            return 0;
+        }
+    }
+    function get_data_hipertensi($kode=0,$value=7,$kecamatan=0,$kelurahan=0,$rw=0)
+    {
+        if ($kecamatan!=0) {
+            $this->db->where("data_keluarga.id_kecamatan",$kecamatan);
+        }
+        if ($kelurahan!=0) {
+            $this->db->where("data_keluarga.id_desa",$kelurahan);
+        }
+        if ($rw!=0) {
+            $this->db->where("data_keluarga.rw",$rw);
+        }
+        $this->db->where("kode",$kode);
+        $this->db->where("value",$value);
+        $this->db->select("COUNT(*) AS jumlah");
+         $this->db->join("data_keluarga","data_keluarga.id_data_keluarga=data_keluarga_anggota_profile.id_data_keluarga");
+        $query = $this->db->get('data_keluarga_anggota_profile');
+        if ($query->num_rows()>0) {
+            foreach ($query->result() as $key) {
+                return $key->jumlah;
+             } 
+
+        }else{
+            return 0;
+        }
+    }
+      
+    function get_data_anggotaprofile($kecamatan=0,$kelurahan=0,$rw=0){
+        if ($kecamatan!=0) {
+            $this->db->where("data_keluarga.id_kecamatan",$kecamatan);
+        }
+        if ($kelurahan!=0) {
+            $this->db->where("data_keluarga.id_desa",$kelurahan);
+        }
+        if ($rw!=0) {
+            $this->db->where("data_keluarga.rw",$rw);
+        }
+        $this->db->where("data_keluarga_anggota_profile.kode","kesehatan_1_g_3_text");
+        $this->db->select("COUNT(data_keluarga_anggota_profile.id_data_keluarga) as jumlah");
+        $this->db->join("data_keluarga","data_keluarga_anggota_profile.id_data_keluarga = data_keluarga.id_data_keluarga");
+        $query = $this->db->get('data_keluarga_anggota_profile');
+        if ($query->num_rows()>0) {
+            foreach ($query->result() as $key) {
+                return $key->jumlah;
+             } 
+
+        }else{
+            return 0;
+        }
+    }
+    public function get_data_totalusiamerokok($kecamatan=0,$kelurahan=0,$rw=0)
+    {
+        if ($kecamatan!=0) {
+            $this->db->where("data_keluarga.id_kecamatan",$kecamatan);
+        }
+        if ($kelurahan!=0) {
+            $this->db->where("data_keluarga.id_desa",$kelurahan);
+        }
+        if ($rw!=0) {
+            $this->db->where("data_keluarga.rw",$rw);
+        }
+        $this->db->where("data_keluarga_anggota_profile.kode","kesehatan_1_g_3_text");
+        $this->db->select("COUNT(VALUE) as total");
+        $this->db->join("data_keluarga","data_keluarga_anggota_profile.id_data_keluarga = data_keluarga.id_data_keluarga");
+        $query = $this->db->get('data_keluarga_anggota_profile');
+        if ($query->num_rows>0) {
+            foreach ($query->result() as $key) {
+                return $key->total;
+            }
+        }
+        return 0;
         
     }
     function get_datawhere($code,$condition,$table){
