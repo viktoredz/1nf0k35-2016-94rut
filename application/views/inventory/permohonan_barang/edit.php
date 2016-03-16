@@ -29,7 +29,7 @@
                   $s[3] = substr($id_inv_permohonan_barang, 6,2);
                   $s[4] = substr($id_inv_permohonan_barang, 8,2);
                   $s[5] = substr($id_inv_permohonan_barang, 10,2);
-                  $s[6] = substr($id_inv_permohonan_barang, 12,2);
+                  $s[6] = substr($id_inv_permohonan_barang, 12,3);
                   echo implode(".", $s);
             }else{
               echo  set_value('id_inv_permohonan_barang');

@@ -186,11 +186,11 @@ class Invbaranghabispakai extends CI_Controller {
 		foreach($rows as $act) {
 			$data[] = array(
 				'no'					=> $no++,
-				//'code'					=> $act->code,
+				'code'					=> $act->code,
 				'uraian'				=> $act->uraian,
 				'merek_tipe'			=> $act->merek_tipe,
 				'negara_asal'			=> $act->negara_asal,
-				'pilihan_satuan'		=> $act->negara_asal,
+				'pilihan_satuan'		=> $act->pilihan_satuan,
 				'value'					=> $act->value,
 				'jenisuraian'			=> $act->jenisuraian,
 				'id_mst_inv_barang_habispakai'			=> $act->id_mst_inv_barang_habispakai,
