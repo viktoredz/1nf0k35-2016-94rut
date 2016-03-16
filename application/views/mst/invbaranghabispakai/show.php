@@ -75,7 +75,7 @@
 			$("#jqxgrid").jqxGrid('updatebounddata', 'sort');
 		},
 		root: 'Rows',
-        pagesize: 10,
+        pagesize: 20,
         beforeprocessing: function(data){		
 			if (data != null){
 				source.totalrecords = data[0].TotalRows;					
@@ -96,7 +96,7 @@
 		{		
 			width: '65%',
 			selectionmode: 'singlerow',
-			source: dataadapter, theme: theme,columnsresize: true,showtoolbar: false, pagesizeoptions: ['10', '25', '50', '100'],
+			source: dataadapter, theme: theme,columnsresize: true,showtoolbar: false, pagesizeoptions: ['20', '25', '50', '100'],
 			showfilterrow: true, filterable: true, sortable: true, autoheight: true, pageable: true, virtualmode: true, editable: false,
 			rendergridrows: function(obj)
 			{
