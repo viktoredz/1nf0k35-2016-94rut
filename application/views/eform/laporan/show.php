@@ -36,7 +36,17 @@
 				     			<option value="24">Distribusi Penduduk Berdasarkan Sakit TB Paru </option>
 				     			<option value="25">Distribusi Penduduk Berdasarkan Penderita Diabetes Melitus (DM)</option>
 				     			<option value="26">Distribusi Penduduk Berdasarkan Penderita Hipertensi</option>
-				     			<option value=""></option>
+				     			<option value="27">Distribusi Penduduk Berdasarkan Penderita Jantung Koroner</option>
+				     			<option value="28">Distribusi Penduduk Berdasarkan Penderita Stroke</option>
+				     			<option value="29">Distribusi Penduduk Berdasarkan Penderita Kanker</option>
+				     			<option value="30">Distribusi Penduduk Berdasarkan Penderita Asma</option>
+				     			<option value="31">Distribusi Penduduk Sulit Tidur</option>
+				     			<option value="32">Distribusi Penduduk Mudah Takut</option>
+				     			<option value="33">Distribusi Penduduk Sulit Berfikir Jernih</option>
+				     			<option value="34">Distribusi Penduduk Merasa Tidak Bahagia</option>
+				     			<option value="35">Distribusi Penduduk Menagis Lebih Sering</option>
+				     			<option value="36">Distribusi Penduduk Mempunyai Pikiran untuk Mengakhiri Hidup</option>
+				     			<option value="37">Distribusi Penduduk Hilang Minat</option>
 				     		</select>
 				  		</div>
 				  	</div>				  	

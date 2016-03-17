@@ -388,4 +388,5 @@ class Export_data extends CI_Controller {
 		$data['color']	= $color;
 		die($this->parser->parse("eform/laporan/chartpekerjaan",$data));
 	}
+	
 }
