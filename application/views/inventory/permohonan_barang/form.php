@@ -23,13 +23,13 @@
           <input type="text" id="id_inv_permohonan_barang" name="id_inv_permohonan_barang" placeholder="Kode Lokasi"  class="form-control"/>
         </div>
         <div class="form-group">
-          <label>Tanggal Permohonan</label>
+          <label>Tanggal Pengajuan</label>
           <div id='tgl' name="tgl" value="<?php
               echo (set_value('tgl')!="") ? date("Y-m-d",strtotime(set_value('tgl'))) : "";
             ?>"></div>
         </div>
         <div class="form-group">
-          <label>Puskesmas</label>
+          <label>Puskesmas Pemohon</label>
           <select  name="codepus" id="puskesmas" class="form-control">
               <?php foreach($kodepuskesmas as $pus) : ?>
                 <?php $select = $pus->code == set_value('codepus') ? 'selected' : '' ?>
@@ -38,7 +38,7 @@
           </select>
         </div>
         <div class="form-group">
-          <label>Ruangan</label>
+          <label>Ruangan</label> <i>optional</i>
           <select name="ruangan" id="ruangan"  class="form-control">
               <option value="">Pilih Ruangan</option>
           </select>
@@ -60,22 +60,10 @@
               }
               ?></textarea>
         </div>
-        <table width="100%">
-          <tr>
-            <th width="25%">Total Jumlah</th>
-            <td>:</td>
-            <td width="70%"><div id="total_jumlah_"></div></td>
-          </tr>
-          <tr>
-            <th>Total Harga</th>
-            <td>:</td>
-            <td><div id="total_harga_"></div></td>
-          </tr>
-        </table>
       </div>
       <div class="box-footer">
-        <button type="submit" class="btn btn-primary">Simpan</button>
-        <button type="button" id="btn-kembali" class="btn btn-warning">Kembali</button>
+        <button type="submit" class="btn btn-primary"><i class='fa fa-save'></i> &nbsp; Simpan & Lanjutkan</button>
+        <button type="button" id="btn-kembali" class="btn btn-warning"><i class='fa fa-reply'></i> &nbsp; Kembali</button>
       </div>
       </div>
     </form>        

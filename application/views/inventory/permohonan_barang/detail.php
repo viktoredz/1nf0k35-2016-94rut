@@ -35,9 +35,8 @@
           </div>
         </div>
         <div class="form-group">
-          <label>Tanggal</label>
+          <label>Tanggal Pengajuan</label>
           <div >
-      		
       		<input type="hidden" id="tanggal" value="<?=$tanggal_permohonan?>">
       		<?php
                   echo date('d-m-Y',strtotime($tanggal_permohonan));
@@ -45,7 +44,7 @@
       	  </div>
         </div>
         <div class="form-group">
-          <label>Puskesmas</label>
+          <label>Puskesmas Pemohon</label>
           <br/>
             <?php 
       			$nama_pus = "";
@@ -56,7 +55,7 @@
     			<input type="hidden" id="nama_puskesmas" value="<?=$pus->value?>">
         </div>
         <div class="form-group">
-          <label>Ruangan</label>
+          <label>Ruangan</label> <i>optional</i>
 		  <br/>
             <?php
       			$nama_ruang = "";

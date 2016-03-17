@@ -37,13 +37,13 @@
           ?>" readonly='' />
         </div>
         <div class="form-group">
-          <label>Tanggal Permohonan</label>
+          <label>Tanggal Pengajuan</label>
           <div id='tgl' name="tgl" value="<?php
               echo date("Y-m-d",strtotime($tanggal_permohonan));
             ?>"></div>
         </div>
         <div class="form-group">
-          <label>Puskesmas</label>
+          <label>Puskesmas Pemohon</label>
           <select  name="codepus" id="puskesmas" class="form-control">
               <?php foreach($kodepuskesmas as $pus) : ?>
                 <option value="<?php echo $pus->code ?>" ><?php echo $pus->value ?></option>
@@ -51,7 +51,7 @@
           </select>
         </div>
         <div class="form-group">
-          <label>Ruangan</label>
+          <label>Ruangan</label> <i>optional</i>
           <select name="ruangan" id="ruangan"  class="form-control">
               <option value="">Pilih Ruangan</option>
           </select>
@@ -96,8 +96,8 @@
         </table>
       </div>
       <div class="box-footer">
-        <button type="submit" class="btn btn-primary">Simpan</button>
-        <button type="button" id="btn-kembali" class="btn btn-warning">Kembali</button>
+        <button type="submit" class="btn btn-primary"><i class='fa fa-save'></i> &nbsp; Simpan</button>
+        <button type="button" id="btn-kembali" class="btn btn-warning"><i class='fa fa-reply'></i> &nbsp; Kembali</button>
       </div>
       </div>
     </form>        
