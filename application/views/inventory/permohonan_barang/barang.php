@@ -167,7 +167,7 @@ var code_cl_phc = '<?php echo $code_cl_phc?>';
 <div>
 	<div style="width:100%;">
 		<div style="padding:5px" class="pull-right">
-			<button class="btn btn-success" id='btn_add_barang' type='button'><i class='icon-copy'></i> Tambah Barang</button>
+			<button class="btn btn-success" id='btn_add_barang' type='button'><i class='fa fa-plus-square'></i> Tambah Barang</button>
 		</div>
         <div id="jqxgrid_barang"></div>
 	</div>

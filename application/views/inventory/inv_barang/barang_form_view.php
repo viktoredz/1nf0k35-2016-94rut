@@ -98,22 +98,23 @@
             <div class="form-group"> 
               <label>Kode Barang</label>
               <br><?php 
+                  $S = array();
                   $s = array();
-                  $s[0] = substr($id_inventaris_barang, 0,2);
-                  $s[1] = substr($id_inventaris_barang, 2,2);
-                  $s[2] = substr($id_inventaris_barang, 4,2);
-                  $s[3] = substr($id_inventaris_barang, 6,2);
-                  $s[4] = substr($id_inventaris_barang, 8,2);
-                  $s[5] = substr($id_inventaris_barang, 10,2);
-                  $s[6] = substr($id_inventaris_barang, 12,2);
-                  $s[7] = substr($id_inventaris_barang, 14,2);
-                  $s[8] = substr($id_inventaris_barang, 16,2);
-                  $s[9] = substr($id_inventaris_barang, 18,2);
-                  $s[10] = substr($id_inventaris_barang, 20,2);
-                  $s[11] = substr($id_inventaris_barang, 22,2);
-                  $s[12] = substr($id_inventaris_barang, 24,4);
+                  $S[0] = substr($id_inventaris_barang, 0,2);
+                  $S[1] = substr($id_inventaris_barang, 2,2);
+                  $S[2] = substr($id_inventaris_barang, 4,2);
+                  $S[3] = substr($id_inventaris_barang, 6,2);
+                  $S[4] = substr($id_inventaris_barang, 8,2);
+                  $S[5] = substr($id_inventaris_barang, 10,2);
+                  $S[6] = substr($id_inventaris_barang, 12,3);
+                  $s[7] = substr($id_inventaris_barang, 15,2);
+                  $s[8] = substr($id_inventaris_barang, 17,2);
+                  $s[9] = substr($id_inventaris_barang, 19,2);
+                  $s[10] = substr($id_inventaris_barang, 21,2);
+                  $s[11] = substr($id_inventaris_barang, 23,2);
+                  $s[12] = substr($id_inventaris_barang, 25,4);
                  // $s[13] = substr($id_inventaris_barang, 26,2);
-                  echo implode(".", $s);
+                  echo implode(".", $S).' - '.implode(".", $s);
                 ?><br><br>
             </div>
             <div class="form-group">

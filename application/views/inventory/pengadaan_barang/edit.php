@@ -48,7 +48,6 @@
           <label>Status Pengadaan</label>
           <?php if(!isset($viewreadonly)){ ?>
           <select  name="status" type="text" class="form-control">
-              <option value="">Pilih Status</option>
               <?php foreach($kodestatus as $stat) : ?>
                 <?php $select = $stat->code == $pilihan_status_pengadaan ? 'selected' : '' ?>
                 <option value="<?php echo $stat->code ?>" <?php echo $select ?>><?php echo $stat->value ?></option>

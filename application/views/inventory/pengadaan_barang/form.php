@@ -45,7 +45,6 @@
         <div class="form-group">
           <label>Status</label>
           <select  name="status" type="text" class="form-control">
-              <option value="">Pilih Status</option>
               </option>
               <?php foreach($kodestatus as $stat) : ?>
                 <?php $select = $stat->code == set_value('status') ? 'selected' : '' ?>
@@ -61,32 +60,6 @@
                 <option value="<?php echo $pus->code ?>" <?php echo $select ?>><?php echo $pus->value ?></option>
               <?php endforeach ?>
           </select>
-        </div>
-        <div class="form-group">
-          <label>No. Kontrak</label>
-          <input type="text" class="form-control" name="nomor_kontrak" placeholder="Nomor Kontrak" value="<?php 
-            if(set_value('nomor_kontrak')=="" && isset($nomor_kontrak)){
-              echo $nokontrak;
-            }else{
-              echo  set_value('nomor_kontrak');
-            }
-            ?>">
-        </div>
-        <div class="form-group">
-          <label>Tanggal Kwitansi</label>
-          <div id='tgl1' name="tgl1" value="<?php
-              echo (set_value('tgl1')!="") ? date("Y-m-d",strtotime(set_value('tgl1'))) : "";
-            ?>"></div>
-        </div>
-        <div class="form-group">
-          <label>Nomor Kwitansi</label>
-          <input type="text" class="form-control" name="nomor_kwitansi" placeholder="Nomor Kwitansi" value="<?php 
-            if(set_value('nomor_kwitansi')=="" && isset($nomor_kwitansi)){
-              echo $nokontrak;
-            }else{
-              echo  set_value('nomor_kwitansi');
-            }
-            ?>">
         </div>
         <div class="form-group">
           <label>Keterangan</label>
@@ -105,37 +78,36 @@
   <div class="col-md-6">
     <div class="box box-warning">
       <div class="box-body">
-        <table class="table table-condensed">
-          <tr>
-            <td>Jumlah Unit</td>
-            <td>
-              <?php echo '0'.' '.'Unit' ?>
-            </td>
-          </tr>
-          <tr>
-            <td>Nilai Pengadaan</td>
-            <td>
-              <?php echo 'Rp.'.' '.'0,00' ?>
-            </td>
-          </tr>
-          <tr>
-            <td>Waktu dibuat</td>
-            <td>
-              <?php echo '00-00-0000' ?>
-            </td>
-          </tr>
-          <tr>
-            <td>Terakhir di edit</td>
-            <td>
-              <?php echo '00-00-0000' ?>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+        <div class="form-group">
+          <label>Nomor Kontrak</label>
+          <input type="text" class="form-control" name="nomor_kontrak" placeholder="Nomor Kontrak" value="<?php 
+            if(set_value('nomor_kontrak')=="" && isset($nomor_kontrak)){
+              echo $nokontrak;
+            }else{
+              echo  set_value('nomor_kontrak');
+            }
+            ?>">
+        </div>
+        <div class="form-group">
+          <label>Tanggal Kwitansi / Faktur</label>
+          <div id='tgl1' name="tgl1" value="<?php
+              echo (set_value('tgl1')!="") ? date("Y-m-d",strtotime(set_value('tgl1'))) : "";
+            ?>"></div>
+        </div>
+        <div class="form-group">
+          <label>Nomor Kwitansi / Faktur</label>
+          <input type="text" class="form-control" name="nomor_kwitansi" placeholder="Nomor Kwitansi" value="<?php 
+            if(set_value('nomor_kwitansi')=="" && isset($nomor_kwitansi)){
+              echo $nokontrak;
+            }else{
+              echo  set_value('nomor_kwitansi');
+            }
+            ?>">
+        </div>
       </div>
       <div class="box-footer">
-        <button type="submit" class="btn btn-primary">Simpan</button>
-        <button type="button" id="btn-kembali" class="btn btn-warning">Kembali</button>
+        <button type="submit" class="btn btn-primary"><i class='fa fa-save'></i> &nbsp; Simpan & Lanjutkan</button>
+        <button type="button" id="btn-kembali" class="btn btn-warning"><i class='fa fa-reply'></i> &nbsp; Kembali</button>
       </div>
       </div>
     </form>        
