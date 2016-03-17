@@ -88,47 +88,49 @@
   <canvas id="barChart" height="500" width="511" style="width: 511px; height: 240px;"></canvas>
 </div>
 <div class="row">
-  <div class="col-md-2">
+  <div class="col-md-3">
       <div class="bux"></div> &nbsp; <label>Petani</label>
   </div>
-  <div class="col-md-2">
+  <div class="col-md-3">
       <div class="bux1"></div> &nbsp; <label>Nelayan</label>
   </div>
-  <div class="col-md-2">
+  <div class="col-md-3">
       <div class="bux2"></div> &nbsp; <label>PNS / Porli / TNI</label>
   </div>
-  <div class="col-md-2">
+  <div class="col-md-3">
       <div class="bux3"></div> &nbsp; <label>Swasta</label>
   </div>
-  <div class="col-md-2">
+</div>
+<div class="row">
+  <div class="col-md-3">
       <div class="bux4"></div> &nbsp; <label>Wirawasta</label>
   </div>
-</div>
-<div class="row">
-  <div class="col-md-2">
+  <div class="col-md-3">
       <div class="bux5"></div> &nbsp; <label>Pensiunan</label>
   </div>
-  <div class="col-md-2">
+  <div class="col-md-3">
       <div class="bux6"></div> &nbsp; <label>Pekerja Lepas</label>
   </div>
-  <div class="col-md-2">
+  <div class="col-md-3">
       <div class="bux8"></div> &nbsp; <label>Tidak/Belum Bekerja</label>
-  </div>
-  <div class="col-md-2">
-      <div class="bux9"></div> &nbsp; <label>Bekerja</label>
-  </div>
-  <div class="col-md-2">
-      <div class="bux10"></div> &nbsp; <label>Belum Bekerja</label>
   </div>
 </div>
 <div class="row">
-  <div class="col-md-2">
+  <div class="col-md-3">
+      <div class="bux9"></div> &nbsp; <label>Bekerja</label>
+  </div>
+  <div class="col-md-3">
+      <div class="bux10"></div> &nbsp; <label>Belum Bekerja</label>
+  </div>
+  <div class="col-md-3">
       <div class="bux11"></div> &nbsp; <label>Tidak Bekerja</label>
   </div>
-  <div class="col-md-2">
+  <div class="col-md-3">
       <div class="bux12"></div> &nbsp; <label>IRT</label>
   </div>
-  <div class="col-md-2">
+</div>
+<div class="row">
+  <div class="col-md-3">
       <div class="bux7"></div> &nbsp; <label>Lainnya</label>
   </div>
 </div>

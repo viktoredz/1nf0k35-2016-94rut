@@ -77,39 +77,41 @@
   <canvas id="barChart" height="500" width="511" style="width: 511px; height: 240px;"></canvas>
 </div>
 <div class="row">
-  <div class="col-md-2">
+  <div class="col-md-3">
       <div class="bux"></div> &nbsp; <label>Belum Sekolah</label>
   </div>
-  <div class="col-md-2">
+  <div class="col-md-3">
       <div class="bux1"></div> &nbsp; <label>Tidak Sekolah</label>
   </div>
-  <div class="col-md-2">
+  <div class="col-md-3">
       <div class="bux2"></div> &nbsp; <label>Tidak Tamat SD</label>
   </div>
-  <div class="col-md-2">
+  <div class="col-md-3">
       <div class="bux3"></div> &nbsp; <label>Masih SD</label>
-  </div>
-  <div class="col-md-2">
-      <div class="bux4"></div> &nbsp; <label>Tamat SD</label>
   </div>
 </div>
 <div class="row">
-  <div class="col-md-1">
+  <div class="col-md-3">
+      <div class="bux4"></div> &nbsp; <label>Tamat SD</label>
+  </div>
+  <div class="col-md-3">
       <div class="bux5"></div> &nbsp; <label>Masih SMP</label>
   </div>
-  <div class="col-md-1">
+  <div class="col-md-3">
       <div class="bux6"></div> &nbsp; <label>Tamat SMP</label>
   </div>
-  <div class="col-md-2">
+  <div class="col-md-3">
       <div class="bux7"></div> &nbsp; <label>Masih SMA</label>
   </div>
-  <div class="col-md-2">
+</div>
+<div class="row">  
+  <div class="col-md-3">
       <div class="bux8"></div> &nbsp; <label>Tamat SMA</label>
   </div>
-  <div class="col-md-2">
+  <div class="col-md-3">
       <div class="bux9"></div> &nbsp; <label>Masih PT/Akademi</label>
   </div>
-  <div class="col-md-2">
+  <div class="col-md-3">
       <div class="bux10"></div> &nbsp; <label>Tamat PT/Akademi</label>
   </div>
 </div>

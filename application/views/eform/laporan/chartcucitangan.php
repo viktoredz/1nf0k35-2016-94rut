@@ -1,6 +1,6 @@
 <table class="table table-bordered table-hover">
   <tr>
-    <th>Tingkat Pendidikan</th>
+    <th>Kebiasaan Mencuci Tangan Pakai Sabun</th>
     <th>Jumlah</th>
     <th>Persentase</th>
   </tr>
@@ -45,22 +45,26 @@
   <canvas id="barChart" height="500" width="511" style="width: 511px; height: 240px;"></canvas>
 </div>
 <div class="row">
-  <div class="col-md-2">
+  <div class="col-md-6">
       <div class="bux"></div> &nbsp; <label>Selalu mencuci tangan pakai sabun</label>
   </div>
-  <div class="col-md-2">
+  <div class="col-md-6">
       <div class="bux1"></div> &nbsp; <label>Setiap kali tangan kotor (pegang uang, binatang, berkebun)</label>
   </div>
-  <div class="col-md-2">
+</div>
+<div class="row">
+  <div class="col-md-6">
       <div class="bux2"></div> &nbsp; <label>Setelah buang air besar</label>
   </div>
-  <div class="col-md-2">
+  <div class="col-md-6">
       <div class="bux3"></div> &nbsp; <label>Setelah mencebok bayi</label>
   </div>
-  <div class="col-md-2">
+  </div>
+<div class="row">
+  <div class="col-md-6">
       <div class="bux7"></div> &nbsp; <label>Setelah menggunakan pestisida/insektisida</label>
   </div>
-  <div class="col-md-2">
+  <div class="col-md-6">
       <div class="bux9"></div> &nbsp; <label>Sebelum menyusui bayi</label>
   </div>
 </div>

@@ -2,7 +2,7 @@
   <div class="col-md-6">
     <table class="table table-bordered table-hover">
       <tr>
-        <th>Jenis Kelamin</th>
+        <th>Jaminan Kesehatan</th>
         <th>Jumlah</th>
         <th>Persentase</th>
       </tr>

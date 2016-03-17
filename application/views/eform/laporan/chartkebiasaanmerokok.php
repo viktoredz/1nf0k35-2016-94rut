@@ -1,6 +1,6 @@
 <table class="table table-bordered table-hover">
   <tr>
-    <th>Tingkat Pendidikan</th>
+    <th>Distribusi merokok dalam 1 bulan terakhir</th>
     <th>Jumlah</th>
     <th>Persentase</th>
   </tr>
@@ -34,25 +34,27 @@
     <th><?php echo (isset($totalorang)) ? $totalorang : 0;?></th>
     <th><?php echo ($totalorang>0) ? number_format($totalorang/$totalorang*100,2): 0;echo " %";?></th>
   </tr>
-  <?php echo $puskesmas.'hai';?>
+  <?php // echo $puskesmas.'hai';?>
 </table>
 <div class="chart">
   <canvas id="barChart" height="400" width="511" style="width: 511px; height: 240px;"></canvas>
 </div>
 <div class="row">
-  <div class="col-md-2">
+  <div class="col-md-4">
       <div class="bux"></div> &nbsp; <label>Ya, setiap hari</label>
   </div>
-  <div class="col-md-2">
+  <div class="col-md-4">
       <div class="bux1"></div> &nbsp; <label>Ya, kadang-kadang</label>
   </div>
-  <div class="col-md-2">
+  <div class="col-md-4">
       <div class="bux2"></div> &nbsp; <label>Tidak, tapi dulu merokok setiap hari</label>
   </div>
-  <div class="col-md-2">
+</div>
+<div class="row">
+  <div class="col-md-4">
       <div class="bux3"></div> &nbsp; <label>Tidak, tapi dulu kadang-kadang</label>
   </div>
-  <div class="col-md-2">
+  <div class="col-md-4">
       <div class="bux7"></div> &nbsp; <label>Tidak pernah sama sekali</label>
   </div>
 </div>
