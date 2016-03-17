@@ -20,8 +20,6 @@ class Bhp_pengadaan extends CI_Controller {
 		$TBS = new clsTinyButStrong;		
 		$TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN);
 		
-
-
 		if($_POST) {
 			$fil = $this->input->post('filterscount');
 			$ord = $this->input->post('sortdatafield');
@@ -260,7 +258,8 @@ class Bhp_pengadaan extends CI_Controller {
 		}
 		echo json_encode($barang);
 	}
-	public function total_pengadaan($id){
+
+	function total_pengadaan($id){
 		$this->db->where('id_inv_hasbispakai_pembelian',$id);
 		$query = $this->db->get('inv_inventaris_habispakai_pembelian')->result();
 		foreach ($query as $q) {
@@ -369,6 +368,7 @@ class Bhp_pengadaan extends CI_Controller {
 
 		echo json_encode(array($json));
 	}
+
 	public function barang($id = 0){
 		$this->authentication->verify('inventory','show');
 
@@ -461,6 +461,7 @@ class Bhp_pengadaan extends CI_Controller {
 
 		echo json_encode(array($json));
 	}
+
 	public function barang__($id = 0)
 	{
 		$data	  	= array();
@@ -512,8 +513,8 @@ class Bhp_pengadaan extends CI_Controller {
 	}
 	function index(){
 		$this->authentication->verify('inventory','edit');
-		$data['title_group'] = "Barang Habis Pakai";
-		$data['title_form'] = "Permohonan / Pengadaan";
+		$data['title_group'] = "Bahan Habis Pakai";
+		$data['title_form'] = "Penerimaan / Pengadaan";
 
 		$kodepuskesmas = $this->session->userdata('puskesmas');
 		$this->db->where('code','P'.$kodepuskesmas);
@@ -567,17 +568,19 @@ class Bhp_pengadaan extends CI_Controller {
         $this->form_validation->set_rules('keterangan', 'Nomor Kontrak', 'trim');
 
 		if($this->form_validation->run()== FALSE){
-			$data['title_group'] = "Inventory";
-			$data['title_form']="Tambah Pengadaan Barang";
-			$data['action']="add";
-			$data['kode']="";
+			$data['title_group'] 	= "Bahan Habis Pakai";
+			$data['title_form']		= "Tambah Penerimaan / Pengadaan";
+			$data['action']			= "add";
+			$data['kode']			= "";
+			$data['bulan']			= array('01'=>'Januari', '02'=>'Februari', '03'=>'Maret', '04'=>'April', '05'=>'Mei', '06'=>'Juni', '07'=>'Juli', '08'=>'Agustus', '09'=>'September', '10'=>'Oktober', '11'=>'November', '12'=>'Desember');
 
 			$kodepuskesmas = $this->session->userdata('puskesmas');
 			$this->db->where('code','P'.$kodepuskesmas);
-
 			$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
 
 			$data['kodestatus'] = $this->bhp_pengadaan_model->get_data_status();
+			$data['kodejenis'] = $this->bhp_pengadaan_model->get_data_jenis();
+			$data['kodedana'] = $this->bhp_pengadaan_model->pilih_data_status('sumber_dana');
 		
 			$data['content'] = $this->parser->parse("inventory/bhp_pengadaan/form",$data,true);
 		}elseif($id = $this->bhp_pengadaan_model->insert_entry()){
@@ -605,6 +608,7 @@ class Bhp_pengadaan extends CI_Controller {
 			$data['title_form']		= "Ubah Permohonan/Pengadaan Barang";
 			$data['action']			= "edit";
 			$data['kode']			= $id_pengadaan;
+			$data['bulan'] 			= array('01'=>'Januari', '02'=>'Februari', '03'=>'Maret', '04'=>'April', '05'=>'Mei', '06'=>'Juni', '07'=>'Juli', '08'=>'Agustus', '09'=>'September', '10'=>'Oktober', '11'=>'November', '12'=>'Desember');
 
 			
 			$kodepuskesmas = $this->session->userdata('puskesmas');
@@ -614,6 +618,8 @@ class Bhp_pengadaan extends CI_Controller {
 			$data['kodestatus'] = $this->bhp_pengadaan_model->get_data_status();
 			$data['kodestatus_inv'] = $this->bhp_pengadaan_model->pilih_data_status('status_pembelian');
 			$data['tgl_opnamecond']		= $this->bhp_pengadaan_model->gettgl_opname($id_pengadaan);
+			$data['kodejenis'] = $this->bhp_pengadaan_model->get_data_jenis();
+			$data['kodedana'] = $this->bhp_pengadaan_model->pilih_data_status('sumber_dana');
 
 			$data['barang']	  	= $this->parser->parse('inventory/bhp_pengadaan/barang', $data, TRUE);
 			$data['content'] 	= $this->parser->parse("inventory/bhp_pengadaan/edit",$data,true);

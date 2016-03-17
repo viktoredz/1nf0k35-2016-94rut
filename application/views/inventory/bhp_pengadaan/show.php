@@ -20,7 +20,7 @@
 	      	<div class="box-footer">
 		      <div class="col-md-8">
 		      	<?php //if($unlock==1){ ?>
-			 	<button type="button" class="btn btn-primary" onclick="document.location.href='<?php echo base_url()?>inventory/bhp_pengadaan/add'"><i class='fa fa-plus-square-o'></i> &nbsp; Permohonan/Pengadaan Baru</button>
+			 	<button type="button" class="btn btn-primary" onclick="document.location.href='<?php echo base_url()?>inventory/bhp_pengadaan/add'"><i class='fa fa-plus-square-o'></i> &nbsp; Penerimaan / Pengadaan Baru</button>
 				<?php //} ?>		 	
 			 	<button type="button" class="btn btn-success" id="btn-refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
 	          <button type="button" id="btn-export" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Export</button>
@@ -51,7 +51,7 @@
 
 <script type="text/javascript">
 	$(function () {	
-	    $("#menu_barang_habis_pakai").addClass("active");
+	    $("#menu_bahan_habis_pakai").addClass("active");
 	    $("#menu_inventory_bhp_pengadaan").addClass("active");
 	});
 	   var source = {

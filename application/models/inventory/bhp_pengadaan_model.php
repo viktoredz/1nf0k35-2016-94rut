@@ -62,12 +62,17 @@ class Bhp_pengadaan_model extends CI_Model {
         return $register;
     }
     function get_data_status()
-    {	
-    	$this->db->where("mst_inv_pilihan.tipe",'status_pembelian');
- 		$this->db->select('mst_inv_pilihan.*');		
- 		$this->db->order_by('mst_inv_pilihan.code','asc');
-		$query = $this->db->get('mst_inv_pilihan');	
-		return $query->result();	
+    {   
+        $this->db->where("mst_inv_pilihan.tipe",'status_pembelian');
+        $this->db->select('mst_inv_pilihan.*');     
+        $this->db->order_by('mst_inv_pilihan.code','asc');
+        $query = $this->db->get('mst_inv_pilihan'); 
+        return $query->result();    
+    }
+    function get_data_jenis()
+    {   
+        $query = $this->db->get('mst_inv_barang_habispakai_jenis'); 
+        return $query->result();    
     }
     function pilih_data_status($status)
     {   

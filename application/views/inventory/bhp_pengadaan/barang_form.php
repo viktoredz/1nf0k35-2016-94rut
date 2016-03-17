@@ -22,6 +22,7 @@ if(isset($disable)){if($disable='disable'){?>
     $.get("<?php echo base_url().'inventory/bhp_pengadaan/add_barang_master/'; ?>" , function(data) {
       $("#popup_mastercontent").html(data);
     });
+
     $("#popup_masterbarang").jqxWindow({
       theme: theme, resizable: false,
       width: 500,
@@ -30,131 +31,135 @@ if(isset($disable)){if($disable='disable'){?>
     });
     $("#popup_masterbarang").jqxWindow('open');
   }
-    $(function(){
+
+  $(function(){
+      $("[name='tgl_kadaluarsa']").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme , height: '30px'});
+
       $('#btn-close').click(function(){
         close_popup();
       }); 
-        $('#form-ss').submit(function(){
-            var data = new FormData();
-            $('#notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
-            $('#notice').show();
-            data.append('id_mst_inv_barang', $('#id_mst_inv_barang').val());
-            data.append('jqxinput', $('#jqxinput').val());
-            data.append('tanggal_diterima', $('#dateInput').val());
-            data.append('nama_barang', $('#v_nama_barang').val());
-            data.append('jumlah', $('#jumlah').val());
-            data.append('harga', $('#harga').val());
-            data.append('subtotal', $('#subtotal').val());
-            data.append('id_permohonan_barang', "<?php echo $kode;?>");
-            $.ajax({
-                cache : false,
-                contentType : false,
-                processData : false,
-                type : 'POST',
-                url : '<?php echo base_url()."inventory/bhp_pengadaan/".$action."_barang/".$kode."/" ?>',
-                data : data,
-                success : function(response){
-                  var res  = response.split("|");
-                  if(res[0]=="OK"){
-                      $('#notice').hide();
-                      $('#notice-content').html('<div class="alert">'+res[1]+'</div>');
-                      $('#notice').show();
-                      $("#jqxgrid_barang").jqxGrid('updatebounddata', 'cells');
-                      close_popup();
-                  }
-                  else if(res[0]=="Error"){
-                      $('#notice').hide();
-                      $('#notice-content').html('<div class="alert">'+res[1]+'</div>');
-                      $('#notice').show();
-                  }
-                  else{
-                      $('#popup_content').html(response);
-                  }
+
+      $('#form-ss').submit(function(){
+          var data = new FormData();
+          $('#notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
+          $('#notice').show();
+          data.append('id_mst_inv_barang', $('#id_mst_inv_barang').val());
+          data.append('jqxinput', $('#jqxinput').val());
+          data.append('tanggal_diterima', $('#dateInput').val());
+          data.append('nama_barang', $('#v_nama_barang').val());
+          data.append('jumlah', $('#jumlah').val());
+          data.append('harga', $('#harga').val());
+          data.append('subtotal', $('#subtotal').val());
+          data.append('id_permohonan_barang', "<?php echo $kode;?>");
+          $.ajax({
+              cache : false,
+              contentType : false,
+              processData : false,
+              type : 'POST',
+              url : '<?php echo base_url()."inventory/bhp_pengadaan/".$action."_barang/".$kode."/" ?>',
+              data : data,
+              success : function(response){
+                var res  = response.split("|");
+                if(res[0]=="OK"){
+                    $('#notice').hide();
+                    $('#notice-content').html('<div class="alert">'+res[1]+'</div>');
+                    $('#notice').show();
+                    $("#jqxgrid_barang").jqxGrid('updatebounddata', 'cells');
+                    close_popup();
+                }
+                else if(res[0]=="Error"){
+                    $('#notice').hide();
+                    $('#notice-content').html('<div class="alert">'+res[1]+'</div>');
+                    $('#notice').show();
+                }
+                else{
+                    $('#popup_content').html(response);
+                }
+            }
+          });
+
+          return false;
+      });
+
+      $("#jqxinput").jqxInput(
+        {
+        placeHolder: " Ketik Nama Barang ",
+        theme: 'classic',
+        width: '100%',
+        height: '30px',
+        minLength: 2,
+        source: function (query, response) {
+          var dataAdapter = new $.jqx.dataAdapter
+          (
+            {
+              datatype: "json",
+                datafields: [
+                { name: 'uraian', type: 'string'},
+                { name: 'id_mst_inv_barang_habispakai', type: 'string'},
+                { name: 'hargaterakhir', type: 'string'},
+                { name: 'harga', type: 'string'},
+                { name: 'harga_opname', type: 'string'},
+                { name: 'harga_pembelian', type: 'string'},
+                { name: 'tgl_opname', type: 'date'},
+                { name: 'tgl_pembelian', type: 'date'},
+              ],
+              url: '<?php echo base_url().'inventory/bhp_pengadaan/autocomplite_barang'; ?>'
+            },
+            {
+              autoBind: true,
+              formatData: function (data) {
+                data.query = query;
+                return data;
+              },
+              loadComplete: function (data) {
+                if (data.length > 0) {
+                  response($.map(data, function (item) {
+                    if ((item.tgl_pembelian!=null)||(item.tgl_opname!=null)) {
+                      if(item.tgl_opname==null){
+                        tgl_opname = 0;
+                      }else{
+                        tgl_opname = Date.parse(item.tgl_opname);
+                      }
+
+                      if (item.tgl_pembelian==null) {
+                        tgl_pembelian = 0
+                      }else{
+                        tgl_pembelian = Date.parse(item.tgl_pembelian);
+                      }
+                      if( tgl_pembelian>= tgl_opname){
+                        var hargabarang = item.harga_pembelian;  
+                      }else{
+                        var hargabarang = item.harga_opname;  
+                      }
+                    }else{
+                      var hargabarang = item.harga;
+                    }
+                    return item.uraian+' | '+item.id_mst_inv_barang_habispakai+' | '+hargabarang;
+                  }));
+                }
               }
             });
-
-            return false;
-        });
-
-        $("#jqxinput").jqxInput(
-          {
-          placeHolder: " Ketik Nama Barang ",
-          theme: 'classic',
-          width: '100%',
-          height: '30px',
-          minLength: 2,
-          source: function (query, response) {
-            var dataAdapter = new $.jqx.dataAdapter
-            (
-              {
-                datatype: "json",
-                  datafields: [
-                  { name: 'uraian', type: 'string'},
-                  { name: 'id_mst_inv_barang_habispakai', type: 'string'},
-                  { name: 'hargaterakhir', type: 'string'},
-                  { name: 'harga', type: 'string'},
-                  { name: 'harga_opname', type: 'string'},
-                  { name: 'harga_pembelian', type: 'string'},
-                  { name: 'tgl_opname', type: 'date'},
-                  { name: 'tgl_pembelian', type: 'date'},
-                ],
-                url: '<?php echo base_url().'inventory/bhp_pengadaan/autocomplite_barang'; ?>'
-              },
-              {
-                autoBind: true,
-                formatData: function (data) {
-                  data.query = query;
-                  return data;
-                },
-                loadComplete: function (data) {
-                  if (data.length > 0) {
-                    response($.map(data, function (item) {
-                      if ((item.tgl_pembelian!=null)||(item.tgl_opname!=null)) {
-                        if(item.tgl_opname==null){
-                          tgl_opname = 0;
-                        }else{
-                          tgl_opname = Date.parse(item.tgl_opname);
-                        }
-
-                        if (item.tgl_pembelian==null) {
-                          tgl_pembelian = 0
-                        }else{
-                          tgl_pembelian = Date.parse(item.tgl_pembelian);
-                        }
-                        if( tgl_pembelian>= tgl_opname){
-                          var hargabarang = item.harga_pembelian;  
-                        }else{
-                          var hargabarang = item.harga_opname;  
-                        }
-                      }else{
-                        var hargabarang = item.harga;
-                      }
-                      return item.uraian+' | '+item.id_mst_inv_barang_habispakai+' | '+hargabarang;
-                    }));
-                  }
-                }
-              });
-          }
-        });
-      
-        $("#jqxinput").select(function(){
-            var codebarang = $(this).val();
-            var res = codebarang.split(" | ");
-            $("#id_mst_inv_barang").val(res[1]);
-            $("#harga").val(res[2]);
-        });
-        $("#harga").change(function(){
-            var jumlah = document.getElementById("jumlah").value;
-            var harga = document.getElementById("harga").value;
-            var subtotal =jumlah*harga;
-            document.getElementById("subtotal").value = toRp(subtotal);
-        });
-        $("#jumlah").change(function(){
-            var jumlah = document.getElementById("jumlah").value;
-            var harga = document.getElementById("harga").value;
-            var subtotal =jumlah*harga;
-            document.getElementById("subtotal").value = toRp(subtotal);
-        });
+        }
+      });
+    
+      $("#jqxinput").select(function(){
+          var codebarang = $(this).val();
+          var res = codebarang.split(" | ");
+          $("#id_mst_inv_barang").val(res[1]);
+          $("#harga").val(res[2]);
+      });
+      $("#harga").change(function(){
+          var jumlah = document.getElementById("jumlah").value;
+          var harga = document.getElementById("harga").value;
+          var subtotal =jumlah*harga;
+          document.getElementById("subtotal").value = toRp(subtotal);
+      });
+      $("#jumlah").change(function(){
+          var jumlah = document.getElementById("jumlah").value;
+          var harga = document.getElementById("harga").value;
+          var subtotal =jumlah*harga;
+          document.getElementById("subtotal").value = toRp(subtotal);
+      });
         
     });
 </script>
@@ -196,8 +201,9 @@ if(isset($disable)){if($disable='disable'){?>
                 }
                 ?>" />
 
-            <div class="form-group">
-              <label>Jumlah</label>
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Jumlah</div>
+            <div class="col-md-8">
               <input type="number" class="form-control" name="jumlah" id="jumlah" placeholder="Jumlah" value="<?php 
                 if(set_value('jumlah')=="" && isset($jumlah)){
                   echo $jumlah;
@@ -206,8 +212,11 @@ if(isset($disable)){if($disable='disable'){?>
                 }
                 ?>">
             </div>
-            <div class="form-group">
-              <label>Harga Satuan</label>
+          </div>
+
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Harga Satuan</div>
+            <div class="col-md-8">
               <input type="number" class="form-control" name="harga" id="harga" placeholder="Harga Satuan" value="<?php 
                 if(set_value('harga')=="" && isset($harga)){
                   echo $harga;
@@ -216,8 +225,11 @@ if(isset($disable)){if($disable='disable'){?>
                 }
                 ?>">
             </div>
-            <div class="form-group">
-              <label>Sub Total</label>
+          </div>
+          
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Sub Total</div>
+            <div class="col-md-8">
               <input type="text" class="form-control" name="subtotal"  id="subtotal" placeholder="Sub Total" readonly="" value="<?php
               if(set_value('subtotal')=="" && isset($harga)){
                   echo $jumlah*$harga;
@@ -226,6 +238,44 @@ if(isset($disable)){if($disable='disable'){?>
                 }
                 ?>">
             </div>
+          </div>
+
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Nomor Batch</div>
+            <div class="col-md-8">
+              <input type="text" class="form-control" name="batch" id="batch" placeholder="Nomor Batch" value="<?php 
+                if(set_value('batch')=="" && isset($batch)){
+                  echo $batch;
+                }else{
+                  echo  set_value('batch');
+                }
+                ?>">
+            </div>
+          </div>
+
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Tanggal Kadaluarsa</div>
+            <div class="col-md-8">
+              <div id='tgl_kadaluarsa' name="tgl_kadaluarsa" value="<?php
+                echo (set_value('tgl_kadaluarsa')!="") ? date("Y-m-d",strtotime(set_value('tgl_kadaluarsa'))) : "";
+              ?>"></div>
+            </div>
+          </div>
+
+
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Keadaan Rusak</div>
+            <div class="col-md-8">
+              <input type="number" class="form-control" name="jml_rusak" id="jml_rusak" placeholder="Jumlah Rusak" value="<?php 
+                if(set_value('jml_rusak')=="" && isset($jml_rusak)){
+                  echo $jml_rusak;
+                }else{
+                  echo  set_value('jml_rusak');
+                }
+                ?>">
+            </div>
+          </div>
+
             <?php if(isset($disable)){if($disable='disable'){?>
             <div class="form-group">
               <label>Tanggal</label>

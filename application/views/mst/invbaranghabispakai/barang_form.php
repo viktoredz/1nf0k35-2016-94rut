@@ -21,7 +21,7 @@ if(isset($disable)){if($disable='disable'){?>
             data.append('uraian', $('#uraian_').val());
             data.append('merek_tipe', $('#merk').val());
             data.append('negara_asal', $('#negara').val());
-            data.append('pilihan_satuan', $('#pilihan_satuan_barang').val());
+            data.append('pilihan_satuan', $('#pilihan_satuan').val());
             data.append('harga', $('#harga').val());
             $.ajax({
                 cache : false,
@@ -119,16 +119,17 @@ if(isset($disable)){if($disable='disable'){?>
             </div>
             <div class="form-group">
               <label>Satuan</label>
-              <select id="pilihan_satuan_barang" name="pilihan_satuan_barang" class="form-control" >
-                <?php foreach($pilihan_satuan_barang as $barang) : ?>
-                  <?php $select = $barang->code == $pilihan_satuan ? 'selected' : '' ?>
-                  <option value="<?php echo $barang->code ?>" <?php echo $select ?>><?php echo $barang->value ?></option>
-                <?php endforeach ?>
-              </select>
+              <input type="text" class="form-control" name="pilihan_satuan"  id="pilihan_satuan" placeholder="Satuan Barang" value="<?php
+              if(set_value('pilihan_satuan')=="" && isset($pilihan_satuan)){
+                  echo $pilihan_satuan;
+                }else{
+                  echo  set_value('pilihan_satuan');
+                }
+                ?>">
             </div>       
             <div class="form-group">
               <label>Harga</label>
-              <input type="text" class="form-control" name="harga"  id="harga" placeholder="Harga" value="<?php
+              <input type="number" class="form-control" name="harga"  id="harga" placeholder="Harga" value="<?php
               if(set_value('harga')=="" && isset($harga)){
                   echo $harga;
                 }else{

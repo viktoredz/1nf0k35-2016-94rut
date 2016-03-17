@@ -9,12 +9,12 @@
             var datamaster = new FormData();
             $('#noticemaster-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
             $('#noticemaster').show();
-            datamaster.append('pilihan_jenis_barang_master', $('#pilihan_jenis_barang_master').val());
+            datamaster.append('id_mst_inv_barang_habispakai_jenis', $('#pilihan_jenis_barang_master').val());
             datamaster.append('code_master', $('#code_master').val());
             datamaster.append('uraian_master', $('#uraian_master').val());
             datamaster.append('merk_master', $('#merk_master').val());
             datamaster.append('negara_master', $('#negara_master').val());
-            datamaster.append('pilihan_satuan_barang_master', $('#pilihan_satuan_barang_master').val());
+            datamaster.append('pilihan_satuan_barang_master', $('#pilihan_satuan').val());
             datamaster.append('harga_master', $('#harga_master').val());
             $.ajax({
                 cache : false,
@@ -117,16 +117,17 @@
             </div>
             <div class="form-group">
               <label>Satuan</label>
-              <select id="pilihan_satuan_barang_master" name="pilihan_satuan_barang_master" class="form-control" >
-                <?php foreach($pilihan_satuan_barang as $barang) : ?>
-                  <?php $select = $barang->code == set_value("pilihan_satuan_barang_master") ? 'selected' : '' ?>
-                  <option value="<?php echo $barang->code ?>" <?php echo $select ?>><?php echo $barang->value ?></option>
-                <?php endforeach ?>
-              </select>
+              <input type="text" class="form-control" name="pilihan_satuan"  id="pilihan_satuan" placeholder="Satuan Barang" value="<?php
+              if(set_value('pilihan_satuan')=="" && isset($pilihan_satuan)){
+                  echo $pilihan_satuan;
+                }else{
+                  echo  set_value('pilihan_satuan');
+                }
+                ?>">
             </div>       
             <div class="form-group">
               <label>Harga</label>
-              <input type="text" class="form-control" name="harga_master"  id="harga_master" placeholder="Harga" value="<?php
+              <input type="number" class="form-control" name="harga_master"  id="harga_master" placeholder="Harga" value="<?php
               if(set_value('harga_master')=="" && isset($harga)){
                   echo $harga;
                 }else{

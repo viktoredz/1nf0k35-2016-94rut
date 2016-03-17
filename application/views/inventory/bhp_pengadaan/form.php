@@ -18,66 +18,78 @@
   <div class="col-md-6">
     <div class="box box-primary">
       <div class="box-body">
-        <div class="form-group">
-          <label>Kode Lokasi</label>
-          <input type="text" class="form-control" name="kode_inventaris_" id="kode_inventaris_" placeholder="Kode Lokasi" value="<?php 
-            if(set_value('kode_inventaris_')=="" && isset($id_pengadaan)){
-               $s = array();
-                  $s[0] = substr($id_inv_habispakai_pembelian, 0,2);
-                  $s[1] = substr($id_inv_habispakai_pembelian, 2,2);
-                  $s[2] = substr($id_inv_habispakai_pembelian, 4,2);
-                  $s[3] = substr($id_inv_habispakai_pembelian, 6,2);
-                  $s[4] = substr($id_inv_habispakai_pembelian, 8,2);
-                  $s[5] = substr($id_inv_habispakai_pembelian, 10,2);
-                  $s[6] = substr($id_inv_habispakai_pembelian, 12,2);
-                  echo implode(".", $s);
-            }else{
-              echo  set_value('kode_inventaris_');
-            }
-            ?>">
+        
+        <div class="row" style="margin: 5px">
+          <div class="col-md-4" style="padding: 5px">Kode Lokasi</div>
+          <div class="col-md-8">
+            <input type="text" class="form-control" name="kode_inventaris_" id="kode_inventaris_" placeholder="Kode Lokasi" readonly>
+          </div>
         </div>
-        <div class="form-group">
-          <label>Tanggal Permohonan / Pengadaan</label>
-          <div id='tgl' name="tgl" value="<?php
+
+        <div class="row" style="margin: 5px">
+          <div class="col-md-4" style="padding: 5px">Tanggal Pengadaan</div>
+          <div class="col-md-8">
+            <div id='tgl' name="tgl" value="<?php
               echo (set_value('tgl')!="") ? date("Y-m-d",strtotime(set_value('tgl'))) : "";
             ?>"></div>
+          </div>
         </div>
-        <div class="form-group">
-          <label>Status</label>
-          <select  name="status" type="text" class="form-control">
-              <option value="">Pilih Status</option>
-              </option>
+
+        <div class="row" style="margin: 5px">
+          <div class="col-md-4" style="padding: 5px">Kategori Barang</div>
+          <div class="col-md-8">
+            <select  name="id_mst_inv_barang_habispakai_jenis" type="text" class="form-control">
+              <?php foreach($kodejenis as $jenis) : ?>
+                <?php $select = $jenis->id_mst_inv_barang_habispakai_jenis == set_value('id_mst_inv_barang_habispakai_jenis') ? 'selected' : '' ?>
+                <option value="<?php echo $jenis->id_mst_inv_barang_habispakai_jenis ?>" <?php echo $select ?>><?php echo $jenis->uraian ?></option>
+              <?php endforeach ?>
+          </select>
+          </div>
+        </div>
+
+        <div class="row" style="margin: 5px">
+          <div class="col-md-4" style="padding: 5px">Jenis Transaksi</div>
+          <div class="col-md-8">
+            <select  name="status" type="text" class="form-control">
+                <option value="pembelian" >Pembelian</option>
+                <option value="penerimaan" >Penerimaan</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row" style="margin: 5px">
+          <div class="col-md-4" style="padding: 5px">Status</div>
+          <div class="col-md-8">
+            <select  name="status" type="text" class="form-control">
               <?php foreach($kodestatus as $stat) : ?>
                 <?php $select = $stat->code == set_value('status') ? 'selected' : '' ?>
                 <option value="<?php echo $stat->code ?>" <?php echo $select ?>><?php echo $stat->value ?></option>
               <?php endforeach ?>
           </select>
+          </div>
         </div>
-        <div class="form-group">
-          <label>Puskesmas</label>
+
+        <div class="row" style="margin: 5px">
+          <div class="col-md-4" style="padding: 5px">Puskesmas</div>
+          <div class="col-md-8">
           <select  name="codepus" id="puskesmas" class="form-control">
               <?php foreach($kodepuskesmas as $pus) : ?>
                 <?php $select = $pus->code == set_value('codepus') ? 'selected' : '' ?>
                 <option value="<?php echo $pus->code ?>" <?php echo $select ?>><?php echo $pus->value ?></option>
               <?php endforeach ?>
           </select>
+          </div>
         </div>
-        <div class="form-group">
-          <label>Tanggal Pembelian</label>
+
+        <div class="row" style="margin: 5px">
+          <div class="col-md-4" style="padding: 5px">Tanggal Pembelian</div>
+          <div class="col-md-8">
           <div id='tgl2' name="tgl2" value="<?php
               echo (set_value('tgl2')!="") ? date("Y-m-d",strtotime(set_value('tgl2'))) : "";
             ?>"></div>
+          </div>
         </div>
-        <div class="form-group">
-          <label>Keterangan</label>
-          <textarea class="form-control" name="keterangan" id="keterangan" placeholder="Keterangan"><?php 
-              if(set_value('keterangan')=="" && isset($keterangan)){
-                echo $keterangan;
-              }else{
-                echo  set_value('keterangan');
-              }
-              ?></textarea>
-        </div>  
+
       </div>
     </div>
   </div><!-- /.form-box -->
@@ -85,37 +97,71 @@
   <div class="col-md-6">
     <div class="box box-warning">
       <div class="box-body">
-        <table class="table table-condensed">
-          <tr>
-            <td>Jumlah Unit</td>
-            <td>
-              <?php echo '0'.' '.'Unit' ?>
-            </td>
-          </tr>
-          <tr>
-            <td>Nilai Pengadaan</td>
-            <td>
-              <?php echo 'Rp.'.' '.'0,00' ?>
-            </td>
-          </tr>
-          <tr>
-            <td>Waktu dibuat</td>
-            <td>
-              <?php echo '00-00-0000' ?>
-            </td>
-          </tr>
-          <tr>
-            <td>Terakhir di edit</td>
-            <td>
-              <?php echo '00-00-0000' ?>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+        <div class="row" style="margin: 5px">
+          <div class="col-md-4" style="padding: 5px">Periode</div>
+          <div class="col-md-4 col-xs-6">
+            <select  name="thn_periode" type="text" class="form-control">
+              <?php for($i=date('Y');$i>=2000;$i--){ ?>
+                <?php $select = $i == set_value('thn_periode') ? 'selected' : '' ?>
+                <option value="<?php echo $i ?>" <?php echo $select ?>><?php echo $i ?></option>
+              <?php } ?>
+            </select>
+          </div>
+          <div class="col-md-4 col-xs-6">
+            <select  name="bln_periode" type="text" class="form-control">
+              <?php foreach($bulan as $x=>$y){ ?>
+                <?php $select = $x == set_value('bln_periode') ? 'selected' : '' ?>
+                <option value="<?php echo $x ?>" <?php echo $select ?>><?php echo $y ?></option>
+              <?php } ?>
+            </select>
+          </div>
+        </div>
+
+        <div class="row" style="margin: 5px">
+          <div class="col-md-4" style="padding: 5px">Sumber Dana</div>
+          <div class="col-md-4 col-xs-6">
+            <select  name="pilihan_sumber_dana" type="text" class="form-control">
+              <?php foreach($kodedana as $dana) : ?>
+                <?php $select = $dana->code == set_value('pilihan_sumber_dana') ? 'selected' : '' ?>
+                <option value="<?php echo $dana->code ?>" <?php echo $select ?>><?php echo $dana->value ?></option>
+              <?php endforeach ?>
+            </select>
+          </div>
+          <div class="col-md-4 col-xs-6">
+            <select  name="thn_dana" type="text" class="form-control">
+              <?php for($i=date('Y');$i>=2000;$i--){ ?>
+                <?php $select = $i == set_value('thn_dana') ? 'selected' : '' ?>
+                <option value="<?php echo $i ?>" <?php echo $select ?>><?php echo $i ?></option>
+              <?php } ?>
+            </select>
+          </div>
+        </div>
+
+        
+        <div class="row" style="margin: 5px">
+          <div class="col-md-4" style="padding: 5px">Instansi / PBF</div>
+          <div class="col-md-8">
+            <input type="text" class="form-control" name="pbf" id="pbf" placeholder="Instansi / PBF">
+          </div>
+        </div>
+
+        <div class="row" style="margin: 5px">
+          <div class="col-md-4" style="padding: 5px">Keterangan</div>
+          <div class="col-md-8">
+          <textarea class="form-control" name="keterangan" id="keterangan" placeholder="Keterangan"><?php 
+              if(set_value('keterangan')=="" && isset($keterangan)){
+                echo $keterangan;
+              }else{
+                echo  set_value('keterangan');
+              }
+              ?></textarea>
+          </div>  
+        </div>
+
       </div>
       <div class="box-footer">
-        <button type="submit" class="btn btn-primary">Simpan</button>
-        <button type="button" id="btn-kembali" class="btn btn-warning">Kembali</button>
+        <button type="submit" class="btn btn-primary"><i class='fa fa-save'></i> &nbsp; Simpan & Lanjutkan</button>
+        <button type="button" id="btn-kembali" class="btn btn-warning"><i class='fa fa-arrow-circle-left'></i> &nbsp;Kembali</button>
       </div>
       </div>
     </form>        
@@ -130,11 +176,11 @@ $(function(){
         window.location.href="<?php echo base_url()?>inventory/bhp_pengadaan";
     });
 
-    $("#menu_barang_habis_pakai").addClass("active");
+    $("#menu_bahan_habis_pakai").addClass("active");
     $("#menu_inventory_bhp_pengadaan").addClass("active");
 
-    $("#tgl").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme});
-    $("#tgl2").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme});
+    $("#tgl").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme , height: '30px'});
+    $("#tgl2").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme , height: '30px'});
     document.getElementById("tgl").onchange = function() {
         kodeInvetaris(document.getElementById("tgl").value);
     };

@@ -95,13 +95,15 @@
 					}
                  }
                 },
-				{ text: 'Nama Barang ', editable: false,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '31%'},
-				{ text: 'Jumlah ', align: 'center',cellsalign: 'right',editable: false,datafield: 'jml', columntype: 'textbox', filtertype: 'textbox', width: '10%'},
+				{ text: 'Nama Barang ', editable: false,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '25%'},
+				{ text: 'Batch ', align: 'center', editable: false, columntype: 'textbox', filtertype: 'textbox', width: '8%'},
+				{ text: 'Jumlah ', align: 'center',cellsalign: 'right',editable: false,datafield: 'jml', columntype: 'textbox', filtertype: 'textbox', width: '8%'},
 				{ text: 'Harga Satuan (Rp.)', align: 'center',cellsalign: 'right',editable: false, datafield: 'harga', columntype: 'textbox', filtertype: 'textbox', width: '15%'},
 				{ text: 'Sub Total (Rp.)', align: 'center',cellsalign: 'right',editable: false,datafield: 'subtotal', columntype: 'textbox', filtertype: 'none', width: '20%'},
             <?php }else{ ?>
-				{ text: 'Nama Barang ', editable: false,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '36%'},
-				{ text: 'Jumlah ', align: 'center',cellsalign: 'right',editable: false,datafield: 'jml', columntype: 'textbox', filtertype: 'textbox', width: '11%'},
+				{ text: 'Nama Barang ', editable: false,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '25%'},
+				{ text: 'Batch ', align: 'center', editable: false, columntype: 'textbox', filtertype: 'textbox', width: '8%'},
+				{ text: 'Jumlah ', align: 'center',cellsalign: 'right',editable: false,datafield: 'jml', columntype: 'textbox', filtertype: 'textbox', width: '9%'},
 				{ text: 'Harga Satuan (Rp.)', align: 'center',cellsalign: 'right',editable: false, datafield: 'harga', columntype: 'textbox', filtertype: 'textbox', width: '17%'},
 				{ text: 'Sub Total (Rp.)', align: 'center',cellsalign: 'right',editable: false,datafield: 'subtotal', columntype: 'textbox', filtertype: 'none', width: '20%'},
             <?php } ?>
@@ -211,7 +213,7 @@
 		$("#popup_barang").jqxWindow({
 			theme: theme, resizable: false,
 			width: 500,
-			height: 500,
+			height: 480,
 			isModal: true, autoOpen: false, modalOpacity: 0.2
 		});
 		$("#popup_barang").jqxWindow('open');
@@ -225,7 +227,7 @@
 		$("#popup_barang").jqxWindow({
 			theme: theme, resizable: false,
 			width: 500,
-			height: 500,
+			height: 480,
 			isModal: true, autoOpen: false, modalOpacity: 0.2
 		});
 		$("#popup_barang").jqxWindow('open');

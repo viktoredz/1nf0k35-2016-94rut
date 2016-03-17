@@ -29,132 +29,201 @@ function validateForm() {
   <div class="col-md-6">
     <div class="box box-primary">
       <div class="box-body">
-        <div class="form-group">
-          <label>Kode Lokasi</label>
-          <input type="text" class="form-control" name="kode_inventaris_" id="kode_inventaris_" placeholder="Kode Lokasi" value="<?php 
-            if(set_value('kode_inventaris_')=="" && isset($id_pengadaan)){
-                  $s = array();
-                  $s[0] = substr($id_inv_habispakai_pembelian, 0,2);
-                  $s[1] = substr($id_inv_habispakai_pembelian, 2,2);
-                  $s[2] = substr($id_inv_habispakai_pembelian, 4,2);
-                  $s[3] = substr($id_inv_habispakai_pembelian, 6,2);
-                  $s[4] = substr($id_inv_habispakai_pembelian, 8,2);
-                  $s[5] = substr($id_inv_habispakai_pembelian, 10,2);
-                  $s[6] = substr($id_inv_habispakai_pembelian, 12,2);
-                  echo implode(".", $s);
-            }else{
-              echo  set_value('kode_inventaris_');
-            }
-            ?>" readonly="">
+        
+        <div class="row" style="margin: 5px">
+          <div class="col-md-4" style="padding: 5px">Kode Lokasi</div>
+          <div class="col-md-8">
+            <input type="text" class="form-control" name="kode_inventaris_" id="kode_inventaris_" placeholder="Kode Lokasi" readonly>
+          </div>
         </div>
-        <div class="form-group">
-          <label>Tanggal Pengadaan</label><?php if(isset($viewreadonly)){if($action='view'){ 
-            echo "<br>".date("d-m-Y",strtotime($tgl_permohonan)); }}else{ ?>
-              <div id='tgl' name="tgl" disabled value="<?php
-              echo $tgl_permohonan;;//echo ($tgl_pengadaan!="") ? date("Y-m-d",strtotime($$tgl_pengadaan)) : "";
-            ?>" ></div>
-             <?php  }?>
+
+        <div class="row" style="margin: 5px">
+          <div class="col-md-4" style="padding: 5px">Tanggal Pengadaan</div>
+          <div class="col-md-8">
+            <div id='tgl' name="tgl" value="<?php
+              echo (set_value('tgl')!="") ? date("Y-m-d",strtotime(set_value('tgl'))) : "";
+            ?>"></div>
+          </div>
         </div>
-        <div class="form-group">
-          <label>Status Pengadaan</label>
-          <?php if(!isset($viewreadonly)){ ?>
-          <select  name="status" type="text" class="form-control">
-              <option value="">Pilih Status</option>
+
+        <div class="row" style="margin: 5px">
+          <div class="col-md-4" style="padding: 5px">Kategori Barang</div>
+          <div class="col-md-8">
+            <select  name="id_mst_inv_barang_habispakai_jenis" type="text" class="form-control">
+              <?php foreach($kodejenis as $jenis) : ?>
+                <?php $select = $jenis->id_mst_inv_barang_habispakai_jenis == set_value('id_mst_inv_barang_habispakai_jenis') ? 'selected' : '' ?>
+                <option value="<?php echo $jenis->id_mst_inv_barang_habispakai_jenis ?>" <?php echo $select ?>><?php echo $jenis->uraian ?></option>
+              <?php endforeach ?>
+          </select>
+          </div>
+        </div>
+
+        <div class="row" style="margin: 5px">
+          <div class="col-md-4" style="padding: 5px">Jenis Transaksi</div>
+          <div class="col-md-8">
+            <select  name="status" type="text" class="form-control">
+                <option value="pembelian" >Pembelian</option>
+                <option value="penerimaan" >Penerimaan</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row" style="margin: 5px">
+          <div class="col-md-4" style="padding: 5px">Status</div>
+          <div class="col-md-8">
+            <select  name="status" type="text" class="form-control">
               <?php foreach($kodestatus as $stat) : ?>
-                <?php $select = $stat->code == $pilihan_status_pembelian ? 'selected' : '' ?>
+                <?php $select = $stat->code == set_value('status') ? 'selected' : '' ?>
                 <option value="<?php echo $stat->code ?>" <?php echo $select ?>><?php echo $stat->value ?></option>
               <?php endforeach ?>
           </select>
-          <?php }else{ 
-              foreach($kodestatus as $stat) : 
-                if($stat->code == $pilihan_status_pembelian ){
-                  echo "<br>".$stat->value ;
-                }
-              endforeach;
-          } ?>
+          </div>
         </div>
-        <div class="form-group">
-          <label>Puskesmas</label>
-          <?php if(!isset($viewreadonly)){ ?>
+
+        <div class="row" style="margin: 5px">
+          <div class="col-md-4" style="padding: 5px">Puskesmas</div>
+          <div class="col-md-8">
           <select  name="codepus" id="puskesmas" class="form-control">
               <?php foreach($kodepuskesmas as $pus) : ?>
-                <?php $select = $pus->code == $code_cl_phc ? 'selected' : '' ?>
+                <?php $select = $pus->code == set_value('codepus') ? 'selected' : '' ?>
                 <option value="<?php echo $pus->code ?>" <?php echo $select ?>><?php echo $pus->value ?></option>
               <?php endforeach ?>
           </select>
-          <?php }else{ 
-              foreach($kodepuskesmas as $pus) : 
-                if($pus->code == $code_cl_phc ){
-                  echo "<br>".$pus->value ;
-                }
-              endforeach;
-          } ?>
+          </div>
         </div>
-        <div class="form-group">
-          <label>Tanggal Pembelian</label><?php if(isset($viewreadonly)){if($action='view'){ 
-            echo "<br>".date("d-m-Y",strtotime($tgl_pembelian)); }}else{ ?>
-              <div id='tgl2' name="tgl2" disabled value="<?php
-              echo $tgl_pembelian;;//echo ($tgl_pengadaan!="") ? date("Y-m-d",strtotime($$tgl_pengadaan)) : "";
-            ?>" ></div>
-             <?php  }?>
+
+        <div class="row" style="margin: 5px">
+          <div class="col-md-4" style="padding: 5px">Tanggal Pembelian</div>
+          <div class="col-md-8">
+          <div id='tgl2' name="tgl2" value="<?php
+              echo (set_value('tgl2')!="") ? date("Y-m-d",strtotime(set_value('tgl2'))) : "";
+            ?>"></div>
+          </div>
         </div>
-        <div class="form-group">
-          <label>Keterangan</label>
-          <?php if(!isset($viewreadonly)){ ?>
-          <textarea class="form-control" id="keterangan" name="keterangan" placeholder="Keterangan"><?php 
-              if(set_value('keterangan')=="" && isset($keterangan)){
-                echo $keterangan;
-              }else{
-                echo  set_value('keterangan');
-              }
-              ?></textarea>
-          <?php }else{ 
-              echo "<br>".$nomor_kontrak;
-          } ?>
+
+        <div class="row" style="margin: 5px">
+          <div class="col-md-4" style="padding: 5px">Periode</div>
+          <div class="col-md-4 col-xs-6">
+            <select  name="thn_periode" type="text" class="form-control">
+              <?php for($i=date('Y');$i>=2000;$i--){ ?>
+                <?php $select = $i == set_value('thn_periode') ? 'selected' : '' ?>
+                <option value="<?php echo $i ?>" <?php echo $select ?>><?php echo $i ?></option>
+              <?php } ?>
+            </select>
+          </div>
+          <div class="col-md-4 col-xs-6">
+            <select  name="bln_periode" type="text" class="form-control">
+              <?php foreach($bulan as $x=>$y){ ?>
+                <?php $select = $x == set_value('bln_periode') ? 'selected' : '' ?>
+                <option value="<?php echo $x ?>" <?php echo $select ?>><?php echo $y ?></option>
+              <?php } ?>
+            </select>
+          </div>
         </div>
+
+        <div class="row" style="margin: 5px">
+          <div class="col-md-4" style="padding: 5px">Sumber Dana</div>
+          <div class="col-md-4 col-xs-6">
+            <select  name="pilihan_sumber_dana" type="text" class="form-control">
+              <?php foreach($kodedana as $dana) : ?>
+                <?php $select = $dana->code == set_value('pilihan_sumber_dana') ? 'selected' : '' ?>
+                <option value="<?php echo $dana->code ?>" <?php echo $select ?>><?php echo $dana->value ?></option>
+              <?php endforeach ?>
+            </select>
+          </div>
+          <div class="col-md-4 col-xs-6">
+            <select  name="thn_dana" type="text" class="form-control">
+              <?php for($i=date('Y');$i>=2000;$i--){ ?>
+                <?php $select = $i == set_value('thn_dana') ? 'selected' : '' ?>
+                <option value="<?php echo $i ?>" <?php echo $select ?>><?php echo $i ?></option>
+              <?php } ?>
+            </select>
+          </div>
+        </div>
+
+        
+        <div class="row" style="margin: 5px">
+          <div class="col-md-4" style="padding: 5px">Instansi / PBF</div>
+          <div class="col-md-8">
+            <input type="text" class="form-control" name="pbf" id="pbf" placeholder="Instansi / PBF">
+          </div>
+        </div>
+
       </div>
-    </div>
+      </div>
+    </form>        
+
   </div><!-- /.form-box -->
+
+
+
+
 
   <div class="col-md-6">
     <div class="box box-warning">
       <div class="box-body">
       <div id="success"> 
-      <div class="form-group">
-          <label>Nomor Kontrak</label>
-          <?php if(!isset($viewreadonly)){ ?>
-          <input type="text" class="form-control" name="nomor_kontrak" placeholder="Nomor Kontrak" value="<?php 
-            if(set_value('nomor_kontrak')=="" && isset($nomor_kontrak)){
-              echo $nomor_kontrak;
-            }else{
-              echo  set_value('nomor_kontrak');
-            }
-            ?>">
-          <?php }else{ 
-              echo "<br>".$nomor_kontrak;
-          } ?>
-        </div>
         <div class="form-group">
-          <label>Tanggal Kwitansi</label><?php if(isset($viewreadonly)){if($action='view'){ 
+
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Nomor Kontrak</div>
+            <div class="col-md-8">
+            <?php if(!isset($viewreadonly)){ ?>
+            <input type="text" class="form-control" name="nomor_kontrak" placeholder="Nomor Kontrak" value="<?php 
+              if(set_value('nomor_kontrak')=="" && isset($nomor_kontrak)){
+                echo $nomor_kontrak;
+              }else{
+                echo  set_value('nomor_kontrak');
+              }
+              ?>">
+            <?php }else{ 
+                echo "<br>".$nomor_kontrak;
+            } ?>
+            </div>
+          </div>
+
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Tanggal Kwitansi</div>
+            <div class="col-md-8">
+            <?php if(isset($viewreadonly)){if($action='view'){ 
             echo "<br>".date("d-m-Y",strtotime($tgl_kwitansi)); }}else{ ?>
               <div id='tgl1' name="tgl1" disabled value="<?php
               echo $tgl_kwitansi;;//echo ($tgl_pengadaan!="") ? date("Y-m-d",strtotime($$tgl_pengadaan)) : "";
             ?>" ></div>
              <?php  }?>
-        </div>
-        <div class="form-group">
-          <label>Nomor Kwitansi</label>
-          <?php if(!isset($viewreadonly)){ ?>
-          <input type="text" class="form-control" name="nomor_kwitansi" placeholder="Nomor Kwitansi" value="<?php 
-            if(set_value('nomor_kwitansi')=="" && isset($nomor_kwitansi)){
-              echo $nomor_kwitansi;
-            }else{
-              echo  set_value('nomor_kwitansi');
-            }
-            ?>">
-          <?php }else{ 
-              echo "<br>".$nomor_kwitansi;
-          } ?>
+            </div>
+          </div>
+
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Nomor Kwitansi</div>
+            <div class="col-md-8">
+            <?php if(!isset($viewreadonly)){ ?>
+            <input type="text" class="form-control" name="nomor_kwitansi" placeholder="Nomor Kwitansi" value="<?php 
+              if(set_value('nomor_kwitansi')=="" && isset($nomor_kwitansi)){
+                echo $nomor_kwitansi;
+              }else{
+                echo  set_value('nomor_kwitansi');
+              }
+              ?>">
+            <?php }else{ 
+                echo "<br>".$nomor_kwitansi;
+            } ?>
+            </div>
+          </div>
+
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Keterangan</div>
+            <div class="col-md-8">
+            <textarea class="form-control" name="keterangan" id="keterangan" placeholder="Keterangan"><?php 
+                if(set_value('keterangan')=="" && isset($keterangan)){
+                  echo $keterangan;
+                }else{
+                  echo  set_value('keterangan');
+                }
+                ?></textarea>
+            </div>  
+          </div>
+
         </div>
           <table class="table table-condensed">
               <tr>
@@ -223,13 +292,13 @@ $(function(){
         window.location.href="<?php echo base_url()?>inventory/bhp_pengadaan/edit/{kode}";
     });
 
-    $("#menu_barang_habis_pakai").addClass("active");
+    $("#menu_bahan_habis_pakai").addClass("active");
     $("#menu_inventory_bhp_pengadaan").addClass("active");
 
     <?php if(!isset($viewreadonly)){?>
-      $("#tgl").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme});
-      $("#tgl1").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme});
-      $("#tgl2").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme});
+      $("#tgl").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme , height: '30px'});
+      $("#tgl1").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme , height: '30px'});
+      $("#tgl2").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme , height: '30px'});
     
     document.getElementById("tgl").onchange = function() {
         kodeInvetaris(document.getElementById("tgl").value);
