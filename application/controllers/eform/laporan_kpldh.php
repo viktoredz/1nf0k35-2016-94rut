@@ -14,7 +14,7 @@ class Laporan_kpldh extends CI_Controller {
 	}
 
 	function index(){
-		$this->authentication->verify('inventory','edit');
+		$this->authentication->verify('eform','show');
 		$data['title_group'] 	= "Laporan";
 		$data['title_form'] 	= "Ketuk Pintu Layani Dengan Hati";;
 
@@ -31,7 +31,7 @@ class Laporan_kpldh extends CI_Controller {
 			$kecamatan = $this->input->post('kecamatan');
 			$kode 	= $this->datakeluarga_model->get_datawhere($kecamatan,"code","cl_village");
 
-				echo '<option value="">Pilih Keluarahan</option>';
+				echo '<option value="">Seluruh Keluarahan</option>';
 			foreach($kode as $kode) :
 				echo $select = $kode->code == set_value('kelurahan') ? 'selected' : '';
 				echo '<option value="'.$kode->code.'" '.$select.'>' . $kode->value . '</option>';
