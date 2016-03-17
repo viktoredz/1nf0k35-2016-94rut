@@ -75,6 +75,8 @@
           <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
             <span class="sr-only">Toggle navigation</span>
           </a>
+
+
           <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
               <li class="dropdown user user-menu">
@@ -93,6 +95,17 @@
                 </a>
               </li>
             </ul>
+          </div>
+
+          <div class="hidden-md hidden-lg hidden-sm">
+            <a href="<?php echo base_url()."morganisasi/logout" ?>" class="sidebar-link">
+              <i class="fa fa-sign-out"></i>
+              <span>Keluar</span>
+            </a>
+            <a href="<?php echo base_url()."morganisasi/profile" ?>" class="sidebar-link">
+              <i class="fa fa-user"></i>
+              <span><?php echo ucwords($this->session-> userdata('username'));?></span>
+            </a>
           </div>
         </nav>
       </header>
