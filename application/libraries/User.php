@@ -121,7 +121,7 @@
 						'logged_in'		=> false
 					);
 					
-			$this->obj->session->set_userdata($data);
+			$this->obj->session->unset_userdata($data);
 			
 			foreach ($data as $key => $value)
 			{
