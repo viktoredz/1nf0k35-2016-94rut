@@ -119,43 +119,28 @@
 
 		$("#hilang").hide(); 
       	$('#btn-preview').click(function(){
-      		
-      		$('#judul').html($('[name=laporan] :selected').text());
-      		//$('#isi').html($('[name=laporan] :selected').text());
       		var judul = $('[name=laporan] :selected').text();
       		var kecamatanbar = $("#kecamatan").val();
       		var kelurahanbar = $("#kelurahan").val();
       		var id_judul = $("#laporan").val();
       		var rw = $("#rw").val();
-      		if ($("#laporan").val()=="") {
-      			alert("Silahkan Pilih Laporan Terlebih Dahulu");
-      			$("#hilang").hide();
-      		}else{
-      			$("#hilang").show(); 
-      		}
+	      		if ($("#laporan").val()=="") {
+	      			$("#hilang").hide();
+	      			alert("Silahkan Pilih Laporan Terlebih Dahulu");
+	      		}else{
+	      			$("#hilang").show(); 
+	      		}
       		$.ajax({
 		        url : '<?php echo site_url('eform/laporan_kpldh/pilihchart/') ?>',
 		        type : 'POST',
 		        data : 'judul=' + judul+'&kecamatan=' + kecamatanbar+'&kelurahan=' + kelurahanbar+'&rw=' + rw+'&id_judul=' + id_judul,
 		        success : function(data) {
-		          $('#tampilchart').html(data);
+		        	$('#judul').html($('[name=laporan] :selected').text());
+		          	$('#tampilchart').html(data);
 		        }
 	     	});
 
 	      return false;
-      		/*var rwbar = $("#rw").val();
-      		if (judul=="Pilih Laporan"){
-      			$('#row_umur').hide(); 
-      			$('#row_kelamin').hide();
-      		}else if (judul=="Distribusi Penduduk Berdasarkan Jenis Kelamin") {
-      			//alert('hai');
-      			kelaminbar();
-      			 $('#row_kelamin').show(); 
-      			$('#row_umur').hide(); 
-      		}else{
-      			$('#row_kelamin').hide(); 
-      			$('#row_umur').show(); 
-      		}*/
 
       	});
       	

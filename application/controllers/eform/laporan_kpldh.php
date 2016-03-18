@@ -46,6 +46,7 @@ class Laporan_kpldh extends CI_Controller {
 	if ($this->input->post('kelurahan')!="null") {
 		if($this->input->is_ajax_request()) {
 			$kelurahan = $this->input->post('kelurahan');
+			$this->db->group_by("rw");
 			$kode 	= $this->datakeluarga_model->get_datawhere($kelurahan,"id_desa","data_keluarga");
 
 				echo '<option value="">Pilih RW</option>';
