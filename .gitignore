@@ -13,3 +13,7 @@ public/temp/
 application/controllers/inventory/temp/
 test.png
 application/third_party/phpqrcode/
+media/images/photos/320520040001/torres_signs.jpg
+media/images/photos/320520040002/image003.gif
+media/images/photos/320520160001/image001.gif
+application/config/database.php
