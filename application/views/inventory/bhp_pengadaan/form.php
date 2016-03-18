@@ -50,7 +50,7 @@
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Jenis Transaksi</div>
           <div class="col-md-8">
-            <select  name="status" type="text" class="form-control">
+            <select  name="jenistransaksi" type="text" class="form-control">
                 <option value="pembelian" >Pembelian</option>
                 <option value="penerimaan" >Penerimaan</option>
             </select>
@@ -141,7 +141,8 @@
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Instansi / PBF</div>
           <div class="col-md-8">
-            <input type="text" class="form-control" name="pbf" id="pbf" placeholder="Instansi / PBF">
+            <input type="text" class="form-control" name="pbf" id="pbf" placeholder="Instansi / PBF"  autocomplete="off">
+            <input type="hidden" class="form-control" name="id_mst_inv_pbf_code" id="id_mst_inv_pbf_code" >
           </div>
         </div>
 
@@ -184,6 +185,46 @@ $(function(){
     document.getElementById("tgl").onchange = function() {
         kodeInvetaris(document.getElementById("tgl").value);
     };
+    $("#pbf").jqxInput(
+        {
+        placeHolder: " Ketik Instansi / PBF",
+        theme: 'classic',
+        width: '100%',
+        height: '30px',
+        minLength: 2,
+        source: function (query, response) {
+          var dataAdapter = new $.jqx.dataAdapter
+          (
+            {
+              datatype: "json",
+                datafields: [
+                { name: 'code', type: 'string'},
+                { name: 'nama', type: 'string'},
+              ],
+              url: '<?php echo base_url().'inventory/bhp_pengadaan/autocomplite_bnf'; ?>'
+            },
+            {
+              autoBind: true,
+              formatData: function (data) {
+                data.query = query;
+                return data;
+              },
+              loadComplete: function (data) {
+                if (data.length > 0) {
+                  response($.map(data, function (item) {
+                    return item.code+' | '+item.nama;
+                  }));
+                }
+              }
+            });
+        }
+      });
+    
+      $("#pbf").select(function(){
+          var codepbf = $(this).val();
+          var res = codepbf.split(" | ");
+          $("#id_mst_inv_pbf_code").val(res[0]);
+      });
   });
   
   function kodeInvetaris(tahun)

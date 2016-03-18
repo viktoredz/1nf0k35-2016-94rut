@@ -16,6 +16,7 @@
 <script>
 
 function validateForm() {
+  //alert('hai');
     var tanggalopname = $("#tgl2").val().split('-');
   //  alert(Date.parse(tanggalopname[2]-tanggalopname[1]-tanggalopname[0])+'<='+Date.parse($("#tgl__opname_").val()));
      if (Date.parse(tanggalopname[2]-tanggalopname[1]-tanggalopname[0])<=Date.parse($("#tgl__opname_").val())) {
@@ -33,7 +34,7 @@ function validateForm() {
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Kode Lokasi</div>
           <div class="col-md-8">
-            <input type="text" class="form-control" name="kode_inventaris_" id="kode_inventaris_" placeholder="Kode Lokasi" readonly>
+            <input type="text" class="form-control" name="kode_inventaris_" id="kode_inventaris_" placeholder="Kode Lokasi" readonly="">
           </div>
         </div>
 
@@ -41,7 +42,7 @@ function validateForm() {
           <div class="col-md-4" style="padding: 5px">Tanggal Pengadaan</div>
           <div class="col-md-8">
             <div id='tgl' name="tgl" value="<?php
-              echo (set_value('tgl')!="") ? date("Y-m-d",strtotime(set_value('tgl'))) : "";
+              echo (!empty($tgl_permohonan)) ? date("Y-m-d",strtotime($tgl_permohonan)) : "";
             ?>"></div>
           </div>
         </div>
@@ -49,9 +50,9 @@ function validateForm() {
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Kategori Barang</div>
           <div class="col-md-8">
-            <select  name="id_mst_inv_barang_habispakai_jenis" type="text" class="form-control">
+            <select  name="id_mst_inv_barang_habispakai_jenis" type="text" class="form-control" disabled="">
               <?php foreach($kodejenis as $jenis) : ?>
-                <?php $select = $jenis->id_mst_inv_barang_habispakai_jenis == set_value('id_mst_inv_barang_habispakai_jenis') ? 'selected' : '' ?>
+                <?php $select = $jenis->id_mst_inv_barang_habispakai_jenis == $id_mst_inv_barang_habispakai_jenis ? 'selected=selected' : '' ?>
                 <option value="<?php echo $jenis->id_mst_inv_barang_habispakai_jenis ?>" <?php echo $select ?>><?php echo $jenis->uraian ?></option>
               <?php endforeach ?>
           </select>
@@ -61,9 +62,18 @@ function validateForm() {
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Jenis Transaksi</div>
           <div class="col-md-8">
-            <select  name="status" type="text" class="form-control">
-                <option value="pembelian" >Pembelian</option>
-                <option value="penerimaan" >Penerimaan</option>
+            <select  name="jenis_transaksi" type="text" class="form-control"  disabled="">
+              <?php 
+                 if($jenis_transaksi=="pembelian"){
+                    $select1 = "selected=selected" ;
+                    $select2 = "" ;
+                 }else{
+                    $select2 = "selected=selected" ;
+                    $select1 = "" ;
+                 }
+              ?>
+                <option value="pembelian" <?php echo $select1 ?>>Pembelian</option>
+                <option value="penerimaan" <?php echo $select2 ?>>Penerimaan</option>
             </select>
           </div>
         </div>
@@ -71,9 +81,9 @@ function validateForm() {
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Status</div>
           <div class="col-md-8">
-            <select  name="status" type="text" class="form-control">
+            <select  name="status" id="status" type="text" class="form-control"  disabled="">
               <?php foreach($kodestatus as $stat) : ?>
-                <?php $select = $stat->code == set_value('status') ? 'selected' : '' ?>
+                <?php $select = $stat->code == $pilihan_status_pembelian ? 'selected=selected' : '' ?>
                 <option value="<?php echo $stat->code ?>" <?php echo $select ?>><?php echo $stat->value ?></option>
               <?php endforeach ?>
           </select>
@@ -83,9 +93,9 @@ function validateForm() {
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Puskesmas</div>
           <div class="col-md-8">
-          <select  name="codepus" id="puskesmas" class="form-control">
+          <select  name="codepus" id="puskesmas" class="form-control"  disabled="">
               <?php foreach($kodepuskesmas as $pus) : ?>
-                <?php $select = $pus->code == set_value('codepus') ? 'selected' : '' ?>
+                <?php $select = $pus->code == $code_cl_phc ? 'selected' : '' ?>
                 <option value="<?php echo $pus->code ?>" <?php echo $select ?>><?php echo $pus->value ?></option>
               <?php endforeach ?>
           </select>
@@ -96,7 +106,7 @@ function validateForm() {
           <div class="col-md-4" style="padding: 5px">Tanggal Pembelian</div>
           <div class="col-md-8">
           <div id='tgl2' name="tgl2" value="<?php
-              echo (set_value('tgl2')!="") ? date("Y-m-d",strtotime(set_value('tgl2'))) : "";
+              echo (!empty($tgl_pembelian)) ? date("Y-m-d",strtotime($tgl_pembelian)) : "";
             ?>"></div>
           </div>
         </div>
@@ -104,17 +114,21 @@ function validateForm() {
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Periode</div>
           <div class="col-md-4 col-xs-6">
-            <select  name="thn_periode" type="text" class="form-control">
-              <?php for($i=date('Y');$i>=2000;$i--){ ?>
-                <?php $select = $i == set_value('thn_periode') ? 'selected' : '' ?>
+            <select  name="thn_periode" type="text" class="form-control"  disabled="">
+              <?php 
+              $tglperiode = explode("-", $bln_periode);
+              for($i=date('Y');$i>=2000;$i--){ ?>
+                <?php $select = $i == $tglperiode[0] ? 'selected' : '' ?>
                 <option value="<?php echo $i ?>" <?php echo $select ?>><?php echo $i ?></option>
               <?php } ?>
             </select>
           </div>
           <div class="col-md-4 col-xs-6">
-            <select  name="bln_periode" type="text" class="form-control">
-              <?php foreach($bulan as $x=>$y){ ?>
-                <?php $select = $x == set_value('bln_periode') ? 'selected' : '' ?>
+            <select  name="bln_periode" type="text" class="form-control"  disabled="">
+              <?php 
+              $tglperiode = explode("-", $bln_periode);
+              foreach($bulan as $x=>$y){ ?>
+                <?php $select = $x == $tglperiode[1] ? 'selected' : '' ?>
                 <option value="<?php echo $x ?>" <?php echo $select ?>><?php echo $y ?></option>
               <?php } ?>
             </select>
@@ -124,17 +138,17 @@ function validateForm() {
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Sumber Dana</div>
           <div class="col-md-4 col-xs-6">
-            <select  name="pilihan_sumber_dana" type="text" class="form-control">
+            <select  name="pilihan_sumber_dana" type="text" class="form-control"  disabled="">
               <?php foreach($kodedana as $dana) : ?>
-                <?php $select = $dana->code == set_value('pilihan_sumber_dana') ? 'selected' : '' ?>
+                <?php $select = $dana->code == $pilihan_sumber_dana ? 'selected=selected' : '' ?>
                 <option value="<?php echo $dana->code ?>" <?php echo $select ?>><?php echo $dana->value ?></option>
               <?php endforeach ?>
             </select>
           </div>
           <div class="col-md-4 col-xs-6">
-            <select  name="thn_dana" type="text" class="form-control">
+            <select  name="thn_dana" type="text" class="form-control"  disabled="">
               <?php for($i=date('Y');$i>=2000;$i--){ ?>
-                <?php $select = $i == set_value('thn_dana') ? 'selected' : '' ?>
+                <?php $select = $i == $thn_dana ? 'selected' : '' ?>
                 <option value="<?php echo $i ?>" <?php echo $select ?>><?php echo $i ?></option>
               <?php } ?>
             </select>
@@ -145,13 +159,14 @@ function validateForm() {
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Instansi / PBF</div>
           <div class="col-md-8">
-            <input type="text" class="form-control" name="pbf" id="pbf" placeholder="Instansi / PBF">
+            <input type="text" class="form-control" name="pbf" id="pbf" placeholder="Instansi / PBF" 
+            value="<?php echo $nama_pbf; ?>" readonly="">
+            <input type="hidden" class="form-control" name="id_mst_inv_pbf_code" id="id_mst_inv_pbf_code" value="<?php echo $mst_inv_pbf_code; ?>">
           </div>
         </div>
 
       </div>
-      </div>
-    </form>        
+      </div>      
 
   </div><!-- /.form-box -->
 
@@ -214,7 +229,7 @@ function validateForm() {
           <div class="row" style="margin: 5px">
             <div class="col-md-4" style="padding: 5px">Keterangan</div>
             <div class="col-md-8">
-            <textarea class="form-control" name="keterangan" id="keterangan" placeholder="Keterangan"><?php 
+            <textarea class="form-control" name="keterangan" id="keterangan" placeholder="Keterangan"  disabled=""><?php 
                 if(set_value('keterangan')=="" && isset($keterangan)){
                   echo $keterangan;
                 }else{
@@ -269,7 +284,8 @@ function validateForm() {
     </form>        
     </div>
   </div><!-- /.form-box -->
-</div><!-- /.register-box -->      
+</div><!-- /.register-box -->    
+ </form>    
 <div class="box box-success">
   <div class="box-body">
     <div class="div-grid">

@@ -33,8 +33,15 @@ if(isset($disable)){if($disable='disable'){?>
   }
 
   $(function(){
+    <?php 
+    if (isset($obat)) {
+      if ($obat=="8") {
+    ?>
       $("[name='tgl_kadaluarsa']").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme , height: '30px'});
-
+    <?php
+      }else{}
+    }
+    ?>
       $('#btn-close').click(function(){
         close_popup();
       }); 
@@ -46,8 +53,11 @@ if(isset($disable)){if($disable='disable'){?>
           data.append('id_mst_inv_barang', $('#id_mst_inv_barang').val());
           data.append('jqxinput', $('#jqxinput').val());
           data.append('tanggal_diterima', $('#dateInput').val());
+          data.append('tgl_kadaluarsa', $('#tgl_kadaluarsa').val());
           data.append('nama_barang', $('#v_nama_barang').val());
           data.append('jumlah', $('#jumlah').val());
+          data.append('jml_rusak', $('#jml_rusak').val());
+          data.append('batch', $('#batch').val());
           data.append('harga', $('#harga').val());
           data.append('subtotal', $('#subtotal').val());
           data.append('id_permohonan_barang', "<?php echo $kode;?>");
@@ -103,7 +113,7 @@ if(isset($disable)){if($disable='disable'){?>
                 { name: 'tgl_opname', type: 'date'},
                 { name: 'tgl_pembelian', type: 'date'},
               ],
-              url: '<?php echo base_url().'inventory/bhp_pengadaan/autocomplite_barang'; ?>'
+              url: "<?php echo base_url().'inventory/bhp_pengadaan/autocomplite_barang/'.$obat; ?>"
             },
             {
               autoBind: true,
@@ -132,7 +142,13 @@ if(isset($disable)){if($disable='disable'){?>
                         var hargabarang = item.harga_opname;  
                       }
                     }else{
-                      var hargabarang = item.harga;
+                      if (item.harga==null) {
+                        var hargaasli =0;
+                      }else{
+                        var hargaasli =item.harga;
+                      }
+
+                      var hargabarang = hargaasli;
                     }
                     return item.uraian+' | '+item.id_mst_inv_barang_habispakai+' | '+hargabarang;
                   }));
@@ -153,6 +169,14 @@ if(isset($disable)){if($disable='disable'){?>
           var harga = document.getElementById("harga").value;
           var subtotal =jumlah*harga;
           document.getElementById("subtotal").value = toRp(subtotal);
+      });
+      $("#jml_rusak").change(function(){
+          if (document.getElementById("jml_rusak").value > document.getElementById("jumlah").value) {
+            alert("Maaf, Data jumlah rusak tidak boleh lebih besar dari data jumlah"+$("#jml_rusak").val() +'>'+ $("#jumlah").val());
+            $("#jml_rusak").val('0')
+          }else{
+
+          }
       });
       $("#jumlah").change(function(){
           var jumlah = document.getElementById("jumlah").value;
@@ -239,7 +263,10 @@ if(isset($disable)){if($disable='disable'){?>
                 ?>">
             </div>
           </div>
-
+          <?php 
+            if (isset($obat)) {
+              if ($obat=="8") {
+          ?>
           <div class="row" style="margin: 5px">
             <div class="col-md-4" style="padding: 5px">Nomor Batch</div>
             <div class="col-md-8">
@@ -262,7 +289,13 @@ if(isset($disable)){if($disable='disable'){?>
             </div>
           </div>
 
+          <?php
+            # code...
+              }else{
 
+              }
+            }
+          ?>
           <div class="row" style="margin: 5px">
             <div class="col-md-4" style="padding: 5px">Keadaan Rusak</div>
             <div class="col-md-8">

@@ -112,8 +112,9 @@ class Bhp_pengadaan_model extends CI_Model {
  	function get_data_row($kode){
 		$data = array();
 		$this->db->where("inv_inventaris_habispakai_pembelian.id_inv_hasbispakai_pembelian",$kode);
-		$this->db->select("$this->tabel.*,mst_inv_pilihan.value");
+		$this->db->select("mst_inv_pbf.nama as nama_pbf,$this->tabel.*,mst_inv_pilihan.value");
         $this->db->join('mst_inv_pilihan', "inv_inventaris_habispakai_pembelian.pilihan_status_pembelian = mst_inv_pilihan.code AND mst_inv_pilihan.tipe='status_pengadaan'",'left');
+        $this->db->join('mst_inv_pbf', "mst_inv_pbf.code = inv_inventaris_habispakai_pembelian.mst_inv_pbf_code",'left');
 		$query = $this->db->get($this->tabel);
 		if ($query->num_rows() > 0){
 			$data = $query->row_array();
@@ -159,7 +160,7 @@ class Bhp_pengadaan_model extends CI_Model {
         $this->db->where('inv_inventaris_habispakai_pembelian_item.id_inv_hasbispakai_pembelian',$kd_permohonan);
         $this->db->where('inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai',$id_barang);
         $this->db->join("mst_inv_barang_habispakai","mst_inv_barang_habispakai.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai");
-        $this->db->select("inv_inventaris_habispakai_pembelian_item.*,mst_inv_barang_habispakai.uraian");
+        $this->db->select("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis,inv_inventaris_habispakai_pembelian_item.*,mst_inv_barang_habispakai.uraian");
         $query= $this->db->get("inv_inventaris_habispakai_pembelian_item");
         
         if ($query->num_rows() > 0){
@@ -203,9 +204,15 @@ class Bhp_pengadaan_model extends CI_Model {
     {
         $data['id_inv_hasbispakai_pembelian'] = $this->kode_pengadaan($this->input->post('kode_inventaris_'));
         $data['code_cl_phc']                = $this->input->post('codepus');
+        $data['id_mst_inv_barang_habispakai_jenis'] = $this->input->post('id_mst_inv_barang_habispakai_jenis');
     	$data['tgl_permohonan']	            = date("Y-m-d",strtotime($this->input->post('tgl')));
         $data['tgl_pembelian']              = date("Y-m-d",strtotime($this->input->post('tgl2')));
+        $data['jenis_transaksi']            = $this->input->post('jenistransaksi');
 		$data['pilihan_status_pembelian']	= $this->input->post('status');
+        $data['bln_periode']                = $this->input->post('thn_periode')."-".$this->input->post('bln_periode');
+        $data['thn_dana']                   = $this->input->post('thn_dana');
+        $data['pilihan_sumber_dana']        = $this->input->post('pilihan_sumber_dana');
+        $data['mst_inv_pbf_code']           = $this->input->post('id_mst_inv_pbf_code');
 		$data['keterangan']		            = $this->input->post('keterangan');
 		$data['waktu_dibuat']		        = date('Y-m-d H:i:s');
         $data['terakhir_diubah']            = "0000-00-00 00:00:00";
@@ -225,7 +232,7 @@ class Bhp_pengadaan_model extends CI_Model {
         return  $kode_pengadaan.$urut;
     }
     function nourut($kode_pengadaan){
-        $q = $this->db->query("select MAX(RIGHT(id_inv_hasbispakai_pembelian,6)) as kd_max from inv_inventaris_habispakai_pembelian where (LEFT(id_inv_hasbispakai_pembelian,14))=$kode_pengadaan");
+        $q = $this->db->query("select MAX(RIGHT(id_inv_hasbispakai_pembelian,6)) as kd_max from inv_inventaris_habispakai_pembelian where (LEFT(id_inv_hasbispakai_pembelian,15))=$kode_pengadaan");
         $nourut="";
         if($q->num_rows()>0)
         {
@@ -249,14 +256,14 @@ class Bhp_pengadaan_model extends CI_Model {
     }
     function update_entry($kode)
     {
-    	$data['tgl_permohonan']             = date("Y-m-d",strtotime($this->input->post('tgl')));
-        $data['tgl_pembelian']              = date("Y-m-d",strtotime($this->input->post('tgl2')));
-        $data['pilihan_status_pembelian']   = $this->input->post('status');
-        $data['keterangan']                 = $this->input->post('keterangan');
+    	//$data['tgl_permohonan']             = date("Y-m-d",strtotime($this->input->post('tgl')));
+       // $data['tgl_pembelian']              = date("Y-m-d",strtotime($this->input->post('tgl2')));
+        //$data['pilihan_status_pembelian']   = $this->input->post('status');
+      //  $data['keterangan']                 = $this->input->post('keterangan');
         $data['nomor_kontrak']              = $this->input->post('nomor_kontrak');
         $data['tgl_kwitansi']               = date("Y-m-d",strtotime($this->input->post('tgl1')));
         $data['nomor_kwitansi']             = $this->input->post('nomor_kwitansi');
-        $data['code_cl_phc']                = $this->input->post('codepus');
+        //$data['code_cl_phc']                = $this->input->post('codepus');
         $data['terakhir_diubah']            = date('Y-m-d H:i:s');
 		$this->db->where('id_inv_hasbispakai_pembelian',$kode);
 
@@ -386,6 +393,15 @@ class Bhp_pengadaan_model extends CI_Model {
     {
 		$this->db->order_by('uraian','asc');
         $query = $this->db->get('mst_inv_barang',$limit,$start);
+        return $query->result();
+    }
+    function get_databarangwhere($obat=0)
+    {
+        if($obat=="8"){
+
+        }
+        $this->db->order_by('uraian','asc');
+        $query = $this->db->get('mst_inv_barang');
         return $query->result();
     }
     public function getnamajenis()

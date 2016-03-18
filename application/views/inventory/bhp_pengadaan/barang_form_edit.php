@@ -19,6 +19,15 @@ if(isset($disable)){if($disable='disable'){?>
   
 
     $(function(){
+      <?php 
+    if (isset($id_mst_inv_barang_habispakai_jenis)) {
+      if ($id_mst_inv_barang_habispakai_jenis=="8") {
+    ?>
+      $("[name='tgl_kadaluarsa']").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme , height: '30px'});
+    <?php
+      }else{}
+    }
+    ?>
       $('#btn-close').click(function(){
         close_popup();
       }); 
@@ -33,6 +42,9 @@ if(isset($disable)){if($disable='disable'){?>
             data.append('jumlah', $('#jumlah').val());
             data.append('harga', $('#harga').val());
             data.append('subtotal', $('#subtotal').val());
+            data.append('tgl_kadaluarsa', $('#tgl_kadaluarsa').val());
+            data.append('jml_rusak', $('#jml_rusak').val());
+            data.append('batch', $('#batch').val());
             data.append('id_permohonan_barang', "<?php echo $kode;?>");
             $.ajax({
                 cache : false,
@@ -140,8 +152,9 @@ if(isset($disable)){if($disable='disable'){?>
   <div class="row">
     <?php echo form_open(current_url(), 'id="form-ss"') ?>
           <div class="box-body">
-            <div class="form-group">
-              <label>Nama Barang</label>
+            <div class="row" style="margin: 5px">
+              <div class="col-md-4" style="padding: 5px">Nama Barang</div>
+              <div class="col-md-8">
               <input readonly="readonly" id="jqxinput" class="form-control" autocomplete="off" name="jqxinput" type="text" value="<?php 
                 if(set_value('jqxinput')=="" && isset($uraian)){ 
                   echo $uraian;
@@ -157,8 +170,10 @@ if(isset($disable)){if($disable='disable'){?>
                 }
                 ?>" />
             </div>
-            <div class="form-group">
-              <label>Jumlah</label>
+          </div>
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Jumlah</div>
+            <div class="col-md-8">
               <input  type="number" class="form-control" name="jumlah" id="jumlah" placeholder="Jumlah" value="<?php 
                 if(set_value('jumlah')=="" && isset($jml)){
                   echo $jml;
@@ -167,8 +182,10 @@ if(isset($disable)){if($disable='disable'){?>
                 }
                 ?>">
             </div>
-            <div class="form-group">
-              <label>Harga Satuan</label>
+          </div>
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Harga Satuan</div>
+            <div class="col-md-8">
               <input type="number" class="form-control" name="harga" id="harga" placeholder="Harga Satuan" value="<?php 
                 if(set_value('harga')=="" && isset($harga)){
                   echo $harga;
@@ -177,8 +194,10 @@ if(isset($disable)){if($disable='disable'){?>
                 }
                 ?>">
             </div>
-            <div class="form-group">
-              <label>Sub Total</label>
+          </div>
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Sub total</div>
+            <div class="col-md-8">
               <input type="text" class="form-control" name="subtotal"  id="subtotal" placeholder="Sub Total" readonly="" value="<?php
               if(set_value('subtotal')=="" && isset($harga)){
                   echo $jml*$harga;
@@ -187,12 +206,58 @@ if(isset($disable)){if($disable='disable'){?>
                 }
                 ?>">
             </div>
+          </div>  
+             <?php 
+            if (isset($id_mst_inv_barang_habispakai_jenis)) {
+              if ($id_mst_inv_barang_habispakai_jenis=="8") {
+          ?>
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Batch</div>
+            <div class="col-md-8">
+              <input type="text" class="form-control" name="batch" id="batch" placeholder="Nomor Batch" value="<?php 
+                if(set_value('batch')=="" && isset($batch)){
+                  echo $batch;
+                }else{
+                  echo  set_value('batch');
+                }
+                ?>">
+            </div>
+          </div>
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Tanggal Kadaluarsa</div>
+            <div class="col-md-8">
+            <div id='tgl_kadaluarsa' name="tgl_kadaluarsa" value="<?php
+                echo (set_value('tgl_kadaluarsa')!="") ? date("Y-m-d",strtotime(set_value('tgl_kadaluarsa'))) : "";
+              ?>"></div>
+            </div>
+          </div>
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Keadaan Rusak</div>
+            <div class="col-md-8">
+              <input type="number" class="form-control" name="jml_rusak" id="jml_rusak" placeholder="Jumlah Rusak" value="<?php 
+                if(set_value('jml_rusak')=="" && isset($jml_rusak)){
+                  echo $jml_rusak;
+                }else{
+                  echo  set_value('jml_rusak');
+                }
+                ?>">
+            </div>
+          </div>
+          <?php
+            # code...
+              }else{
+
+              }
+            }
+          ?>
             <?php if(isset($disable)){if($disable='disable'){?>
-            <div class="form-group">
-              <label>Tanggal</label>
+            <div class="row" style="margin: 5px">
+              <div class="col-md-4" style="padding: 5px">Tanggal Diterima</div>
+              <div class="col-md-8">
               <div id='dateInput' name="tanggal_diterima" value="<?php
               echo (!empty($tanggal_diterima)) ? date("Y-m-d",strtotime($tanggal_diterima)) :  date("d-m-Y");
             ?>"></div>
+            </div>
             </div>
             <?php }} ?>
            <!-- <div class="form-group">
