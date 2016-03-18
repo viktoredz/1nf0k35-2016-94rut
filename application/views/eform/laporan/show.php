@@ -93,7 +93,7 @@
   <div class="col-md-12">
     <div class="box" id="hilang">
       <div class="box-header with-border">
-        <h3 class="box-title" id="judul">Pilih Laporan </h3>
+        <h3 class="box-title" id="judul">Tunggu, sedang proses...</h3>
         <br><br>
         <div class="box-tools pull-right">
           <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
