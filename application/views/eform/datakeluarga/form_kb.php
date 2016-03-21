@@ -21,13 +21,17 @@
 	 			<tr>
 	 				<td rowspan="2" style="border-right: 2px solid #EEE">2. Jumlah anak</td>
 	 				<td colspan="2">a. Yang pernah dilahirkan hidup</td>
-	 				<td colspan="2"><input type="number" name="berencana_II_2_laki" id="berencana_II_2_laki"  placeholder="Laki-laki" class="form-control" style="border:0;background:#dde4ff"></td>
-	 				<td colspan="2">Orang</td>
+	 				<td><input type="number" name="berencana_II_2_laki" id="berencana_II_2_laki"  placeholder="Laki-laki" class="form-control" style="border:0;background:#dde4ff"></td>
+	 				<td>Orang</td>
+	 				<td><input type="number" name="berencana_II_2_perempuan" id="berencana_II_2_perempuan"  placeholder="Perempuan" class="form-control" style="border:0;background:#dde4ff"></td>
+	 				<td>Orang</td>
 	 			</tr>
 	 			<tr>
 	 				<td colspan="2">b. Yang masih hidup</td>
-	 				<td colspan="2"><input type="number" name="berencana_II_2_perempuan" id="berencana_II_2_perempuan"  placeholder="Perempuan" class="form-control" style="border:0;background:#dde4ff"></td>
-	 				<td colspan="2">Orang</td>
+	 				<td><input type="number" name="berencana_II_2_laki_hidup" id="berencana_II_2_laki_hidup"  placeholder="Laki-laki" class="form-control" style="border:0;background:#dde4ff"></td>
+	 				<td>Orang</td>
+	 				<td><input type="number" name="berencana_II_2_perempuan_hidup" id="berencana_II_2_perempuan_hidup"  placeholder="Perempuan" class="form-control" style="border:0;background:#dde4ff"></td>
+	 				<td>Orang</td>
 	 			</tr>
 	 			<tr>
 	 				<td  style="border-right: 2px solid #EEE">3. Kesertaan ber-KB</td>
