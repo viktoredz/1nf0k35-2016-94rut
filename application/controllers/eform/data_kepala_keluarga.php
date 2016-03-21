@@ -143,7 +143,7 @@ class Data_kepala_keluarga extends CI_Controller {
 		$data_puskesmas[] = array('nama_puskesmas' => $nama,'kd_prov' => $kd_prov,'kd_kab' => $kd_kab,'tanggal_export' => $tanggal_export,'kd_kab' => $kd_kab,'rw' => $rukunwarga);
 		
 		$dir = getcwd().'/';
-		$template = $dir.'public/files/template/inventory/data_kepala_keluarga.xlsx';		
+		$template = $dir.'public/files/template/data_kepala_keluarga.xlsx';		
 		$TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8);
 
 		// Merge data in the first sheet
