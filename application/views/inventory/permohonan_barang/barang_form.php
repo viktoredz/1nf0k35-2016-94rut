@@ -18,7 +18,8 @@
           });
 
           return false;
-        });*/      
+        });*/ 
+             
         $('#form-ss').submit(function(){
             var data = new FormData();
             $('#notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');

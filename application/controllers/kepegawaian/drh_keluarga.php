@@ -60,6 +60,7 @@ class Drh_keluarga extends CI_Controller {
 		$data = array();
 		foreach($rows as $act) {
 			$data[] = array(
+				'urut'	  		=> $act->urut,
 				'id_pegawai'	=> $act->id_pegawai,
 				'nama_keluarga'	=> $act->nama_keluarga,
 				'nama'			=> $act->nama,
@@ -276,6 +277,7 @@ class Drh_keluarga extends CI_Controller {
 	}
 
 	function biodata_keluarga_ortu_edit($id="",$urut=0){
+
         $this->form_validation->set_rules('nama', 'Nama', 'trim|required');
         $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'trim|required');
         $this->form_validation->set_rules('tgl_lahir', 'Tanggal Lahir', 'trim');
@@ -283,13 +285,18 @@ class Drh_keluarga extends CI_Controller {
         $this->form_validation->set_rules('status_pns', 'Status PNS', 'trim');
         $this->form_validation->set_rules('status_hidup', 'Status Hidup', 'trim');
         $this->form_validation->set_rules('bpjs', 'Nomor BPJS', 'trim');
-
-		$data['id']=$id;
-		$data['alert_form'] = '';
-		$data['kode_kel'] = $this->drh_model->get_kode_keluarga('ortu');
-
+		
 		if($this->form_validation->run()== FALSE){
+			$data 						= $this->drh_model->get_data_ortu_edit($id,$urut);
+ 			$data['kode_kel'] 			= $this->drh_model->get_kode_keluarga('ortu');
+			$data['notice']				= validation_errors();
+			$data['action']				= "edit";
+			$data['id']					= $id;
+			$data['urut']				= $urut;
+			$data['alert_form'] 		= '';
+			$data['disable']			= "disable";
 			die($this->parser->parse("kepegawaian/drh/form_keluarga_ortu_form",$data));
+		
 		}elseif($this->drh_model->update_entry_ortu($id,$urut)){
 			die("OK");
 		}else{
@@ -299,15 +306,14 @@ class Drh_keluarga extends CI_Controller {
 		die($this->parser->parse("kepegawaian/drh/form_keluarga_ortu_form",$data));
 	}
 
-	function biodata_keluarga_ortu_del($id="",$urut=0){
-		$this->authentication->verify('kepegawaian','del');
+	function biodata_keluarga_ortu_del($id=0,$urut=0){
 
-		if($this->drh_model->delete_entry_ortu($id,$urut)){
-			die ("OK");
-		} else {
-			die ("Error");
-		}
-	}
+		 $this->authentication->verify('kepegawaian','del');
 
-//CRUD Keluarga - END
+		 if($this->drh_model->delete_entry_ortu($id,$urut)){
+		 	die ("OK");
+		 } else {
+		 	die ("Error");
+		 }
+	}//CRUD Keluarga - END
 }
