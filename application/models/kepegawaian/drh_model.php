@@ -241,6 +241,14 @@ class Drh_model extends CI_Model {
         return $this->db->delete('pegawai_keluarga');
     }
 
+    function delete_entry_pasangan($id,$urut)
+    {
+        $this->db->where('id_pegawai',$id);
+        $this->db->where('urut',$urut);
+
+        return $this->db->delete('pegawai_keluarga');
+    }
+
     function get_data_ortu($id,$start=0,$limit=999999,$options=array())
     {
         $this->db->select("pegawai_keluarga.*,DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgl_lahir)), '%Y')+0 AS usia,mst_peg_keluarga.nama_keluarga,IF(pegawai_keluarga.status_hidup=1,'Hidup','Meninggal') as hidup",false);
@@ -253,7 +261,35 @@ class Drh_model extends CI_Model {
     }
 
 
+    function get_data_anak($id,$start=0,$limit=999999,$options=array())
+    {
+        $this->db->select("pegawai_keluarga.*,DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgl_lahir)), '%Y')+0 AS usia,mst_peg_keluarga.nama_keluarga,IF(pegawai_keluarga.status_hidup=1,'Hidup','Meninggal') as hidup,cl_district.value as tmp_lahir",false);
+        $this->db->where('id_mst_peg_keluarga',5);
+        $this->db->or_where('id_mst_peg_keluarga',6);
+        $this->db->order_by('tgl_lahir','asc');
+        $this->db->join('cl_district','cl_district.code=pegawai_keluarga.code_cl_district');
+        $this->db->join('mst_peg_keluarga','mst_peg_keluarga.id_keluarga=pegawai_keluarga.id_mst_peg_keluarga');
+        $query = $this->db->get('pegawai_keluarga',$limit,$start);
+        return $query->result();
+    }
+
     function get_data_ortu_edit($id,$urut){
+        $data = array();
+
+        $this->db->select("*");
+        $this->db->where("id_pegawai",$id);
+        $this->db->where("urut",$urut);
+        $query = $this->db->get("pegawai_keluarga");
+        if($query->num_rows()>0){
+            $data = $query->row_array();
+        }
+
+        $query->free_result();
+        return $data;
+    }
+
+
+    function get_data_pasangan_edit($id,$urut){
         $data = array();
 
         $this->db->select("*");
@@ -279,17 +315,6 @@ class Drh_model extends CI_Model {
         return $query->result();
     }
 
-    function get_data_anak($id,$start=0,$limit=999999,$options=array())
-    {
-        $this->db->select("pegawai_keluarga.*,DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgl_lahir)), '%Y')+0 AS usia,mst_peg_keluarga.nama_keluarga,IF(pegawai_keluarga.status_hidup=1,'Hidup','Meninggal') as hidup,cl_district.value as tmp_lahir",false);
-        $this->db->where('id_mst_peg_keluarga',5);
-        $this->db->or_where('id_mst_peg_keluarga',6);
-        $this->db->order_by('tgl_lahir','asc');
-        $this->db->join('cl_district','cl_district.code=pegawai_keluarga.code_cl_district');
-        $this->db->join('mst_peg_keluarga','mst_peg_keluarga.id_keluarga=pegawai_keluarga.id_mst_peg_keluarga');
-        $query = $this->db->get('pegawai_keluarga',$limit,$start);
-        return $query->result();
-    }
 
     function insert_entry_ortu($id)
     {
@@ -302,6 +327,10 @@ class Drh_model extends CI_Model {
         $data['bpjs']               = $this->input->post('bpjs');
         $data['status_hidup']       = $this->input->post('status_hidup');
         $data['status_pns']         = $this->input->post('status_pns');
+        $data['akta_menikah']       = $this->input->post('akta_menikah');
+        $data['akta_meninggal']     = $this->input->post('akta_meninggal');
+        $data['akta_cerai']         = $this->input->post('akta_cerai');
+
 
         $this->db->select('MAX(urut) as urut');
         $this->db->where('id_pegawai',$id);
@@ -313,6 +342,115 @@ class Drh_model extends CI_Model {
         }
 
         if($this->db->insert('pegawai_keluarga', $data)){
+            return true; 
+        }else{
+            return mysql_error();
+        }
+    }
+
+
+    function insert_entry_anak($id)
+    {
+        $data['id_pegawai']         = $id;
+        $data['id_mst_peg_keluarga']= $this->input->post('id_mst_peg_keluarga');
+        $data['nama']               = $this->input->post('nama');
+        $data['jenis_kelamin']      = $this->input->post('jenis_kelamin');
+        $data['tgl_lahir']          = date("Y-m-d",strtotime($this->input->post('tgl_lahir')));
+        $data['code_cl_district']   = $this->input->post('code_cl_district');
+        $data['bpjs']               = $this->input->post('bpjs');
+        $data['status_hidup']       = $this->input->post('status_hidup');
+        $data['status_pns']         = $this->input->post('status_pns');
+        $data['status_anak']        = $this->input->post('status_anak');  
+        $data['alasan_taksekolah']  = $this->input->post('alasan_taksekolah');       
+
+
+        $this->db->select('MAX(urut) as urut');
+        $this->db->where('id_pegawai',$id);
+        $urut = $this->db->get('pegawai_keluarga')->row();
+        if(!empty($urut->urut)){
+          $data['urut'] = $urut->urut+1;
+        }else{
+          $data['urut'] = 1;
+        }
+
+        if($this->db->insert('pegawai_keluarga', $data)){
+            return true; 
+        }else{
+            return mysql_error();
+        }
+    }
+
+
+
+     function insert_entry_pasangan($id)
+    {
+        $data['id_pegawai']         = $id;
+        $data['id_mst_peg_keluarga']= $this->input->post('id_mst_peg_keluarga');
+        $data['nama']               = $this->input->post('nama');
+        $data['jenis_kelamin']      = $this->input->post('jenis_kelamin');
+        $data['tgl_lahir']          = date("Y-m-d",strtotime($this->input->post('tgl_lahir')));
+        $data['code_cl_district']   = $this->input->post('code_cl_district');
+        $data['bpjs']               = $this->input->post('bpjs');
+        $data['status_hidup']       = $this->input->post('status_hidup');
+        $data['status_pns']         = $this->input->post('status_pns');
+        $data['akta_menikah']       = $this->input->post('akta_menikah');
+        $data['akta_meninggal']     = $this->input->post('akta_meninggal');
+        $data['akta_cerai']         = $this->input->post('akta_cerai');
+
+
+        $this->db->select('MAX(urut) as urut');
+        $this->db->where('id_pegawai',$id);
+        $urut = $this->db->get('pegawai_keluarga')->row();
+        if(!empty($urut->urut)){
+          $data['urut'] = $urut->urut+1;
+        }else{
+          $data['urut'] = 1;
+        }
+
+        if($this->db->insert('pegawai_keluarga', $data)){
+            return true; 
+        }else{
+            return mysql_error();
+        }
+    }
+
+    function update_entry_ortu($id,$urut)
+    {
+        $data['id_mst_peg_keluarga']= $this->input->post('id_mst_peg_keluarga');
+        $data['nama']               = $this->input->post('nama');
+        $data['jenis_kelamin']      = $this->input->post('jenis_kelamin');
+        $data['tgl_lahir']          = date("Y-m-d",strtotime($this->input->post('tgl_lahir')));
+        $data['code_cl_district']   = $this->input->post('code_cl_district');
+        $data['bpjs']               = $this->input->post('bpjs');
+        $data['status_hidup']       = $this->input->post('status_hidup');
+        $data['status_pns']         = $this->input->post('status_pns');
+
+        $this->db->where('id_pegawai',$id);
+        $this->db->where('urut',$urut);
+
+        if($this->db->update('pegawai_keluarga', $data)){
+            return true; 
+        }else{
+            return mysql_error();
+        }
+    }
+
+
+    function update_entry_pasangan($id,$urut)
+    {
+        $data['id_mst_peg_keluarga']= $this->input->post('id_mst_peg_keluarga');
+        $data['nama']               = $this->input->post('nama');
+        $data['jenis_kelamin']      = $this->input->post('jenis_kelamin');
+        $data['tgl_lahir']          = date("Y-m-d",strtotime($this->input->post('tgl_lahir')));
+        $data['code_cl_district']   = $this->input->post('code_cl_district');
+        $data['bpjs']               = $this->input->post('bpjs');
+        $data['status_hidup']       = $this->input->post('status_hidup');
+        $data['status_pns']         = $this->input->post('status_pns');
+
+        $this->db->where('id_pegawai',$id);
+        $this->db->where('urut',$urut);
+
+        if($this->db->update('pegawai_keluarga', $data)){
             return true; 
         }else{
             return mysql_error();

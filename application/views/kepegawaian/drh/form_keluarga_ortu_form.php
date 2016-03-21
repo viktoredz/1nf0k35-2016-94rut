@@ -224,21 +224,21 @@
         $('#biodata_notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
         $('#biodata_notice').show();
 
-        data.append('id_mst_peg_keluarga', $("[name='ortu_id_mst_peg_keluarga']").val());
-        data.append('nama', $("[name='ortu_nama']").val());
-        data.append('jenis_kelamin', $("[name='ortu_jenis_kelamin']:checked").val());
-        data.append('code_cl_district', $("[name='ortu_tmp_lahir']").val());
-        data.append('tgl_lahir', $("[name='ortu_tgl_lahir']").val());
-        data.append('bpjs', $("[name='ortu_bpjs']").val());
-        data.append('status_hidup', $("[name='ortu_status_hidup']:checked").val());
-        data.append('status_pns', $("[name='ortu_status_pns']:checked").val());
+        data.append('id_mst_peg_keluarga',  $("[name='ortu_id_mst_peg_keluarga']").val());
+        data.append('nama',                 $("[name='ortu_nama']").val());
+        data.append('jenis_kelamin',        $("[name='ortu_jenis_kelamin']:checked").val());
+        data.append('code_cl_district',     $("[name='ortu_tmp_lahir']").val());
+        data.append('tgl_lahir',            $("[name='ortu_tgl_lahir']").val());
+        data.append('bpjs',                 $("[name='ortu_bpjs']").val());
+        data.append('status_hidup',         $("[name='ortu_status_hidup']:checked").val());
+        data.append('status_pns',           $("[name='ortu_status_pns']:checked").val());
 
         $.ajax({
             cache : false,
             contentType : false,
             processData : false,
             type : 'POST',
-            url : '<?php echo base_url()."kepegawaian/drh_keluarga/biodata_keluarga_ortu_add/{id}"   ?>',
+            url : '<?php echo base_url()."kepegawaian/drh_keluarga/biodata_keluarga_ortu_{action}/{id}/{urut}"   ?>',
             data : data,
             success : function(response){
               if(response=="OK"){

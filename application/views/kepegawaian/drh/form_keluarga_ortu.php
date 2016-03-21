@@ -34,6 +34,7 @@
       { name: 'bpjs', type: 'string'},
       { name: 'hidup', type: 'string'},
       { name: 'status_pns', type: 'string'},
+      { name: 'akta_menikah', type: 'string'},
       { name: 'edit', type: 'number'},
       { name: 'delete', type: 'number'}
         ],
