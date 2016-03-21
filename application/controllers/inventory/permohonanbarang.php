@@ -715,7 +715,7 @@ class Permohonanbarang extends CI_Controller {
         $this->form_validation->set_rules('pilihan_satuan_barang', 'Pilihan Satuan Barang', 'trim|required');
 
 		if($this->form_validation->run()== FALSE){
-			$data = $this->permohonanbarang_model->get_data_barang_edit($code_cl_phc, $kode, $id_inv_permohonan_barang_item); 
+			$data 					= $this->permohonanbarang_model->get_data_barang_edit($code_cl_phc, $kode, $id_inv_permohonan_barang_item); 
 			$data['kodebarang']		= $this->permohonanbarang_model->get_databarang();
 			$data['notice']			= validation_errors();
 			$data['action']			= "edit";

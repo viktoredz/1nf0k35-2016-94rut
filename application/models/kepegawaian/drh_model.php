@@ -5,7 +5,7 @@ class Drh_model extends CI_Model {
     var $t_puskesmas = 'cl_phc';
     var $t_alamat = 'pegawai_alamat';
     var $t_diklat = 'pegawai_diklat';
-    var $t_dp3 = 'pegawai_dp3';
+    var $t_dp3    = 'pegawai_dp3';
 	var $lang	  = '';
 
     function __construct() {
@@ -217,6 +217,15 @@ class Drh_model extends CI_Model {
 		}
     }
 
+    
+    function delete_entry_alamat($id,$urut)
+    {
+        $this->db->where('id_pegawai',$id);
+        $this->db->where('urut',$urut);
+
+        return $this->db->delete($this->t_alamat);
+    }
+
 	function delete_entry($id)
 	{
 		$this->db->where('id_pegawai',$id);
@@ -224,15 +233,39 @@ class Drh_model extends CI_Model {
 		return $this->db->delete($this->tabel);
 	}
 
+    function delete_entry_ortu($id,$urut)
+    {
+        $this->db->where('id_pegawai',$id);
+        $this->db->where('urut',$urut);
+
+        return $this->db->delete('pegawai_keluarga');
+    }
+
     function get_data_ortu($id,$start=0,$limit=999999,$options=array())
     {
         $this->db->select("pegawai_keluarga.*,DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgl_lahir)), '%Y')+0 AS usia,mst_peg_keluarga.nama_keluarga,IF(pegawai_keluarga.status_hidup=1,'Hidup','Meninggal') as hidup",false);
-        $this->db->where('id_mst_peg_keluarga',3);
-        $this->db->or_where('id_mst_peg_keluarga',4);
+        $this->db->where('pegawai_keluarga.id_pegawai',$id);
+        $this->db->where('(id_mst_peg_keluarga =3 OR id_mst_peg_keluarga =4)');
         $this->db->order_by('tgl_lahir','asc');
         $this->db->join('mst_peg_keluarga','mst_peg_keluarga.id_keluarga=pegawai_keluarga.id_mst_peg_keluarga');
         $query = $this->db->get('pegawai_keluarga',$limit,$start);
         return $query->result();
+    }
+
+
+    function get_data_ortu_edit($id,$urut){
+        $data = array();
+
+        $this->db->select("*");
+        $this->db->where("id_pegawai",$id);
+        $this->db->where("urut",$urut);
+        $query = $this->db->get("pegawai_keluarga");
+        if($query->num_rows()>0){
+            $data = $query->row_array();
+        }
+
+        $query->free_result();
+        return $data;
     }
 
     function get_data_pasangan($id,$start=0,$limit=999999,$options=array())
@@ -405,14 +438,6 @@ class Drh_model extends CI_Model {
             return $jum->urut+1;
         }
 
-    }
-
-    function delete_entry_alamat($id,$urut)
-    {
-        $this->db->where('id_pegawai',$id);
-        $this->db->where('urut',$urut);
-
-        return $this->db->delete($this->t_alamat);
     }
 
 //Diklat
