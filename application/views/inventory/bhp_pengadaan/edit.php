@@ -41,9 +41,12 @@ function validateForm() {
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Tanggal Pengadaan</div>
           <div class="col-md-8">
-            <div id='tgl' name="tgl" value="<?php
+          <?php if(isset($viewreadonly)){if($action='view'){ 
+                echo "".date("d-m-Y",strtotime($tgl_permohonan)); }}else{ ?>
+              <div id='tgl' name="tgl" value="<?php
               echo (!empty($tgl_permohonan)) ? date("Y-m-d",strtotime($tgl_permohonan)) : "";
             ?>"></div>
+             <?php  }?>
           </div>
         </div>
 
@@ -105,9 +108,13 @@ function validateForm() {
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Tanggal Pembelian</div>
           <div class="col-md-8">
-          <div id='tgl2' name="tgl2" value="<?php
-              echo (!empty($tgl_pembelian)) ? date("Y-m-d",strtotime($tgl_pembelian)) : "";
-            ?>"></div>
+              <?php if(isset($viewreadonly)){if($action='view'){ 
+                echo "".date("d-m-Y",strtotime($tgl_pembelian)); }}else{ ?>
+              <div id='tgl2' name="tgl2" value="<?php
+                  echo (!empty($tgl_pembelian)) ? date("Y-m-d",strtotime($tgl_pembelian)) : "";
+                ?>">
+              </div>
+             <?php  }?>
           </div>
         </div>
 
@@ -192,7 +199,7 @@ function validateForm() {
               }
               ?>">
             <?php }else{ 
-                echo "<br>".$nomor_kontrak;
+                echo "".$nomor_kontrak;
             } ?>
             </div>
           </div>
@@ -201,7 +208,7 @@ function validateForm() {
             <div class="col-md-4" style="padding: 5px">Tanggal Kwitansi</div>
             <div class="col-md-8">
             <?php if(isset($viewreadonly)){if($action='view'){ 
-            echo "<br>".date("d-m-Y",strtotime($tgl_kwitansi)); }}else{ ?>
+            echo "".date("d-m-Y",strtotime($tgl_kwitansi)); }}else{ ?>
               <div id='tgl1' name="tgl1" disabled value="<?php
               echo $tgl_kwitansi;;//echo ($tgl_pengadaan!="") ? date("Y-m-d",strtotime($$tgl_pengadaan)) : "";
             ?>" ></div>
@@ -221,7 +228,7 @@ function validateForm() {
               }
               ?>">
             <?php }else{ 
-                echo "<br>".$nomor_kwitansi;
+                echo "".$nomor_kwitansi;
             } ?>
             </div>
           </div>

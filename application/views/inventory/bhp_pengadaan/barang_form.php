@@ -171,7 +171,7 @@ if(isset($disable)){if($disable='disable'){?>
           document.getElementById("subtotal").value = toRp(subtotal);
       });
       $("#jml_rusak").change(function(){
-          if (document.getElementById("jml_rusak").value > document.getElementById("jumlah").value) {
+          if ( parseInt($("#jml_rusak").val()) > parseInt($("#jumlah").val())) {
             alert("Maaf, Data jumlah rusak tidak boleh lebih besar dari data jumlah"+$("#jml_rusak").val() +'>'+ $("#jumlah").val());
             $("#jml_rusak").val('0')
           }else{

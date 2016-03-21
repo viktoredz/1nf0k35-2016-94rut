@@ -666,12 +666,11 @@ class Bhp_pengadaan extends CI_Controller {
 			$data['kode']			= $id_permohonan;
 			$data['viewreadonly']	= "readonly=''";
 
-			$kodepuskesmas = $this->session->userdata('puskesmas');
-			if(substr($kodepuskesmas, -2)=="01"){
-				$data['unlock'] = 1;
-			}else{
-				$data['unlock'] = 0;
-			}
+			
+			$data['unlock'] = 1;
+			$data['bulan'] 			= array('01'=>'Januari', '02'=>'Februari', '03'=>'Maret', '04'=>'April', '05'=>'Mei', '06'=>'Juni', '07'=>'Juli', '08'=>'Agustus', '09'=>'September', '10'=>'Oktober', '11'=>'November', '12'=>'Desember');
+			$data['kodejenis'] = $this->bhp_pengadaan_model->get_data_jenis();
+			$data['kodedana'] = $this->bhp_pengadaan_model->pilih_data_status('sumber_dana');
 			$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
 			$data['kodestatus'] = $this->bhp_pengadaan_model->get_data_status();
 			$data['kodestatus_inv'] = $this->bhp_pengadaan_model->pilih_data_status('status_pembelian');
@@ -789,13 +788,10 @@ class Bhp_pengadaan extends CI_Controller {
 			$data = $this->bhp_pengadaan_model->get_data_barang_edit_table($id_permohonan,$kd_barang); 
 			$data['action']			= "edit";
 			$data['kode']			= $id_permohonan;
-			//$data['disable']		= "disable";
 			$data['notice']			= validation_errors();
-   			/*end mengirim status pada masing2 form*/
 			die($this->parser->parse('inventory/bhp_pengadaan/barang_form_edit', $data));
 		}else{
-			//$tanggal = explode("/",$this->input->post('tanggal_mulai'));
-   			//$tanggal_mulai = $tanggal[2].'-'.$tanggal[1].'-'.$tanggal[0];
+			
    			$tgl_kadaluarsa = explode("-", $this->input->post('tgl_kadaluarsa'));
    			$values = array(
 					'jml' => $this->input->post('jumlah'),

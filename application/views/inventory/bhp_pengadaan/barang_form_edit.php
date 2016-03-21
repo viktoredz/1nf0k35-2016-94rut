@@ -130,6 +130,14 @@ if(isset($disable)){if($disable='disable'){?>
             var subtotal =jumlah*harga;
             document.getElementById("subtotal").value = toRp(subtotal);
         });
+        $("#jml_rusak").change(function(){
+          if ( parseInt($("#jml_rusak").val()) > parseInt($("#jumlah").val())) {
+            alert("Maaf, Data jumlah rusak tidak boleh lebih besar dari data jumlah"+$("#jml_rusak").val() +'>'+ $("#jumlah").val());
+            $("#jml_rusak").val("<?php echo  $jml_rusak; ?>")
+          }else{
+
+          }
+      });
         $("#jumlah").change(function(){
             var jumlah = document.getElementById("jumlah").value;
             var harga = document.getElementById("harga").value;
