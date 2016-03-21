@@ -172,7 +172,7 @@ if(isset($disable)){if($disable='disable'){?>
       });
       $("#jml_rusak").change(function(){
           if ( parseInt($("#jml_rusak").val()) > parseInt($("#jumlah").val())) {
-            alert("Maaf, Data jumlah rusak tidak boleh lebih besar dari data jumlah"+$("#jml_rusak").val() +'>'+ $("#jumlah").val());
+            alert("Maaf, Data jumlah rusak tidak boleh lebih besar dari data jumlah");
             $("#jml_rusak").val('0')
           }else{
 

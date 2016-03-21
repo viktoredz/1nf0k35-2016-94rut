@@ -620,10 +620,14 @@ class Bhp_pengadaan extends CI_Controller {
 	function edit($id_pengadaan=0){
 		$this->authentication->verify('inventory','edit');
 
-        $this->form_validation->set_rules('tgl', 'Tanggal Perngadaan', 'trim|required');
-        //$this->form_validation->set_rules('status', 'Status Pengadaan', 'trim|required');
-       // $this->form_validation->set_rules('keterangan', 'Keterangan', 'trim|required');
+        //$this->form_validation->set_rules('tgl', 'Tanggal Perngadaan', 'trim|required');
+        $this->form_validation->set_rules('jenis_transaksi', 'Jenis Transaksi', 'trim|required');
+        $this->form_validation->set_rules('keterangan', 'Keterangan', 'trim|required');
         $this->form_validation->set_rules('nomor_kontrak', 'Nomor Kontrak', 'trim|required');
+        $this->form_validation->set_rules('thn_periode', 'Periode', 'trim|required');
+        $this->form_validation->set_rules('bln_periode', 'Periode', 'trim|required');
+        $this->form_validation->set_rules('pilihan_sumber_dana', 'Nomor Kontrak', 'trim|required');
+        $this->form_validation->set_rules('thn_dana', 'Sumber Dana', 'trim|required');
         
 		if($this->form_validation->run()== FALSE){
 			$data 	= $this->bhp_pengadaan_model->get_data_row($id_pengadaan);

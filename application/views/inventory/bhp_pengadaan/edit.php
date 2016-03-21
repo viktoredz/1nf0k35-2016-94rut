@@ -22,6 +22,12 @@ function validateForm() {
      if (Date.parse(tanggalopname[2]-tanggalopname[1]-tanggalopname[0])<=Date.parse($("#tgl__opname_").val())) {
         alert("Maaf! Data pembelian sudah di stock opname pada "+$("#tgl__opname_").val()+"\n"+"Silahkan ganti tanggal pembelian ke hari berikutnya!");
         return false;
+    }else{
+      /*alert($("#jenis_transaksi").val());
+          var post = "";
+          post = post+'&jenis_transaksi='+$("#jenis_transaksi").val()+'&keterangan='+$("#keterangan").val()+'&nomor_kontrak='+$("#nomor_kontrak").val()+'&tgl1='+$("#tgl1").val()+'&nomor_kwitansi='+$("#nomor_kwitansi").val()+'&thn_periode='+$("#thn_periode").val()+'&bln_periode='+$("#bln_periode").val()+'&pilihan_sumber_dana='+$("#pilihan_sumber_dana").val()+'&thn_dana='+$("#thn_dana").val()+'&id_inv_hasbispakai_pembelian='+$("#id_inv_hasbispakai_pembelian").val();
+          $.post("<?php echo base_url()?>inventory/bhp_pengadaan/{action}/{kode}",post,function(response ){
+          });*/
     }
 }
 </script>
@@ -65,7 +71,7 @@ function validateForm() {
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Jenis Transaksi</div>
           <div class="col-md-8">
-            <select  name="jenis_transaksi" type="text" class="form-control"  disabled="">
+            <select  name="jenis_transaksi" id="jenis_transaksi" type="text" class="form-control" >
               <?php 
                  if($jenis_transaksi=="pembelian"){
                     $select1 = "selected=selected" ;
@@ -121,7 +127,7 @@ function validateForm() {
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Periode</div>
           <div class="col-md-4 col-xs-6">
-            <select  name="thn_periode" type="text" class="form-control"  disabled="">
+            <select  name="thn_periode" type="text" class="form-control"  >
               <?php 
               $tglperiode = explode("-", $bln_periode);
               for($i=date('Y');$i>=2000;$i--){ ?>
@@ -131,7 +137,7 @@ function validateForm() {
             </select>
           </div>
           <div class="col-md-4 col-xs-6">
-            <select  name="bln_periode" type="text" class="form-control"  disabled="">
+            <select  name="bln_periode" type="text" class="form-control"  >
               <?php 
               $tglperiode = explode("-", $bln_periode);
               foreach($bulan as $x=>$y){ ?>
@@ -145,7 +151,7 @@ function validateForm() {
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Sumber Dana</div>
           <div class="col-md-4 col-xs-6">
-            <select  name="pilihan_sumber_dana" type="text" class="form-control"  disabled="">
+            <select  name="pilihan_sumber_dana" type="text" class="form-control" 
               <?php foreach($kodedana as $dana) : ?>
                 <?php $select = $dana->code == $pilihan_sumber_dana ? 'selected=selected' : '' ?>
                 <option value="<?php echo $dana->code ?>" <?php echo $select ?>><?php echo $dana->value ?></option>
@@ -153,7 +159,7 @@ function validateForm() {
             </select>
           </div>
           <div class="col-md-4 col-xs-6">
-            <select  name="thn_dana" type="text" class="form-control"  disabled="">
+            <select  name="thn_dana" type="text" class="form-control"  >
               <?php for($i=date('Y');$i>=2000;$i--){ ?>
                 <?php $select = $i == $thn_dana ? 'selected' : '' ?>
                 <option value="<?php echo $i ?>" <?php echo $select ?>><?php echo $i ?></option>
@@ -236,7 +242,7 @@ function validateForm() {
           <div class="row" style="margin: 5px">
             <div class="col-md-4" style="padding: 5px">Keterangan</div>
             <div class="col-md-8">
-            <textarea class="form-control" name="keterangan" id="keterangan" placeholder="Keterangan"  disabled=""><?php 
+            <textarea class="form-control" name="keterangan" id="keterangan" placeholder="Keterangan"  ><?php 
                 if(set_value('keterangan')=="" && isset($keterangan)){
                   echo $keterangan;
                 }else{

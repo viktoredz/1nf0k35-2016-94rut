@@ -256,14 +256,14 @@ class Bhp_pengadaan_model extends CI_Model {
     }
     function update_entry($kode)
     {
-    	//$data['tgl_permohonan']             = date("Y-m-d",strtotime($this->input->post('tgl')));
-       // $data['tgl_pembelian']              = date("Y-m-d",strtotime($this->input->post('tgl2')));
-        //$data['pilihan_status_pembelian']   = $this->input->post('status');
-      //  $data['keterangan']                 = $this->input->post('keterangan');
+        $data['jenis_transaksi']            = $this->input->post('jenis_transaksi');
+        $data['keterangan']                 = $this->input->post('keterangan');
         $data['nomor_kontrak']              = $this->input->post('nomor_kontrak');
         $data['tgl_kwitansi']               = date("Y-m-d",strtotime($this->input->post('tgl1')));
         $data['nomor_kwitansi']             = $this->input->post('nomor_kwitansi');
-        //$data['code_cl_phc']                = $this->input->post('codepus');
+        $data['bln_periode']                = $this->input->post('thn_periode')."-".$this->input->post('bln_periode');
+        $data['pilihan_sumber_dana']        = $this->input->post('pilihan_sumber_dana');
+        $data['thn_dana']                   = $this->input->post('thn_dana');
         $data['terakhir_diubah']            = date('Y-m-d H:i:s');
 		$this->db->where('id_inv_hasbispakai_pembelian',$kode);
 
