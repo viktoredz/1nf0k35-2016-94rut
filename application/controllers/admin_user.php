@@ -84,7 +84,7 @@ class Admin_user extends CI_Controller {
 			$this->session->set_flashdata('alert', 'Save data successful...');
 			redirect(base_url()."admin_user");
 		}else{
-			$this->session->set_flashdata('alert_form', 'Save data failed...');
+			$this->session->set_flashdata('alert_form', 'Username telah digunakan...');
 			redirect(base_url()."admin_user/add");
 		}
 	}
