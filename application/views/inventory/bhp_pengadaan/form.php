@@ -141,8 +141,20 @@
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Instansi / PBF</div>
           <div class="col-md-8">
-            <input type="text" class="form-control" name="pbf" id="pbf" placeholder="Instansi / PBF"  autocomplete="off">
-            <input type="hidden" class="form-control" name="id_mst_inv_pbf_code" id="id_mst_inv_pbf_code" >
+            <input type="text" class="form-control" name="pbf" id="pbf" placeholder="Instansi / PBF"  autocomplete="off" value="<?php 
+                if(set_value('pbf')=="" && isset($nama_pbf)){
+                  echo $nama_pbf;
+                }else{
+                  echo  set_value('pbf');
+                }
+                ?>">
+            <input type="hidden" class="form-control" name="id_mst_inv_pbf_code" id="id_mst_inv_pbf_code" value="<?php 
+                if(set_value('id_mst_inv_pbf_code')=="" && isset($mst_inv_pbf_code)){
+                  echo $mst_inv_pbf_code;
+                }else{
+                  echo  set_value('id_mst_inv_pbf_code');
+                }
+                ?>">
           </div>
         </div>
 
@@ -185,7 +197,7 @@ $(function(){
     document.getElementById("tgl").onchange = function() {
         kodeInvetaris(document.getElementById("tgl").value);
     };
-    $("#pbf").jqxInput(
+   /* $("#pbf").jqxInput(
         {
         placeHolder: " Ketik Instansi / PBF",
         theme: 'classic',
@@ -201,7 +213,7 @@ $(function(){
                 { name: 'code', type: 'string'},
                 { name: 'nama', type: 'string'},
               ],
-              url: '<?php echo base_url().'inventory/bhp_pengadaan/autocomplite_bnf/'; ?>'+$("#id_mst_inv_barang_habispakai_jenis").val(),
+              url: '<?php //echo base_url().'inventory/bhp_pengadaan/autocomplite_bnf/'; ?>'+$("#id_mst_inv_barang_habispakai_jenis").val(),
             },
             {
               autoBind: true,
@@ -212,21 +224,39 @@ $(function(){
               loadComplete: function (data) {
                 if (data.length > 0) {
                   response($.map(data, function (item) {
-                    return item.nama+' | '+item.code;
+                    return{                                    
+                            label: item.nama,
+                            value: item.code,
+                           }
                   }));
                 }
-              }
+              },
             });
         }
       });
     
-      $("#pbf").select(function(){
+      $("#pbf").select(function(event,ui){
           var codepbf = $(this).val();
           var res = codepbf.split(" | ");
           $("#id_mst_inv_pbf_code").val(res[1]);
-      });
+          $("#pbf").val(res[0]);
+      });*/
+    $("#pbf").autocomplete({
+      minLength: 0,
+      source:'<?php echo base_url().'inventory/bhp_pengadaan/autocomplite_bnf/'; ?>'+$("#id_mst_inv_barang_habispakai_jenis").val(),
+      focus: function( event, ui ) {
+        $("#pbf" ).val( ui.item.value );
+        return false;
+      },
+      select: function( event, ui ) {
+        $("#pbf").val( ui.item.value );
+        $("#id_mst_inv_pbf_code").val( ui.item.key );
+ 
+        return false;
+      } 
+    });
   });
-  
+  //return item.+' | '+item.code;
   function kodeInvetaris(tahun)
     {
       if (tahun==null) {
@@ -250,3 +280,4 @@ $(function(){
       return false;
     }
 </script>
+  

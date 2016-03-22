@@ -13,7 +13,6 @@ class Bhp_pengadaan extends CI_Controller {
 		$this->load->model('inventory/inv_ruangan_model');
 		$this->load->model('mst/invbarang_model');
 	}
-
 	function pengadaan_export(){
 		$this->authentication->verify('inventory','show');
 		
@@ -262,7 +261,7 @@ class Bhp_pengadaan extends CI_Controller {
 	function autocomplite_bnf($obat=0){
 		$kodepuskesmas = "P".$this->session->userdata("puskesmas");
 		$search = explode("&",$this->input->server('QUERY_STRING'));
-		$search = str_replace("query=","",$search[0]);
+		$search = str_replace("term=","",$search[0]);
 		$search = str_replace("+"," ",$search);
 
 		//$this->db->where("id_mst_inv_barang_habispakai_jenis",$obat);
@@ -273,8 +272,8 @@ class Bhp_pengadaan extends CI_Controller {
 		$query= $this->db->get("mst_inv_pbf")->result();
 		foreach ($query as $q) {
 			$barang[] = array(
-				'code' 	=> $q->code, 
-				'nama' 	=> $q->nama,
+				'key' 	=> $q->code, 
+				'value'	=> $q->nama,
 			);
 		}
 		echo json_encode($barang);

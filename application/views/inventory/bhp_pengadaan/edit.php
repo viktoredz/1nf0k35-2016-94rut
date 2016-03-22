@@ -172,8 +172,13 @@ function validateForm() {
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Instansi / PBF</div>
           <div class="col-md-8">
-            <input type="text" class="form-control" name="pbf" id="pbf" placeholder="Instansi / PBF" 
-            value="<?php echo $nama_pbf; ?>" autocomplit="off">
+            <input type="text" class="form-control" name="pbf" id="pbf" placeholder="Instansi / PBF" autocomplit="off" value="<?php 
+                if(set_value('pbf')=="" && isset($nama_pbf)){
+                  echo $nama_pbf;
+                }else{
+                  echo  set_value('pbf');
+                }
+                ?>">
             <input type="hidden" class="form-control" name="id_mst_inv_pbf_code" id="id_mst_inv_pbf_code" value="<?php echo $mst_inv_pbf_code; ?>">
           </div>
         </div>
@@ -333,7 +338,7 @@ $(function(){
         kodeInvetaris(document.getElementById("tgl").value);
     };
     <?php } ?>
-     $("#pbf").jqxInput(
+    /* $("#pbf").jqxInput(
         {
         placeHolder: " Ketik Instansi / PBF",
         theme: 'classic',
@@ -349,7 +354,7 @@ $(function(){
                 { name: 'code', type: 'string'},
                 { name: 'nama', type: 'string'},
               ],
-              url: '<?php echo base_url().'inventory/bhp_pengadaan/autocomplite_bnf/'; ?>'+$("#id_mst_inv_barang_habispakai_jenis").val(),
+              url: '<?php // echo base_url().'inventory/bhp_pengadaan/autocomplite_bnf/'; ?>'+$("#id_mst_inv_barang_habispakai_jenis").val(),
             },
             {
               autoBind: true,
@@ -372,7 +377,21 @@ $(function(){
           var codepbf = $(this).val();
           var res = codepbf.split(" | ");
           $("#id_mst_inv_pbf_code").val(res[1]);
-      });
+      });*/
+      $("#pbf").autocomplete({
+      minLength: 0,
+      source:'<?php echo base_url().'inventory/bhp_pengadaan/autocomplite_bnf/'; ?>'+$("#id_mst_inv_barang_habispakai_jenis").val(),
+      focus: function( event, ui ) {
+        $("#pbf" ).val( ui.item.value );
+        return false;
+      },
+      select: function( event, ui ) {
+        $("#pbf").val( ui.item.value );
+        $("#id_mst_inv_pbf_code").val( ui.item.key );
+ 
+        return false;
+      } 
+    });
   });
     function kodeInvetaris(tahun)
     { 
