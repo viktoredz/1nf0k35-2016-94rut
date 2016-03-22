@@ -90,7 +90,7 @@ function validateForm() {
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Status</div>
           <div class="col-md-8">
-            <select  name="status" id="status" type="text" class="form-control"  disabled="">
+            <select  name="status" id="status" type="text" class="form-control" >
               <?php foreach($kodestatus as $stat) : ?>
                 <?php $select = $stat->code == $pilihan_status_pembelian ? 'selected=selected' : '' ?>
                 <option value="<?php echo $stat->code ?>" <?php echo $select ?>><?php echo $stat->value ?></option>

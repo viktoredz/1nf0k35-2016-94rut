@@ -264,6 +264,7 @@ class Bhp_pengadaan_model extends CI_Model {
         $data['bln_periode']                = $this->input->post('thn_periode')."-".$this->input->post('bln_periode');
         $data['pilihan_sumber_dana']        = $this->input->post('pilihan_sumber_dana');
         $data['thn_dana']                   = $this->input->post('thn_dana');
+        $data['pilihan_status_pembelian']   = $this->input->post('status');
         $data['terakhir_diubah']            = date('Y-m-d H:i:s');
 		$this->db->where('id_inv_hasbispakai_pembelian',$kode);
 

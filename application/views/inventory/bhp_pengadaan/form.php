@@ -38,7 +38,7 @@
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Kategori Barang</div>
           <div class="col-md-8">
-            <select  name="id_mst_inv_barang_habispakai_jenis" type="text" class="form-control">
+            <select  name="id_mst_inv_barang_habispakai_jenis" id="id_mst_inv_barang_habispakai_jenis" type="text" class="form-control">
               <?php foreach($kodejenis as $jenis) : ?>
                 <?php $select = $jenis->id_mst_inv_barang_habispakai_jenis == set_value('id_mst_inv_barang_habispakai_jenis') ? 'selected' : '' ?>
                 <option value="<?php echo $jenis->id_mst_inv_barang_habispakai_jenis ?>" <?php echo $select ?>><?php echo $jenis->uraian ?></option>
@@ -201,7 +201,7 @@ $(function(){
                 { name: 'code', type: 'string'},
                 { name: 'nama', type: 'string'},
               ],
-              url: '<?php echo base_url().'inventory/bhp_pengadaan/autocomplite_bnf'; ?>'
+              url: '<?php echo base_url().'inventory/bhp_pengadaan/autocomplite_bnf/'; ?>'+$("#id_mst_inv_barang_habispakai_jenis").val(),
             },
             {
               autoBind: true,

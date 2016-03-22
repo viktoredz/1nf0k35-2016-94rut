@@ -45,6 +45,7 @@ if(isset($disable)){if($disable='disable'){?>
             data.append('tgl_kadaluarsa', $('#tgl_kadaluarsa').val());
             data.append('jml_rusak', $('#jml_rusak').val());
             data.append('batch', $('#batch').val());
+            data.append('obat',  $('#obat').val());
             data.append('id_permohonan_barang', "<?php echo $kode;?>");
             $.ajax({
                 cache : false,
@@ -215,7 +216,14 @@ if(isset($disable)){if($disable='disable'){?>
                 ?>">
             </div>
           </div>  
-             <?php 
+          <input type="hidden" name="obat" id="obat"  value="<?php 
+            if(set_value('obat')=="" && isset($id_mst_inv_barang_habispakai_jenis)){
+                  echo $id_mst_inv_barang_habispakai_jenis;
+                }else{
+                  echo  set_value('obat');
+                }
+          ?>" />
+             <?php //echo $id_mst_inv_barang_habispakai_jenis;
             if (isset($id_mst_inv_barang_habispakai_jenis)) {
               if ($id_mst_inv_barang_habispakai_jenis=="8") {
           ?>

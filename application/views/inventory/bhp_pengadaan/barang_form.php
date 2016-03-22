@@ -59,6 +59,7 @@ if(isset($disable)){if($disable='disable'){?>
           data.append('jml_rusak', $('#jml_rusak').val());
           data.append('batch', $('#batch').val());
           data.append('harga', $('#harga').val());
+          data.append('obat', "<?php echo $obat;?>");
           data.append('subtotal', $('#subtotal').val());
           data.append('id_permohonan_barang', "<?php echo $kode;?>");
           $.ajax({
