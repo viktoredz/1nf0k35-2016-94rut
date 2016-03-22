@@ -212,7 +212,7 @@ $(function(){
               loadComplete: function (data) {
                 if (data.length > 0) {
                   response($.map(data, function (item) {
-                    return item.code+' | '+item.nama;
+                    return item.nama+' | '+item.code;
                   }));
                 }
               }
@@ -223,7 +223,7 @@ $(function(){
       $("#pbf").select(function(){
           var codepbf = $(this).val();
           var res = codepbf.split(" | ");
-          $("#id_mst_inv_pbf_code").val(res[0]);
+          $("#id_mst_inv_pbf_code").val(res[1]);
       });
   });
   

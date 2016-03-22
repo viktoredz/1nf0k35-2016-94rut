@@ -64,6 +64,7 @@
 			{ name: 'tgl_kwitansi', type: 'date'},
 			{ name: 'nomor_kontrak', type: 'string'},
 			{ name: 'nomor_kwitansi', type: 'string'},
+			{ name: 'uraian', type: 'string'},
 			{ name: 'code_cl_phc', type: 'string'},
 			{ name: 'pilihan_status_pembelian', type: 'string'},
 			{ name: 'value', type: 'string'},
@@ -147,7 +148,7 @@
 				{ text: 'Status Pengadaan', editable:false ,align: 'center', cellsalign: 'center', datafield: 'value', columntype: 'textbox', filtertype: 'textbox', width: '12%' },
 				{ text: 'Jumlah Unit', editable:false ,align: 'center', cellsalign: 'right', datafield: 'jumlah_unit', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
 				{ text: 'Total Harga (Rp.)', editable:false ,align: 'center', cellsalign: 'right', datafield: 'nilai_pembelian', columntype: 'textbox', filtertype: 'textbox', width: '15%' },
-				{ text: 'Keterangan', editable:false ,datafield: 'keterangan', columntype: 'textbox', filtertype: 'textbox', width: '25%' }
+				{ text: 'Kategori Barang', editable:false ,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '25%' }
             ]
 		});
 

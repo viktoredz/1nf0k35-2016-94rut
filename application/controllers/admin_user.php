@@ -80,7 +80,7 @@ class Admin_user extends CI_Controller {
 			$data['code']			= $this->session->userdata('puskesmas');
 			$data['content'] = $this->parser->parse("admin/users/form",$data,true);
         	$this->template->show($data,"home");
-		}elseif($username=$this->admin_users_model->insert_entry()){
+		}elseif($this->admin_users_model->insert_entry()){
 			$this->session->set_flashdata('alert', 'Save data successful...');
 			redirect(base_url()."admin_user");
 		}else{

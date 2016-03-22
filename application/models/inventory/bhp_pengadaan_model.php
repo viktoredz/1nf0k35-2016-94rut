@@ -93,8 +93,9 @@ class Bhp_pengadaan_model extends CI_Model {
     function get_data($start=0,$limit=999999,$options=array())
     {
         $this->db->order_by('tgl_permohonan','desc');
-        $this->db->select("$this->tabel.*,mst_inv_pilihan.value");
+        $this->db->select("mst_inv_barang_habispakai_jenis.uraian,$this->tabel.*,mst_inv_pilihan.value");
         $this->db->join('mst_inv_pilihan', "inv_inventaris_habispakai_pembelian.pilihan_status_pembelian = mst_inv_pilihan.code AND mst_inv_pilihan.tipe='status_pembelian'",'left');
+        $this->db->join('mst_inv_barang_habispakai_jenis', "mst_inv_barang_habispakai_jenis.id_mst_inv_barang_habispakai_jenis = inv_inventaris_habispakai_pembelian.id_mst_inv_barang_habispakai_jenis",'left');
         $query = $this->db->get($this->tabel,$limit,$start);
         return $query->result();
     }
@@ -261,6 +262,7 @@ class Bhp_pengadaan_model extends CI_Model {
         $data['nomor_kontrak']              = $this->input->post('nomor_kontrak');
         $data['tgl_kwitansi']               = date("Y-m-d",strtotime($this->input->post('tgl1')));
         $data['nomor_kwitansi']             = $this->input->post('nomor_kwitansi');
+        $data['mst_inv_pbf_code']           = $this->input->post('id_mst_inv_pbf_code');
         $data['bln_periode']                = $this->input->post('thn_periode')."-".$this->input->post('bln_periode');
         $data['pilihan_sumber_dana']        = $this->input->post('pilihan_sumber_dana');
         $data['thn_dana']                   = $this->input->post('thn_dana');

@@ -367,6 +367,7 @@ class Bhp_pengadaan extends CI_Controller {
 				'nomor_kwitansi'				=> $act->nomor_kwitansi,
 				'nomor_kontrak'					=> $act->nomor_kontrak,
 				'jumlah_unit'					=> $act->jumlah_unit,
+				'uraian'						=> $act->uraian,
 				'nilai_pembelian'				=> $act->nilai_pembelian,
 				'jumlah_unit'					=> $act->jumlah_unit,
 				'nilai_pembelian'				=> number_format($act->nilai_pembelian),
@@ -627,6 +628,7 @@ class Bhp_pengadaan extends CI_Controller {
         $this->form_validation->set_rules('pilihan_sumber_dana', 'Nomor Kontrak', 'trim|required');
         $this->form_validation->set_rules('thn_dana', 'Sumber Dana', 'trim|required');
         $this->form_validation->set_rules('status', 'Status', 'trim|required');
+        $this->form_validation->set_rules('id_mst_inv_pbf_code', 'Instansi/PBF', 'trim|required');
         
 		if($this->form_validation->run()== FALSE){
 			$data 	= $this->bhp_pengadaan_model->get_data_row($id_pengadaan);

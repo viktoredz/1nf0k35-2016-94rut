@@ -173,7 +173,7 @@ function validateForm() {
           <div class="col-md-4" style="padding: 5px">Instansi / PBF</div>
           <div class="col-md-8">
             <input type="text" class="form-control" name="pbf" id="pbf" placeholder="Instansi / PBF" 
-            value="<?php echo $nama_pbf; ?>" readonly="">
+            value="<?php echo $nama_pbf; ?>" autocomplit="off">
             <input type="hidden" class="form-control" name="id_mst_inv_pbf_code" id="id_mst_inv_pbf_code" value="<?php echo $mst_inv_pbf_code; ?>">
           </div>
         </div>
@@ -333,6 +333,46 @@ $(function(){
         kodeInvetaris(document.getElementById("tgl").value);
     };
     <?php } ?>
+     $("#pbf").jqxInput(
+        {
+        placeHolder: " Ketik Instansi / PBF",
+        theme: 'classic',
+        width: '100%',
+        height: '30px',
+        minLength: 2,
+        source: function (query, response) {
+          var dataAdapter = new $.jqx.dataAdapter
+          (
+            {
+              datatype: "json",
+                datafields: [
+                { name: 'code', type: 'string'},
+                { name: 'nama', type: 'string'},
+              ],
+              url: '<?php echo base_url().'inventory/bhp_pengadaan/autocomplite_bnf/'; ?>'+$("#id_mst_inv_barang_habispakai_jenis").val(),
+            },
+            {
+              autoBind: true,
+              formatData: function (data) {
+                data.query = query;
+                return data;
+              },
+              loadComplete: function (data) {
+                if (data.length > 0) {
+                  response($.map(data, function (item) {
+                    return item.nama+' | '+item.code;
+                  }));
+                }
+              }
+            });
+        }
+      });
+    
+      $("#pbf").select(function(){
+          var codepbf = $(this).val();
+          var res = codepbf.split(" | ");
+          $("#id_mst_inv_pbf_code").val(res[1]);
+      });
   });
     function kodeInvetaris(tahun)
     { 
