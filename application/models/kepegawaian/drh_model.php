@@ -261,6 +261,19 @@ class Drh_model extends CI_Model {
     }
 
 
+    function get_data_pasangan($id,$start=0,$limit=999999,$options=array())
+    {
+        $this->db->select("pegawai_keluarga.*,DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgl_lahir)), '%Y')+0 AS usia,mst_peg_keluarga.nama_keluarga,IF(pegawai_keluarga.status_pns=1,'Ya','Tidak') as pns",false);
+        $this->db->where('pegawai_keluarga.id_pegawai',$id);
+        $this->db->where('(id_mst_peg_keluarga = 1 OR id_mst_peg_keluarga = 2)');
+        $this->db->or_where('id_mst_peg_keluarga',2);
+        $this->db->order_by('tgl_lahir','asc');
+        $this->db->join('mst_peg_keluarga','mst_peg_keluarga.id_keluarga=pegawai_keluarga.id_mst_peg_keluarga');
+        $query = $this->db->get('pegawai_keluarga',$limit,$start);
+        return $query->result();
+    }
+
+
     function get_data_anak($id,$start=0,$limit=999999,$options=array())
     {
         $this->db->select("pegawai_keluarga.*,DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgl_lahir)), '%Y')+0 AS usia,mst_peg_keluarga.nama_keluarga,IF(pegawai_keluarga.status_hidup=1,'Hidup','Meninggal') as hidup,cl_district.value as tmp_lahir",false);
@@ -303,18 +316,6 @@ class Drh_model extends CI_Model {
         $query->free_result();
         return $data;
     }
-
-    function get_data_pasangan($id,$start=0,$limit=999999,$options=array())
-    {
-        $this->db->select("pegawai_keluarga.*,DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgl_lahir)), '%Y')+0 AS usia,mst_peg_keluarga.nama_keluarga,IF(pegawai_keluarga.status_pns=1,'Ya','Tidak') as pns",false);
-        $this->db->where('id_mst_peg_keluarga',1);
-        $this->db->or_where('id_mst_peg_keluarga',2);
-        $this->db->order_by('tgl_lahir','asc');
-        $this->db->join('mst_peg_keluarga','mst_peg_keluarga.id_keluarga=pegawai_keluarga.id_mst_peg_keluarga');
-        $query = $this->db->get('pegawai_keluarga',$limit,$start);
-        return $query->result();
-    }
-
 
     function insert_entry_ortu($id)
     {
@@ -396,6 +397,10 @@ class Drh_model extends CI_Model {
         $data['akta_menikah']       = $this->input->post('akta_menikah');
         $data['akta_meninggal']     = $this->input->post('akta_meninggal');
         $data['akta_cerai']         = $this->input->post('akta_cerai');
+        $data['tgl_menikah']        = date("Y-m-d",strtotime($this->input->post('tgl_menikah')));
+        $data['tgl_meninggal']      = date("Y-m-d",strtotime($this->input->post('tgl_meninggal')));
+        $data['tgl_cerai']          = date("Y-m-d",strtotime($this->input->post('tgl_cerai')));
+        $data['status_menikah']     = $this->input->post('status_menikah');
 
 
         $this->db->select('MAX(urut) as urut');
@@ -446,7 +451,14 @@ class Drh_model extends CI_Model {
         $data['bpjs']               = $this->input->post('bpjs');
         $data['status_hidup']       = $this->input->post('status_hidup');
         $data['status_pns']         = $this->input->post('status_pns');
-
+        $data['akta_menikah']       = $this->input->post('akta_menikah');
+        $data['akta_meninggal']     = $this->input->post('akta_meninggal');
+        $data['akta_cerai']         = $this->input->post('akta_cerai');
+        $data['tgl_menikah']        = $this->input->post('tgl_menikah');
+        $data['tgl_meninggal']      = $this->input->post('tgl_meninggal');
+        $data['tgl_cerai']          = $this->input->post('tgl_cerai');
+        $data['status_menikah']     = $this->input->post('status_menikah');
+        
         $this->db->where('id_pegawai',$id);
         $this->db->where('urut',$urut);
 

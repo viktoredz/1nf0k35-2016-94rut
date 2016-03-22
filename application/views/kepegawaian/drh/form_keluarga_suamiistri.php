@@ -34,11 +34,12 @@
       { name: 'bpjs', type: 'string'},
       { name: 'status_menikah', type: 'string'},
       { name: 'pns', type: 'string'},
-      { name: 'akta_menikah', type: 'string'},
       { name: 'edit', type: 'number'},
       { name: 'delete', type: 'number'}
         ],
+   
     url: "<?php echo site_url('kepegawaian/drh_keluarga/json_pasangan/{id}'); ?>",
+
     cache: false,
     updaterow: function (rowid, rowdata, commit) {
       },
