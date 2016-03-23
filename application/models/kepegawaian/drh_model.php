@@ -84,6 +84,14 @@ class Drh_model extends CI_Model {
         return $query->result();
     }
 
+    function get_tingkat_pendidikan(){
+        $this->db->select('*');
+        $this->db->from('mst_peg_tingkatpendidikan');
+        $this->db->order_by('id_tingkat','asc');
+        $query = $this->db->get();
+        return $query->result();
+    }
+
     function get_tingkat($id_rumpun){
         $this->db->select('distinct id_tingkat,deskripsi',false);
         $this->db->from('mst_peg_tingkatpendidikan');
@@ -110,8 +118,8 @@ class Drh_model extends CI_Model {
                 $this->db->or_where('id_keluarga',4);
                 break;
             case 'anak':
-                $this->db->where('id_keluarga',5);
-                $this->db->or_where('id_keluarga',6);
+                $this->db->where('(id_keluarga =5 OR id_keluarga=6)');
+                $this->db->or_where('id_keluarga',7);
                 break;
             default:
                 $this->db->where('id_keluarga',1);
@@ -140,7 +148,6 @@ class Drh_model extends CI_Model {
 		$query = $this->db->get();
 		return $query->result();
 	}
-
 
 	public function getSelectedData($table,$data)
     {
@@ -241,6 +248,14 @@ class Drh_model extends CI_Model {
         return $this->db->delete('pegawai_keluarga');
     }
 
+    function delete_entry_anak($id,$urut)
+    {
+        $this->db->where('id_pegawai',$id);
+        $this->db->where('urut',$urut);
+
+        return $this->db->delete('pegawai_keluarga');
+    }
+
     function delete_entry_pasangan($id,$urut)
     {
         $this->db->where('id_pegawai',$id);
@@ -266,7 +281,6 @@ class Drh_model extends CI_Model {
         $this->db->select("pegawai_keluarga.*,DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgl_lahir)), '%Y')+0 AS usia,mst_peg_keluarga.nama_keluarga,IF(pegawai_keluarga.status_pns=1,'Ya','Tidak') as pns",false);
         $this->db->where('pegawai_keluarga.id_pegawai',$id);
         $this->db->where('(id_mst_peg_keluarga = 1 OR id_mst_peg_keluarga = 2)');
-        $this->db->or_where('id_mst_peg_keluarga',2);
         $this->db->order_by('tgl_lahir','asc');
         $this->db->join('mst_peg_keluarga','mst_peg_keluarga.id_keluarga=pegawai_keluarga.id_mst_peg_keluarga');
         $query = $this->db->get('pegawai_keluarga',$limit,$start);
@@ -276,17 +290,32 @@ class Drh_model extends CI_Model {
 
     function get_data_anak($id,$start=0,$limit=999999,$options=array())
     {
-        $this->db->select("pegawai_keluarga.*,DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgl_lahir)), '%Y')+0 AS usia,mst_peg_keluarga.nama_keluarga,IF(pegawai_keluarga.status_hidup=1,'Hidup','Meninggal') as hidup,cl_district.value as tmp_lahir",false);
-        $this->db->where('id_mst_peg_keluarga',5);
-        $this->db->or_where('id_mst_peg_keluarga',6);
+        $this->db->select("pegawai_keluarga.*,DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgl_lahir)), '%Y')+0 AS usia,mst_peg_keluarga.nama_keluarga,IF(pegawai_keluarga.status_pns=1,'Ya','Tidak') as pns",false);
+        $this->db->where('pegawai_keluarga.id_pegawai',$id);
+        $this->db->where('(id_mst_peg_keluarga = 5 OR id_mst_peg_keluarga = 6 OR id_mst_peg_keluarga= 7)');
         $this->db->order_by('tgl_lahir','asc');
-        $this->db->join('cl_district','cl_district.code=pegawai_keluarga.code_cl_district');
         $this->db->join('mst_peg_keluarga','mst_peg_keluarga.id_keluarga=pegawai_keluarga.id_mst_peg_keluarga');
         $query = $this->db->get('pegawai_keluarga',$limit,$start);
         return $query->result();
     }
 
     function get_data_ortu_edit($id,$urut){
+        $data = array();
+
+        $this->db->select("*");
+        $this->db->where("id_pegawai",$id);
+        $this->db->where("urut",$urut);
+        $query = $this->db->get("pegawai_keluarga");
+        if($query->num_rows()>0){
+            $data = $query->row_array();
+        }
+
+        $query->free_result();
+        return $data;
+    }
+
+
+    function get_data_anak_edit($id,$urut){
         $data = array();
 
         $this->db->select("*");
@@ -309,6 +338,52 @@ class Drh_model extends CI_Model {
         $this->db->where("id_pegawai",$id);
         $this->db->where("urut",$urut);
         $query = $this->db->get("pegawai_keluarga");
+        if($query->num_rows()>0){
+            $data = $query->row_array();
+        }
+
+        $query->free_result();
+        return $data;
+    }
+
+    function get_data_pendidikan_formal_edit($id,$id_jurusan){
+        $data = array();
+
+        $this->db->select("*");
+        $this->db->where("id_pegawai",$id);
+        $this->db->where("id_mst_peg_jurusan",$id_jurusan);
+        $query = $this->db->get("pegawai_pendidikan");
+        if($query->num_rows()>0){
+            $data = $query->row_array();
+        }
+
+        $query->free_result();
+        return $data;
+    }
+
+
+    function get_data_pendidikan_struktural_edit($id,$id_diklat){
+        $data = array();
+
+        $this->db->select("*");
+        $this->db->where("id_pegawai",$id);
+        $this->db->where("mst_peg_id_diklat",$id_diklat);
+        $query = $this->db->get("pegawai_diklat");
+        if($query->num_rows()>0){
+            $data = $query->row_array();
+        }
+
+        $query->free_result();
+        return $data;
+    }
+
+    function get_data_pendidikan_fungsional_edit($id,$id_diklat){
+        $data = array();
+
+        $this->db->select("*");
+        $this->db->where("id_pegawai",$id);
+        $this->db->where("mst_peg_id_diklat",$id_diklat);
+        $query = $this->db->get("pegawai_diklat");
         if($query->num_rows()>0){
             $data = $query->row_array();
         }
@@ -352,18 +427,15 @@ class Drh_model extends CI_Model {
 
     function insert_entry_anak($id)
     {
-        $data['id_pegawai']         = $id;
-        $data['id_mst_peg_keluarga']= $this->input->post('id_mst_peg_keluarga');
-        $data['nama']               = $this->input->post('nama');
-        $data['jenis_kelamin']      = $this->input->post('jenis_kelamin');
-        $data['tgl_lahir']          = date("Y-m-d",strtotime($this->input->post('tgl_lahir')));
-        $data['code_cl_district']   = $this->input->post('code_cl_district');
-        $data['bpjs']               = $this->input->post('bpjs');
-        $data['status_hidup']       = $this->input->post('status_hidup');
-        $data['status_pns']         = $this->input->post('status_pns');
-        $data['status_anak']        = $this->input->post('status_anak');  
-        $data['alasan_taksekolah']  = $this->input->post('alasan_taksekolah');       
-
+        $data['id_pegawai']                  = $id;
+        $data['id_mst_peg_keluarga']         = $this->input->post('id_mst_peg_keluarga');
+        $data['id_mst_peg_tingkatpendidikan']= $this->input->post('id_mst_peg_tingkatpendidikan');
+        $data['nama']                        = $this->input->post('nama');
+        $data['jenis_kelamin']               = $this->input->post('jenis_kelamin');
+        $data['tgl_lahir']                   = date("Y-m-d",strtotime($this->input->post('tgl_lahir')));
+        $data['code_cl_district']            = $this->input->post('code_cl_district');
+        $data['bpjs']                        = $this->input->post('bpjs');
+        $data['status_pns']                  = $this->input->post('status_pns');
 
         $this->db->select('MAX(urut) as urut');
         $this->db->where('id_pegawai',$id);
@@ -381,9 +453,7 @@ class Drh_model extends CI_Model {
         }
     }
 
-
-
-     function insert_entry_pasangan($id)
+    function insert_entry_pasangan($id)
     {
         $data['id_pegawai']         = $id;
         $data['id_mst_peg_keluarga']= $this->input->post('id_mst_peg_keluarga');
@@ -440,6 +510,26 @@ class Drh_model extends CI_Model {
         }
     }
 
+    function update_entry_anak($id,$urut)
+    {
+        $data['id_mst_peg_keluarga']            = $this->input->post('id_mst_peg_keluarga');
+        $data['id_mst_peg_tingkatpendidikan']   = $this->input->post('id_mst_peg_tingkatpendidikan');
+        $data['nama']                           = $this->input->post('nama');
+        $data['jenis_kelamin']                  = $this->input->post('jenis_kelamin');
+        $data['tgl_lahir']                      = date("Y-m-d",strtotime($this->input->post('tgl_lahir')));
+        $data['code_cl_district']               = $this->input->post('code_cl_district');
+        $data['bpjs']                           = $this->input->post('bpjs');
+        $data['status_pns']                     = $this->input->post('status_pns');
+
+        $this->db->where('id_pegawai',$id);
+        $this->db->where('urut',$urut);
+
+        if($this->db->update('pegawai_keluarga', $data)){
+            return true; 
+        }else{
+            return mysql_error();
+        }
+    }
 
     function update_entry_pasangan($id,$urut)
     {
@@ -454,15 +544,74 @@ class Drh_model extends CI_Model {
         $data['akta_menikah']       = $this->input->post('akta_menikah');
         $data['akta_meninggal']     = $this->input->post('akta_meninggal');
         $data['akta_cerai']         = $this->input->post('akta_cerai');
-        $data['tgl_menikah']        = $this->input->post('tgl_menikah');
-        $data['tgl_meninggal']      = $this->input->post('tgl_meninggal');
-        $data['tgl_cerai']          = $this->input->post('tgl_cerai');
+        $data['tgl_menikah']        = date("Y-m-d",strtotime($this->input->post('tgl_menikah')));
+        $data['tgl_meninggal']      = date("Y-m-d",strtotime($this->input->post('tgl_meninggal')));
+        $data['tgl_cerai']          = date("Y-m-d",strtotime($this->input->post('tgl_cerai')));
         $data['status_menikah']     = $this->input->post('status_menikah');
-        
+
         $this->db->where('id_pegawai',$id);
         $this->db->where('urut',$urut);
 
         if($this->db->update('pegawai_keluarga', $data)){
+            return true; 
+        }else{
+            return mysql_error();
+        }
+    }
+
+    function update_entry_pendidikan_formal($id,$id_jurusan)
+    {
+        $data['sekolah_nama']       = $this->input->post('sekolah_nama');
+        $data['sekolah_lokasi']     = $this->input->post('sekolah_lokasi');
+        $data['ijazah_no']          = $this->input->post('ijazah_no');
+        $data['ijazah_tgl']         = date("Y-m-d",strtotime($this->input->post('ijazah_tgl')));
+        $data['gelar_depan']        = $this->input->post('gelar_depan');
+        $data['gelar_belakang']     = $this->input->post('gelar_belakang');
+        $data['status_pendidikan_cpns'] = $this->input->post('status_pendidikan_cpns');
+
+        $this->db->where('id_pegawai',$id);
+        $this->db->where('id_mst_peg_jurusan',$id_jurusan);
+
+        if($this->db->update('pegawai_pendidikan', $data)){
+            return true; 
+        }else{
+            return mysql_error();
+        }
+    }
+
+    function update_entry_pendidikan_struktural($id,$id_diklat)
+    {
+        $data['nama_diklat']        = $this->input->post('nama_diklat');
+        $data['tgl_diklat']         = date("Y-m-d",strtotime($this->input->post('tgl_diklat')));
+        $data['nomor_sertifikat']   = $this->input->post('nomor_sertifikat');
+        $data['tipe']               = 'struktural';
+
+        $this->db->where('id_pegawai',$id);
+        $this->db->where('mst_peg_id_diklat',$id_diklat);
+
+        if($this->db->update('pegawai_diklat', $data)){
+            return true; 
+        }else{
+            return mysql_error();
+        }
+    }
+
+    function update_entry_pendidikan_fungsional($id,$id_diklat)
+    {
+        $data['id_pegawai']         = $id;
+        $data['mst_peg_id_diklat']  = $this->input->post('mst_peg_id_diklat');
+        $data['nama_diklat']        = $this->input->post('nama_diklat');
+        $data['tgl_diklat']         = date("Y-m-d",strtotime($this->input->post('tgl_diklat')));
+        $data['nomor_sertifikat']   = $this->input->post('nomor_sertifikat');
+        $data['tipe']               = $this->input->post('tipe');
+        $data['lama_diklat']        = intval($this->input->post('lama_diklat'));
+        $data['instansi']           = $this->input->post('instansi');
+        $data['penyelenggara']      = $this->input->post('penyelenggara');
+
+        $this->db->where('id_pegawai',$id);
+        $this->db->where('mst_peg_id_diklat',$id_diklat);
+
+        if($this->db->update('pegawai_diklat', $data)){
             return true; 
         }else{
             return mysql_error();
@@ -658,5 +807,28 @@ class Drh_model extends CI_Model {
         return $this->db->delete($this->t_dp3);
     }
 
+    function delete_entry_pendidikan_formal($id,$jurusan)
+    {
+        $this->db->where('id_pegawai',$id);
+        $this->db->where('id_mst_peg_jurusan',$jurusan);
+
+        return $this->db->delete('pegawai_pendidikan');
+    }
+
+    function delete_entry_pendidikan_struktural($id,$id_diklat)
+    {
+        $this->db->where('id_pegawai',$id);
+        $this->db->where('mst_peg_id_diklat',$id_diklat);
+
+        return $this->db->delete('pegawai_diklat');
+    }
+
+    function delete_entry_pendidikan_fungsional($id,$id_diklat)
+    {
+        $this->db->where('id_pegawai',$id);
+        $this->db->where('mst_peg_id_diklat',$id_diklat);
+
+        return $this->db->delete('pegawai_diklat');
+    }
 
 }

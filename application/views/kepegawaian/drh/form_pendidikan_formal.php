@@ -76,7 +76,7 @@
         { text: 'Detail', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
             var dataRecord = $("#jqxgridPendidikan").jqxGrid('getrowdata', row);
             if(dataRecord.edit==1){
-            return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='edit_formal(\""+dataRecord.id_mst_peg_jurusan+"\");'></a></div>";
+            return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='detail_formal (\""+dataRecord.id_pegawai+"\",\""+dataRecord.id_mst_peg_jurusan+"\");'></a></div>";
           }else{
             return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_view.gif'></a></div>";
           }
@@ -85,7 +85,7 @@
         { text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
             var dataRecord = $("#jqxgridPendidikan").jqxGrid('getrowdata', row);
             if(dataRecord.delete==1){
-            return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del_formal(\""+dataRecord.id_mst_peg_jurusan+"\");'></a></div>";
+            return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del_formal (\""+dataRecord.id_pegawai+"\",\""+dataRecord.id_mst_peg_jurusan+"\");'></a></div>";
           }else{
             return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
           }
@@ -100,9 +100,9 @@
             ]
     });
 
-  function edit_formal(id_mst_peg_jurusan){
+  function detail_formal(id,id_jurusan){
       $("#popup_pendidikan_formal #popup_pendidikan_formal_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-      $.get("<?php echo base_url().'kepegawaian/drh_pedidikan/biodata_pendidikan_formal_add/'.$id.'/';?>"+id_mst_peg_jurusan , function(data) {
+      $.get("<?php echo base_url().'kepegawaian/drh_pedidikan/biodata_pendidikan_formal_edit' ?>/" + id +"/"+id_jurusan,  function(data) {
         $("#popup_pendidikan_formal_content").html(data);
       });
       $("#popup_pendidikan_formal").jqxWindow({
@@ -114,10 +114,10 @@
       $("#popup_pendidikan_formal").jqxWindow('open');
   }
 
-  function del_formal(id_mst_peg_jurusan){
+  function del_formal(id,id_jurusan){
     var confirms = confirm("Hapus Data ?");
     if(confirms == true){
-      $.post("<?php echo base_url().'kepegawaian/drh_pedidikan/dodel_pendidikan_formal/'.$id.'/' ?>/" + id_mst_peg_jurusan,  function(){
+      $.post("<?php echo base_url().'kepegawaian/drh_pedidikan/biodata_pendidikan_formal_del' ?>/" + id +"/"+id_jurusan,   function(){
         alert('data berhasil dihapus');
 
         $("#jqxgridPendidikan").jqxGrid('updatebounddata', 'cells');

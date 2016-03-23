@@ -293,9 +293,10 @@ class Drh_pedidikan extends CI_Controller {
         $this->form_validation->set_rules('gelar_belakang', '', 'trim');
         $this->form_validation->set_rules('status_pendidikan_cpns', '', 'trim');
 
-		$data['id']=$id;
-		$data['alert_form'] = '';
-		$data['kode_rumpun'] = $this->drh_model->get_kode_rumpun();
+		$data['id']				= $id;
+	    $data['action']			= "add";
+		$data['alert_form'] 	= '';
+		$data['kode_rumpun'] 	= $this->drh_model->get_kode_rumpun();
 
 		if($this->form_validation->run()== FALSE){
 			die($this->parser->parse("kepegawaian/drh/form_pendidikan_formal_form",$data));
@@ -320,12 +321,16 @@ class Drh_pedidikan extends CI_Controller {
         $this->form_validation->set_rules('gelar_belakang', '', 'trim');
         $this->form_validation->set_rules('status_pendidikan_cpns', '', 'trim');
 
-		$data['id']=$id;
-		$data['alert_form'] = '';
-		$data['kode_kel'] = $this->drh_model->get_kode_keluarga('ortu');
-
 		if($this->form_validation->run()== FALSE){
+			$data 						= $this->drh_model->get_data_pendidikan_formal_edit($id,$id_jurusan);
+			$data['kode_rumpun'] 		= $this->drh_model->get_kode_rumpun();
+			$data['id']					= $id;
+			$data['id_jurusan']			= $id_jurusan;
+			$data['action']				= "edit";
+			$data['alert_form'] 		= '';
+			$data['disable']			= "disable";
 			die($this->parser->parse("kepegawaian/drh/form_pendidikan_formal_form",$data));
+			
 		}elseif($this->drh_model->update_entry_pendidikan_formal($id,$id_jurusan)){
 			die("OK");
 		}else{
@@ -338,7 +343,17 @@ class Drh_pedidikan extends CI_Controller {
 	function biodata_pendidikan_formal_del($id="",$id_jurusan=0){
 		$this->authentication->verify('kepegawaian','del');
 
-		if($this->drh_model->delete_entry_ortu($id,$urut)){
+		if($this->drh_model->delete_entry_pendidikan_formal($id,$id_jurusan)){
+			die ("OK");
+		} else {
+			die ("Error");
+		}
+	}
+
+	function biodata_pendidikan_struktural_del($id="",$id_diklat=0){
+		$this->authentication->verify('kepegawaian','del');
+
+		if($this->drh_model->delete_entry_pendidikan_struktural($id,$id_diklat)){
 			die ("OK");
 		} else {
 			die ("Error");
@@ -351,8 +366,9 @@ class Drh_pedidikan extends CI_Controller {
         $this->form_validation->set_rules('tgl_diklat', '', 'trim');
         $this->form_validation->set_rules('nomor_sertifikat', '', 'trim');
 
-		$data['id']=$id;
-		$data['alert_form'] = '';
+		$data['id']			 =$id;
+	    $data['action']		 = "add";
+		$data['alert_form']  = '';
 		$data['kode_diklat'] = $this->drh_model->get_kode_diklat('struktural');
 
 		if($this->form_validation->run()== FALSE){
@@ -366,25 +382,24 @@ class Drh_pedidikan extends CI_Controller {
 		die($this->parser->parse("kepegawaian/drh/form_pendidikan_struktural_form",$data));
 	}
 
-	function biodata_pendidikan_struktural_edit($id="",$id_jurusan=0){
-        $this->form_validation->set_rules('sekolah_nama', 'Nama', 'trim|required');
-        $this->form_validation->set_rules('id_jurusan', 'Program Studi', 'trim|required');
-        $this->form_validation->set_rules('id_tingkat', 'Tingkat Pendidikan', 'trim|required');
-        $this->form_validation->set_rules('id_rumpun', 'Rumpun Pendidikan', 'trim|required');
-        $this->form_validation->set_rules('ijazah_tgl', '', 'trim');
-        $this->form_validation->set_rules('ijazah_no', '', 'trim');
-        $this->form_validation->set_rules('sekolah_lokasi', '', 'trim');
-        $this->form_validation->set_rules('gelar_depan', '', 'trim');
-        $this->form_validation->set_rules('gelar_belakang', '', 'trim');
-        $this->form_validation->set_rules('status_pendidikan_cpns', '', 'trim');
-
-		$data['id']=$id;
-		$data['alert_form'] = '';
-		$data['kode_kel'] = $this->drh_model->get_kode_keluarga('ortu');
+	function biodata_pendidikan_struktural_edit($id="",$id_diklat=0){
+   		$this->form_validation->set_rules('nama_diklat', 'Nama Diklat Struktural', 'trim|required');
+        $this->form_validation->set_rules('mst_peg_id_diklat', 'Jenis Diklat', 'trim|required');
+        $this->form_validation->set_rules('tgl_diklat', '', 'trim');
+        $this->form_validation->set_rules('nomor_sertifikat', '', 'trim');
 
 		if($this->form_validation->run()== FALSE){
+			$data 				 = $this->drh_model->get_data_pendidikan_struktural_edit($id,$id_diklat);
+			$data['kode_diklat'] = $this->drh_model->get_kode_diklat('struktural');
+			$data['action']		 = "edit";
+			$data['id']			 = $id;
+			$data['id_diklat']	 = $id_diklat;
+			$data['alert_form']  = '';
+			$data['disable']	 = "disable";
+
 			die($this->parser->parse("kepegawaian/drh/form_pendidikan_struktural_form",$data));
-		}elseif($this->drh_model->update_entry_pendidikan_formal($id,$id_jurusan)){
+
+		}elseif($this->drh_model->update_entry_pendidikan_struktural($id,$id_diklat)){
 			die("OK");
 		}else{
 			$data['alert_form'] = 'Save data failed...';
@@ -393,15 +408,6 @@ class Drh_pedidikan extends CI_Controller {
 		die($this->parser->parse("kepegawaian/drh/form_pendidikan_struktural_form",$data));
 	}
 
-	function biodata_pendidikan_struktural_del($id="",$id_jurusan=0){
-		$this->authentication->verify('kepegawaian','del');
-
-		if($this->drh_model->delete_entry_ortu($id,$urut)){
-			die ("OK");
-		} else {
-			die ("Error");
-		}
-	}
 
 	function biodata_pendidikan_fungsional_add($id){
         $this->form_validation->set_rules('nama_diklat', 'Nama Diklat Struktural', 'trim|required');
@@ -413,11 +419,11 @@ class Drh_pedidikan extends CI_Controller {
         $this->form_validation->set_rules('instansi', '', 'trim');
         $this->form_validation->set_rules('penyelenggara', '', 'trim');
 
-		$data['id']=$id;
-		$data['alert_form'] = '';
-		$data['kode_diklat'] = $this->drh_model->get_kode_diklat('fungsional');
-
 		if($this->form_validation->run()== FALSE){
+	    	$data['action']		 = "add";
+			$data['id']			 = $id;
+			$data['alert_form']  = '';
+			$data['kode_diklat'] = $this->drh_model->get_kode_diklat('fungsional');
 			die($this->parser->parse("kepegawaian/drh/form_pendidikan_fungsional_form",$data));
 		}elseif($this->drh_model->insert_entry_pendidikan_fungsional($id)){
 			die("OK");
@@ -438,12 +444,15 @@ class Drh_pedidikan extends CI_Controller {
         $this->form_validation->set_rules('instansi', '', 'trim');
         $this->form_validation->set_rules('penyelenggara', '', 'trim');
 
-		$data['id']=$id;
-		$data['alert_form'] = '';
-		$data['kode_diklat'] = $this->drh_model->get_kode_diklat('fungsional');
-
 		if($this->form_validation->run()== FALSE){
+			$data 				 = $this->drh_model->get_data_pendidikan_fungsional_edit($id,$id_diklat);
+			$data['kode_diklat'] = $this->drh_model->get_kode_diklat('fungsional');
+			$data['action']		 = "edit";
+			$data['id']			 = $id;
+			$data['id_diklat']	 = $id_diklat;
+			$data['alert_form']  = '';
 			die($this->parser->parse("kepegawaian/drh/form_pendidikan_fungsional_form",$data));
+
 		}elseif($this->drh_model->update_entry_pendidikan_fungsional($id,$id_diklat)){
 			die("OK");
 		}else{
@@ -456,7 +465,7 @@ class Drh_pedidikan extends CI_Controller {
 	function biodata_pendidikan_fungsional_del($id="",$id_diklat=0){
 		$this->authentication->verify('kepegawaian','del');
 
-		if($this->drh_model->delete_entry_fungsional($id,$id_diklat)){
+		if($this->drh_model->delete_entry_pendidikan_fungsional($id,$id_diklat)){
 			die ("OK");
 		} else {
 			die ("Error");

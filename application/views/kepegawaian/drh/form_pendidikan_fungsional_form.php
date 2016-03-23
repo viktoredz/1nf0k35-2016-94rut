@@ -199,7 +199,7 @@
             contentType : false,
             processData : false,
             type : 'POST',
-            url : '<?php echo base_url()."kepegawaian/drh_pedidikan/biodata_pendidikan_fungsional_add/{id}"   ?>',
+            url : '<?php echo base_url()."kepegawaian/drh_pedidikan/biodata_pendidikan_fungsional_{action}/{id}/{id_diklat}"   ?>',
             data : data,
             success : function(response){
               if(response=="OK"){

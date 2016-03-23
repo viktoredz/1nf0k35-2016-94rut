@@ -79,7 +79,7 @@
         { text: 'Detail', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
             var dataRecord = $("#jqxgridPendidikanFungsional").jqxGrid('getrowdata', row);
             if(dataRecord.edit==1){
-            return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='edit_fungsional(\""+dataRecord.mst_peg_id_diklat+"\");'></a></div>";
+            return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='detail_fungsional (\""+dataRecord.id_pegawai+"\",\""+dataRecord.mst_peg_id_diklat+"\");'></a></div>";
           }else{
             return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_view.gif'></a></div>";
           }
@@ -88,7 +88,7 @@
         { text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
             var dataRecord = $("#jqxgridPendidikanFungsional").jqxGrid('getrowdata', row);
             if(dataRecord.delete==1){
-            return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del_fungsional(\""+dataRecord.mst_peg_id_diklat+"\");'></a></div>";
+            return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del_fungsional (\""+dataRecord.id_pegawai+"\",\""+dataRecord.mst_peg_id_diklat+"\");'></a></div>";
           }else{
             return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
           }
@@ -103,9 +103,9 @@
             ]
     });
 
-  function edit_fungsional(id_diklat){
+  function detail_fungsional(id,id_diklat){
       $("#popup_pendidikan_fungsional #popup_pendidikan_fungsional_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-      $.get("<?php echo base_url().'kepegawaian/drh_pedidikan/biodata_pendidikan_fungsional_add/'.$id.'/';?>" +id_diklat , function(data) {
+      $.get("<?php echo base_url().'kepegawaian/drh_pedidikan/biodata_pendidikan_fungsional_edit' ?>/" + id +"/"+id_diklat,  function(data) {
         $("#popup_pendidikan_fungsional_content").html(data);
       });
       $("#popup_pendidikan_fungsional").jqxWindow({
@@ -117,10 +117,10 @@
       $("#popup_pendidikan_fungsional").jqxWindow('open');
   }
 
-  function del_fungsional(id_diklat){
+  function del_fungsional(id,id_diklat){
     var confirms = confirm("Hapus Data ?");
     if(confirms == true){
-      $.post("<?php echo base_url().'kepegawaian/drh_pedidikan/dodel_pendidikan_fungsional/'.$id.'/' ?>" + id_diklat,  function(){
+      $.post("<?php echo base_url().'kepegawaian/drh_pedidikan/biodata_pendidikan_fungsional_del' ?>/" + id +"/"+id_diklat,   function(){
         alert('data berhasil dihapus');
 
         $("#jqxgridPendidikanFungsional").jqxGrid('updatebounddata', 'cells');

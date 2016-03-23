@@ -132,13 +132,13 @@
             contentType : false,
             processData : false,
             type : 'POST',
-            url : '<?php echo base_url()."kepegawaian/drh_pedidikan/biodata_pendidikan_struktural_add/{id}"   ?>',
+            url : '<?php echo base_url()."kepegawaian/drh_pedidikan/biodata_pendidikan_struktural_{action}/{id}/{id_diklat}"   ?>',
             data : data,
             success : function(response){
               if(response=="OK"){
                 $("#popup_pendidikan_struktural").jqxWindow('close');
                 alert("Data diklat berhasil disimpan.");
-                $("#jqxgridPendidikan").jqxGrid('updatebounddata', 'filter');
+                $("#jqxgridPendidikanStruktural").jqxGrid('updatebounddata', 'filter');
               }else{
                 $('#popup_pendidikan_struktural_content').html(response);
               }

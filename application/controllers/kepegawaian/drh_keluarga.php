@@ -60,22 +60,22 @@ class Drh_keluarga extends CI_Controller {
 		$data = array();
 		foreach($rows as $act) {
 			$data[] = array(
-				'akta_menikah'  => $act->akta_menikah,
-				'akta_meninggal'=> $act->akta_meninggal,
-				'akta_cerai'    => $act->akta_cerai,
-				'urut'	  		=> $act->urut,
-				'id_pegawai'	=> $act->id_pegawai,
-				'nama_keluarga'	=> $act->nama_keluarga,
-				'nama'			=> $act->nama,
-				'jenis_kelamin'	=> $act->jenis_kelamin,
-				'tgl_lahir'		=> $act->tgl_lahir,
+				'akta_menikah'  	=> $act->akta_menikah,
+				'akta_meninggal'	=> $act->akta_meninggal,
+				'akta_cerai'    	=> $act->akta_cerai,
+				'urut'	  			=> $act->urut,
+				'id_pegawai'		=> $act->id_pegawai,
+				'nama_keluarga'		=> $act->nama_keluarga,
+				'nama'				=> $act->nama,
+				'jenis_kelamin'		=> $act->jenis_kelamin,
+				'tgl_lahir'			=> $act->tgl_lahir,
 				'code_cl_district'	=> $act->code_cl_district,
-				'usia'			=> $act->usia,
-				'bpjs'			=> $act->bpjs,
-				'hidup'			=> $act->hidup,
-				'status_pns'	=> $act->status_pns,
-				'edit'		=> 1,
-				'delete'	=> 1
+				'usia'			    => $act->usia,
+				'bpjs'			    => $act->bpjs,
+				'hidup'			    => $act->hidup,
+				'status_pns'	    => $act->status_pns,
+				'edit'		        => 1,
+				'delete'	        => 1
 			);
 		}
 
@@ -157,8 +157,6 @@ class Drh_keluarga extends CI_Controller {
 				'tgl_menikah'		=> $act->tgl_menikah,
 				'tgl_meninggal'		=> $act->tgl_meninggal,
 				'tgl_cerai'			=> $act->tgl_cerai,
-
-
 				'edit'		=> 1,
 				'delete'	=> 1
 			);
@@ -225,16 +223,17 @@ class Drh_keluarga extends CI_Controller {
 		$data = array();
 		foreach($rows as $act) {
 			$data[] = array(
-				'id_pegawai'	=> $act->id_pegawai,
-				'nama_keluarga'	=> $act->nama_keluarga,
-				'nama'			=> $act->nama,
-				'jenis_kelamin'	=> $act->jenis_kelamin,
-				'tgl_lahir'		=> $act->tgl_lahir,
-				'tmp_lahir'		=> $act->tmp_lahir,
-				'usia'			=> $act->usia,
-				'status_anak'	=> $act->status_anak,
-				'edit'		=> 1,
-				'delete'	=> 1
+				'id_pegawai'				   => $act->id_pegawai,
+				'urut'	  				       => $act->urut,
+				'nama'						   => $act->nama,
+				'nama_keluarga'				   => $act->nama_keluarga,
+				'jenis_kelamin'				   => $act->jenis_kelamin,
+				'tgl_lahir'					   => $act->tgl_lahir,
+				'usia'						   => $act->usia,
+				'code_cl_district'	           => $act->code_cl_district,
+				'id_mst_peg_tingkatpendidikan' => $act->id_mst_peg_tingkatpendidikan,
+				'edit'						   => 1,
+				'delete'					   => 1
 			);
 		}
 
@@ -264,7 +263,6 @@ class Drh_keluarga extends CI_Controller {
 		}
 	}
 
-
 	function biodata_keluarga_anak_add($id){
         $this->form_validation->set_rules('nama', 'Nama', 'trim|required');
         $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'trim|required');
@@ -278,7 +276,8 @@ class Drh_keluarga extends CI_Controller {
 	    $data['action']				= "add";
 		$data['alert_form']		    = '';
 		$data['kode_kel'] 			= $this->drh_model->get_kode_keluarga('anak');
-		$data['kode_tingkatpend'] 	= $this->drh_model->get_tingkat('');
+		$data['kode_tingkat_pend'] 	= $this->drh_model->get_tingkat_pendidikan();
+
 
 		if($this->form_validation->run()== FALSE){
 			die($this->parser->parse("kepegawaian/drh/form_keluarga_anak_form",$data));
@@ -331,7 +330,6 @@ class Drh_keluarga extends CI_Controller {
         $this->form_validation->set_rules('tgl_menikah', 'Tanggal Menikah', 'trim');
         $this->form_validation->set_rules('tgl_cerai', 'Tanggal Cerai', 'trim');
         $this->form_validation->set_rules('tgl_meninggal', 'Tanggal Meninggal', 'trim');
-        //$this->form_validation->set_rules('status_menikah', ' Status Menikah', 'trim');
 
 		$data['id']					= $id;
 	    $data['action']				= "add";
@@ -379,6 +377,39 @@ class Drh_keluarga extends CI_Controller {
 		die($this->parser->parse("kepegawaian/drh/form_keluarga_ortu_form",$data));
 	}
 
+
+	function biodata_keluarga_anak_edit($id="",$urut=0){
+		$this->form_validation->set_rules('nama', 'Nama', 'trim|required');
+        $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'trim|required');
+        $this->form_validation->set_rules('tgl_lahir', 'Tanggal Lahir', 'trim');
+        $this->form_validation->set_rules('code_cl_district', 'Tempat Lahir', 'trim');
+        $this->form_validation->set_rules('status_pns', 'Status PNS', 'trim');
+        $this->form_validation->set_rules('alasan_taksekolah', 'Alasan Tak Sekolah', 'trim');
+        $this->form_validation->set_rules('bpjs', 'Nomor BPJS', 'trim');
+
+			$data['kode_tingkat_pend'] 	= $this->drh_model->get_tingkat_pendidikan();
+			
+		if($this->form_validation->run()== FALSE){
+			$data 						= $this->drh_model->get_data_anak_edit($id,$urut);
+			$data['kode_tingkat_pend'] 	= $this->drh_model->get_tingkat_pendidikan();
+ 			$data['kode_kel'] 			= $this->drh_model->get_kode_keluarga('anak');
+			$data['notice']				= validation_errors();
+			$data['action']				= "edit";
+			$data['id']					= $id;
+			$data['urut']				= $urut;
+			$data['alert_form'] 		= '';
+			$data['disable']			= "disable";
+			die($this->parser->parse("kepegawaian/drh/form_keluarga_anak_form",$data));
+		
+		}elseif($this->drh_model->update_entry_pasangan($id,$urut)){
+			die("OK");
+		}else{
+			$data['alert_form'] = 'Save data failed...';
+		}
+
+		die($this->parser->parse("kepegawaian/drh/form_keluarga_anak_form",$data));
+	}
+
 	function biodata_keluarga_pasangan_edit($id="",$urut=0){
 		$this->form_validation->set_rules('nama', 'Nama', 'trim|required');
         $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'trim|required');
@@ -394,7 +425,6 @@ class Drh_keluarga extends CI_Controller {
         $this->form_validation->set_rules('tgl_cerai', 'Tanggal Cerai', 'trim');
         $this->form_validation->set_rules('tgl_meninggal', 'Tanggal Meninggal', 'trim');
         $this->form_validation->set_rules('status_menikah', ' Status Menikah', 'trim');
-
 
 		if($this->form_validation->run()== FALSE){
 			$data 						= $this->drh_model->get_data_pasangan_edit($id,$urut);
@@ -428,6 +458,16 @@ class Drh_keluarga extends CI_Controller {
 		 }
 	}
 
+	function biodata_keluarga_anak_del($id=0,$urut=0){
+
+		 $this->authentication->verify('kepegawaian','del');
+
+		 if($this->drh_model->delete_entry_anak($id,$urut)){
+		 	die ("OK");
+		 } else {
+		 	die ("Error");
+		 }
+	}
 	
 	function biodata_keluarga_pasangan_del($id=0,$urut=0){
 

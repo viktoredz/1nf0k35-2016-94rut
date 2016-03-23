@@ -334,7 +334,7 @@
             contentType : false,
             processData : false,
             type : 'POST',
-            url : '<?php echo base_url()."kepegawaian/drh_pedidikan/biodata_pendidikan_formal_add/{id}"   ?>',
+            url : '<?php echo base_url()."kepegawaian/drh_pedidikan/biodata_pendidikan_formal_{action}/{id}/{id_jurusan}"   ?>',
             data : data,
             success : function(response){
               if(response=="OK"){
