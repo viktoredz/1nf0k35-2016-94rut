@@ -32,7 +32,7 @@
                   Jenis Diklat Struktural
                 </div>
                 <div class="col-md-8">
-                  <select  name="mst_peg_id_pendidikan_struktural" type="text" class="form-control">
+                  <select  name="mst_peg_id_pendidikan_struktural" type="text" class="form-control" <?php if($action=="edit") echo "disabled"?>>
                     <option value=''>-</option>
                       <?php 
                       if(set_value('mst_peg_id_diklat')=="" && isset($mst_peg_id_diklat)){
@@ -121,10 +121,10 @@
         $('#biodata_notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
         $('#biodata_notice').show();
 
-        data.append('mst_peg_id_diklat', $("[name='mst_peg_id_pendidikan_struktural']").val());
-        data.append('tgl_diklat', $("[name='tgl_pendidikan_struktural']").val());
-        data.append('nomor_sertifikat', $("[name='nomor_sertifikat_struktural']").val());
-        data.append('nama_diklat', $("[name='nama_pendidikan_struktural']").val());
+        data.append('mst_peg_id_diklat',    $("[name='mst_peg_id_pendidikan_struktural']").val());
+        data.append('tgl_diklat',           $("[name='tgl_pendidikan_struktural']").val());
+        data.append('nomor_sertifikat',     $("[name='nomor_sertifikat_struktural']").val());
+        data.append('nama_diklat',          $("[name='nama_pendidikan_struktural']").val());
         data.append('tipe', 'struktural');
 
         $.ajax({

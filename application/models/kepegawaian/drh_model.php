@@ -361,7 +361,6 @@ class Drh_model extends CI_Model {
         return $data;
     }
 
-
     function get_data_pendidikan_struktural_edit($id,$id_diklat){
         $data = array();
 
@@ -424,18 +423,17 @@ class Drh_model extends CI_Model {
         }
     }
 
-
     function insert_entry_anak($id)
     {
-        $data['id_pegawai']                  = $id;
-        $data['id_mst_peg_keluarga']         = $this->input->post('id_mst_peg_keluarga');
-        $data['id_mst_peg_tingkatpendidikan']= $this->input->post('id_mst_peg_tingkatpendidikan');
-        $data['nama']                        = $this->input->post('nama');
-        $data['jenis_kelamin']               = $this->input->post('jenis_kelamin');
-        $data['tgl_lahir']                   = date("Y-m-d",strtotime($this->input->post('tgl_lahir')));
-        $data['code_cl_district']            = $this->input->post('code_cl_district');
-        $data['bpjs']                        = $this->input->post('bpjs');
-        $data['status_pns']                  = $this->input->post('status_pns');
+        $data['id_pegawai']                   = $id;
+        $data['id_mst_peg_keluarga']          = $this->input->post('id_mst_peg_keluarga');
+        $data['id_mst_peg_tingkatpendidikan'] = $this->input->post('id_mst_peg_tingkatpendidikan');
+        $data['nama']                         = $this->input->post('nama');
+        $data['jenis_kelamin']                = $this->input->post('jenis_kelamin');
+        $data['tgl_lahir']                    = date("Y-m-d",strtotime($this->input->post('tgl_lahir')));
+        $data['code_cl_district']             = $this->input->post('code_cl_district');
+        $data['bpjs']                         = $this->input->post('bpjs');
+        $data['status_pns']                   = $this->input->post('status_pns');
 
         $this->db->select('MAX(urut) as urut');
         $this->db->where('id_pegawai',$id);
@@ -471,7 +469,6 @@ class Drh_model extends CI_Model {
         $data['tgl_meninggal']      = date("Y-m-d",strtotime($this->input->post('tgl_meninggal')));
         $data['tgl_cerai']          = date("Y-m-d",strtotime($this->input->post('tgl_cerai')));
         $data['status_menikah']     = $this->input->post('status_menikah');
-
 
         $this->db->select('MAX(urut) as urut');
         $this->db->where('id_pegawai',$id);
@@ -559,26 +556,6 @@ class Drh_model extends CI_Model {
         }
     }
 
-    function update_entry_pendidikan_formal($id,$id_jurusan)
-    {
-        $data['sekolah_nama']       = $this->input->post('sekolah_nama');
-        $data['sekolah_lokasi']     = $this->input->post('sekolah_lokasi');
-        $data['ijazah_no']          = $this->input->post('ijazah_no');
-        $data['ijazah_tgl']         = date("Y-m-d",strtotime($this->input->post('ijazah_tgl')));
-        $data['gelar_depan']        = $this->input->post('gelar_depan');
-        $data['gelar_belakang']     = $this->input->post('gelar_belakang');
-        $data['status_pendidikan_cpns'] = $this->input->post('status_pendidikan_cpns');
-
-        $this->db->where('id_pegawai',$id);
-        $this->db->where('id_mst_peg_jurusan',$id_jurusan);
-
-        if($this->db->update('pegawai_pendidikan', $data)){
-            return true; 
-        }else{
-            return mysql_error();
-        }
-    }
-
     function update_entry_pendidikan_struktural($id,$id_diklat)
     {
         $data['nama_diklat']        = $this->input->post('nama_diklat');
@@ -618,6 +595,27 @@ class Drh_model extends CI_Model {
         }
     }
 
+    function update_entry_pendidikan_formal($id,$id_jurusan)
+    {
+        $data['id_pegawai']         = $id;
+        $data['id_mst_peg_jurusan'] = $this->input->post('id_mst_peg_jurusan');
+        $data['sekolah_nama']       = $this->input->post('sekolah_nama');
+        $data['sekolah_lokasi']     = $this->input->post('sekolah_lokasi');
+        $data['ijazah_no']          = $this->input->post('ijazah_no');
+        $data['ijazah_tgl']         = date("Y-m-d",strtotime($this->input->post('ijazah_tgl')));
+        $data['gelar_depan']        = $this->input->post('gelar_depan');
+        $data['gelar_belakang']     = $this->input->post('gelar_belakang');
+        $data['status_pendidikan_cpns'] = $this->input->post('status_pendidikan_cpns');
+
+        $this->db->where('id_pegawai',$id);
+        $this->db->where('id_mst_peg_jurusan',$id_jurusan);
+
+        if($this->db->update('pegawai_pendidikan', $data)){
+            return true; 
+        }else{
+            return mysql_error();
+        }
+    }
     function get_data_pendidikan_formal($id,$start=0,$limit=999999,$options=array())
     {
         $this->db->select("pegawai_pendidikan.*,IF(pegawai_pendidikan.status_pendidikan_cpns=1,'Ya','Tidak') as cpns,mst_peg_jurusan.nama_jurusan,mst_peg_tingkatpendidikan.deskripsi",false);

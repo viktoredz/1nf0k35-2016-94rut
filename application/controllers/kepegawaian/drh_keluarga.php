@@ -231,7 +231,6 @@ class Drh_keluarga extends CI_Controller {
 				'tgl_lahir'					   => $act->tgl_lahir,
 				'usia'						   => $act->usia,
 				'code_cl_district'	           => $act->code_cl_district,
-				'id_mst_peg_tingkatpendidikan' => $act->id_mst_peg_tingkatpendidikan,
 				'edit'						   => 1,
 				'delete'					   => 1
 			);
@@ -387,8 +386,6 @@ class Drh_keluarga extends CI_Controller {
         $this->form_validation->set_rules('alasan_taksekolah', 'Alasan Tak Sekolah', 'trim');
         $this->form_validation->set_rules('bpjs', 'Nomor BPJS', 'trim');
 
-			$data['kode_tingkat_pend'] 	= $this->drh_model->get_tingkat_pendidikan();
-			
 		if($this->form_validation->run()== FALSE){
 			$data 						= $this->drh_model->get_data_anak_edit($id,$urut);
 			$data['kode_tingkat_pend'] 	= $this->drh_model->get_tingkat_pendidikan();
@@ -401,7 +398,7 @@ class Drh_keluarga extends CI_Controller {
 			$data['disable']			= "disable";
 			die($this->parser->parse("kepegawaian/drh/form_keluarga_anak_form",$data));
 		
-		}elseif($this->drh_model->update_entry_pasangan($id,$urut)){
+		}elseif($this->drh_model->update_entry_anak($id,$urut)){
 			die("OK");
 		}else{
 			$data['alert_form'] = 'Save data failed...';

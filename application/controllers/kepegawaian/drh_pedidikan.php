@@ -336,7 +336,6 @@ class Drh_pedidikan extends CI_Controller {
 		}else{
 			$data['alert_form'] = 'Save data failed...';
 		}
-
 		die($this->parser->parse("kepegawaian/drh/form_pendidikan_formal_form",$data));
 	}
 

@@ -32,7 +32,7 @@
                   Tipe
                 </div>
                 <div class="col-md-8">
-                  <select  name="tipe" type="text" class="form-control">
+                  <select  name="tipe" type="text" class="form-control" <?php if($action == "edit") echo "disabled"?>>
                     <?php 
                     if(set_value('tipe')=="" && isset($tipe)){
                       $tipe = $tipe;
@@ -51,8 +51,7 @@
                   Jenis Diklat Fungsional
                 </div>
                 <div class="col-md-8">
-                  <select  name="mst_peg_id_pendidikan_fungsional" type="text" class="form-control">
-                    <option value=''>-</option>
+                  <select  name="mst_peg_id_pendidikan_fungsional" type="text" class="form-control" <?php if($action == "edit") echo "disabled"?>>
                       <?php 
                       if(set_value('mst_peg_id_diklat')=="" && isset($mst_peg_id_diklat)){
                         $mst_peg_id_diklat = $mst_peg_id_diklat;

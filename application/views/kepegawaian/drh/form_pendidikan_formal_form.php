@@ -243,7 +243,6 @@
 
       return false;
     });
-  
 
     $("[name='sekolah_nama']").jqxInput(
       {
@@ -321,12 +320,12 @@
         data.append('id_rumpun', $("[name='id_rumpun']").val());
         data.append('id_tingkat', $("[name='id_tingkat']").val());
         data.append('id_jurusan', $("[name='id_jurusan']").val());
-        data.append('ijazah_no', $("[name='ijazah_no']").val());
-        data.append('ijazah_tgl', $("[name='formal_ijazah_tgl']").val());
-        data.append('sekolah_nama', $("[name='sekolah_nama']").val());
-        data.append('sekolah_lokasi', $("[name='sekolah_lokasi']").val());
-        data.append('gelar_depan', $("[name='formal_gelar_depan']").val());
-        data.append('gelar_belakang', $("[name='formal_gelar_belakang']").val());
+        data.append('ijazah_no',              $("[name='ijazah_no']").val());
+        data.append('ijazah_tgl',             $("[name='formal_ijazah_tgl']").val());
+        data.append('sekolah_nama',           $("[name='sekolah_nama']").val());
+        data.append('sekolah_lokasi',         $("[name='sekolah_lokasi']").val());
+        data.append('gelar_depan',            $("[name='formal_gelar_depan']").val());
+        data.append('gelar_belakang',         $("[name='formal_gelar_belakang']").val());
         data.append('status_pendidikan_cpns', $("[name='status_pendidikan_cpns']:checked").val());
 
         $.ajax({
