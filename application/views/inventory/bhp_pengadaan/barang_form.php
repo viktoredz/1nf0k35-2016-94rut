@@ -68,7 +68,7 @@ if(isset($disable)){if($disable='disable'){?>
               contentType : false,
               processData : false,
               type : 'POST',
-              url : '<?php echo base_url()."inventory/bhp_pengadaan/".$action."_barang/".$kode."/" ?>',
+              url : '<?php echo base_url()."inventory/bhp_pengadaan/".$action."_barang/".$kode."/".$obat."/" ?>',
               data : data,
               success : function(response){
                 var res  = response.split("|");
@@ -279,7 +279,7 @@ if(isset($disable)){if($disable='disable'){?>
           </div>
 
           <div class="row" style="margin: 5px">
-            <div class="col-md-4" style="padding: 5px">Harga Satuan<?php echo $obat;?></div>
+            <div class="col-md-4" style="padding: 5px">Harga Satuan</div>
             <div class="col-md-8">
               <input type="number" class="form-control" name="harga" id="harga" placeholder="Harga Satuan" value="<?php 
                 if(set_value('harga')=="" && isset($harga)){

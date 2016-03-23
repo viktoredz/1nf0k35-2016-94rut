@@ -232,7 +232,7 @@
 
 	function edit_barang(id_permohonan,kode_barang){
 		$("#popup_barang #popup_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-		$.get("<?php echo base_url().'inventory/bhp_pengadaan/edit_barang/';?>"+id_permohonan+'/'+kode_barang, function(data) {
+		$.get("<?php echo base_url().'inventory/bhp_pengadaan/edit_barang/'.$id_mst_inv_barang_habispakai_jenis.'/';?>"+id_permohonan+'/'+kode_barang, function(data) {
 			$("#popup_content").html(data);
 		});
 		$("#popup_barang").jqxWindow({

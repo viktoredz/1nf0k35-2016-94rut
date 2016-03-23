@@ -52,7 +52,7 @@ if(isset($disable)){if($disable='disable'){?>
                 contentType : false,
                 processData : false,
                 type : 'POST',
-                url : '<?php echo base_url()."inventory/bhp_pengadaan/".$action."_barang/".$kode."/" ?>',
+                url : '<?php echo base_url()."inventory/bhp_pengadaan/".$action."_barang/".$obat."/".$kode."/" ?>',
                 data : data,
                 success : function(response){
                   var res  = response.split("|");
@@ -134,7 +134,12 @@ if(isset($disable)){if($disable='disable'){?>
         $("#jml_rusak").change(function(){
           if ( parseInt($("#jml_rusak").val()) > parseInt($("#jumlah").val())) {
             alert("Maaf, Data jumlah rusak tidak boleh lebih besar dari data jumlah");
-            $("#jml_rusak").val("<?php echo  $jml_rusak; ?>")
+            $("#jml_rusak").val("<?php
+              if(set_value('jml_rusak')=="" && isset($jml_rusak)){
+                  echo $jml_rusak;
+                }else{
+                  echo  set_value('jml_rusak');
+                } ?>")
           }else{
 
           }
@@ -162,7 +167,7 @@ if(isset($disable)){if($disable='disable'){?>
     <?php echo form_open(current_url(), 'id="form-ss"') ?>
           <div class="box-body">
             <div class="row" style="margin: 5px">
-              <div class="col-md-4" style="padding: 5px">Nama Barang</div>
+              <div class="col-md-4" style="padding: 5px">Nama Barang<?php echo $obat; ?></div>
               <div class="col-md-8">
               <input readonly="readonly" id="jqxinput" class="form-control" autocomplete="off" name="jqxinput" type="text" value="<?php 
                 if(set_value('jqxinput')=="" && isset($uraian)){ 
@@ -224,8 +229,8 @@ if(isset($disable)){if($disable='disable'){?>
                 }
           ?>" />
              <?php //echo $id_mst_inv_barang_habispakai_jenis;
-            if (isset($id_mst_inv_barang_habispakai_jenis)) {
-              if ($id_mst_inv_barang_habispakai_jenis=="8") {
+            if (isset($obat)) {
+              if ($obat=="8") {
           ?>
           <div class="row" style="margin: 5px">
             <div class="col-md-4" style="padding: 5px">Batch</div>
@@ -247,6 +252,13 @@ if(isset($disable)){if($disable='disable'){?>
               ?>"></div>
             </div>
           </div>
+           <?php
+            # code...
+              }else{
+
+              }
+            }
+          ?>
           <div class="row" style="margin: 5px">
             <div class="col-md-4" style="padding: 5px">Keadaan Rusak</div>
             <div class="col-md-8">
@@ -259,13 +271,6 @@ if(isset($disable)){if($disable='disable'){?>
                 ?>">
             </div>
           </div>
-          <?php
-            # code...
-              }else{
-
-              }
-            }
-          ?>
             <?php if(isset($disable)){if($disable='disable'){?>
             <div class="row" style="margin: 5px">
               <div class="col-md-4" style="padding: 5px">Tanggal Diterima</div>

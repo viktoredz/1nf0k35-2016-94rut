@@ -776,6 +776,9 @@ class Bhp_pengadaan extends CI_Controller {
         $this->form_validation->set_rules('jqxinput', 'Nama Barang', 'trim');
         $this->form_validation->set_rules('subtotal', 'subtotal', 'trim');
         $this->form_validation->set_rules('id_mst_inv_barang', 'barang', 'trim');
+        if(!empty($this->input->post('obat'))&&($this->input->post('obat')=="8")){
+        	$this->form_validation->set_rules('batch', 'Nomor Batch', 'trim|required');
+        }
 
 		if($this->form_validation->run()== FALSE){
 
@@ -798,7 +801,7 @@ class Bhp_pengadaan extends CI_Controller {
 			
 		}
 	}
-	public function edit_barang($id_permohonan=0,$kd_barang=0)
+	public function edit_barang($obat=0,$id_permohonan=0,$kd_barang=0)
 	{
 		$data['action']			= "edit";
 		$data['kode']			= $id_permohonan;
@@ -809,11 +812,17 @@ class Bhp_pengadaan extends CI_Controller {
         $this->form_validation->set_rules('jqxinput', 'Nama Barang', 'trim');
         $this->form_validation->set_rules('subtotal', 'subtotal', 'trim');
         $this->form_validation->set_rules('id_mst_inv_barang', 'barang', 'trim');
+        $this->form_validation->set_rules('jml_rusak', 'rusak', 'trim');
+        if(!empty($this->input->post('obat'))&&($this->input->post('obat')=="8")){
+        	$this->form_validation->set_rules('batch', 'Nomor Batch', 'trim|required');
+        }
 		if($this->form_validation->run()== FALSE){
 			$data = $this->bhp_pengadaan_model->get_data_barang_edit_table($id_permohonan,$kd_barang); 
 			$data['action']			= "edit";
 			$data['kode']			= $id_permohonan;
+			$data['obat']			= $obat;
 			$data['notice']			= validation_errors();
+			
 			die($this->parser->parse('inventory/bhp_pengadaan/barang_form_edit', $data));
 		}else{
 			if(!empty($this->input->post('obat'))&&($this->input->post('obat')=='8')){
