@@ -11,6 +11,7 @@
 			{ name: 'tgl_opname', type: 'string' },
 			{ name: 'batch', type: 'string' },
 			{ name: 'harga', type: 'string' },
+			{ name: 'jumlah', type: 'string' },
 			{ name: 'subtotal', type: 'string' },
 			{ name: 'harga', type: 'double' },
 			{ name: 'tgl_update', type: 'date' },

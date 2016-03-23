@@ -79,21 +79,16 @@ class Bhp_distribusi extends CI_Controller {
 		
 		foreach($rows as $act) {
 			$data[] = array(
-				'id_inv_hasbispakai_pembelian' 	=> $act->id_inv_hasbispakai_pembelian,
+				'id_inv_inventaris_habispakai_distribusi' 	=> $act->id_inv_inventaris_habispakai_distribusi,
 				'code_cl_phc' 					=> $act->code_cl_phc,
-				'pilihan_status_pembelian' 		=> $act->pilihan_status_pembelian,
-				'tgl_permohonan' 				=> $act->tgl_permohonan,
-				'tgl_pembelian' 				=> $act->tgl_pembelian,
-				'tgl_kwitansi'					=> $act->tgl_kwitansi,
-				'nomor_kwitansi'				=> $act->nomor_kwitansi,
-				'nomor_kontrak'					=> $act->nomor_kontrak,
-				'jumlah_unit'					=> $act->jumlah_unit,
-				'uraian'						=> $act->uraian,
-				'nilai_pembelian'				=> $act->nilai_pembelian,
-				'jumlah_unit'					=> $act->jumlah_unit,
-				'nilai_pembelian'				=> number_format($act->nilai_pembelian),
-				'value'							=> $act->value,
+				'jenis_bhp' 					=> $act->jenis_bhp,
+				'tgl_distribusi' 				=> $act->tgl_distribusi,
+				'nomor_dokumen'					=> $act->nomor_dokumen,
+				'penerima_nama'					=> $act->penerima_nama,
+				'penerima_nip'					=> $act->penerima_nip,
 				'keterangan'					=> $act->keterangan,
+				'bln_periode'					=> $act->bln_periode,
+				'jumlah'						=> $act->jumlah,
 				'detail'						=> 1,
 				'edit'							=> 1,//$unlock,
 				'delete'						=> 1//$unlock
@@ -139,8 +134,13 @@ class Bhp_distribusi extends CI_Controller {
 		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
 			$this->db->where('inv_inventaris_habispakai_pembelian_item.code_cl_phc','P'.$this->session->userdata('puskesmas'));
 		}
-		$this->db->where('inv_inventaris_habispakai_pembelian_item.id_inv_hasbispakai_pembelian',$id);
-		$rows_all_activity = $this->bhp_distribusi_model->getItem();
+		if ($id=='8') {
+			$this->db->where('mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis',$id);
+		}else{
+			$this->db->where('mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis !=','8');
+		}
+		
+		$rows_all_activity = $this->bhp_distribusi_model->getitem();
 
 
 		if($_POST) {
@@ -167,8 +167,12 @@ class Bhp_distribusi extends CI_Controller {
 		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
 			$this->db->where('inv_inventaris_habispakai_pembelian_item.code_cl_phc','P'.$this->session->userdata('puskesmas'));
 		}
-		$this->db->where('inv_inventaris_habispakai_pembelian_item.id_inv_hasbispakai_pembelian',$id);
-		$activity = $this->bhp_distribusi_model->getItem($this->input->post('recordstartindex'), $this->input->post('pagesize'));
+		if ($id=='8') {
+			$this->db->where('mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis',$id);
+		}else{
+			$this->db->where('mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis !=','8');
+		}
+		$activity = $this->bhp_distribusi_model->getitem($this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();
 
 		$kodepuskesmas = $this->session->userdata('puskesmas');
@@ -184,11 +188,102 @@ class Bhp_distribusi extends CI_Controller {
 				'id_mst_inv_barang_habispakai'   		=> $act->id_mst_inv_barang_habispakai,
 				'uraian'								=> $act->uraian,
 				'jml'									=> $act->jml,
+				'jumlah'								=> $act->jumlah-$act->jmldistribusi,
 				'batch'									=> $act->batch,
 				'harga'									=> number_format($act->harga,2),
 				'subtotal'								=> number_format($act->jml*$act->harga,2),
 				'tgl_update'							=> $act->tgl_update,
-				'tgl_opname'							=> $act->tgl_opname,
+				'edit'		=> 1,
+				'delete'	=> 1
+			);
+		}
+
+
+		
+		$size = sizeof($rows_all_activity);
+		$json = array(
+			'TotalRows' => (int) $size,
+			'Rows' => $data
+		);
+
+		echo json_encode(array($json));
+	}
+	public function distribusibarang($id = 0){
+		$this->authentication->verify('inventory','show');
+
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl_update' ) {
+					$value = date("Y-m-d",strtotime($value));
+
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+
+		$this->db->where('mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis',$id);
+		
+		$rows_all_activity = $this->bhp_distribusi_model->getitemdistribusi();
+
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl_update' ) {
+					$value = date("Y-m-d",strtotime($value));
+
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+
+		$this->db->where('mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis',$id);
+
+		$activity = $this->bhp_distribusi_model->getitemdistribusi($this->input->post('recordstartindex'), $this->input->post('pagesize'));
+		$data = array();
+
+		$kodepuskesmas = $this->session->userdata('puskesmas');
+		if(substr($kodepuskesmas, -2)=="01"){
+			$unlock = 1;
+		}else{
+			$unlock = 0;
+		}
+		
+		foreach($activity as $act) {
+			$data[] = array(
+				'id_inv_hasbispakai_pembelian'   		=> $act->id_inv_hasbispakai_pembelian,
+				'id_mst_inv_barang_habispakai'   		=> $act->id_mst_inv_barang_habispakai,
+				'uraian'								=> $act->uraian,
+				'jml'									=> $act->jml,
+				'jumlah'								=> $act->jumlah-$act->jmldistribusi,
+				'batch'									=> $act->batch,
+				'harga'									=> number_format($act->harga,2),
+				'subtotal'								=> number_format($act->jml*$act->harga,2),
+				'tgl_update'							=> $act->tgl_update,
 				'edit'		=> 1,
 				'delete'	=> 1
 			);
@@ -232,7 +327,7 @@ class Bhp_distribusi extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
-		$activity = $this->bhp_distribusi_model->getItem('inv_inventaris_habispakai_pembelian_item', array('id_inv_hasbispakai_pembelian'=>$id))->result();
+		$activity = $this->bhp_distribusi_model->getitem('inv_inventaris_habispakai_pembelian_item', array('id_inv_hasbispakai_pembelian'=>$id))->result();
 		foreach($activity as $act) {
 			$data[] = array(
 				'id_inv_hasbispakai_pembelian'   		=> $act->id_inv_hasbispakai_pembelian,
@@ -271,10 +366,13 @@ class Bhp_distribusi extends CI_Controller {
 	function add(){
 		$this->authentication->verify('inventory','add');
 
-		$this->form_validation->set_rules('kode_inventaris_', 'Kode Inventaris', 'trim|required');
-        $this->form_validation->set_rules('tgl', 'Tanggal Perngadaan', 'trim|required');
-        $this->form_validation->set_rules('status', 'Status Pengadaan', 'trim|required');
-        $this->form_validation->set_rules('keterangan', 'Nomor Kontrak', 'trim');
+		$this->form_validation->set_rules('kode_distribusi_', 'Kode Distribusi', 'trim|required');
+        $this->form_validation->set_rules('tgl_distribusi', 'Tanggal Distribusi', 'trim|required');
+        $this->form_validation->set_rules('penerima_nama', 'Nama Penerima', 'trim|required');
+        $this->form_validation->set_rules('penerima_nip', 'NIP Penerima', 'trim|required');
+        $this->form_validation->set_rules('nomor_dokumen', 'Nomor Dokumen', 'trim|required');
+        $this->form_validation->set_rules('keterangan', 'Keterangan', 'trim');
+        $this->form_validation->set_rules('jenis_bhp', 'jenis_bhp', 'trim');
 
 		if($this->form_validation->run()== FALSE){
 			$data['title_group'] 	= "Bahan Habis Pakai";
@@ -292,7 +390,12 @@ class Bhp_distribusi extends CI_Controller {
 			$data['content'] = $this->parser->parse("inventory/bhp_distribusi/form",$data,true);
 		}elseif($id = $this->bhp_distribusi_model->insert_entry()){
 			$this->session->set_flashdata('alert', 'Save data successful...');
-			redirect(base_url().'inventory/bhp_distribusi/edit/'.$id);
+			if ($this->input->post('jenis_bhp')=="obat") {
+				$jenis='8';
+			}else{
+				$jenis='0';
+			}
+			redirect(base_url().'inventory/bhp_distribusi/edit/'.$id.'/'.$jenis);
 		}else{
 			$this->session->set_flashdata('alert_form', 'Save data failed...');
 			redirect(base_url()."inventory/bhp_distribusi/add");
@@ -301,26 +404,24 @@ class Bhp_distribusi extends CI_Controller {
 		$this->template->show($data,"home");
 	}
 
-	function edit($id_pengadaan=0){
+	function edit($id_distribusi=0,$jenis_bhp=0){
 		$this->authentication->verify('inventory','edit');
 
-        //$this->form_validation->set_rules('tgl', 'Tanggal Perngadaan', 'trim|required');
-        $this->form_validation->set_rules('jenis_transaksi', 'Jenis Transaksi', 'trim|required');
-        $this->form_validation->set_rules('keterangan', 'Keterangan', 'trim|required');
-        $this->form_validation->set_rules('nomor_kontrak', 'Nomor Kontrak', 'trim|required');
-        $this->form_validation->set_rules('thn_periode', 'Periode', 'trim|required');
-        $this->form_validation->set_rules('bln_periode', 'Periode', 'trim|required');
-        $this->form_validation->set_rules('pilihan_sumber_dana', 'Nomor Kontrak', 'trim|required');
-        $this->form_validation->set_rules('thn_dana', 'Sumber Dana', 'trim|required');
-        $this->form_validation->set_rules('status', 'Status', 'trim|required');
-        $this->form_validation->set_rules('id_mst_inv_pbf_code', 'Instansi/PBF', 'trim|required');
-        
+        $this->form_validation->set_rules('kode_distribusi_', 'Kode Distribusi', 'trim|required');
+        $this->form_validation->set_rules('tgl_distribusi', 'Tanggal Distribusi', 'trim|required');
+        $this->form_validation->set_rules('penerima_nama', 'Nama Penerima', 'trim|required');
+        $this->form_validation->set_rules('penerima_nip', 'NIP Penerima', 'trim|required');
+        $this->form_validation->set_rules('nomor_dokumen', 'Nomor Dokumen', 'trim|required');
+        $this->form_validation->set_rules('keterangan', 'Keterangan', 'trim');
+        $this->form_validation->set_rules('jenis_bhp', 'jenis_bhp', 'trim');
+
 		if($this->form_validation->run()== FALSE){
-			$data 	= $this->bhp_distribusi_model->get_data_row($id_pengadaan);
+			$data 	= $this->bhp_distribusi_model->get_data_row($id_distribusi);
 			$data['title_group'] 	= "Barang Habis Pakai";
 			$data['title_form']		= "Ubah Distribusi Barang";
 			$data['action']			= "edit";
-			$data['kode']			= $id_pengadaan;
+			$data['kode']			= $id_distribusi;
+			$data['jenis_bhp']		= $jenis_bhp;
 			$data['bulan'] 			= array('01'=>'Januari', '02'=>'Februari', '03'=>'Maret', '04'=>'April', '05'=>'Mei', '06'=>'Juni', '07'=>'Juli', '08'=>'Agustus', '09'=>'September', '10'=>'Oktober', '11'=>'November', '12'=>'Desember');
 
 			
@@ -330,17 +431,18 @@ class Bhp_distribusi extends CI_Controller {
 			$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
 			$data['kodestatus'] = $this->bhp_distribusi_model->get_data_status();
 			$data['kodestatus_inv'] = $this->bhp_distribusi_model->pilih_data_status('status_pembelian');
-			$data['tgl_opnamecond']		= $this->bhp_distribusi_model->gettgl_opname($id_pengadaan);
+			$data['tgl_opnamecond']	= $this->bhp_distribusi_model->gettgl_opname($id_distribusi);
+			$data['jenis_bhp']		= $jenis_bhp;
 
 			$data['barang']	  			= $this->parser->parse('inventory/bhp_distribusi/barang', $data, TRUE);
 			$data['barang_distribusi'] 	= $this->parser->parse('inventory/bhp_distribusi/barang_distribusi', $data, TRUE);
 			$data['content'] 			= $this->parser->parse("inventory/bhp_distribusi/edit",$data,true);
-		}elseif($this->bhp_distribusi_model->update_entry($id_pengadaan)){
+		}elseif($this->bhp_distribusi_model->update_entry($id_distribusi)){
 			$this->session->set_flashdata('alert_form', 'Save data successful...');
-			redirect(base_url()."inventory/bhp_distribusi/edit/".$id_pengadaan);
+			redirect(base_url()."inventory/bhp_distribusi/edit/".$id_distribusi);
 		}else{
 			$this->session->set_flashdata('alert_form', 'Save data failed...');
-			redirect(base_url()."inventory/bhp_distribusi/edit/".$id_pengadaan);
+			redirect(base_url()."inventory/bhp_distribusi/edit/".$id_distribusi);
 		}
 
 		$this->template->show($data,"home");
@@ -399,7 +501,7 @@ class Bhp_distribusi extends CI_Controller {
 	}
 
 
-	public function kodeInvetaris($id=0){
+	public function kodedistribusi($id=0){
 		$this->db->where('code',"P".$this->session->userdata('puskesmas'));
 		$query = $this->db->get('cl_phc')->result();
 		foreach ($query as $q) {
@@ -417,24 +519,20 @@ class Bhp_distribusi extends CI_Controller {
 			);
 			echo json_encode($totalpengadaan);
 	}
-	public function add_barang($kode=0,$obat=0)
+	public function distribusi($id_distribusi=0,$kode=0,$batch=0)
 	{	
 		$data['action']			= "add";
 		$data['kode']			= $kode;
-        $this->form_validation->set_rules('id_permohonan_barang', 'Kode Barang', 'trim|required');
-        $this->form_validation->set_rules('nama_barang', 'Nama Barang', 'trim|required');
-        $this->form_validation->set_rules('jumlah', 'Jumlah', 'trim|required');
-        $this->form_validation->set_rules('harga', 'Harga Satuan', 'trim|required');
-        $this->form_validation->set_rules('jqxinput', 'Nama Barang', 'trim');
-        $this->form_validation->set_rules('subtotal', 'subtotal', 'trim');
-        $this->form_validation->set_rules('id_mst_inv_barang', 'barang', 'trim');
+        $this->form_validation->set_rules('jmldistribusi', 'Jumlah Distribusi', 'trim|required');
 
 		if($this->form_validation->run()== FALSE){
 
-			$data['kodebarang']		= $this->bhp_distribusi_model->get_databarang();
+			$data 					= $this->bhp_distribusi_model->get_data_distribusi($kode,$batch);
 			$data['notice']			= validation_errors();
 			$data['kode']			= $kode;
-			$data['obat']			= $obat;
+			$data['batch']			= $batch;
+			$data['action']			= "add";
+			$data['id_distribusi']  = $id_distribusi;
 			die($this->parser->parse('inventory/bhp_distribusi/barang_form', $data));
 		}else{
 				if(empty($this->input->post('obat'))){
@@ -584,5 +682,41 @@ class Bhp_distribusi extends CI_Controller {
 			}
 			
 		}
+	}
+	function autocomplite_nama($obat=0){
+		$kodepuskesmas = "P".$this->session->userdata("puskesmas");
+		$search = explode("&",$this->input->server('QUERY_STRING'));
+		$search = str_replace("term=","",$search[0]);
+		$search = str_replace("+"," ",$search);
+
+		$this->db->like("penerima_nama",$search);
+		$this->db->order_by('id_inv_inventaris_habispakai_distribusi','asc');
+		$this->db->limit(10,0);
+		$this->db->select("penerima_nama");
+		$query= $this->db->get("inv_inventaris_habispakai_distribusi")->result();
+		foreach ($query as $q) {
+			$barang[] = array(
+				'value'	=> $q->penerima_nama,
+			);
+		}
+		echo json_encode($barang);
+	}
+	function autocomplite_nip($obat=0){
+		$kodepuskesmas = "P".$this->session->userdata("puskesmas");
+		$search = explode("&",$this->input->server('QUERY_STRING'));
+		$search = str_replace("term=","",$search[0]);
+		$search = str_replace("+"," ",$search);
+
+		$this->db->like("penerima_nip",$search);
+		$this->db->order_by('id_inv_inventaris_habispakai_distribusi','asc');
+		$this->db->limit(10,0);
+		$this->db->select("penerima_nip");
+		$query= $this->db->get("inv_inventaris_habispakai_distribusi")->result();
+		foreach ($query as $q) {
+			$barang[] = array(
+				'value'	=> $q->penerima_nip,
+			);
+		}
+		echo json_encode($barang);
 	}
 }

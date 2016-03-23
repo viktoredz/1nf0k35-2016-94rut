@@ -620,7 +620,7 @@ class Bhp_pengadaan extends CI_Controller {
 		$this->form_validation->set_rules('kode_inventaris_', 'Kode Inventaris', 'trim|required');
         $this->form_validation->set_rules('tgl', 'Tanggal Perngadaan', 'trim|required');
         $this->form_validation->set_rules('status', 'Status Pengadaan', 'trim|required');
-        $this->form_validation->set_rules('keterangan', 'Nomor Kontrak', 'trim');
+        $this->form_validation->set_rules('keterangan', 'Kontrak', 'trim');
 
 		if($this->form_validation->run()== FALSE){
 			$data['title_group'] 	= "Bahan Habis Pakai";

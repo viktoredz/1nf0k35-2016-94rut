@@ -1,7 +1,7 @@
 <?php
 class Bhp_distribusi_model extends CI_Model {
 
-    var $tabel    = 'inv_inventaris_habispakai_pembelian';
+    var $tabel    = 'inv_inventaris_habispakai_distribusi';
 	var $lang	  = '';
 
     function __construct() {
@@ -92,31 +92,38 @@ class Bhp_distribusi_model extends CI_Model {
     }
     function get_data($start=0,$limit=999999,$options=array())
     {
-        $this->db->order_by('tgl_permohonan','desc');
-        $this->db->select("mst_inv_barang_habispakai_jenis.uraian,$this->tabel.*,mst_inv_pilihan.value");
-        $this->db->join('mst_inv_pilihan', "inv_inventaris_habispakai_pembelian.pilihan_status_pembelian = mst_inv_pilihan.code AND mst_inv_pilihan.tipe='status_pembelian'",'left');
-        $this->db->join('mst_inv_barang_habispakai_jenis', "mst_inv_barang_habispakai_jenis.id_mst_inv_barang_habispakai_jenis = inv_inventaris_habispakai_pembelian.id_mst_inv_barang_habispakai_jenis",'left');
-        $query = $this->db->get($this->tabel,$limit,$start);
+        $this->db->order_by('id_inv_inventaris_habispakai_distribusi','desc');
+        $this->db->select("inv_inventaris_habispakai_distribusi.*,(SELECT COUNT(*) FROM inv_inventaris_habispakai_distribusi_item WHERE inv_inventaris_habispakai_distribusi_item.id_inv_inventaris_habispakai_distribusi = inv_inventaris_habispakai_distribusi.id_inv_inventaris_habispakai_distribusi) AS jumlah,");
+        $query = $this->db->get("inv_inventaris_habispakai_distribusi",$limit,$start);
         return $query->result();
     }
-    public function getItem($start=0,$limit=999999,$options=array()){
+    public function getitem($start=0,$limit=999999,$options=array()){
         $this->db->order_by('tgl_update','desc');
-        $this->db->select("inv_inventaris_habispakai_pembelian_item.*,mst_inv_barang_habispakai.uraian,
-                (select tgl_update  as tglopname from inv_inventaris_habispakai_opname where id_mst_inv_barang_habispakai = inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai and code_cl_phc=inv_inventaris_habispakai_pembelian_item.code_cl_phc order by tgl_update desc limit 1) as tgl_opname
-            ");
+        $this->db->select("inv_inventaris_habispakai_pembelian_item.id_inv_hasbispakai_pembelian,inv_inventaris_habispakai_pembelian_item.batch,inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai,inv_inventaris_habispakai_pembelian_item.code_cl_phc,inv_inventaris_habispakai_pembelian_item.jml,inv_inventaris_habispakai_pembelian_item.jml_rusak,inv_inventaris_habispakai_pembelian_item.harga,inv_inventaris_habispakai_pembelian_item.tgl_kadaluarsa,inv_inventaris_habispakai_pembelian_item.tgl_update,mst_inv_barang_habispakai.uraian,(inv_inventaris_habispakai_pembelian_item.jml - inv_inventaris_habispakai_pembelian_item.jml_rusak) as jumlah,
+            (SELECT jml FROM inv_inventaris_habispakai_distribusi_item  WHERE batch = inv_inventaris_habispakai_pembelian_item.batch AND id_mst_inv_barang_habispakai = inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai) AS jmldistribusi");
         $this->db->join("mst_inv_barang_habispakai","mst_inv_barang_habispakai.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai");
-        /*$this->db->join("inv_inventaris_habispakai_opname","inv_inventaris_habispakai_opname.id_mst_inv_barang_habispakai = inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai and inv_inventaris_habispakai_opname.code_cl_phc = inv_inventaris_habispakai_pembelian_item.code_cl_phc","left");*/
+        $this->db->join("inv_inventaris_habispakai_pembelian","inv_inventaris_habispakai_pembelian.id_inv_hasbispakai_pembelian = inv_inventaris_habispakai_pembelian_item.id_inv_hasbispakai_pembelian and inv_inventaris_habispakai_pembelian.pilihan_status_pembelian='2'");
         $query = $this->db->get("inv_inventaris_habispakai_pembelian_item",$limit,$start);
         return $query->result();
     }
+    public function getitemdistribusi($start=0,$limit=999999,$options=array()){
+        $this->db->order_by('id_inv_inventaris_habispakai_distribusi','desc');
+        $this->db->select("inv_inventaris_habispakai_distribusi_item.*,mst_inv_barang_habispakai.uraian");
+        $this->db->join("mst_inv_barang_habispakai","mst_inv_barang_habispakai.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_distribusi_item.id_mst_inv_barang_habispakai");
+        $query = $this->db->get("inv_inventaris_habispakai_distribusi_item",$limit,$start);
+        return $query->result();
+    }
 
- 	function get_data_row($kode){
+ 	function get_data_distribusi($kode,$batch){
 		$data = array();
-		$this->db->where("inv_inventaris_habispakai_pembelian.id_inv_hasbispakai_pembelian",$kode);
-		$this->db->select("mst_inv_pbf.nama as nama_pbf,$this->tabel.*,mst_inv_pilihan.value");
-        $this->db->join('mst_inv_pilihan', "inv_inventaris_habispakai_pembelian.pilihan_status_pembelian = mst_inv_pilihan.code AND mst_inv_pilihan.tipe='status_pengadaan'",'left');
-        $this->db->join('mst_inv_pbf', "mst_inv_pbf.code = inv_inventaris_habispakai_pembelian.mst_inv_pbf_code",'left');
-		$query = $this->db->get($this->tabel);
+
+        $this->db->where("inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai",$kode);
+        $this->db->where("inv_inventaris_habispakai_pembelian_item.batch",$batch);
+        $this->db->select("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis,inv_inventaris_habispakai_pembelian_item.id_inv_hasbispakai_pembelian,inv_inventaris_habispakai_pembelian_item.batch,inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai,inv_inventaris_habispakai_pembelian_item.code_cl_phc,inv_inventaris_habispakai_pembelian_item.jml,inv_inventaris_habispakai_pembelian_item.jml_rusak,inv_inventaris_habispakai_pembelian_item.harga,inv_inventaris_habispakai_pembelian_item.tgl_kadaluarsa,inv_inventaris_habispakai_pembelian_item.tgl_update,mst_inv_barang_habispakai.uraian,(inv_inventaris_habispakai_pembelian_item.jml - inv_inventaris_habispakai_pembelian_item.jml_rusak) as jumlah,
+            (SELECT jml FROM inv_inventaris_habispakai_distribusi_item  WHERE batch = inv_inventaris_habispakai_pembelian_item.batch AND id_mst_inv_barang_habispakai = inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai) AS jmldistribusi");
+        $this->db->join("mst_inv_barang_habispakai","mst_inv_barang_habispakai.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai");
+        $this->db->join("inv_inventaris_habispakai_pembelian","inv_inventaris_habispakai_pembelian.id_inv_hasbispakai_pembelian = inv_inventaris_habispakai_pembelian_item.id_inv_hasbispakai_pembelian and inv_inventaris_habispakai_pembelian.pilihan_status_pembelian='2'");
+        $query = $this->db->get("inv_inventaris_habispakai_pembelian_item");
 		if ($query->num_rows() > 0){
 			$data = $query->row_array();
 		}
@@ -124,6 +131,18 @@ class Bhp_distribusi_model extends CI_Model {
 		$query->free_result();    
 		return $data;
 	}
+    function get_data_row($kode){
+        $data = array();
+        $this->db->where("id_inv_inventaris_habispakai_distribusi",$kode);
+        $this->db->select("$this->tabel.*");
+        $query = $this->db->get($this->tabel);
+        if ($query->num_rows() > 0){
+            $data = $query->row_array();
+        }
+
+        $query->free_result();    
+        return $data;
+    }
     function get_data_nama($kode){
         $data = array();
         $this->db->select('*');
@@ -203,29 +222,22 @@ class Bhp_distribusi_model extends CI_Model {
 
    function insert_entry()
     {
-        $data['id_inv_hasbispakai_pembelian'] = $this->kode_pengadaan($this->input->post('kode_inventaris_'));
+        $data['id_inv_inventaris_habispakai_distribusi'] = $this->kode_distribusi($this->input->post('kode_distribusi_'));
         $data['code_cl_phc']                = $this->input->post('codepus');
-        $data['id_mst_inv_barang_habispakai_jenis'] = $this->input->post('id_mst_inv_barang_habispakai_jenis');
-    	$data['tgl_permohonan']	            = date("Y-m-d",strtotime($this->input->post('tgl')));
-        $data['tgl_pembelian']              = date("Y-m-d",strtotime($this->input->post('tgl2')));
-        $data['jenis_transaksi']            = $this->input->post('jenistransaksi');
-		$data['pilihan_status_pembelian']	= $this->input->post('status');
+        $data['jenis_bhp']                  = $this->input->post('jenis_bhp');
+    	$data['tgl_distribusi']	            = date("Y-m-d",strtotime($this->input->post('tgl_distribusi')));
+        $data['nomor_dokumen']              = $this->input->post('nomor_dokumen');
         $data['bln_periode']                = $this->input->post('thn_periode')."-".$this->input->post('bln_periode');
-        $data['thn_dana']                   = $this->input->post('thn_dana');
-        $data['pilihan_sumber_dana']        = $this->input->post('pilihan_sumber_dana');
-        $data['mst_inv_pbf_code']           = $this->input->post('id_mst_inv_pbf_code');
+        $data['penerima_nama']              = $this->input->post('penerima_nama');
+        $data['penerima_nip']               = $this->input->post('penerima_nip');
 		$data['keterangan']		            = $this->input->post('keterangan');
-		$data['waktu_dibuat']		        = date('Y-m-d H:i:s');
-        $data['terakhir_diubah']            = "0000-00-00 00:00:00";
-		$data['jumlah_unit']      	        = 0;
-        $data['nilai_pembelian']            = 0;
 		if($this->db->insert($this->tabel, $data)){
-			return $data['id_inv_hasbispakai_pembelian'];
+			return $data['id_inv_inventaris_habispakai_distribusi'];
 		}else{
 			return mysql_error();
 		}
     }
-    function kode_pengadaan($kode){
+    function kode_distribusi($kode){
         $inv=explode(".", $kode);
         $kode_pengadaan = $inv[0].$inv[1].$inv[2].$inv[3].$inv[4].$inv[5].$inv[6];
         $tahun          = $inv[6];
@@ -233,7 +245,7 @@ class Bhp_distribusi_model extends CI_Model {
         return  $kode_pengadaan.$urut;
     }
     function nourut($kode_pengadaan){
-        $q = $this->db->query("select MAX(RIGHT(id_inv_hasbispakai_pembelian,6)) as kd_max from inv_inventaris_habispakai_pembelian where (LEFT(id_inv_hasbispakai_pembelian,15))=$kode_pengadaan");
+        $q = $this->db->query("select MAX(RIGHT(id_inv_inventaris_habispakai_distribusi,6)) as kd_max from inv_inventaris_habispakai_distribusi where (LEFT(id_inv_inventaris_habispakai_distribusi,15))=$kode_pengadaan");
         $nourut="";
         if($q->num_rows()>0)
         {

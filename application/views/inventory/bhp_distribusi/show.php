@@ -38,8 +38,7 @@
   </div>
 </div>
 </form>
-</section>
-
+</section> 
 <script type="text/javascript">
 	$(function () {	
 	    $("#menu_bahan_habis_pakai").addClass("active");
@@ -49,20 +48,16 @@
 			datatype: "json",
 			type	: "POST",
 			datafields: [
-			{ name: 'id_inv_hasbispakai_pembelian', type: 'string'},
-			{ name: 'tgl_permohonan', type: 'date'},
-			{ name: 'tgl_pembelian', type: 'date'},
-			{ name: 'tgl_kwitansi', type: 'date'},
-			{ name: 'nomor_kontrak', type: 'string'},
-			{ name: 'nomor_kwitansi', type: 'string'},
-			{ name: 'uraian', type: 'string'},
+			{ name: 'id_inv_inventaris_habispakai_distribusi', type: 'string'},
 			{ name: 'code_cl_phc', type: 'string'},
-			{ name: 'pilihan_status_pembelian', type: 'string'},
-			{ name: 'value', type: 'string'},
-			{ name: 'jumlah_unit', type: 'double'},
-			{ name: 'total_harga', type: 'double'},
-			{ name: 'nilai_pembelian', type: 'double'},
-			{ name: 'keterangan', type: 'text'},
+			{ name: 'tgl_distribusi', type: 'date'},
+			{ name: 'jenis_bhp', type: 'string'},
+			{ name: 'nomor_dokumen', type: 'string'},
+			{ name: 'bln_periode', type: 'string' },
+			{ name: 'penerima_nama', type: 'string'},
+			{ name: 'jumlah', type: 'string'},
+			{ name: 'penerima_nip', type: 'string'},
+			{ name: 'keterangan', type: 'string'},
 			{ name: 'detail', type: 'number'},
 			{ name: 'edit', type: 'number'},
 			{ name: 'delete', type: 'number'}
@@ -110,7 +105,7 @@
 				{ text: 'View', align: 'center', filtertype: 'none', sortable: false, width: '4%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
 				    if(dataRecord.detail==1){
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_view.gif' onclick='detail(\""+dataRecord.id_inv_hasbispakai_pembelian+"\");'></a></div>";
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_view.gif' onclick='detail(\""+dataRecord.id_inv_inventaris_habispakai_distribusi+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lockdo.gif'></a></div>";
 					}
@@ -119,7 +114,7 @@
 				{ text: 'Edit', align: 'center', filtertype: 'none', sortable: false, width: '4%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
 				    if(dataRecord.edit==1){
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='edit(\""+dataRecord.id_inv_hasbispakai_pembelian+"\");'></a></div>";
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='edit(\""+dataRecord.id_inv_inventaris_habispakai_distribusi+"\",\""+dataRecord.jenis_bhp+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}
@@ -127,19 +122,19 @@
                 },
 				{ text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '4%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
-			    	if((dataRecord.delete==1) && (dataRecord.pilihan_status_pembelian!=2)){		
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del(\""+dataRecord.id_inv_hasbispakai_pembelian+"\",\""+dataRecord.jumlah_unit+"\");'></a></div>";
+			    	if(dataRecord.delete==1){		
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del(\""+dataRecord.id_inv_inventaris_habispakai_distribusi+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}
                  }
                 },
-				{ text: 'No. Dokumen', editable:false ,datafield: 'nomor_kontrak', columntype: 'textbox', filtertype: 'textbox', width: '15%' },
-				{ text: 'Tgl. Distribusi',editable:false , align: 'center', cellsalign: 'center', datafield: 'tgl_permohonan', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '11%' },
-				{ text: 'Periode', editable:false ,align: 'center', cellsalign: 'center', datafield: 'value', columntype: 'textbox', filtertype: 'textbox', width: '12%' },
-				{ text: 'Jenis Barang', editable:false ,align: 'center', cellsalign: 'right', datafield: 'jumlah_unit', columntype: 'textbox', filtertype: 'textbox', width: '15%' },
-				{ text: 'Jumlah', editable:false ,align: 'center', cellsalign: 'right', datafield: 'nilai_pembelian', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
-				{ text: 'Nama Penerima', editable:false ,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '25%' }
+				{ text: 'No. Dokumen', editable:false ,datafield: 'nomor_dokumen', columntype: 'textbox', filtertype: 'textbox', width: '15%' },
+				{ text: 'Tgl. Distribusi',editable:false , align: 'center', cellsalign: 'center', datafield: 'tgl_distribusi', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '11%' },
+				{ text: 'Periode', editable:false ,align: 'center', cellsalign: 'center', datafield: 'bln_periode', columntype: 'textbox', filtertype: 'textbox', width: '12%' },
+				{ text: 'Jenis Barang', editable:false ,align: 'center', cellsalign: 'left', datafield: 'jenis_bhp', columntype: 'textbox', filtertype: 'textbox', width: '15%' },
+				{ text: 'Jumlah', editable:false ,align: 'center', cellsalign: 'right', datafield: 'jumlah', columntype: 'textbox', filtertype: 'none', width: '10%' },
+				{ text: 'Nama Penerima', editable:false ,datafield: 'penerima_nama', columntype: 'textbox', filtertype: 'textbox', width: '25%' }
             ]
 		});
 
@@ -147,8 +142,14 @@
 		document.location.href="<?php echo base_url().'inventory/bhp_distribusi/detail';?>/" + id ;
 	}
 
-	function edit(id){
-		document.location.href="<?php echo base_url().'inventory/bhp_distribusi/edit';?>/" + id ;
+	function edit(id,jenis){
+		var idjenis = '0';
+		if (jenis=="obat") {
+			idjenis = '8';
+		}else{
+			idjenis = '0';
+		}
+		document.location.href="<?php echo base_url().'inventory/bhp_distribusi/edit';?>/" + id+'/'+idjenis ;
 	}
 
 	function view(id){
