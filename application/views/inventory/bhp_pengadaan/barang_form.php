@@ -1,3 +1,4 @@
+
 </style>
 <?php
 if(isset($disable)){if($disable='disable'){?>
@@ -91,8 +92,48 @@ if(isset($disable)){if($disable='disable'){?>
 
           return false;
       });
+      $("#jqxinput").autocomplete({
+        minLength: 0,
+        source:"<?php echo base_url().'inventory/bhp_pengadaan/autocomplite_barang/'.$obat; ?>",
+        focus: function( event, ui ) {
+          $("#jqxinput" ).val(ui.item.value);
+          return false;
+        },
+        open: function(event, ui) {
+                        $(".ui-autocomplete").css("position: absolute");
+                        $(".ui-autocomplete").css("top: 0");
+                        $(".ui-autocomplete").css("left: 0");
+                        $(".ui-autocomplete").css("cursor: default");
+                        $(".ui-autocomplete").css("z-index","999999");
+                        $(".ui-autocomplete").css("font-weight : bold");
+                    },
+        select: function( event, ui ) {
+          $("#jqxinput").val( ui.item.value );
+          $("#id_mst_inv_barang").val(ui.item.key);
+          deskripsi(ui.item.key);
+          return false;
+        }
+      }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+        return $( "<li>" )
+          .append( "<a><b><font size=2>" + item.label + "</font></b><br><font size=1>" + item.satuan + "</font></a>" )
+          .appendTo( ul );
+      };
+      function deskripsi(data){
+        $.ajax({
+          url: "<?php echo base_url().'inventory/bhp_pengadaan/deskripsi/' ?>"+data,
+          dataType: "json",
+          success:function(data)
+          { 
+            $.each(data,function(index,elemet){
+              $("#harga").val(elemet.hargabarang);
+            });
+          }
+          });
 
-      $("#jqxinput").jqxInput(
+          return false;
+      }
+
+     /* $("#jqxinput").jqxInput(
         {
         placeHolder: " Ketik Nama Barang ",
         theme: 'classic',
@@ -114,7 +155,7 @@ if(isset($disable)){if($disable='disable'){?>
                 { name: 'tgl_opname', type: 'date'},
                 { name: 'tgl_pembelian', type: 'date'},
               ],
-              url: "<?php echo base_url().'inventory/bhp_pengadaan/autocomplite_barang/'.$obat; ?>"
+              url: "<?php //echo base_url().'inventory/bhp_pengadaan/autocomplite_barang/'.$obat; ?>"
             },
             {
               autoBind: true,
@@ -158,13 +199,12 @@ if(isset($disable)){if($disable='disable'){?>
             });
         }
       });
-    
       $("#jqxinput").select(function(){
           var codebarang = $(this).val();
           var res = codebarang.split(" | ");
           $("#id_mst_inv_barang").val(res[1]);
           $("#harga").val(res[2]);
-      });
+      });*/
       $("#harga").change(function(){
           var jumlah = document.getElementById("jumlah").value;
           var harga = document.getElementById("harga").value;
@@ -185,7 +225,6 @@ if(isset($disable)){if($disable='disable'){?>
           var subtotal =jumlah*harga;
           document.getElementById("subtotal").value = toRp(subtotal);
       });
-        
     });
 </script>
 
@@ -240,7 +279,7 @@ if(isset($disable)){if($disable='disable'){?>
           </div>
 
           <div class="row" style="margin: 5px">
-            <div class="col-md-4" style="padding: 5px">Harga Satuan</div>
+            <div class="col-md-4" style="padding: 5px">Harga Satuan<?php echo $obat;?></div>
             <div class="col-md-8">
               <input type="number" class="form-control" name="harga" id="harga" placeholder="Harga Satuan" value="<?php 
                 if(set_value('harga')=="" && isset($harga)){

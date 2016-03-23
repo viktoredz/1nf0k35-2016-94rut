@@ -231,7 +231,7 @@ function validateForm() {
             <div class="col-md-4" style="padding: 5px">Nomor Kwitansi</div>
             <div class="col-md-8">
             <?php if(!isset($viewreadonly)){ ?>
-            <input type="text" class="form-control" name="nomor_kwitansi" placeholder="Nomor Kwitansi" value="<?php 
+            <input type="text" class="form-control" name="nomor_kwitansi" id="nomor_kwitansi" placeholder="Nomor Kwitansi" value="<?php 
               if(set_value('nomor_kwitansi')=="" && isset($nomor_kwitansi)){
                 echo $nomor_kwitansi;
               }else{
@@ -379,19 +379,20 @@ $(function(){
           $("#id_mst_inv_pbf_code").val(res[1]);
       });*/
       $("#pbf").autocomplete({
-      minLength: 0,
-      source:'<?php echo base_url().'inventory/bhp_pengadaan/autocomplite_bnf/'; ?>'+$("#id_mst_inv_barang_habispakai_jenis").val(),
-      focus: function( event, ui ) {
-        $("#pbf" ).val( ui.item.value );
-        return false;
-      },
-      select: function( event, ui ) {
-        $("#pbf").val( ui.item.value );
-        $("#id_mst_inv_pbf_code").val( ui.item.key );
- 
-        return false;
-      } 
-    });
+        minLength: 0,
+        source:'<?php echo base_url().'inventory/bhp_pengadaan/autocomplite_bnf/'; ?>'+$("#id_mst_inv_barang_habispakai_jenis").val(),
+        focus: function( event, ui ) {
+          $("#pbf" ).val( ui.item.value );
+          return false;
+        },
+        select: function( event, ui ) {
+          $("#pbf").val( ui.item.value );
+          $("#id_mst_inv_pbf_code").val( ui.item.key );
+   
+          return false;
+        } 
+      });
+      
   });
     function kodeInvetaris(tahun)
     { 

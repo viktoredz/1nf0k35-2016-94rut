@@ -9,6 +9,40 @@ class Bhp_pengadaan_model extends CI_Model {
 		$this->lang	  = $this->config->item('language');
 
     }
+    function insertdata($kode=0)
+    {
+        
+        $this->db->where("id_inv_hasbispakai_pembelian",$this->input->post('id_permohonan_barang'));
+        $this->db->where("id_mst_inv_barang_habispakai",$this->input->post('id_mst_inv_barang'));
+        $cek=$this->db->get("inv_inventaris_habispakai_pembelian_item");
+        if ($cek->num_rows() > 0) {
+            return false;
+        }else{
+            if(!empty($this->input->post('obat'))&&($this->input->post('obat')=="8")){
+                $tgl_kadaluarsa = explode("-", $this->input->post('tgl_kadaluarsa'));
+                $batch = $this->input->post('batch');
+            }else{
+                $tgl_kadaluarsa = explode("-", "00-00-0000");
+                $batch = "-";
+            }
+            $values = array(
+                        'id_inv_hasbispakai_pembelian'=>$this->input->post('id_permohonan_barang'),
+                        'id_mst_inv_barang_habispakai'=> $this->input->post('id_mst_inv_barang'),
+                        'batch' => $batch,
+                        'jml' => $this->input->post('jumlah'),
+                        'jml_rusak' => $this->input->post('jml_rusak'),
+                        'tgl_kadaluarsa' => $tgl_kadaluarsa[2]."-".$tgl_kadaluarsa[1]."-".$tgl_kadaluarsa[0],
+                        'harga' => $this->input->post('harga'),
+                        'tgl_update' => $this->bhp_pengadaan_model->tanggal($kode),
+                        'code_cl_phc' => 'P'.$this->session->userdata('puskesmas'),
+            );
+            if($this->db->insert('inv_inventaris_habispakai_pembelian_item', $values)){
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }
     function kode_invetaris($kode){
         $inv=explode(".", $kode);
         $kode_invetaris = $inv[0].$inv[1].$inv[2].$inv[3].$inv[4].$inv[5].$inv[6];
