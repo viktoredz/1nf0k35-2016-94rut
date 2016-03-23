@@ -323,6 +323,7 @@ class Drh_pedidikan extends CI_Controller {
 
 		if($this->form_validation->run()== FALSE){
 			$data 						= $this->drh_model->get_data_pendidikan_formal_edit($id,$id_jurusan);
+			$data['jurusan'] 			= $this->drh_model->get_rumpun_tingkat($id_jurusan);
 			$data['kode_rumpun'] 		= $this->drh_model->get_kode_rumpun();
 			$data['id']					= $id;
 			$data['id_jurusan']			= $id_jurusan;

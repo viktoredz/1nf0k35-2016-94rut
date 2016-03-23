@@ -101,6 +101,16 @@ class Drh_model extends CI_Model {
         return $query->result();
     }
 
+    function get_rumpun_tingkat($id_jurusan){
+        $data = array();
+        $this->db->where('id_jurusan',$id_jurusan);
+        $query = $this->db->get('mst_peg_jurusan');
+        if ($query->num_rows() > 0){
+            $data = $query->row_array();
+        }
+        return $data;
+    }
+
     function get_jurusan($id_rumpun,$id_tingkat){
         $this->db->select('id_jurusan,nama_jurusan',false);
         $this->db->from('mst_peg_jurusan');
@@ -598,7 +608,7 @@ class Drh_model extends CI_Model {
     function update_entry_pendidikan_formal($id,$id_jurusan)
     {
         $data['id_pegawai']         = $id;
-        $data['id_mst_peg_jurusan'] = $this->input->post('id_mst_peg_jurusan');
+        //$data['id_mst_peg_jurusan'] = $this->input->post('id_mst_peg_jurusan');
         $data['sekolah_nama']       = $this->input->post('sekolah_nama');
         $data['sekolah_lokasi']     = $this->input->post('sekolah_lokasi');
         $data['ijazah_no']          = $this->input->post('ijazah_no');

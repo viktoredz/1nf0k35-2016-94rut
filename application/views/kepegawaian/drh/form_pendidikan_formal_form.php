@@ -32,7 +32,7 @@
                   Rumpun Pendidikan
                 </div>
                 <div class="col-md-8">
-                  <select  name="id_rumpun" type="text" class="form-control">
+                  <select  name="id_rumpun" type="text" class="form-control" <?php if($action == "edit") echo "disabled"?>>
                     <option value=''>-</option>
                       <?php foreach($kode_rumpun as $rumpun) : ?>
                         <?php
@@ -53,6 +53,12 @@
                         }else{
                           $id_rumpun = set_value('id_rumpun');
                         }
+
+                        if($action=="edit"){
+                          $id_rumpun  = $jurusan['id_mst_peg_rumpunpendidikan'];
+                          $id_tingkat = $jurusan['id_mst_peg_tingkatpendidikan'];
+                        }
+
                         $select = $rumpun->id_rumpun == $id_rumpun ? 'selected' : '' ;
                         ?>
                         <option value="<?php echo $rumpun->id_rumpun ?>" <?php echo $select ?>><?php echo $rumpun->nama_rumpun ?></option>
@@ -66,7 +72,7 @@
                   Tingkat Pendidikan
                 </div>
                 <div class="col-md-8">
-                  <select  name="id_tingkat" type="text" class="form-control">
+                  <select  name="id_tingkat" type="text" class="form-control" <?php if($action == "edit") echo "disabled"?>>
                     <option value=''>-</option>
                   </select>
                 </div>
@@ -76,7 +82,7 @@
                   Program Studi
                 </div>
                 <div class="col-md-8">
-                  <select  name="id_jurusan" type="text" class="form-control">
+                  <select  name="id_jurusan" type="text" class="form-control" <?php if($action == "edit") echo "disabled"?>>
                     <option value=''>-</option>
                   </select>
                 </div>
