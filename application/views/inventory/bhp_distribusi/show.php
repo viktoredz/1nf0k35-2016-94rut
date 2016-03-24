@@ -214,8 +214,9 @@
 		}
 		post = post+'&puskes='+$("#puskesmas option:selected").text();
 		
-		$.post("<?php echo base_url()?>inventory/bhp_distribusi/pengadaan_export",post,function(response	){
-			window.location.href=response;
+		$.post("<?php echo base_url()?>inventory/bhp_distribusi/pengadaan_export",post,function(response){
+			alert(response);
+			//window.location.href=response;
 		});
 	});
 </script>

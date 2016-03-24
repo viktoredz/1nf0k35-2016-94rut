@@ -13,7 +13,129 @@ class Bhp_distribusi extends CI_Controller {
 		$this->load->model('inventory/inv_ruangan_model');
 		$this->load->model('mst/invbarang_model');
 	}
+	public function export_distribusi($id = 0){
+		if($this->input->post('kode')!='' || !empty($this->input->post('kode'))){
+			$id= $this->input->post('kode');
+		}else{
+			$id = 0;
+		}
+		if($this->input->post('jenis_bhp')!='' || !empty($this->input->post('jenis_bhp'))){
+			$jenis_bhp= $this->input->post('jenis_bhp');
+		}else{
+			$jenis_bhp = 0;
+		}
+		$TBS = new clsTinyButStrong;		
+		$TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN);
+		$this->authentication->verify('inventory','show');
 
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl_update' ) {
+					$value = date("Y-m-d",strtotime($value));
+
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+
+		$this->db->where('inv_inventaris_habispakai_distribusi_item.id_inv_inventaris_habispakai_distribusi',$id);
+		
+		$rows_all_activity = $this->bhp_distribusi_model->getitemdistribusi();
+
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl_update' ) {
+					$value = date("Y-m-d",strtotime($value));
+
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+
+		$this->db->where('inv_inventaris_habispakai_distribusi_item.id_inv_inventaris_habispakai_distribusi',$id);
+
+		$activity = $this->bhp_distribusi_model->getitemdistribusi();
+		$data_tabel = array();
+
+		$kodepuskesmas = $this->session->userdata('puskesmas');
+		if(substr($kodepuskesmas, -2)=="01"){
+			$unlock = 1;
+		}else{
+			$unlock = 0;
+		}
+		$no=1;
+		foreach($activity as $act) {
+			$data_tabel[] = array(
+				'no'										=> $no++,
+				'id_inv_inventaris_habispakai_distribusi'   => $act->id_inv_inventaris_habispakai_distribusi,
+				'id_mst_inv_barang_habispakai'   			=> $act->id_mst_inv_barang_habispakai,
+				'batch'										=> $act->batch,
+				'uraian'									=> $act->uraian,
+				'pilihan_satuan'							=> $act->pilihan_satuan,
+				'tgl_kadaluarsa'							=> date("d-m-Y",strtotime($act->tgl_kadaluarsa)),
+				'jumlah'										=> $act->jml,
+			);
+		}
+
+
+		$kode_sess=$this->session->userdata('puskesmas');
+		$kd_prov = $this->inv_barang_model->get_nama('value','cl_province','code',substr($kode_sess, 0,2));
+		$kd_kab  = $this->inv_barang_model->get_nama('value','cl_district','code',substr($kode_sess, 0,4));
+		$kd_kec  = 'KEC. '.$this->inv_barang_model->get_nama('nama','cl_kec','code',substr($kode_sess, 0,7));
+		$namapus  = $this->inv_barang_model->get_nama('value','cl_phc','code','P'.$kode_sess);
+		$tahun  = date("Y");
+
+		$data_puskesmas[] = array('nama_puskesmas' => $namapus,'kd_prov' => $kd_prov,'kd_kab' => $kd_kab,'tahun' => $tahun);
+		$dir = getcwd().'/';
+		if ($jenis_bhp!='8') {
+			$template = $dir.'public/files/template/inventory/bhp_distribusi_umum.xlsx';		
+		}else{
+			$template = $dir.'public/files/template/inventory/bhp_distribusi_obat.xlsx';		
+		}
+		
+		$TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8);
+
+		// Merge data in the first sheet
+		$TBS->MergeBlock('a', $data_tabel);
+		$TBS->MergeBlock('b', $data_puskesmas);
+		
+		$code = uniqid();
+		if ($jenis_bhp!='8') {
+			$output_file_name = 'public/files/hasil/hasil_export_bhpdistribusiumum_'.$code.'.xlsx';
+		}else{
+			$output_file_name = 'public/files/hasil/hasil_export_bhpdistribusiobat_'.$code.'.xlsx';
+		}
+		$output = $dir.$output_file_name;
+		$TBS->Show(OPENTBS_FILE, $output); // Also merges all [onshow] automatic fields.
+		
+		echo base_url().$output_file_name ;
+	}
 	function json(){
 		$this->authentication->verify('inventory','show');
 

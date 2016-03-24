@@ -322,6 +322,15 @@ $(function(){
 
       return false;
     }
+    $("#btn-export").click(function(){
+    
+    var post = "";
+    post = post+'&jenis_bhp='+"<?php echo $jenis_bhp; ?>"+'&kode='+"<?php echo $kode; ?>";
+    
+    $.post("<?php echo base_url()?>inventory/bhp_distribusi/export_distribusi",post,function(response ){
+      window.location.href=response;
+    });
+  });
 </script>
 
       
