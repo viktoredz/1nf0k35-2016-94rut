@@ -73,7 +73,7 @@
 				    var dataRecord = $("#jqxgrid_barang").jqxGrid('getrowdata', row);
 				    if ((statupembelian!=2)&&(dataRecord.edit==1)) {
 				    	//if (dataRecord.tgl_opname!="<?php echo date('Y-m-d')?>") {
-				    		return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='edit_barang(\""+dataRecord.id_inv_hasbispakai_pembelian+"\",\""+dataRecord.id_mst_inv_barang_habispakai+"\");'></a></div>";	
+				    		return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='edit_barang(\""+dataRecord.id_inv_hasbispakai_pembelian+"\",\""+dataRecord.id_mst_inv_barang_habispakai+"\",\""+dataRecord.batch+"\");'></a></div>";	
 				    	/*}else{
 				    		return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php// echo base_url(); ?>media/images/16_lock.gif'></a></div>";	
 				    	}*/
@@ -230,23 +230,29 @@
 		$("#popup_barang").jqxWindow('open');
 	}
 
-	function edit_barang(id_permohonan,kode_barang){
-		$("#popup_barang #popup_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-		$.get("<?php echo base_url().'inventory/bhp_pengadaan/edit_barang/'.$id_mst_inv_barang_habispakai_jenis.'/';?>"+id_permohonan+'/'+kode_barang, function(data) {
-			$("#popup_content").html(data);
+	function edit_barang(id_permohonan,kode_barang,batch){
+		$.get("<?php echo base_url().'inventory/bhp_pengadaan/cekdelete/'; ?>" + id_permohonan+'/'+kode_barang+'/'+batch,  function(data){
+			if(data=='1'){
+				alert('Maaf, Data tidak bisa di ubah karena sudah di distribusikan');
+			}else{
+				$("#popup_barang #popup_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
+				$.get("<?php echo base_url().'inventory/bhp_pengadaan/edit_barang/'.$id_mst_inv_barang_habispakai_jenis.'/';?>"+id_permohonan+'/'+kode_barang, function(data) {
+					$("#popup_content").html(data);
+				});
+				$("#popup_barang").jqxWindow({
+					theme: theme, resizable: false,
+					width: 500,
+					height: 480,
+					isModal: true, autoOpen: false, modalOpacity: 0.2
+				});
+				$("#popup_barang").jqxWindow('open');
+			}
 		});
-		$("#popup_barang").jqxWindow({
-			theme: theme, resizable: false,
-			width: 500,
-			height: 480,
-			isModal: true, autoOpen: false, modalOpacity: 0.2
-		});
-		$("#popup_barang").jqxWindow('open');
 	}
 	function del_barang(id_permohonan,kode_barang,batch){
 		$.get("<?php echo base_url().'inventory/bhp_pengadaan/cekdelete/'; ?>" + id_permohonan+'/'+kode_barang+'/'+batch,  function(data){
 			if(data=='1'){
-				alert('Maaf, Data tidak bisa di hapus karena telah di distribusikan');
+				alert('Maaf, Data tidak bisa di hapus karena sudah di distribusikan');
 			}else{
 				var confirms = confirm("Hapus Data ?");
 				if(confirms == true){
