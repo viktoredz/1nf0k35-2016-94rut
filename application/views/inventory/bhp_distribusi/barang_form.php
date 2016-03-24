@@ -60,7 +60,7 @@
                           }else{
                             echo  set_value('jumlah');
                           } ?>";
-          if($("#jumlah").val() < $("#jumlahdistribusi").val()){
+          if(parseInt($("#jumlah").val()) < parseInt($("#jumlahdistribusi").val())){
               alert("Maaf, data distribusi tidak boleh melebihi data jumlah");
               $("#jumlah").val(jmlasli);
               $("#jumlahdistribusi").val(jmlasli);
@@ -91,7 +91,7 @@
                 }else{
                   echo  set_value('uraian');
                 }
-                ?>">
+                ?>" readonly="readonly">
             </div>
           </div>
           <div class="row" style="margin: 5px">
@@ -103,7 +103,7 @@
                 }else{
                   echo  set_value('jumlah');
                 }
-                ?>">
+                ?>" readonly="readonly">
             </div>
             <input type="hidden" class="form-control" name="id_mst_inv_barang_habispakai_jenis" id="id_mst_inv_barang_habispakai_jenis" placeholder="Jumlah" value="<?php 
                 if(set_value('id_mst_inv_barang_habispakai_jenis')=="" && isset($id_mst_inv_barang_habispakai_jenis)){
@@ -111,7 +111,7 @@
                 }else{
                   echo  set_value('id_mst_inv_barang_habispakai_jenis');
                 }
-                ?>">
+                ?>" readonly="readonly">
           </div>
           <?php 
             if (isset($id_mst_inv_barang_habispakai_jenis)) {
@@ -126,7 +126,7 @@
                 }else{
                   echo  set_value('batch');
                 }
-                ?>">
+                ?>" readonly="readonly">
             </div>
           </div>
           <?php

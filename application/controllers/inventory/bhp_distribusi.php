@@ -594,7 +594,7 @@ class Bhp_distribusi extends CI_Controller {
 			);
 			echo json_encode($totalpengadaan);
 	}
-	public function add_distribusi($id_distribusi=0,$kode=0,$batch=0)
+	public function add_distribusi($id_distribusi=0,$kode=0,$batch="")
 	{	
 		$data['action']			= "add";
 		$data['kode']			= $kode;
@@ -612,13 +612,32 @@ class Bhp_distribusi extends CI_Controller {
 			$data['id_distribusi']  = $id_distribusi;
 			die($this->parser->parse('inventory/bhp_distribusi/barang_form', $data));
 		}else{
-				$values = array(
-					'id_inv_inventaris_habispakai_distribusi'=>$id_distribusi,
-					'id_mst_inv_barang_habispakai'=> $kode,
-					'batch' => $batch,
-					'jml' => $this->input->post('jumlahdistribusi'),
-				);
-			$simpan=$this->db->insert('inv_inventaris_habispakai_distribusi_item', $values);
+				$this->db->where("id_inv_inventaris_habispakai_distribusi",$id_distribusi);
+				$this->db->where("id_mst_inv_barang_habispakai",$kode);
+				$this->db->where("batch",$batch);
+				$query = $this->db->get('inv_inventaris_habispakai_distribusi_item');
+				if ($query->num_rows() > 0) {
+					foreach ($query->result() as $key) {
+							$jumlahdata = $key->jml;
+					}	
+					$values = array(
+						'jml' => $this->input->post('jumlahdistribusi')+$jumlahdata,
+					);
+					$kodeup = array(
+						'id_inv_inventaris_habispakai_distribusi'=>$id_distribusi,
+						'id_mst_inv_barang_habispakai'=> $kode,
+						'batch' => $batch,
+					);
+					$simpan=$this->db->update('inv_inventaris_habispakai_distribusi_item', $values,$kodeup);	
+				}else{
+					$values = array(
+						'id_inv_inventaris_habispakai_distribusi'=>$id_distribusi,
+						'id_mst_inv_barang_habispakai'=> $kode,
+						'batch' => $batch,
+						'jml' => $this->input->post('jumlahdistribusi'),
+					);
+					$simpan=$this->db->insert('inv_inventaris_habispakai_distribusi_item', $values);
+				}
 			if($simpan==true){
 				die("OK|Data Tersimpan");
 			}else{

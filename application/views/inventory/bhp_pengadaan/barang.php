@@ -87,7 +87,7 @@
 				    var statupembelian = "<?php echo $pilihan_status_pembelian; ?>";
 				    if ((statupembelian!=2)&&(dataRecord.edit==1)) {
 				    	//if (dataRecord.tgl_opname!="<?php echo date('Y-m-d')?>") {
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del_barang(\""+dataRecord.id_inv_hasbispakai_pembelian+"\",\""+dataRecord.id_mst_inv_barang_habispakai+"\");'></a></div>";
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del_barang(\""+dataRecord.id_inv_hasbispakai_pembelian+"\",\""+dataRecord.id_mst_inv_barang_habispakai+"\",\""+dataRecord.batch+"\");'></a></div>";
 						/*}else{
 							return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php// echo base_url(); ?>media/images/16_lock.gif'></a></div>";	
 						}*/
@@ -243,18 +243,25 @@
 		});
 		$("#popup_barang").jqxWindow('open');
 	}
-	function del_barang(id_permohonan,kode_barang){
-		var confirms = confirm("Hapus Data ?");
-		if(confirms == true){
-			$.post("<?php echo base_url().'inventory/bhp_pengadaan/dodelpermohonan/'; ?>" + id_permohonan+'/'+kode_barang,  function(){
-				alert('Data berhasil dihapus');
+	function del_barang(id_permohonan,kode_barang,batch){
+		$.get("<?php echo base_url().'inventory/bhp_pengadaan/cekdelete/'; ?>" + id_permohonan+'/'+kode_barang+'/'+batch,  function(data){
+			if(data=='1'){
+				alert('Maaf, Data tidak bisa di hapus karena telah di distribusikan');
+			}else{
+				var confirms = confirm("Hapus Data ?");
+				if(confirms == true){
+					$.post("<?php echo base_url().'inventory/bhp_pengadaan/dodelpermohonan/'; ?>" + id_permohonan+'/'+kode_barang+'/'+batch,  function(){
+						alert('Data berhasil dihapus');
 
-				$("#jqxgrid_barang").jqxGrid('updatebounddata', 'cells');
-				ambil_total();
-				ambil_tanggalopname()
-			});
-			
-		}
+						$("#jqxgrid_barang").jqxGrid('updatebounddata', 'cells');
+						ambil_total();
+						ambil_tanggalopname()
+					});
+					
+				}		
+			}
+		});
+		/**/
 	}
 
 </script>

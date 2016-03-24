@@ -102,7 +102,9 @@ class Bhp_distribusi_model extends CI_Model {
         $query = $this->db->get("bhp_distribusi",$limit,$start);
         return $query->result();
     }
+    
     public function getitemdistribusi($start=0,$limit=999999,$options=array()){
+        $this->db->group_by('id_mst_inv_barang_habispakai','batch');
         $this->db->order_by('id_inv_inventaris_habispakai_distribusi','desc');
         $this->db->select("inv_inventaris_habispakai_distribusi_item.*,mst_inv_barang_habispakai.uraian,mst_inv_barang_habispakai.pilihan_satuan,inv_inventaris_habispakai_pembelian_item.tgl_kadaluarsa");
         $this->db->join("mst_inv_barang_habispakai","mst_inv_barang_habispakai.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_distribusi_item.id_mst_inv_barang_habispakai");

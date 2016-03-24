@@ -733,8 +733,8 @@ class Bhp_pengadaan extends CI_Controller {
 		$this->authentication->verify('inventory','edit');
 		$this->bhp_pengadaan_model->update_status();				
 	}
-	function dodelpermohonan($kode=0,$barang=0){
-		if($this->bhp_pengadaan_model->delete_entryitem($kode,$barang)){
+	function dodelpermohonan($kode=0,$barang=0,$batch=""){
+		if($this->bhp_pengadaan_model->delete_entryitem($kode,$barang,$batch)){
 				
 		}else{
 			$this->session->set_flashdata('alert', 'Delete data error');
@@ -745,7 +745,15 @@ class Bhp_pengadaan extends CI_Controller {
 				$key['id_inv_hasbispakai_pembelian'] = $kode;
         		$this->db->update("inv_inventaris_habispakai_pembelian",$dataupdate,$key);
 	}
+	function cekdelete($kode=0,$barang=0,$batch=""){
+		$hasil = $this->bhp_pengadaan_model->cekdelete($barang,$batch);
+		if($hasil=='1'){
+			die('1');
+		}else{
+			die('0');
+		}
 
+	}
 
 	public function kodeInvetaris($id=0){
 		$this->db->where('code',"P".$this->session->userdata('puskesmas'));

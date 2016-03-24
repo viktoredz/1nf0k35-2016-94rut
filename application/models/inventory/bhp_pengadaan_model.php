@@ -9,6 +9,21 @@ class Bhp_pengadaan_model extends CI_Model {
 		$this->lang	  = $this->config->item('language');
 
     }
+    function cekdelete($habispakai,$batch)
+    {
+        $this->db->where('inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai',$habispakai);
+        $this->db->where('inv_inventaris_habispakai_pembelian_item.batch',$batch);
+        $this->db->where('inv_inventaris_habispakai_distribusi.tgl_distribusi <= inv_inventaris_habispakai_pembelian_item.tgl_update');
+        $this->db->select('inv_inventaris_habispakai_distribusi_item.*');
+        $this->db->join('inv_inventaris_habispakai_distribusi_item','inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai = inv_inventaris_habispakai_distribusi_item.id_mst_inv_barang_habispakai AND  inv_inventaris_habispakai_pembelian_item.batch = inv_inventaris_habispakai_distribusi_item.batch','left');
+        $this->db->join('inv_inventaris_habispakai_distribusi','inv_inventaris_habispakai_distribusi.id_inv_inventaris_habispakai_distribusi = inv_inventaris_habispakai_distribusi_item.id_inv_inventaris_habispakai_distribusi');
+        $query = $this->db->get('inv_inventaris_habispakai_pembelian_item');
+        if($query->num_rows() > 0 ){
+            return 1;
+        }else{
+            return 0;
+        }
+    }
     function insertdata($kode=0)
     {
         
@@ -414,11 +429,14 @@ class Bhp_pengadaan_model extends CI_Model {
         }
         return $kd;
     }
-	function delete_entryitem($kode,$barang)
-	{   
-        $this->db->where('id_inv_hasbispakai_pembelian',$kode);
-        $this->db->where('id_mst_inv_barang_habispakai',$barang);
-        $this->db->delete('inv_inventaris_habispakai_pembelian_item');
+	function delete_entryitem($kode,$barang,$batch)
+	{   if($this->cekdelete!="0"){
+            return false;
+        }else{
+            $this->db->where('id_inv_hasbispakai_pembelian',$kode);
+            $this->db->where('id_mst_inv_barang_habispakai',$barang);
+            $this->db->delete('inv_inventaris_habispakai_pembelian_item');
+        }
 	}
     function delete_entryitem_table($kode,$id_barang,$table)
     {    
