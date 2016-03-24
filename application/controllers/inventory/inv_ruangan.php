@@ -244,7 +244,6 @@ class Inv_ruangan extends CI_Controller {
 		$data['barang'] = $this->parser->parse("inventory/inv_ruangan/barang",$data,true);
 		$data['content'] = $this->parser->parse("inventory/inv_ruangan/detail",$data,true);
 		$this->template->show($data,"home");
-		
 	}
 
 	function detail($kode=0,$id="")

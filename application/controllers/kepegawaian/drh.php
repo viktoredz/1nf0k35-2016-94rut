@@ -9,7 +9,7 @@ class Drh extends CI_Controller {
 
 	function index(){
 		$this->authentication->verify('kepegawaian','edit');
-		$data['title_group'] = "Kepegawaian";
+		$data['title_group'] = "Master Data";
 		$data['title_form'] = "Daftar Riwayat Hidup";
 
 		$data['content'] = $this->parser->parse("kepegawaian/drh/show",$data,true);
