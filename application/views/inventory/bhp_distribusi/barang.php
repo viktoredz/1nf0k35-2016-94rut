@@ -1,5 +1,6 @@
 <script>
 	$(function(){
+		ambil_total();
 	   var source = {
 			datatype: "json",
 			type	: "POST",
@@ -74,9 +75,15 @@
 					}
                  }
                 },
+                <?php if ($jenis_bhp=="8") { ?>
 				{ text: 'Nama Barang ', editable: false,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '50%'},
 				{ text: 'Batch ',datafield: 'batch' ,align: 'center', editable: false, columntype: 'textbox', filtertype: 'textbox', width: '20%'},
 				{ text: 'Jumlah ', align: 'center',cellsalign: 'right',editable: false,datafield: 'jumlah', columntype: 'textbox', filtertype: 'textbox', width: '20%'}
+				<?php }else{
+				?>
+				{ text: 'Nama Barang ', editable: false,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '60%'},
+				{ text: 'Jumlah ', align: 'center',cellsalign: 'right',editable: false,datafield: 'jumlah', columntype: 'textbox', filtertype: 'textbox', width: '30%'}
+				<?php } ?>
            ]
 		});
         
@@ -97,14 +104,26 @@
 	function close_popup(){
 		$("#popup_barang").jqxWindow('close');
 		ambil_total();
+		$("#jqxgrid_barang_distribusi").jqxGrid('updatebounddata', 'cells');
 	}
 	function ambil_total(argument) {
-		// body...
+		$.ajax({
+		url: "<?php echo base_url().'inventory/bhp_distribusi/total_distribusi/'.$kode ?>",
+		dataType: "json",
+		success:function(data)
+		{ 
+			$.each(data,function(index,elemet){
+				$("#jumlah_total_").html(elemet.jumlah_tot);
+			});
+		}
+		});
+
+		return false;
 	}
-	function pilih(kode,batch){
+	function pilih(barang,batch){
 		
 		$("#popup_barang #popup_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-		$.get("<?php echo base_url().'inventory/bhp_distribusi/distribusi/'.$kode.'/'; ?>"+kode+'/'+batch , function(data) {
+		$.get("<?php echo base_url().'inventory/bhp_distribusi/add_distribusi/'.$kode.'/'; ?>"+barang+'/'+batch , function(data) {
 			$("#popup_content").html(data);
 		});
 		$("#popup_barang").jqxWindow({

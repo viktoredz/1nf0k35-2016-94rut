@@ -19,24 +19,18 @@
           var data = new FormData();
           $('#notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
           $('#notice').show();
-          data.append('id_mst_inv_barang', $('#id_mst_inv_barang').val());
-          data.append('jqxinput', $('#jqxinput').val());
-          data.append('tanggal_diterima', $('#dateInput').val());
-          data.append('tgl_kadaluarsa', $('#tgl_kadaluarsa').val());
-          data.append('nama_barang', $('#v_nama_barang').val());
-          data.append('jumlah', $('#jumlah').val());
-          data.append('jml_rusak', $('#jml_rusak').val());
+          data.append('id_mst_inv_barang_habispakai_jenis', $('#id_mst_inv_barang_habispakai_jenis').val());
           data.append('batch', $('#batch').val());
-          data.append('harga', $('#harga').val());
-          data.append('obat', $('#id_mst_inv_barang_habispakai_jenis').val());
-          data.append('subtotal', $('#subtotal').val());
-          data.append('id_permohonan_barang', "<?php echo $kode;?>");
+          data.append('uraian', $('#uraian').val());
+          data.append('jumlah', $('#jumlah').val());
+          data.append('batch', $('#batch').val());
+          data.append('jumlahdistribusi', $('#jumlahdistribusi').val());
           $.ajax({
               cache : false,
               contentType : false,
               processData : false,
               type : 'POST',
-              url : '<?php echo base_url()."inventory/bhp_pengadaan/".$action."_barang/".$id_distribusi."/".$kode."/".$id_mst_inv_barang_habispakai_jenis."/" ?>',
+              url : '<?php echo base_url()."inventory/bhp_distribusi/".$action."_distribusi/".$id_distribusi."/".$kode."/".$batch."/" ?>',
               data : data,
               success : function(response){
                 var res  = response.split("|");
@@ -62,16 +56,15 @@
       });
       $("#jumlahdistribusi").change(function(){
           var jmlasli = "<?php if(set_value('jumlah')=="" && isset($jumlah)){
-                            echo $jumlah - $jmldistribusi;
+                            echo $jumlah;
                           }else{
                             echo  set_value('jumlah');
                           } ?>";
-          $("#jumlah").val(jmlasli - $("#jumlahdistribusi").val());
-          if ($("#jumlah").val() <= 0){
-            alert("Maaf, tidak ada data yang bisa di distribusikan");
-            $("#jumlahdistribusi").val(0);
-            $("#jumlah").val(jmlasli);
-          };
+          if($("#jumlah").val() < $("#jumlahdistribusi").val()){
+              alert("Maaf, data distribusi tidak boleh melebihi data jumlah");
+              $("#jumlah").val(jmlasli);
+              $("#jumlahdistribusi").val(jmlasli);
+          }
 
       });
     });
@@ -106,7 +99,7 @@
             <div class="col-md-8">
               <input type="number" class="form-control" name="jumlah" id="jumlah" placeholder="Jumlah" value="<?php 
                 if(set_value('jumlah')=="" && isset($jumlah)){
-                  echo $jumlah - $jmldistribusi;
+                  echo $jumlah;
                 }else{
                   echo  set_value('jumlah');
                 }
@@ -147,8 +140,8 @@
             <div class="col-md-4" style="padding: 5px">Jumlah Distribusi</div>
             <div class="col-md-8">
               <input type="number" class="form-control" name="jumlahdistribusi" id="jumlahdistribusi" placeholder="Jumlah Rusak" value="<?php 
-                if(set_value('jumlahdistribusi')=="" && isset($jumlahdistribusi)){
-                  echo $jumlahdistribusi;
+                if(set_value('jumlahdistribusi')=="" && isset($jumlah)){
+                  echo $jumlah;
                 }else{
                   echo  set_value('jumlahdistribusi');
                 }

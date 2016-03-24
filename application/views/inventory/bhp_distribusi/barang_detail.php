@@ -1,5 +1,20 @@
 <script>
+function ambil_total(argument) {
+		$.ajax({
+		url: "<?php echo base_url().'inventory/bhp_distribusi/total_distribusi/'.$kode ?>",
+		dataType: "json",
+		success:function(data)
+		{ 
+			$.each(data,function(index,elemet){
+				$("#jumlah_total_").html(elemet.jumlah_tot);
+			});
+		}
+		});
+
+		return false;
+	}
 	$(function(){
+		ambil_total();
 	   var source = {
 			datatype: "json",
 			type	: "POST",
@@ -8,17 +23,15 @@
 			{ name: 'id_mst_inv_barang_habispakai', type: 'number' },
 			{ name: 'uraian', type: 'string' },
 			{ name: 'jml', type: 'number' },
-			{ name: 'tgl_opname', type: 'string' },
+			{ name: 'pilihan_satuan', type: 'string' },
 			{ name: 'batch', type: 'string' },
 			{ name: 'harga', type: 'string' },
 			{ name: 'jumlah', type: 'string' },
-			{ name: 'subtotal', type: 'string' },
-			{ name: 'harga', type: 'double' },
-			{ name: 'tgl_update', type: 'date' },
+			{ name: 'tgl_kadaluarsa', type: 'string' },
 			{ name: 'edit', type: 'number'},
 			{ name: 'delete', type: 'number'}
         ],
-		url: "<?php echo site_url('inventory/bhp_pengadaan/barang/'.$kode); ?>",
+		url: "<?php echo site_url('inventory/bhp_distribusi/distribusibarang/'.$kode); ?>",
 		cache: false,
 		filter: function(){
 			$("#jqxgrid_barang_distribusi").jqxGrid('updatebounddata', 'filter');
@@ -52,11 +65,17 @@
 			},
 
 			columns: [
+			<?php if ($jenis_bhp=="8") { ?>
 				{ text: 'Nama Barang ', editable: false,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '40%'},
-				{ text: 'Kemasan / Satuan ', editable: false,columntype: 'textbox', filtertype: 'textbox', width: '20%'},
+				{ text: 'Kemasan / Satuan ', editable: false,columntype: 'textbox', filtertype: 'textbox', width: '20%',datafield: 'pilihan_satuan'},
 				{ text: 'Batch ',datafield: 'batch' ,align: 'center', editable: false, columntype: 'textbox', filtertype: 'textbox', width: '15%'},
-				{ text: 'Tgl Kadaluarsa ',align: 'center', editable: false, columntype: 'textbox', filtertype: 'textbox', width: '15%'},
+				{ text: 'Tgl Kadaluarsa ',align: 'center', editable: false, columntype: 'textbox', filtertype: 'textbox', width: '15%',datafield: 'tgl_kadaluarsa'},
 				{ text: 'Jumlah ', align: 'center',cellsalign: 'right',editable: false,datafield: 'jml', columntype: 'textbox', filtertype: 'textbox', width: '10%'},
+			<?php }else{ ?>
+				{ text: 'Nama Barang ', editable: false,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '45%'},
+				{ text: 'Kemasan / Satuan ', editable: false,columntype: 'textbox', filtertype: 'textbox', width: '35%',datafield: 'pilihan_satuan'},
+				{ text: 'Jumlah ', align: 'center',cellsalign: 'right',editable: false,datafield: 'jml', columntype: 'textbox', filtertype: 'textbox', width: '20%'},
+			<?php } ?>
            ]
 		});
         
@@ -67,41 +86,12 @@
  		$('#refreshdatabutton').click(function () {
 			$("#jqxgrid_barang_distribusi").jqxGrid('updatebounddata', 'cells');
 		});
- 		$('#btn_add_barang').click(function () {
- 			
-			//alert("<?php echo date("d-m-Y",strtotime($tgl_opnamecond)); ?>");
- 			/*if ($("#tgl2").val()<="<?php echo date("d-m-Y",strtotime($tgl_opnamecond)); ?>") {
- 				alert("Maaf! Data pembelian sudah di stock opname pada "+"<?php echo date('d-m-Y',strtotime($tgl_opnamecond)); ?>"+"\n"+"Silahkan ganti tanggal pembelian ke hari berikutnya!");
- 			}else{*/
- 				add_barang();
- 			//}	
-			
-		});
+ 		
 
 
 	});
 
-	function close_popup(){
-		$("#popup_barang").jqxWindow('close');
-		ambil_total();
-		ambil_tanggalopname()
-	}
-
-	function add_barang(){
-		
-		$("#popup_barang #popup_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-		$.get("<?php echo base_url().'inventory/bhp_pengadaan/add_barang/'.$kode.'/'.$id_mst_inv_barang_habispakai_jenis.'/'; ?>" , function(data) {
-			$("#popup_content").html(data);
-		});
-		$("#popup_barang").jqxWindow({
-			theme: theme, resizable: false,
-			width: 500,
-			height: 480,
-			isModal: true, autoOpen: false, modalOpacity: 0.2
-		});
-		$("#popup_barang").jqxWindow('open');
-	}
-
+	
 	function edit_barang(id_permohonan,kode_barang){
 		$("#popup_barang #popup_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
 		$.get("<?php echo base_url().'inventory/bhp_pengadaan/edit_barang/';?>"+id_permohonan+'/'+kode_barang, function(data) {

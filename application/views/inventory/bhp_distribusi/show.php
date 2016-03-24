@@ -105,7 +105,7 @@
 				{ text: 'View', align: 'center', filtertype: 'none', sortable: false, width: '4%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
 				    if(dataRecord.detail==1){
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_view.gif' onclick='detail(\""+dataRecord.id_inv_inventaris_habispakai_distribusi+"\");'></a></div>";
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_view.gif' onclick='detail(\""+dataRecord.id_inv_inventaris_habispakai_distribusi+"\",\""+dataRecord.jenis_bhp+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lockdo.gif'></a></div>";
 					}
@@ -138,8 +138,14 @@
             ]
 		});
 
-	function detail(id){
-		document.location.href="<?php echo base_url().'inventory/bhp_distribusi/detail';?>/" + id ;
+	function detail(id,jenis){
+		var idjenis = '0';
+		if (jenis=="obat") {
+			idjenis = '8';
+		}else{
+			idjenis = '0';
+		}
+		document.location.href="<?php echo base_url().'inventory/bhp_distribusi/detail';?>/" + id+'/'+idjenis  ;
 	}
 
 	function edit(id,jenis){
@@ -153,7 +159,7 @@
 	}
 
 	function view(id){
-		document.location.href="<?php echo base_url().'inventory/bhp_distribusi/view';?>/" + id ;
+		document.location.href="<?php echo base_url().'inventory/bhp_distribusi/view';?>/" + id;
 	}
 
 	function del(id,jumlah){

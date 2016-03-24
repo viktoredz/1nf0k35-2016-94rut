@@ -98,18 +98,15 @@ class Bhp_distribusi_model extends CI_Model {
         return $query->result();
     }
     public function getitem($start=0,$limit=999999,$options=array()){
-        $this->db->order_by('tgl_update','desc');
-        $this->db->select("inv_inventaris_habispakai_pembelian_item.id_inv_hasbispakai_pembelian,inv_inventaris_habispakai_pembelian_item.batch,inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai,inv_inventaris_habispakai_pembelian_item.code_cl_phc,inv_inventaris_habispakai_pembelian_item.jml,inv_inventaris_habispakai_pembelian_item.jml_rusak,inv_inventaris_habispakai_pembelian_item.harga,inv_inventaris_habispakai_pembelian_item.tgl_kadaluarsa,inv_inventaris_habispakai_pembelian_item.tgl_update,mst_inv_barang_habispakai.uraian,(inv_inventaris_habispakai_pembelian_item.jml - inv_inventaris_habispakai_pembelian_item.jml_rusak) as jumlah,
-            (SELECT jml FROM inv_inventaris_habispakai_distribusi_item  WHERE batch = inv_inventaris_habispakai_pembelian_item.batch AND id_mst_inv_barang_habispakai = inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai) AS jmldistribusi");
-        $this->db->join("mst_inv_barang_habispakai","mst_inv_barang_habispakai.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai");
-        $this->db->join("inv_inventaris_habispakai_pembelian","inv_inventaris_habispakai_pembelian.id_inv_hasbispakai_pembelian = inv_inventaris_habispakai_pembelian_item.id_inv_hasbispakai_pembelian and inv_inventaris_habispakai_pembelian.pilihan_status_pembelian='2'");
-        $query = $this->db->get("inv_inventaris_habispakai_pembelian_item",$limit,$start);
+        
+        $query = $this->db->get("bhp_distribusi",$limit,$start);
         return $query->result();
     }
     public function getitemdistribusi($start=0,$limit=999999,$options=array()){
         $this->db->order_by('id_inv_inventaris_habispakai_distribusi','desc');
-        $this->db->select("inv_inventaris_habispakai_distribusi_item.*,mst_inv_barang_habispakai.uraian");
+        $this->db->select("inv_inventaris_habispakai_distribusi_item.*,mst_inv_barang_habispakai.uraian,mst_inv_barang_habispakai.pilihan_satuan,inv_inventaris_habispakai_pembelian_item.tgl_kadaluarsa");
         $this->db->join("mst_inv_barang_habispakai","mst_inv_barang_habispakai.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_distribusi_item.id_mst_inv_barang_habispakai");
+        $this->db->join("inv_inventaris_habispakai_pembelian_item","inv_inventaris_habispakai_distribusi_item.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai and inv_inventaris_habispakai_distribusi_item.batch = inv_inventaris_habispakai_pembelian_item.batch",'left');
         $query = $this->db->get("inv_inventaris_habispakai_distribusi_item",$limit,$start);
         return $query->result();
     }
@@ -117,13 +114,9 @@ class Bhp_distribusi_model extends CI_Model {
  	function get_data_distribusi($kode,$batch){
 		$data = array();
 
-        $this->db->where("inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai",$kode);
-        $this->db->where("inv_inventaris_habispakai_pembelian_item.batch",$batch);
-        $this->db->select("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis,inv_inventaris_habispakai_pembelian_item.id_inv_hasbispakai_pembelian,inv_inventaris_habispakai_pembelian_item.batch,inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai,inv_inventaris_habispakai_pembelian_item.code_cl_phc,inv_inventaris_habispakai_pembelian_item.jml,inv_inventaris_habispakai_pembelian_item.jml_rusak,inv_inventaris_habispakai_pembelian_item.harga,inv_inventaris_habispakai_pembelian_item.tgl_kadaluarsa,inv_inventaris_habispakai_pembelian_item.tgl_update,mst_inv_barang_habispakai.uraian,(inv_inventaris_habispakai_pembelian_item.jml - inv_inventaris_habispakai_pembelian_item.jml_rusak) as jumlah,
-            (SELECT jml FROM inv_inventaris_habispakai_distribusi_item  WHERE batch = inv_inventaris_habispakai_pembelian_item.batch AND id_mst_inv_barang_habispakai = inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai) AS jmldistribusi");
-        $this->db->join("mst_inv_barang_habispakai","mst_inv_barang_habispakai.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai");
-        $this->db->join("inv_inventaris_habispakai_pembelian","inv_inventaris_habispakai_pembelian.id_inv_hasbispakai_pembelian = inv_inventaris_habispakai_pembelian_item.id_inv_hasbispakai_pembelian and inv_inventaris_habispakai_pembelian.pilihan_status_pembelian='2'");
-        $query = $this->db->get("inv_inventaris_habispakai_pembelian_item");
+        $this->db->where("id_mst_inv_barang_habispakai",$kode);
+        $this->db->where("batch",$batch);;
+        $query = $this->db->get("bhp_distribusi");
 		if ($query->num_rows() > 0){
 			$data = $query->row_array();
 		}
@@ -392,11 +385,12 @@ class Bhp_distribusi_model extends CI_Model {
         }
         return $kd;
     }
-	function delete_entryitem($kode,$barang)
+	function delete_entryitem($kode,$barang,$batch)
 	{   
-        $this->db->where('id_inv_hasbispakai_pembelian',$kode);
+        $this->db->where('id_inv_inventaris_habispakai_distribusi',$kode);
         $this->db->where('id_mst_inv_barang_habispakai',$barang);
-        $this->db->delete('inv_inventaris_habispakai_pembelian_item');
+        $this->db->where('batch',$batch);
+        $this->db->delete('inv_inventaris_habispakai_distribusi_item');
 	}
     function delete_entryitem_table($kode,$id_barang,$table)
     {    
