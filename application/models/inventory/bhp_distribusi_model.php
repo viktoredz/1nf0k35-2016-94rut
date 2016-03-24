@@ -366,9 +366,9 @@ class Bhp_distribusi_model extends CI_Model {
     }
 	function delete_entry($kode)
 	{
-		$this->db->where('id_inv_hasbispakai_pembelian',$kode);
+		$this->db->where('id_inv_inventaris_habispakai_distribusi',$kode);
 
-		return $this->db->delete('inv_inventaris_habispakai_pembelian');
+		return $this->db->delete('inv_inventaris_habispakai_distribusi');
 	}
     function jumlahtable($table,$id_inventaris_barang){
 

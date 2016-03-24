@@ -123,7 +123,7 @@
 				{ text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '4%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
 			    	if(dataRecord.delete==1){		
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del(\""+dataRecord.id_inv_inventaris_habispakai_distribusi+"\");'></a></div>";
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del(\""+dataRecord.id_inv_inventaris_habispakai_distribusi+"\",\""+dataRecord.jumlah+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}
@@ -164,7 +164,7 @@
 
 	function del(id,jumlah){
 		if(jumlah>0){
-			alert('Maaf, Data ini tidak bisa dihapus karena sudah ada pengadaan barang sebanyak '+ jumlah +'unit \n Jika ingin menghapus data ini silahkan hapus pengadaan barang didalamnya');
+			alert('Maaf, Data ini tidak bisa dihapus karena sudah ada data distribusi sebanyak '+ jumlah +' unit \n Jika ingin menghapus data ini silahkan hapus pengadaan barang didalamnya');
 		}else{
 		var confirms = confirm("Hapus Data ?");
 		if(confirms == true){
