@@ -197,10 +197,10 @@
 	}
 
 	function edit_barang(id_permohonan,kode_barang,batch){
-		$.get("<?php echo base_url().'inventory/bhp_pengadaan/cekdelete/'; ?>" + id_permohonan+'/'+kode_barang+'/'+batch,  function(data){
+	/*	$.get("<?php // echo base_url().'inventory/bhp_pengadaan/cekdelete/'; ?>" + id_permohonan+'/'+kode_barang+'/'+batch,  function(data){
 			if(data=='1'){
 				alert('Maaf, Data tidak bisa di ubah karena sudah di distribusikan');
-			}else{
+			}else{*/
 				$("#popup_barang #popup_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
 				$.get("<?php echo base_url().'inventory/bhp_pengadaan/edit_barang/'.$id_mst_inv_barang_habispakai_jenis.'/';?>"+id_permohonan+'/'+kode_barang, function(data) {
 					$("#popup_content").html(data);
@@ -212,14 +212,14 @@
 					isModal: true, autoOpen: false, modalOpacity: 0.2
 				});
 				$("#popup_barang").jqxWindow('open');
-			}
-		});
+		/*	}
+		});*/
 	}
 	function del_barang(id_permohonan,kode_barang,batch){
-		$.get("<?php echo base_url().'inventory/bhp_pengadaan/cekdelete/'; ?>" + id_permohonan+'/'+kode_barang+'/'+batch,  function(data){
+	/*	$.get("<?php // echo base_url().'inventory/bhp_pengadaan/cekdelete/'; ?>" + id_permohonan+'/'+kode_barang+'/'+batch,  function(data){
 			if(data=='1'){
 				alert('Maaf, Data tidak bisa di hapus karena sudah di distribusikan');
-			}else{
+			}else{*/
 				var confirms = confirm("Hapus Data ?");
 				if(confirms == true){
 					$.post("<?php echo base_url().'inventory/bhp_pengadaan/dodelpermohonan/'; ?>" + id_permohonan+'/'+kode_barang+'/'+batch,  function(){
@@ -230,9 +230,9 @@
 					});
 					
 				}		
-			}
+		/*	}
 		});
-		/**/
+		*/
 	}
 
 </script>

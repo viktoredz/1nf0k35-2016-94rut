@@ -711,7 +711,7 @@ class Bhp_pengadaan extends CI_Controller {
 			$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
 			$data['kodestatus'] = $this->bhp_pengadaan_model->get_data_status();
 			$data['kodestatus_inv'] = $this->bhp_pengadaan_model->pilih_data_status('status_pembelian');
-			$data['tgl_opnamecond']		= $this->bhp_pengadaan_model->gettgl_opname($id_permohonan);
+			//$data['tgl_opnamecond']		= $this->bhp_pengadaan_model->gettgl_opname($id_permohonan);
 			$data['barang']	  	= $this->parser->parse('inventory/bhp_pengadaan/barang', $data, TRUE);
 			$data['content'] 	= $this->parser->parse("inventory/bhp_pengadaan/edit",$data,true);
 			$this->template->show($data,"home");

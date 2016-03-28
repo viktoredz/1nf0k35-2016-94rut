@@ -310,11 +310,12 @@ $(function(){
       success:function(data)
       { 
         $.each(data,function(index,elemet){
+         // alert( );
           var lokasi = elemet.kodeinv.split(".")
           <?php if($action!="view") {?>
-          $("#kode_distribusi_").val(lokasi[0]+"."+lokasi[1]+"."+lokasi[2]+"."+lokasi[3]+"."+lokasi[4]+"."+tahun+'.'+lokasi[5]);
+          $("#kode_distribusi_").val(/*lokasi[0]+"."+lokasi[1]+"."+lokasi[2]+"."+lokasi[3]+"."+lokasi[4]+"."+tahun+'.'+lokasi[5]*/elemet.kodeinv);
           <?php }else{?>
-          $("#kode_distribusi_").html(lokasi[0]+"."+lokasi[1]+"."+lokasi[2]+"."+lokasi[3]+"."+lokasi[4]+"."+tahun+'.'+lokasi[5]);
+          $("#kode_distribusi_").html(/*lokasi[0]+"."+lokasi[1]+"."+lokasi[2]+"."+lokasi[3]+"."+lokasi[4]+"."+tahun+'.'+lokasi[5]*/elemet.kodeinv;
           <?php }?>
         });
       }

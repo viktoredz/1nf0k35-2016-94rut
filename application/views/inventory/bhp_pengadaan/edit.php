@@ -16,7 +16,7 @@
 <script>
 
 function validateForm() {
-  //alert('hai');
+  //alert('hai');onsubmit="return validateForm()" 
     var tanggalopname = $("#tgl2").val().split('-');
   //  alert(Date.parse(tanggalopname[2]-tanggalopname[1]-tanggalopname[0])+'<='+Date.parse($("#tgl__opname_").val()));
      if (Date.parse(tanggalopname[2]-tanggalopname[1]-tanggalopname[0])<=Date.parse($("#tgl__opname_").val())) {
@@ -32,7 +32,7 @@ function validateForm() {
 }
 </script>
 <div class="row">
-  <form action="<?php echo base_url()?>inventory/bhp_pengadaan/{action}/{kode}/" method="post" onsubmit="return validateForm()" name="editform">
+  <form action="<?php echo base_url()?>inventory/bhp_pengadaan/{action}/{kode}/" method="post" name="editform">
   <div class="col-md-6">
     <div class="box box-primary">
       <div class="box-body">

@@ -111,6 +111,7 @@ if(isset($disable)){if($disable='disable'){?>
           $("#jqxinput").val( ui.item.value );
           $("#id_mst_inv_barang").val(ui.item.key);
           deskripsi(ui.item.key);
+          cekdata(ui.item.key);
           return false;
         }
       }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
@@ -118,6 +119,9 @@ if(isset($disable)){if($disable='disable'){?>
           .append( "<a><b><font size=2>" + item.label + "</font></b><br><font size=1>" + item.satuan + "</font></a>" )
           .appendTo( ul );
       };
+      function cekdata(key) {
+        
+      }
       function deskripsi(data){
         $.ajax({
           url: "<?php echo base_url().'inventory/bhp_pengadaan/deskripsi/' ?>"+data,
