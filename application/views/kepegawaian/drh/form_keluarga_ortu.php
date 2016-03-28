@@ -96,7 +96,7 @@
                  }
                 },
         { text: 'Hubungan', datafield: 'nama_keluarga', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center',width: '12%' },
-        { text: 'Nama', datafield: 'nama', columntype: 'textbox', filtertype: 'textbox', width: '25%' },
+        { text: 'Nama', datafield: 'nama', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '25%' },
         { text: 'Jenis Kelamin', datafield: 'jenis_kelamin', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '10%' },
         { text: 'Usia', datafield: 'usia', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '8%' },
         { text: 'Tanggal Lahir', datafield: 'tgl_lahir', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', align: 'center', cellsalign: 'center', width: '10%' },

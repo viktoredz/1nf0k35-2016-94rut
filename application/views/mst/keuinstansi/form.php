@@ -151,7 +151,7 @@
             success : function(response){
               if(response=="OK"){
                 $("#popup_keuangan_instansi").jqxWindow('close');
-                alert("Data keluarga berhasil disimpan.");
+                alert("Data instansi berhasil disimpan.");
                 $("#jqxgrid").jqxGrid('updatebounddata', 'filter');
               }else{
                 $('#popup_keuangan_instansi_content').html(response);

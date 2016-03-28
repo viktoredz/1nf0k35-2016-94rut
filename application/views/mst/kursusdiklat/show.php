@@ -42,8 +42,8 @@
 			datatype: "json",
 			type	: "POST",
 			datafields: [
-			{ name: 'id_kursus', type: 'string'},
-			{ name: 'nama_kursus', type: 'string'},
+			{ name: 'id_diklat', type: 'string'},
+			{ name: 'nama_diklat', type: 'string'},
 			{ name: 'jenis', type: 'string'},
 			{ name: 'edit', type: 'number'},
 			{ name: 'delete', type: 'number'}
@@ -105,8 +105,8 @@
 					}
                  }
                 },
-				{ text: 'ID Kursus/Diklat', datafield: 'id_kursus', columntype: 'textbox', filtertype: 'textbox', width: '15%' },
-				{ text: 'Nama Kursus/Diklat', datafield: 'nama_kursus', columntype: 'textbox', filtertype: 'textbox', width: '45%' },
+				{ text: 'ID Kursus/Diklat', datafield: 'id_diklat', columntype: 'textbox', filtertype: 'textbox', width: '15%' },
+				{ text: 'Nama Kursus/Diklat', datafield: 'nama_diklat', columntype: 'textbox', filtertype: 'textbox', width: '45%' },
 				{ text: 'jenis', datafield: 'jenis', columntype: 'textbox', filtertype: 'textbox', width: '30%' },
             ]
 		});

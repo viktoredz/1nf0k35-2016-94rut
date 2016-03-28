@@ -95,11 +95,11 @@
                  }
                 },
         { text: 'Tipe', datafield: 'tipe', columntype: 'textbox', filtertype: 'textbox',align: 'center', cellsalign: 'center', width: '8%' },
-        { text: 'Instansi', datafield: 'instansi', columntype: 'textbox', filtertype: 'textbox', width: '15%' },
+        { text: 'Instansi', datafield: 'instansi', columntype: 'textbox', filtertype: 'textbox', align:'center', cellsalign: 'center', width: '15%' },
         { text: 'Tanggal', datafield: 'tgl_diklat', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', align: 'center', cellsalign: 'center', width: '10%' },
-        { text: 'Nama Diklat', datafield: 'nama_diklat', columntype: 'textbox', filtertype: 'textbox', width: '25%' },
+        { text: 'Nama Diklat', datafield: 'nama_diklat', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '25%' },
         { text: 'Lama Diklat', datafield: 'lama_diklat', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center',width: '8%' },
-        { text: 'Institusi Penyelenggara', datafield: 'penyelenggara', columntype: 'textbox', filtertype: 'textbox', align: 'center', width: '24%' }
+        { text: 'Institusi Penyelenggara', datafield: 'penyelenggara', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '24%' }
             ]
     });
 

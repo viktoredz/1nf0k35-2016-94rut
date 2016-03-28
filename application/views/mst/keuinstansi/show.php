@@ -106,6 +106,7 @@
 					}
                  }
                 },
+				
 				{ text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
 				    if(dataRecord.delete==1){
@@ -115,9 +116,19 @@
 					}
                  }
                 },
-				{ text: 'Nama', datafield: 'nama', columntype: 'textbox', filtertype: 'textbox', width: '20%' },
-				{ text: 'Kategori', datafield: 'kategori', columntype: 'textbox', filtertype: 'textbox', width: '29%' },
-				{ text: 'Aktif', datafield: 'status', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '10%' },
+				{ text: 'Nama', datafield: 'nama', columntype: 'textbox', filtertype: 'textbox',align: 'center', cellsalign: 'center', width: '29%' },
+				{ text: 'Kategori', datafield: 'kategori', columntype: 'textbox', filtertype: 'textbox',align: 'center', cellsalign: 'center', width: '13%'},
+				{ text: 'Alamat', datafield: 'alamat', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '29%' },
+				{ text: 'Telpon', datafield: 'tlp', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '10%' },
+				{ text: 'Aktif', datafield: 'status', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '10%',  cellsrenderer: function (row) {
+				  var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
+				  var aktif = dataRecord.status;
+					if(aktif=='1'){
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/checkbox_yes.gif'></a></div>";
+					}else{
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/checkbox_no.gif'></a></div>";}
+					}
+				}
             ]
 		});
 
@@ -159,12 +170,6 @@
       });
       $("#popup_keuangan_instansi").jqxWindow('open');
     }
-
-
-
-
-
-
 
 </script>
 
