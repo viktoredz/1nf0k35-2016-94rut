@@ -78,27 +78,18 @@
                 </div>
                 <div class="col-md-8">
                   <select name="keuinstansi_kategori" type="text" class="form-control">
-                         <option value="Farmasi">Farmasi</option>
-                         <option value="Umum">Umum</option>
+                  <?php 
+                  if(set_value('keuinstansi_kategori')=="" && isset($kategori)){
+                    $keuinstansi_kategori = $kategori;
+                  }else{
+                    $keuinstansi_kategori = set_value('keuinstansi_kategori');
+                  }
+                  ?>
+                       <option value="Farmasi" <?php if($keuinstansi_kategori=="farmasi") echo "selected" ?>>Farmasi</option>
+                       <option value="Umum" <?php if($keuinstansi_kategori=="umum") echo "selected" ?>>Umum</option>
                   </select>
                 </div>
               </div>
-
-<!--               <div class="row" style="margin: 5px">
-                <div class="col-md-4" style="padding: 5px">
-                 <button type="button" name="btn_tambah_kategori" class="btn btn-warning"></i> &nbsp; Tambah Kategori</button>
-                </div>
-                <div class="col-md-8">
-                 <input type="text" class="form-control" name="keuinstansi_kategori" placeholder=" Nama Ketegori " value="<?php 
-                  if(set_value('kategori')=="" && isset($kategori)){
-                    echo $kategori;
-                  }else{
-                    echo  set_value('kategori');
-                  }
-                  ?>">
-                </div>
-              </div> -->
-
              <div class="row" style="margin: 5px">
                 <div class="col-md-4" style="padding: 5px">
                  Aktif
