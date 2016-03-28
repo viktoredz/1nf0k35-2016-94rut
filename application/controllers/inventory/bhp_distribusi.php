@@ -205,7 +205,7 @@ class Bhp_distribusi extends CI_Controller {
 			$data[] = array(
 				'id_inv_inventaris_habispakai_distribusi' 	=> $act->id_inv_inventaris_habispakai_distribusi,
 				'code_cl_phc' 					=> $act->code_cl_phc,
-				'jenis_bhp' 					=> $act->jenis_bhp,
+				'jenis_bhp' 					=> ucfirst($act->jenis_bhp),
 				'tgl_distribusi' 				=> $act->tgl_distribusi,
 				'nomor_dokumen'					=> $act->nomor_dokumen,
 				'penerima_nama'					=> $act->penerima_nama,

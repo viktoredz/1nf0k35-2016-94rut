@@ -805,7 +805,7 @@ class Bhp_pengadaan extends CI_Controller {
         		$this->db->update("inv_inventaris_habispakai_pembelian",$dataupdate,$key);
 				die("OK|Data Tersimpan");
 			}else{
-				 die("Error|Proses data gagal");
+				 die("Error|Maaf, data tidak dapat diproses");
 			}
 			
 		}
