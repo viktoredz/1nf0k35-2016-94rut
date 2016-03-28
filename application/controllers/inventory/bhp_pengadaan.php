@@ -410,7 +410,7 @@ class Bhp_pengadaan extends CI_Controller {
 				'keterangan'					=> $act->keterangan,
 				'detail'						=> 1,
 				'edit'							=> 1,//$unlock,
-				'delete'						=> 1//$unlock
+				'delete'						=> ($act->pilihan_status_pembelian==2) ? 0 : 1
 			);
 		}
 
