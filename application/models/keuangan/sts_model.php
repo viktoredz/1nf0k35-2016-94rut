@@ -38,11 +38,7 @@ class Sts_model extends CI_Model {
     }	
 	function get_data_kode_rekening()
     {
- 		$this->db->select('*');		
-		
-		$query = $this->db->get("mst_keu_rekening");		
-		
-		return $query->result_array();
+    	return array();
     }	
 	
 	function get_data_type_filter($type)
