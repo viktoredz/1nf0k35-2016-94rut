@@ -11,255 +11,56 @@
 	<div id="popup_content">&nbsp;</div>
 </div>
 <section class="content">
-<form action="<?php echo base_url()?>inventory/bhp_opname/dodel_multi" method="POST" name="">
-  <div class="row">
-    <!-- left column -->
-    <div class="col-md-12">
-      <!-- general form elements -->
-      <div class="box box-primary">
-	        <div class="box-header">
-	          <h3 class="box-title">{title_form}</h3>
-		    </div>
+<div class="row">
+    <div id='jqxTabs'>
+        <ul>
+            <li style="margin-left: 15px;">
+              <div style="height: 20px; margin-top: 5px;">
+                  <div style="float: left;">
+                      <i class="icon fa fa-list-alt" style="font-size: 18px"></i>
+                  </div>
+                  <div style="margin-left: 8px; vertical-align: middle; text-align: center; float: left;">
+                      Daftar Bahan Habis Pakai</div>
+              </div>
+            </li>
+            <li style="margin-left: 15px;">
+              <div style="height: 20px; margin-top: 5px;">
+                  <div style="float: left;">
+                      <i class="icon fa fa-list-alt" style="font-size: 18px"></i>
+                  </div>
+                  <div style="margin-left: 8px; vertical-align: middle; text-align: center; float: left;">
+                      Daftar Stock Opname</div>
+              </div>
+            </li>
 
-	      	<div class="box-footer">
-		      	<div class="row"> 
-			      	<div class="col-md-12">
-			      		<?php //if($unlock==1){ ?>
-					<!-- 	<button type="button" class="btn btn-primary" onclick="add(0)"><i class='fa fa-plus-square-o'></i> &nbsp; Tambah Pengeluaran</button>-->
-						<?php //} ?>		 	
-					 	<button type="button" class="btn btn-success" id="btn-refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
-			          <button type="button" id="btn-export" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Export</button>
-			      	</div>
-		      	</div>
-		    <div class="box-body">
-		      	<div class="row">
-			      <div class="col-md-6">
-			      	<div class="row">
-				     	<div class="col-md-4" style="padding-top:5px;"><label> Puskesmas </label> </div>
-				     	<div class="col-md-8">
-					     	<select name="code_cl_phc" id="puskesmas" class="form-control">
-								<?php foreach ($datapuskesmas as $row ) { ;?>
-									<option value="<?php echo $row->code; ?>" onchange="" ><?php echo $row->value; ?></option>
-								<?php	} ;?>
-					     	</select>
-					     </div>	
-			     	</div>
-			     </div>
-			      <div class="col-md-6">
-			     	<div class="row">
-				     	<div class="col-md-4" style="padding-top:5px;"><label> Jenis Barang </label> </div>
-				     	<div class="col-md-8">
-				     		<select name="jenisbarang" id="jenisbarang" class="form-control">
-				     				<option value="all">All</option>
-								<?php foreach ($jenisbaranghabis as $row ) { ;?>
-								<?php $select = $row->id_mst_inv_barang_habispakai_jenis == $this->session->userdata('filter_jenisbarang') ? 'selected=selected' : '' ?>
-									<option value="<?php echo $row->id_mst_inv_barang_habispakai_jenis; ?>"  <?php echo $select ?> ><?php echo $row->uraian; ?></option>
-								<?php	} ;?>
-					     	</select>
-					     </div>	
-			     	</div>
-				  </div>
-				</div>
-			</div>
-		</div>
-        <div class="box-body">
-		    <div class="div-grid">
-		        <div id="jqxgrid"></div>
-			</div>
-    	</div>
-      </div>
-  </div>
+        </ul>
+        <div id="content1" style="background: #FAFAFA"></div>
+        <div id="content2" style="background: #FAFAFA"></div>
+    </div>
 </div>
-</form>
 </section>
 
 <script type="text/javascript">
-
-	function close_popup(){
-	$("#popup_barang").jqxWindow('close');
-	}
-	$(function () {	
-		$("select[name='jenisbarang']").change(function(){
-			$.post("<?php echo base_url().'inventory/bhp_opname/filter_jenisbarang' ?>", 'jenisbarang='+$(this).val(),  function(){
-				$("#jqxgrid").jqxGrid('updatebounddata', 'cells');
-			});
-		});
+  $(function() {
 	    $("#menu_bahan_habis_pakai").addClass("active");
 	    $("#menu_inventory_bhp_opname").addClass("active");
-	});
 
-	   var source = {
-			datatype: "json",
-			type	: "POST",
-			datafields: [
-			{ name: 'id_mst_inv_barang_habispakai_jenis', type: 'string' },
-			{ name: 'uraian', type: 'string' },
-			{ name: 'no', type: 'string' },
-			{ name: 'id_mst_inv_barang_habispakai', type: 'string' },
-			{ name: 'code', type: 'string' },
-			{ name: 'negara_asal', type: 'number' },
-			{ name: 'tgl_opname', type: 'string' },
-			{ name: 'merek_tipe', type: 'string' },
-			{ name: 'jmlawal', type: 'string' },
-			{ name: 'jml_akhir', type: 'string' },
-			{ name: 'tgl_update', type: 'date' },
-			{ name: 'jml_selisih', type: 'string' },
-			{ name: 'harga', type: 'double' },
-			{ name: 'jenisuraian', type: 'string' },
-			{ name: 'pilihan_satuan', type: 'string' },
-			{ name: 'value', type: 'string' },
-        ],
-		url: "<?php echo site_url('inventory/bhp_opname/json'); ?>",
-		cache: false,
-			updateRow: function (rowID, rowData, commit) {
-             
-         },
-		filter: function(){
-			$("#jqxgrid").jqxGrid('updatebounddata', 'filter');
-		},
-		sort: function(){
-			$("#jqxgrid").jqxGrid('updatebounddata', 'sort');
-		},
-		root: 'Rows',
-        pagesize: 10,
-        beforeprocessing: function(data){		
-			if (data != null){
-				source.totalrecords = data[0].TotalRows;					
-			}
-		}
-		};		
-		var dataadapter = new $.jqx.dataAdapter(source, {
-			loadError: function(xhr, status, error){
-				alert(error);
-			}
-		});
-     
-		$('#btn-refresh').click(function () {
-			$("#jqxgrid").jqxGrid('clearfilters');
-		});
+        $('#jqxTabs').jqxTabs({ width: '100%', height: '700'});
 
-		$("#jqxgrid").jqxGrid(
-		{		
-			width: '100%',
-			selectionmode: 'singlerow',
-			source: dataadapter, theme: theme,columnsresize: true,showtoolbar: false, pagesizeoptions: ['10', '25', '50', '100', '200'],
-			showfilterrow: true, filterable: true, sortable: true, autoheight: true, pageable: true, virtualmode: true, editable: true,
-			rendergridrows: function(obj)
-			{
-				return obj.data;    
-			},
-			columns: [
-				{ text: 'Detail', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
-				    var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row)
-				    if((dataRecord.id_mst_inv_barang_habispakai!=null)&&(dataRecord.tgl_opname!="<?php echo date('Y-m-d');?>")){
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_view.gif' onclick='add(\""+dataRecord.id_mst_inv_barang_habispakai+"\");'></a></div>";
-					}else{
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
-					}
-                 }
-                },
-			/*	{ text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '6%', cellsrenderer: function (row) {
-				    var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
-				    if(dataRecord.id_mst_inv_barang_habispakai!=null){
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php /* echo base_url(); ?>media/images/16_del.gif' onclick='del(\""+dataRecord.id_mst_inv_barang_habispakai+"\");'></a></div>";
-					}else{
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php  echo base_url();*/ ?>media/images/16_lock.gif'></a></div>";
-					}
-                 }
-                },*/
-				{ text: 'Nama Barang', editable:false ,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '30%' },
-				{ text: 'Merek', editable:false ,datafield: 'merek_tipe', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
-				{ text: 'Last Update', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false,datafield: 'tgl_update', columntype: 'date', filtertype: 'none', cellsformat: 'dd-MM-yyyy', width: '10%'},
-				{ text: 'Jumlah Awal',sortable: false,editable:false ,align: 'center', cellsalign: 'right', datafield: 'jmlawal', columntype: 'textbox', filtertype: 'none', width: '13%' },
-				{ text: 'Jumlah Akhir',sortable: false,editable:false ,align: 'center', cellsalign: 'right', datafield: 'jml_akhir', columntype: 'textbox', filtertype: 'none', width: '13%' },
-				{ text: 'Selisih',sortable: false,editable:false ,datafield: 'jml_selisih', columntype: 'textbox', filtertype: 'none', width: '13%' ,align: 'center', cellsalign: 'right'}
-            ]
-		});
-	 /*function timeline_add_barang(id){
-	    $.get("<?php echo base_url();?>inventory/bhp_opname/timeline_comment/"+id , function(response) {
-	      $("#timeline-barang").html(response);
-	    });
-	  }*/
-	  function timeline_pengeluaran_barang(id){
-	    $.get("<?php echo base_url();?>inventory/bhp_opname/timeline_pengeluaran_barang/"+id , function(response) {
-	      $("#timeline-barang").html(response);
-	    });
-	  }
-	/*function edit(id){
-		$("#popup_barang #popup_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-		$.get("<?php echo base_url().'inventory/bhp_opname/add_barang/'; ?>"+id , function(data) {
-			timeline_add_barang(id);
-			$("#popup_content").html(data);
-		});
-		$("#popup_barang").jqxWindow({
-			theme: theme, resizable: false,
-			width: 500,
-			height: 600,
-			isModal: true, autoOpen: false, modalOpacity: 0.2
-		});
-		$("#popup_barang").jqxWindow('open');
+        var loadPage = function (url, tabIndex) {
+            $.get(url, function (data) {
+                $('#content' + tabIndex).html(data);
+            });
+        }
+
+        loadPage('<?php echo base_url()?>inventory/bhp_opname/tab/1', 1);
+        $('#jqxTabs').on('selected', function (event) {
+            var pageIndex = event.args.item + 1;
+            loadPage('<?php echo base_url()?>inventory/bhp_opname/tab/'+pageIndex, pageIndex);
+        });
+    });	
+
+	function close_popup(){
+		$("#popup_barang").jqxWindow('close');
 	}
-
-	function del(id){
-		$("#popup_barang #popup_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-		$.get("<?php echo base_url().'inventory/bhp_opname/kondisi_barang/'; ?>"+id , function(data) {
-			timeline_kondisi_barang(id);
-			$("#popup_content").html(data);
-		});
-		$("#popup_barang").jqxWindow({
-			theme: theme, resizable: false,
-			width: 500,
-			height: 600,
-			isModal: true, autoOpen: false, modalOpacity: 0.2
-		});
-		$("#popup_barang").jqxWindow('open');
-	}*/
-	function add(id){
-		$("#popup_barang #popup_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-		$.get("<?php echo base_url().'inventory/bhp_opname/add_barang/'; ?>"+id , function(data) {
-			timeline_pengeluaran_barang(id);
-			$("#popup_content").html(data);
-		});
-		$("#popup_barang").jqxWindow({
-			theme: theme, resizable: false,
-			width: 1000,
-			height: 700,
-			isModal: true, autoOpen: false, modalOpacity: 0.2
-		});
-		$("#popup_barang").jqxWindow('open');
-	}
-
-	$("#btn-export").click(function(){
-		
-		var post = "";
-		var filter = $("#jqxgrid").jqxGrid('getfilterinformation');
-		for(i=0; i < filter.length; i++){
-			var fltr 	= filter[i];
-			var value	= fltr.filter.getfilters()[0].value;
-			var condition	= fltr.filter.getfilters()[0].condition;
-			var filteroperation	= fltr.filter.getfilters()[0].operation;
-			var filterdatafield	= fltr.filtercolumn;
-			post = post+'&filtervalue'+i+'='+value;
-			post = post+'&filtercondition'+i+'='+condition;
-			post = post+'&filteroperation'+i+'='+filteroperation;
-			post = post+'&filterdatafield'+i+'='+filterdatafield;
-			post = post+'&'+filterdatafield+'operator=and';
-		}
-		post = post+'&filterscount='+i;
-		
-		var sortdatafield = $("#jqxgrid").jqxGrid('getsortcolumn');
-		if(sortdatafield != "" && sortdatafield != null){
-			post = post + '&sortdatafield='+sortdatafield;
-		}
-		if(sortdatafield != null){
-			var sortorder = $("#jqxgrid").jqxGrid('getsortinformation').sortdirection.ascending ? "asc" : ($("#jqxgrid").jqxGrid('getsortinformation').sortdirection.descending ? "desc" : "");
-			post = post+'&sortorder='+sortorder;
-			
-		}
-		post = post+'&jenisbarang='+$("#jenisbarang option:selected").text()+'&nama_puskesmas='+$("#puskesmas option:selected").text();
-		
-		$.post("<?php echo base_url()?>inventory/bhp_opname/pengeluaran_export",post,function(response	){
-			window.location.href=response;
-		});
-	});
 </script>

@@ -306,19 +306,42 @@ class Bhp_opname extends CI_Controller {
 
 		echo json_encode(array($json));
 	}
+
 	function index(){
 		$this->authentication->verify('inventory','edit');
 		$data['title_group'] = "Barang Habis Pakai";
+
 		$data['title_form'] = "Stock Opname";
 
+		$data['content'] = $this->parser->parse("inventory/bhp_opname/show",$data,true);
+		$this->template->show($data,"home");
+	}
+
+	function tab($index){
+		if($index==1) $this->daftar_bhp();
+		else $this->daftar_opname();
+	}
+
+	function daftar_bhp(){
 		$kodepuskesmas = $this->session->userdata('puskesmas');
 		$this->db->where('code','P'.$kodepuskesmas);
 
 		$data['datapuskesmas'] 	= $this->inv_ruangan_model->get_data_puskesmas();
-		$data['jenisbaranghabis'] = $this->bhp_opname_model->get_data_jenis();
-		$data['content'] = $this->parser->parse("inventory/bhp_opname/show",$data,true);
-		$this->template->show($data,"home");
+		$data['jenisbaranghabis'] = array('obat'=>'Obat','umum'=>'Umum');
+
+		die($this->parser->parse("inventory/bhp_opname/show_bhp",$data,true));
 	}
+
+	function daftar_opname(){
+		$kodepuskesmas = $this->session->userdata('puskesmas');
+		$this->db->where('code','P'.$kodepuskesmas);
+
+		$data['datapuskesmas'] 	= $this->inv_ruangan_model->get_data_puskesmas();
+		$data['jenisbaranghabis'] = array('obat'=>'Obat','umum'=>'Umum');
+		
+		die($this->parser->parse("inventory/bhp_opname/show_opname",$data,true));
+	}
+
 	function autocomplite_barang(){
 		$search = explode("&",$this->input->server('QUERY_STRING'));
 		$search = str_replace("query=","",$search[0]);
