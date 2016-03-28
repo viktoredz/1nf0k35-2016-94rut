@@ -92,8 +92,8 @@
                 },
         { text: 'Nomor', datafield: 'nomor_sertifikat', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center',width: '20%' },
         { text: 'Tanggal', datafield: 'tgl_diklat', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', align: 'center', cellsalign: 'center', width: '10%' },
-        { text: 'Nama Diklat', datafield: 'nama_diklat', columntype: 'textbox', filtertype: 'textbox', width: '38%' },
-        { text: 'Jenis', datafield: 'jenis_diklat', columntype: 'textbox', filtertype: 'textbox', align: 'center', width: '22%' }
+        { text: 'Nama Diklat', datafield: 'nama_diklat', columntype: 'textbox', filtertype: 'textbox', align: 'center' , cellsalign: 'center', width: '38%' },
+        { text: 'Jenis', datafield: 'jenis_diklat', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '22%' }
             ]
     });
 

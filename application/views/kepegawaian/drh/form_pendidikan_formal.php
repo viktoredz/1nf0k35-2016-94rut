@@ -92,8 +92,8 @@
                  }
                 },
         { text: 'Tingkat', datafield: 'deskripsi', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '9%' },
-        { text: 'Bidang Studi', datafield: 'nama_jurusan', columntype: 'textbox', filtertype: 'textbox', align: 'center', width: '21%' },
-        { text: 'Nama Sekolah', datafield: 'sekolah_nama', columntype: 'textbox', filtertype: 'textbox', align: 'center', width: '25%' },
+        { text: 'Bidang Studi', datafield: 'nama_jurusan', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '21%' },
+        { text: 'Nama Sekolah', datafield: 'sekolah_nama', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center',width: '25%' },
         { text: 'Lokasi', datafield: 'sekolah_lokasi', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '12%' },
         { text: 'Tanggal Lulus', datafield: 'ijazah_tgl', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', align: 'center', cellsalign: 'center', width: '10%' },
         { text: 'Pendidikan Pertama', datafield: 'cpns', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '13%' }

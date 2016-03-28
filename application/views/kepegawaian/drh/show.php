@@ -118,8 +118,8 @@
 					}
                  }
                 },
-				{ text: 'NIP', datafield: 'nip_baru', columntype: 'textbox', filtertype: 'textbox', width: '20%' },
-				{ text: 'Nama', datafield: 'nama', columntype: 'textbox', filtertype: 'textbox', width: '29%' },
+				{ text: 'NIP', datafield: 'nip_baru', columntype: 'textbox', filtertype: 'textbox', align: 'center' , cellsalign: 'center', width: '20%'},
+				{ text: 'Nama', datafield: 'nama', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '29%' },
 				{ text: 'Jenis Kelamin', datafield: 'jenis_kelamin', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '10%' },
 				{ text: 'Usia', datafield: 'usia', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '6%' },
 				{ text: 'Tanggal Lahir', datafield: 'tgl_lhr', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', align: 'center', cellsalign: 'center', width: '10%' },

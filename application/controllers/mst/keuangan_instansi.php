@@ -10,7 +10,7 @@ class Keuangan_instansi extends CI_Controller {
 	function index(){
 		$this->authentication->verify('mst','edit');
 		$data['title_group'] = "Parameter";
-		$data['title_form'] = "Master Data - Instansi";
+		$data['title_form'] = "Master Data - Keu Instansi";
 
 		$data['content'] = $this->parser->parse("mst/keuinstansi/show",$data,true);
 
@@ -73,7 +73,7 @@ class Keuangan_instansi extends CI_Controller {
 				'tlp'	   => $act->tlp,
 				'alamat'   => $act->alamat,
 				'status'   => $act->status,
-				'kategori' => $act->kategori,
+				'kategori' => ucwords($act->kategori),
 				'edit'		=> 1,
 				'delete'	=> 1
 			);
@@ -117,10 +117,8 @@ class Keuangan_instansi extends CI_Controller {
 
 		if($this->keuinstansi_model->delete_entry($id)){
 			$this->session->set_flashdata('alert', 'Delete data ('.$id.')');
-			//redirect(base_url()."mst/agama");
 		}else{
 			$this->session->set_flashdata('alert', 'Delete data error');
-			//redirect(base_url()."mst/agama");
 		}
 	}
 

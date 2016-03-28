@@ -7,7 +7,7 @@ class Master_sts extends CI_Controller {
 	}
 
 	function index(){
-		header("location:master_sts/anggaran");
+		header("location:anggaran");
 	}
 
 	function api_data(){
@@ -51,8 +51,8 @@ class Master_sts extends CI_Controller {
 	}
 	function anggaran(){
 		$this->authentication->verify('keuangan','edit');
-		$data['title_group'] = "Anggaran";
-		$data['title_form'] = "Master Data - Anggaran";
+		$data['title_group'] = "Keuangan";
+		$data['title_form'] = "Master Data - Tarif STS";
 		$data['ambildata'] = $this->sts_model->get_data();
 		$data['kode_rekening'] = $this->sts_model->get_data_kode_rekening();
 		$data['content'] = $this->parser->parse("keuangan/anggaran",$data,true);		
@@ -61,8 +61,8 @@ class Master_sts extends CI_Controller {
 	}
 	function anggaran_tarif(){
 		$this->authentication->verify('keuangan','edit');
-		$data['title_group'] = "Tarif Anggaran";
-		$data['title_form'] = "Master Data - Tarif Anggaran ";
+		$data['title_group'] = "Keuangan";
+		$data['title_form'] = "Master Data - Tarif STS";
 		$data['ambildata'] = $this->sts_model->get_data();
 		$data['data_puskesmas']	= $this->sts_model->get_data_puskesmas();
 		$data['content'] = $this->parser->parse("keuangan/anggaran_tarif",$data,true);					

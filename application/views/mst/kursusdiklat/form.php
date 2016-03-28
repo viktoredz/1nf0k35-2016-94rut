@@ -14,7 +14,6 @@
 </div>
 <?php } ?>
 
-
 <section class="content">
 <form action="<?php echo base_url()?>mst/kursusdiklat/{action}/{id}" method="POST" name="">
   <div class="row">
@@ -28,27 +27,27 @@
 
           <div class="box-footer pull-right">
             <button type="submit" class="btn btn-primary">Simpan</button>
-            <button type="reset" class="btn btn-warning">Ulang</button>
+            <button type="reset"  class="btn btn-warning">Ulang</button>
             <button type="button" class="btn btn-success" onClick="document.location.href='<?php echo base_url()?>mst/kursusdiklat'">Kembali</button>
           </div>
           <div class="box-body">
             <div class="form-group">
               <label>ID Kursus</label>
-              <input type="text" class="form-control" name="id_kursus" placeholder="Nama Struktur" value="<?php 
-                if(set_value('id_kursus')=="" && isset($id_kursus)){
-                  echo $id_kursus;
+              <input type="text" class="form-control" name="id_diklat" placeholder="Nama Struktur" value="<?php 
+                if(set_value('id_diklat')=="" && isset($id_diklat)){
+                  echo $id_diklat;
                 }else{
-                  echo  set_value('id_kursus');
+                  echo  set_value('id_diklat');
                 }
                 ?>">
             </div>
             <div class="form-group">
               <label>Nama Kursus</label>
-              <input type="text" class="form-control" name="nama_kursus" placeholder="Nama Kursus" value="<?php 
-                if(set_value('nama_kursus')=="" && isset($nama_kursus)){
-                  echo $nama_kursus;
+              <input type="text" class="form-control" name="nama_diklat" placeholder="Nama Kursus" value="<?php 
+                if(set_value('nama_diklat')=="" && isset($nama_diklat)){
+                  echo $nama_diklat;
                 }else{
-                  echo  set_value('nama_kursus');
+                  echo  set_value('nama_diklat');
                 }
                 ?>">
             </div>

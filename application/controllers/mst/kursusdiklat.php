@@ -48,8 +48,8 @@ class Kursusdiklat extends CI_Controller {
 		$data = array();
 		foreach($rows as $act) {
 			$data[] = array(
-				'id_kursus'			=> $act->id_kursus,
-				'nama_kursus'		=> $act->nama_kursus,
+				'id_diklat'			=> $act->id_diklat,
+				'nama_diklat'		=> $act->nama_diklat,
 				'jenis'				=> $act->jenis,
 				'edit'		=> 1,
 				'delete'	=> 1
@@ -82,15 +82,15 @@ class Kursusdiklat extends CI_Controller {
 	function add(){
 		$this->authentication->verify('mst','add');
 
-        $this->form_validation->set_rules('id_kursus', 'ID Kursus', 'trim|required');
-        $this->form_validation->set_rules('nama_kursus', 'Nama Kursus', 'trim|required');
+        $this->form_validation->set_rules('id_diklat', 'ID Kursus', 'trim|required');
+        $this->form_validation->set_rules('nama_diklat', 'Nama Kursus', 'trim|required');
         $this->form_validation->set_rules('jenis', 'Jenis', 'trim|required');
         
 			if($this->form_validation->run()== FALSE){
 				$data['title_group'] = "Parameter";
-				$data['title_form']="Tambah Kursus/Diklat Pegawai";
-				$data['action']="add";
-				$data['kode']="";
+				$data['title_form']	 ="Tambah Kursus/Diklat Pegawai";
+				$data['action']		 ="add";
+				$data['kode']		 ="";
 
 			
 				$data['content'] = $this->parser->parse("mst/kursusdiklat/form",$data,true);
@@ -109,8 +109,8 @@ class Kursusdiklat extends CI_Controller {
 	{
 		$this->authentication->verify('mst','add');
 
-        $this->form_validation->set_rules('id_kursus', 'ID Kursus', 'trim|required');
-        $this->form_validation->set_rules('nama_kursus', 'Nama Kursus', 'trim|required');
+        $this->form_validation->set_rules('id_diklat', 'ID Kursus', 'trim|required');
+        $this->form_validation->set_rules('nama_diklat', 'Nama Kursus', 'trim|required');
         $this->form_validation->set_rules('jenis', 'Jenis', 'trim|required');
 
 		if($this->form_validation->run()== FALSE){
@@ -118,11 +118,10 @@ class Kursusdiklat extends CI_Controller {
 			// var_dump($data);
 			// exit();
 			$data['title_group'] = "Parameter";
-			$data['title_form']="Ubah Kursus/Diklat Pegawai";
-			$data['action']="edit";
-			$data['id']=$id;
+			$data['title_form']	 = "Ubah Kursus/Diklat Pegawai";
+			$data['action']		 = "edit";
+			$data['id']			 = $id;
 
-		
 			$data['content'] = $this->parser->parse("mst/kursusdiklat/form",$data,true);
 			$this->template->show($data,"home");
 		}elseif($this->kursusdiklat_model->update_entry($id)){
