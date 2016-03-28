@@ -14,34 +14,15 @@ class Bhp_opname_model extends CI_Model {
     {
         $kodepuskesmas = "P".$this->session->userdata("puskesmas");
         $data = array();
-        $this->db->select("mst_inv_barang_habispakai.uraian,mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis,mst_inv_barang_habispakai.id_mst_inv_barang_habispakai,mst_inv_barang_habispakai.merek_tipe,
-            mst_inv_pilihan.value as value, 
-            (select jml as jml from  inv_inventaris_habispakai_opname where id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai and code_cl_phc=".'"'.$kodepuskesmas.'"'." order by tgl_update desc limit 1) as jmlbaik,
-            (SELECT SUM(jml) AS jmltotal   FROM inv_inventaris_habispakai_pembelian_item JOIN inv_inventaris_habispakai_pembelian ON (inv_inventaris_habispakai_pembelian.id_inv_hasbispakai_pembelian = inv_inventaris_habispakai_pembelian_item.id_inv_hasbispakai_pembelian AND inv_inventaris_habispakai_pembelian.code_cl_phc = inv_inventaris_habispakai_pembelian_item.code_cl_phc AND inv_inventaris_habispakai_pembelian.pilihan_status_pembelian=2)   WHERE inv_inventaris_habispakai_pembelian_item.code_cl_phc=".'"'.$kodepuskesmas.'"'." AND id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai AND inv_inventaris_habispakai_pembelian_item.tgl_update > IF((SELECT MAX(tgl_update) FROM inv_inventaris_habispakai_opname WHERE inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_opname.id_mst_inv_barang_habispakai AND inv_inventaris_habispakai_pembelian_item.code_cl_phc=inv_inventaris_habispakai_opname.code_cl_phc) IS NOT NULL,(SELECT MAX(tgl_update) FROM inv_inventaris_habispakai_opname WHERE inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_opname.id_mst_inv_barang_habispakai AND inv_inventaris_habispakai_pembelian_item.code_cl_phc=inv_inventaris_habispakai_opname.code_cl_phc),  (SELECT MIN(tgl_update- INTERVAL 1 DAY) FROM inv_inventaris_habispakai_pembelian_item))AND inv_inventaris_habispakai_pembelian_item.tgl_update <= CURDATE()) AS totaljumlah,
-            (SELECT SUM(jml) AS jmlpeng  FROM inv_inventaris_habispakai_pengeluaran WHERE id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai AND code_cl_phc=".'"'.$kodepuskesmas.'"'." AND inv_inventaris_habispakai_pengeluaran.tgl_update > IF((SELECT MAX(tgl_update) FROM inv_inventaris_habispakai_opname WHERE inv_inventaris_habispakai_pengeluaran.id_mst_inv_barang_habispakai = inv_inventaris_habispakai_opname.id_mst_inv_barang_habispakai AND inv_inventaris_habispakai_pengeluaran.code_cl_phc = inv_inventaris_habispakai_opname.code_cl_phc) IS NOT NULL,(SELECT MAX(tgl_update) FROM inv_inventaris_habispakai_opname WHERE inv_inventaris_habispakai_pengeluaran.id_mst_inv_barang_habispakai = inv_inventaris_habispakai_opname.id_mst_inv_barang_habispakai AND inv_inventaris_habispakai_pengeluaran.code_cl_phc = inv_inventaris_habispakai_opname.code_cl_phc), (SELECT MIN(tgl_update - INTERVAL 1 DAY) FROM inv_inventaris_habispakai_pengeluaran)) AND inv_inventaris_habispakai_pengeluaran.tgl_update <= CURDATE()   ORDER BY tgl_update DESC LIMIT 1) AS jmlpengeluaran,
-            (select jml_rusak as jmlrusak from  inv_inventaris_habispakai_kondisi where id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai order by tgl_update desc limit 1) as jml_rusak,
-            (select jml_tdkdipakai as jmltdkdipakai from  inv_inventaris_habispakai_kondisi where id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai order by tgl_update desc limit 1) as jml_tdkdipakai,
-            (select tgl_update as tglupdate from  inv_inventaris_habispakai_pengeluaran where id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai and code_cl_phc=".'"'.$kodepuskesmas.'"'." order by tgl_update desc limit 1) as tgl_update,
-            (select tgl_update as tglopname from inv_inventaris_habispakai_opname where id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai and code_cl_phc=".'"'.$kodepuskesmas.'"'." order by tgl_update desc limit 1) as tgl_opname
-             ");
-        $this->db->join('mst_inv_pilihan',"mst_inv_barang_habispakai.pilihan_satuan=mst_inv_pilihan.code and mst_inv_pilihan.tipe='satuan_bhp'",'left');
-        $query = $this->db->get('mst_inv_barang_habispakai',$limit,$start);
+        $this->db->select("*");
+        $query = $this->db->get('inv_inventaris_habispakai_opname',$limit,$start);
         return $query->result();
     }
     function get_data_export($start=0,$limit=999999,$options=array())
     {
         $kodepuskesmas = "P".$this->session->userdata("puskesmas");
         $data = array();
-        $this->db->select("mst_inv_barang_habispakai.uraian,mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis,mst_inv_barang_habispakai.id_mst_inv_barang_habispakai,mst_inv_barang_habispakai.merek_tipe,mst_inv_barang_habispakai_jenis.uraian as nama_jenis,
-            mst_inv_pilihan.value as value, 
-            (select jml as jml from  inv_inventaris_habispakai_opname where id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai and code_cl_phc=".'"'.$kodepuskesmas.'"'." order by tgl_update desc limit 1) as jmlbaik,
-            (SELECT SUM(jml) AS jmltotal   FROM inv_inventaris_habispakai_pembelian_item JOIN inv_inventaris_habispakai_pembelian ON (inv_inventaris_habispakai_pembelian.id_inv_hasbispakai_pembelian = inv_inventaris_habispakai_pembelian_item.id_inv_hasbispakai_pembelian AND inv_inventaris_habispakai_pembelian.code_cl_phc = inv_inventaris_habispakai_pembelian_item.code_cl_phc AND inv_inventaris_habispakai_pembelian.pilihan_status_pembelian=2)   WHERE inv_inventaris_habispakai_pembelian_item.code_cl_phc=".'"'.$kodepuskesmas.'"'." AND id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai AND inv_inventaris_habispakai_pembelian_item.tgl_update > IF((SELECT MAX(tgl_update) FROM inv_inventaris_habispakai_opname WHERE inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_opname.id_mst_inv_barang_habispakai AND inv_inventaris_habispakai_pembelian_item.code_cl_phc=inv_inventaris_habispakai_opname.code_cl_phc) IS NOT NULL,(SELECT MAX(tgl_update) FROM inv_inventaris_habispakai_opname WHERE inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_opname.id_mst_inv_barang_habispakai AND inv_inventaris_habispakai_pembelian_item.code_cl_phc=inv_inventaris_habispakai_opname.code_cl_phc),  (SELECT MIN(tgl_update- INTERVAL 1 DAY) FROM inv_inventaris_habispakai_pembelian_item))AND inv_inventaris_habispakai_pembelian_item.tgl_update <= CURDATE()) AS totaljumlah,
-            (SELECT SUM(jml) AS jmlpeng  FROM inv_inventaris_habispakai_pengeluaran WHERE id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai AND code_cl_phc=".'"'.$kodepuskesmas.'"'." AND inv_inventaris_habispakai_pengeluaran.tgl_update > IF((SELECT MAX(tgl_update) FROM inv_inventaris_habispakai_opname WHERE inv_inventaris_habispakai_pengeluaran.id_mst_inv_barang_habispakai = inv_inventaris_habispakai_opname.id_mst_inv_barang_habispakai AND inv_inventaris_habispakai_pengeluaran.code_cl_phc = inv_inventaris_habispakai_opname.code_cl_phc) IS NOT NULL,(SELECT MAX(tgl_update) FROM inv_inventaris_habispakai_opname WHERE inv_inventaris_habispakai_pengeluaran.id_mst_inv_barang_habispakai = inv_inventaris_habispakai_opname.id_mst_inv_barang_habispakai AND inv_inventaris_habispakai_pengeluaran.code_cl_phc = inv_inventaris_habispakai_opname.code_cl_phc), (SELECT MIN(tgl_update - INTERVAL 1 DAY) FROM inv_inventaris_habispakai_pengeluaran)) AND inv_inventaris_habispakai_pengeluaran.tgl_update <= CURDATE()   ORDER BY tgl_update DESC LIMIT 1) AS jmlpengeluaran,
-            (select jml_rusak as jmlrusak from  inv_inventaris_habispakai_kondisi where id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai order by tgl_update desc limit 1) as jml_rusak,
-            (select jml_tdkdipakai as jmltdkdipakai from  inv_inventaris_habispakai_kondisi where id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai order by tgl_update desc limit 1) as jml_tdkdipakai,
-            (select tgl_update as tglupdate from  inv_inventaris_habispakai_pengeluaran where id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai and code_cl_phc=".'"'.$kodepuskesmas.'"'." order by tgl_update desc limit 1) as tgl_update,
-            (select tgl_update as tglopname from inv_inventaris_habispakai_opname where id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai and code_cl_phc=".'"'.$kodepuskesmas.'"'." order by tgl_update desc limit 1) as tgl_opname
-             ");
+        $this->db->select("*");
         $this->db->join('mst_inv_pilihan',"mst_inv_barang_habispakai.pilihan_satuan=mst_inv_pilihan.code and mst_inv_pilihan.tipe='satuan_bhp'",'left');
         $this->db->join('mst_inv_barang_habispakai_jenis',"mst_inv_barang_habispakai_jenis.id_mst_inv_barang_habispakai_jenis=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis");
         $query = $this->db->get('mst_inv_barang_habispakai',$limit,$start);
@@ -206,5 +187,70 @@ class Bhp_opname_model extends CI_Model {
         $this->db->order_by('mst_inv_pilihan.code','asc');
         $query = $this->db->get('mst_inv_pilihan'); 
         return $query->result();    
+    }
+    function insert_entry()
+    {
+        $data['id_inv_inventaris_habispakai_opname'] = $this->kode_distribusi($this->input->post('kode_distribusi_'));
+        $data['code_cl_phc']                = $this->input->post('puskesmas');
+        $data['jenis_bhp']                  = $this->input->post('jenis_bhp');
+        $data['tgl_opname']                 = date("Y-m-d",strtotime($this->input->post('tgl_opname')));
+        $data['nomor_opname']               = $this->input->post('nomor_opname');
+        $data['petugas_nama']              = $this->input->post('penerima_nama');
+        $data['petugas_nip']               = $this->input->post('penerima_nip');
+        $data['catatan']                    = $this->input->post('catatan');
+        if($this->db->insert('inv_inventaris_habispakai_opname', $data)){
+            return $data['id_inv_inventaris_habispakai_opname'];
+        }else{
+            return mysql_error();
+        }
+    }
+    public function getitem($start=0,$limit=999999,$options=array()){
+        $query = $this->db->get("bhp_distribusi_opname",$limit,$start);
+        return $query->result();
+    }
+    public function getitemopname($start=0,$limit=999999,$options=array()){
+        //$this->db->group_by('id_mst_inv_barang_habispakai','batch');
+        $this->db->order_by('id_inv_inventaris_habispakai_opname','desc');
+        $this->db->select("inv_inventaris_habispakai_opname_item.*,mst_inv_barang_habispakai.uraian,mst_inv_barang_habispakai.pilihan_satuan");
+        $this->db->join("mst_inv_barang_habispakai","mst_inv_barang_habispakai.id_mst_inv_barang_habispakai = inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai");
+        $query = $this->db->get("inv_inventaris_habispakai_opname_item",$limit,$start);
+        return $query->result();
+    }
+
+    function get_data_row($kode){
+        $data = array();
+        $this->db->where("id_inv_inventaris_habispakai_opname",$kode);
+        $this->db->select("inv_inventaris_habispakai_opname.*");
+        $query = $this->db->get('inv_inventaris_habispakai_opname');
+        if ($query->num_rows() > 0){
+            $data = $query->row_array();
+        }
+
+        $query->free_result();    
+        return $data;
+    }
+    function kode_distribusi($kode){
+        $inv=explode(".", $kode);
+        $kode_pengadaan = $inv[0].$inv[1].$inv[2].$inv[3].$inv[4].$inv[5].$inv[6];
+        $tahun          = $inv[6];
+        $urut = $this->nourut($kode_pengadaan);
+        return  $kode_pengadaan.$urut;
+    }
+    function nourut($kode_pengadaan){
+        $q = $this->db->query("select MAX(RIGHT(id_inv_inventaris_habispakai_opname,6)) as kd_max from inv_inventaris_habispakai_opname where (LEFT(id_inv_inventaris_habispakai_opname,15))=".'"'.$kode_pengadaan.'"'."");
+        $nourut="";
+        if($q->num_rows()>0)
+        {
+            foreach($q->result() as $k)
+            {
+                $tmp = ((int)$k->kd_max)+1;
+                $nourut = sprintf("%06s", $tmp);
+            }
+        }
+        else
+        {
+            $nourut = "000001";
+        }
+        return $nourut;
     }
 }

@@ -140,7 +140,7 @@
 
 	function detail(id,jenis){
 		var idjenis = '0';
-		if (jenis=="obat") {
+		if (jenis.toLowerCase()=="obat") {
 			idjenis = '8';
 		}else{
 			idjenis = '0';
@@ -150,7 +150,7 @@
 
 	function edit(id,jenis){
 		var idjenis = '0';
-		if (jenis=="obat") {
+		if (jenis.toLowerCase()=="obat") {
 			idjenis = '8';
 		}else{
 			idjenis = '0';

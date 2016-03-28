@@ -15,14 +15,15 @@
     <!-- left column -->
     <div class="col-md-12">
       <!-- general form elements -->
-      <div class="box box-primary">
+      <div id="addopname"></div>
+      <div class="box box-primary" id="grid">
 	      	<div class="box-footer">
 		      	<div class="row"> 
 			      	<div class="col-md-12">
 			      		<?php //if($unlock==1){ ?>
 					<!-- 	<button type="button" class="btn btn-primary" onclick="add(0)"><i class='fa fa-plus-square-o'></i> &nbsp; Tambah Pengeluaran</button>-->
 						<?php //} ?>		 	
-					 	<button type="button" class="btn btn-primary" id="btn-add"><i class='fa fa-refresh'></i> &nbsp; Stock Opname Baru</button>
+					 	<button type="button" class="btn btn-primary" id="btn-add"><i class='fa fa-plus-square'></i> &nbsp; Stock Opname Baru</button>
 					 	<button type="button" class="btn btn-success" id="btn-refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
 			          <button type="button" id="btn-export" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Export</button>
 			      	</div>
@@ -95,27 +96,21 @@
 	    $("#menu_bahan_habis_pakai").addClass("active");
 	    $("#menu_inventory_bhp_opname").addClass("active");
 	});
-
 	   var source = {
 			datatype: "json",
 			type	: "POST",
 			datafields: [
-			{ name: 'id_mst_inv_barang_habispakai_jenis', type: 'string' },
-			{ name: 'uraian', type: 'string' },
+			{ name: 'id_inv_inventaris_habispakai_opname', type: 'string' },
+			{ name: 'code_cl_phc', type: 'string' },
+			{ name: 'jenis_bhp', type: 'string' },
+			{ name: 'petugas_nip', type: 'string' },
+			{ name: 'petugas_nama', type: 'string' },
+			{ name: 'catatan', type: 'number' },
+			{ name: 'tgl_opname', type: 'date' },
+			{ name: 'nomor_opname', type: 'string' },
 			{ name: 'no', type: 'string' },
-			{ name: 'id_mst_inv_barang_habispakai', type: 'string' },
-			{ name: 'code', type: 'string' },
-			{ name: 'negara_asal', type: 'number' },
-			{ name: 'tgl_opname', type: 'string' },
-			{ name: 'merek_tipe', type: 'string' },
-			{ name: 'jmlawal', type: 'string' },
-			{ name: 'jml_akhir', type: 'string' },
-			{ name: 'tgl_update', type: 'date' },
-			{ name: 'jml_selisih', type: 'string' },
-			{ name: 'harga', type: 'double' },
-			{ name: 'jenisuraian', type: 'string' },
-			{ name: 'pilihan_satuan', type: 'string' },
-			{ name: 'value', type: 'string' },
+			{ name: 'edit', type: 'number' },
+			{ name: 'delete', type: 'number' },
         ],
 		url: "<?php echo site_url('inventory/bhp_opname/json'); ?>",
 		cache: false,
@@ -159,8 +154,8 @@
 			columns: [
 				{ text: 'Edit', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgridOpname").jqxGrid('getrowdata', row)
-				    if((dataRecord.id_mst_inv_barang_habispakai!=null)&&(dataRecord.tgl_opname!="<?php echo date('Y-m-d');?>")){
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_view.gif' onclick='add(\""+dataRecord.id_mst_inv_barang_habispakai+"\");'></a></div>";
+				    if((dataRecord.edit==1)){
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='editopname(\""+dataRecord.id_inv_inventaris_habispakai_opname+"\",\""+dataRecord.jenis_bhp+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}
@@ -168,44 +163,44 @@
                 },
 				{ text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgridOpname").jqxGrid('getrowdata', row);
-				    if(dataRecord.id_mst_inv_barang_habispakai!=null){
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del(\""+dataRecord.id_mst_inv_barang_habispakai+"\");'></a></div>";
+				    if(dataRecord.delete==1){
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del(\""+dataRecord.id_inv_inventaris_habispakai_opname+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php  echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}
                  }
                 },
-				{ text: 'Nomor', editable:false ,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
-				{ text: 'Tanggal', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false,datafield: 'tgl_update', columntype: 'date', filtertype: 'none', cellsformat: 'dd-MM-yyyy', width: '10%'},
-				{ text: 'Jenis Barang', editable:false ,align: 'center', datafield: 'merek_tipe', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
-				{ text: 'Nama Petugas', editable:false ,align: 'center', cellsalign: 'right', datafield: 'jml_akhir', columntype: 'textbox', filtertype: 'textbox', width: '25%' },
-				{ text: 'NIP Petugas', editable:false ,align: 'center', cellsalign: 'right', datafield: 'jmlawal', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
-				{ text: 'Catatan', editable:false ,datafield: 'jml_selisih', columntype: 'textbox', filtertype: 'textbox', width: '13%' ,align: 'center', cellsalign: 'right'}
+				{ text: 'Nomor', editable:false ,datafield: 'nomor_opname', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
+				{ text: 'Tanggal', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false,datafield: 'tgl_opname', columntype: 'date', filtertype: 'none', cellsformat: 'dd-MM-yyyy', width: '10%'},
+				{ text: 'Jenis Barang', editable:false ,align: 'center', datafield: 'jenis_bhp', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
+				{ text: 'Nama Petugas', editable:false ,align: 'center', cellsalign: 'right', datafield: 'petugas_nama', columntype: 'textbox', filtertype: 'textbox', width: '25%' },
+				{ text: 'NIP Petugas', editable:false ,align: 'center', cellsalign: 'right', datafield: 'petugas_nip', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
+				{ text: 'Catatan', editable:false ,datafield: 'catatan', columntype: 'textbox', filtertype: 'textbox', width: '13%' ,align: 'center', cellsalign: 'right'}
             ]
 		});
-	 /*function timeline_add_barang(id){
-	    $.get("<?php echo base_url();?>inventory/bhp_opname/timeline_comment/"+id , function(response) {
-	      $("#timeline-barang").html(response);
-	    });
-	  }*/
 	  function timeline_pengeluaran_barang(id){
 	    $.get("<?php echo base_url();?>inventory/bhp_opname/timeline_pengeluaran_barang/"+id , function(response) {
 	      $("#timeline-barang").html(response);
 	    });
 	  }
-	/*function edit(id){
-		$("#popup_barang #popup_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-		$.get("<?php echo base_url().'inventory/bhp_opname/add_barang/'; ?>"+id , function(data) {
-			timeline_add_barang(id);
-			$("#popup_content").html(data);
-		});
-		$("#popup_barang").jqxWindow({
-			theme: theme, resizable: false,
-			width: 500,
-			height: 600,
-			isModal: true, autoOpen: false, modalOpacity: 0.2
-		});
-		$("#popup_barang").jqxWindow('open');
+	function editopname(id,jenis){
+		var idjenis = '0';
+		if (jenis.toLowerCase()=="obat") {
+			idjenis = '8';
+		}else{
+			idjenis = '0';
+		}
+  		$.ajax({
+	        url : '<?php echo site_url('inventory/bhp_opname/edit_opname/') ?>',
+	        type : 'POST',
+	        data : 'id=' + id+'&idjenis='+idjenis,
+	        success : function(data) {
+	          	$('#addopname').html(data);
+	          	$('#grid').hide();
+	        }
+     	});
+
+      return false;
 	}
 
 	function del(id){
@@ -221,21 +216,23 @@
 			isModal: true, autoOpen: false, modalOpacity: 0.2
 		});
 		$("#popup_barang").jqxWindow('open');
-	}*/
-	function add(id){
-		$("#popup_barang #popup_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-		$.get("<?php echo base_url().'inventory/bhp_opname/add_barang/'; ?>"+id , function(data) {
-			timeline_pengeluaran_barang(id);
-			$("#popup_content").html(data);
-		});
-		$("#popup_barang").jqxWindow({
-			theme: theme, resizable: false,
-			width: 1000,
-			height: 700,
-			isModal: true, autoOpen: false, modalOpacity: 0.2
-		});
-		$("#popup_barang").jqxWindow('open');
 	}
+	
+	$('#btn-add').click(function(){
+		var opname = '';
+  		$.ajax({
+	        url : '<?php echo site_url('inventory/bhp_opname/add_opname/') ?>',
+	        type : 'POST',
+	        data : 'opname=' + opname,
+	        success : function(data) {
+	          	$('#addopname').html(data);
+	          	$('#grid').hide();
+	        }
+     	});
+
+      return false;
+
+  	});
 
 	$("#btn-export").click(function(){
 		
