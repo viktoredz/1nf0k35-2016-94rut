@@ -3,7 +3,6 @@
 
 	$(function(){
 		ambil_total();
-		ambil_tanggalopname()
 	   var source = {
 			datatype: "json",
 			type	: "POST",
@@ -18,8 +17,7 @@
 			{ name: 'subtotal', type: 'string' },
 			{ name: 'harga', type: 'double' },
 			{ name: 'tgl_update', type: 'date' },
-			{ name: 'edit', type: 'number'},
-			{ name: 'delete', type: 'number'}
+			{ name: 'jml_distribusi', type: 'number'}
         ],
 		url: "<?php echo site_url('inventory/bhp_pengadaan/barang/'.$kode); ?>",
 		cache: false,
@@ -69,30 +67,20 @@
 
 			columns: [
 			<?php if(!isset($viewreadonly)){?>	{ text: 'Edit', align: 'center', filtertype: 'none', sortable: false,editable: false, width: '4%', cellsrenderer: function (row) {
-					var statupembelian = "<?php echo $pilihan_status_pembelian; ?>";
 				    var dataRecord = $("#jqxgrid_barang").jqxGrid('getrowdata', row);
-				    if ((statupembelian!=2)&&(dataRecord.edit==1)) {
-				    	//if (dataRecord.tgl_opname!="<?php echo date('Y-m-d')?>") {
-				    		return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='edit_barang(\""+dataRecord.id_inv_hasbispakai_pembelian+"\",\""+dataRecord.id_mst_inv_barang_habispakai+"\",\""+dataRecord.batch+"\");'></a></div>";	
-				    	/*}else{
-				    		return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php// echo base_url(); ?>media/images/16_lock.gif'></a></div>";	
-				    	}*/
-					}else{
+				    if (({pilihan_status_pembelian}==2) || (dataRecord.jml_distribusi>0)) {
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
+					}else{
+			    		return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='edit_barang(\""+dataRecord.id_inv_hasbispakai_pembelian+"\",\""+dataRecord.id_mst_inv_barang_habispakai+"\",\""+dataRecord.batch+"\");'></a></div>";	
 					}
                  }
                 },
 				{ text: 'Del', align: 'center', editable: false,filtertype: 'none', sortable: false, width: '4%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid_barang").jqxGrid('getrowdata', row);
-				    var statupembelian = "<?php echo $pilihan_status_pembelian; ?>";
-				    if ((statupembelian!=2)&&(dataRecord.edit==1)) {
-				    	//if (dataRecord.tgl_opname!="<?php echo date('Y-m-d')?>") {
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del_barang(\""+dataRecord.id_inv_hasbispakai_pembelian+"\",\""+dataRecord.id_mst_inv_barang_habispakai+"\",\""+dataRecord.batch+"\");'></a></div>";
-						/*}else{
-							return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php// echo base_url(); ?>media/images/16_lock.gif'></a></div>";	
-						}*/
-					}else{
+				    if (({pilihan_status_pembelian}==2) || (dataRecord.jml_distribusi>0)) {
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
+					}else{
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del_barang(\""+dataRecord.id_inv_hasbispakai_pembelian+"\",\""+dataRecord.id_mst_inv_barang_habispakai+"\",\""+dataRecord.batch+"\");'></a></div>";
 					}
                  }
                 },
@@ -130,14 +118,7 @@
 			$("#jqxgrid_barang").jqxGrid('updatebounddata', 'cells');
 		});
  		$('#btn_add_barang').click(function () {
- 			
-			//alert("<?php echo date("d-m-Y",strtotime($tgl_opnamecond)); ?>");
- 			/*if ($("#tgl2").val()<="<?php echo date("d-m-Y",strtotime($tgl_opnamecond)); ?>") {
- 				alert("Maaf! Data pembelian sudah di stock opname pada "+"<?php echo date('d-m-Y',strtotime($tgl_opnamecond)); ?>"+"\n"+"Silahkan ganti tanggal pembelian ke hari berikutnya!");
- 			}else{*/
  				add_barang();
- 			//}	
-			
 		});
 
 
@@ -175,21 +156,7 @@
 			});
 		});
 	});
-	function ambil_tanggalopname()
-	{
-		$.ajax({
-		url: "<?php echo base_url().'inventory/bhp_pengadaan/tanggalopnamecondisi/'.$kode ?>",
-		dataType: "json",
-		success:function(data)
-		{ 
-			$.each(data,function(index,elemet){
-				$("#tgl__opname_").val(elemet.tgl_opname);
-			});
-		}
-		});
 
-		return false;
-	}
 	function ambil_total()
 	{
 		$.ajax({
@@ -212,7 +179,6 @@
 	function close_popup(){
 		$("#popup_barang").jqxWindow('close');
 		ambil_total();
-		ambil_tanggalopname()
 	}
 
 	function add_barang(){
@@ -261,7 +227,6 @@
 
 						$("#jqxgrid_barang").jqxGrid('updatebounddata', 'cells');
 						ambil_total();
-						ambil_tanggalopname()
 					});
 					
 				}		

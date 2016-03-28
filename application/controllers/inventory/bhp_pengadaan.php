@@ -250,7 +250,6 @@ class Bhp_pengadaan extends CI_Controller {
 		echo json_encode($barang);
 	}
 
-
 	function autocomplite_bnf($obat=0){
 		$kodepuskesmas = "P".$this->session->userdata("puskesmas");
 		$search = explode("&",$this->input->server('QUERY_STRING'));
@@ -271,6 +270,7 @@ class Bhp_pengadaan extends CI_Controller {
 		}
 		echo json_encode($barang);
 	}
+	
 	function total_pengadaan($id){
 		$this->db->where('id_inv_hasbispakai_pembelian',$id);
 		$query = $this->db->get('inv_inventaris_habispakai_pembelian')->result();
@@ -284,6 +284,7 @@ class Bhp_pengadaan extends CI_Controller {
 			echo json_encode($totalpengadaan);
 		}
     }
+    
     function deskripsi($id){
     	$kodepuskesmas = "P".$this->session->userdata("puskesmas");
 		$this->db->where("id_mst_inv_barang_habispakai","$id");
@@ -326,6 +327,7 @@ class Bhp_pengadaan extends CI_Controller {
 			echo json_encode($totalpengadaan);
 		}
     }
+	
 	function json(){
 		$this->authentication->verify('inventory','show');
 
@@ -500,9 +502,7 @@ class Bhp_pengadaan extends CI_Controller {
 				'harga'									=> number_format($act->harga,2),
 				'subtotal'								=> number_format($act->jml*$act->harga,2),
 				'tgl_update'							=> $act->tgl_update,
-				'tgl_opname'							=> $act->tgl_opname,
-				'edit'		=> 1,
-				'delete'	=> 1
+				'jml_distribusi'						=> $act->tgl_distribusi !='' ? 1:0
 			);
 		}
 
@@ -675,12 +675,11 @@ class Bhp_pengadaan extends CI_Controller {
 			$kodepuskesmas = $this->session->userdata('puskesmas');
 			$this->db->where('code','P'.$kodepuskesmas);
 			
-			$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
-			$data['kodestatus'] = $this->bhp_pengadaan_model->get_data_status();
+			$data['kodepuskesmas'] 	= $this->puskesmas_model->get_data();
+			$data['kodestatus'] 	= $this->bhp_pengadaan_model->get_data_status();
 			$data['kodestatus_inv'] = $this->bhp_pengadaan_model->pilih_data_status('status_pembelian');
-			$data['tgl_opnamecond']		= $this->bhp_pengadaan_model->gettgl_opname($id_pengadaan);
-			$data['kodejenis'] = $this->bhp_pengadaan_model->get_data_jenis();
-			$data['kodedana'] = $this->bhp_pengadaan_model->pilih_data_status('sumber_dana');
+			$data['kodejenis'] 		= $this->bhp_pengadaan_model->get_data_jenis();
+			$data['kodedana'] 		= $this->bhp_pengadaan_model->pilih_data_status('sumber_dana');
 
 			$data['barang']	  	= $this->parser->parse('inventory/bhp_pengadaan/barang', $data, TRUE);
 			$data['content'] 	= $this->parser->parse("inventory/bhp_pengadaan/edit",$data,true);
@@ -765,6 +764,7 @@ class Bhp_pengadaan extends CI_Controller {
 			echo json_encode($kode);
 		}
 	}
+	/*
 	public function tanggalopnamecondisi($id='')
 	{
 		$query = $this->bhp_pengadaan_model->gettgl_opname($id);
@@ -772,7 +772,8 @@ class Bhp_pengadaan extends CI_Controller {
 				'tgl_opname' => date("Y-m-d",strtotime($query)), 
 			);
 			echo json_encode($totalpengadaan);
-	}
+	}*/
+
 	public function add_barang($kode=0,$obat=0)
 	{	
 		$data['action']			= "add";

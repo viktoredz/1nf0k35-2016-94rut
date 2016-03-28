@@ -149,12 +149,12 @@ class Bhp_pengadaan_model extends CI_Model {
         return $query->result();
     }
     public function getItem($start=0,$limit=999999,$options=array()){
-        $this->db->order_by('tgl_update','desc');
-        $this->db->select("inv_inventaris_habispakai_pembelian_item.*,mst_inv_barang_habispakai.uraian,
-                (select tgl_update  as tglopname from inv_inventaris_habispakai_opname where id_mst_inv_barang_habispakai = inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai and code_cl_phc=inv_inventaris_habispakai_pembelian_item.code_cl_phc order by tgl_update desc limit 1) as tgl_opname
-            ");
-        $this->db->join("mst_inv_barang_habispakai","mst_inv_barang_habispakai.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai");
-        /*$this->db->join("inv_inventaris_habispakai_opname","inv_inventaris_habispakai_opname.id_mst_inv_barang_habispakai = inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai and inv_inventaris_habispakai_opname.code_cl_phc = inv_inventaris_habispakai_pembelian_item.code_cl_phc","left");*/
+        $this->db->order_by('mst_inv_barang_habispakai.uraian','asc');
+        $this->db->select("inv_inventaris_habispakai_pembelian_item.*,mst_inv_barang_habispakai.uraian, tgl_distribusi",false);
+        $this->db->join("bhp_distribusi_item",
+            "inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai = bhp_distribusi_item.id_mst_inv_barang_habispakai AND inv_inventaris_habispakai_pembelian_item.batch = bhp_distribusi_item.batch AND inv_inventaris_habispakai_pembelian_item.code_cl_phc = bhp_distribusi_item.code_cl_phc AND inv_inventaris_habispakai_pembelian_item.tgl_update <= bhp_distribusi_item.tgl_distribusi",
+            "LEFT");
+        $this->db->join("mst_inv_barang_habispakai","mst_inv_barang_habispakai.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai","inner");
         $query = $this->db->get("inv_inventaris_habispakai_pembelian_item",$limit,$start);
         return $query->result();
     }
@@ -309,6 +309,8 @@ class Bhp_pengadaan_model extends CI_Model {
         $data['jenis_transaksi']            = $this->input->post('jenis_transaksi');
         $data['keterangan']                 = $this->input->post('keterangan');
         $data['nomor_kontrak']              = $this->input->post('nomor_kontrak');
+        $data['tgl_permohonan']             = date("Y-m-d",strtotime($this->input->post('tgl')));
+        $data['tgl_pembelian']              = date("Y-m-d",strtotime($this->input->post('tgl2')));
         $data['tgl_kwitansi']               = date("Y-m-d",strtotime($this->input->post('tgl1')));
         $data['nomor_kwitansi']             = $this->input->post('nomor_kwitansi');
         $data['mst_inv_pbf_code']           = $this->input->post('id_mst_inv_pbf_code');
@@ -465,6 +467,8 @@ class Bhp_pengadaan_model extends CI_Model {
         $query = $this->db->get("mst_inv_barang_habispakai_jenis");
         return $query->result();
     }
+    
+    /*
     public function gettgl_opname($id=0)
     {
         $nmpuskes = "P".$this->session->userdata("puskesmas");
@@ -484,7 +488,6 @@ class Bhp_pengadaan_model extends CI_Model {
                 /*
                 inv_inventaris_habispakai_opname.tgl_update desc,
                 inv_inventaris_habispakai_pembelian_item.id_inv_hasbispakai_pembelian
-                */
         if ($this->db->query($sql)->num_rows()>0) {
             foreach ($this->db->query($sql)->result() as $key) {
                 return $key->tgl_opname;
@@ -494,4 +497,5 @@ class Bhp_pengadaan_model extends CI_Model {
         }
         
     }
+    */
 }

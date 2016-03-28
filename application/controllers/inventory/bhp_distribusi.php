@@ -13,6 +13,7 @@ class Bhp_distribusi extends CI_Controller {
 		$this->load->model('inventory/inv_ruangan_model');
 		$this->load->model('mst/invbarang_model');
 	}
+
 	public function export_distribusi($id = 0){
 		if($this->input->post('kode')!='' || !empty($this->input->post('kode'))){
 			$id= $this->input->post('kode');
@@ -136,6 +137,7 @@ class Bhp_distribusi extends CI_Controller {
 		
 		echo base_url().$output_file_name ;
 	}
+	
 	function json(){
 		$this->authentication->verify('inventory','show');
 
@@ -512,7 +514,6 @@ class Bhp_distribusi extends CI_Controller {
 			$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
 			$data['kodestatus'] = $this->bhp_distribusi_model->get_data_status();
 			$data['kodestatus_inv'] = $this->bhp_distribusi_model->pilih_data_status('status_pembelian');
-			$data['tgl_opnamecond']	= $this->bhp_distribusi_model->gettgl_opname($id_distribusi);
 			$data['jenis_bhp']		= $jenis_bhp;
 
 			$data['barang']	  			= $this->parser->parse('inventory/bhp_distribusi/barang', $data, TRUE);
