@@ -334,50 +334,12 @@ $(function(){
       $("#tgl1").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme , height: '30px'});
       $("#tgl2").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme , height: '30px'});
     
-    document.getElementById("tgl").onchange = function() {
-        kodeInvetaris(document.getElementById("tgl").value);
-    };
-    <?php } ?>
-    /* $("#pbf").jqxInput(
-        {
-        placeHolder: " Ketik Instansi / PBF",
-        theme: 'classic',
-        width: '100%',
-        height: '30px',
-        minLength: 2,
-        source: function (query, response) {
-          var dataAdapter = new $.jqx.dataAdapter
-          (
-            {
-              datatype: "json",
-                datafields: [
-                { name: 'code', type: 'string'},
-                { name: 'nama', type: 'string'},
-              ],
-              url: '<?php // echo base_url().'inventory/bhp_pengadaan/autocomplite_bnf/'; ?>'+$("#id_mst_inv_barang_habispakai_jenis").val(),
-            },
-            {
-              autoBind: true,
-              formatData: function (data) {
-                data.query = query;
-                return data;
-              },
-              loadComplete: function (data) {
-                if (data.length > 0) {
-                  response($.map(data, function (item) {
-                    return item.nama+' | '+item.code;
-                  }));
-                }
-              }
-            });
-        }
+      $("#tgl").change(function(){
+          kodeInvetaris($("#tgl").val());
       });
-    
-      $("#pbf").select(function(){
-          var codepbf = $(this).val();
-          var res = codepbf.split(" | ");
-          $("#id_mst_inv_pbf_code").val(res[1]);
-      });*/
+    <?php } ?>
+
+
       $("#pbf").autocomplete({
         minLength: 0,
         source:'<?php echo base_url().'inventory/bhp_pengadaan/autocomplite_bnf/'; ?>'+$("#id_mst_inv_barang_habispakai_jenis").val(),
@@ -401,7 +363,7 @@ $(function(){
       }else{
         var tahun = tahun.substr(-2);
       }
-      //alert(tahun);
+
       $.ajax({
       url: "<?php echo base_url().'inventory/bhp_pengadaan/kodeInvetaris';?>",
       dataType: "json",
