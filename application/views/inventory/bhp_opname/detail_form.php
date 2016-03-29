@@ -11,8 +11,8 @@
       }else{}
     }
     ?>
-      $('#btn-close-opname').click(function(){
-        close_popup_opname();
+      $('#btn-close-bhp').click(function(){
+        close_popup_bhp();
       }); 
 
       $('#form-ss').submit(function(){
@@ -59,8 +59,8 @@
           }
           return false;
       });
-      var jmlasli = "<?php if(set_value('jumlah')=="" && isset($jmlawal)){
-                            echo $jmlawal;
+      var jmlasli = "<?php if(set_value('jumlah')=="" && isset($jml_awal)){
+                            echo $jml_awal;
                           }else{
                             echo  set_value('jumlah');
                           } ?>";
@@ -87,6 +87,120 @@
   <div class="row">
     <?php echo form_open(current_url(), 'id="form-ss"') ?>
           <div class="box-body">
+        <div class="box box-primary">
+        <div class="row">
+        <div class="col-md-6">
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Tanggal Opname</div>
+            <div class="col-md-8">
+              <input type="text" class="form-control" name="tgl_opname" id="tgl_opname" placeholder="tanggal Barang" value="<?php 
+                if(set_value('tgl_opname')=="" && isset($tgl_opname)){
+                  echo date('d-m-Y',strtotime($tgl_opname));
+                }else{
+                  echo  set_value('tgl_opname');
+                }
+                ?>" readonly="readonly">
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Nomor Opname </div>
+            <div class="col-md-8">
+              <input type="text" class="form-control" name="nomor_opname" id="nomor_opname" placeholder="Nomor Opname" value="<?php 
+                if(set_value('nomor_opname')=="" && isset($nomor_opname)){
+                  echo $nomor_opname;
+                }else{
+                  echo  set_value('nomor_opname');
+                }
+                ?>" readonly="readonly">
+            </div>
+          </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-6">
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Nama Penerima</div>
+            <div class="col-md-8">
+              <input type="text" class="form-control" name="petugas_nama" id="petugas_nama" placeholder="Nama Barang" value="<?php 
+                if(set_value('petugas_nama')=="" && isset($petugas_nama)){
+                  echo $petugas_nama;
+                }else{
+                  echo  set_value('petugas_nama');
+                }
+                ?>" readonly="readonly">
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">NIP Penerima</div>
+            <div class="col-md-8">
+              <input type="text" class="form-control" name="petugas_nip" id="petugas_nip" placeholder="petugas" value="<?php 
+                if(set_value('petugas_nip')=="" && isset($petugas_nip)){
+                  echo $petugas_nip;
+                }else{
+                  echo  set_value('petugas_nip');
+                }
+                ?>" readonly="readonly">
+            </div>
+          </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-6">
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Catatan</div>
+            <div class="col-md-8">
+              <input type="text" class="form-control" name="catatan" id="catatan" placeholder="petugas" value="<?php 
+                if(set_value('catatan')=="" && isset($catatan)){
+                  echo $catatan;
+                }else{
+                  echo  set_value('catatan');
+                }
+                ?>" readonly="readonly">
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Puskesmas</div>
+            <div class="col-md-8">
+              <select  name="codepus" id="puskesmas" name="puskesmas" class="form-control" disabled="">
+              <?php foreach($kodepuskesmas as $pus) : ?>
+                <?php $select = $pus->code == $code_cl_phc ? 'selected' : '' ?>
+                <option value="<?php echo $pus->code ?>" <?php echo $select ?>><?php echo $pus->value ?></option>
+              <?php endforeach ?>
+          </select>
+            </div>
+          </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-6">
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Jenis Barang</div>
+            <div class="col-md-8">
+              <select  name="jenis_bhp" id="jenis_bhp" type="text" class="form-control" disabled="">
+                <?php
+                  if ($jenis_bhp=="umum") {
+                    $select1 = "selected=selected";
+                    $select2 = "";
+                  }else{
+                    $select2 = "selected=selected";
+                    $select1 = "";
+                  }
+                ?>
+                    <option value="obat" <?php echo $select2; ?>>Obat</option>
+                    <option value="umum" <?php echo $select1; ?>>Umum</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        </div>
+        </div>
+        <div class="box box-warning">
           <div class="row" style="margin: 5px">
             <div class="col-md-4" style="padding: 5px">Nama Barang</div>
             <div class="col-md-8">
@@ -109,7 +223,7 @@
           <div class="row" style="margin: 5px">
             <div class="col-md-4" style="padding: 5px">Harga</div>
             <div class="col-md-8">
-              <input type="number" class="form-control" name="harga" id="harga" placeholder="Harga" value="<?php 
+              <input type="text" class="form-control" name="harga" id="harga" placeholder="Harga" value="<?php 
                 if(set_value('harga')=="" && isset($harga)){
                   echo $harga;
                 }else{
@@ -144,9 +258,9 @@
           <div class="row" style="margin: 5px">
             <div class="col-md-4" style="padding: 5px">Jumlah</div>
             <div class="col-md-8">
-              <input type="number" class="form-control" name="jumlah" id="jumlah" placeholder="Jumlah" value="<?php 
-                if(set_value('jumlah')=="" && isset($jmlawal)){
-                  echo $jmlawal;
+              <input type="text" class="form-control" name="jumlah" id="jumlah" placeholder="Jumlah" value="<?php 
+                if(set_value('jumlah')=="" && isset($jml_awal)){
+                  echo $jml_awal;
                 }else{
                   echo  set_value('jumlah');
                 }
@@ -170,21 +284,21 @@
           <div class="row" style="margin: 5px">
             <div class="col-md-4" style="padding: 5px">Jumlah Opname</div>
             <div class="col-md-8">
-              <input type="number" class="form-control" name="jumlahopname" id="jumlahopname" placeholder="Jumlah Opname" value="<?php 
-                if(set_value('jumlahopname')=="" && isset($jmlawal)){
-                  echo $jmlawal;
+              <input type="text" class="form-control" name="jumlahopname" id="jumlahopname" placeholder="Jumlah Opname" value="<?php 
+                if(set_value('jumlahopname')=="" && isset($jml_akhir)){
+                  echo $jml_akhir;
                 }else{
                   echo  set_value('jumlahopname');
                 }
-                ?>">
+                ?>"  readonly="readonly">
             </div>
           </div>
         <div class="row" style="margin: 5px">
             <div class="col-md-4" style="padding: 5px">Selisih</div>
             <div class="col-md-8">
-              <input type="number" class="form-control" name="selisih" id="selisih" placeholder="Selisih Opname" value="<?php 
-                if(set_value('selisih')=="" && isset($jmlawal) && isset($jml_akhir)){
-                  echo $jmlawal-$jml_akhir;
+              <input type="text" class="form-control" name="selisih" id="selisih" placeholder="Selisih Opname" value="<?php 
+                if(set_value('selisih')=="" && isset($jml_awal) && isset($jml_akhir)){
+                  echo $jml_awal-$jml_akhir;
                 }else{
                   echo  set_value('selisih');
                 }
@@ -192,9 +306,10 @@
             </div>
           </div>
         </div>
+        </div>
         <div class="box-footer">
-            <button type="submit" class="btn btn-primary">Simpan</button>
-            <button type="button" id="btn-close-opname" class="btn btn-warning">Batal</button>
+         <!--   <button type="submit" class="btn btn-primary">Simpan</button>-->
+            <button type="button" id="btn-close-bhp" class="btn btn-warning">Batal</button>
         </div>
     </div>
 </form>

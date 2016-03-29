@@ -6,12 +6,12 @@
 </div>
 <?php } ?>
 
-<?php if($this->session->flashdata('alert_form')!=""){ ?>
-<div class="alert alert-success alert-dismissable">
-  <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-  <h4>  <i class="icon fa fa-check"></i> Information!</h4>
-  <?php echo $this->session->flashdata('alert_form')?>
-</div>
+<?php if($alert_form!=""){ ?>
+  <div class="alert alert-success alert-dismissable">
+    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+    <h4>  <i class="icon fa fa-check"></i> Information!</h4>
+    <?php echo $alert_form?>
+  </div>
 <?php } ?>
 <div class="row">
   <form action="" method="post" id="form-ss">
@@ -163,7 +163,16 @@ $(function(){
         });
     kodedistribusi();
     $('#btn-kembali').click(function(){
-        window.location.href="<?php echo base_url()?>inventory/bhp_distribusi";
+       $.ajax({
+          url : '<?php echo site_url('inventory/bhp_opname/daftar_opname/') ?>',
+          type : 'POST',
+          success : function(data) {
+              $('#addopname').hide();
+              $('#grid').html(data);
+          }
+      });
+
+      return false;
     });
 
     $("#tgl_opname").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme , height: '30px'});

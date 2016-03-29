@@ -4,21 +4,22 @@
 			datatype: "json",
 			type	: "POST",
 			datafields: [
-			{ name: 'id_inv_hasbispakai_pembelian', type: 'string' },
+			{ name: 'id_inv_inventaris_habispakai_distribusi', type: 'string' },
 			{ name: 'id_mst_inv_barang_habispakai', type: 'number' },
 			{ name: 'uraian', type: 'string' },
-			{ name: 'jml', type: 'number' },
-			{ name: 'tgl_opname', type: 'string' },
+			{ name: 'code_cl_phc', type: 'string' },
+			{ name: 'jenis_bhp', type: 'string' },
+			{ name: 'tgl_distribusi', type: 'string' },
+			{ name: 'id_mst_inv_barang_habispakai_jenis', type: 'string' },
+			{ name: 'jml_distribusi', type: 'string' },
+			{ name: 'jml_opname', type: 'string' },
 			{ name: 'batch', type: 'string' },
-			{ name: 'harga', type: 'string' },
-			{ name: 'jumlah', type: 'string' },
-			{ name: 'subtotal', type: 'string' },
-			{ name: 'harga', type: 'double' },
-			{ name: 'tgl_update', type: 'date' },
+			{ name: 'tgl_opname', type: 'double' },
+			{ name: 'jmlawal', type: 'string' },
 			{ name: 'edit', type: 'number'},
 			{ name: 'delete', type: 'number'}
         ],
-		url: "<?php echo site_url('inventory/bhp_opname/json_barang/'.$jenis_bhp); ?>",
+		url: "<?php echo site_url('inventory/bhp_opname/json_barang/'.$jenisbarangbhp); ?>",
 		cache: false,
 		updateRow: function (rowID, rowData, commit) {
          },
@@ -57,7 +58,7 @@
 				{ text: 'Pilih', align: 'center', editable: false,filtertype: 'none', sortable: false, width: '10%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid_barang").jqxGrid('getrowdata', row);
 				    if (dataRecord.edit==1) {
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_add.gif' onclick='pilih(\""+dataRecord.id_mst_inv_barang_habispakai+"\",\""+dataRecord.batch+"\");'></a></div>";
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_add.gif' onclick='pilih_opname(\""+dataRecord.id_mst_inv_barang_habispakai+"\",\""+dataRecord.batch+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}
@@ -66,11 +67,11 @@
                 <?php if ($jenis_bhp=="8") { ?>
 				{ text: 'Nama Barang ', editable: false,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '50%'},
 				{ text: 'Batch ',datafield: 'batch' ,align: 'center', editable: false, columntype: 'textbox', filtertype: 'textbox', width: '20%'},
-				{ text: 'Jumlah ', align: 'center',cellsalign: 'right',editable: false,datafield: 'jumlah', columntype: 'textbox', filtertype: 'textbox', width: '20%'}
+				{ text: 'Jumlah ', align: 'center',cellsalign: 'right',editable: false,datafield: 'jmlawal', columntype: 'textbox', filtertype: 'textbox', width: '20%'}
 				<?php }else{
 				?>
 				{ text: 'Nama Barang ', editable: false,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '60%'},
-				{ text: 'Jumlah ', align: 'center',cellsalign: 'right',editable: false,datafield: 'jumlah', columntype: 'textbox', filtertype: 'textbox', width: '30%'}
+				{ text: 'Jumlah ', align: 'center',cellsalign: 'right',editable: false,datafield: 'jmlawal', columntype: 'textbox', filtertype: 'textbox', width: '30%'}
 				<?php } ?>
            ]
 		});
@@ -89,30 +90,31 @@
 
 	});
 
-	function close_popup(){
-		$("#popup_barang").jqxWindow('close');
-		$("#jqxgrid_barang_distribusi").jqxGrid('updatebounddata', 'cells');
+	function close_popup_opname(){
+		$("#popup_barang_opname").jqxWindow('close');
+		$("#jqxgrid_barang").jqxGrid('updatebounddata', 'cells');
+		$("#jqxgrid_barang_opname").jqxGrid('updatebounddata', 'cells');
 	}
-	function pilih(barang,batch){
+	function pilih_opname(barang,batch){
 		
-		$("#popup_barang #popup_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-		$.get("<?php echo base_url().'inventory/bhp_opname/add_distribusi/'.$kode.'/'; ?>"+barang+'/'+batch , function(data) {
-			$("#popup_content").html(data);
+		$("#popup_barang_opname #popup_content_opname_opname").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
+		$.get("<?php echo base_url().'inventory/bhp_opname/add_barang/'.$kode.'/'; ?>"+barang+'/'+batch , function(data) {
+			$("#popup_content_opname").html(data);
 		});
-		$("#popup_barang").jqxWindow({
+		$("#popup_barang_opname").jqxWindow({
 			theme: theme, resizable: false,
 			width: 400,
-			height: 320,
+			height: 400,
 			isModal: true, autoOpen: false, modalOpacity: 0.2
 		});
-		$("#popup_barang").jqxWindow('open');
+		$("#popup_barang_opname").jqxWindow('open');
 	}
 
 </script>
 
-<div id="popup_barang" style="display:none">
+<div id="popup_barang_opname" style="display:none">
 	<div id="popup_title">Data Barang </div>
-	<div id="popup_content">&nbsp;</div>
+	<div id="popup_content_opname">&nbsp;</div>
 </div>
 
 <div>

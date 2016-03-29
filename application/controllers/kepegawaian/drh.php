@@ -289,7 +289,7 @@ class Drh extends CI_Controller {
 		$data['kode_nk'] = $this->drh_model->get_kode_nikah('kode_nk');
 		$data['alert_form'] = '';
 
-		if($this->form_validation->run()== FALSE){
+		if($this->form_validation->run() == FALSE){
 			die($this->parser->parse("kepegawaian/drh/form_biodata",$data));
 		}elseif($this->drh_model->update_entry($id)){
 			$data = $this->drh_model->get_data_row($id); 

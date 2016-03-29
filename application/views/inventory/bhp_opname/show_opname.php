@@ -1,8 +1,8 @@
-<?php if($this->session->flashdata('alert')!=""){ ?>
+<?php if($msg_opname!=""){ ?>
 <div class="alert alert-success alert-dismissable">
 	<button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
 	<h4>	<i class="icon fa fa-check"></i> Information!</h4>
-	<?php echo $this->session->flashdata('alert')?>
+	<?php echo $msg_opname; ?>
 </div>
 <?php } ?>
 <div id="popup_barang" style="display:none">
@@ -24,7 +24,7 @@
 					<!-- 	<button type="button" class="btn btn-primary" onclick="add(0)"><i class='fa fa-plus-square-o'></i> &nbsp; Tambah Pengeluaran</button>-->
 						<?php //} ?>		 	
 					 	<button type="button" class="btn btn-primary" id="btn-add"><i class='fa fa-plus-square'></i> &nbsp; Stock Opname Baru</button>
-					 	<button type="button" class="btn btn-success" id="btn-refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
+					 	<button type="button" class="btn btn-success" id="btn-refreshopname"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
 			          <button type="button" id="btn-export" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Export</button>
 			      	</div>
 		      	</div>
@@ -59,7 +59,7 @@
 			     	<div class="row">
 				     	<div class="col-md-4" style="padding-top:5px;"><label> Bulan </label> </div>
 				     	<div class="col-md-8">
-				     		<select name="jenisbarang" id="jenisbarang" class="form-control">
+				     		<select name="bulan" id="bulan" class="form-control">
 			     				<option value="all">All</option>
 								<?php foreach ($bulan as $val=>$key ) { ;?>
 									<option value="<?php echo $val; ?>" ><?php echo $key; ?></option>
@@ -73,7 +73,7 @@
 		</div>
         <div class="box-body">
 		    <div class="div-grid">
-		        <div id="jqxgridOpname"></div>
+		        <div id="jqxgridopname"></div>
 			</div>
     	</div>
       </div>
@@ -90,7 +90,12 @@
 	$(function () {	
 		$("select[name='jenisbarang']").change(function(){
 			$.post("<?php echo base_url().'inventory/bhp_opname/filter_jenisbarang' ?>", 'jenisbarang='+$(this).val(),  function(){
-				$("#jqxgridOpname").jqxGrid('updatebounddata', 'cells');
+				$("#jqxgridopname").jqxGrid('updatebounddata', 'cells');
+			});
+		});
+		$("select[name='bulan']").change(function(){
+			$.post("<?php echo base_url().'inventory/bhp_opname/filter_bulan' ?>", 'bulan='+$(this).val(),  function(){
+				$("#jqxgridopname").jqxGrid('updatebounddata', 'cells');
 			});
 		});
 	    $("#menu_bahan_habis_pakai").addClass("active");
@@ -118,10 +123,10 @@
              
          },
 		filter: function(){
-			$("#jqxgridOpname").jqxGrid('updatebounddata', 'filter');
+			$("#jqxgridopname").jqxGrid('updatebounddata', 'filter');
 		},
 		sort: function(){
-			$("#jqxgridOpname").jqxGrid('updatebounddata', 'sort');
+			$("#jqxgridopname").jqxGrid('updatebounddata', 'sort');
 		},
 		root: 'Rows',
         pagesize: 10,
@@ -137,11 +142,11 @@
 			}
 		});
      
-		$('#btn-refresh').click(function () {
-			$("#jqxgridOpname").jqxGrid('clearfilters');
+		$('#btn-refreshopname').click(function () {
+			$("#jqxgridopname").jqxGrid('clearfilters');
 		});
 
-		$("#jqxgridOpname").jqxGrid(
+		$("#jqxgridopname").jqxGrid(
 		{		
 			width: '100%',
 			selectionmode: 'singlerow',
@@ -153,7 +158,7 @@
 			},
 			columns: [
 				{ text: 'Edit', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
-				    var dataRecord = $("#jqxgridOpname").jqxGrid('getrowdata', row)
+				    var dataRecord = $("#jqxgridopname").jqxGrid('getrowdata', row)
 				    if((dataRecord.edit==1)){
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='editopname(\""+dataRecord.id_inv_inventaris_habispakai_opname+"\",\""+dataRecord.jenis_bhp+"\");'></a></div>";
 					}else{
@@ -162,7 +167,7 @@
                  }
                 },
 				{ text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
-				    var dataRecord = $("#jqxgridOpname").jqxGrid('getrowdata', row);
+				    var dataRecord = $("#jqxgridopname").jqxGrid('getrowdata', row);
 				    if(dataRecord.delete==1){
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del(\""+dataRecord.id_inv_inventaris_habispakai_opname+"\");'></a></div>";
 					}else{
@@ -190,32 +195,23 @@
 		}else{
 			idjenis = '0';
 		}
-  		$.ajax({
-	        url : '<?php echo site_url('inventory/bhp_opname/edit_opname/') ?>',
-	        type : 'POST',
-	        data : 'id=' + id+'&idjenis='+idjenis,
-	        success : function(data) {
+  		$.get("<?php echo base_url().'inventory/bhp_opname/edit_opname/' ?>"+id+'/'+idjenis,function (data) {
 	          	$('#addopname').html(data);
 	          	$('#grid').hide();
-	        }
      	});
 
       return false;
 	}
 
 	function del(id){
-		$("#popup_barang #popup_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-		$.get("<?php echo base_url().'inventory/bhp_opname/kondisi_barang/'; ?>"+id , function(data) {
-			timeline_kondisi_barang(id);
-			$("#popup_content").html(data);
-		});
-		$("#popup_barang").jqxWindow({
-			theme: theme, resizable: false,
-			width: 500,
-			height: 600,
-			isModal: true, autoOpen: false, modalOpacity: 0.2
-		});
-		$("#popup_barang").jqxWindow('open');
+		var confirms = confirm("Hapus Data ?");
+		if(confirms == true){
+			$.post("<?php echo base_url().'inventory/bhp_opname/dodel_opname' ?>/"+id,  function(){
+				alert('data berhasil dihapus');
+
+				$("#jqxgridopname").jqxGrid('updatebounddata', 'cells');
+			});
+		}
 	}
 	
 	$('#btn-add').click(function(){
@@ -223,7 +219,7 @@
   		$.ajax({
 	        url : '<?php echo site_url('inventory/bhp_opname/add_opname/') ?>',
 	        type : 'POST',
-	        data : 'opname=' + opname,
+	     //   data : 'opname=' + opname,
 	        success : function(data) {
 	          	$('#addopname').html(data);
 	          	$('#grid').hide();
@@ -237,7 +233,7 @@
 	$("#btn-export").click(function(){
 		
 		var post = "";
-		var filter = $("#jqxgridOpname").jqxGrid('getfilterinformation');
+		var filter = $("#jqxgridopname").jqxGrid('getfilterinformation');
 		for(i=0; i < filter.length; i++){
 			var fltr 	= filter[i];
 			var value	= fltr.filter.getfilters()[0].value;
@@ -252,12 +248,12 @@
 		}
 		post = post+'&filterscount='+i;
 		
-		var sortdatafield = $("#jqxgridOpname").jqxGrid('getsortcolumn');
+		var sortdatafield = $("#jqxgridopname").jqxGrid('getsortcolumn');
 		if(sortdatafield != "" && sortdatafield != null){
 			post = post + '&sortdatafield='+sortdatafield;
 		}
 		if(sortdatafield != null){
-			var sortorder = $("#jqxgridOpname").jqxGrid('getsortinformation').sortdirection.ascending ? "asc" : ($("#jqxgridOpname").jqxGrid('getsortinformation').sortdirection.descending ? "desc" : "");
+			var sortorder = $("#jqxgridopname").jqxGrid('getsortinformation').sortdirection.ascending ? "asc" : ($("#jqxgridopname").jqxGrid('getsortinformation').sortdirection.descending ? "desc" : "");
 			post = post+'&sortorder='+sortorder;
 			
 		}

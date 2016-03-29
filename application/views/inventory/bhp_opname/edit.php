@@ -6,7 +6,7 @@
 </div>
 <?php } ?>
 
-<?php if($this->session->flashdata('alert_form')!=""){ ?>
+<?php if($alert_form!=""){ ?>
 <div class="alert alert-success alert-dismissable">
   <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
   <h4>  <i class="icon fa fa-check"></i> Information!</h4>
@@ -15,7 +15,7 @@
 <?php }  ?>
 
 <div class="row">
-  <form action="<?php echo base_url()?>inventory/bhp_distribusi/{action}/{kode}/" method="post" name="editform">
+  <form action="" method="post" name="editform" id="form-ss-edit">
   <div class="col-md-6">
     <div class="box box-primary">
       <div class="box-body">
@@ -64,7 +64,7 @@
         </div>
 
         <div class="row" style="margin: 5px">
-          <div class="col-md-4" style="padding: 5px">Kategori Barang</div>
+          <div class="col-md-4" style="padding: 5px">Kategori Barang<?php echo $jenis_bhp;?></div>
           <div class="col-md-8">
          <?php if($action!="view") {?>
             <select  name="jenis_bhp" id="jenis_bhp" type="text" class="form-control" disabled="">
@@ -193,7 +193,7 @@
   <div class="col-md-6">
     <div class="box box-success">
       <div class="box-body">
-        <label>Barang Diterima</label>
+        <label>Barang Opname</label>
         <div class="div-grid">
             <div id="jqxTabs">
               <?php echo $barang_opname;?>
@@ -206,7 +206,7 @@
   <div class="col-md-6">
     <div class="box box-danger">
       <div class="box-body">
-      <label>Daftar Barang Tersedia </label>
+      <label>Daftar Barang Distribusi </label>
         <div class="div-grid">
             <div id="jqxTabs">
               <?php echo $barang;?>
@@ -219,7 +219,7 @@
   <div class="col-md-12">
     <div class="box box-success">
       <div class="box-body">
-        <label>Barang Diterima</label>
+        <label>Barang Distribusi</label>
         <div class="div-grid">
             <div id="jqxTabs">
               <?php echo $barang_opname;?>
@@ -235,17 +235,37 @@
 <script type="text/javascript">
 
 $(function(){
+  $('#form-ss-edit').submit(function(){
+      var data = new FormData();
+      data.append('kode_distribusi_', $('#kode_distribusi_').val());
+      data.append('tgl_opname', $('#tgl_opname').val());
+      data.append('nomor_opname', $('#nomor_opname').val());
+      data.append('jenis_bhp', $('#jenis_bhp').val());
+      data.append('puskesmas', $('#puskesmas').val());
+      data.append('penerima_nama', $('#penerima_nama').val());
+      data.append('penerima_nip', $('#penerima_nip').val());
+      data.append('catatan', $('#catatan').val());
+      $.ajax({
+          cache : false,
+          contentType : false,
+          processData : false,
+          type : 'POST',
+          url : "<?php echo base_url()?>inventory/bhp_opname/{action}_opname/{kode}/{jenisbarangbhp}",
+          data : data,
+          success : function(response){
+            $('#addopname').html(response);
+          }
+      });
+      return false;
+  });
   kodedistribusi();
     $('#btn-kembali').click(function(){
-        window.location.href="<?php echo base_url()?>inventory/bhp_distribusi";
+        window.location.href="<?php echo base_url()?>inventory/bhp_opname";
     });
 
-    $('#btn-edit').click(function(){
-        window.location.href="<?php echo base_url()?>inventory/bhp_distribusi/edit/{kode}/{jenis_bhp}";
-    });
 
     $("#menu_bahan_habis_pakai").addClass("active");
-    $("#menu_inventory_bhp_distribusi").addClass("active");
+    $("#menu_inventory_bhp_opname").addClass("active");
 
     <?php if($action!="view"){?>
       $("#tgl_opname").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme , height: '30px' , disabled: true});
@@ -265,7 +285,7 @@ $(function(){
       }
 
       $.ajax({
-      url: "<?php echo base_url().'inventory/bhp_distribusi/kodedistribusi';?>",
+      url: "<?php echo base_url().'inventory/bhp_opname/kodedistribusi';?>",
       dataType: "json",
       success:function(data)
       { 
@@ -286,9 +306,9 @@ $(function(){
     $("#btn-export").click(function(){
     
     var post = "";
-    post = post+'&jenis_bhp='+"<?php echo $jenis_bhp; ?>"+'&kode='+"<?php echo $kode; ?>";
+    post = post+'&jenis_bhp='+"<?php echo $jenisbarangbhp; ?>"+'&kode='+"<?php echo $kode; ?>";
     
-    $.post("<?php echo base_url()?>inventory/bhp_distribusi/export_distribusi",post,function(response ){
+    $.post("<?php echo base_url()?>inventory/bhp_opname/export_distribusi",post,function(response ){
       window.location.href=response;
     });
   });
