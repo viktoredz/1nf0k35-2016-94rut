@@ -69,9 +69,9 @@
             alert('Maaf, jumlah oname tidak boleh minus');
             $("#jumlahopname").val(jmlasli);
           }
-          $('#selisih').val(jmlasli-$(this).val());
+          $('#selisih').val($(this).val()-jmlasli);
       });
-      $('#selisih').val(jmlasli-$("#jumlahopname").val());
+      $('#selisih').val($("#jumlahopname").val()-jmlasli);
     });
 </script>
 
@@ -90,30 +90,18 @@
           <div class="row" style="margin: 5px">
             <div class="col-md-4" style="padding: 5px">Nama Barang</div>
             <div class="col-md-8">
-              <input type="text" class="form-control" name="uraian" id="uraian" placeholder="Nama Barang" value="<?php 
-                if(set_value('uraian')=="" && isset($uraian)){
-                  echo $uraian;
-                }else{
-                  echo  set_value('uraian');
-                }
-                ?>" readonly="readonly">
+                <?php 
+                  if(set_value('uraian')=="" && isset($uraian)){
+                    echo $uraian;
+                  }else{
+                    echo  set_value('uraian');
+                  }
+                ?>
                 <input type="hidden" class="form-control" name="id_inv_inventaris_habispakai_opname" id="id_inv_inventaris_habispakai_opname" placeholder="Nama Barang" value="<?php 
                 if(set_value('id_inv_inventaris_habispakai_opname')=="" && isset($kode)){
                   echo $kode;
                 }else{
                   echo  set_value('id_inv_inventaris_habispakai_opname');
-                }
-                ?>" readonly="readonly">
-            </div>
-          </div>
-          <div class="row" style="margin: 5px">
-            <div class="col-md-4" style="padding: 5px">Harga</div>
-            <div class="col-md-8">
-              <input type="number" class="form-control" name="harga" id="harga" placeholder="Harga" value="<?php 
-                if(set_value('harga')=="" && isset($harga)){
-                  echo $harga;
-                }else{
-                  echo  set_value('harga');
                 }
                 ?>" readonly="readonly">
             </div>
@@ -125,13 +113,20 @@
           <div class="row" style="margin: 5px">
             <div class="col-md-4" style="padding: 5px">Nomor Batch</div>
             <div class="col-md-8">
-              <input type="text" class="form-control" name="batch" id="batch" placeholder="Nomor Batch" value="<?php 
+              <input type="hidden" class="form-control" name="batch" id="batch" placeholder="Nomor Batch" value="<?php 
                 if(set_value('batch')=="" && isset($batch)){
                   echo $batch;
                 }else{
                   echo  set_value('batch');
                 }
                 ?>" readonly="readonly">
+                 <?php 
+                if(set_value('batch')=="" && isset($batch)){
+                  echo $batch;
+                }else{
+                  echo  set_value('batch');
+                }
+                ?>
             </div>
           </div>
           <?php
@@ -141,8 +136,20 @@
               }
             }
           ?>
+           <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Harga</div>
+            <div class="col-md-8">
+              <input type="number" class="form-control" name="harga" id="harga" placeholder="Harga" value="<?php 
+                if(set_value('harga')=="" && isset($harga)){
+                  echo $harga;
+                }else{
+                  echo  set_value('harga');
+                }
+                ?>" >
+            </div>
+          </div>
           <div class="row" style="margin: 5px">
-            <div class="col-md-4" style="padding: 5px">Jumlah</div>
+            <div class="col-md-4" style="padding: 5px">Jumlah Awal</div>
             <div class="col-md-8">
               <input type="number" class="form-control" name="jumlah" id="jumlah" placeholder="Jumlah" value="<?php 
                 if(set_value('jumlah')=="" && isset($jmlawal)){

@@ -204,13 +204,13 @@
           <div class="row" style="margin: 5px">
             <div class="col-md-4" style="padding: 5px">Nama Barang</div>
             <div class="col-md-8">
-              <input type="text" class="form-control" name="uraian" id="uraian" placeholder="Nama Barang" value="<?php 
-                if(set_value('uraian')=="" && isset($uraian)){
-                  echo $uraian;
-                }else{
-                  echo  set_value('uraian');
-                }
-                ?>" readonly="readonly">
+               <?php 
+                    if(set_value('uraian')=="" && isset($uraian)){
+                      echo $uraian;
+                    }else{
+                      echo  set_value('uraian');
+                    }
+                ?>
                 <input type="hidden" class="form-control" name="id_inv_inventaris_habispakai_opname" id="id_inv_inventaris_habispakai_opname" placeholder="Nama Barang" value="<?php 
                 if(set_value('id_inv_inventaris_habispakai_opname')=="" && isset($kode)){
                   echo $kode;
@@ -298,7 +298,7 @@
             <div class="col-md-8">
               <input type="text" class="form-control" name="selisih" id="selisih" placeholder="Selisih Opname" value="<?php 
                 if(set_value('selisih')=="" && isset($jml_awal) && isset($jml_akhir)){
-                  echo $jml_awal-$jml_akhir;
+                  echo $jml_akhir-$jml_awal;
                 }else{
                   echo  set_value('selisih');
                 }
@@ -309,7 +309,7 @@
         </div>
         <div class="box-footer">
          <!--   <button type="submit" class="btn btn-primary">Simpan</button>-->
-            <button type="button" id="btn-close-bhp" class="btn btn-warning">Batal</button>
+            <button type="button" id="btn-close-bhp" class="btn btn-warning">Keluar</button>
         </div>
     </div>
 </form>
