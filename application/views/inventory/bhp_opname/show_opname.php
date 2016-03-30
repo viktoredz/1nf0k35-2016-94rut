@@ -25,16 +25,16 @@
 						<?php //} ?>		 	
 					 	<button type="button" class="btn btn-primary" id="btn-add"><i class='fa fa-plus-square'></i> &nbsp; Stock Opname Baru</button>
 					 	<button type="button" class="btn btn-success" id="btn-refreshopname"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
-			          <button type="button" id="btn-export" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Export</button>
+			          <button type="button" id="btn-export-opname" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Export</button>
 			      	</div>
 		      	</div>
 		    <div class="box-body">
 		      	<div class="row">
-			      <div class="col-md-4">
+			      <div class="col-md-3">
 			      	<div class="row">
 				     	<div class="col-md-4" style="padding-top:5px;"><label> Puskesmas </label> </div>
 				     	<div class="col-md-8">
-					     	<select name="code_cl_phc" id="puskesmas" class="form-control">
+					     	<select name="code_cl_phc" id="puskesmasopname" class="form-control">
 								<?php foreach ($datapuskesmas as $row ) { ;?>
 									<option value="<?php echo $row->code; ?>" onchange="" ><?php echo $row->value; ?></option>
 								<?php	} ;?>
@@ -42,11 +42,11 @@
 					     </div>	
 			     	</div>
 			     </div>
-			      <div class="col-md-4">
+			      <div class="col-md-3">
 			     	<div class="row">
 				     	<div class="col-md-4" style="padding-top:5px;"><label> Jenis Barang </label> </div>
 				     	<div class="col-md-8">
-				     		<select name="jenisbarang" id="jenisbarang" class="form-control">
+				     		<select name="jenisbarangopname" id="jenisbarangopname" class="form-control">
 			     				<option value="all">All</option>
 								<?php foreach ($jenisbaranghabis as $val=>$key ) { ;?>
 									<option value="<?php echo $val; ?>" ><?php echo $key; ?></option>
@@ -55,11 +55,11 @@
 					     </div>	
 			     	</div>
 				  </div>
-			      <div class="col-md-4">
+			      <div class="col-md-3">
 			     	<div class="row">
 				     	<div class="col-md-4" style="padding-top:5px;"><label> Bulan </label> </div>
 				     	<div class="col-md-8">
-				     		<select name="bulan" id="bulan" class="form-control">
+				     		<select name="bulanopname" id="bulanopname" class="form-control">
 			     				<option value="all">All</option>
 								<?php foreach ($bulan as $val=>$key ) { ;?>
 									<option value="<?php echo $val; ?>" ><?php echo $key; ?></option>
@@ -68,6 +68,19 @@
 					     </div>	
 			     	</div>
 				  </div>
+				   <div class="col-md-3">
+			     	<div class="row">
+				     	<div class="col-md-4" style="padding-top:5px;"><label> Tahun </label> </div>
+				     	<div class="col-md-8">
+				     		<select name="tahunopname" id="tahunopname" class="form-control">
+			     				<option value="all">All</option>
+								<?php for ($i=date("Y");$i>=date("Y")-10;$i--) { ;?>
+									<option value="<?php echo $i; ?>" ><?php echo $i; ?></option>
+								<?php	} ;?>
+					     	</select>
+					     </div>	
+			     	</div>
+				  </div>	
 				</div>
 			</div>
 		</div>
@@ -88,13 +101,18 @@
 	$("#popup_barang").jqxWindow('close');
 	}
 	$(function () {	
-		$("select[name='jenisbarang']").change(function(){
+		$("select[name='jenisbarangopname']").change(function(){
 			$.post("<?php echo base_url().'inventory/bhp_opname/filter_jenisbarang' ?>", 'jenisbarang='+$(this).val(),  function(){
 				$("#jqxgridopname").jqxGrid('updatebounddata', 'cells');
 			});
 		});
-		$("select[name='bulan']").change(function(){
+		$("select[name='bulanopname']").change(function(){
 			$.post("<?php echo base_url().'inventory/bhp_opname/filter_bulan' ?>", 'bulan='+$(this).val(),  function(){
+				$("#jqxgridopname").jqxGrid('updatebounddata', 'cells');
+			});
+		});
+		$("select[name='tahunopname']").change(function(){
+			$.post("<?php echo base_url().'inventory/bhp_opname/filter_tahun' ?>", 'tahun='+$(this).val(),  function(){
 				$("#jqxgridopname").jqxGrid('updatebounddata', 'cells');
 			});
 		});
@@ -230,7 +248,7 @@
 
   	});
 
-	$("#btn-export").click(function(){
+	$("#btn-export-opname").click(function(){
 		
 		var post = "";
 		var filter = $("#jqxgridopname").jqxGrid('getfilterinformation');
@@ -257,10 +275,11 @@
 			post = post+'&sortorder='+sortorder;
 			
 		}
-		post = post+'&jenisbarang='+$("#jenisbarang option:selected").text()+'&nama_puskesmas='+$("#puskesmas option:selected").text();
+		post = post+'&jenisbarang='+$("#jenisbarangopname option:selected").text()+'&nama_puskesmas='+$("#puskesmasopname option:selected").text()+'&bulan='+$("#bulanopname option:selected").text()+'&tahun='+$("#tahunopname option:selected").text();
 		
-		$.post("<?php echo base_url()?>inventory/bhp_opname/pengeluaran_export",post,function(response	){
-			window.location.href=response;
+		$.post("<?php echo base_url()?>inventory/bhp_opname/pengeluaran_export",post,function(response){
+			alert(response);
+			//window.location.href=response;
 		});
 	});
 </script>

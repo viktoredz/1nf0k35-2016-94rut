@@ -246,7 +246,28 @@ class Bhp_opname_model extends CI_Model {
         $query = $this->db->get("inv_inventaris_habispakai_opname_item",$limit,$start);
         return $query->result();
     }
+    function get_data_lap_opname($bulan,$tahun)
+    {
+        $data = array();
+        for($i=1; $i<=31;$i++){
+            $tanggal = date("Y-m-d",mktime(0, 0, 0, $bulan, $i, $tahun));
+            $pusksmas = "P".$this->session->userdata('puskesmas');
+            $this->db->where('code_cl_phc',$pusksmas);
+            $this->db->where('inv_inventaris_habispakai_opname.tgl_opname',$tanggal);
+            $this->db->select('mst_inv_barang_habispakai.uraian, inv_inventaris_habispakai_opname.tgl_opname,inv_inventaris_habispakai_opname.petugas_nama,inv_inventaris_habispakai_opname_item.jml_akhir - inv_inventaris_habispakai_opname_item.jml_awal AS pengeluaranperhari,inv_inventaris_habispakai_opname_item.harga');
+            $this->db->join('inv_inventaris_habispakai_opname_item','inv_inventaris_habispakai_opname_item.id_inv_inventaris_habispakai_opname = inv_inventaris_habispakai_opname.id_inv_inventaris_habispakai_opname');
+            $this->db->join('mst_inv_barang_habispakai','mst_inv_barang_habispakai.id_mst_inv_barang_habispakai = inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai');
+            $query = $this->db->get("inv_inventaris_habispakai_opname");
 
+            $datas = $query->result_array();  
+           // print_r($datas);
+            foreach ($datas as $brg) {
+                $data[$brg['uraian']][$i] = $brg;
+            }
+        }
+        //die(print_r($data));
+        return $data;
+    }
     function get_data_row($kode){
         $data = array();
         $this->db->where("id_inv_inventaris_habispakai_opname",$kode);

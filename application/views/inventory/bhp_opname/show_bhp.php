@@ -28,7 +28,7 @@
 		      	</div>
 		    <div class="box-body">
 		      	<div class="row">
-			      <div class="col-md-4">
+			      <div class="col-md-3">
 			      	<div class="row">
 				     	<div class="col-md-4" style="padding-top:5px;"><label> Puskesmas </label> </div>
 				     	<div class="col-md-8">
@@ -40,7 +40,7 @@
 					     </div>	
 			     	</div>
 			     </div>
-			      <div class="col-md-4">
+			      <div class="col-md-3">
 			     	<div class="row">
 				     	<div class="col-md-4" style="padding-top:5px;"><label> Jenis Barang </label> </div>
 				     	<div class="col-md-8">
@@ -53,7 +53,7 @@
 					     </div>	
 			     	</div>
 				  </div>
-			      <div class="col-md-4">
+			      <div class="col-md-3">
 			     	<div class="row">
 				     	<div class="col-md-4" style="padding-top:5px;"><label> Bulan </label> </div>
 				     	<div class="col-md-8">
@@ -65,7 +65,20 @@
 					     	</select>
 					     </div>	
 			     	</div>
-				  </div>			  
+				  </div>	
+				  <div class="col-md-3">
+			     	<div class="row">
+				     	<div class="col-md-4" style="padding-top:5px;"><label> Tahun </label> </div>
+				     	<div class="col-md-8">
+				     		<select name="tahun" id="tahun" class="form-control">
+			     				<option value="all">All</option>
+								<?php for ($i=date("Y");$i>=date("Y")-10;$i--) { ;?>
+									<option value="<?php echo $i; ?>" ><?php echo $i; ?></option>
+								<?php	} ;?>
+					     	</select>
+					     </div>	
+			     	</div>
+				  </div>		  
 				</div>
 			</div>
 		</div>
@@ -93,6 +106,11 @@
 		});
 		$("select[name='bulan']").change(function(){
 			$.post("<?php echo base_url().'inventory/bhp_opname/filter_bulan' ?>", 'bulan='+$(this).val(),  function(){
+				$("#jqxgridBhp").jqxGrid('updatebounddata', 'cells');
+			});
+		});
+		$("select[name='tahun']").change(function(){
+			$.post("<?php echo base_url().'inventory/bhp_opname/filter_tahun' ?>", 'tahun='+$(this).val(),  function(){
 				$("#jqxgridBhp").jqxGrid('updatebounddata', 'cells');
 			});
 		});
@@ -219,10 +237,11 @@
 			post = post+'&sortorder='+sortorder;
 			
 		}
-		post = post+'&jenisbarang='+$("#jenisbarang option:selected").text()+'&nama_puskesmas='+$("#puskesmas option:selected").text()+'&bulan='+$("#bulan option:selected").text();
+		post = post+'&jenisbarang='+$("#jenisbarang option:selected").text()+'&nama_puskesmas='+$("#puskesmas option:selected").text()+'&bulan='+$("#bulan option:selected").text()+'&tahun='+$("#tahun option:selected").text();
 		
 		$.post("<?php echo base_url()?>inventory/bhp_opname/laporan_opname",post,function(response	){
-			window.location.href=response;
+			alert(response);
+			//window.location.href=response;
 		});
 	});
 </script>

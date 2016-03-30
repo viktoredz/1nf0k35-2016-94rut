@@ -88,7 +88,7 @@ class Lap_bhp_pengeluaran extends CI_Controller {
 		$rows = $this->lap_bhp_pengeluaran_model->get_data_permohonan($tanggals[1],$tanggals[0]);
 		$data = array();
 		
-		//die(print_r($rows));
+	//	die(print_r($rows));
 		$no=0;
 		$data_tabel = array();
 		foreach ($rows as $key => $val) {

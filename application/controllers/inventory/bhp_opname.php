@@ -16,12 +16,11 @@ class Bhp_opname extends CI_Controller {
 	}
 
 	function pengeluaran_export(){
-		$this->authentication->verify('inventory','show');
 		
 		$TBS = new clsTinyButStrong;		
 		$TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN);
 		
-
+		$this->authentication->verify('inventory','show');
 
 		if($_POST) {
 			$fil = $this->input->post('filterscount');
@@ -42,14 +41,32 @@ class Bhp_opname extends CI_Controller {
 			if($this->session->userdata('filter_jenisbarang')=="all"){
 
 			}else{
-				$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$this->session->userdata('filter_jenisbarang'));
+				$this->db->where("jenis_bhp",$this->session->userdata('filter_jenisbarang'));
+			}
+		}else{
+			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
+		}
+		if($this->session->userdata('filter_bulan')!=''){
+			if($this->session->userdata('filter_bulan')=="all"){
+
+			}else{
+				$this->db->where("MONTH(tgl_opname)",$this->session->userdata('filter_bulan'));
+			}
+		}else{
+			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
+		}
+		if($this->session->userdata('filter_tahun')!=''){
+			if($this->session->userdata('filter_tahun')=="all"){
+
+			}else{
+				$this->db->where("YEAR(tgl_opname)",$this->session->userdata('filter_tahun'));
 			}
 		}else{
 			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
 		}
 		
 		
-		$rows_all = $this->bhp_opname_model->get_data_export();
+		$rows_all = $this->bhp_opname_model->get_data();
 
 
 		if($_POST) {
@@ -67,56 +84,102 @@ class Bhp_opname extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
-
+		$filbulan=date("m");
+		$filtahun=date("Y");
 		if($this->session->userdata('filter_jenisbarang')!=''){
 			if($this->session->userdata('filter_jenisbarang')=="all"){
 				
 			}else{
-				$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$this->session->userdata('filter_jenisbarang'));
+				$this->db->where("jenis_bhp",$this->session->userdata('filter_jenisbarang'));
 			}
 		}else{
 			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
 		}
-		//$rows = $this->bhp_opname_model->get_data($this->input->post('recordstartindex'), $this->input->post('pagesize'));
-		$rows = $this->bhp_opname_model->get_data_export();
-		$data_tabel = array();
-		$no=1;
-		//$unlock = 1;
-		foreach($rows as $act) {
-			$data_tabel[] = array(
-				'no'					=> $no++,
-				//'code'					=> $act->code,
-				'uraian'				=> $act->uraian,
-				'merek_tipe'			=> $act->merek_tipe,
-				//'negara_asal'			=> $act->negara_asal,
-				'jmlawal'				=> ($act->totaljumlah+$act->jmlbaik),//-($act->jml_rusak+$act->jml_tdkdipakai),
-				'jml_akhir'				=> ($act->totaljumlah+$act->jmlbaik)-(/*$act->jml_rusak+$act->jml_tdkdipakai+*/$act->jmlpengeluaran),
-				'jml_selisih'			=> $act->jmlpengeluaran,
-				//'pilihan_satuan'		=> $act->pilihan_satuan,
-				'value'					=> $act->value,
-				'tgl_update'			=> $act->tgl_update,
-				'nama_jenis'			=> $act->nama_jenis,
-				//'harga'					=> number_format($act->harga,2),
-				'id_mst_inv_barang_habispakai'			=> $act->id_mst_inv_barang_habispakai,
-				'id_mst_inv_barang_habispakai_jenis'	=> $act->id_mst_inv_barang_habispakai_jenis
-			);
-		}
-
-		$jenisbarang = $this->input->post('jenisbarang');
-		if(empty($jenisbarang) or $jenisbarang == 'All'){
-			$nama_jenis = 'Semua Jenis Barang';
+		if($this->session->userdata('filter_bulan')!=''){
+			if($this->session->userdata('filter_bulan')=="all"){
+			}else{
+				$this->db->where("MONTH(tgl_opname)",$this->session->userdata('filter_bulan'));
+				$filbulan =$this->session->userdata('filter_bulan');
+			}
 		}else{
-			$nama_jenis = $this->input->post('puskes');
+			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
 		}
+		if($this->session->userdata('filter_tahun')!=''){
+			if($this->session->userdata('filter_tahun')=="all"){
+			}else{
+				$this->db->where("YEAR(tgl_opname)",$this->session->userdata('filter_tahun'));
+				$filtahun =$this->session->userdata('filter_tahun');
+			}
+		}else{
 
+			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
+		}
+		$rows = $this->bhp_opname_model->get_data_lap_opname($filbulan,$filtahun);
+		die(print_r($rows));
+		$data = array();
+		$no=0;
+		$data_tabel = array();
+		foreach ($rows as $key => $val) {
+			$no++;
+			foreach ($val as $act => $value) {
+
+				$data_tabel[$key]= array(
+					'no'				=> $no,								
+					'uraian'			=> $key,
+					'harga'				=> $value['harga'],
+					'petugas'			=> $value['petugas_nama'],
+					'tgl_opname'		=> $value['tgl_opname'],
+					'jumlah'			=> $value['pengeluaranperhari']*$value['harga'],
+					'nilai_aset'		=> $value['pengeluaranperhari']*$value['harga'],
+					'keluar1'			=> isset($rows["$key"]["1"]) ? $act == 1 ? $value['pengeluaranperhari'] : '---' : '-',
+					'keluar2'			=> $act == 2 ? $value['pengeluaranperhari'] : '',
+					'keluar3'			=> $act == 3 ? $value['pengeluaranperhari'] : '',
+					'keluar4'			=> $act == 4 ? $value['pengeluaranperhari'] : '',
+					'keluar5'			=> $act == 5 ? $value['pengeluaranperhari'] : '',
+					'keluar6'			=> $act == 6 ? $value['pengeluaranperhari'] : '',
+					'keluar7'			=> $act == 6 ? $value['pengeluaranperhari'] : '',
+					'keluar8'			=> $act == 8 ? $value['pengeluaranperhari'] : '',
+					'keluar9'			=> $act == 9 ? $value['pengeluaranperhari'] : '',
+					'keluar10'			=> $act == 10 ? $value['pengeluaranperhari'] : '',
+					'keluar11'			=> $act == 11 ? $value['pengeluaranperhari'] : '',
+					'keluar12'			=> $act == 12 ? $value['pengeluaranperhari'] : '',
+					'keluar13'			=> $act == 13 ? $value['pengeluaranperhari'] : '',
+					'keluar14'			=> $act == 14 ? $value['pengeluaranperhari'] : '',
+					'keluar15'			=> $act == 15 ? $value['pengeluaranperhari'] : '',
+					'keluar16'			=> $act == 16 ? $value['pengeluaranperhari'] : '',
+					'keluar17'			=> $act == 17 ? $value['pengeluaranperhari'] : '',
+					'keluar18'			=> $act == 18 ? $value['pengeluaranperhari'] : '',
+					'keluar19'			=> $act == 19 ? $value['pengeluaranperhari'] : '',
+					'keluar20'			=> $act == 20 ? $value['pengeluaranperhari'] : '',
+					'keluar21'			=> $act == 21 ? $value['pengeluaranperhari'] : '',
+					'keluar22'			=> $act == 22 ? $value['pengeluaranperhari'] : '',
+					'keluar23'			=> $act == 23 ? $value['pengeluaranperhari'] : '',
+					'keluar24'			=> $act == 24 ? $value['pengeluaranperhari'] : '',
+					'keluar25'			=> $act == 25 ? $value['pengeluaranperhari'] : '',
+					'keluar26'			=> $act == 26 ? $value['pengeluaranperhari'] : '',
+					'keluar27'			=> $act == 27 ? $value['pengeluaranperhari'] : '',
+					'keluar28'			=> $act == 28 ? $value['pengeluaranperhari'] : '',
+					'keluar29'			=> isset($rows["$key"]["29"]) ? $act == 29 ? $value['pengeluaranperhari'] : '---' : '-',
+					'keluar30'			=> isset($rows["$key"]["30"]) ? $act == 30 ? $value['pengeluaranperhari'] : '---' : '-',
+					'keluar31'			=> $act == 31 ? $value['pengeluaranperhari'] : '',
+				);
+			}
+		}
+		die(print_r($data_tabel));
+		
 		$kode_sess=$this->session->userdata('puskesmas');
 		$kd_prov = $this->inv_barang_model->get_nama('value','cl_province','code',substr($kode_sess, 0,2));
 		$kd_kab  = $this->inv_barang_model->get_nama('value','cl_district','code',substr($kode_sess, 0,4));
 		$nama_puskesmas = $this->input->post('nama_puskesmas');
-		$tahun_ = date("Y");
-		$data_puskesmas[] = array('nama_jenis' => $nama_jenis,'kd_prov' => $kd_prov,'kd_kab' => $kd_kab,'nama_puskesmas' => $nama_puskesmas,'tahun'=>$tahun_);
+		//$tgl = date("d-m-Y");
+		$jenis_barang = $this->input->post('jenisbarang');
+		$tgl = $this->input->post('bulan');
+		$tahun = $this->input->post('tahun');
+		$tgl1=date("m-m-Y");
+		$tgl2=date("d-m-Y");
+		$data_puskesmas[] = array('jenis_barang' => $jenis_barang,'kd_prov' => $kd_prov,'kd_kab' => $kd_kab,'nama_puskesmas' => $nama_puskesmas,'bulan'=>$tgl,'tahun'=>$tahun,'tgl1'=>$tgl1,'tgl2'=>$tgl2,'tanggal_export'=>$tgl2);
 		$dir = getcwd().'/';
-		$template = $dir.'public/files/template/inventory/pengeluaran_habispakai.xlsx';		
+		$template = $dir.'public/files/template/inventory/lap_bhp_pengeluaran.xlsx';		
 		$TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8);
 
 		// Merge data in the first sheet
@@ -124,7 +187,7 @@ class Bhp_opname extends CI_Controller {
 		$TBS->MergeBlock('b', $data_puskesmas);
 		
 		$code = date('Y-m-d-H-i-s');
-		$output_file_name = 'public/files/hasil/hasil_pengeluaranhabispakai_'.$code.'.xlsx';
+		$output_file_name = 'public/files/hasil/hasil_daftarstokopname_'.$code.'.xlsx';
 		$output = $dir.$output_file_name;
 		$TBS->Show(OPENTBS_FILE, $output); // Also merges all [onshow] automatic fields.
 		
@@ -142,6 +205,13 @@ class Bhp_opname extends CI_Controller {
 		if($_POST) {
 			if($this->input->post('bulan') != '') {
 				$this->session->set_userdata('filter_bulan',$this->input->post('bulan'));
+			}
+		}
+	}
+	function filter_tahun(){
+		if($_POST) {
+			if($this->input->post('tahun') != '') {
+				$this->session->set_userdata('filter_tahun',$this->input->post('tahun'));
 			}
 		}
 	}
@@ -181,6 +251,15 @@ class Bhp_opname extends CI_Controller {
 		}else{
 			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
 		}
+		if($this->session->userdata('filter_tahun')!=''){
+			if($this->session->userdata('filter_tahun')=="all"){
+
+			}else{
+				$this->db->where("YEAR(tgl_opname)",$this->session->userdata('filter_tahun'));
+			}
+		}else{
+			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
+		}
 		
 		
 		$rows_all = $this->bhp_opname_model->get_data();
@@ -216,6 +295,15 @@ class Bhp_opname extends CI_Controller {
 
 			}else{
 				$this->db->where("MONTH(tgl_opname)",$this->session->userdata('filter_bulan'));
+			}
+		}else{
+			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
+		}
+		if($this->session->userdata('filter_tahun')!=''){
+			if($this->session->userdata('filter_tahun')=="all"){
+
+			}else{
+				$this->db->where("YEAR(tgl_opname)",$this->session->userdata('filter_tahun'));
 			}
 		}else{
 			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
@@ -560,6 +648,15 @@ class Bhp_opname extends CI_Controller {
 		}else{
 			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
 		}
+		if($this->session->userdata('filter_tahun')!=''){
+			if($this->session->userdata('filter_tahun')=="all"){
+
+			}else{
+				$this->db->where("YEAR(tgl_opname)",$this->session->userdata('filter_tahun'));
+			}
+		}else{
+			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
+		}
 		
 		$rows_all_activity = $this->bhp_opname_model->getitemopname();
 
@@ -603,6 +700,15 @@ class Bhp_opname extends CI_Controller {
 
 			}else{
 				$this->db->where("MONTH(tgl_opname)",$this->session->userdata('filter_bulan'));
+			}
+		}else{
+			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
+		}
+		if($this->session->userdata('filter_tahun')!=''){
+			if($this->session->userdata('filter_tahun')=="all"){
+
+			}else{
+				$this->db->where("YEAR(tgl_opname)",$this->session->userdata('filter_tahun'));
 			}
 		}else{
 			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
@@ -684,7 +790,9 @@ class Bhp_opname extends CI_Controller {
 	function daftar_bhp(){
 		$kodepuskesmas = $this->session->userdata('puskesmas');
 		$this->db->where('code','P'.$kodepuskesmas);
-
+		$this->session->set_userdata('filter_jenisbarang','');
+		$this->session->set_userdata('filter_bulan','');
+		$this->session->set_userdata('filter_tahun','');
 		$data['datapuskesmas'] 	= $this->inv_ruangan_model->get_data_puskesmas();
 		$data['jenisbaranghabis'] = array('obat'=>'Obat','umum'=>'Umum');
 		$data['msg_opname'] = "";
@@ -700,6 +808,9 @@ class Bhp_opname extends CI_Controller {
 		$data['datapuskesmas'] 	= $this->inv_ruangan_model->get_data_puskesmas();
 		$data['jenisbaranghabis'] = array('obat'=>'Obat','umum'=>'Umum');
 		$data['msg_opname'] = "";
+		$this->session->set_userdata('filter_jenisbarang','');
+		$this->session->set_userdata('filter_bulan','');
+		$this->session->set_userdata('filter_tahun','');
 		$data['bulan']			= array('01'=>'Januari', '02'=>'Februari', '03'=>'Maret', '04'=>'April', '05'=>'Mei', '06'=>'Juni', '07'=>'Juli', '08'=>'Agustus', '09'=>'September', '10'=>'Oktober', '11'=>'November', '12'=>'Desember');
 		die($this->parser->parse("inventory/bhp_opname/show_opname",$data,true));
 	}
@@ -906,7 +1017,15 @@ class Bhp_opname extends CI_Controller {
 		}else{
 			
 		}
-		
+		if($this->session->userdata('filter_tahun')!=''){
+			if($this->session->userdata('filter_tahun')=="all"){
+
+			}else{
+				$this->db->where("YEAR(tgl_opname)",$this->session->userdata('filter_tahun'));
+			}
+		}else{
+			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
+		}
 		$rows_all_activity = $this->bhp_opname_model->getitemopname();
 
 
@@ -953,6 +1072,15 @@ class Bhp_opname extends CI_Controller {
 		}else{
 			
 		}
+		if($this->session->userdata('filter_tahun')!=''){
+			if($this->session->userdata('filter_tahun')=="all"){
+
+			}else{
+				$this->db->where("YEAR(tgl_opname)",$this->session->userdata('filter_tahun'));
+			}
+		}else{
+			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
+		}
 		$activity = $this->bhp_opname_model->getitemopname();
 		$data_tabel = array();
 
@@ -982,7 +1110,7 @@ class Bhp_opname extends CI_Controller {
 			);
 		}
 
-
+		//die(print_r($data_tabel));
 		
 		$kode_sess=$this->session->userdata('puskesmas');
 		$kd_prov = $this->inv_barang_model->get_nama('value','cl_province','code',substr($kode_sess, 0,2));
@@ -991,7 +1119,9 @@ class Bhp_opname extends CI_Controller {
 		//$tgl = date("d-m-Y");
 		$jenis_barang = $this->input->post('jenisbarang');
 		$tgl = $this->input->post('bulan');
-		$data_puskesmas[] = array('jenis_barang' => $jenis_barang,'kd_prov' => $kd_prov,'kd_kab' => $kd_kab,'nama_puskesmas' => $nama_puskesmas,'bulan'=>$tgl);
+		$tahun = $this->input->post('tahun');
+		
+		$data_puskesmas[] = array('jenis_barang' => $jenis_barang,'kd_prov' => $kd_prov,'kd_kab' => $kd_kab,'nama_puskesmas' => $nama_puskesmas,'bulan'=>$tgl,'tahun'=>$tahun);
 		$dir = getcwd().'/';
 		$template = $dir.'public/files/template/inventory/stok_opname.xlsx';		
 		$TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8);
