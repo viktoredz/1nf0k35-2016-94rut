@@ -46,16 +46,12 @@
 			datatype: "json",
 			type	: "POST",
 			datafields: [
-			{ name: 'id_inv_hasbispakai_pembelian', type: 'string'},
-			{ name: 'tgl_permohonan', type: 'date'},
-			{ name: 'tgl_pembelian', type: 'date'},
-			{ name: 'tgl_kwitansi', type: 'date'},
-			{ name: 'nomor_kontrak', type: 'string'},
-			{ name: 'nomor_kwitansi', type: 'string'},
+			{ name: 'id_inv_hasbispakai_permintaan', type: 'string'},
+			{ name: 'tgl_permintaan', type: 'date'},
 			{ name: 'uraian', type: 'string'},
 			{ name: 'code_cl_phc', type: 'string'},
 			{ name: 'pilihan_status_pembelian', type: 'string'},
-			{ name: 'value', type: 'string'},
+			{ name: 'status_permintaan', type: 'string'},
 			{ name: 'jumlah_unit', type: 'double'},
 			{ name: 'total_harga', type: 'double'},
 			{ name: 'nilai_pembelian', type: 'double'},
@@ -107,7 +103,7 @@
 				{ text: 'View', align: 'center', filtertype: 'none', sortable: false, width: '4%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
 				    if(dataRecord.detail==1){
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_view.gif' onclick='detail(\""+dataRecord.id_inv_hasbispakai_pembelian+"\");'></a></div>";
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_view.gif' onclick='detail(\""+dataRecord.id_inv_hasbispakai_permintaan+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lockdo.gif'></a></div>";
 					}
@@ -116,7 +112,7 @@
 				{ text: 'Edit', align: 'center', filtertype: 'none', sortable: false, width: '4%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
 				    if(dataRecord.edit==1){
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='edit(\""+dataRecord.id_inv_hasbispakai_pembelian+"\");'></a></div>";
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='edit(\""+dataRecord.id_inv_hasbispakai_permintaan+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}
@@ -125,18 +121,18 @@
 				{ text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
 			    	if(dataRecord.delete==1){
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del(\""+dataRecord.id_inv_hasbispakai_pembelian+"\",\""+dataRecord.jumlah_unit+"\");'></a></div>";
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del(\""+dataRecord.id_inv_hasbispakai_permintaan+"\",\""+dataRecord.jumlah_unit+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}
                  }
                 },
-				{ text: 'Tgl. Permintaan',editable:false , align: 'center', cellsalign: 'center', datafield: 'tgl_permohonan', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '11%' },
-				{ text: 'Status Permintaan', editable:false ,align: 'center', cellsalign: 'center', datafield: 'value', columntype: 'textbox', filtertype: 'textbox', width: '12%' },
-				{ text: 'Kategori Barang', editable:false ,align: 'center', cellsalign: 'center', columntype: 'textbox', filtertype: 'textbox', width: '14%' },
+				{ text: 'Tgl. Permintaan',editable:false , align: 'center', cellsalign: 'center', datafield: 'tgl_permintaan', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '11%' },
+				{ text: 'Status Permintaan', editable:false ,align: 'center', cellsalign: 'center', datafield: 'status_permintaan', columntype: 'textbox', filtertype: 'textbox', width: '12%' },
+				{ text: 'Kategori Barang', editable:false ,align: 'center', cellsalign: 'center', datafield:'uraian', columntype: 'textbox', filtertype: 'textbox', width: '14%' },
 				{ text: 'Jumlah Unit', editable:false ,align: 'center', cellsalign: 'right', datafield: 'jumlah_unit', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
 				{ text: 'Total Harga (Rp.)', editable:false ,align: 'center', cellsalign: 'right', datafield: 'nilai_pembelian', columntype: 'textbox', filtertype: 'textbox', width: '15%' },
-				{ text: 'Keterangan', editable:false ,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '25%' }
+				{ text: 'Keterangan', editable:false ,datafield: 'keterangan', columntype: 'textbox', filtertype: 'textbox', width: '25%' }
             ]
 		});
 
@@ -177,7 +173,7 @@
 			var condition	= fltr.filter.getfilters()[0].condition;
 			var filteroperation	= fltr.filter.getfilters()[0].operation;
 			var filterdatafield	= fltr.filtercolumn;
-			if(filterdatafield=="tgl_permohonan"){
+			if(filterdatafield=="tgl_permintaan"){
 				var d = new Date(value);
 				var day = d.getDate();
 				var month = d.getMonth();

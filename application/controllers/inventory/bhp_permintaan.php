@@ -72,8 +72,8 @@ class Bhp_permintaan extends CI_Controller {
 	}
 	
 	function total_permintaan($id){
-		$this->db->where('id_inv_hasbispakai_pembelian',$id);
-		$query = $this->db->get('inv_inventaris_habispakai_pembelian')->result();
+		$this->db->where('id_inv_hasbispakai_permintaan',$id);
+		$query = $this->db->get('inv_inventaris_habispakai_permintaan')->result();
 		foreach ($query as $q) {
 			$totalpermintaan[] = array(
 				'jumlah_unit' => $q->jumlah_unit, 
@@ -90,25 +90,25 @@ class Bhp_permintaan extends CI_Controller {
 		$this->db->where("id_mst_inv_barang_habispakai","$id");
 		$this->db->select("mst_inv_barang_habispakai.*,
 			(SELECT harga AS hrg FROM inv_inventaris_habispakai_opname_item JOIN inv_inventaris_habispakai_opname ON (inv_inventaris_habispakai_opname_item.id_inv_inventaris_habispakai_opname = inv_inventaris_habispakai_opname.id_inv_inventaris_habispakai_opname)  WHERE code_cl_phc=".'"'.$kodepuskesmas.'"'." AND id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai ORDER BY tgl_opname DESC LIMIT 1) AS harga_opname,
-			(select harga as hargapembelian from inv_inventaris_habispakai_pembelian_item 
+			(select harga as hargapembelian from inv_inventaris_habispakai_permintaan_item 
             where code_cl_phc=".'"'.$kodepuskesmas.'"'." and id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai order by tgl_update desc limit 1 ) as harga_pembelian,
             (SELECT tgl_opname AS tglopname FROM inv_inventaris_habispakai_opname_item JOIN inv_inventaris_habispakai_opname ON (inv_inventaris_habispakai_opname_item.id_inv_inventaris_habispakai_opname = inv_inventaris_habispakai_opname.id_inv_inventaris_habispakai_opname) WHERE id_mst_inv_barang_habispakai = mst_inv_barang_habispakai.id_mst_inv_barang_habispakai AND code_cl_phc=".'"'.$kodepuskesmas.'"'."ORDER BY tgl_opname DESC LIMIT 1) AS tgl_opname,
-            (select tgl_update  as tglpembelian from inv_inventaris_habispakai_pembelian_item where id_mst_inv_barang_habispakai = mst_inv_barang_habispakai.id_mst_inv_barang_habispakai and code_cl_phc=".'"'.$kodepuskesmas.'"'." order by tgl_update desc limit 1) as tgl_pembelian");
+            (select tgl_update  as tglpembelian from inv_inventaris_habispakai_permintaan_item where id_mst_inv_barang_habispakai = mst_inv_barang_habispakai.id_mst_inv_barang_habispakai and code_cl_phc=".'"'.$kodepuskesmas.'"'." order by tgl_update desc limit 1) as tgl_permintaan");
 		$query= $this->db->get("mst_inv_barang_habispakai")->result();
 		foreach ($query as $q) {
-			if (($q->tgl_pembelian!=null)||($q->tgl_opname!=null)) {
+			if (($q->tgl_permintaan!=null)||($q->tgl_opname!=null)) {
 	          if($q->tgl_opname==null){
 	            $tgl_opname = 0;
 	          }else{
 	            $tgl_opname = $q->tgl_opname;
 	          }
 
-	          if ($q->tgl_pembelian==null) {
-	            $tgl_pembelian = 0;
+	          if ($q->tgl_permintaan==null) {
+	            $tgl_permintaan = 0;
 	          }else{
-	            $tgl_pembelian = $q->tgl_pembelian;
+	            $tgl_permintaan = $q->tgl_permintaan;
 	          }
-	          if( $tgl_pembelian>= $tgl_opname){
+	          if( $tgl_permintaan>= $tgl_opname){
 	            $hargabarang = $q->harga_pembelian;  
 	          }else{
 	            $hargabarang = $q->harga_opname;  
@@ -140,7 +140,7 @@ class Bhp_permintaan extends CI_Controller {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
 
-				if($field == 'tgl_permohonan') {
+				if($field == 'tgl_permintaan') {
 					$value = date("Y-m-d",strtotime($value));
 					$this->db->where($field,$value);
 				}elseif($field != 'year') {
@@ -155,9 +155,7 @@ class Bhp_permintaan extends CI_Controller {
 		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
 			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
 		}
-
 		$rows_all = $this->bhp_permintaan_model->get_data();
-
 
 		if($_POST) {
 			$fil = $this->input->post('filterscount');
@@ -167,7 +165,7 @@ class Bhp_permintaan extends CI_Controller {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
 
-				if($field == 'tgl_permohonan') {
+				if($field == 'tgl_permintaan') {
 					$value = date("Y-m-d",strtotime($value));
 					$this->db->where($field,$value);
 				}elseif($field != 'year') {
@@ -184,25 +182,14 @@ class Bhp_permintaan extends CI_Controller {
 		}
 		$rows = $this->bhp_permintaan_model->get_data($this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();
-
-		$kodepuskesmas = $this->session->userdata('puskesmas');
-		if(substr($kodepuskesmas, -2)=="01"){
-			$unlock = 1;
-		}else{
-			$unlock = 0;
-		}
 		
 		foreach($rows as $act) {
 			$data[] = array(
-				'id_inv_hasbispakai_pembelian' 	=> $act->id_inv_hasbispakai_pembelian,
+				'id_inv_hasbispakai_permintaan' => $act->id_inv_hasbispakai_permintaan,
 				'code_cl_phc' 					=> $act->code_cl_phc,
-				'pilihan_status_pembelian' 		=> $act->pilihan_status_pembelian,
-				'tgl_permohonan' 				=> $act->tgl_permohonan,
-				'tgl_pembelian' 				=> $act->tgl_pembelian,
-				'tgl_kwitansi'					=> $act->tgl_kwitansi,
-				'nomor_kwitansi'				=> $act->nomor_kwitansi,
-				'nomor_kontrak'					=> $act->nomor_kontrak,
+				'tgl_permintaan' 				=> $act->tgl_permintaan,
 				'jumlah_unit'					=> $act->jumlah_unit,
+				'status_permintaan'				=> ucwords($act->status_permintaan),
 				'uraian'						=> $act->uraian,
 				'nilai_pembelian'				=> $act->nilai_pembelian,
 				'jumlah_unit'					=> $act->jumlah_unit,
@@ -210,8 +197,8 @@ class Bhp_permintaan extends CI_Controller {
 				'value'							=> $act->value,
 				'keterangan'					=> $act->keterangan,
 				'detail'						=> 1,
-				'edit'							=> 1,//$unlock,
-				'delete'						=> ($act->pilihan_status_pembelian==2) ? 0 : 1
+				'edit'							=> 1,
+				'delete'						=> ($act->status_permintaan=='diterima') ? 0 : 1
 			);
 		}
 
@@ -251,10 +238,7 @@ class Bhp_permintaan extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
-		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
-			$this->db->where('inv_inventaris_habispakai_pembelian_item.code_cl_phc','P'.$this->session->userdata('puskesmas'));
-		}
-		$this->db->where('inv_inventaris_habispakai_pembelian_item.id_inv_hasbispakai_pembelian',$id);
+		$this->db->where('inv_inventaris_habispakai_permintaan_item.id_inv_hasbispakai_permintaan',$id);
 		$rows_all_activity = $this->bhp_permintaan_model->getItem();
 
 
@@ -279,10 +263,8 @@ class Bhp_permintaan extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
-		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
-			$this->db->where('inv_inventaris_habispakai_pembelian_item.code_cl_phc','P'.$this->session->userdata('puskesmas'));
-		}
-		$this->db->where('inv_inventaris_habispakai_pembelian_item.id_inv_hasbispakai_pembelian',$id);
+
+		$this->db->where('inv_inventaris_habispakai_permintaan_item.id_inv_hasbispakai_permintaan',$id);
 		$activity = $this->bhp_permintaan_model->getItem($this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();
 
@@ -295,11 +277,10 @@ class Bhp_permintaan extends CI_Controller {
 		
 		foreach($activity as $act) {
 			$data[] = array(
-				'id_inv_hasbispakai_pembelian'   		=> $act->id_inv_hasbispakai_pembelian,
+				'id_inv_hasbispakai_permintaan'   		=> $act->id_inv_hasbispakai_permintaan,
 				'id_mst_inv_barang_habispakai'   		=> $act->id_mst_inv_barang_habispakai,
 				'uraian'								=> $act->uraian,
 				'jml'									=> $act->jml,
-				'batch'									=> $act->batch,
 				'harga'									=> number_format($act->harga,2),
 				'subtotal'								=> number_format($act->jml*$act->harga,2),
 				'tgl_update'							=> $act->tgl_update,
@@ -381,17 +362,14 @@ class Bhp_permintaan extends CI_Controller {
 			$data['title_form']		= "Ubah Permohonan/Pengadaan Barang";
 			$data['action']			= "edit";
 			$data['kode']			= $id_permintaan;
-			$data['bulan'] 			= array('01'=>'Januari', '02'=>'Februari', '03'=>'Maret', '04'=>'April', '05'=>'Mei', '06'=>'Juni', '07'=>'Juli', '08'=>'Agustus', '09'=>'September', '10'=>'Oktober', '11'=>'November', '12'=>'Desember');
 
 			
 			$kodepuskesmas = $this->session->userdata('puskesmas');
 			$this->db->where('code','P'.$kodepuskesmas);
-			
-			$data['kodepuskesmas'] 	= $this->puskesmas_model->get_data();
-			$data['kodestatus'] 	= $this->bhp_permintaan_model->get_data_status();
-			$data['kodestatus_inv'] = $this->bhp_permintaan_model->pilih_data_status('status_pembelian');
-			$data['kodejenis'] 		= $this->bhp_permintaan_model->get_data_jenis();
-			$data['kodedana'] 		= $this->bhp_permintaan_model->pilih_data_status('sumber_dana');
+			$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
+
+			$data['kodestatus'] = $this->bhp_permintaan_model->get_data_status();
+			$data['kodejenis'] = $this->bhp_permintaan_model->get_data_jenis();
 
 			$data['barang']	  	= $this->parser->parse('inventory/bhp_permintaan/barang', $data, TRUE);
 			$data['content'] 	= $this->parser->parse("inventory/bhp_permintaan/edit",$data,true);
@@ -444,8 +422,8 @@ class Bhp_permintaan extends CI_Controller {
 		$this->authentication->verify('inventory','edit');
 		$this->bhp_permintaan_model->update_status();				
 	}
-	function dodelpermohonan($kode=0,$barang=0,$batch=""){
-		if($this->bhp_permintaan_model->delete_entryitem($kode,$barang,$batch)){
+	function dodelpermohonan($kode=0,$barang=0){
+		if($this->bhp_permintaan_model->delete_entryitem($kode,$barang)){
 				
 		}else{
 			$this->session->set_flashdata('alert', 'Delete data error');
@@ -453,11 +431,11 @@ class Bhp_permintaan extends CI_Controller {
 				$dataupdate['terakhir_diubah']= date('Y-m-d H:i:s');
 				$dataupdate['jumlah_unit']=  $this->bhp_permintaan_model->sum_jumlah_item( $kode,'jml');
 				$dataupdate['nilai_pembelian']= $this->bhp_permintaan_model->sum_jumlah_item_jumlah( $kode,'harga');
-				$key['id_inv_hasbispakai_pembelian'] = $kode;
-        		$this->db->update("inv_inventaris_habispakai_pembelian",$dataupdate,$key);
+				$key['id_inv_hasbispakai_permintaan'] = $kode;
+        		$this->db->update("inv_inventaris_habispakai_permintaan",$dataupdate,$key);
 	}
-	function cekdelete($kode=0,$barang=0,$batch=""){
-		$hasil = $this->bhp_permintaan_model->cekdelete($barang,$batch);
+	function cekdelete($kode=0,$barang=0){
+		$hasil = $this->bhp_permintaan_model->cekdelete($barang);
 		if($hasil=='1'){
 			die('1');
 		}else{
@@ -476,15 +454,7 @@ class Bhp_permintaan extends CI_Controller {
 			echo json_encode($kode);
 		}
 	}
-	/*
-	public function tanggalopnamecondisi($id='')
-	{
-		$query = $this->bhp_permintaan_model->gettgl_opname($id);
-			$totalpermintaan[] = array(
-				'tgl_opname' => date("Y-m-d",strtotime($query)), 
-			);
-			echo json_encode($totalpermintaan);
-	}*/
+
 
 	public function add_barang($kode=0,$obat=0)
 	{	
@@ -497,9 +467,6 @@ class Bhp_permintaan extends CI_Controller {
         $this->form_validation->set_rules('jqxinput', 'Nama Barang', 'trim');
         $this->form_validation->set_rules('subtotal', 'subtotal', 'trim');
         $this->form_validation->set_rules('id_mst_inv_barang', 'barang', 'trim');
-        if(!empty($this->input->post('obat'))&&($this->input->post('obat')=="8")){
-        	$this->form_validation->set_rules('batch', 'Nomor Batch', 'trim|required');
-        }
 
 		if($this->form_validation->run()== FALSE){
 
@@ -513,8 +480,8 @@ class Bhp_permintaan extends CI_Controller {
 				$dataupdate['terakhir_diubah']= date('Y-m-d H:i:s');
 				$dataupdate['jumlah_unit']=  $this->bhp_permintaan_model->sum_jumlah_item( $kode,'jml');
 				$dataupdate['nilai_pembelian']= $this->bhp_permintaan_model->sum_jumlah_item_jumlah( $kode,'harga');
-				$key['id_inv_hasbispakai_pembelian'] = $kode;
-        		$this->db->update("inv_inventaris_habispakai_pembelian",$dataupdate,$key);
+				$key['id_inv_hasbispakai_permintaan'] = $kode;
+        		$this->db->update("inv_inventaris_habispakai_permintaan",$dataupdate,$key);
 				die("OK|Data Tersimpan");
 			}else{
 				 die("Error|Maaf, data tidak dapat diproses");
@@ -534,9 +501,6 @@ class Bhp_permintaan extends CI_Controller {
         $this->form_validation->set_rules('subtotal', 'subtotal', 'trim');
         $this->form_validation->set_rules('id_mst_inv_barang', 'barang', 'trim');
         $this->form_validation->set_rules('jml_rusak', 'rusak', 'trim');
-        if(!empty($this->input->post('obat'))&&($this->input->post('obat')=="8")){
-        	$this->form_validation->set_rules('batch', 'Nomor Batch', 'trim|required');
-        }
 		if($this->form_validation->run()== FALSE){
 			$data = $this->bhp_permintaan_model->get_data_barang_edit_table($id_permohonan,$kd_barang); 
 			$data['action']			= "edit";
@@ -546,33 +510,25 @@ class Bhp_permintaan extends CI_Controller {
 			
 			die($this->parser->parse('inventory/bhp_permintaan/barang_form_edit', $data));
 		}else{
-			if(!empty($this->input->post('obat'))&&($this->input->post('obat')=='8')){
-				$tgl_kadaluarsa = explode("-", $this->input->post('tgl_kadaluarsa'));
-				$batch = $this->input->post('batch');
-			}else{
-				$tgl_kadaluarsa = explode("-", "00-00-0000");
-				$batch = "-";
-			}
    			$values = array(
 					'jml' => $this->input->post('jumlah'),
 					'harga' => $this->input->post('harga'),
 					'tgl_update' => $this->bhp_permintaan_model->tanggal($id_permohonan),
 					'code_cl_phc' => 'P'.$this->session->userdata('puskesmas'),
-					'batch' => $batch,
 					'jml_rusak' => $this->input->post('jml_rusak'),
 					'tgl_kadaluarsa' => $tgl_kadaluarsa[2]."-".$tgl_kadaluarsa[1]."-".$tgl_kadaluarsa[0],
 				);
    			$keyupdate = array(
-					'id_inv_hasbispakai_pembelian'=>$this->input->post('id_permohonan_barang'),
+					'id_inv_hasbispakai_permintaan'=>$this->input->post('id_permohonan_barang'),
 					'id_mst_inv_barang_habispakai'=> $this->input->post('id_mst_inv_barang'),
    				);
-			$simpan=$this->db->update('inv_inventaris_habispakai_pembelian_item', $values,$keyupdate);
+			$simpan=$this->db->update('inv_inventaris_habispakai_permintaan_item', $values,$keyupdate);
 			if($simpan==true){
 				$dataupdate['terakhir_diubah']= date('Y-m-d H:i:s');
 				$dataupdate['jumlah_unit']=  $this->bhp_permintaan_model->sum_jumlah_item( $id_permohonan,'jml');
 				$dataupdate['nilai_pembelian']= $this->bhp_permintaan_model->sum_jumlah_item_jumlah( $id_permohonan,'harga');
-				$key['id_inv_hasbispakai_pembelian'] = $id_permohonan;
-        		$this->db->update("inv_inventaris_habispakai_pembelian",$dataupdate,$key);
+				$key['id_inv_hasbispakai_permintaan'] = $id_permohonan;
+        		$this->db->update("inv_inventaris_habispakai_permintaan",$dataupdate,$key);
 				die("OK|Data Telah di Ubah");
 			}else{
 				 die("Error|Proses data gagal");

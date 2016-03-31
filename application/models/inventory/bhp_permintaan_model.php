@@ -1,7 +1,7 @@
 <?php
 class Bhp_permintaan_model extends CI_Model {
 
-    var $tabel    = 'id_inv_hasbispakai_permintaan';
+    var $tabel    = 'inv_inventaris_habispakai_permintaan';
 	var $lang	  = '';
 
     function __construct() {
@@ -13,21 +13,13 @@ class Bhp_permintaan_model extends CI_Model {
     function insertdata($kode=0){
         $this->db->where("id_inv_hasbispakai_permintaan",$this->input->post('id_permohonan_barang'));
         $this->db->where("id_mst_inv_barang_habispakai",$this->input->post('id_mst_inv_barang'));
-        $cek=$this->db->get("id_inv_hasbispakai_permintaan_item");
+        $cek=$this->db->get("inv_inventaris_habispakai_permintaan_item");
         if ($cek->num_rows() > 0) {
             return false;
         }else{
-            if(!empty($this->input->post('obat'))&&($this->input->post('obat')=="8")){
-                $tgl_kadaluarsa = explode("-", $this->input->post('tgl_kadaluarsa'));
-                $batch = $this->input->post('batch');
-            }else{
-                $tgl_kadaluarsa = explode("-", "00-00-0000");
-                $batch = "-";
-            }
             $values = array(
                         'id_inv_hasbispakai_permintaan'=>$this->input->post('id_permohonan_barang'),
                         'id_mst_inv_barang_habispakai'=> $this->input->post('id_mst_inv_barang'),
-                        'batch' => $batch,
                         'jml' => $this->input->post('jumlah'),
                         'jml_rusak' => $this->input->post('jml_rusak'),
                         'tgl_kadaluarsa' => $tgl_kadaluarsa[2]."-".$tgl_kadaluarsa[1]."-".$tgl_kadaluarsa[0],
@@ -35,10 +27,10 @@ class Bhp_permintaan_model extends CI_Model {
                         'tgl_update' => $this->bhp_pengadaan_model->tanggal($kode),
                         'code_cl_phc' => 'P'.$this->session->userdata('puskesmas'),
             );
-            if ($this->cekdata($values['id_mst_inv_barang_habispakai'],$values['batch'],$values['tgl_update'],$values['code_cl_phc'])==1) {
+            if ($this->cekdata($values['id_mst_inv_barang_habispakai'],$values['tgl_update'],$values['code_cl_phc'])==1) {
                 return false;
             }else{
-                if($this->db->insert('id_inv_hasbispakai_permintaan_item', $values)){
+                if($this->db->insert('inv_inventaris_habispakai_permintaan_item', $values)){
                     return true;
                 }else{
                     return false;
@@ -47,20 +39,7 @@ class Bhp_permintaan_model extends CI_Model {
         }
 
     }
-    function cekdata($idpakai=0,$batch=0,$tgl_update=0,$code_cl_phc=0)
-    {
-        $this->db->where('id_mst_inv_barang_habispakai',$idpakai);
-        $this->db->where('batch',$batch);
-        $this->db->where('tgl_distribusi >=',$tgl_update);
-        $this->db->where('code_cl_phc',$code_cl_phc);
-        $query = $this->db->get('bhp_distribusi_item');
-        if ($query->num_rows() > 0) {
-            return 1;
-        }else{
-            return 0;
-        }
 
-    }
     function kode_invetaris($kode){
         $inv=explode(".", $kode);
         $kode_invetaris = $inv[0].$inv[1].$inv[2].$inv[3].$inv[4].$inv[5].$inv[6];
@@ -101,30 +80,29 @@ class Bhp_permintaan_model extends CI_Model {
     }
     function get_data($start=0,$limit=999999,$options=array())
     {
-        $this->db->order_by('tgl_permohonan','desc');
+        $this->db->order_by('tgl_permintaan','desc');
         $this->db->select("mst_inv_barang_habispakai_jenis.uraian,$this->tabel.*,mst_inv_pilihan.value");
-        $this->db->join('mst_inv_pilihan', "id_inv_hasbispakai_permintaan.pilihan_status_pembelian = mst_inv_pilihan.code AND mst_inv_pilihan.tipe='status_pembelian'",'left');
-        $this->db->join('mst_inv_barang_habispakai_jenis', "mst_inv_barang_habispakai_jenis.id_mst_inv_barang_habispakai_jenis = id_inv_hasbispakai_permintaan.id_mst_inv_barang_habispakai_jenis",'left');
+        $this->db->join('mst_inv_pilihan', "inv_inventaris_habispakai_permintaan.status_permintaan = mst_inv_pilihan.code AND mst_inv_pilihan.tipe='status_pembelian'",'left');
+        $this->db->join('mst_inv_barang_habispakai_jenis', "mst_inv_barang_habispakai_jenis.id_mst_inv_barang_habispakai_jenis = inv_inventaris_habispakai_permintaan.id_mst_inv_barang_habispakai_jenis",'left');
         $query = $this->db->get($this->tabel,$limit,$start);
         return $query->result();
     }
     public function getItem($start=0,$limit=999999,$options=array()){
         $this->db->order_by('mst_inv_barang_habispakai.uraian','asc');
-        $this->db->select("id_inv_hasbispakai_permintaan_item.*,mst_inv_barang_habispakai.uraian, tgl_distribusi",false);
+        $this->db->select("inv_inventaris_habispakai_permintaan_item.*,mst_inv_barang_habispakai.uraian, tgl_distribusi",false);
         $this->db->join("bhp_distribusi_item",
-            "id_inv_hasbispakai_permintaan_item.id_mst_inv_barang_habispakai = bhp_distribusi_item.id_mst_inv_barang_habispakai AND id_inv_hasbispakai_permintaan_item.batch = bhp_distribusi_item.batch AND id_inv_hasbispakai_permintaan_item.code_cl_phc = bhp_distribusi_item.code_cl_phc AND id_inv_hasbispakai_permintaan_item.tgl_update <= bhp_distribusi_item.tgl_distribusi",
+            "inv_inventaris_habispakai_permintaan_item.id_mst_inv_barang_habispakai = bhp_distribusi_item.id_mst_inv_barang_habispakai",
             "LEFT");
-        $this->db->join("mst_inv_barang_habispakai","mst_inv_barang_habispakai.id_mst_inv_barang_habispakai=id_inv_hasbispakai_permintaan_item.id_mst_inv_barang_habispakai","inner");
-        $query = $this->db->get("id_inv_hasbispakai_permintaan_item",$limit,$start);
+        $this->db->join("mst_inv_barang_habispakai","mst_inv_barang_habispakai.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_permintaan_item.id_mst_inv_barang_habispakai","inner");
+        $query = $this->db->get("inv_inventaris_habispakai_permintaan_item",$limit,$start);
         return $query->result();
     }
 
  	function get_data_row($kode){
 		$data = array();
-		$this->db->where("id_inv_hasbispakai_permintaan.id_inv_hasbispakai_permintaan",$kode);
-		$this->db->select("mst_inv_pbf.nama as nama_pbf,$this->tabel.*,mst_inv_pilihan.value");
-        $this->db->join('mst_inv_pilihan', "id_inv_hasbispakai_permintaan.pilihan_status_pembelian = mst_inv_pilihan.code AND mst_inv_pilihan.tipe='status_pengadaan'",'left');
-        $this->db->join('mst_inv_pbf', "mst_inv_pbf.code = id_inv_hasbispakai_permintaan.mst_inv_pbf_code",'left');
+		$this->db->where("inv_inventaris_habispakai_permintaan.id_inv_hasbispakai_permintaan",$kode);
+		$this->db->select("$this->tabel.*,mst_inv_pilihan.value");
+        $this->db->join('mst_inv_pilihan', "inv_inventaris_habispakai_permintaan.status_permintaan = mst_inv_pilihan.code AND mst_inv_pilihan.tipe='status_pengadaan'",'left');
 		$query = $this->db->get($this->tabel);
 		if ($query->num_rows() > 0){
 			$data = $query->row_array();
@@ -159,11 +137,11 @@ class Bhp_permintaan_model extends CI_Model {
 	}
     function get_data_barang_edit_table($kd_permohonan,$id_barang){
         $data = array();
-        $this->db->where('id_inv_hasbispakai_permintaan_item.id_inv_hasbispakai_permintaan',$kd_permohonan);
-        $this->db->where('id_inv_hasbispakai_permintaan_item.id_mst_inv_barang_habispakai',$id_barang);
-        $this->db->join("mst_inv_barang_habispakai","mst_inv_barang_habispakai.id_mst_inv_barang_habispakai=id_inv_hasbispakai_permintaan_item.id_mst_inv_barang_habispakai");
-        $this->db->select("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis,id_inv_hasbispakai_permintaan_item.*,mst_inv_barang_habispakai.uraian");
-        $query= $this->db->get("id_inv_hasbispakai_permintaan_item");
+        $this->db->where('inv_inventaris_habispakai_permintaan_item.id_inv_hasbispakai_permintaan',$kd_permohonan);
+        $this->db->where('inv_inventaris_habispakai_permintaan_item.id_mst_inv_barang_habispakai',$id_barang);
+        $this->db->join("mst_inv_barang_habispakai","mst_inv_barang_habispakai.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_permintaan_item.id_mst_inv_barang_habispakai");
+        $this->db->select("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis,inv_inventaris_habispakai_permintaan_item.*,mst_inv_barang_habispakai.uraian");
+        $query= $this->db->get("inv_inventaris_habispakai_permintaan_item");
         
         if ($query->num_rows() > 0){
             $data = $query->row_array();
@@ -177,17 +155,7 @@ class Bhp_permintaan_model extends CI_Model {
         return $this->db->get_where($table, $data);
     }
 
-    function get_permohonan_id($puskesmas="")
-    {
-    	$this->db->select('MAX(id_inv_permohonan_barang)+1 as id');
-    	$this->db->where('code_cl_phc',$puskesmas);
-    	$permohonan = $this->db->get('inv_permohonan_barang')->row();
-    	if (empty($permohonan->id)) {
-    		return 1;
-    	}else {
-    		return $permohonan->id;
-    	}
-	}
+
 	function get_inventarisbarang_id($id,$barang,$table)
     {
     	$query  = $this->db->query("SELECT MAX(id_inventaris_barang) as id from $table WHERE id_pengadaan=$id AND id_mst_inv_barang=$barang");
@@ -203,17 +171,11 @@ class Bhp_permintaan_model extends CI_Model {
 	}
 
    function insert_entry(){
-        $data['id_inv_hasbispakai_permintaan'] = $this->kode_pengadaan($this->input->post('kode_inventaris_'));
-        $data['code_cl_phc']                = $this->input->post('codepus');
+        $data['id_inv_hasbispakai_permintaan']      = $this->kode_pengadaan($this->input->post('kode_inventaris_'));
+        $data['code_cl_phc']                        = $this->input->post('codepus');
         $data['id_mst_inv_barang_habispakai_jenis'] = $this->input->post('id_mst_inv_barang_habispakai_jenis');
-    	$data['tgl_permohonan']	            = date("Y-m-d",strtotime($this->input->post('tgl')));
-        $data['tgl_pembelian']              = date("Y-m-d",strtotime($this->input->post('tgl2')));
-        $data['jenis_transaksi']            = $this->input->post('jenistransaksi');
-		$data['pilihan_status_pembelian']	= $this->input->post('status');
-        $data['bln_periode']                = $this->input->post('thn_periode')."-".$this->input->post('bln_periode');
-        $data['thn_dana']                   = $this->input->post('thn_dana');
-        $data['pilihan_sumber_dana']        = $this->input->post('pilihan_sumber_dana');
-        $data['mst_inv_pbf_code']           = $this->input->post('id_mst_inv_pbf_code');
+    	$data['tgl_permintaan']	            = date("Y-m-d",strtotime($this->input->post('tgl')));
+		$data['status_permintaan']	        = $this->input->post('status');
 		$data['keterangan']		            = $this->input->post('keterangan');
 		$data['waktu_dibuat']		        = date('Y-m-d H:i:s');
         $data['terakhir_diubah']            = "0000-00-00 00:00:00";
@@ -225,6 +187,21 @@ class Bhp_permintaan_model extends CI_Model {
 			return mysql_error();
 		}
     }
+    function update_entry($kode)
+    {
+        $data['tgl_permintaan']             = date("Y-m-d",strtotime($this->input->post('tgl')));
+        $data['tgl_diterima']               = date("Y-m-d",strtotime($this->input->post('tgl1')));
+        $data['status_permintaan']          = $this->input->post('status');
+        $data['keterangan']                 = $this->input->post('keterangan');
+        $data['waktu_dibuat']               = date('Y-m-d H:i:s');
+        $this->db->where('inv_inventaris_habispakai_permintaan',$kode);
+
+        if($this->db->update($this->tabel, $data)){
+            return true;
+        }else{
+            return mysql_error();
+        }
+    }
     function kode_pengadaan($kode){
         $inv=explode(".", $kode);
         $kode_pengadaan = $inv[0].$inv[1].$inv[2].$inv[3].$inv[4].$inv[5].$inv[6];
@@ -233,7 +210,7 @@ class Bhp_permintaan_model extends CI_Model {
         return  $kode_pengadaan.$urut;
     }
     function nourut($kode_pengadaan){
-        $q = $this->db->query("select MAX(RIGHT(id_inv_hasbispakai_permintaan,6)) as kd_max from id_inv_hasbispakai_permintaan where (LEFT(id_inv_hasbispakai_permintaan,15))=$kode_pengadaan");
+        $q = $this->db->query("select MAX(RIGHT(id_inv_hasbispakai_permintaan,6)) as kd_max from inv_inventaris_habispakai_permintaan where (LEFT(id_inv_hasbispakai_permintaan,15))=$kode_pengadaan");
         $nourut="";
         if($q->num_rows()>0)
         {
@@ -250,41 +227,10 @@ class Bhp_permintaan_model extends CI_Model {
         return $nourut;
     }
     function tanggal($pengadaan){
-        $query = $this->db->query("select tgl_pembelian from id_inv_hasbispakai_permintaan where id_inv_hasbispakai_permintaan =".'"'.$pengadaan.'"'."")->result();
+        $query = $this->db->query("select tgl_pembelian from inv_inventaris_habispakai_permintaan where id_inv_hasbispakai_permintaan =".'"'.$pengadaan.'"'."")->result();
         foreach ($query as $key) {
             return $key->tgl_pembelian;
         }
-    }
-    function update_entry($kode)
-    {
-        $data['jenis_transaksi']            = $this->input->post('jenis_transaksi');
-        $data['keterangan']                 = $this->input->post('keterangan');
-        $data['nomor_kontrak']              = $this->input->post('nomor_kontrak');
-        $data['tgl_permohonan']             = date("Y-m-d",strtotime($this->input->post('tgl')));
-        $data['tgl_pembelian']              = date("Y-m-d",strtotime($this->input->post('tgl2')));
-        $data['tgl_kwitansi']               = date("Y-m-d",strtotime($this->input->post('tgl1')));
-        $data['nomor_kwitansi']             = $this->input->post('nomor_kwitansi');
-        $data['mst_inv_pbf_code']           = $this->input->post('id_mst_inv_pbf_code');
-        $data['bln_periode']                = $this->input->post('thn_periode')."-".$this->input->post('bln_periode');
-        $data['pilihan_sumber_dana']        = $this->input->post('pilihan_sumber_dana');
-        $data['thn_dana']                   = $this->input->post('thn_dana');
-        $data['pilihan_status_pembelian']   = $this->input->post('status');
-        $data['terakhir_diubah']            = date('Y-m-d H:i:s');
-		$this->db->where('id_inv_hasbispakai_permintaan',$kode);
-
-		if($this->db->update($this->tabel, $data)){
-            $this->db->select("*");
-            $this->db->where('id_inv_hasbispakai_permintaan',$kode);
-            $query = $this->db->get("id_inv_hasbispakai_permintaan_item");
-            if($query->num_rows()>0){
-                $dataupdateitem['tgl_update']              = date("Y-m-d",strtotime($this->input->post('tgl2')));
-                $this->db->where('id_inv_hasbispakai_permintaan',$kode);
-                $this->db->update("id_inv_hasbispakai_permintaan_item",$dataupdateitem);
-            }
-			return true;
-		}else{
-			return mysql_error();
-		}
     }
 
     function tampilstatus_id($status,$tipe){
@@ -324,7 +270,7 @@ class Bhp_permintaan_model extends CI_Model {
     	$this->db->select_sum($tipe);
     	$this->db->where('id_inv_hasbispakai_permintaan',$kode);
         $this->db->where('code_cl_phc',$namapus);
-		$query=$this->db->get('id_inv_hasbispakai_permintaan_item');
+		$query=$this->db->get('inv_inventaris_habispakai_permintaan_item');
 		if($query->num_rows()>0)
         {
             foreach($query->result() as $k)
@@ -340,7 +286,7 @@ class Bhp_permintaan_model extends CI_Model {
     }
     function sum_jumlah_item_jumlah($kode,$tipe){
         $namapus = "P".$this->session->userdata('puskesmas');
-        $query=$this->db->query("SELECT SUM(jml*harga) as totalharga FROM id_inv_hasbispakai_permintaan_item WHERE id_inv_hasbispakai_permintaan = ".'"'.$kode.'"'." and code_cl_phc= ".'"'.$namapus.'"'."");
+        $query=$this->db->query("SELECT SUM(jml*harga) as totalharga FROM inv_inventaris_habispakai_permintaan_item WHERE id_inv_hasbispakai_permintaan = ".'"'.$kode.'"'." and code_cl_phc= ".'"'.$namapus.'"'."");
         if($query->num_rows()>0)
         {
             foreach($query->result() as $k)
@@ -359,13 +305,13 @@ class Bhp_permintaan_model extends CI_Model {
     {
         $this->db->select("*");
         $this->db->where('id_inv_hasbispakai_permintaan',$kode);  
-        return $query = $this->db->get("id_inv_hasbispakai_permintaan_item"); 
+        return $query = $this->db->get("inv_inventaris_habispakai_permintaan_item"); 
     }
 	function delete_entry($kode)
 	{
 		$this->db->where('id_inv_hasbispakai_permintaan',$kode);
 
-		return $this->db->delete('id_inv_hasbispakai_permintaan');
+		return $this->db->delete('inv_inventaris_habispakai_permintaan');
 	}
     function jumlahtable($table,$id_inventaris_barang){
 
@@ -382,11 +328,11 @@ class Bhp_permintaan_model extends CI_Model {
         }
         return $kd;
     }
-	function delete_entryitem($kode,$barang,$batch)
+	function delete_entryitem($kode,$barang)
 	{  
         $this->db->where('id_inv_hasbispakai_permintaan',$kode);
         $this->db->where('id_mst_inv_barang_habispakai',$barang);
-        $this->db->delete('id_inv_hasbispakai_permintaan_item');
+        $this->db->delete('inv_inventaris_habispakai_permintaan_item');
 	}
     function delete_entryitem_table($kode,$id_barang,$table)
     {    
