@@ -22,10 +22,18 @@
            <h3 class="box-title">{title_form}</h3> 
       </div>
 
+      <div class="box-body">
+      <div class="">
+        <div class="col-md-4 pull-right">
+          <button class="btn btn-success" data-toggle="modal" data-target="#myModal">Simpan Perubahan</button>          
+          <button type="button" id="btn-kembali" class="btn btn-primary"><i class='fa  fa-arrow-circle-o-left'></i> &nbsp;Kembali</button>
+        </div>
+      </div>
+      </div>
+
     <div class="box-body">
       <div class="">
-
-        <div class="col-md-4 pull-right">
+        <div class="col-md-7 pull-right">
           <button class="btn btn-success" data-toggle="modal" data-target="#myModal"> Lihat Semua Versi</button>          
           <button type="button" class="btn btn-primary" onclick='add_versi()'> Buat Versi Baru</button> 
         </div>
@@ -113,7 +121,14 @@
 </section>
 
   <script type="text/javascript">
-    function getDemoTheme() {
+
+    $("#btn-kembali").click(function(){
+        $.get('<?php echo base_url()?>mst/keuangan_sts/kembali', function (data) {
+          $('#content1').html(data);
+          });
+       });
+
+      function getDemoTheme() {
       var theme = document.body ? $.data(document.body, 'theme') : null
       if (theme == null) {
         theme = '';

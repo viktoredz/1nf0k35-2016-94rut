@@ -32,7 +32,7 @@
                  Judul Versi
                 </div>
                 <div class="col-md-8">
-                  <input type="text" class="form-control" name="sts_nama" placeholder=" Judul Versi " value="<?php 
+                  <input type="text" class="form-control" name="versi_nama" placeholder=" Judul Versi " value="<?php 
                   if(set_value('nama')=="" && isset($nama)){
                     echo $nama;
                   }else{
@@ -47,11 +47,11 @@
                   Deskripsi
                 </div>
                 <div class="col-md-8">
-                  <input type="text" class="form-control" name="sts_deskripsi" placeholder=" Deskripsi " value="<?php 
-                  if(set_value('tlp')=="" && isset($tlp)){
-                    echo $tlp;
+                  <input type="text" class="form-control" name="versi_uraian" placeholder=" Deskripsi " value="<?php 
+                  if(set_value('uraian')=="" && isset($uraian)){
+                    echo $uraian;
                   }else{
-                    echo  set_value('tlp');
+                    echo  set_value('uraian');
                   }
                   ?>">
                 </div>
@@ -62,17 +62,20 @@
                    Duplikasi Dari
                 </div>
                 <div class="col-md-8">
-                  <select name="keuinstansi_kategori" type="text" class="form-control">
-                  <?php 
-                  if(set_value('keuinstansi_kategori')=="" && isset($kategori)){
-                    $keuinstansi_kategori = $kategori;
-                  }else{
-                    $keuinstansi_kategori = set_value('keuinstansi_kategori');
-                  }
+                 <select  name="versi" type="text" class="form-control">
+               <option> Versi </option>
+                <?php foreach($versi as $ver) : ?>
+                    <?php
+                       if(set_value('id_mst_anggaran_versi')=="" && isset($id_mst_anggaran_versi)){
+                         $id_mst_anggaran_versi = $id_mst_anggaran_versi;
+                       }else{
+                         $id_mst_anggaran_versi = set_value('id_mst_anggaran_versi');
+                       }
+                     $select = $ver->id_mst_anggaran_versi == $id_mst_anggaran_versi ? 'selected' : '' ;
                   ?>
-                       <option value="Farmasi" <?php if($keuinstansi_kategori=="farmasi") echo "selected" ?>>Farmasi</option>
-                       <option value="Umum" <?php if($keuinstansi_kategori=="umum") echo "selected" ?>>Umum</option>
-                  </select>
+                 <option value="<?php echo $ver->id_mst_anggaran_versi ?>" <?php echo $select ?>><?php echo $ver->nama ?></option>
+               <?php endforeach ?>
+             </select>
                 </div>
               </div>
   
