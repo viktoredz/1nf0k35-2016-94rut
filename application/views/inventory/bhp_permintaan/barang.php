@@ -12,7 +12,6 @@
 			{ name: 'uraian', type: 'string' },
 			{ name: 'jml', type: 'number' },
 			{ name: 'tgl_opname', type: 'string' },
-			{ name: 'batch', type: 'string' },
 			{ name: 'harga', type: 'string' },
 			{ name: 'subtotal', type: 'string' },
 			{ name: 'harga', type: 'double' },
@@ -65,45 +64,34 @@
 			columns: [
 			<?php if(!isset($viewreadonly)){?>	{ text: 'Edit', align: 'center', filtertype: 'none', sortable: false,editable: false, width: '4%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid_barang").jqxGrid('getrowdata', row);
-				    if (({pilihan_status_pembelian}==2) || (dataRecord.jml_distribusi>0)) {
+				    if (({status_permintaan}=='diterima') || (dataRecord.jml_distribusi>0)) {
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}else{
-			    		return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='edit_barang(\""+dataRecord.id_inv_hasbispakai_pembelian+"\",\""+dataRecord.id_mst_inv_barang_habispakai+"\",\""+dataRecord.batch+"\");'></a></div>";	
+			    		return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='edit_barang(\""+dataRecord.id_inv_hasbispakai_pembelian+"\",\""+dataRecord.id_mst_inv_barang_habispakai+"\");'></a></div>";	
 					}
                  }
                 },
 				{ text: 'Del', align: 'center', editable: false,filtertype: 'none', sortable: false, width: '4%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid_barang").jqxGrid('getrowdata', row);
-				    if (({pilihan_status_pembelian}==2) || (dataRecord.jml_distribusi>0)) {
+				    if (({status_permintaan}=='diterima') || (dataRecord.jml_distribusi>0)) {
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}else{
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del_barang(\""+dataRecord.id_inv_hasbispakai_pembelian+"\",\""+dataRecord.id_mst_inv_barang_habispakai+"\",\""+dataRecord.batch+"\");'></a></div>";
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del_barang(\""+dataRecord.id_inv_hasbispakai_pembelian+"\",\""+dataRecord.id_mst_inv_barang_habispakai+"\");'></a></div>";
 					}
                  }
                 },
-				{ text: 'Nama Barang ', editable: false,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '25%'},
-				<?php if (isset($id_mst_inv_barang_habispakai_jenis)&&($id_mst_inv_barang_habispakai_jenis=='8')) { ?>
-				{ text: 'Batch ',datafield: 'batch' ,align: 'center', editable: false, columntype: 'textbox', filtertype: 'textbox', width: '8%'},
-				{ text: 'Jumlah ', align: 'center',cellsalign: 'right',editable: false,datafield: 'jml', columntype: 'textbox', filtertype: 'textbox', width: '8%'},
-				{ text: 'Harga Satuan (Rp.)', align: 'center',cellsalign: 'right',editable: false, datafield: 'harga', columntype: 'textbox', filtertype: 'textbox', width: '15%'},
-				{ text: 'Sub Total (Rp.)', align: 'center',cellsalign: 'right',editable: false,datafield: 'subtotal', columntype: 'textbox', filtertype: 'none', width: '20%'},
-				<?php }else{ ?>
+				{ text: 'Nama Barang ', editable: false,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '26%'},
+				{ text: 'Satuan / Kemasan ', editable: false, columntype: 'textbox', filtertype: 'textbox', width: '15%'},
 				{ text: 'Jumlah ', align: 'center',cellsalign: 'right',editable: false,datafield: 'jml', columntype: 'textbox', filtertype: 'textbox', width: '11%'},
 				{ text: 'Harga Satuan (Rp.)', align: 'center',cellsalign: 'right',editable: false, datafield: 'harga', columntype: 'textbox', filtertype: 'textbox', width: '20%'},
 				{ text: 'Sub Total (Rp.)', align: 'center',cellsalign: 'right',editable: false,datafield: 'subtotal', columntype: 'textbox', filtertype: 'none', width: '20%'},
-            <?php } }else{ ?>
-				{ text: 'Nama Barang ', editable: false,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '25%'},
-				<?php if (isset($id_mst_inv_barang_habispakai_jenis)&&($id_mst_inv_barang_habispakai_jenis=='8')) { ?>
-				{ text: 'Batch ',datafield: 'batch', align: 'center',cellsalign: 'left', editable: false, columntype: 'textbox', filtertype: 'textbox', width: '10%'},
-				{ text: 'Jumlah ', align: 'center',cellsalign: 'right',editable: false,datafield: 'jml', columntype: 'textbox', filtertype: 'textbox', width: '9%'},
-				{ text: 'Harga Satuan (Rp.)', align: 'center',cellsalign: 'right',editable: false, datafield: 'harga', columntype: 'textbox', filtertype: 'textbox', width: '20%'},
-				{ text: 'Sub Total (Rp.)', align: 'center',cellsalign: 'right',editable: false,datafield: 'subtotal', columntype: 'textbox', filtertype: 'none', width: '20%'},
-				<?php }else{ ?>
+            <?php  }else{ ?>
+				{ text: 'Nama Barang ', editable: false,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '26%'},
+				{ text: 'Satuan / Kemasan ', editable: false, columntype: 'textbox', filtertype: 'textbox', width: '15%'},
 				{ text: 'Jumlah ', align: 'center',cellsalign: 'right',editable: false,datafield: 'jml', columntype: 'textbox', filtertype: 'textbox', width: '11%'},
 				{ text: 'Harga Satuan (Rp.)', align: 'center',cellsalign: 'right',editable: false, datafield: 'harga', columntype: 'textbox', filtertype: 'textbox', width: '25%'},
 				{ text: 'Sub Total (Rp.)', align: 'center',cellsalign: 'right',editable: false,datafield: 'subtotal', columntype: 'textbox', filtertype: 'none', width: '23%'},
-            <?php } } ?>
-				{ text: 'Tanggal Update',align: 'center',cellsalign: 'center', editable: false,datafield: 'tgl_update', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '16%'}
+            <?php  } ?>
            ]
 		});
         
@@ -187,49 +175,36 @@
 		$("#popup_barang").jqxWindow({
 			theme: theme, resizable: false,
 			width: 500,
-			height: 480,
+			height: 380,
 			isModal: true, autoOpen: false, modalOpacity: 0.2
 		});
 		$("#popup_barang").jqxWindow('open');
 	}
 
-	function edit_barang(id_permohonan,kode_barang,batch){
-	/*	$.get("<?php // echo base_url().'inventory/bhp_permintaan/cekdelete/'; ?>" + id_permohonan+'/'+kode_barang+'/'+batch,  function(data){
-			if(data=='1'){
-				alert('Maaf, Data tidak bisa di ubah karena sudah di distribusikan');
-			}else{*/
-				$("#popup_barang #popup_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-				$.get("<?php echo base_url().'inventory/bhp_permintaan/edit_barang/'.$id_mst_inv_barang_habispakai_jenis.'/';?>"+id_permohonan+'/'+kode_barang, function(data) {
-					$("#popup_content").html(data);
-				});
-				$("#popup_barang").jqxWindow({
-					theme: theme, resizable: false,
-					width: 500,
-					height: 480,
-					isModal: true, autoOpen: false, modalOpacity: 0.2
-				});
-				$("#popup_barang").jqxWindow('open');
-		/*	}
-		});*/
-	}
-	function del_barang(id_permohonan,kode_barang,batch){
-	/*	$.get("<?php // echo base_url().'inventory/bhp_permintaan/cekdelete/'; ?>" + id_permohonan+'/'+kode_barang+'/'+batch,  function(data){
-			if(data=='1'){
-				alert('Maaf, Data tidak bisa di hapus karena sudah di distribusikan');
-			}else{*/
-				var confirms = confirm("Hapus Data ?");
-				if(confirms == true){
-					$.post("<?php echo base_url().'inventory/bhp_permintaan/dodelpermohonan/'; ?>" + id_permohonan+'/'+kode_barang+'/'+batch,  function(){
-						alert('Data berhasil dihapus');
-
-						$("#jqxgrid_barang").jqxGrid('updatebounddata', 'cells');
-						ambil_total();
-					});
-					
-				}		
-		/*	}
+	function edit_barang(id_permohonan,kode_barang){
+		$("#popup_barang #popup_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
+		$.get("<?php echo base_url().'inventory/bhp_permintaan/edit_barang/'.$id_mst_inv_barang_habispakai_jenis.'/';?>"+id_permohonan+'/'+kode_barang, function(data) {
+			$("#popup_content").html(data);
 		});
-		*/
+		$("#popup_barang").jqxWindow({
+			theme: theme, resizable: false,
+			width: 500,
+			height: 380,
+			isModal: true, autoOpen: false, modalOpacity: 0.2
+		});
+		$("#popup_barang").jqxWindow('open');
+	}
+	function del_barang(id_permohonan,kode_barang){
+		var confirms = confirm("Hapus Data ?");
+		if(confirms == true){
+			$.post("<?php echo base_url().'inventory/bhp_permintaan/dodelpermohonan/'; ?>" + id_permohonan+'/'+kode_barang,  function(){
+				alert('Data berhasil dihapus');
+
+				$("#jqxgrid_barang").jqxGrid('updatebounddata', 'cells');
+				ambil_total();
+			});
+			
+		}		
 	}
 
 </script>
@@ -242,7 +217,7 @@
 <div>
 	<div style="width:100%;">
 		<div style="padding:5px" class="pull-right">
-			<?php if((!isset($viewreadonly))&&($pilihan_status_pembelian!=2)){?><button class="btn btn-success" id='btn_add_barang' type='button'><i class='fa fa-plus-square'></i> Tambah Barang</button><?php  } ?>
+			<?php if((!isset($viewreadonly))&&($status_permintaan!=2)){?><button class="btn btn-success" id='btn_add_barang' type='button'><i class='fa fa-plus-square'></i> Tambah Barang</button><?php  } ?>
 		</div>
         <div id="jqxgrid_barang"></div>
 	</div>

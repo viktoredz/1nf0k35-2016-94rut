@@ -12,25 +12,8 @@
   <h4>  <i class="icon fa fa-check"></i> Information!</h4>
   <?php echo $this->session->flashdata('alert_form')?>
 </div>
-<?php } //print_r($tgl_opname_);echo "<h1>hai</h1>"; ?>
-<script>
+<?php } ?>
 
-function validateForm() {
-  //alert('hai');onsubmit="return validateForm()" 
-    var tanggalopname = $("#tgl2").val().split('-');
-  //  alert(Date.parse(tanggalopname[2]-tanggalopname[1]-tanggalopname[0])+'<='+Date.parse($("#tgl__opname_").val()));
-     if (Date.parse(tanggalopname[2]-tanggalopname[1]-tanggalopname[0])<=Date.parse($("#tgl__opname_").val())) {
-        alert("Maaf! Data pembelian sudah di stock opname pada "+$("#tgl__opname_").val()+"\n"+"Silahkan ganti tanggal pembelian ke hari berikutnya!");
-        return false;
-    }else{
-      /*alert($("#jenis_transaksi").val());
-          var post = "";
-          post = post+'&jenis_transaksi='+$("#jenis_transaksi").val()+'&keterangan='+$("#keterangan").val()+'&nomor_kontrak='+$("#nomor_kontrak").val()+'&tgl1='+$("#tgl1").val()+'&nomor_kwitansi='+$("#nomor_kwitansi").val()+'&thn_periode='+$("#thn_periode").val()+'&bln_periode='+$("#bln_periode").val()+'&pilihan_sumber_dana='+$("#pilihan_sumber_dana").val()+'&thn_dana='+$("#thn_dana").val()+'&id_inv_hasbispakai_pembelian='+$("#id_inv_hasbispakai_pembelian").val();
-          $.post("<?php echo base_url()?>inventory/bhp_permintaan/{action}/{kode}",post,function(response ){
-          });*/
-    }
-}
-</script>
 <div class="row">
   <form action="<?php echo base_url()?>inventory/bhp_permintaan/{action}/{kode}/" method="post" name="editform">
   <div class="col-md-6">
@@ -45,12 +28,12 @@ function validateForm() {
         </div>
 
         <div class="row" style="margin: 5px">
-          <div class="col-md-4" style="padding: 5px">Tanggal Pengadaan</div>
+          <div class="col-md-4" style="padding: 5px">Tanggal Permintaan</div>
           <div class="col-md-8">
           <?php if(isset($viewreadonly)){if($action='view'){ 
-                echo "".date("d-m-Y",strtotime($tgl_permohonan)); }}else{ ?>
+                echo "".date("d-m-Y",strtotime($tgl_permintaan)); }}else{ ?>
               <div id='tgl' name="tgl" value="<?php
-              echo (!empty($tgl_permohonan)) ? date("Y-m-d",strtotime($tgl_permohonan)) : "";
+              echo (!empty($tgl_permintaan)) ? date("Y-m-d",strtotime($tgl_permintaan)) : "";
             ?>"></div>
              <?php  }?>
           </div>
@@ -65,25 +48,6 @@ function validateForm() {
                 <option value="<?php echo $jenis->id_mst_inv_barang_habispakai_jenis ?>" <?php echo $select ?>><?php echo $jenis->uraian ?></option>
               <?php endforeach ?>
           </select>
-          </div>
-        </div>
-
-        <div class="row" style="margin: 5px">
-          <div class="col-md-4" style="padding: 5px">Jenis Transaksi</div>
-          <div class="col-md-8">
-            <select  name="jenis_transaksi" id="jenis_transaksi" type="text" class="form-control" >
-              <?php 
-                 if($jenis_transaksi=="pembelian"){
-                    $select1 = "selected=selected" ;
-                    $select2 = "" ;
-                 }else{
-                    $select2 = "selected=selected" ;
-                    $select1 = "" ;
-                 }
-              ?>
-                <option value="pembelian" <?php echo $select1 ?>>Pembelian</option>
-                <option value="penerimaan" <?php echo $select2 ?>>Penerimaan</option>
-            </select>
           </div>
         </div>
 
@@ -111,85 +75,20 @@ function validateForm() {
           </div>
         </div>
 
-        <div class="row" style="margin: 5px">
-          <div class="col-md-4" style="padding: 5px">Tanggal Pembelian</div>
-          <div class="col-md-8">
-              <?php if(isset($viewreadonly)){if($action='view'){ 
-                echo "".date("d-m-Y",strtotime($tgl_pembelian)); }}else{ ?>
-              <div id='tgl2' name="tgl2" value="<?php
-                  echo (!empty($tgl_pembelian)) ? date("Y-m-d",strtotime($tgl_pembelian)) : "";
-                ?>">
-              </div>
-             <?php  }?>
-          </div>
+      <div class="row" style="margin: 5px">
+        <div class="col-md-4" style="padding: 5px">Tanggal Diterima</div>
+        <div class="col-md-8">
+        <?php 
+        if(isset($viewreadonly)){
+          if($action='view'){ echo "".date("d-m-Y",strtotime($tgl_diterima)); }
+        }else{ ?>
+          <div id='tgl1' name="tgl1" disabled value="<?php echo $tgl_diterima ?>" ></div>
+         <?php  }?>
         </div>
-
-        <div class="row" style="margin: 5px">
-          <div class="col-md-4" style="padding: 5px">Periode</div>
-          <div class="col-md-4 col-xs-6">
-            <select  name="thn_periode" type="text" class="form-control"  >
-              <?php 
-              $tglperiode = explode("-", $bln_periode);
-              for($i=date('Y');$i>=2000;$i--){ ?>
-                <?php $select = $i == $tglperiode[0] ? 'selected' : '' ?>
-                <option value="<?php echo $i ?>" <?php echo $select ?>><?php echo $i ?></option>
-              <?php } ?>
-            </select>
-          </div>
-          <div class="col-md-4 col-xs-6">
-            <select  name="bln_periode" type="text" class="form-control"  >
-              <?php 
-              $tglperiode = explode("-", $bln_periode);
-              foreach($bulan as $x=>$y){ ?>
-                <?php $select = $x == $tglperiode[1] ? 'selected' : '' ?>
-                <option value="<?php echo $x ?>" <?php echo $select ?>><?php echo $y ?></option>
-              <?php } ?>
-            </select>
-          </div>
-        </div>
-
-        <div class="row" style="margin: 5px">
-          <div class="col-md-4" style="padding: 5px">Sumber Dana</div>
-          <div class="col-md-4 col-xs-6">
-            <select  name="pilihan_sumber_dana" type="text" class="form-control" 
-              <?php foreach($kodedana as $dana) : ?>
-                <?php $select = $dana->code == $pilihan_sumber_dana ? 'selected=selected' : '' ?>
-                <option value="<?php echo $dana->code ?>" <?php echo $select ?>><?php echo $dana->value ?></option>
-              <?php endforeach ?>
-            </select>
-          </div>
-          <div class="col-md-4 col-xs-6">
-            <select  name="thn_dana" type="text" class="form-control"  >
-              <?php for($i=date('Y');$i>=2000;$i--){ ?>
-                <?php $select = $i == $thn_dana ? 'selected' : '' ?>
-                <option value="<?php echo $i ?>" <?php echo $select ?>><?php echo $i ?></option>
-              <?php } ?>
-            </select>
-          </div>
-        </div>
-
-        
-        <div class="row" style="margin: 5px">
-          <div class="col-md-4" style="padding: 5px">Instansi / PBF</div>
-          <div class="col-md-8">
-            <input type="text" class="form-control" name="pbf" id="pbf" placeholder="Instansi / PBF" autocomplit="off" value="<?php 
-                if(set_value('pbf')=="" && isset($nama_pbf)){
-                  echo $nama_pbf;
-                }else{
-                  echo  set_value('pbf');
-                }
-                ?>">
-            <input type="hidden" class="form-control" name="id_mst_inv_pbf_code" id="id_mst_inv_pbf_code" value="<?php echo $mst_inv_pbf_code; ?>">
-          </div>
-        </div>
-
-      </div>
+      </div>  
       </div>      
-
+      </div>
   </div><!-- /.form-box -->
-
-
-
 
 
   <div class="col-md-6">
@@ -197,53 +96,6 @@ function validateForm() {
       <div class="box-body">
       <div id="success"> 
         <div class="form-group">
-
-          <div class="row" style="margin: 5px">
-            <div class="col-md-4" style="padding: 5px">Nomor Kontrak</div>
-            <div class="col-md-8">
-            <?php if(!isset($viewreadonly)){ ?>
-            <input type="text" class="form-control" name="nomor_kontrak" placeholder="Nomor Kontrak" value="<?php 
-              if(set_value('nomor_kontrak')=="" && isset($nomor_kontrak)){
-                echo $nomor_kontrak;
-              }else{
-                echo  set_value('nomor_kontrak');
-              }
-              ?>">
-            <?php }else{ 
-                echo "".$nomor_kontrak;
-            } ?>
-            </div>
-          </div>
-
-          <div class="row" style="margin: 5px">
-            <div class="col-md-4" style="padding: 5px">Tanggal Kwitansi</div>
-            <div class="col-md-8">
-            <?php if(isset($viewreadonly)){if($action='view'){ 
-            echo "".date("d-m-Y",strtotime($tgl_kwitansi)); }}else{ ?>
-              <div id='tgl1' name="tgl1" disabled value="<?php
-              echo $tgl_kwitansi;;//echo ($tgl_permintaan!="") ? date("Y-m-d",strtotime($$tgl_permintaan)) : "";
-            ?>" ></div>
-             <?php  }?>
-            </div>
-          </div>
-
-          <div class="row" style="margin: 5px">
-            <div class="col-md-4" style="padding: 5px">Nomor Kwitansi</div>
-            <div class="col-md-8">
-            <?php if(!isset($viewreadonly)){ ?>
-            <input type="text" class="form-control" name="nomor_kwitansi" id="nomor_kwitansi" placeholder="Nomor Kwitansi" value="<?php 
-              if(set_value('nomor_kwitansi')=="" && isset($nomor_kwitansi)){
-                echo $nomor_kwitansi;
-              }else{
-                echo  set_value('nomor_kwitansi');
-              }
-              ?>">
-            <?php }else{ 
-                echo "".$nomor_kwitansi;
-            } ?>
-            </div>
-          </div>
-
           <div class="row" style="margin: 5px">
             <div class="col-md-4" style="padding: 5px">Keterangan</div>
             <div class="col-md-8">
@@ -266,7 +118,7 @@ function validateForm() {
                 </td>
               </tr>
               <tr>
-                <td>Nilai Pengadaan</td>
+                <td>Nilai Permintaan</td>
                 <td>
                   <div id="nilai_permintaan_"></div>
                 </td>
@@ -317,7 +169,6 @@ function validateForm() {
 <script type="text/javascript">
 
 $(function(){
-  kodeInvetaris();
     $('#btn-kembali').click(function(){
         window.location.href="<?php echo base_url()?>inventory/bhp_permintaan";
     });
@@ -332,90 +183,9 @@ $(function(){
     <?php if(!isset($viewreadonly)){?>
       $("#tgl").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme , height: '30px'});
       $("#tgl1").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme , height: '30px'});
-      $("#tgl2").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme , height: '30px'});
-    
-    document.getElementById("tgl").onchange = function() {
-        kodeInvetaris(document.getElementById("tgl").value);
-    };
     <?php } ?>
-    /* $("#pbf").jqxInput(
-        {
-        placeHolder: " Ketik Instansi / PBF",
-        theme: 'classic',
-        width: '100%',
-        height: '30px',
-        minLength: 2,
-        source: function (query, response) {
-          var dataAdapter = new $.jqx.dataAdapter
-          (
-            {
-              datatype: "json",
-                datafields: [
-                { name: 'code', type: 'string'},
-                { name: 'nama', type: 'string'},
-              ],
-              url: '<?php // echo base_url().'inventory/bhp_permintaan/autocomplite_bnf/'; ?>'+$("#id_mst_inv_barang_habispakai_jenis").val(),
-            },
-            {
-              autoBind: true,
-              formatData: function (data) {
-                data.query = query;
-                return data;
-              },
-              loadComplete: function (data) {
-                if (data.length > 0) {
-                  response($.map(data, function (item) {
-                    return item.nama+' | '+item.code;
-                  }));
-                }
-              }
-            });
-        }
-      });
-    
-      $("#pbf").select(function(){
-          var codepbf = $(this).val();
-          var res = codepbf.split(" | ");
-          $("#id_mst_inv_pbf_code").val(res[1]);
-      });*/
-      $("#pbf").autocomplete({
-        minLength: 0,
-        source:'<?php echo base_url().'inventory/bhp_permintaan/autocomplite_bnf/'; ?>'+$("#id_mst_inv_barang_habispakai_jenis").val(),
-        focus: function( event, ui ) {
-          $("#pbf" ).val( ui.item.value );
-          return false;
-        },
-        select: function( event, ui ) {
-          $("#pbf").val( ui.item.value );
-          $("#id_mst_inv_pbf_code").val( ui.item.key );
-   
-          return false;
-        } 
-      });
-      
   });
-    function kodeInvetaris(tahun)
-    { 
-      if (tahun==null) {
-        var tahun = "<?php echo $tgl_permohonan?>".substring(2,4);
-      }else{
-        var tahun = tahun.substr(-2);
-      }
-      //alert(tahun);
-      $.ajax({
-      url: "<?php echo base_url().'inventory/bhp_permintaan/kodeInvetaris';?>",
-      dataType: "json",
-      success:function(data)
-      { 
-        $.each(data,function(index,elemet){
-          var lokasi = elemet.kodeinv.split(".")
-          $("#kode_inventaris_").val(lokasi[0]+"."+lokasi[1]+"."+lokasi[2]+"."+lokasi[3]+"."+lokasi[4]+"."+tahun+'.'+lokasi[5]);
-        });
-      }
-      });
 
-      return false;
-    }
 </script>
 
       
