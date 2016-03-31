@@ -246,19 +246,66 @@ class Bhp_opname_model extends CI_Model {
         $query = $this->db->get("inv_inventaris_habispakai_opname_item",$limit,$start);
         return $query->result();
     }
+        /*$this->db->where('inv_inventaris_habispakai_opname.code_cl_phc',$pusksmas);
+            $this->db->where('inv_inventaris_habispakai_opname.tgl_opname',$tanggal);
+            $this->db->select('inv_inventaris_habispakai_opname_item.harga, inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai, mst_inv_barang_habispakai.uraian, inv_inventaris_habispakai_opname.tgl_opname, inv_inventaris_habispakai_opname.petugas_nama, (inv_inventaris_habispakai_opname_item.jml_akhir - inv_inventaris_habispakai_opname_item.jml_awal) AS pengeluaranperhari');
+            $this->db->join('inv_inventaris_habispakai_opname_item','inv_inventaris_habispakai_opname_item.id_inv_inventaris_habispakai_opname = inv_inventaris_habispakai_opname.id_inv_inventaris_habispakai_opname');
+            $this->db->join('mst_inv_barang_habispakai','mst_inv_barang_habispakai.id_mst_inv_barang_habispakai = inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai');
+            $query = $this->db->get("inv_inventaris_habispakai_opname");*/
     function get_data_lap_opname($bulan,$tahun)
     {
-        $data = array();
+          $data = array();
         for($i=1; $i<=31;$i++){
             $tanggal = date("Y-m-d",mktime(0, 0, 0, $bulan, $i, $tahun));
             $pusksmas = "P".$this->session->userdata('puskesmas');
-            $this->db->where('code_cl_phc',$pusksmas);
-            $this->db->where('inv_inventaris_habispakai_opname.tgl_opname',$tanggal);
-            $this->db->select('mst_inv_barang_habispakai.uraian, inv_inventaris_habispakai_opname.tgl_opname,inv_inventaris_habispakai_opname.petugas_nama,inv_inventaris_habispakai_opname_item.jml_akhir - inv_inventaris_habispakai_opname_item.jml_awal AS pengeluaranperhari,inv_inventaris_habispakai_opname_item.harga');
-            $this->db->join('inv_inventaris_habispakai_opname_item','inv_inventaris_habispakai_opname_item.id_inv_inventaris_habispakai_opname = inv_inventaris_habispakai_opname.id_inv_inventaris_habispakai_opname');
-            $this->db->join('mst_inv_barang_habispakai','mst_inv_barang_habispakai.id_mst_inv_barang_habispakai = inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai');
-            $query = $this->db->get("inv_inventaris_habispakai_opname");
-
+            $query =  $this->db->query("
+                    SELECT ((Ifnull( 
+                   ( 
+                            SELECT   (a.jml_akhir - a.jml_awal) 
+                            FROM     inv_inventaris_habispakai_opname_item a 
+                            JOIN     inv_inventaris_habispakai_opname b 
+                            ON       a.id_inv_inventaris_habispakai_opname = b.id_inv_inventaris_habispakai_opname
+                            WHERE    Month(b.tgl_opname) <'03' 
+                            AND      Year(b.tgl_opname) <='2016' 
+                            AND      a.id_mst_inv_barang_habispakai= inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai
+                            AND      a.batch = inv_inventaris_habispakai_opname_item.batch 
+                            AND      a.id_inv_inventaris_habispakai_opname = inv_inventaris_habispakai_opname_item.id_inv_inventaris_habispakai_opname
+                            ORDER BY b.tgl_opname DESC limit 1),0))+ (Ifnull( 
+                   ( 
+                          SELECT Sum(jml) 
+                          FROM   inv_inventaris_habispakai_distribusi_item 
+                          JOIN   inv_inventaris_habispakai_distribusi 
+                          ON     inv_inventaris_habispakai_distribusi_item.id_inv_inventaris_habispakai_distribusi = inv_inventaris_habispakai_distribusi.id_inv_inventaris_habispakai_distribusi
+                          WHERE  inv_inventaris_habispakai_distribusi_item.batch = inv_inventaris_habispakai_opname_item.batch
+                          AND    inv_inventaris_habispakai_distribusi_item.id_mst_inv_barang_habispakai = inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai
+                          AND    ( 
+                                        inv_inventaris_habispakai_distribusi.tgl_distribusi) > Ifnull( 
+                                 ( 
+                                          SELECT   f.tgl_opname 
+                                          FROM     inv_inventaris_habispakai_opname f 
+                                          JOIN     inv_inventaris_habispakai_opname_item g 
+                                          ON       f.id_inv_inventaris_habispakai_opname = g.id_inv_inventaris_habispakai_opname
+                                          WHERE    g.id_mst_inv_barang_habispakai = inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai
+                                          AND      g.batch = inv_inventaris_habispakai_opname_item.batch 
+                                          AND      Month(f.tgl_opname) <'03' 
+                                          AND      Year(f.tgl_opname) <='2016' 
+                                          ORDER BY f.tgl_opname DESC limit 1 ),'0000-00-00') 
+                          AND    ( 
+                                        inv_inventaris_habispakai_distribusi.tgl_distribusi) <=Last_day(Curdate())),0))) AS jumlah_awal,
+                   inv_inventaris_habispakai_opname_item.harga, 
+                   inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai, 
+                   mst_inv_barang_habispakai.uraian, 
+                   inv_inventaris_habispakai_opname.tgl_opname, 
+                   inv_inventaris_habispakai_opname.petugas_nama, 
+                   (inv_inventaris_habispakai_opname_item.jml_akhir - inv_inventaris_habispakai_opname_item.jml_awal) AS pengeluaranperhari
+            FROM   (inv_inventaris_habispakai_opname) 
+            JOIN   inv_inventaris_habispakai_opname_item 
+            ON     inv_inventaris_habispakai_opname_item.id_inv_inventaris_habispakai_opname = inv_inventaris_habispakai_opname.id_inv_inventaris_habispakai_opname
+            JOIN   mst_inv_barang_habispakai 
+            ON     mst_inv_barang_habispakai.id_mst_inv_barang_habispakai = inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai
+            WHERE  inv_inventaris_habispakai_opname.code_cl_phc = ".'"'.$pusksmas.'"'."
+            AND    inv_inventaris_habispakai_opname.tgl_opname = ".'"'.$tanggal.'"'."
+     ");
             $datas = $query->result_array();  
            // print_r($datas);
             foreach ($datas as $brg) {

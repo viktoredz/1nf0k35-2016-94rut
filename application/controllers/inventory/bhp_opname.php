@@ -115,23 +115,37 @@ class Bhp_opname extends CI_Controller {
 			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
 		}
 		$rows = $this->bhp_opname_model->get_data_lap_opname($filbulan,$filtahun);
-		die(print_r($rows));
+		//die(print_r($rows));
+	//	$get_jumlahawal = $this->bhp_opname_model->get_jumlahawal();
 		$data = array();
 		$no=0;
 		$data_tabel = array();
+		$temp='';
+		$jml=0;
 		foreach ($rows as $key => $val) {
 			$no++;
 			foreach ($val as $act => $value) {
-
+				
+				if($key==$temp){
+					$data_tabel["$key"]["keluar$act"]		= $value['pengeluaranperhari'];	
+					$data_tabel["$key"]["harga"]			= $value['harga'];	
+					$data_tabel["$key"]["jumlah_op"]		= $data_tabel["$key"]["jumlah_op"]+$value['pengeluaranperhari'];	
+					$data_tabel["$key"]['nilai_aset_total']	= ($data_tabel["$key"]["jumlah_awal"]-$data_tabel["$key"]["jumlah_op"])*$value['harga'];
+					$data_tabel["$key"]['total']			= $data_tabel["$key"]["jumlah_awal"]-$data_tabel["$key"]["jumlah_op"];
+					$data_tabel["$key"]['nilai_aset_awal']  = $value['jumlah_awal']*$value['harga'];
+															  
+				}else{
+				$temp = $key;
 				$data_tabel[$key]= array(
 					'no'				=> $no,								
 					'uraian'			=> $key,
 					'harga'				=> $value['harga'],
-					'petugas'			=> $value['petugas_nama'],
-					'tgl_opname'		=> $value['tgl_opname'],
-					'jumlah'			=> $value['pengeluaranperhari']*$value['harga'],
-					'nilai_aset'		=> $value['pengeluaranperhari']*$value['harga'],
-					'keluar1'			=> isset($rows["$key"]["1"]) ? $act == 1 ? $value['pengeluaranperhari'] : '---' : '-',
+					'jumlah_op'			=> $value['pengeluaranperhari'],
+					'jumlah_awal'		=> $value['jumlah_awal'],
+					'nilai_aset_awal'	=> $value['jumlah_awal']*$value['harga'],
+					'total'				=> $value['jumlah_awal']-$value['pengeluaranperhari'],
+					'nilai_aset_total'	=> ($value['jumlah_awal']-$value['pengeluaranperhari'])*$value['harga'],
+					'keluar1'			=> $act == 1 ? $value['pengeluaranperhari'] : '',
 					'keluar2'			=> $act == 2 ? $value['pengeluaranperhari'] : '',
 					'keluar3'			=> $act == 3 ? $value['pengeluaranperhari'] : '',
 					'keluar4'			=> $act == 4 ? $value['pengeluaranperhari'] : '',
@@ -159,13 +173,15 @@ class Bhp_opname extends CI_Controller {
 					'keluar26'			=> $act == 26 ? $value['pengeluaranperhari'] : '',
 					'keluar27'			=> $act == 27 ? $value['pengeluaranperhari'] : '',
 					'keluar28'			=> $act == 28 ? $value['pengeluaranperhari'] : '',
-					'keluar29'			=> isset($rows["$key"]["29"]) ? $act == 29 ? $value['pengeluaranperhari'] : '---' : '-',
-					'keluar30'			=> isset($rows["$key"]["30"]) ? $act == 30 ? $value['pengeluaranperhari'] : '---' : '-',
+					'keluar29'			=> $act == 29 ? $value['pengeluaranperhari'] : '',
+					'keluar30'			=> $act == 30 ? $value['pengeluaranperhari'] : '',
 					'keluar31'			=> $act == 31 ? $value['pengeluaranperhari'] : '',
 				);
 			}
+				
+			}
 		}
-		die(print_r($data_tabel));
+		//die(print_r($data_tabel));
 		
 		$kode_sess=$this->session->userdata('puskesmas');
 		$kd_prov = $this->inv_barang_model->get_nama('value','cl_province','code',substr($kode_sess, 0,2));

@@ -278,8 +278,8 @@
 		post = post+'&jenisbarang='+$("#jenisbarangopname option:selected").text()+'&nama_puskesmas='+$("#puskesmasopname option:selected").text()+'&bulan='+$("#bulanopname option:selected").text()+'&tahun='+$("#tahunopname option:selected").text();
 		
 		$.post("<?php echo base_url()?>inventory/bhp_opname/pengeluaran_export",post,function(response){
-			alert(response);
-			//window.location.href=response;
+			//alert(response);
+			window.location.href=response;
 		});
 	});
 </script>
