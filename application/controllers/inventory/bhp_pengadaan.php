@@ -173,10 +173,12 @@ class Bhp_pengadaan extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
+		
+		
 		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
-			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+			$this->db->where('inv_inventaris_habispakai_pembelian_item.code_cl_phc','P'.$this->session->userdata('puskesmas'));
 		}
-		$this->db->where('id_inv_hasbispakai_pembelian',$id);
+		$this->db->where('inv_inventaris_habispakai_pembelian_item.id_inv_hasbispakai_pembelian',$id);
 		$activity = $this->bhp_pengadaan_model->getItem(/*$this->input->post('recordstartindex'), $this->input->post('pagesize')*/);
 		$no=1;
 		$datadetail = array();

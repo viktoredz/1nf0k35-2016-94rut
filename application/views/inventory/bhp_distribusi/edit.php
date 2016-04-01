@@ -100,12 +100,12 @@
         </div>
 
         <div class="row" style="margin: 5px">
-          <div class="col-md-4" style="padding: 5px">Kategori Barang</div>
+          <div class="col-md-4" style="padding: 5px">Kategori Barang<?php echo $jenis_bhp;?></div>
           <div class="col-md-8">
          <?php if($action!="view") {?>
             <select  name="jenis_bhp" id="jenis_bhp" type="text" class="form-control" disabled="">
             <?php
-              if ($jenis_bhp=="umum") {
+              if ($jenis_bhp=="0") {
                 $select1 = "selected=selected";
                 $select2 = "";
               }else{
@@ -117,7 +117,13 @@
                 <option value="umum" <?php echo $select1; ?>>Umum</option>
           </select>
           <?php }else{
-              
+                if ($jenis_bhp=="0") {
+                $select1 = "selected=selected";
+                $select2 = "";
+              }else{
+                $select2 = "selected=selected";
+                $select1 = "";
+              }
                 echo $jenis_bhp;
               }
           ?>
@@ -295,7 +301,8 @@ $(function(){
       });
     <?php } ?>
     });
-
+/*lokasi[0]+"."+lokasi[1]+"."+lokasi[2]+"."+lokasi[3]+"."+lokasi[4]+"."+tahun+'.'+lokasi[5]*/
+/*lokasi[0]+"."+lokasi[1]+"."+lokasi[2]+"."+lokasi[3]+"."+lokasi[4]+"."+tahun+'.'+lokasi[5]*/
     function kodedistribusi(tahun)
     { 
       if (tahun==null) {
@@ -313,9 +320,9 @@ $(function(){
          // alert( );
           var lokasi = elemet.kodeinv.split(".")
           <?php if($action!="view") {?>
-          $("#kode_distribusi_").val(/*lokasi[0]+"."+lokasi[1]+"."+lokasi[2]+"."+lokasi[3]+"."+lokasi[4]+"."+tahun+'.'+lokasi[5]*/elemet.kodeinv);
+          $("#kode_distribusi_").val(elemet.kodeinv);
           <?php }else{?>
-          $("#kode_distribusi_").html(/*lokasi[0]+"."+lokasi[1]+"."+lokasi[2]+"."+lokasi[3]+"."+lokasi[4]+"."+tahun+'.'+lokasi[5]*/elemet.kodeinv;
+          $("#kode_distribusi_").html(elemet.kodeinv);
           <?php }?>
         });
       }

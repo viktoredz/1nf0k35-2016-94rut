@@ -22,8 +22,14 @@ class Bhp_distribusi extends CI_Controller {
 		}
 		if($this->input->post('jenis_bhp')!='' || !empty($this->input->post('jenis_bhp'))){
 			$jenis_bhp= $this->input->post('jenis_bhp');
+			if ($this->input->post('jenis_bhp')=="8") {
+				$nama_jenis = "Obat";
+			}else{
+				$nama_jenis = "Umum";
+			}
 		}else{
 			$jenis_bhp = 0;
+			$nama_jenis = "Umum";
 		}
 		$TBS = new clsTinyButStrong;		
 		$TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN);
@@ -100,7 +106,7 @@ class Bhp_distribusi extends CI_Controller {
 				'uraian'									=> $act->uraian,
 				'pilihan_satuan'							=> $act->pilihan_satuan,
 				'tgl_kadaluarsa'							=> date("d-m-Y",strtotime($act->tgl_kadaluarsa)),
-				'jumlah'										=> $act->jml,
+				'jumlah'									=> $act->jml,
 			);
 		}
 
@@ -111,8 +117,16 @@ class Bhp_distribusi extends CI_Controller {
 		$kd_kec  = 'KEC. '.$this->inv_barang_model->get_nama('nama','cl_kec','code',substr($kode_sess, 0,7));
 		$namapus  = $this->inv_barang_model->get_nama('value','cl_phc','code','P'.$kode_sess);
 		$tahun  = date("Y");
+		$datautama = $this->bhp_distribusi_model->get_data_row($id);
+		$nomor_dokumen = $datautama['nomor_dokumen'];
+		$tgl_distribusi =$datautama['tgl_distribusi'];
+		
+		$jenis_bhps = $nama_jenis;
+		//$jsontotal  = json_decode($this->total_distribusi($id));
+		$jumlah = $this->bhp_distribusi_model->sum_jumlah_item_jumlah($id);//$jsontotal->jumlah_tot;
+		$penerima = $datautama['penerima_nama'];
 
-		$data_puskesmas[] = array('nama_puskesmas' => $namapus,'kd_prov' => $kd_prov,'kd_kab' => $kd_kab,'tahun' => $tahun);
+		$data_puskesmas[] = array('nama_puskesmas' => $namapus,'kd_prov' => $kd_prov,'kd_kab' => $kd_kab,'tahun' => $tahun,'nomor_dokumen' => $nomor_dokumen,'tgl_distribusi' => $tgl_distribusi,'jenis_bhp' => $jenis_bhps,'jumlah' => $jumlah,'penerima' => $penerima);
 		$dir = getcwd().'/';
 		if ($jenis_bhp!='8') {
 			$template = $dir.'public/files/template/inventory/bhp_distribusi_umum.xlsx';		
@@ -132,6 +146,119 @@ class Bhp_distribusi extends CI_Controller {
 		}else{
 			$output_file_name = 'public/files/hasil/hasil_export_bhpdistribusiobat_'.$code.'.xlsx';
 		}
+		$output = $dir.$output_file_name;
+		$TBS->Show(OPENTBS_FILE, $output); // Also merges all [onshow] automatic fields.
+		
+		echo base_url().$output_file_name ;
+	}
+	public function distribusi_export_umum(){
+		$TBS = new clsTinyButStrong;		
+		$TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN);
+		$this->authentication->verify('inventory','show');
+
+
+		$this->authentication->verify('inventory','show');
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl_permohonan') {
+					$value = date("Y-m-d",strtotime($value));
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
+
+		$rows_all = $this->bhp_distribusi_model->get_data();
+
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl_permohonan') {
+					$value = date("Y-m-d",strtotime($value));
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
+		$rows = $this->bhp_distribusi_model->get_data();
+		$data_tabel = array();
+
+		$kodepuskesmas = $this->session->userdata('puskesmas');
+		if(substr($kodepuskesmas, -2)=="01"){
+			$unlock = 1;
+		}else{
+			$unlock = 0;
+		}
+		$no=1;
+		foreach($rows as $act) {
+			$data_tabel[] = array(
+				'no'							=> $no++,
+				'id_inv_inventaris_habispakai_distribusi' 	=> $act->id_inv_inventaris_habispakai_distribusi,
+				'code_cl_phc' 					=> $act->code_cl_phc,
+				'jenis_bhp' 					=> ucfirst($act->jenis_bhp),
+				'tgl_distribusi' 				=> $act->tgl_distribusi,
+				'nomor_dokumen'					=> $act->nomor_dokumen,
+				'penerima_nama'					=> $act->penerima_nama,
+				'penerima_nip'					=> $act->penerima_nip,
+				'keterangan'					=> $act->keterangan,
+				'bln_periode'					=> $act->bln_periode,
+				'jumlah'						=> ($act->jumlah==null ? 0:$act->jumlah),
+				'detail'						=> 1,
+				'edit'							=> 1,//$unlock,
+				'delete'						=> 1//$unlock
+			);
+		}
+
+
+		$kode_sess=$this->session->userdata('puskesmas');
+		$kd_prov = $this->inv_barang_model->get_nama('value','cl_province','code',substr($kode_sess, 0,2));
+		$kd_kab  = $this->inv_barang_model->get_nama('value','cl_district','code',substr($kode_sess, 0,4));
+		$kd_kec  = 'KEC. '.$this->inv_barang_model->get_nama('nama','cl_kec','code',substr($kode_sess, 0,7));
+		$namapus  = $this->inv_barang_model->get_nama('value','cl_phc','code','P'.$kode_sess);
+		$tahun  = date("Y");
+		
+
+		$data_puskesmas[] = array('nama_puskesmas' => $namapus,'kd_prov' => $kd_prov,'kd_kab' => $kd_kab,'tahun' => $tahun);
+		$dir = getcwd().'/';
+		$template = $dir.'public/files/template/inventory/distribusi.xlsx';		
+		
+		$TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8);
+
+		// Merge data in the first sheet
+		$TBS->MergeBlock('a', $data_tabel);
+		$TBS->MergeBlock('b', $data_puskesmas);
+		
+		$code = uniqid();
+		$output_file_name = 'public/files/hasil/hasi_export_distribusi'.$code.'.xlsx';
 		$output = $dir.$output_file_name;
 		$TBS->Show(OPENTBS_FILE, $output); // Also merges all [onshow] automatic fields.
 		
@@ -212,7 +339,7 @@ class Bhp_distribusi extends CI_Controller {
 				'penerima_nip'					=> $act->penerima_nip,
 				'keterangan'					=> $act->keterangan,
 				'bln_periode'					=> $act->bln_periode,
-				'jumlah'						=> $act->jumlah,
+				'jumlah'						=> ($act->jumlah==null ? 0:$act->jumlah),
 				'detail'						=> 1,
 				'edit'							=> 1,//$unlock,
 				'delete'						=> 1//$unlock
@@ -549,7 +676,7 @@ class Bhp_distribusi extends CI_Controller {
 			$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
 			$data['kodestatus'] = $this->bhp_distribusi_model->get_data_status();
 			$data['kodestatus_inv'] = $this->bhp_distribusi_model->pilih_data_status('status_pembelian');
-			$data['tgl_opnamecond']		= $this->bhp_distribusi_model->gettgl_opname($id_distribusi);
+			//$data['tgl_opnamecond']		= $this->bhp_distribusi_model->gettgl_opname($id_distribusi);
 			$data['barang_distribusi'] 	= $this->parser->parse('inventory/bhp_distribusi/barang_detail', $data, TRUE);
 			$data['content'] 	= $this->parser->parse("inventory/bhp_distribusi/edit",$data,true);
 			$this->template->show($data,"home");
