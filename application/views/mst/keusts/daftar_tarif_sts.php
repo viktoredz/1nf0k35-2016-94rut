@@ -18,6 +18,9 @@
       </div>
     
       <div class="box-body">
+          <div class="div-grid">
+            <div id="jqxgrid"></div>
+      </div
       <div class="">
         <div class="col-md-3 pull-left">
           <button id="doExpand" class="btn  btn-warning " >Expand All</button>  

@@ -11,15 +11,41 @@ class Keusts_model extends CI_Model {
 
     function insert_versi()
     {
-        $data['nama']            = $this->input->post('nama');
-        $data['deskripsi']       = $this->input->post('tlp');
-        $data['tanggal_dibuat']  = $this->input->post('alamat');
+        $data['id_mst_anggaran_versi'] = $this->kode_versi();
+        $data['nama']                  = $this->input->post('nama');
+        $data['deskripsi']             = $this->input->post('deskripsi');
     
-        if($this->db->insert('mst_keu_anggaran_versi', $data)){
+        if($this->db->set('tanggal_dibuat', 'NOW()', FALSE)){
+          ($this->db->insert('mst_keu_anggaran_versi', $data));
             return 1;
         }else{
             return mysql_error();
         }
+    }
+
+    function kode_versi($kode){
+        $insert_versi=explode(".", $kode);
+        $kode_versi = $inv[0].$inv[1].$inv[2];
+        $urut = $this->nourut($kode_versi);
+        return  $kode_versi.$urut;
+    }
+
+      function nourut($kode_versi){
+        $q = $this->db->query("select MAX(RIGHT(id_mst_anggaran_versi,6)) as kd_max from mst_keu_anggaran_versi where (LEFT(id_mst_anggaran_versi,11))=$kode_versi");
+        $nourut="";
+        if($q->num_rows()>0)
+        {
+            foreach($q->result() as $k)
+            {
+                $tmp = ((int)$k->kd_max)+1;
+                $nourut = sprintf("%06s", $tmp);
+            }
+        }
+        else
+        {
+            $nourut = "001";
+        }
+        return $nourut;
     }
 
     function insert_induk()
@@ -122,6 +148,22 @@ class Keusts_model extends CI_Model {
         $query = $this->db->get('keu_sts');     
         return $query->result_array();
     }
+
+    function get_data_versi_filter($ver)
+    {               
+        $this->db->select('mst_keu_anggaran.*,mst_keu_anggaran_versi.*,mst_keu_akun.id_mst_akun AS rekening');        
+        
+        #$kodepuskesmas = $this->session->userdata('puskesmas');
+        $versi = $ver;
+        if(substr($versi, -2)=="01"){           
+            $this->db->join('mst_keu_anggaran_versi', "mst_keu_anggaran_versi.id_mst_anggaran_versi=mst_keu_anggaran.id_mst_anggaran and mst_keu_anggaran_versi.nama= '".$ver."'",'left');
+            $this->db->where("mst_keu_anggaran_versi.nama");
+        }
+        $this->db->join('mst_keu_akun', "mst_keu_akun.id_mst_akun=mst_keu_anggaran.id_mst_akun",'inner');
+        $this->db->order_by('id_mst_anggaran','asc');
+        $query = $this->db->get('mst_keu_anggaran');        
+        return $query->result_array();
+    }
     
     function get_data_puskesmas_filter($pus)
     {               
@@ -166,18 +208,18 @@ class Keusts_model extends CI_Model {
     function get_data_puskesmas(){
         
         $kodepuskesmas = $this->session->userdata('puskesmas');
-        if(substr($kodepuskesmas, -2)=="01"){           
-            //kecamatan
+        // if(substr($kodepuskesmas, -2)=="01"){           
+        //     //kecamatan
             
                 
-                $this->db->like('code','P'.substr($kodepuskesmas,0,7));
+        //         $this->db->like('code','P'.substr($kodepuskesmas,0,7));
             
-        }else{
-            $this->db->like('code','P'.$kodepuskesmas);
-            //kelurahan
-        }
+        // }else{
+        //     $this->db->like('code','P'.$kodepuskesmas);
+        //     //kelurahan
+        // }
         
-        $query = $this->db->get('cl_phc');
+        $query = $this->db->get('mst_keu_anggaran_versi');
         return $query->result_array();
     }
     

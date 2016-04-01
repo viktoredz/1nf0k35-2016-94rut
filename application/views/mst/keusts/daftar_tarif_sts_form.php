@@ -7,7 +7,7 @@
 <?php } ?>
 
 <div id="popup_keuangan_sts" style="display:none">
-  <div id="popup_title">{title_pupup}</div>
+  <div id="popup_title">aa</div>
   <div id="popup_keuangan_sts_content">&nbsp;</div>
 </div>
 

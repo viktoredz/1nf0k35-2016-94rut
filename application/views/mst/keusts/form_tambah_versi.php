@@ -57,7 +57,7 @@
                 </div>
               </div>
 
-             <div class="row" style="margin: 5px">
+         <!--     <div class="row" style="margin: 5px">
                 <div class="col-md-4" style="padding: 5px">
                    Duplikasi Dari
                 </div>
@@ -77,7 +77,26 @@
                <?php endforeach ?>
              </select>
                 </div>
-              </div>
+              </div> -->
+
+<!--              <div class="row" style="margin: 5px">
+                <div class="col-md-4" style="padding: 5px">
+                  Tanggal Dibuat
+                </div>
+                <div class="col-md-8">
+                  <div id='tanggal_dibuat' name="versi_tgl" value="<?php
+                    if(set_value('tanggal_dibuat')=="" && isset($tanggal_dibuat)){
+                      $tanggal_dibuat = strtotime($tanggal_dibuat);
+                    }else{
+                      $tanggal_dibuat = strtotime(set_value('tanggal_dibuat'));
+                    }
+
+                    if($tanggal_dibuat=="") $tanggal_dibuat = time();
+                    echo date("Y-m-d",$tanggal_dibuat);
+                  ?>" >
+                  </div>
+                </div>
+              </div> -->
   
               <br>
             </div>
@@ -89,6 +108,8 @@
   $(function () { 
     tabIndex = 1;
 
+    // $("[name='versi_tgl']").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme, height:30});
+
     $("[name='btn_keuangan_versi_close']").click(function(){
         $("#popup_keuangan_sts").jqxWindow('close');
     });
@@ -98,20 +119,20 @@
         $('#biodata_notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
         $('#biodata_notice').show();
 
-        data.append('nama',            $("[name='sts_nama']").val());
-        data.append('deskripsi',       $("[name='sts_deskripsi']").val());
-        data.append('tanggal_dibuat',  $("[name='sts_tanggal_dibuat']").val());
+        data.append('nama',            $("[name='versi_nama']").val());
+        data.append('deskripsi',       $("[name='versi_uraian']").val());
+        // data.append('tanggal_dibuat',  $("[name='versi_tgl']").val());
         
         $.ajax({
             cache : false,
             contentType : false,
             processData : false,
             type : 'POST',
-            url : '<?php echo base_url()."mst/keuangan_instansi/instansi_{action}/{id}"   ?>',
+            url : '<?php echo base_url()."mst/keuangan_sts/versi_{action}/{id}"   ?>',
             data : data,
             success : function(response){
               if(response=="OK"){
-                $("#popup_keuangan_instansi").jqxWindow('close');
+                $("#popup_keuangan_sts").jqxWindow('close');
                 alert("Data instansi berhasil disimpan.");
                 $("#jqxgrid").jqxGrid('updatebounddata', 'filter');
               }else{
