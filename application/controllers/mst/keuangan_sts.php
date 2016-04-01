@@ -36,29 +36,83 @@ class Keuangan_sts extends CI_Controller {
 				die($this->parser->parse("mst/keusts/pengaturan_sts",$data));
 
 				break;
+			default:
+				die($this->parser->parse("mst/keusts/penggunaan_tarif_sts",$data));
+				break;
 		}
 	}
 
-	function sts_sts($pageIndex){
-		$data = array();
+	function json_sts($id){
+		$this->authentication->verify('mst','show');
 
-		switch ($pageIndex) {
-			case 1:
-				$data['title_group']   = "Keuangan";
-			    $data['title_form']    = "Ubah Daftar Tarif Surat Tanda Setoran";
-			    $data['title_pupup']   = "Buat Versi Daftar Tarif STS Baru";
-				$data['ambildata']     = $this->keusts_model->get_data();
-				$data['versi'] 		   = $this->keusts_model->get_versi_sts();
-				$data['kode_rekening'] = $this->keusts_model->get_data_kode_rekening();
-				
-				die($this->parser->parse("mst/keusts/daftar_tarif_sts_form",$data));
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
 
-				break;
-			case 2:
-				die($this->parser->parse("mst/keusts/pengaturan_sts",$data));
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
 
-				break;
+				if($field == 'tgl_lahir') {
+					$value = date("Y-m-d",strtotime($value));
+					$this->db->where($field,$value);
+				}else{
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
 		}
+
+		$rows_all = $this->keusts_model->get_data_sts($versi);
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl_lahir') {
+					$value = date("Y-m-d",strtotime($value));
+					$this->db->where($field,$value);
+				}else{
+					$this->db->like($field,$value);
+				}
+
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+
+		$rows = $this->keusts_model->get_data_sts($versi,$this->input->post('recordstartindex'), $this->input->post('pagesize'));
+		$data = array();
+		foreach($rows as $act) {
+			$data[] = array(
+				'id_mst_anggaran'  		=> $act->id_mst_anggaran,
+				'id_mst_anggaran_parent'=> $act->id_mst_anggaran_parent,
+				'id_mst_akun'    		=> $act->id_mst_akun,
+				'kode_anggaran'  		=> $act->kode_anggaran,
+				'uraian'				=> $act->uraian,
+				'tarif'					=> $act->tarif,
+				'id_mst_anggaran_versi'	=> $act->id_mst_anggaran_versi,
+				'edit'		 	        => 1,
+				'delete'	     	    => 1
+			);
+		}
+
+		$size = sizeof($rows_all);
+		$json = array(
+			'TotalRows' => (int) $size,
+			'Rows' => $data
+		);
+
+		echo json_encode(array($json));
 	}
 
 	function versi_add(){
@@ -71,6 +125,7 @@ class Keuangan_sts extends CI_Controller {
 		$data['id_mst_anggaran_versi']	= "";
 	    $data['action']					= "add";
 		$data['alert_form']		   	    = '';
+		$data['versi'] 		            = $this->keusts_model->get_versi_sts();
 
 		if($this->form_validation->run()== FALSE){
 			die($this->parser->parse("mst/keusts/form_tambah_versi",$data));
@@ -132,6 +187,18 @@ class Keuangan_sts extends CI_Controller {
 		die($this->parser->parse("mst/keusts/form_tambah_induk",$data));
 	}
 
+	function kembali(){
+
+		$data['title_group']   = "Keuangan";
+		$data['title_form']    = "Daftar Tarif Surat Tanda Setoran";
+		$data['ambildata']     = $this->keusts_model->get_data();
+		$data['versi'] 		   = $this->keusts_model->get_versi_sts();
+		$data['kode_rekening'] = $this->keusts_model->get_data_kode_rekening();
+		$data['kode_rek']	   = $this->keusts_model->get_data_kode_rek();
+
+		die($this->parser->parse("mst/keusts/daftar_tarif_sts",$data));
+	}
+
 	function api_data(){
 		$this->authentication->verify('mst','edit');		
 		
@@ -174,12 +241,17 @@ class Keuangan_sts extends CI_Controller {
 
 	function anggaran_ubah(){
 		$this->authentication->verify('mst','edit');
+
 		$data['title_group']   = "Tarif Surat Tanda Setoran";
 		$data['title_form']    = "Ubah Daftar Tarif Surat Tanda Setoran";
-		
-		$data['content']       = $this->parser->parse("mst/keusts/show_edit",$data,true);		
-		
-		$this->template->show($data,"home");
+
+		$data['ambildata']     = $this->keusts_model->get_data();
+		$data['versi'] 		   = $this->keusts_model->get_versi_sts();
+		$data['kode_rekening'] = $this->keusts_model->get_data_kode_rekening();
+		$data['kode_rek']	   = $this->keusts_model->get_data_kode_rek();
+		$data['versi'] 		   = $this->keusts_model->get_versi_sts();
+
+	 	die($this->parser->parse("mst/keusts/daftar_tarif_sts_form",$data));
 	}
 
 	function anggaran_tarif(){

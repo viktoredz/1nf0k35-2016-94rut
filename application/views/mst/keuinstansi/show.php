@@ -116,16 +116,16 @@
 				{ text: 'Alamat', datafield: 'alamat', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '29%' },
 				{ text: 'Telpon', datafield: 'tlp', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '10%' },
 				{ text: 'Aktif', datafield: 'status', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '10%',  cellsrenderer: function (row) {
-				  var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
-				  var aktif = dataRecord.status;
-				  var str = "";
-					if(aktif=='1'){
-						str = "<input type='checkbox' checked>";
-					}else{
-						str = "<input type='checkbox'>";
-					}
-					return "<div style='width:100%;padding-top:2px;text-align:center'>"+str+"</div>";}
-				}
+				//   var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
+				//   var aktif = dataRecord.status;
+				//   var str = "";
+				// 	if(aktif=='1'){
+				// 		str = "<input type='combokbox' checked>";
+				// 	}else{
+				// 		str = "<input type='combobox'>";
+				// 	}
+				// 	return "<div style='width:100%;padding-top:2px;text-align:center'>"+str+"</div>";}
+				// }
             ]
 		});
 

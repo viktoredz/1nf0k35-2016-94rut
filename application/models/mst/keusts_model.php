@@ -72,6 +72,14 @@ class Keusts_model extends CI_Model {
         $query = $this->db->get($this->tb);     
         return $query->result_array();
     }
+
+    function get_data_sts($versi)
+    {
+        $this->db->select('*');     
+        $this->db->where('id_mst_anggaran_versi', $versi);
+        $query = $this->db->get('mst_keu_anggaran');     
+        return $query->result_array();
+    } 
     
     function get_data_sts_total($tgl, $puskes)
     {
@@ -83,16 +91,6 @@ class Keusts_model extends CI_Model {
             return $q->n;
         }       
     }
-    
-    function get_data_sts($tgl, $puskes)
-    {
-        $this->db->select('*');     
-        $this->db->where('tgl', $tgl);
-        $this->db->where('code_cl_phc', $puskes);
-        $this->db->join('cl_phc','cl_phc.code = keu_sts.code_cl_phc');
-        $query = $this->db->get('keu_sts');     
-        return $query->result_array();
-    }   
     
     function get_data_kode_rekening()
     {
@@ -106,11 +104,11 @@ class Keusts_model extends CI_Model {
         return $query->result_array();
     } 
 
-    function get_data_type_filter($ver)
+    function get_data_type_filter($versi)
     {       
         $this->db->select('id_mst_anggaran, id_mst_anggaran_parent, mst_keu_akun.id_mst_akun as akun,uraian, kode_anggaran,uraian, tarif, id_mst_anggaran_versi');        
         $this->db->join('mst_keu_akun','mst_keu_akun.id_mst_akun = mst_keu_anggaran.id_mst_akun');
-        $this->db->where('id_mst_anggaran_versi', $ver);        
+        $this->db->where('id_mst_anggaran_versi', $versi);        
         $this->db->order_by('id_mst_anggaran','asc');
         $query = $this->db->get($this->tb);     
         return $query->result_array();

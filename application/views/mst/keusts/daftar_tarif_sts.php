@@ -24,13 +24,18 @@
           <button id="doCollapse" onclick="" class="btn  btn-warning " >Collapse All</button> 
         </div>
         <div class="col-md pull-right">
-          <a href="<?php echo base_url(); ?>mst/keuangan_sts/anggaran_ubah" class="btn btn-success" >Ubah Tarif</a>  
+          
+          <button type="button" class="btn btn-primary" id="btn-ubah-tarif"></i> &nbsp; Ubah Tarif
+          </button>
+          
+          <!-- <a href="<?php echo base_url(); ?>mst/keuangan_sts/anggaran_ubah" class="btn btn-success" >Ubah Tarif</a>   -->
+       
         </div>
 
         <!-- <div class="col-md-4 pull-right" style="padding-top:5px;"><label> Versi </label> </div> -->
         
         <div class="col-md-3 pull-right">
-          <select  name="versi" type="text" class="form-control">
+          <select class="form-control" name="versi" type="text" >
              <option> Versi </option>
                 <?php foreach($versi as $ver) : ?>
                     <?php
@@ -61,6 +66,8 @@
 
 
   <script type="text/javascript">
+
+
     function getDemoTheme() {
       var theme = document.body ? $.data(document.body, 'theme') : null
       if (theme == null) {
@@ -160,6 +167,11 @@
       $("#menu_master_data").addClass("active");
       $("#menu_mst_keuangan_sts").addClass("active");
 
+        $("#btn-ubah-tarif").click(function(){
+        $.get('<?php echo base_url()?>mst/keuangan_sts/anggaran_ubah', function (data) {
+          $('#content1').html(data);
+          });
+       });
             var newRowID = null;
       
       $("#doExpand").click(function(){
@@ -169,15 +181,17 @@
       $("#doCollapse").click(function(){
           $("#treeGrid").jqxTreeGrid('collapseAll');                    
             });
-            
-      $("select[name='pilih_type']").change(function(){
+
+      $("select[name='versi']").change(function(){
         $.post( '<?php echo base_url()?>keuangan/master_sts/set_type', {tipe:$(this).val()},function( data ) {
           $("#treeGrid").jqxTreeGrid('updateBoundData');
           $("#treeGrid").jqxTreeGrid('expandAll');            
         });
             });
-
+      
+            
             // prepare the data
+
             var source =
             {
                 dataType: "tab",
@@ -198,7 +212,7 @@
                 id: 'id_mst_anggaran',
                 url: '<?php echo base_url()?>mst/keuangan_sts/api_data',
                  addRow: function (rowID, rowData, position, parentID, commit) {        
-          // POST to server using $.post or $.ajax          
+                  // POST to server using $.post or $.ajax          
                      // synchronize with the server - send insert command
                      // call commit with parameter true if the synchronization with the server is successful 
                      // and with parameter false if the synchronization failed.
@@ -206,54 +220,27 @@
                      commit(true);
                      newRowID = rowID;
                  },
+                 
                  updateRow: function (rowID, rowData, commit) {
                      // synchronize with the server - send update command
                      // call commit with parameter true if the synchronization with the server is successful 
                      // and with parameter false if the synchronization failed.         
           
+          
+          
                     commit(true);
-          var arr = $.map(rowData, function(el) { return el });                                                           
-          //cek tipe inputan 
-          //object -> input
-          //number -> update
-          if(typeof(arr[1]) === 'object'){
-            var arr2 = $.map(arr[1], function(el) { return el });
-            //input data
-            $.post( '<?php echo base_url()?>mst/keuangan_sts/anggaran_add', {id_anggaran:arr[0],sub_id:arr2[0], kode_rekening:arr[6], kode_anggaran:arr[4], uraian : arr[5], type : arr[8]},function( data ) {
-                if(data != 0){
-                  alert(data);                  
-                }else{
-                  $("#treeGrid").jqxTreeGrid('updateBoundData');
-                }
-                
-            });
-          }else{      
-            //update data
-            $.post( '<?php echo base_url()?>mst/keuangan_sts/anggaran_update', {id_anggaran_awal:rowID, id_anggaran:arr[0],sub_id:arr[1], kode_rekening:arr[2], kode_anggaran:arr[3], uraian : arr[4], type : arr[5]},function( data ) {
-                if(data != 0){
-                  alert(data);                  
-                }
-            });
-          }
-                 },
+                    var arr = $.map(rowData, function(el) { return el });                             
+                    //0,7
+                    $.post( '<?php echo base_url()?>keuangan/master_sts/add_tarif', {id_anggaran:arr[0],tarif:arr[8]},function( data ) {
+                      if(data != 0){
+                        alert(data);                  
+                    }else{
+                   //$("#treeGrid").jqxTreeGrid('updateBoundData');
+                    }
+                  });
+                 },                 
+
                  deleteRow: function (rowID, commit) {
-                     // synchronize with the server - send delete command
-                     // call commit with parameter true if the synchronization with the server is successful 
-                     // and with parameter false if the synchronization failed.
-          
-          if( Object.prototype.toString.call( rowID ) === '[object Array]' ) {
-            for(var i=0; i< rowID.length; i++){
-              $.post( '<?php echo base_url()?>mst/keuangan_sts/anggaran_delete', {id_anggaran:rowID[i]},function( data ) {
-                $("#treeGrid").jqxTreeGrid('updateBoundData');
-              });
-            }
-            
-          }else{
-            $.post( '<?php echo base_url()?>mst/keuangan_sts/anggaran_delete', {id_anggaran:rowID},function( data ) {
-              $("#treeGrid").jqxTreeGrid('updateBoundData');
-            });
-          }
-          
           
            
                      commit(true);
@@ -268,193 +255,21 @@
 
             $("#treeGrid").jqxTreeGrid(
             {
-                width: '100%',
-                source: dataAdapter, 
-                pageable: false,
-                editable: true,
-                showToolbar: true,
+                 width: '100%',
+                source: dataAdapter,
+                pageable: false,pageSize:999,
+                editable: true,                
                 altRows: true,
                 ready: function()
-                {
-                    // called when the DatatreeGrid is loaded.   
-          $("#treeGrid").jqxTreeGrid('expandAll');            
-                },
-                pagerButtonsCount: 8,
-                toolbarHeight: 35,
-                renderToolbar: function(toolBar)
-                {
-                    var toTheme = function (className) {
-                        if (theme == "") return className;
-                        return className + " " + className + "-" + theme;
-                    }
-
-                    // appends buttons to the status bar.
-                    var container = $("<div style='overflow: hidden; position: relative; height: 100%; width: 100%;'></div>");
-                    var buttonTemplate = "<div style='float: left; padding: 3px; margin: 2px;'><div style='margin: 4px; width: 16px; height: 16px;'></div></div>";
-                    var addButton = $(buttonTemplate);
-                    var editButton = $(buttonTemplate);
-                    var deleteButton = $(buttonTemplate);
-                    var cancelButton = $(buttonTemplate);
-                    var updateButton = $(buttonTemplate);                    
-                    
-                    container.append(addButton);
-                    container.append(editButton);
-                    container.append(deleteButton);
-                    container.append(cancelButton);
-                    container.append(updateButton);
-
-                    toolBar.append(container);
-          
-          
-                    addButton.jqxButton({cursor: "pointer", enableDefault: false, disabled: true, height: 25, width: 25 });
-                    addButton.find('div:first').addClass(toTheme('jqx-icon-plus'));
-                    addButton.jqxTooltip({ position: 'bottom', content: "Tambah Cabang"});
-
-                    editButton.jqxButton({ cursor: "pointer", disabled: true, enableDefault: false,  height: 25, width: 25 });
-                    editButton.find('div:first').addClass(toTheme('jqx-icon-edit'));
-                    editButton.jqxTooltip({ position: 'bottom', content: "Edit"});
-
-                    deleteButton.jqxButton({ cursor: "pointer", disabled: true, enableDefault: false,  height: 25, width: 25 });
-                    deleteButton.find('div:first').addClass(toTheme('jqx-icon-delete'));
-                    deleteButton.jqxTooltip({ position: 'bottom', content: "Delete"});
-
-                    updateButton.jqxButton({ cursor: "pointer", disabled: true, enableDefault: false,  height: 25, width: 25 });
-                    updateButton.find('div:first').addClass(toTheme('jqx-icon-save'));
-                    updateButton.jqxTooltip({ position: 'bottom', content: "Save Changes"});
-
-                    cancelButton.jqxButton({ cursor: "pointer", disabled: true, enableDefault: false,  height: 25, width: 25 });
-                    cancelButton.find('div:first').addClass(toTheme('jqx-icon-cancel'));
-                    cancelButton.jqxTooltip({ position: 'bottom', content: "Cancel"});
-
-                    var updateButtons = function (action) {
-                        switch (action) {
-                            case "Select":
-                                addButton.jqxButton({ disabled: false });
-                                deleteButton.jqxButton({ disabled: false });
-                                editButton.jqxButton({ disabled: false });
-                                cancelButton.jqxButton({ disabled: true });
-                                updateButton.jqxButton({ disabled: true });
-                                break;
-                            case "Unselect":
-                                addButton.jqxButton({ disabled: true });
-                                deleteButton.jqxButton({ disabled: true });
-                                editButton.jqxButton({ disabled: true });
-                                cancelButton.jqxButton({ disabled: true });
-                                updateButton.jqxButton({ disabled: true });
-                                break;
-                            case "Edit":
-                                addButton.jqxButton({ disabled: true });
-                                deleteButton.jqxButton({ disabled: true });
-                                editButton.jqxButton({ disabled: true });
-                                cancelButton.jqxButton({ disabled: false });
-                                updateButton.jqxButton({ disabled: false });
-                                break;
-                            case "End Edit":
-                                addButton.jqxButton({ disabled: false });
-                                deleteButton.jqxButton({ disabled: false });
-                                editButton.jqxButton({ disabled: false });
-                                cancelButton.jqxButton({ disabled: true });
-                                updateButton.jqxButton({ disabled: true });
-                                break;
-
-                        }
-                    }
-
-                    var rowKey = null;
-                    $("#treeGrid").on('rowSelect', function (event) {
-                        var args = event.args;
-                        rowKey = args.key;
-                        updateButtons('Select');
-                    });
-                    $("#treeGrid").on('rowUnselect', function (event) {
-                        updateButtons('Unselect');
-                    });
-                    $("#treeGrid").on('rowEndEdit', function (event) {
-                        updateButtons('End Edit');
-                    });
-                    $("#treeGrid").on('rowBeginEdit', function (event) {
-                        updateButtons('Edit');
-                    });
-          
-                    addButton.click(function (event) {
-                        if (!addButton.jqxButton('disabled')) {             
-                            $("#treeGrid").jqxTreeGrid('expandRow', rowKey);
-                            // add new empty row.
-                            $("#treeGrid").jqxTreeGrid('addRow', null, {}, 'first', rowKey);
-                            // select the first row and clear the selection.
-                            $("#treeGrid").jqxTreeGrid('clearSelection');
-                            $("#treeGrid").jqxTreeGrid('selectRow', newRowID);
-                            // edit the new row.
-                            $("#treeGrid").jqxTreeGrid('beginRowEdit', newRowID);
-                            updateButtons('add');
-                        }
-                    });
-
-                    cancelButton.click(function (event) {
-                        if (!cancelButton.jqxButton('disabled')) {
-                            // cancel changes.
-                            $("#treeGrid").jqxTreeGrid('endRowEdit', rowKey, true);
-                        }
-                    });
-
-                    updateButton.click(function (event) {
-                        if (!updateButton.jqxButton('disabled')) {
-                            // save changes.
-                            $("#treeGrid").jqxTreeGrid('endRowEdit', rowKey, false);
-                        }
-                    });
-
-                    editButton.click(function () {
-                        if (!editButton.jqxButton('disabled')) {
-                            $("#treeGrid").jqxTreeGrid('beginRowEdit', rowKey);
-                            updateButtons('edit');
-
-                        }
-                    });
-                    deleteButton.click(function () {
-                        if (!deleteButton.jqxButton('disabled')) {
-                            var selection = $("#treeGrid").jqxTreeGrid('getSelection');
-                            if (selection.length > 1) {
-                                var keys = new Array();
-                                for (var i = 0; i < selection.length; i++) {
-                                    keys.push($("#treeGrid").jqxTreeGrid('getKey', selection[i]));
-                                }
-                if(confirm('Apakah anda yakin akan menghapus beberapa data sekaligus ? Data yang telah terhapus tidak dapat di kembalikan lagi')){
-                  $("#treeGrid").jqxTreeGrid('deleteRow', keys);
-                }
-                            }
-                            else {
-                if(confirm('Apakah anda yakin akan menghapus data ini ? Data yang telah terhapus tidak dapat di kembalikan lagi')){
-                  $("#treeGrid").jqxTreeGrid('deleteRow', rowKey);
-                }
-                            }
-                            updateButtons('delete');
-
-                        }
-                    });
+                {   // called when the DatatreeGrid is loaded.   
+         
                 },
                 columns: [
                                   
                   { text: 'Kode Anggaran', dataField: "KodeAnggaran", align: 'center', width: '19%' },
                   { text: 'Uraian', dataField: "Uraian", align: 'center', width: '31%' }, 
                   { text: 'Tarif', dataField: "Tarif", align: 'center', width: '20%' },         
-                  { text: 'Kode Rekening', dataField: 'IdMstAkun', width: "30%", columnType: "template", align:'center',
-                   createEditor: function (row, cellvalue, editor, cellText, width, height) {
-                       // construct the editor.
-            var source=[<?php foreach($kode_rekening as $kr){?>
-              "<?=$kr['code']."-".$kr['kode_rekening']."-".$kr['uraian']?>",
-            <?php } ?>];             
-                       editor.jqxDropDownList({autoDropDownHeight: true, source: source, width: '100%', height: '100%' });
-                   },
-                   initEditor: function (row, cellvalue, editor, celltext, width, height) {
-                       // set the editor's current value. The callback is called each time the editor is displayed.
-                       editor.jqxDropDownList('selectItem', cellvalue);
-                   },
-                   getEditorValue: function (row, cellvalue, editor) {
-                       // return the editor's value.
-                       return editor.val();
-                   }
-        }     
+                  { text: 'Kode Rekening', dataField: 'IdMstAkun', width: "30%", columnType: "template", align:'center'}
                 ]
             });
       
@@ -473,48 +288,10 @@
           document.getElementById("kode_anggaran").value='';
           document.getElementById("uraian").value = '';
         });
+    
+
+
     }
     </script>
   
-  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Add New Parent</h4>
-      </div>
-      <div class="modal-body">
-        
-    <div class="form-group">
-      <label for="exampleInputEmail1">Kode Anggaran</label>
-      <input type="text" required id="kode_anggaran" class="form-control" name="kode_anggaran" id="exampleInputEmail1" placeholder="Kode Anggaran">
-    </div>
-    <div class="form-group">
-      <label for="exampleInputEmail1">Uraian</label>
-      <input type="text" required id="uraian" class="form-control" name="uraian" id="exampleInputEmail1" placeholder="Uraian">
-    </div>
-    <div class="form-group">
-      <label for="exampleInputEmail1">Kode Rekening</label>
-      <select id="kode_rekening" name="kode_rekening"  class="form-control" id="exampleInputEmail1">
-      <option>Select Rekening</option>
-      <?php 
-        foreach($kode_rekening as $kr){
-      ?>
-          <option value="<?=$kr['code']?>"><?=$kr['kode_rekening']."-".$kr['uraian']?></option>
-      <?php
-        }
-      ?>
-      
-      </select>
-      
-    </div>
-    <input type="hidden" name="type" value="<?php echo $this->session->userdata('tipe')?>"/>
-    
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" onclick="addParent()" data-dismiss="modal" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
+  
