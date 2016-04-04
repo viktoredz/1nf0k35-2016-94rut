@@ -512,7 +512,7 @@ class Bhp_opname extends CI_Controller {
 
 		echo json_encode(array($json));
 	}
-	function json_barang($id=0){
+	function json_barang($id=0,$tgl_opname='0000-00-00'){
 		$this->authentication->verify('inventory','show');
 
 
@@ -545,7 +545,9 @@ class Bhp_opname extends CI_Controller {
 		}else{
 			$this->db->where('id_mst_inv_barang_habispakai_jenis !=','8');
 		}
-		
+		if ($tgl_opname!='0000-00-00' or empty($tgl_opname)) {
+			$this->db->query("set @var =".'"'.$tgl_opname.'"'."");
+		}
 		$rows_all_activity = $this->bhp_opname_model->getitem();
 
 
@@ -577,6 +579,9 @@ class Bhp_opname extends CI_Controller {
 			$this->db->where('id_mst_inv_barang_habispakai_jenis',$id);
 		}else{
 			$this->db->where('id_mst_inv_barang_habispakai_jenis !=','8');
+		}
+		if ($tgl_opname!='0000-00-00' or empty($tgl_opname)) {
+			$this->db->query("set @var =".'"'.$tgl_opname.'"'."");
 		}
 		$activity = $this->bhp_opname_model->getitem($this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();
@@ -861,7 +866,7 @@ class Bhp_opname extends CI_Controller {
 		}
 		echo json_encode($barang);
 	}
-	public function add_barang($kodeopname=0,$idbarang=0,$batch='')
+	public function add_barang($tanggal_opnam='0000-00-00',$kodeopname=0,$idbarang=0,$batch='')
 	{	
 		$data['action']			= "add";
 		$data['kode']			= $kodeopname;
@@ -876,7 +881,7 @@ class Bhp_opname extends CI_Controller {
 
 		if($this->form_validation->run()== FALSE){
 
-			$data = $this->bhp_opname_model->get_data_detail_edit_barang($kodeopname,$idbarang,$batch); 
+			$data = $this->bhp_opname_model->get_data_detail_edit_barang($kodeopname,$idbarang,$batch,$tanggal_opnam); 
 			$data['action']			= "add";
 			$data['kode']			= $kodeopname;
 			$data['notice']			= validation_errors();

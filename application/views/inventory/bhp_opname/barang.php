@@ -19,7 +19,7 @@
 			{ name: 'edit', type: 'number'},
 			{ name: 'delete', type: 'number'}
         ],
-		url: "<?php echo site_url('inventory/bhp_opname/json_barang/'.$jenisbarangbhp); ?>",
+		url: "<?php echo site_url('inventory/bhp_opname/json_barang/'.$jenisbarangbhp.'/'.$tgl_opname); ?>",
 		cache: false,
 		updateRow: function (rowID, rowData, commit) {
          },
@@ -96,9 +96,9 @@
 		$("#jqxgrid_barang_opname").jqxGrid('updatebounddata', 'cells');
 	}
 	function pilih_opname(barang,batch){
-		
+		$tanggal_opname= $('#tgl_opname').val();
 		$("#popup_barang_opname #popup_content_opname_opname").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-		$.get("<?php echo base_url().'inventory/bhp_opname/add_barang/'.$kode.'/'; ?>"+barang+'/'+batch , function(data) {
+		$.get("<?php echo base_url().'inventory/bhp_opname/add_barang/'.$tgl_opname.'/'.$kode.'/'; ?>"+barang+'/'+batch, function(data) {
 			$("#popup_content_opname").html(data);
 		});
 		$("#popup_barang_opname").jqxWindow({

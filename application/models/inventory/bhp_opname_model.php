@@ -56,13 +56,16 @@ class Bhp_opname_model extends CI_Model {
         $query->free_result();    
         return $data;
     }
-    function get_data_detail_edit_barang($kodeopname,$idbarang,$batch){
+    function get_data_detail_edit_barang($kodeopname,$idbarang,$batch,$tanggal_opnam='0000-00-00'){
         $kodepuskesmas = "P".$this->session->userdata("puskesmas");
         $data = array();
+        $this->db->query("set @var =".'"'.$tanggal_opnam.'"'."");
         $this->db->where("id_mst_inv_barang_habispakai",$idbarang);
         $this->db->where("batch",$batch);
+        $this->db->where("code_cl_phc",$kodepuskesmas);
         $this->db->select("*");
         $query = $this->db->get('bhp_distribusi_opname',1,0);
+
         if ($query->num_rows() > 0){
             $data = $query->row_array();
         }
