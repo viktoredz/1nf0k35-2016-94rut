@@ -41,8 +41,7 @@
         <div class="col-md-2" style="padding-top:5px;"><label> Pilih Versi </label> </div>
         <div class="col-md-3 pull-left">
 
-        <select  name="versi" type="text" class="form-control">
-             <option> Versi </option>
+        <select class="form-control" name="versi" type="text" >
                 <?php foreach($versi as $ver) : ?>
                     <?php
                        if(set_value('id_mst_anggaran_versi')=="" && isset($id_mst_anggaran_versi)){
@@ -50,11 +49,11 @@
                        }else{
                          $id_mst_anggaran_versi = set_value('id_mst_anggaran_versi');
                        }
-                     $select = $ver->id_mst_anggaran_versi == $id_mst_anggaran_versi ? 'selected' : '' ;
-                  ?>
-                 <option value="<?php echo $ver->id_mst_anggaran_versi ?>" <?php echo $select ?>><?php echo $ver->nama ?></option>
+                         $select = $ver->id_mst_anggaran_versi == $id_mst_anggaran_versi ? 'selected' : '' ;
+                    ?>
+                     <option value="<?php echo $ver->id_mst_anggaran_versi ?>" <?php echo $select ?>><?php echo $ver->nama ?></option>
                <?php endforeach ?>
-             </select>
+           </select>
         </div>
       </div>
       </div>
@@ -492,27 +491,12 @@
                         }
                     });
                 },
+
                 columns: [                             
-                  { text: 'Kode Anggaran', dataField: "KodeAnggaran", align: 'center', width: '19%' },
-                  { text: 'Uraian', dataField: "Uraian", align: 'center', width: '31%' }, 
-                  { text: 'Tarif', dataField: "Tarif", align: 'center', width: '20%' },         
-                  { text: 'Kode Rekening', dataField: 'IdMstAkun', width: "30%", columnType: "template", align:'center',
-                   createEditor: function (row, cellvalue, editor, cellText, width, height) {
-                       // construct the editor.
-            var source=[<?php foreach($kode_rekening as $kr){?>
-              "<?=$kr['code']."-".$kr['kode_rekening']."-".$kr['uraian']?>",
-            <?php } ?>];             
-                       editor.jqxDropDownList({autoDropDownHeight: true, source: source, width: '100%', height: '100%' });
-                   },
-                   initEditor: function (row, cellvalue, editor, celltext, width, height) {
-                       // set the editor's current value. The callback is called each time the editor is displayed.
-                       editor.jqxDropDownList('selectItem', cellvalue);
-                   },
-                   getEditorValue: function (row, cellvalue, editor) {
-                       // return the editor's value.
-                       return editor.val();
-                   }
-        }     
+             { text: 'Kode Anggaran', dataField: "IdMstAkun", align: 'center',cellsalign: 'center', width: '19%' },
+               { text: 'Uraian', dataField: "KodeAnggaran", align: 'center', width: '31%',cellsalign: 'center' }, 
+               { text: 'Tarif', dataField: "Uraian", align: 'center', width: '20%',cellsalign: 'center' },         
+               { text: 'Kode Rekening', dataField: 'IdMstAnggaran', width: "30%", columnType: "template", align:'center',cellsalign: 'center'}    
                 ]
             });
       

@@ -1,21 +1,19 @@
-<form action="#" method="POST" name="frmPegawai">
-  <div class="row" style="margin: 15px 5px 15px 5px">
-    <div class="col-sm-8">
-      <?php if(validation_errors()!=""){ ?>
-      <div class="alert alert-warning alert-dismissable">
-        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-        <h4>  <i class="icon fa fa-check"></i> Information!</h4>
-        <?php echo validation_errors()?>
-      </div>
-      <?php } ?>
+<?php if(validation_errors()!=""){ ?>
+<div class="alert alert-warning alert-dismissable">
+  <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+  <h4>  <i class="icon fa fa-check"></i> Information!</h4>
+  <?php echo validation_errors()?>
+</div>
+<?php } ?>
 
-      <?php if($alert_form!=""){ ?>
-      <div class="alert alert-success alert-dismissable">
-        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-        <h4>  <i class="icon fa fa-check"></i> Information!</h4>
-        <?php echo $alert_form?>
-      </div>
-      <?php } ?>
+<?php if($this->session->flashdata('alert_form')!=""){ ?>
+<div class="alert alert-success alert-dismissable">
+  <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+  <h4>  <i class="icon fa fa-check"></i> Information!</h4>
+  <?php echo $this->session->flashdata('alert_form')?>
+</div>
+<?php } ?>
+
     </div>
     <div class="col-sm-12" style="text-align: right">
       <button type="button" name="btn_keuangan_versi_save" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Simpan</button>
@@ -26,6 +24,13 @@
   <div class="row" style="margin: 5px">
           <div class="col-md-12">
             <div class="box box-primary">
+
+             <!--  <div class="row" style="margin: 5px">
+                <div class="col-md-4" style="padding: 5px">ID</div>
+                  <div class="col-md-8">-->
+                    <input type="text" class="form-control" name="kode_versi_" id="kode_versi_" placeholder="ID" readonly>
+                <!-- </div>
+             </div> -->
              
               <div class="row" style="margin: 5px">
                 <div class="col-md-4" style="padding: 5px">
@@ -78,26 +83,6 @@
              </select>
                 </div>
               </div> -->
-
-<!--              <div class="row" style="margin: 5px">
-                <div class="col-md-4" style="padding: 5px">
-                  Tanggal Dibuat
-                </div>
-                <div class="col-md-8">
-                  <div id='tanggal_dibuat' name="versi_tgl" value="<?php
-                    if(set_value('tanggal_dibuat')=="" && isset($tanggal_dibuat)){
-                      $tanggal_dibuat = strtotime($tanggal_dibuat);
-                    }else{
-                      $tanggal_dibuat = strtotime(set_value('tanggal_dibuat'));
-                    }
-
-                    if($tanggal_dibuat=="") $tanggal_dibuat = time();
-                    echo date("Y-m-d",$tanggal_dibuat);
-                  ?>" >
-                  </div>
-                </div>
-              </div> -->
-  
               <br>
             </div>
           </div>
@@ -105,10 +90,25 @@
 </form>
 
 <script>
+
+    function kodeVersi(){
+      $.ajax({
+      url: "<?php echo base_url().'mst/keuangan_sts/kodeVersi';?>",
+      dataType: "json",
+      success:function(data)
+      { 
+        $.each(data,function(index,elemet){
+          var lokasi = elemet.kodeversi.split(".")
+          $("#kode_versi_").val(lokasi[0]);
+        });
+      }
+      });
+      return false;
+    }
+
   $(function () { 
     tabIndex = 1;
-
-    // $("[name='versi_tgl']").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme, height:30});
+    kodeVersi();
 
     $("[name='btn_keuangan_versi_close']").click(function(){
         $("#popup_keuangan_sts").jqxWindow('close');
@@ -119,9 +119,9 @@
         $('#biodata_notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
         $('#biodata_notice').show();
 
-        data.append('nama',            $("[name='versi_nama']").val());
-        data.append('deskripsi',       $("[name='versi_uraian']").val());
-        // data.append('tanggal_dibuat',  $("[name='versi_tgl']").val());
+        data.append('kode_versi_', $("[name='kode_versi_']").val());
+        data.append('nama',                  $("[name='versi_nama']").val());
+        data.append('deskripsi',             $("[name='versi_uraian']").val());
         
         $.ajax({
             cache : false,
@@ -145,4 +145,6 @@
     });
 
   });
+
+
 </script>
