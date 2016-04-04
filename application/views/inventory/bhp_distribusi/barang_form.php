@@ -24,6 +24,7 @@
           data.append('uraian', $('#uraian').val());
           data.append('jumlah', $('#jumlah').val());
           data.append('batch', $('#batch').val());
+          data.append('tgl_distribusi', $('#tanggal_distribusi').val());
           data.append('jumlahdistribusi', $('#jumlahdistribusi').val());
           $.ajax({
               cache : false,
@@ -102,6 +103,13 @@
                   echo $jumlah;
                 }else{
                   echo  set_value('jumlah');
+                }
+                ?>" readonly="readonly">
+                <input type="hidden" class="form-control" name="tanggal_distribusi" id="tanggal_distribusi" placeholder="tgl" value="<?php 
+                if(set_value('tanggal_distribusi')=="" && isset($tgl_distribusi)){
+                  echo $tgl_distribusi;
+                }else{
+                  echo  set_value('tanggal_distribusi');
                 }
                 ?>" readonly="readonly">
             </div>

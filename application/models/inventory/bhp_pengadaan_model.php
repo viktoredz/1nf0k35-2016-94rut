@@ -169,10 +169,16 @@ class Bhp_pengadaan_model extends CI_Model {
     }
     public function getItem($start=0,$limit=999999,$options=array()){
         $this->db->order_by('mst_inv_barang_habispakai.uraian','asc');
-        $this->db->select("inv_inventaris_habispakai_pembelian_item.*,mst_inv_barang_habispakai.uraian, tgl_distribusi",false);
-        $this->db->join("bhp_distribusi_item",
-            "inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai = bhp_distribusi_item.id_mst_inv_barang_habispakai AND inv_inventaris_habispakai_pembelian_item.batch = bhp_distribusi_item.batch AND inv_inventaris_habispakai_pembelian_item.code_cl_phc = bhp_distribusi_item.code_cl_phc AND inv_inventaris_habispakai_pembelian_item.tgl_update <= bhp_distribusi_item.tgl_distribusi",
-            "LEFT");
+        $this->db->select("inv_inventaris_habispakai_pembelian_item.*, 
+           mst_inv_barang_habispakai.uraian,
+           (SELECT tgl_distribusi FROM inv_inventaris_habispakai_distribusi LEFT JOIN inv_inventaris_habispakai_distribusi_item 
+            ON inv_inventaris_habispakai_distribusi.id_inv_inventaris_habispakai_distribusi =
+            inv_inventaris_habispakai_distribusi_item.id_inv_inventaris_habispakai_distribusi 
+            WHERE  
+            inv_inventaris_habispakai_distribusi_item.batch = inv_inventaris_habispakai_pembelian_item.batch  AND
+            inv_inventaris_habispakai_distribusi_item.id_mst_inv_barang_habispakai = inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai
+            AND tgl_distribusi >= inv_inventaris_habispakai_pembelian_item.tgl_update ORDER BY tgl_distribusi DESC LIMIT 1
+           ) AS tgl_distribusi",false);
         $this->db->join("mst_inv_barang_habispakai","mst_inv_barang_habispakai.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai","inner");
         $query = $this->db->get("inv_inventaris_habispakai_pembelian_item",$limit,$start);
         return $query->result();

@@ -740,36 +740,46 @@ class Bhp_distribusi extends CI_Controller {
 			$data['id_distribusi']  = $id_distribusi;
 			die($this->parser->parse('inventory/bhp_distribusi/barang_form', $data));
 		}else{
-				$this->db->where("id_inv_inventaris_habispakai_distribusi",$id_distribusi);
-				$this->db->where("id_mst_inv_barang_habispakai",$kode);
-				$this->db->where("batch",$batch);
-				$query = $this->db->get('inv_inventaris_habispakai_distribusi_item');
-				if ($query->num_rows() > 0) {
-					foreach ($query->result() as $key) {
-							$jumlahdata = $key->jml;
-					}	
-					$values = array(
-						'jml' => $this->input->post('jumlahdistribusi')+$jumlahdata,
-					);
-					$kodeup = array(
-						'id_inv_inventaris_habispakai_distribusi'=>$id_distribusi,
-						'id_mst_inv_barang_habispakai'=> $kode,
-						'batch' => $batch,
-					);
-					$simpan=$this->db->update('inv_inventaris_habispakai_distribusi_item', $values,$kodeup);	
-				}else{
-					$values = array(
-						'id_inv_inventaris_habispakai_distribusi'=>$id_distribusi,
-						'id_mst_inv_barang_habispakai'=> $kode,
-						'batch' => $batch,
-						'jml' => $this->input->post('jumlahdistribusi'),
-					);
-					$simpan=$this->db->insert('inv_inventaris_habispakai_distribusi_item', $values);
-				}
-			if($simpan==true){
-				die("OK|Data Tersimpan");
+			$this->db->where("id_mst_inv_barang_habispakai",$kode);
+			$this->db->where("batch",$batch);
+			$this->db->where("tgl_distribusi",$this->input->post("tgl_distribusi"));
+			$this->db->join("inv_inventaris_habispakai_distribusi","inv_inventaris_habispakai_distribusi.id_inv_inventaris_habispakai_distribusi = inv_inventaris_habispakai_distribusi_item.id_inv_inventaris_habispakai_distribusi");
+			$query = $this->db->get('inv_inventaris_habispakai_distribusi_item');
+			if ($query->num_rows() > 0) {
+				die("Error|Maaf data sudah di distribusi pada hari yang sama");
 			}else{
-				 die("Error|Proses data gagal");
+
+					$this->db->where("id_inv_inventaris_habispakai_distribusi",$id_distribusi);
+					$this->db->where("id_mst_inv_barang_habispakai",$kode);
+					$this->db->where("batch",$batch);
+					$query = $this->db->get('inv_inventaris_habispakai_distribusi_item');
+					if ($query->num_rows() > 0) {
+						foreach ($query->result() as $key) {
+								$jumlahdata = $key->jml;
+						}	
+						$values = array(
+							'jml' => $this->input->post('jumlahdistribusi')+$jumlahdata,
+						);
+						$kodeup = array(
+							'id_inv_inventaris_habispakai_distribusi'=>$id_distribusi,
+							'id_mst_inv_barang_habispakai'=> $kode,
+							'batch' => $batch,
+						);
+						$simpan=$this->db->update('inv_inventaris_habispakai_distribusi_item', $values,$kodeup);	
+					}else{
+						$values = array(
+							'id_inv_inventaris_habispakai_distribusi'=>$id_distribusi,
+							'id_mst_inv_barang_habispakai'=> $kode,
+							'batch' => $batch,
+							'jml' => $this->input->post('jumlahdistribusi'),
+						);
+						$simpan=$this->db->insert('inv_inventaris_habispakai_distribusi_item', $values);
+					}
+				if($simpan==true){
+					die("OK|Data Tersimpan");
+				}else{
+					 die("Error|Proses data gagal");
+				}
 			}
 			
 		}

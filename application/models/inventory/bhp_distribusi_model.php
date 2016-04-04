@@ -117,7 +117,7 @@ class Bhp_distribusi_model extends CI_Model {
 		$data = array();
 
         $this->db->where("id_mst_inv_barang_habispakai",$kode);
-        $this->db->where("batch",$batch);;
+        $this->db->where("batch",$batch);
         $query = $this->db->get("bhp_distribusi");
 		if ($query->num_rows() > 0){
 			$data = $query->row_array();
