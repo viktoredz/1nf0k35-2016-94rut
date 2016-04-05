@@ -7,8 +7,13 @@
 <?php } ?>
 
 <div id="popup_keuangan_sts" style="display:none">
-  <div id="popup_title">aa</div>
+  <div id="popup_title">Buat Versi Daftar Tarif STS Baru</div>
   <div id="popup_keuangan_sts_content">&nbsp;</div>
+</div>
+
+<div id="popup_keuangan_sts_induk" style="display:none">
+  <div id="popup_title">Tambah Induk Baru</div>
+  <div id="popup_keuangan_sts_induk_content">&nbsp;</div>
 </div>
 
 <section class="content">
@@ -41,19 +46,13 @@
         <div class="col-md-2" style="padding-top:5px;"><label> Pilih Versi </label> </div>
         <div class="col-md-3 pull-left">
 
-        <select class="form-control" name="versi" type="text" >
-                <?php foreach($versi as $ver) : ?>
-                    <?php
-                       if(set_value('id_mst_anggaran_versi')=="" && isset($id_mst_anggaran_versi)){
-                         $id_mst_anggaran_versi = $id_mst_anggaran_versi;
-                       }else{
-                         $id_mst_anggaran_versi = set_value('id_mst_anggaran_versi');
-                       }
-                         $select = $ver->id_mst_anggaran_versi == $id_mst_anggaran_versi ? 'selected' : '' ;
-                    ?>
-                     <option value="<?php echo $ver->id_mst_anggaran_versi ?>" <?php echo $select ?>><?php echo $ver->nama ?></option>
-               <?php endforeach ?>
-           </select>
+        <select name="versi" class="form-control" id="versi">
+          <option value="0">Pilih Versi</option>
+            <?php foreach ($dataversi as $ver ) { ;?>
+            <?php $select = $ver->id_mst_anggaran_versi ? 'selected=selected' : '' ?>
+          <option value="<?php echo $ver->id_mst_anggaran_versi; ?>" <?php echo $select ?>><?php echo $ver->nama; ?></option>
+            <?php } ;?>
+        </select>
         </div>
       </div>
       </div>
@@ -89,7 +88,7 @@
 
             <div class="col-md-4 pull-right">
           <!-- <button class="btn btn-success" data-toggle="modal" data-target="#myModal"> Lihat Semua Versi</button>           -->
-          <a href="<?php echo base_url(); ?>keuangan/master_sts/anggaran_tarif" class="btn btn-danger" >Aktifkan Versi ini</a>  
+          <a href="<?php echo base_url(); ?>keuangan/master_sts/anggaran_tarif" class="btn btn-default" >Aktifkan Versi ini</a>  
         </div>
 
       </div>
@@ -222,6 +221,20 @@
   </script>
   <script type="text/javascript">
         $(document).ready(function () {
+
+        $('#pilih_versi').change(function(){
+          var pilih_versi = $(this).val();
+            $.ajax({
+              url : '<?php echo site_url('mst/keuangan_sts/get_versi') ?>',
+              type : 'POST',
+              data : 'pilih_versi=' + pilih_versi,
+            success : function(data) {
+            // $("#jqxgrid").jqxGrid('updatebounddata','cells');
+          }
+        });
+
+        return false;
+      }).change();
       
       $("#menu_master_data").addClass("active");
       $("#menu_mst_keuangan_sts").addClass("active");
@@ -236,12 +249,12 @@
           $("#treeGrid").jqxTreeGrid('collapseAll');                    
             });
             
-      $("select[name='pilih_type']").change(function(){
-        $.post( '<?php echo base_url()?>mst/keuangan_sts/set_type', {tipe:$(this).val()},function( data ) {
+    $("select[name='versi']").change(function(){
+        $.post( '<?php echo base_url()?>mst/keuangan_sts/set_versi', {versi:$(this).val()},function( data ) {
           $("#treeGrid").jqxTreeGrid('updateBoundData');
           $("#treeGrid").jqxTreeGrid('expandAll');            
         });
-            });
+      });
             // prepare the data
             var source =
             {
@@ -554,7 +567,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Add New Parent</h4>
+        <h4 class="modal-title" id="myModalLabel">Semua Versi Tarif STS</h4>
       </div>
       <div class="modal-body">
         
@@ -585,8 +598,7 @@
     
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" onclick="addParent()" data-dismiss="modal" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
       </div>
     </div>
   </div>
