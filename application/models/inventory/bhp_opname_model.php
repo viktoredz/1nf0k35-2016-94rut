@@ -12,6 +12,7 @@ class Bhp_opname_model extends CI_Model {
     
     function get_data($start=0,$limit=999999,$options=array())
     {
+
         $query = $this->db->get('inv_inventaris_habispakai_opname',$limit,$start);
         return $query->result();
     }
@@ -241,20 +242,16 @@ class Bhp_opname_model extends CI_Model {
         return $query->result();
     }
     public function getitemopname($start=0,$limit=999999,$options=array()){
-        //$this->db->group_by('id_mst_inv_barang_habispakai','batch');
+        /*$this->db->group_by('id_mst_inv_barang_habispakai','batch');
         $this->db->order_by('id_inv_inventaris_habispakai_opname','desc');
         $this->db->select("inv_inventaris_habispakai_opname_item.*,mst_inv_barang_habispakai.uraian,mst_inv_barang_habispakai.pilihan_satuan,mst_inv_barang_habispakai.merek_tipe,inv_inventaris_habispakai_opname.tgl_opname");
         $this->db->join("mst_inv_barang_habispakai","mst_inv_barang_habispakai.id_mst_inv_barang_habispakai = inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai");
-        $this->db->join("inv_inventaris_habispakai_opname","inv_inventaris_habispakai_opname.id_inv_inventaris_habispakai_opname = inv_inventaris_habispakai_opname_item.id_inv_inventaris_habispakai_opname");
-        $query = $this->db->get("inv_inventaris_habispakai_opname_item",$limit,$start);
+        $this->db->join("inv_inventaris_habispakai_opname","inv_inventaris_habispakai_opname.id_inv_inventaris_habispakai_opname = inv_inventaris_habispakai_opname_item.id_inv_inventaris_habispakai_opname");*/
+        
+        $query = $this->db->get("satuan_opname",$limit,$start);
         return $query->result();
     }
-        /*$this->db->where('inv_inventaris_habispakai_opname.code_cl_phc',$pusksmas);
-            $this->db->where('inv_inventaris_habispakai_opname.tgl_opname',$tanggal);
-            $this->db->select('inv_inventaris_habispakai_opname_item.harga, inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai, mst_inv_barang_habispakai.uraian, inv_inventaris_habispakai_opname.tgl_opname, inv_inventaris_habispakai_opname.petugas_nama, (inv_inventaris_habispakai_opname_item.jml_akhir - inv_inventaris_habispakai_opname_item.jml_awal) AS pengeluaranperhari');
-            $this->db->join('inv_inventaris_habispakai_opname_item','inv_inventaris_habispakai_opname_item.id_inv_inventaris_habispakai_opname = inv_inventaris_habispakai_opname.id_inv_inventaris_habispakai_opname');
-            $this->db->join('mst_inv_barang_habispakai','mst_inv_barang_habispakai.id_mst_inv_barang_habispakai = inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai');
-            $query = $this->db->get("inv_inventaris_habispakai_opname");*/
+
     function get_data_lap_opname($bulan,$tahun)
     {
           $data = array();

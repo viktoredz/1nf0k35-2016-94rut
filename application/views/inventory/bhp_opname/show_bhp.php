@@ -28,7 +28,7 @@
 		      	</div>
 		    <div class="box-body">
 		      	<div class="row">
-			      <div class="col-md-3">
+			      <div class="col-md-4">
 			      	<div class="row">
 				     	<div class="col-md-4" style="padding-top:5px;"><label> Puskesmas </label> </div>
 				     	<div class="col-md-8">
@@ -40,10 +40,40 @@
 					     </div>	
 			     	</div>
 			     </div>
-			      <div class="col-md-3">
+			      <div class="col-md-4">
 			     	<div class="row">
-				     	<div class="col-md-4" style="padding-top:5px;"><label> Jenis Barang </label> </div>
+				     	<div class="col-md-4" style="padding-top:5px;"><label> Bulan </label> </div>
 				     	<div class="col-md-8">
+				     		<select name="bulan" id="bulan" class="form-control">
+								<?php foreach ($bulan as $val=>$key ) { ;?>
+								<?php $select = $val == date("m") ? 'selected=selected' : '' ?>
+									<option value="<?php echo $val; ?>" <?php echo $select ?>><?php echo $key; ?></option>
+								<?php	} ;?>
+					     	</select>
+					     </div>	
+			     	</div>
+				  </div>	
+				  <div class="col-md-4">
+			     	<div class="row">
+				     	<div class="col-md-4" style="padding-top:5px;"><label> Tahun </label> </div>
+				     	<div class="col-md-8">
+				     		<select name="tahun" id="tahun" class="form-control">
+								<?php for ($i=date("Y");$i>=date("Y")-10;$i--) { ;?>
+									<?php $select = $i == '2015' ? 'selected=selected' : '' ?>
+									<option value="<?php echo $i; ?>" <?php echo $select ?>><?php echo $i; ?></option>
+								<?php	} ;?>
+					     	</select>
+					     </div>	
+			     	</div>
+				  </div>		  
+				</div>
+			</div>
+			<div class="box-body">
+				<div class="row">
+					<div class="col-md-4">
+			     	<div class="row">
+				     	<div class="col-md-5" style="padding-top:5px;"><label> Jenis Barang <?php echo 'bulan :'.$this->session->userdata('filter_bulan').' tahun : '.$this->session->userdata('filter_tahun');?></label> </div>
+				     	<div class="col-md-7">
 				     		<select name="jenisbarang" id="jenisbarang" class="form-control">
 			     				<option value="all">All</option>
 								<?php foreach ($jenisbaranghabis as $val=>$key ) { ;?>
@@ -53,32 +83,6 @@
 					     </div>	
 			     	</div>
 				  </div>
-			      <div class="col-md-3">
-			     	<div class="row">
-				     	<div class="col-md-4" style="padding-top:5px;"><label> Bulan </label> </div>
-				     	<div class="col-md-8">
-				     		<select name="bulan" id="bulan" class="form-control">
-			     				<option value="all">All</option>
-								<?php foreach ($bulan as $val=>$key ) { ;?>
-									<option value="<?php echo $val; ?>" ><?php echo $key; ?></option>
-								<?php	} ;?>
-					     	</select>
-					     </div>	
-			     	</div>
-				  </div>	
-				  <div class="col-md-3">
-			     	<div class="row">
-				     	<div class="col-md-4" style="padding-top:5px;"><label> Tahun </label> </div>
-				     	<div class="col-md-8">
-				     		<select name="tahun" id="tahun" class="form-control">
-			     				<option value="all">All</option>
-								<?php for ($i=date("Y");$i>=date("Y")-10;$i--) { ;?>
-									<option value="<?php echo $i; ?>" ><?php echo $i; ?></option>
-								<?php	} ;?>
-					     	</select>
-					     </div>	
-			     	</div>
-				  </div>		  
 				</div>
 			</div>
 		</div>
@@ -127,10 +131,12 @@
 			{ name: 'uraian', type: 'string' },
 			{ name: 'jml_awal', type: 'number' },
 			{ name: 'jml_akhir', type: 'number' },
+			{ name: 'jmlawal_opname', type: 'number' },
+			{ name: 'jmlakhir_opname', type: 'number' },
+			{ name: 'sumselisih', type: 'number' },
 			{ name: 'harga', type: 'string' },
 			{ name: 'merek_tipe', type: 'string' },
 			{ name: 'tgl_opname', type: 'string' },
-			{ name: 'jml_akhir', type: 'string' },
 			{ name: 'jml_selisih', type: 'number' }
         ],
 		url: "<?php echo site_url('inventory/bhp_opname/json_opname'); ?>",
@@ -185,9 +191,9 @@
 				{ text: 'Nama Barang', editable:false ,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '30%' },
 				{ text: 'Merek', editable:false ,datafield: 'merek_tipe', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
 				{ text: 'Last Update', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false,datafield: 'tgl_opname', columntype: 'date', filtertype: 'none', cellsformat: 'dd-MM-yyyy', width: '10%'},
-				{ text: 'Jumlah Awal',sortable: true,editable:false ,align: 'center', cellsalign: 'right', datafield: 'jml_awal', columntype: 'textbox', filtertype: 'none', width: '13%' },
-				{ text: 'Jumlah Akhir',sortable: true,editable:false ,align: 'center', cellsalign: 'right', datafield: 'jml_akhir', columntype: 'textbox', filtertype: 'none', width: '13%' },
-				{ text: 'Selisih',sortable: false,editable:false ,datafield: 'jml_selisih', columntype: 'textbox', filtertype: 'none', width: '13%' ,align: 'center', cellsalign: 'right'}
+				{ text: 'Jumlah Awal',sortable: true,editable:false ,align: 'center', cellsalign: 'right', datafield: 'jmlawal_opname', columntype: 'textbox', filtertype: 'none', width: '13%' },
+				{ text: 'Jumlah Akhir',sortable: true,editable:false ,align: 'center', cellsalign: 'right', datafield: 'jmlakhir_opname', columntype: 'textbox', filtertype: 'none', width: '13%' },
+				{ text: 'Selisih',sortable: false,editable:false ,datafield: 'sumselisih', columntype: 'textbox', filtertype: 'none', width: '13%' ,align: 'center', cellsalign: 'right'}
             ]
 		});
 	  function timeline_pengeluaran_barang(id){
@@ -240,8 +246,8 @@
 		post = post+'&jenisbarang='+$("#jenisbarang option:selected").text()+'&nama_puskesmas='+$("#puskesmas option:selected").text()+'&bulan='+$("#bulan option:selected").text()+'&tahun='+$("#tahun option:selected").text();
 		
 		$.post("<?php echo base_url()?>inventory/bhp_opname/laporan_opname",post,function(response	){
-			alert(response);
-			//window.location.href=response;
+			//alert(response);
+			window.location.href=response;
 		});
 	});
 </script>

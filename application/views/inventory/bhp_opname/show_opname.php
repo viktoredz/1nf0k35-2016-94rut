@@ -30,7 +30,7 @@
 		      	</div>
 		    <div class="box-body">
 		      	<div class="row">
-			      <div class="col-md-3">
+			      <div class="col-md-4">
 			      	<div class="row">
 				     	<div class="col-md-4" style="padding-top:5px;"><label> Puskesmas </label> </div>
 				     	<div class="col-md-8">
@@ -42,20 +42,8 @@
 					     </div>	
 			     	</div>
 			     </div>
-			      <div class="col-md-3">
-			     	<div class="row">
-				     	<div class="col-md-4" style="padding-top:5px;"><label> Jenis Barang </label> </div>
-				     	<div class="col-md-8">
-				     		<select name="jenisbarangopname" id="jenisbarangopname" class="form-control">
-			     				<option value="all">All</option>
-								<?php foreach ($jenisbaranghabis as $val=>$key ) { ;?>
-									<option value="<?php echo $val; ?>" ><?php echo $key; ?></option>
-								<?php	} ;?>
-					     	</select>
-					     </div>	
-			     	</div>
-				  </div>
-			      <div class="col-md-3">
+			      
+			      <div class="col-md-4">
 			     	<div class="row">
 				     	<div class="col-md-4" style="padding-top:5px;"><label> Bulan </label> </div>
 				     	<div class="col-md-8">
@@ -68,7 +56,7 @@
 					     </div>	
 			     	</div>
 				  </div>
-				   <div class="col-md-3">
+				   <div class="col-md-4">
 			     	<div class="row">
 				     	<div class="col-md-4" style="padding-top:5px;"><label> Tahun </label> </div>
 				     	<div class="col-md-8">
@@ -81,6 +69,23 @@
 					     </div>	
 			     	</div>
 				  </div>	
+				</div>
+			</div>
+			<div class="box-body">
+				<div class="row">
+					<div class="col-md-4">
+			     	<div class="row">
+				     	<div class="col-md-5" style="padding-top:5px;"><label> Jenis Barang </label> </div>
+				     	<div class="col-md-7">
+				     		<select name="jenisbarangopname" id="jenisbarangopname" class="form-control">
+			     				<option value="all">All</option>
+								<?php foreach ($jenisbaranghabis as $val=>$key ) { ;?>
+									<option value="<?php echo $val; ?>" ><?php echo $key; ?></option>
+								<?php	} ;?>
+					     	</select>
+					     </div>	
+			     	</div>
+				  </div>
 				</div>
 			</div>
 		</div>
@@ -278,7 +283,7 @@
 		post = post+'&jenisbarang='+$("#jenisbarangopname option:selected").text()+'&nama_puskesmas='+$("#puskesmasopname option:selected").text()+'&bulan='+$("#bulanopname option:selected").text()+'&tahun='+$("#tahunopname option:selected").text();
 		
 		$.post("<?php echo base_url()?>inventory/bhp_opname/pengeluaran_export",post,function(response){
-			//alert(response);
+			//\\alert(response);
 			window.location.href=response;
 		});
 	});
