@@ -701,8 +701,106 @@ class Bhp_opname extends CI_Controller {
 				'jml_awal'									=> $act->jml_awal,
 				'jml_akhir'									=> $act->jml_akhir,
 				'jmlawal_opname'							=> $act->jmlawal_opname,
-				'sumselisih'								=> $act->sumselisih,
-				'jmlakhir_opname'							=> $act->jmlawal_opname - $act->sumselisih,
+				'sumselisih'								=> ($act->sumselisih),
+				'jmlakhir_opname'							=> $act->jmlawal_opname + $act->sumselisih,
+				'harga'										=> $act->harga,
+				'merek_tipe'								=> $act->merek_tipe,
+				'tgl_opname'								=> date("d-m-Y",strtotime($act->tgl_opname)),
+				'jml_selisih'								=> $act->jml_akhir-$act->jml_awal,
+				'edit'		=> 1,
+				'delete'	=> 1
+			);
+		}
+
+
+		
+		$size = sizeof($rows_all_activity);
+		$json = array(
+			'TotalRows' => (int) $size,
+			'Rows' => $data
+		);
+
+		echo json_encode(array($json));
+	}
+	function json_opname_dalam($id=0){
+		$this->authentication->verify('inventory','show');
+
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl_update' ) {
+					$value = date("Y-m-d",strtotime($value));
+
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+
+		if ($id!=0) {
+			$this->db->where('inv_inventaris_habispakai_opname_item.id_inv_inventaris_habispakai_opname',$id);
+		}
+		
+		
+		$rows_all_activity = $this->bhp_opname_model->get_data_opname();
+
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl_update' ) {
+					$value = date("Y-m-d",strtotime($value));
+
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+
+		if ($id!=0) {
+			$this->db->where('inv_inventaris_habispakai_opname_item.id_inv_inventaris_habispakai_opname',$id);
+		}
+		
+		$activity = $this->bhp_opname_model->get_data_opname($this->input->post('recordstartindex'), $this->input->post('pagesize'));
+		$data = array();
+
+		$kodepuskesmas = $this->session->userdata('puskesmas');
+		if(substr($kodepuskesmas, -2)=="01"){
+			$unlock = 1;
+		}else{
+			$unlock = 0;
+		}
+		
+		foreach($activity as $act) {
+			$data[] = array(
+				'id_mst_inv_barang_habispakai'   			=> $act->id_mst_inv_barang_habispakai,
+				'batch'										=> $act->batch,
+				'uraian'									=> $act->uraian,
+				'id_inv_inventaris_habispakai_opname'		=> $act->id_inv_inventaris_habispakai_opname,
+				'jml_awal'									=> $act->jml_awal,
+				'jml_akhir'									=> $act->jml_akhir,
+				'selisih'									=> $act->jml_akhir - $act->jml_awal,
 				'harga'										=> $act->harga,
 				'merek_tipe'								=> $act->merek_tipe,
 				'tgl_opname'								=> date("d-m-Y",strtotime($act->tgl_opname)),

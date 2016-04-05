@@ -30,7 +30,7 @@
 		      	</div>
 		    <div class="box-body">
 		      	<div class="row">
-			      <div class="col-md-4">
+			      <div class="col-md-6">
 			      	<div class="row">
 				     	<div class="col-md-4" style="padding-top:5px;"><label> Puskesmas </label> </div>
 				     	<div class="col-md-8">
@@ -43,7 +43,7 @@
 			     	</div>
 			     </div>
 			      
-			      <div class="col-md-4">
+			      <div class="col-md-3">
 			     	<div class="row">
 				     	<div class="col-md-4" style="padding-top:5px;"><label> Bulan </label> </div>
 				     	<div class="col-md-8">
@@ -56,7 +56,7 @@
 					     </div>	
 			     	</div>
 				  </div>
-				   <div class="col-md-4">
+				   <div class="col-md-3">
 			     	<div class="row">
 				     	<div class="col-md-4" style="padding-top:5px;"><label> Tahun </label> </div>
 				     	<div class="col-md-8">
@@ -73,10 +73,10 @@
 			</div>
 			<div class="box-body">
 				<div class="row">
-					<div class="col-md-4">
+					<div class="col-md-6">
 			     	<div class="row">
-				     	<div class="col-md-5" style="padding-top:5px;"><label> Jenis Barang </label> </div>
-				     	<div class="col-md-7">
+				     	<div class="col-md-4" style="padding-top:5px;"><label> Jenis Barang </label> </div>
+				     	<div class="col-md-8">
 				     		<select name="jenisbarangopname" id="jenisbarangopname" class="form-control">
 			     				<option value="all">All</option>
 								<?php foreach ($jenisbaranghabis as $val=>$key ) { ;?>
