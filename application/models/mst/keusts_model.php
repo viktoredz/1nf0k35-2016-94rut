@@ -9,9 +9,8 @@ class Keusts_model extends CI_Model {
         $this->lang   = $this->config->item('language');
     }
 
-    function insert_versi()
-    {
-        $data['id_mst_anggaran_versi'] = $this->kode_versi();
+    function insert_versi(){
+        $data['id_mst_anggaran_versi'] = $this->kode_versi($this->input->post('kode_versi_'));
         $data['nama']                  = $this->input->post('nama');
         $data['deskripsi']             = $this->input->post('deskripsi');
     
@@ -24,14 +23,14 @@ class Keusts_model extends CI_Model {
     }
 
     function kode_versi($kode){
-        $insert_versi=explode(".", $kode);
-        $kode_versi = $inv[0].$inv[1].$inv[2];
+        $mst_anggaran_versi=explode(".", $kode);
+        $kode_versi = $mst[0];
         $urut = $this->nourut($kode_versi);
         return  $kode_versi.$urut;
     }
 
       function nourut($kode_versi){
-        $q = $this->db->query("select MAX(RIGHT(id_mst_anggaran_versi,6)) as kd_max from mst_keu_anggaran_versi where (LEFT(id_mst_anggaran_versi,11))=$kode_versi");
+        $q = $this->db->query("select MAX(RIGHT(id_mst_anggaran_versi,1)) as kd_max from mst_keu_anggaran_versi where (LEFT(id_mst_anggaran_versi,3))=$kode_versi");
         $nourut="";
         if($q->num_rows()>0)
         {
@@ -90,7 +89,6 @@ class Keusts_model extends CI_Model {
             return mysql_error();
         }
     }
-
     
     function get_data()
     {
@@ -131,13 +129,12 @@ class Keusts_model extends CI_Model {
     } 
 
     function get_data_type_filter($versi)
-    {       
-        $this->db->select('id_mst_anggaran, id_mst_anggaran_parent, mst_keu_akun.id_mst_akun as akun,uraian, kode_anggaran,uraian, tarif, id_mst_anggaran_versi');        
-        $this->db->join('mst_keu_akun','mst_keu_akun.id_mst_akun = mst_keu_anggaran.id_mst_akun');
+    {     
+        $this->db->select('*');        
         $this->db->where('id_mst_anggaran_versi', $versi);        
         $this->db->order_by('id_mst_anggaran','asc');
         $query = $this->db->get($this->tb);     
-        return $query->result_array();
+        return $query->result_array();  
     }
     
     function get_data_keu_sts_general($puskes)
@@ -149,25 +146,9 @@ class Keusts_model extends CI_Model {
         return $query->result_array();
     }
 
-    function get_data_versi_filter($ver)
-    {               
-        $this->db->select('mst_keu_anggaran.*,mst_keu_anggaran_versi.*,mst_keu_akun.id_mst_akun AS rekening');        
-        
-        #$kodepuskesmas = $this->session->userdata('puskesmas');
-        $versi = $ver;
-        if(substr($versi, -2)=="01"){           
-            $this->db->join('mst_keu_anggaran_versi', "mst_keu_anggaran_versi.id_mst_anggaran_versi=mst_keu_anggaran.id_mst_anggaran and mst_keu_anggaran_versi.nama= '".$ver."'",'left');
-            $this->db->where("mst_keu_anggaran_versi.nama");
-        }
-        $this->db->join('mst_keu_akun', "mst_keu_akun.id_mst_akun=mst_keu_anggaran.id_mst_akun",'inner');
-        $this->db->order_by('id_mst_anggaran','asc');
-        $query = $this->db->get('mst_keu_anggaran');        
-        return $query->result_array();
-    }
-    
     function get_data_puskesmas_filter($pus)
     {               
-        $this->db->select('keu_anggaran.*,keu_anggaran_tarif.*,mst_keu_rekening.kode_rekening AS rekening');        
+        $this->db->select('mst_keu_anggaran.*,mst_keu_anggaran_versi.*,mst_keu_akun.id_mst_akun AS rekening');        
         
         #$kodepuskesmas = $this->session->userdata('puskesmas');
         $kodepuskesmas = $pus;
@@ -180,9 +161,9 @@ class Keusts_model extends CI_Model {
             $this->db->where("keu_anggaran.type",'kel');
             //kelurahan
         }
-        $this->db->join('mst_keu_rekening', "mst_keu_rekening.code=keu_anggaran.kode_rekening",'inner');
-        $this->db->order_by('id_anggaran','asc');
-        $query = $this->db->get('keu_anggaran');        
+        $this->db->join('mst_keu_akun', "mst_keu_akun.id_mst_akun=mst_keu_anggaran.id_mst_akun",'inner');
+        $this->db->order_by('id_mst_anggaran','asc');
+        $query = $this->db->get('mst_keu_anggaran');        
         return $query->result_array();
     }
     
@@ -208,16 +189,16 @@ class Keusts_model extends CI_Model {
     function get_data_puskesmas(){
         
         $kodepuskesmas = $this->session->userdata('puskesmas');
-        // if(substr($kodepuskesmas, -2)=="01"){           
-        //     //kecamatan
+        if(substr($kodepuskesmas, -2)=="01"){           
+            //kecamatan
             
                 
-        //         $this->db->like('code','P'.substr($kodepuskesmas,0,7));
+                $this->db->like('code','P'.substr($kodepuskesmas,0,7));
             
-        // }else{
-        //     $this->db->like('code','P'.$kodepuskesmas);
-        //     //kelurahan
-        // }
+        }else{
+            $this->db->like('code','P'.$kodepuskesmas);
+            //kelurahan
+        }
         
         $query = $this->db->get('mst_keu_anggaran_versi');
         return $query->result_array();
@@ -557,4 +538,31 @@ class Keusts_model extends CI_Model {
         $query = $this->db->get();
         return $query->result();
     }
+
+        function get_data_row($idversi){
+        $data = array();
+        $options = array('id_mst_anggaran_versi' => $idversi);
+        $this->db->select('*');
+        $query = $this->db->get_where($this->tb,$options);
+        if ($query->num_rows() > 0){
+            $data = $query->row_array();
+        }
+
+        $query->free_result();    
+        return $data;
+    }
+
+      function update_versi($idversi)
+    {
+        $data['nama']    = $this->input->post('nama');
+
+        $this->db->where('id_mst_anggaran_versi',$idversi);
+        if($this->db->update('mst_keu_anggaran_versi', $data)){
+            return true; 
+        }else{
+            return mysql_error();
+        }
+    }
+
+
 }

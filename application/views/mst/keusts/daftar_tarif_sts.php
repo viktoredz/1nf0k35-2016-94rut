@@ -1,11 +1,3 @@
-<?php if($this->session->flashdata('alert')!=""){ ?>
-<div class="alert alert-success alert-dismissable">
-  <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-  <h4>  <i class="icon fa fa-check"></i> Information!</h4>
-  <?php echo $this->session->flashdata('alert')?>
-</div>
-<?php } ?>
-
 <section class="content">
 
   <div class="row">
@@ -18,28 +10,19 @@
       </div>
     
       <div class="box-body">
-          <div class="div-grid">
-            <div id="jqxgrid"></div>
-      </div
-      <div class="">
-        <div class="col-md-3 pull-left">
-          <button id="doExpand" class="btn  btn-warning " >Expand All</button>  
-          <button id="doCollapse" onclick="" class="btn  btn-warning " >Collapse All</button> 
-        </div>
+    
+      <div class="col-md-3 pull-left">
+        <button id="doExpand" class="btn  btn-warning " >Expand All</button>  
+        <button id="doCollapse" onclick="" class="btn  btn-warning " >Collapse All</button> 
+      </div>
+
         <div class="col-md pull-right">
-          
           <button type="button" class="btn btn-primary" id="btn-ubah-tarif"></i> &nbsp; Ubah Tarif
           </button>
-          
-          <!-- <a href="<?php echo base_url(); ?>mst/keuangan_sts/anggaran_ubah" class="btn btn-success" >Ubah Tarif</a>   -->
-       
         </div>
 
-        <!-- <div class="col-md-4 pull-right" style="padding-top:5px;"><label> Versi </label> </div> -->
-        
-        <div class="col-md-3 pull-right">
-          <select class="form-control" name="versi" type="text" >
-             <option> Versi </option>
+      <div class="col-md-3 pull-right">
+        <select class="form-control" name="versi" type="text" >
                 <?php foreach($versi as $ver) : ?>
                     <?php
                        if(set_value('id_mst_anggaran_versi')=="" && isset($id_mst_anggaran_versi)){
@@ -50,9 +33,8 @@
                          $select = $ver->id_mst_anggaran_versi == $id_mst_anggaran_versi ? 'selected' : '' ;
                     ?>
                      <option value="<?php echo $ver->id_mst_anggaran_versi ?>" <?php echo $select ?>><?php echo $ver->nama ?></option>
-                      <?php endforeach ?>
-          </select>
-        </div>
+               <?php endforeach ?>
+           </select>  
       </div>
       </div>
     
@@ -69,14 +51,11 @@
 
 
   <script type="text/javascript">
-
-
     function getDemoTheme() {
       var theme = document.body ? $.data(document.body, 'theme') : null
       if (theme == null) {
         theme = '';
       }
-      
       else {
         return theme;
       }
@@ -165,37 +144,41 @@
     }
   </script>
   <script type="text/javascript">
-        $(document).ready(function () {
-      
-      $("#menu_master_data").addClass("active");
-      $("#menu_mst_keuangan_sts").addClass("active");
+        $(document).ready(function () {   
 
-        $("#btn-ubah-tarif").click(function(){
-        $.get('<?php echo base_url()?>mst/keuangan_sts/anggaran_ubah', function (data) {
-          $('#content1').html(data);
-          });
-       });
+      $("#menu_keuangan").addClass("active");
+      $("#menu_keuangan_master_sts_anggaran_tarif").addClass("active");
+        
             var newRowID = null;
       
       $("#doExpand").click(function(){
+        $.post( '<?php echo base_url()?>keuangan/master_sts/set_puskes', {puskes:'<?php echo $this->session->userdata('puskes');?>'},function( data ) {
           $("#treeGrid").jqxTreeGrid('expandAll');                    
+        });
             });
       
       $("#doCollapse").click(function(){
+        $.post( '<?php echo base_url()?>keuangan/master_sts/set_puskes', {puskes:'<?php echo $this->session->userdata('puskes');?>'},function( data ) {
           $("#treeGrid").jqxTreeGrid('collapseAll');                    
+        });
             });
 
-      $("select[name='versi']").change(function(){
-        $.post( '<?php echo base_url()?>keuangan/master_sts/set_type', {tipe:$(this).val()},function( data ) {
+     $("#btn-ubah-tarif").click(function(){
+        $.get('<?php echo base_url()?>mst/keuangan_sts/anggaran_ubah/{idversi}',function( data ) {
+          $('#content1').html(data);
+          });
+       });
+
+      
+     $("select[name='versi']").change(function(){
+        $.post( '<?php echo base_url()?>mst/keuangan_sts/set_versi', {versi:$(this).val()},function( data ) {
           $("#treeGrid").jqxTreeGrid('updateBoundData');
           $("#treeGrid").jqxTreeGrid('expandAll');            
         });
             });
       
-            
             // prepare the data
-
-            var source =
+             var source =
             {
                 dataType: "tab",
                 dataFields: [
@@ -215,7 +198,7 @@
                 id: 'id_mst_anggaran',
                 url: '<?php echo base_url()?>mst/keuangan_sts/api_data',
                  addRow: function (rowID, rowData, position, parentID, commit) {        
-                  // POST to server using $.post or $.ajax          
+          // POST to server using $.post or $.ajax          
                      // synchronize with the server - send insert command
                      // call commit with parameter true if the synchronization with the server is successful 
                      // and with parameter false if the synchronization failed.
@@ -223,7 +206,6 @@
                      commit(true);
                      newRowID = rowID;
                  },
-                 
                  updateRow: function (rowID, rowData, commit) {
                      // synchronize with the server - send update command
                      // call commit with parameter true if the synchronization with the server is successful 
@@ -232,18 +214,22 @@
           
           
                     commit(true);
-                    var arr = $.map(rowData, function(el) { return el });                             
-                    //0,7
-                    $.post( '<?php echo base_url()?>keuangan/master_sts/add_tarif', {id_anggaran:arr[0],tarif:arr[8]},function( data ) {
-                      if(data != 0){
-                        alert(data);                  
-                    }else{
-                   //$("#treeGrid").jqxTreeGrid('updateBoundData');
-                    }
-                  });
-                 },                 
-
+          var arr = $.map(rowData, function(el) { return el });                             
+                                        
+          
+          //0,7
+          $.post( '<?php echo base_url()?>keuangan/master_sts/add_tarif', {id_anggaran:arr[0],tarif:arr[8]},function( data ) {
+            if(data != 0){
+              alert(data);                  
+            }else{
+              //$("#treeGrid").jqxTreeGrid('updateBoundData');
+            }
+          });
+                 },
                  deleteRow: function (rowID, commit) {
+                     // synchronize with the server - send delete command
+                     // call commit with parameter true if the synchronization with the server is successful 
+                     // and with parameter false if the synchronization failed.
           
            
                      commit(true);
@@ -258,21 +244,23 @@
 
             $("#treeGrid").jqxTreeGrid(
             {
-                 width: '100%',
+                width: '100%',
                 source: dataAdapter,
                 pageable: false,pageSize:999,
                 editable: true,                
                 altRows: true,
                 ready: function()
-                {   // called when the DatatreeGrid is loaded.   
-         
+                {
+          
+                    // called when the DatatreeGrid is loaded.         
                 },
-                columns: [
+                pagerButtonsCount: 8,                
+           columns: [
                                   
-                  { text: 'Kode Anggaran', dataField: "KodeAnggaran", align: 'center', width: '19%' },
-                  { text: 'Uraian', dataField: "Uraian", align: 'center', width: '31%' }, 
-                  { text: 'Tarif', dataField: "Tarif", align: 'center', width: '20%' },         
-                  { text: 'Kode Rekening', dataField: 'IdMstAkun', width: "30%", columnType: "template", align:'center'}
+               { text: 'Kode Anggaran', dataField: "IdMstAkun", align: 'center',cellsalign: 'center', width: '19%' },
+               { text: 'Uraian', dataField: "KodeAnggaran", align: 'center', width: '31%',cellsalign: 'center' }, 
+               { text: 'Tarif', dataField: "Uraian", align: 'center', width: '20%',cellsalign: 'center' },         
+               { text: 'Kode Rekening', dataField: 'IdMstAnggaran', width: "30%", columnType: "template", align:'center',cellsalign: 'center'}
                 ]
             });
       
@@ -285,16 +273,19 @@
       var kode_anggaran = document.getElementById("kode_anggaran").value;
       var uraian = document.getElementById("uraian").value;
       $.post( '<?php echo base_url()?>keuangan/master_sts/anggaran_add', {sub_id:sub_id, kode_rekening:kode_rekening, kode_anggaran:kode_anggaran, uraian:uraian},function( data ) {
-          $("#treeGrid").jqxTreeGrid('updateBoundData');
-          $("#treeGrid").jqxTreeGrid('expandAll');            
-          document.getElementById("kode_rekening").value='';
-          document.getElementById("kode_anggaran").value='';
-          document.getElementById("uraian").value = '';
+        
+          if(data != 0){
+            alert(data);                  
+          }else{            
+            $("#treeGrid").jqxTreeGrid('updateBoundData');
+          
+            document.getElementById("kode_rekening").value='';
+            document.getElementById("kode_anggaran").value='';
+            document.getElementById("uraian").value = '';
+          }
+          
         });
-    
-
-
     }
     </script>
   
-  
+    
