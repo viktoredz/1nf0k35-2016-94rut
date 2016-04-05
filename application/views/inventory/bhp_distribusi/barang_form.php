@@ -2,6 +2,9 @@
 <script type="text/javascript">
 
   $(function(){
+   // alert($("#tgl_distribusi").val());
+    var tgldis = $("#tgl_distribusi").val().split("-")
+    $("#tanggal_distribusi").val(tgldis[2]+'-'+tgldis[1]+'-'+tgldis[0]);
     <?php 
     if (isset($obat)) {
       if ($obat=="8") {
@@ -105,13 +108,13 @@
                   echo  set_value('jumlah');
                 }
                 ?>" readonly="readonly">
-                <input type="hidden" class="form-control" name="tanggal_distribusi" id="tanggal_distribusi" placeholder="tgl" value="<?php 
+             <!--   <input type="hidden" class="form-control" name="tanggal_distribusi" id="tanggal_distribusi" placeholder="tgl" value="<?php /*
                 if(set_value('tanggal_distribusi')=="" && isset($tgl_distribusi)){
                   echo $tgl_distribusi;
                 }else{
                   echo  set_value('tanggal_distribusi');
-                }
-                ?>" readonly="readonly">
+                }*/
+                ?>" readonly="readonly"> -->
             </div>
             <input type="hidden" class="form-control" name="id_mst_inv_barang_habispakai_jenis" id="id_mst_inv_barang_habispakai_jenis" placeholder="Jumlah" value="<?php 
                 if(set_value('id_mst_inv_barang_habispakai_jenis')=="" && isset($id_mst_inv_barang_habispakai_jenis)){
@@ -152,6 +155,11 @@
                   echo $jumlah;
                 }else{
                   echo  set_value('jumlahdistribusi');
+                }
+                ?>">
+                <input type="hidden" class="form-control" name="tanggal_distribusi" id="tanggal_distribusi" placeholder="Jumlah Rusak" value="<?php 
+                if(set_value('tanggal_distribusi')=="" ){
+                  echo  set_value('tanggal_distribusi');
                 }
                 ?>">
             </div>
