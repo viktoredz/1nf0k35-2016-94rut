@@ -22,19 +22,14 @@
         </div>
 
       <div class="col-md-3 pull-right">
-        <select class="form-control" name="versi" type="text" >
-                <?php foreach($versi as $ver) : ?>
-                    <?php
-                       if(set_value('id_mst_anggaran_versi')=="" && isset($id_mst_anggaran_versi)){
-                         $id_mst_anggaran_versi = $id_mst_anggaran_versi;
-                       }else{
-                         $id_mst_anggaran_versi = set_value('id_mst_anggaran_versi');
-                       }
-                         $select = $ver->id_mst_anggaran_versi == $id_mst_anggaran_versi ? 'selected' : '' ;
-                    ?>
-                     <option value="<?php echo $ver->id_mst_anggaran_versi ?>" <?php echo $select ?>><?php echo $ver->nama ?></option>
-               <?php endforeach ?>
-           </select>  
+
+        <select name="versi" class="form-control" id="versi">
+            <option value="0">Pilih Versi</option>
+            <?php foreach ($dataversi as $ver ) { ;?>
+            <?php $select = $ver->id_mst_anggaran_versi ? 'selected=selected' : '' ?>
+              <option value="<?php echo $ver->id_mst_anggaran_versi; ?>" <?php echo $select ?>><?php echo $ver->nama; ?></option>
+            <?php } ;?>
+        </select>
       </div>
       </div>
     
@@ -146,6 +141,20 @@
   <script type="text/javascript">
         $(document).ready(function () {   
 
+       $('#pilih_versi').change(function(){
+        var pilih_versi = $(this).val();
+        $.ajax({
+          url : '<?php echo site_url('mst/keuangan_sts/get_versi') ?>',
+          type : 'POST',
+          data : 'pilih_versi=' + pilih_versi,
+          success : function(data) {
+            // $("#jqxgrid").jqxGrid('updatebounddata','cells');
+          }
+        });
+
+        return false;
+      }).change();
+
       $("#menu_keuangan").addClass("active");
       $("#menu_keuangan_master_sts_anggaran_tarif").addClass("active");
         
@@ -164,7 +173,7 @@
             });
 
      $("#btn-ubah-tarif").click(function(){
-        $.get('<?php echo base_url()?>mst/keuangan_sts/anggaran_ubah/{idversi}',function( data ) {
+        $.get('<?php echo base_url()?>mst/keuangan_sts/anggaran_ubah', {versi:'<?php echo $this->session->userdata('versi');?>'},function( data )  {
           $('#content1').html(data);
           });
        });

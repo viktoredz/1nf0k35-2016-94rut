@@ -10,7 +10,7 @@ class Keusts_model extends CI_Model {
     }
 
     function insert_versi(){
-        $data['id_mst_anggaran_versi'] = $this->kode_versi($this->input->post('kode_versi_'));
+        $data['id_mst_anggaran_versi'] = $this->kode_versi($this->input->post('id_mst_anggaran_versi'));
         $data['nama']                  = $this->input->post('nama');
         $data['deskripsi']             = $this->input->post('deskripsi');
     
@@ -23,26 +23,28 @@ class Keusts_model extends CI_Model {
     }
 
     function kode_versi($kode){
-        $mst_anggaran_versi=explode(".", $kode);
-        $kode_versi = $mst[0];
+        $versi=explode(".", $kode);
+        $kode_versi = $versi[0];
         $urut = $this->nourut($kode_versi);
-        return  $kode_versi.$urut;
+        return $urut;
     }
 
-      function nourut($kode_versi){
-        $q = $this->db->query("select MAX(RIGHT(id_mst_anggaran_versi,1)) as kd_max from mst_keu_anggaran_versi where (LEFT(id_mst_anggaran_versi,3))=$kode_versi");
+    function nourut($kode_versi){
+        $kodepuskesmas = substr($this->session->userdata('puskesmas'),0,4);
+        $this->db->select("MAX(id_mst_anggaran_versi) as kd_max");
+        $this->db->where("id_mst_anggaran_versi LIKE '".$kodepuskesmas."%'");
+        $q = $this->db->get("mst_keu_anggaran_versi")->row();
         $nourut="";
-        if($q->num_rows()>0)
+        $kd="";
+        if(!empty($q->kd_max))
         {
-            foreach($q->result() as $k)
-            {
-                $tmp = ((int)$k->kd_max)+1;
-                $nourut = sprintf("%06s", $tmp);
-            }
+                $tmp  = substr($q->kd_max,-6)+1;
+                $kd  = sprintf("%06s", $tmp);
+                $nourut = $kodepuskesmas.$kd;
         }
         else
         {
-            $nourut = "001";
+            $nourut = $kodepuskesmas."000001";
         }
         return $nourut;
     }
@@ -539,9 +541,9 @@ class Keusts_model extends CI_Model {
         return $query->result();
     }
 
-        function get_data_row($idversi){
+        function get_data_row($id){
         $data = array();
-        $options = array('id_mst_anggaran_versi' => $idversi);
+        $options = array('id_mst_anggaran_versi' => $id);
         $this->db->select('*');
         $query = $this->db->get_where($this->tb,$options);
         if ($query->num_rows() > 0){
@@ -552,16 +554,22 @@ class Keusts_model extends CI_Model {
         return $data;
     }
 
-      function update_versi($idversi)
-    {
+      function update_versi($versi){
+
         $data['nama']    = $this->input->post('nama');
 
-        $this->db->where('id_mst_anggaran_versi',$idversi);
+        $this->db->where('id_mst_anggaran_versi',$versi);
         if($this->db->update('mst_keu_anggaran_versi', $data)){
             return true; 
         }else{
             return mysql_error();
         }
+    }
+
+      function get_datawhere ($code,$condition,$tb){
+        $this->db->select("*");
+        $this->db->like($condition,$code);
+        return $this->db->get($tb)->result();
     }
 
 
