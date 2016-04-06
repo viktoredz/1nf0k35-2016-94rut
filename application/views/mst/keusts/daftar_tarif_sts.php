@@ -25,10 +25,6 @@
 
         <select name="versi" class="form-control" id="versi">
             <option value="0">Pilih Versi</option>
-            <?php foreach ($dataversi as $ver ) { ;?>
-            <?php $select = $ver->id_mst_anggaran_versi ? 'selected=selected' : '' ?>
-              <option value="<?php echo $ver->id_mst_anggaran_versi; ?>" <?php echo $select ?>><?php echo $ver->nama; ?></option>
-            <?php } ;?>
         </select>
       </div>
       </div>
@@ -139,16 +135,17 @@
     }
   </script>
   <script type="text/javascript">
-        $(document).ready(function () {   
 
-       $('#pilih_versi').change(function(){
-        var pilih_versi = $(this).val();
+       $(document).ready(function () {   
+
+       $('#versi').change(function(){
+        var versi = $(this).val();
         $.ajax({
           url : '<?php echo site_url('mst/keuangan_sts/get_versi') ?>',
           type : 'POST',
-          data : 'pilih_versi=' + pilih_versi,
+          data : 'versi=' + versi,
           success : function(data) {
-            // $("#jqxgrid").jqxGrid('updatebounddata','cells');
+          $('#versi').html(data);
           }
         });
 
@@ -178,13 +175,12 @@
           });
        });
 
-      
      $("select[name='versi']").change(function(){
         $.post( '<?php echo base_url()?>mst/keuangan_sts/set_versi', {versi:$(this).val()},function( data ) {
           $("#treeGrid").jqxTreeGrid('updateBoundData');
           $("#treeGrid").jqxTreeGrid('expandAll');            
         });
-            });
+     });
       
             // prepare the data
              var source =
@@ -207,7 +203,7 @@
                 id: 'id_mst_anggaran',
                 url: '<?php echo base_url()?>mst/keuangan_sts/api_data',
                  addRow: function (rowID, rowData, position, parentID, commit) {        
-          // POST to server using $.post or $.ajax          
+                     // POST to server using $.post or $.ajax          
                      // synchronize with the server - send insert command
                      // call commit with parameter true if the synchronization with the server is successful 
                      // and with parameter false if the synchronization failed.
@@ -219,14 +215,8 @@
                      // synchronize with the server - send update command
                      // call commit with parameter true if the synchronization with the server is successful 
                      // and with parameter false if the synchronization failed.         
-          
-          
-          
                     commit(true);
           var arr = $.map(rowData, function(el) { return el });                             
-                                        
-          
-          //0,7
           $.post( '<?php echo base_url()?>keuangan/master_sts/add_tarif', {id_anggaran:arr[0],tarif:arr[8]},function( data ) {
             if(data != 0){
               alert(data);                  
@@ -239,8 +229,6 @@
                      // synchronize with the server - send delete command
                      // call commit with parameter true if the synchronization with the server is successful 
                      // and with parameter false if the synchronization failed.
-          
-           
                      commit(true);
                  }
              };
@@ -260,7 +248,6 @@
                 altRows: true,
                 ready: function()
                 {
-          
                     // called when the DatatreeGrid is loaded.         
                 },
                 pagerButtonsCount: 8,                
@@ -272,8 +259,6 @@
                { text: 'Kode Rekening', dataField: 'IdMstAnggaran', width: "30%", columnType: "template", align:'center',cellsalign: 'center'}
                 ]
             });
-      
-      
         });
     
     function addParent(){

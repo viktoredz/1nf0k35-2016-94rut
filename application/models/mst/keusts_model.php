@@ -528,7 +528,7 @@ class Keusts_model extends CI_Model {
     function get_versi_sts(){
         $this->db->select('*');
         $this->db->from('mst_keu_anggaran_versi');
-        $this->db->order_by('nama','asc');
+        $this->db->order_by('id_mst_anggaran_versi','asc');
         $query = $this->db->get();
         return $query->result();
     }

@@ -48,10 +48,6 @@
 
         <select name="versi" class="form-control" id="versi">
           <option value="0">Pilih Versi</option>
-            <?php foreach ($dataversi as $ver ) { ;?>
-            <?php $select = $ver->id_mst_anggaran_versi ? 'selected=selected' : '' ?>
-          <option value="<?php echo $ver->id_mst_anggaran_versi; ?>" <?php echo $select ?>><?php echo $ver->nama; ?></option>
-            <?php } ;?>
         </select>
         </div>
       </div>
@@ -83,11 +79,9 @@
 
         <div class="col-md-2" style="padding-top:5px;"><label> Pilih Versi </label> </div>
         <div class="col-md-3 pull-left">
-        <!-- <h3 class="box-title">{title_form}</h3> -->
         </div>
 
             <div class="col-md-4 pull-right">
-          <!-- <button class="btn btn-success" data-toggle="modal" data-target="#myModal"> Lihat Semua Versi</button>           -->
           <a href="<?php echo base_url(); ?>keuangan/master_sts/anggaran_tarif" class="btn btn-default" >Aktifkan Versi ini</a>  
         </div>
 
@@ -119,6 +113,16 @@
 </section>
 
   <script type="text/javascript">
+  
+      function getVersi(){
+      $.ajax({
+        url: "<?php echo base_url().'mst/keuangan_sts/get_versi';?>",
+        success:function(data){
+            $("select[name='versi']").html(data);
+        }
+      });
+      return false;
+    }
 
     $("#btn-kembali").click(function(){
         $.get('<?php echo base_url()?>mst/keuangan_sts/kembali', function (data) {
@@ -222,14 +226,14 @@
   <script type="text/javascript">
         $(document).ready(function () {
 
-        $('#pilih_versi').change(function(){
-          var pilih_versi = $(this).val();
+        $('#versi').change(function(){
+          var versi = $(this).val();
             $.ajax({
               url : '<?php echo site_url('mst/keuangan_sts/get_versi') ?>',
               type : 'POST',
-              data : 'pilih_versi=' + pilih_versi,
+              data : 'versi=' + versi,
             success : function(data) {
-            // $("#jqxgrid").jqxGrid('updatebounddata','cells');
+            $('#versi').html(data);
           }
         });
 

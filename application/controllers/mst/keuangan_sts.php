@@ -25,8 +25,6 @@ class Keuangan_sts extends CI_Controller {
 				$data['title_group']   = "Keuangan";
 				$data['title_form']    = "Daftar Tarif Surat Tanda Setoran";
 				$data['ambildata']     = $this->keusts_model->get_data();
-				$data['versi'] 		   = $this->keusts_model->get_versi_sts();
-				$data['dataversi']    = $this->keusts_model->get_versi_sts();
 				$data['kode_rekening'] = $this->keusts_model->get_data_kode_rekening();
 				$data['kode_rek']	   = $this->keusts_model->get_data_kode_rek();
 
@@ -153,6 +151,27 @@ class Keuangan_sts extends CI_Controller {
 		}
 	}
 
+	function get_versi(){
+
+	if ($this->input->post('versi')!="null") {
+		if($this->input->is_ajax_request()) {
+			$versi = $this->input->post('versi');
+			$this->session->set_userdata('versi',$this->input->post('versi'));
+			$ver 	= $this->keusts_model->get_versi_sts();
+
+				echo '<option value="">Pilih Versi</option>';
+			foreach($ver as $ver) :
+				echo $select = $ver->id_mst_anggaran_versi == set_value('versi') ? 'selected' : '';
+				echo '<option value="'.$ver->id_mst_anggaran_versi.'" '.$select.'>' . $ver->nama . '</option>';
+			endforeach;
+
+			return FALSE;
+		}
+
+		 show_404();
+	   }
+	}
+
 	function induk_add(){
 		$this->authentication->verify('mst','add');
 
@@ -258,9 +277,13 @@ class Keuangan_sts extends CI_Controller {
 
 	function anggaran_ubah(){
 		$this->authentication->verify('mst','edit');
+		// $data = $this->keusts_model->get_data_row($idversi);
+	
+		$data['ambildata'] = $this->keusts_model->get_data_row($this->session->userdata('versi'));
 
-		$data['action']		   ="edit";
-		$data['alert_form']    = "";
+		$data['action']="edit";
+		// $data['id_mst_anggaran_versi'] = $idversi;
+		$data['alert_form'] = "";
 
 		$data['title_group']   = "Tarif Surat Tanda Setoran";
 		$data['title_form']    = "Ubah Daftar Tarif Surat Tanda Setoran";
@@ -274,26 +297,7 @@ class Keuangan_sts extends CI_Controller {
 	 	die($this->parser->parse("mst/keusts/daftar_tarif_sts_form",$data));
 	}
 
-	function get_versi(){
-
-	if ($this->input->post('versi')!="null") {
-		if($this->input->is_ajax_request()) {
-			$versi = $this->input->post('versi');
-			$this->session->set_userdata('versi',$this->input->post('versi'));
-			$ver 	= $this->keusts_model->get_datawhere($versi,"id_mst_anggaran_versi","mst_keu_anggaran_versi");
-
-				echo '<option value="">Pilih Versi</option>';
-			foreach($ver as $ver) :
-				echo $select = $ver->id_mst_anggaran_versi == set_value('pilih_versi') ? 'selected' : '';
-				echo '<option value="'.$ver->id_mst_anggaran_versi.'" '.$select.'>' . $ver->nama . '</option>';
-			endforeach;
-
-			return FALSE;
-		}
-
-		 show_404();
-	   }
-	}
+	
 
 	function anggaran_tarif(){
 		$this->authentication->verify('mst','edit');

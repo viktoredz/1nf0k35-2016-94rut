@@ -89,39 +89,10 @@
       return false;
   }
 
- function ver(){
-      $.ajax({
-      url: "<?php echo base_url().'mst/keuangan_sts/get_versi';?>",
-      dataType: "json",
-      success:function(data){ 
-      //   $.each(data,function(index,elemet){
-      //     var lokasi = elemet.kodeversi.split(".")
-      //     $("#id_mst_anggaran_versi").val(lokasi[0]);
-      //   });
-      // }
-      });
-      return false;
-    }
-
   $(function () { 
     tabIndex = 1;
-
-      $('#pilih_versi').change(function(){
-        var pilih_versi = $(this).val();
-        $.ajax({
-          url : '<?php echo site_url('mst/keuangan_sts/get_versi') ?>',
-          type : 'POST',
-          data : 'pilih_versi=' + pilih_versi,
-          success : function(data) {
-            // $("#jqxgrid").jqxGrid('updatebounddata','cells');
-          }
-        });
-
-        return false;
-      }).change();
-
     kodeVersi();
-    ver();
+    
    $("[name='btn_keuangan_versi_close']").click(function(){
         $("#popup_keuangan_sts").jqxWindow('close');
     });
@@ -144,8 +115,8 @@
             data : data,
             success : function(response){
               if(response=="OK"){
-                $('#pilih_versi').html(data);
                 $("#popup_keuangan_sts").jqxWindow('close');
+                 getVersi();
                 alert("Data instansi berhasil disimpan.");
                 // $("#jqxgrid").jqxGrid('updatebounddata', 'filter');
               }else{
