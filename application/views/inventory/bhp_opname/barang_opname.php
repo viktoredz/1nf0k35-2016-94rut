@@ -17,7 +17,7 @@
 			{ name: 'edit', type: 'number'},
 			{ name: 'delete', type: 'number'}
         ],
-		url: "<?php echo site_url('inventory/bhp_opname/json_opname/'.$kode); ?>",
+		url: "<?php echo site_url('inventory/bhp_opname/json_opname_dalam/'.$kode); ?>",
 		cache: false,
 		updateRow: function (rowID, rowData, commit) {
          },
