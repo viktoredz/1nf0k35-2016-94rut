@@ -174,8 +174,7 @@ $(function(){
           url : '<?php echo site_url('inventory/bhp_opname/daftar_opname/') ?>',
           type : 'POST',
           success : function(data) {
-              $('#addopname').hide();
-              $('#grid').html(data);
+              $('#content2').html(data);
           }
       });
 

@@ -13,7 +13,7 @@
   <?php echo $this->session->flashdata('alert_form')?>
 </div>
 <?php }  ?>
-
+<div id="grid"></div>
 <div class="row">
   <form action="" method="post" name="editform" id="form-ss-edit">
   <div class="col-md-6">
@@ -260,7 +260,10 @@ $(function(){
   });
   kodedistribusi();
     $('#btn-kembali').click(function(){
-        window.location.href="<?php echo base_url()?>inventory/bhp_opname";
+        $.get('<?php echo base_url()?>inventory/bhp_opname/tab/2', function (data) {
+            $('#addopname').hide();
+              $('#content2').html(data);
+      });
     });
 
 

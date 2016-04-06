@@ -59,7 +59,7 @@
 				     	<div class="col-md-8">
 				     		<select name="tahun" id="tahun" class="form-control">
 								<?php for ($i=date("Y");$i>=date("Y")-10;$i--) { ;?>
-									<?php $select = $i == '2015' ? 'selected=selected' : '' ?>
+									<?php $select = $i == date("Y") ? 'selected=selected' : '' ?>
 									<option value="<?php echo $i; ?>" <?php echo $select ?>><?php echo $i; ?></option>
 								<?php	} ;?>
 					     	</select>

@@ -1163,7 +1163,7 @@ class Bhp_opname extends CI_Controller {
 			if($this->session->userdata('filter_jenisbarang')=="all"){
 
 			}else{
-				$this->db->where("jenis_bhp",$this->session->userdata('filter_jenisbarang'));
+				//$this->db->where("jenis_bhp",$this->session->userdata('filter_jenisbarang'));
 			}
 		}else{
 			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
@@ -1172,7 +1172,7 @@ class Bhp_opname extends CI_Controller {
 			if($this->session->userdata('filter_bulan')=="all"){
 
 			}else{
-				$this->db->where("MONTH(tgl_opname)",$this->session->userdata('filter_bulan'));
+				//$this->db->where("MONTH(tgl_opname)",$this->session->userdata('filter_bulan'));
 			}
 		}else{
 			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
@@ -1181,7 +1181,7 @@ class Bhp_opname extends CI_Controller {
 			if($this->session->userdata('filter_tahun')=="all"){
 
 			}else{
-				$this->db->where("YEAR(tgl_opname)",$this->session->userdata('filter_tahun'));
+			//	$this->db->where("YEAR(tgl_opname)",$this->session->userdata('filter_tahun'));
 			}
 		}else{
 			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
@@ -1208,11 +1208,17 @@ class Bhp_opname extends CI_Controller {
 		}
 		$filbulan=date("m");
 		$filtahun=date("Y");
+		$filterbhp ="";
 		if($this->session->userdata('filter_jenisbarang')!=''){
 			if($this->session->userdata('filter_jenisbarang')=="all"){
-				
+				$filterbhp ="";
 			}else{
-				$this->db->where("jenis_bhp",$this->session->userdata('filter_jenisbarang'));
+				if ($this->session->userdata('filter_jenisbarang')=='obat') {
+					$jenis='obat';
+				}else{
+					$jenis='umum';
+				}
+				$filterbhp = " and inv_inventaris_habispakai_opname.jenis_bhp = ".'"'.$jenis.'"'."";
 			}
 		}else{
 			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
@@ -1220,7 +1226,7 @@ class Bhp_opname extends CI_Controller {
 		if($this->session->userdata('filter_bulan')!=''){
 			if($this->session->userdata('filter_bulan')=="all"){
 			}else{
-				$this->db->where("MONTH(tgl_opname)",$this->session->userdata('filter_bulan'));
+				//$this->db->where("MONTH(tgl_opname)",$this->session->userdata('filter_bulan'));
 				$filbulan =$this->session->userdata('filter_bulan');
 			}
 		}else{
@@ -1229,14 +1235,14 @@ class Bhp_opname extends CI_Controller {
 		if($this->session->userdata('filter_tahun')!=''){
 			if($this->session->userdata('filter_tahun')=="all"){
 			}else{
-				$this->db->where("YEAR(tgl_opname)",$this->session->userdata('filter_tahun'));
+				//$this->db->where("YEAR(tgl_opname)",$this->session->userdata('filter_tahun'));
 				$filtahun =$this->session->userdata('filter_tahun');
 			}
 		}else{
 
 			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
 		}
-		$rows = $this->bhp_opname_model->get_data_lap_opname($filbulan,$filtahun);
+		$rows = $this->bhp_opname_model->get_data_lap_opname($filbulan,$filtahun,$filterbhp);
 		//die(print_r($rows));
 	//	$get_jumlahawal = $this->bhp_opname_model->get_jumlahawal();
 		$data = array();

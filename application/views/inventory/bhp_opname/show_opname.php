@@ -220,8 +220,7 @@
 			idjenis = '0';
 		}
   		$.get("<?php echo base_url().'inventory/bhp_opname/edit_opname/' ?>"+id+'/'+idjenis,function (data) {
-	          	$('#addopname').html(data);
-	          	$('#grid').hide();
+	          	$('#content2').html(data);
      	});
 
       return false;
@@ -245,8 +244,7 @@
 	        type : 'POST',
 	     //   data : 'opname=' + opname,
 	        success : function(data) {
-	          	$('#addopname').html(data);
-	          	$('#grid').hide();
+	          	$('#content2').html(data);
 	        }
      	});
 
