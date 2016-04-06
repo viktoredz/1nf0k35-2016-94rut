@@ -42,6 +42,66 @@ class Keuangan_sts extends CI_Controller {
 		}
 	}
 
+	function json_anggaran_versi(){
+		$this->authentication->verify('mst','show');
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+			
+					$this->db->like($field,$value);
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+
+		$rows_all = $this->keusts_model->get_versi_sts();
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				$this->db->like($field,$value);
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+
+		$rows = $this->keusts_model->get_versi_sts($this->input->post('recordstartindex'), $this->input->post('pagesize'));
+		$data = array();
+		foreach($rows as $act) {
+			$data[] = array(
+				'id_mst_anggaran_versi' => $act->id_mst_anggaran_versi,
+				'nama'					=> $act->nama,
+				'deskripsi'    			=> $act->deskripsi,
+				'tanggal_dibuat'  		=> $act->tanggal_dibuat,
+				'edit'		 	        => 1,
+				'delete'	     	    => 1
+			);
+		}
+
+		$size = sizeof($rows_all);
+		$json = array(
+			'TotalRows' => (int) $size,
+			'Rows' => $data
+		);
+
+		echo json_encode(array($json));
+	}
+
+
 	function json_penggunaan_tarif_sts($id){
 		$this->authentication->verify('mst','show');
 
@@ -140,6 +200,26 @@ class Keuangan_sts extends CI_Controller {
 		die($this->parser->parse("mst/keusts/form_tambah_versi",$data));
 	}
 
+	function versi_del($id=0){
+
+		 $this->authentication->verify('mst','del');
+
+		 if($this->keusts_model->delete_versi($id)){
+		 	die ("OK");
+		 } else {
+		 	die ("Error");
+		 }
+	}
+
+	function lihat_versi(){
+		$this->authentication->verify('mst','edit');
+		
+		$data['lihat_versi'] = $this->keusts_model->get_versi_sts();
+
+		die($this->parser->parse("mst/keusts/versi_sts",$data));
+		
+	}
+
 	public function kodeVersi($id=0){
 		$this->db->where('code',"P".$this->session->userdata('puskesmas'));
 		$query = $this->db->get('cl_phc')->result();
@@ -161,7 +241,7 @@ class Keuangan_sts extends CI_Controller {
 
 				echo '<option value="">Pilih Versi</option>';
 			foreach($ver as $ver) :
-				echo $select = $ver->id_mst_anggaran_versi == set_value('versi') ? 'selected' : '';
+				echo $select = $ver->id_mst_anggaran_versi == $this->input->post('versi') ? 'selected' : '';
 				echo '<option value="'.$ver->id_mst_anggaran_versi.'" '.$select.'>' . $ver->nama . '</option>';
 			endforeach;
 
