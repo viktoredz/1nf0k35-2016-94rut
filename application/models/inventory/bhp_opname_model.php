@@ -12,7 +12,7 @@ class Bhp_opname_model extends CI_Model {
     
     function get_data($start=0,$limit=999999,$options=array())
     {
-
+        $this->db->select("(SELECT a.tgl_opname FROM inv_inventaris_habispakai_opname a WHERE a.jenis_bhp = inv_inventaris_habispakai_opname.jenis_bhp ORDER BY a.tgl_opname DESC LIMIT 1) AS last_tgl_opname,inv_inventaris_habispakai_opname.*");
         $query = $this->db->get('inv_inventaris_habispakai_opname',$limit,$start);
         return $query->result();
     }
@@ -132,7 +132,6 @@ class Bhp_opname_model extends CI_Model {
     }
     function insertdata(){
         $this->db->where('id_inv_inventaris_habispakai_opname',$this->input->post('id_inv_inventaris_habispakai_opname'));
-        $this->db->where('id_inv_inventaris_habispakai_opname',$this->input->post('id_inv_inventaris_habispakai_opname'));
         $this->db->where('id_mst_inv_barang_habispakai',$this->input->post('id_mst_inv_barang_habispakai'));
         $this->db->where('batch',$this->input->post('batch'));
         $this->db->select("*");
@@ -154,13 +153,62 @@ class Bhp_opname_model extends CI_Model {
                     return mysql_error();
                 }
             }else{
+                if ($this->input->post('batch')=='undefined') {
+                    $nobac='';
+                }else{
+                    $nobac=$this->input->post('batch');
+                }
                 $values = array(
                     'jml_awal'                      => $this->input->post('jumlah'),
                     'jml_akhir'                     => $this->input->post('jumlahopname') ,
                     'harga'                         => $this->input->post('harga'),
                     'id_mst_inv_barang_habispakai'  => $this->input->post('id_mst_inv_barang_habispakai'),
                     'id_inv_inventaris_habispakai_opname' => $this->input->post('id_inv_inventaris_habispakai_opname'),
-                    'batch'                         => $this->input->post('batch'),
+                    'batch'                         => $nobac,
+                );
+                if($simpan=$this->db->insert('inv_inventaris_habispakai_opname_item', $values)){
+                    return true;
+                }else{
+                    return mysql_error();
+                }
+            }
+            
+    }
+    function insertdatamaster(){
+        $this->db->where('id_inv_inventaris_habispakai_opname',$this->input->post('id_inv_inventaris_habispakai_opname_master'));
+        $this->db->where('id_mst_inv_barang_habispakai',$this->input->post('id_mst_inv_barang_habispakai_master'));
+        $this->db->where('batch',$this->input->post('batch_master'));
+        $this->db->select("*");
+        $query = $this->db->get("inv_inventaris_habispakai_opname_item");
+           if ($query->num_rows() > 0){
+                $dataupdate = array(
+                    'jml_awal' => $this->input->post('jumlah_awal_opname'),
+                    'jml_akhir' => $this->input->post('jumlah_masteropname'),
+                    'harga' => $this->input->post('harga_master'),
+                    );
+                $datakey = array(
+                    'id_mst_inv_barang_habispakai'          =>$this->input->post('id_mst_inv_barang_habispakai_master'),
+                    'id_inv_inventaris_habispakai_opname'   =>$this->input->post('id_inv_inventaris_habispakai_opname_master') ,
+                    'batch'                                 =>$this->input->post('batch_master'),
+                     );
+                if($simpan=$this->db->update("inv_inventaris_habispakai_opname_item",$dataupdate,$datakey)){
+                    return true;
+                }else{
+                    return mysql_error();
+                }
+            }else{
+                if ($this->input->post('batch_master')=='undefined') {
+                    $nobac='';
+                }else{
+                    $nobac=$this->input->post('batch_master');
+                }
+                $values = array(
+                    'jml_awal'                      => $this->input->post('jumlah_awal_opname'),
+                    'jml_akhir'                     => $this->input->post('jumlah_masteropname') ,
+                    'harga'                         => $this->input->post('harga_master'),
+                    'id_mst_inv_barang_habispakai'  => $this->input->post('id_mst_inv_barang_habispakai_master'),
+                    'id_inv_inventaris_habispakai_opname' => $this->input->post('id_inv_inventaris_habispakai_opname_master'),
+                    'batch'                         => $nobac,
                 );
                 if($simpan=$this->db->insert('inv_inventaris_habispakai_opname_item', $values)){
                     return true;

@@ -8,6 +8,7 @@
 			{ name: 'id_mst_inv_barang_habispakai', type: 'number' },
 			{ name: 'uraian', type: 'string' },
 			{ name: 'jml', type: 'number' },
+			{ name: 'jml_opname', type: 'number' },
 			{ name: 'tgl_opname', type: 'string' },
 			{ name: 'batch', type: 'string' },
 			{ name: 'harga', type: 'string' },
@@ -64,7 +65,7 @@
 				<?php } ?>
 				{ text: 'Hapus', align: 'center', editable: false,filtertype: 'none', sortable: false, width: '10%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid_barang_distribusi").jqxGrid('getrowdata', row);
-				    if (dataRecord.edit==1){
+				    if (dataRecord.edit==1 && (dataRecord.jml_opname > 0)){
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del_barang(\""+dataRecord.id_mst_inv_barang_habispakai+"\",\""+dataRecord.batch+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";

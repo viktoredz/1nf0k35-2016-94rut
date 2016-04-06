@@ -287,6 +287,7 @@ class Bhp_opname extends CI_Controller {
 				'petugas_nama'			=> $act->petugas_nama,
 				'catatan'				=> $act->catatan,
 				'nomor_opname'			=> $act->nomor_opname,
+				'last_opname' 			=> ($act->tgl_opname >= $act->last_tgl_opname) ? 1 :0,
 				'edit'					=> 1,
 				'delete'				=> 1,
 			);
@@ -701,7 +702,7 @@ class Bhp_opname extends CI_Controller {
 				'jml_awal'									=> $act->jml_awal,
 				'jml_akhir'									=> $act->jml_akhir,
 				'jmlawal_opname'							=> $act->jmlawal_opname,
-				'sumselisih'								=> ($act->sumselisih),
+				'sumselisih'								=> ($act->sumselisih)*-1,
 				'jmlakhir_opname'							=> $act->jmlawal_opname + $act->sumselisih,
 				'harga'										=> $act->harga,
 				'merek_tipe'								=> $act->merek_tipe,
@@ -944,6 +945,106 @@ class Bhp_opname extends CI_Controller {
 			
 		}
 	}
+	function detail_master($id){
+    	$kodepuskesmas = "P".$this->session->userdata("puskesmas");
+		$this->db->where("id_mst_inv_barang_habispakai","$id");
+		$this->db->select("mst_inv_barang_habispakai.*,
+			(SELECT harga AS hrg FROM inv_inventaris_habispakai_opname_item JOIN inv_inventaris_habispakai_opname ON (inv_inventaris_habispakai_opname_item.id_inv_inventaris_habispakai_opname = inv_inventaris_habispakai_opname.id_inv_inventaris_habispakai_opname)  WHERE code_cl_phc=".'"'.$kodepuskesmas.'"'." AND id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai ORDER BY tgl_opname DESC LIMIT 1) AS harga_opname,
+			(select harga as hargapembelian from inv_inventaris_habispakai_pembelian_item 
+            where code_cl_phc=".'"'.$kodepuskesmas.'"'." and id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai order by tgl_update desc limit 1 ) as harga_pembelian,
+            (SELECT tgl_opname AS tglopname FROM inv_inventaris_habispakai_opname_item JOIN inv_inventaris_habispakai_opname ON (inv_inventaris_habispakai_opname_item.id_inv_inventaris_habispakai_opname = inv_inventaris_habispakai_opname.id_inv_inventaris_habispakai_opname) WHERE id_mst_inv_barang_habispakai = mst_inv_barang_habispakai.id_mst_inv_barang_habispakai AND code_cl_phc=".'"'.$kodepuskesmas.'"'."ORDER BY tgl_opname DESC LIMIT 1) AS tgl_opname,
+            (select tgl_update  as tglpembelian from inv_inventaris_habispakai_pembelian_item where id_mst_inv_barang_habispakai = mst_inv_barang_habispakai.id_mst_inv_barang_habispakai and code_cl_phc=".'"'.$kodepuskesmas.'"'." order by tgl_update desc limit 1) as tgl_pembelian");
+		$query= $this->db->get("mst_inv_barang_habispakai")->result();
+		foreach ($query as $q) {
+			if (($q->tgl_pembelian!=null)||($q->tgl_opname!=null)) {
+	          if($q->tgl_opname==null){
+	            $tgl_opname = 0;
+	          }else{
+	            $tgl_opname = $q->tgl_opname;
+	          }
+
+	          if ($q->tgl_pembelian==null) {
+	            $tgl_pembelian = 0;
+	          }else{
+	            $tgl_pembelian = $q->tgl_pembelian;
+	          }
+	          if( $tgl_pembelian>= $tgl_opname){
+	            $hargabarang = $q->harga_pembelian;  
+	          }else{
+	            $hargabarang = $q->harga_opname;  
+	          }
+	        }else{
+	          if ($q->harga==null) {
+	            $hargaasli =0;
+	          }else{
+	            $hargaasli =$q->harga;
+	          }
+
+	          $hargabarang = $hargaasli;
+            }
+			$totalpengadaan[] = array(
+				'hargabarang' 					=> $hargabarang, 
+			);
+			echo json_encode($totalpengadaan);
+		}
+    }
+	function autocomplite_barang_master($obat=8){
+		$kodepuskesmas = "P".$this->session->userdata("puskesmas");
+		$search = explode("&",$this->input->server('QUERY_STRING'));
+		$search = str_replace("term=","",$search[0]);
+		$search = str_replace("+"," ",$search);
+		if ($obat=='0') {
+			$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis !=",'8');
+		}else{
+			$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$obat);
+		}
+		$this->db->like("uraian",$search);
+		$this->db->order_by('id_mst_inv_barang_habispakai','asc');
+		$this->db->limit(7,0);
+		$this->db->select("mst_inv_barang_habispakai.*");
+		$query= $this->db->get("mst_inv_barang_habispakai")->result();
+		foreach ($query as $q) {
+			$barangmaster[] = array(
+				'key' 		=> $q->id_mst_inv_barang_habispakai , 
+				'value' 	=> $q->uraian,
+				'satuan'	=>$q->pilihan_satuan, 
+				
+			);
+		}
+		echo json_encode($barangmaster);
+	}
+	public function add_barang_opnamemaster($kodeopname=0,$jenis_master=8)
+	{	
+		$data['action']			= "add";
+		$data['kode']			= $kodeopname;
+
+        $this->form_validation->set_rules('id_mst_inv_barang_habispakai_jenis_master', 'ID Barang', 'trim');
+        $this->form_validation->set_rules('id_mst_inv_barang_habispakai_master', 'Nama Barang', 'trim');
+        $this->form_validation->set_rules('id_inv_inventaris_habispakai_opname_master', 'Kode Opname', 'trim');
+        $this->form_validation->set_rules('batch_master', 'Batch', 'trim|required');
+        $this->form_validation->set_rules('uraian_master', 'Nama Barang', 'trim|required');
+        $this->form_validation->set_rules('jumlah_awal_opname', 'Jumlah Awal', 'trim');
+        $this->form_validation->set_rules('harga_master', 'harga', 'trim');
+        $this->form_validation->set_rules('jumlah_masteropname', 'Jumlah Opname', 'trim|required');
+
+		if($this->form_validation->run()== FALSE){
+			$data['action']			= "add";
+			$data['kode']			= $kodeopname;
+			$data['notice_master']			= validation_errors();
+			$data['jenis_master']			= $jenis_master;
+
+			die($this->parser->parse('inventory/bhp_opname/barang_form_master', $data));
+		}else{
+			if($simpan=$this->bhp_opname_model->insertdatamaster()){
+				$id=$this->input->post('id_mst_inv_barang');
+				die("OK|$id|Tersimpan");
+			}else{
+				$id=$this->input->post('id_mst_inv_barang');
+				 die("Error|$id|Proses data gagal");
+			}
+			
+		}
+	}
 	public function detailbhp($kodeopname=0,$idbarang=0,$batch='')
 	{	
 		$data['action']			= "add";
@@ -994,6 +1095,7 @@ class Bhp_opname extends CI_Controller {
 		$search = str_replace("term=","",$search[0]);
 		$search = str_replace("+"," ",$search);
 
+		$this->db->distinct();
 		$this->db->like("petugas_nama",$search);
 		$this->db->order_by('id_inv_inventaris_habispakai_opname','asc');
 		$this->db->limit(10,0);
@@ -1011,6 +1113,7 @@ class Bhp_opname extends CI_Controller {
 		$search = str_replace("term=","",$search[0]);
 		$search = str_replace("+"," ",$search);
 
+		$this->db->distinct();
 		$this->db->like("petugas_nip",$search);
 		$this->db->order_by('id_inv_inventaris_habispakai_opname','asc');
 		$this->db->limit(10,0);
@@ -1228,5 +1331,23 @@ class Bhp_opname extends CI_Controller {
 		
 		echo base_url().$output_file_name ;
 	}
-	
+	function lastopname($bhp='obat')
+	{
+		$this->db->where('jenis_bhp',$bhp);
+		$this->db->select("max(tgl_opname) as last_opname");
+        $query = $this->db->get('inv_inventaris_habispakai_opname');
+        if ($query->num_rows()>0) {
+        	foreach ($query->result() as $key) {
+        		if ($key->last_opname !=null) {
+        			die($key->last_opname);
+        		}else{
+        			die('0000-00-00');	
+        		}
+        	}
+        }else{
+        	die('0000-00-00');	
+        }
+        
+
+	}
 }

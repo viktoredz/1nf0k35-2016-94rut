@@ -122,6 +122,7 @@
                 echo  set_value('catatan');
               }
               ?></textarea>
+              <input type="hidden" id="last_opname" name="last_opname" />
           </div>  
         </div>
 
@@ -138,7 +139,12 @@
 
 <script type="text/javascript">
 $(function(){
+  cekopname($('#tgl_opname').val(),$('#jenis_bhp').val());
     $('#form-ss').submit(function(){
+      if ($('#last_opname').val() >= $('#tgl_opname').val()) {
+      alert("Maaf! Kategori barang "+$('#jenis_bhp').val()+" sudah di opname pada "+$('#last_opname').val()+','+'\n'+"Silahkan ganti ke tanggal berikutnya");
+
+      }else{
             var data = new FormData();
             data.append('kode_distribusi_', $('#kode_distribusi_').val());
             data.append('tgl_opname', $('#tgl_opname').val());
@@ -159,6 +165,7 @@ $(function(){
                   $('#addopname').html(response);
                 }
             });
+      }
             return false;
         });
     kodedistribusi();
@@ -178,8 +185,23 @@ $(function(){
     $("#tgl_opname").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme , height: '30px'});
     $("#tgl_opname").change(function() {
         kodedistribusi($("#tgl_opname").val());
+        
     });
+    $("#jenis_bhp").change(function(){
+        cekopname($('#tgl_opname').val(),$(this).val());
+    });
+    function cekopname(tgl,bhp){
+     
+      $.ajax({
+          url : "<?php echo base_url().'inventory/bhp_opname/lastopname/';?>"+bhp,
+          success : function(data) {
+             tglop = data.split('-');
+              $("#last_opname").val(tglop[2]+'-'+tglop[1]+'-'+tglop[0]);
+          }
+      });
 
+      return false;
+    }
     function kodedistribusi(tahun)
     {
       if (tahun==null) {
@@ -189,7 +211,7 @@ $(function(){
       }
       
       $.ajax({
-      url: "<?php echo base_url().'inventory/bhp_distribusi/kodedistribusi';?>",
+      url: "<?php echo base_url().'inventory/bhp_opname/kodedistribusi';?>",
       dataType: "json",
       success:function(data)
       { 

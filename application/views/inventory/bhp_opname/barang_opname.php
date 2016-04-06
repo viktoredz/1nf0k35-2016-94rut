@@ -53,10 +53,17 @@
 			},
 
 			columns: [
+			<?php if ($jenis_bhp=="8") { ?>
 				{ text: 'Nama Barang ', editable: false,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '40%'},
 				{ text: 'Batch ',datafield: 'batch' ,align: 'center', editable: false, columntype: 'textbox', filtertype: 'textbox', width: '20%'},
 				{ text: 'Jumlah Akhir ', align: 'center',cellsalign: 'right',editable: false,datafield: 'jml_akhir', columntype: 'textbox', filtertype: 'textbox', width: '15%'},
 				{ text: 'Selisih ', align: 'center',cellsalign: 'right',editable: false,datafield: 'selisih', columntype: 'textbox', filtertype: 'textbox', width: '15%'},
+			<?php }else{
+				?>
+				{ text: 'Nama Barang ', editable: false,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '50%'},
+				{ text: 'Jumlah Akhir ', align: 'center',cellsalign: 'right',editable: false,datafield: 'jml_akhir', columntype: 'textbox', filtertype: 'textbox', width: '20%'},
+				{ text: 'Selisih ', align: 'center',cellsalign: 'right',editable: false,datafield: 'selisih', columntype: 'textbox', filtertype: 'textbox', width: '20%'},
+				<?php } ?>
 				{ text: 'Hapus', align: 'center', editable: false,filtertype: 'none', sortable: false, width: '10%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid_barang_opname").jqxGrid('getrowdata', row);
 				    if (dataRecord.edit==1){
@@ -79,7 +86,11 @@
 
 
 	});
-
+	function close_popup_master(){
+		$("#popup_barang_master").jqxWindow('close');
+		$("#jqxgrid_barang").jqxGrid('updatebounddata', 'cells');
+		$("#jqxgrid_barang_opname").jqxGrid('updatebounddata', 'cells');
+	}
 	
 	function del_barang(id_barang,kode_batch){
 		var confirms = confirm("Hapus Data ?");
@@ -92,16 +103,41 @@
 			
 		}
 	}
-
+	$("#btn-masteropname").click(function(){
+		pilih_opname_master($("#jenis_bhp").val());
+	});
+	function pilih_opname_master(jenis){
+		if (jenis.toLowerCase()=="obat") {
+			idjenis = '8';
+		}else{
+			idjenis = '0';
+		}
+		$("#popup_barang_master #popup_content_master").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
+		$.get("<?php echo base_url().'inventory/bhp_opname/add_barang_opnamemaster/'.$kode.'/'?>"+idjenis, function(data) {
+			$("#popup_content_master").html(data);
+		});
+		$("#popup_barang_master").jqxWindow({
+			theme: theme, resizable: false,
+			width: 600,
+			height: 500,
+			isModal: true, autoOpen: false, modalOpacity: 0.2
+		});
+		$("#popup_barang_master").jqxWindow('open');
+	}
 </script>
 
-<div id="popup_barang" style="display:none">
-	<div id="popup_title">Data Barang</div>
-	<div id="popup_content">&nbsp;</div>
+<div id="popup_barang_master" style="display:none">
+	<div id="popup_title_master">Data Opname Barang Master</div>
+	<div id="popup_content_master">&nbsp;</div>
 </div>
 
 <div>
-	<div style="width:100%;">
-        <div id="jqxgrid_barang_opname"></div>
+	<div align="right">
+	<button type="button" id="btn-masteropname" class="btn btn-success"><i class='fa fa-plus-square'></i> &nbsp;Tambah</button>
+	</div>
+	<div class="box-body">
+		<div style="width:100%;">
+	        <div id="jqxgrid_barang_opname"></div>
+		</div>
 	</div>
 </div>

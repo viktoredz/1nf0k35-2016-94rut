@@ -532,6 +532,7 @@ class Bhp_distribusi extends CI_Controller {
 				'pilihan_satuan'							=> $act->pilihan_satuan,
 				'tgl_kadaluarsa'							=> date("d-m-Y",strtotime($act->tgl_kadaluarsa)),
 				'jml'										=> $act->jml,
+				'jml_opname'								=> $act->tgl_opname !='' ? 0:1,
 				'edit'		=> 1,
 				'delete'	=> 1
 			);
@@ -818,6 +819,7 @@ class Bhp_distribusi extends CI_Controller {
 		$search = str_replace("term=","",$search[0]);
 		$search = str_replace("+"," ",$search);
 
+		$this->db->distinct();
 		$this->db->like("penerima_nama",$search);
 		$this->db->order_by('id_inv_inventaris_habispakai_distribusi','asc');
 		$this->db->limit(10,0);
@@ -835,7 +837,8 @@ class Bhp_distribusi extends CI_Controller {
 		$search = explode("&",$this->input->server('QUERY_STRING'));
 		$search = str_replace("term=","",$search[0]);
 		$search = str_replace("+"," ",$search);
-
+		
+		$this->db->distinct();
 		$this->db->like("penerima_nip",$search);
 		$this->db->order_by('id_inv_inventaris_habispakai_distribusi','asc');
 		$this->db->limit(10,0);

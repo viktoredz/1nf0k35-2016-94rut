@@ -137,6 +137,7 @@
 			{ name: 'tgl_opname', type: 'date' },
 			{ name: 'nomor_opname', type: 'string' },
 			{ name: 'no', type: 'string' },
+			{ name: 'last_opname', type: 'number' },
 			{ name: 'edit', type: 'number' },
 			{ name: 'delete', type: 'number' },
         ],
@@ -182,7 +183,7 @@
 			columns: [
 				{ text: 'Edit', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgridopname").jqxGrid('getrowdata', row)
-				    if((dataRecord.edit==1)){
+				    if((dataRecord.edit==1)&&(dataRecord.last_opname > 0)){
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='editopname(\""+dataRecord.id_inv_inventaris_habispakai_opname+"\",\""+dataRecord.jenis_bhp+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
@@ -191,7 +192,7 @@
                 },
 				{ text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgridopname").jqxGrid('getrowdata', row);
-				    if(dataRecord.delete==1){
+				    if(dataRecord.delete==1 &&(dataRecord.last_opname > 0)){
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del(\""+dataRecord.id_inv_inventaris_habispakai_opname+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php  echo base_url(); ?>media/images/16_lock.gif'></a></div>";
