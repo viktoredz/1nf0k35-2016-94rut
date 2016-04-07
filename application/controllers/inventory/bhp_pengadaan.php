@@ -502,6 +502,7 @@ class Bhp_pengadaan extends CI_Controller {
 				'uraian'								=> $act->uraian,
 				'jml'									=> $act->jml,
 				'batch'									=> $act->batch,
+				'jml_rusak'								=> $act->jml_rusak,
 				'harga'									=> number_format($act->harga,2),
 				'subtotal'								=> number_format($act->jml*$act->harga,2),
 				'tgl_update'							=> $act->tgl_update,

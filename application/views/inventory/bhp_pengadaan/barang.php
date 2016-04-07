@@ -15,6 +15,7 @@
 			{ name: 'batch', type: 'string' },
 			{ name: 'harga', type: 'string' },
 			{ name: 'subtotal', type: 'string' },
+			{ name: 'jml_rusak', type: 'string' },
 			{ name: 'harga', type: 'double' },
 			{ name: 'tgl_update', type: 'date' },
 			{ name: 'jml_distribusi', type: 'number'}
@@ -88,23 +89,27 @@
 				<?php if (isset($id_mst_inv_barang_habispakai_jenis)&&($id_mst_inv_barang_habispakai_jenis=='8')) { ?>
 				{ text: 'Batch ',datafield: 'batch' ,align: 'center', editable: false, columntype: 'textbox', filtertype: 'textbox', width: '8%'},
 				{ text: 'Jumlah ', align: 'center',cellsalign: 'right',editable: false,datafield: 'jml', columntype: 'textbox', filtertype: 'textbox', width: '8%'},
-				{ text: 'Harga Satuan (Rp.)', align: 'center',cellsalign: 'right',editable: false, datafield: 'harga', columntype: 'textbox', filtertype: 'textbox', width: '15%'},
-				{ text: 'Sub Total (Rp.)', align: 'center',cellsalign: 'right',editable: false,datafield: 'subtotal', columntype: 'textbox', filtertype: 'none', width: '20%'},
+				{ text: 'Jumlah Rusak', align: 'center',cellsalign: 'right',editable: false,datafield: 'jml_rusak', columntype: 'textbox', filtertype: 'textbox', width: '10%'},
+				{ text: 'Harga Satuan (Rp.)', align: 'center',cellsalign: 'right',editable: false, datafield: 'harga', columntype: 'textbox', filtertype: 'textbox', width: '10%'},
+				{ text: 'Sub Total (Rp.)', align: 'center',cellsalign: 'right',editable: false,datafield: 'subtotal', columntype: 'textbox', filtertype: 'none', width: '15%'},
 				<?php }else{ ?>
 				{ text: 'Jumlah ', align: 'center',cellsalign: 'right',editable: false,datafield: 'jml', columntype: 'textbox', filtertype: 'textbox', width: '11%'},
-				{ text: 'Harga Satuan (Rp.)', align: 'center',cellsalign: 'right',editable: false, datafield: 'harga', columntype: 'textbox', filtertype: 'textbox', width: '20%'},
-				{ text: 'Sub Total (Rp.)', align: 'center',cellsalign: 'right',editable: false,datafield: 'subtotal', columntype: 'textbox', filtertype: 'none', width: '20%'},
+				{ text: 'Jumlah Rusak', align: 'center',cellsalign: 'right',editable: false,datafield: 'jml_rusak', columntype: 'textbox', filtertype: 'textbox', width: '10%'},
+				{ text: 'Harga Satuan (Rp.)', align: 'center',cellsalign: 'right',editable: false, datafield: 'harga', columntype: 'textbox', filtertype: 'textbox', width: '15%'},
+				{ text: 'Sub Total (Rp.)', align: 'center',cellsalign: 'right',editable: false,datafield: 'subtotal', columntype: 'textbox', filtertype: 'none', width: '15%'},
             <?php } }else{ ?>
 				{ text: 'Nama Barang ', editable: false,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '25%'},
 				<?php if (isset($id_mst_inv_barang_habispakai_jenis)&&($id_mst_inv_barang_habispakai_jenis=='8')) { ?>
 				{ text: 'Batch ',datafield: 'batch', align: 'center',cellsalign: 'left', editable: false, columntype: 'textbox', filtertype: 'textbox', width: '10%'},
 				{ text: 'Jumlah ', align: 'center',cellsalign: 'right',editable: false,datafield: 'jml', columntype: 'textbox', filtertype: 'textbox', width: '9%'},
-				{ text: 'Harga Satuan (Rp.)', align: 'center',cellsalign: 'right',editable: false, datafield: 'harga', columntype: 'textbox', filtertype: 'textbox', width: '20%'},
-				{ text: 'Sub Total (Rp.)', align: 'center',cellsalign: 'right',editable: false,datafield: 'subtotal', columntype: 'textbox', filtertype: 'none', width: '20%'},
+				{ text: 'Jumlah Rusak', align: 'center',cellsalign: 'right',editable: false,datafield: 'jml_rusak', columntype: 'textbox', filtertype: 'textbox', width: '10%'},
+				{ text: 'Harga Satuan (Rp.)', align: 'center',cellsalign: 'right',editable: false, datafield: 'harga', columntype: 'textbox', filtertype: 'textbox', width: '15%'},
+				{ text: 'Sub Total (Rp.)', align: 'center',cellsalign: 'right',editable: false,datafield: 'subtotal', columntype: 'textbox', filtertype: 'none', width: '15%'},
 				<?php }else{ ?>
 				{ text: 'Jumlah ', align: 'center',cellsalign: 'right',editable: false,datafield: 'jml', columntype: 'textbox', filtertype: 'textbox', width: '11%'},
-				{ text: 'Harga Satuan (Rp.)', align: 'center',cellsalign: 'right',editable: false, datafield: 'harga', columntype: 'textbox', filtertype: 'textbox', width: '25%'},
-				{ text: 'Sub Total (Rp.)', align: 'center',cellsalign: 'right',editable: false,datafield: 'subtotal', columntype: 'textbox', filtertype: 'none', width: '23%'},
+				{ text: 'Jumlah Rusak', align: 'center',cellsalign: 'right',editable: false,datafield: 'jml_rusak', columntype: 'textbox', filtertype: 'textbox', width: '10%'},
+				{ text: 'Harga Satuan (Rp.)', align: 'center',cellsalign: 'right',editable: false, datafield: 'harga', columntype: 'textbox', filtertype: 'textbox', width: '20%'},
+				{ text: 'Sub Total (Rp.)', align: 'center',cellsalign: 'right',editable: false,datafield: 'subtotal', columntype: 'textbox', filtertype: 'none', width: '18%'},
             <?php } } ?>
 				{ text: 'Tanggal Update',align: 'center',cellsalign: 'center', editable: false,datafield: 'tgl_update', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '16%'}
            ]
