@@ -202,8 +202,8 @@
 				{ text: 'Nomor', editable:false ,datafield: 'nomor_opname', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
 				{ text: 'Tanggal', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false,datafield: 'tgl_opname', columntype: 'date', filtertype: 'none', cellsformat: 'dd-MM-yyyy', width: '10%'},
 				{ text: 'Jenis Barang', editable:false ,align: 'center', datafield: 'jenis_bhp', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
-				{ text: 'Nama Petugas', editable:false ,align: 'center', cellsalign: 'right', datafield: 'petugas_nama', columntype: 'textbox', filtertype: 'textbox', width: '25%' },
-				{ text: 'NIP Petugas', editable:false ,align: 'center', cellsalign: 'right', datafield: 'petugas_nip', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
+				{ text: 'Nama Penanggungjawab', editable:false ,align: 'center', cellsalign: 'left', datafield: 'petugas_nama', columntype: 'textbox', filtertype: 'textbox', width: '25%' },
+				{ text: 'NIP Penanggungjawab', editable:false ,align: 'center', cellsalign: 'left', datafield: 'petugas_nip', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
 				{ text: 'Catatan', editable:false ,datafield: 'catatan', columntype: 'textbox', filtertype: 'textbox', width: '13%' ,align: 'center', cellsalign: 'right'}
             ]
 		});

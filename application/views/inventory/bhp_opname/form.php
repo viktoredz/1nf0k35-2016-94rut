@@ -88,8 +88,8 @@
 
       <div class="box-body">
         <div class="row" style="margin: 5px">
-          <div class="col-md-4" style="padding: 5px">Nama Penanggungjawab</div>
-          <div class="col-md-8">
+          <div class="col-md-5" style="padding: 5px">Nama Penanggungjawab</div>
+          <div class="col-md-7">
             <input type="text" class="form-control" name="penerima_nama" id="penerima_nama" placeholder="Nama Penerima" value="<?php 
                 if(set_value('penerima_nama')=="" && isset($penerima_nama)){
                   echo $penerima_nama;
@@ -101,8 +101,8 @@
         </div>
 
         <div class="row" style="margin: 5px">
-          <div class="col-md-4" style="padding: 5px">NIP Penanggungjawab</div>
-          <div class="col-md-8">
+          <div class="col-md-5" style="padding: 5px">NIP Penanggungjawab</div>
+          <div class="col-md-7">
             <input type="text" class="form-control" name="penerima_nip" id="penerima_nip" placeholder="NIP Penerima" value="<?php 
                 if(set_value('penerima_nip')=="" && isset($penerima_nip)){
                   echo $penerima_nip;
@@ -114,8 +114,8 @@
         </div>
 
         <div class="row" style="margin: 5px">
-          <div class="col-md-4" style="padding: 5px">Catatan</div>
-          <div class="col-md-8">
+          <div class="col-md-5" style="padding: 5px">Catatan</div>
+          <div class="col-md-7">
           <textarea class="form-control" name="catatan" id="catatan" placeholder="catatan / Keperluan"><?php 
               if(set_value('catatan')=="" && isset($catatan)){
                 echo $catatan;
@@ -143,7 +143,9 @@
 $(function(){
   cekopname($('#tgl_opname').val(),$('#jenis_bhp').val());
     $('#form-ss').submit(function(){
-      if ($('#last_opname').val() >= $('#tgl_opname').val()) {
+      var tglper1 = $('#tgl_opname').val().split('-');
+      var tglper2 = $('#last_opname').val().split('-');
+      if (tglper2[2]+'-'+tglper2[1]+'-'+tglper2[0] >= tglper1[2]+'-'+tglper1[1]+'-'+tglper1[0]) {
       alert("Maaf! Kategori barang "+$('#jenis_bhp').val()+" sudah di opname pada "+$('#last_opname').val()+','+'\n'+"Silahkan ganti ke tanggal berikutnya");
 
       }else{

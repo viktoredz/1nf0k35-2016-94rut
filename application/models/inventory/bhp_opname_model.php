@@ -12,6 +12,7 @@ class Bhp_opname_model extends CI_Model {
     
     function get_data($start=0,$limit=999999,$options=array())
     {
+        $this->db->where('inv_inventaris_habispakai_opname.tipe','opname');
         $this->db->select("(SELECT a.tgl_opname FROM inv_inventaris_habispakai_opname a WHERE a.jenis_bhp = inv_inventaris_habispakai_opname.jenis_bhp ORDER BY a.tgl_opname DESC LIMIT 1) AS last_tgl_opname,inv_inventaris_habispakai_opname.*");
         $query = $this->db->get('inv_inventaris_habispakai_opname',$limit,$start);
         return $query->result();
@@ -279,6 +280,7 @@ class Bhp_opname_model extends CI_Model {
         $data['petugas_nama']              = $this->input->post('penerima_nama');
         $data['petugas_nip']               = $this->input->post('penerima_nip');
         $data['catatan']                    = $this->input->post('catatan');
+        $data['tipe']                       = 'opname';
         if($this->db->insert('inv_inventaris_habispakai_opname', $data)){
             return $data['id_inv_inventaris_habispakai_opname'];
         }else{
