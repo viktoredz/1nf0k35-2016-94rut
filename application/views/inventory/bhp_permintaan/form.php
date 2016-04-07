@@ -51,9 +51,9 @@
           <div class="col-md-4" style="padding: 5px">Status</div>
           <div class="col-md-8">
             <select  name="status" type="text" class="form-control">
-              <?php foreach($kodestatus as $stat) : ?>
-                <?php $select = $stat->code == set_value('status') ? 'selected' : '' ?>
-                <option value="<?php echo $stat->code ?>" <?php echo $select ?>><?php echo $stat->value ?></option>
+              <?php foreach($kodestatus as $stat => $value) : ?>
+                <?php $select = $stat == set_value('status') ? 'selected' : '' ?>
+                <option value="<?php echo $stat?>" <?php echo $select ?>><?php echo $value ?></option>
               <?php endforeach ?>
           </select>
           </div>
@@ -97,7 +97,7 @@
 
 <script type="text/javascript">
   $(function(){
-    kodeInvetaris();
+    kodeinvetaris();
     $('#btn-kembali').click(function(){
         window.location.href="<?php echo base_url()?>inventory/bhp_permintaan";
     });
@@ -107,11 +107,11 @@
 
     $("#tgl").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme , height: '30px'});
     $("#tgl").change(function(){
-        kodeInvetaris($("#tgl").val());
+        kodeinvetaris($("#tgl").val());
     });
   });
 
-  function kodeInvetaris(tahun)
+  function kodeinvetaris(tahun)
     {
       if (tahun==null) {
         var tahun = <?php echo date("y");?>;  
@@ -120,7 +120,7 @@
       }
       
       $.ajax({
-      url: "<?php echo base_url().'inventory/bhp_permintaan/kodeInvetaris';?>",
+      url: "<?php echo base_url().'inventory/bhp_permintaan/kodeinvetaris';?>",
       dataType: "json",
       success:function(data)
       { 

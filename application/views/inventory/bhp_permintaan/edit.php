@@ -48,6 +48,7 @@
                 <option value="<?php echo $jenis->id_mst_inv_barang_habispakai_jenis ?>" <?php echo $select ?>><?php echo $jenis->uraian ?></option>
               <?php endforeach ?>
           </select>
+          
           </div>
         </div>
 
@@ -55,9 +56,9 @@
           <div class="col-md-4" style="padding: 5px">Status</div>
           <div class="col-md-8">
             <select  name="status" id="status" type="text" class="form-control" >
-              <?php foreach($kodestatus as $stat) : ?>
-                <?php $select = $stat->code == $pilihan_status_pembelian ? 'selected=selected' : '' ?>
-                <option value="<?php echo $stat->code ?>" <?php echo $select ?>><?php echo $stat->value ?></option>
+              <?php foreach($kodestatus as $stat => $val) : ?>
+                <?php $select = $stat == $status_permintaan ? 'selected=selected' : '' ?>
+                <option value="<?php echo $stat ?>" <?php echo $select ?>><?php echo $val ?></option>
               <?php endforeach ?>
           </select>
           </div>
@@ -169,6 +170,7 @@
 <script type="text/javascript">
 
 $(function(){
+  kodeinvetaris();
     $('#btn-kembali').click(function(){
         window.location.href="<?php echo base_url()?>inventory/bhp_permintaan";
     });
@@ -183,9 +185,35 @@ $(function(){
     <?php if(!isset($viewreadonly)){?>
       $("#tgl").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme , height: '30px'});
       $("#tgl1").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme , height: '30px'});
+      $("#tgl").change(function(){
+          kodeinvetaris($("#tgl").val());
+      });
     <?php } ?>
   });
 
+
+function kodeinvetaris(tahun)
+    {
+      if (tahun==null) {
+        var tahun = <?php echo date("y");?>;  
+      }else{
+        var tahun = tahun.substr(-2);
+      }
+      
+      $.ajax({
+      url: "<?php echo base_url().'inventory/bhp_permintaan/kodeinvetaris';?>",
+      dataType: "json",
+      success:function(data)
+      { 
+        $.each(data,function(index,elemet){
+          var lokasi = elemet.kodeinv.split(".")
+          $("#kode_inventaris_").val(lokasi[0]+"."+lokasi[1]+"."+lokasi[2]+"."+lokasi[3]+"."+lokasi[4]+"."+tahun+'.'+lokasi[5]);
+        });
+      }
+      });
+
+      return false;
+    }
 </script>
 
       

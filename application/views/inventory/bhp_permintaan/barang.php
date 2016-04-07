@@ -7,16 +7,16 @@
 			datatype: "json",
 			type	: "POST",
 			datafields: [
-			{ name: 'id_inv_hasbispakai_pembelian', type: 'string' },
-			{ name: 'id_mst_inv_barang_habispakai', type: 'number' },
+			{ name: 'id_inv_hasbispakai_permintaan', type: 'string' },
+			{ name: 'id_mst_inv_barang_habispakai', type: 'string' },
 			{ name: 'uraian', type: 'string' },
 			{ name: 'jml', type: 'number' },
-			{ name: 'tgl_opname', type: 'string' },
+			{ name: 'tgl_permintaan', type: 'string' },
 			{ name: 'harga', type: 'string' },
 			{ name: 'subtotal', type: 'string' },
-			{ name: 'harga', type: 'double' },
-			{ name: 'tgl_update', type: 'date' },
-			{ name: 'jml_distribusi', type: 'number'}
+			{ name: 'status_permintaan', type: 'string' },
+			{ name: 'pilihan_satuan', type: 'string' },
+			{ name: 'harga', type: 'double' }
         ],
 		url: "<?php echo site_url('inventory/bhp_permintaan/barang/'.$kode); ?>",
 		cache: false,
@@ -64,30 +64,30 @@
 			columns: [
 			<?php if(!isset($viewreadonly)){?>	{ text: 'Edit', align: 'center', filtertype: 'none', sortable: false,editable: false, width: '4%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid_barang").jqxGrid('getrowdata', row);
-				    if (({status_permintaan}=='diterima') || (dataRecord.jml_distribusi>0)) {
+				    if ((dataRecord.status_permintaan=='diterima')) {
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}else{
-			    		return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='edit_barang(\""+dataRecord.id_inv_hasbispakai_pembelian+"\",\""+dataRecord.id_mst_inv_barang_habispakai+"\");'></a></div>";	
+			    		return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='edit_barang(\""+dataRecord.id_inv_hasbispakai_permintaan+"\",\""+dataRecord.id_mst_inv_barang_habispakai+"\");'></a></div>";	
 					}
                  }
                 },
 				{ text: 'Del', align: 'center', editable: false,filtertype: 'none', sortable: false, width: '4%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid_barang").jqxGrid('getrowdata', row);
-				    if (({status_permintaan}=='diterima') || (dataRecord.jml_distribusi>0)) {
+				    if ((dataRecord.status_permintaan=='diterima')) {
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}else{
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del_barang(\""+dataRecord.id_inv_hasbispakai_pembelian+"\",\""+dataRecord.id_mst_inv_barang_habispakai+"\");'></a></div>";
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del_barang(\""+dataRecord.id_inv_hasbispakai_permintaan+"\",\""+dataRecord.id_mst_inv_barang_habispakai+"\");'></a></div>";
 					}
                  }
                 },
 				{ text: 'Nama Barang ', editable: false,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '26%'},
-				{ text: 'Satuan / Kemasan ', editable: false, columntype: 'textbox', filtertype: 'textbox', width: '15%'},
+				{ text: 'Satuan / Kemasan ',datafield: 'pilihan_satuan',  editable: false, columntype: 'textbox', filtertype: 'textbox', width: '15%'},
 				{ text: 'Jumlah ', align: 'center',cellsalign: 'right',editable: false,datafield: 'jml', columntype: 'textbox', filtertype: 'textbox', width: '11%'},
 				{ text: 'Harga Satuan (Rp.)', align: 'center',cellsalign: 'right',editable: false, datafield: 'harga', columntype: 'textbox', filtertype: 'textbox', width: '20%'},
 				{ text: 'Sub Total (Rp.)', align: 'center',cellsalign: 'right',editable: false,datafield: 'subtotal', columntype: 'textbox', filtertype: 'none', width: '20%'},
             <?php  }else{ ?>
 				{ text: 'Nama Barang ', editable: false,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '26%'},
-				{ text: 'Satuan / Kemasan ', editable: false, columntype: 'textbox', filtertype: 'textbox', width: '15%'},
+				{ text: 'Satuan / Kemasan ',datafield: 'pilihan_satuan',  editable: false, columntype: 'textbox', filtertype: 'textbox', width: '15%'},
 				{ text: 'Jumlah ', align: 'center',cellsalign: 'right',editable: false,datafield: 'jml', columntype: 'textbox', filtertype: 'textbox', width: '11%'},
 				{ text: 'Harga Satuan (Rp.)', align: 'center',cellsalign: 'right',editable: false, datafield: 'harga', columntype: 'textbox', filtertype: 'textbox', width: '25%'},
 				{ text: 'Sub Total (Rp.)', align: 'center',cellsalign: 'right',editable: false,datafield: 'subtotal', columntype: 'textbox', filtertype: 'none', width: '23%'},
@@ -136,7 +136,8 @@
 			
 			post = post+'&kode={kode}';
 			
-			$.post("<?php echo base_url()?>inventory/bhp_permintaan/permintaan_detail_export",post  ,function(response){
+			$.post("<?php echo base_url()?>inventory/bhp_permintaan/permintaan_detail_export/{kode}",post  ,function(response){
+				//alert(response);
 				window.location.href=response;
 			});
 		});
@@ -183,7 +184,7 @@
 
 	function edit_barang(id_permohonan,kode_barang){
 		$("#popup_barang #popup_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-		$.get("<?php echo base_url().'inventory/bhp_permintaan/edit_barang/'.$id_mst_inv_barang_habispakai_jenis.'/';?>"+id_permohonan+'/'+kode_barang, function(data) {
+		$.get("<?php echo base_url().'inventory/bhp_permintaan/edit_barang/'.$kode.'/'.$id_mst_inv_barang_habispakai_jenis.'/';?>"+kode_barang, function(data) {
 			$("#popup_content").html(data);
 		});
 		$("#popup_barang").jqxWindow({
@@ -217,7 +218,7 @@
 <div>
 	<div style="width:100%;">
 		<div style="padding:5px" class="pull-right">
-			<?php if((!isset($viewreadonly))&&($status_permintaan!=2)){?><button class="btn btn-success" id='btn_add_barang' type='button'><i class='fa fa-plus-square'></i> Tambah Barang</button><?php  } ?>
+			<?php if((!isset($viewreadonly))&&($status_permintaan!='diterima')){?><button class="btn btn-success" id='btn_add_barang' type='button'><i class='fa fa-plus-square'></i> Tambah Barang</button><?php  } ?>
 		</div>
         <div id="jqxgrid_barang"></div>
 	</div>

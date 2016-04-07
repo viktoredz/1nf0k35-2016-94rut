@@ -201,6 +201,7 @@
 		post = post+'&puskes='+$("#puskesmas option:selected").text();
 		
 		$.post("<?php echo base_url()?>inventory/bhp_permintaan/permintaan_export",post,function(response	){
+			//alert(response);
 			window.location.href=response;
 		});
 	});

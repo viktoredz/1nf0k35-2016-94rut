@@ -33,11 +33,9 @@
           $('#notice').show();
           data.append('id_mst_inv_barang', $('#id_mst_inv_barang').val());
           data.append('jqxinput', $('#jqxinput').val());
-          data.append('nama_barang', $('#v_nama_barang').val());
           data.append('jumlah', $('#jumlah').val());
           data.append('harga', $('#harga').val());
           data.append('subtotal', $('#subtotal').val());
-          data.append('id_inv_hasbispakai_permintaan', "<?php echo $kode;?>");
           $.ajax({
               cache : false,
               contentType : false,
@@ -86,7 +84,6 @@
           $("#jqxinput").val( ui.item.value );
           $("#id_mst_inv_barang").val(ui.item.key);
           deskripsi(ui.item.key);
-          cekdata(ui.item.key);
           return false;
         }
       }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
@@ -143,8 +140,8 @@
             <div class="form-group">
               <label>Nama Barang</label>
               <input id="jqxinput" class="form-control" autocomplete="off" name="jqxinput" type="text" value="<?php 
-                if(set_value('jqxinput')=="" && isset($id_mst_inv_barang_habispakai)){ 
-                  echo $id_mst_inv_barang_habispakai;
+                if(set_value('jqxinput')=="" && isset($uraian)){ 
+                  echo $uraian;
                 }else{
                   echo  set_value('jqxinput');
                 }
@@ -167,8 +164,8 @@
             <div class="col-md-4" style="padding: 5px">Jumlah</div>
             <div class="col-md-8">
               <input type="number" class="form-control" name="jumlah" id="jumlah" placeholder="Jumlah" value="<?php 
-                if(set_value('jumlah')=="" && isset($jumlah)){
-                  echo $jumlah;
+                if(set_value('jumlah')=="" && isset($jml)){
+                  echo $jml;
                 }else{
                   echo  set_value('jumlah');
                 }
@@ -194,7 +191,7 @@
             <div class="col-md-8">
               <input type="text" class="form-control" name="subtotal"  id="subtotal" placeholder="Sub Total" readonly="" value="<?php
               if(set_value('subtotal')=="" && isset($harga)){
-                  echo $jumlah*$harga;
+                  echo $jml*$harga;
                 }else{
                   echo  set_value('subtotal');
                 }

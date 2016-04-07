@@ -88,45 +88,15 @@ class Bhp_permintaan extends CI_Controller {
     function deskripsi($id){
     	$kodepuskesmas = "P".$this->session->userdata("puskesmas");
 		$this->db->where("id_mst_inv_barang_habispakai","$id");
-		$this->db->select("mst_inv_barang_habispakai.*,
-			(SELECT harga AS hrg FROM inv_inventaris_habispakai_opname_item JOIN inv_inventaris_habispakai_opname ON (inv_inventaris_habispakai_opname_item.id_inv_inventaris_habispakai_opname = inv_inventaris_habispakai_opname.id_inv_inventaris_habispakai_opname)  WHERE code_cl_phc=".'"'.$kodepuskesmas.'"'." AND id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai ORDER BY tgl_opname DESC LIMIT 1) AS harga_opname,
-			(select harga as hargapembelian from inv_inventaris_habispakai_permintaan_item 
-            where code_cl_phc=".'"'.$kodepuskesmas.'"'." and id_mst_inv_barang_habispakai=mst_inv_barang_habispakai.id_mst_inv_barang_habispakai order by tgl_update desc limit 1 ) as harga_pembelian,
-            (SELECT tgl_opname AS tglopname FROM inv_inventaris_habispakai_opname_item JOIN inv_inventaris_habispakai_opname ON (inv_inventaris_habispakai_opname_item.id_inv_inventaris_habispakai_opname = inv_inventaris_habispakai_opname.id_inv_inventaris_habispakai_opname) WHERE id_mst_inv_barang_habispakai = mst_inv_barang_habispakai.id_mst_inv_barang_habispakai AND code_cl_phc=".'"'.$kodepuskesmas.'"'."ORDER BY tgl_opname DESC LIMIT 1) AS tgl_opname,
-            (select tgl_update  as tglpembelian from inv_inventaris_habispakai_permintaan_item where id_mst_inv_barang_habispakai = mst_inv_barang_habispakai.id_mst_inv_barang_habispakai and code_cl_phc=".'"'.$kodepuskesmas.'"'." order by tgl_update desc limit 1) as tgl_permintaan");
+		$this->db->select("mst_inv_barang_habispakai.*");
 		$query= $this->db->get("mst_inv_barang_habispakai")->result();
 		foreach ($query as $q) {
-			if (($q->tgl_permintaan!=null)||($q->tgl_opname!=null)) {
-	          if($q->tgl_opname==null){
-	            $tgl_opname = 0;
-	          }else{
-	            $tgl_opname = $q->tgl_opname;
-	          }
-
-	          if ($q->tgl_permintaan==null) {
-	            $tgl_permintaan = 0;
-	          }else{
-	            $tgl_permintaan = $q->tgl_permintaan;
-	          }
-	          if( $tgl_permintaan>= $tgl_opname){
-	            $hargabarang = $q->harga_pembelian;  
-	          }else{
-	            $hargabarang = $q->harga_opname;  
-	          }
-	        }else{
-	          if ($q->harga==null) {
-	            $hargaasli =0;
-	          }else{
-	            $hargaasli =$q->harga;
-	          }
-
-	          $hargabarang = $hargaasli;
-            }
-			$totalpermintaan[] = array(
-				'hargabarang' 					=> $hargabarang, 
-			);
+	          $hargabarang = $q->harga;
+        }
+		$totalpermintaan[] = array(
+			'hargabarang' 					=> $hargabarang, 
+		);
 			echo json_encode($totalpermintaan);
-		}
     }
 	
 	function json(){
@@ -225,10 +195,8 @@ class Bhp_permintaan extends CI_Controller {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
 
-				if($field == 'tgl_update' ) {
-					$value = date("Y-m-d",strtotime($value));
-
-					$this->db->where($field,$value);
+				if($field == 'harga' ) {
+					$this->db->where('inv_inventaris_habispakai_permintaan_item.harga',$value);
 				}elseif($field != 'year') {
 					$this->db->like($field,$value);
 				}
@@ -250,10 +218,8 @@ class Bhp_permintaan extends CI_Controller {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
 
-				if($field == 'tgl_update' ) {
-					$value = date("Y-m-d",strtotime($value));
-
-					$this->db->where($field,$value);
+				if($field == 'harga' ) {
+					$this->db->where('inv_inventaris_habispakai_permintaan_item.harga',$value);
 				}elseif($field != 'year') {
 					$this->db->like($field,$value);
 				}
@@ -283,8 +249,9 @@ class Bhp_permintaan extends CI_Controller {
 				'jml'									=> $act->jml,
 				'harga'									=> number_format($act->harga,2),
 				'subtotal'								=> number_format($act->jml*$act->harga,2),
-				'tgl_update'							=> $act->tgl_update,
-				'jml_distribusi'						=> $act->tgl_distribusi !='' ? 1:0
+				'tgl_permintaan'							=> $act->tgl_permintaan,
+				'status_permintaan'							=> $act->status_permintaan,
+				'pilihan_satuan'							=> $act->pilihan_satuan,
 			);
 		}
 
@@ -333,7 +300,7 @@ class Bhp_permintaan extends CI_Controller {
 			$this->db->where('code','P'.$kodepuskesmas);
 			$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
 
-			$data['kodestatus'] = $this->bhp_permintaan_model->get_data_status();
+			$data['kodestatus'] = array('permintaan' =>'Permintaan','diterima' =>'Diterima');
 			$data['kodejenis'] = $this->bhp_permintaan_model->get_data_jenis();
 		
 			$data['content'] = $this->parser->parse("inventory/bhp_permintaan/form",$data,true);
@@ -352,7 +319,7 @@ class Bhp_permintaan extends CI_Controller {
 		$this->authentication->verify('inventory','edit');
 
         $this->form_validation->set_rules('tgl', 'Tanggal Permintaan', 'trim|required');
-        $this->form_validation->set_rules('id_mst_inv_barang_habispakai_jenis', 'Jenis Barang', 'trim|required');
+        $this->form_validation->set_rules('id_mst_inv_barang_habispakai_jenis', 'Jenis Barang', 'trim');
         $this->form_validation->set_rules('status', 'Status Permintaan', 'trim|required');
         $this->form_validation->set_rules('keterangan', 'Keterangan', 'trim|required');
         
@@ -368,7 +335,7 @@ class Bhp_permintaan extends CI_Controller {
 			$this->db->where('code','P'.$kodepuskesmas);
 			$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
 
-			$data['kodestatus'] = $this->bhp_permintaan_model->get_data_status();
+			$data['kodestatus'] = array('permintaan' =>'Permintaan','diterima' =>'Diterima');
 			$data['kodejenis'] = $this->bhp_permintaan_model->get_data_jenis();
 
 			$data['barang']	  	= $this->parser->parse('inventory/bhp_permintaan/barang', $data, TRUE);
@@ -400,8 +367,7 @@ class Bhp_permintaan extends CI_Controller {
 			$data['kodedana'] = $this->bhp_permintaan_model->pilih_data_status('sumber_dana');
 			$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
 			$data['kodestatus'] = $this->bhp_permintaan_model->get_data_status();
-			$data['kodestatus_inv'] = $this->bhp_permintaan_model->pilih_data_status('status_pembelian');
-			//$data['tgl_opnamecond']		= $this->bhp_permintaan_model->gettgl_opname($id_permohonan);
+			$data['kodestatus'] = array('permintaan' =>'Permintaan','diterima' =>'Diterima');
 			$data['barang']	  	= $this->parser->parse('inventory/bhp_permintaan/barang', $data, TRUE);
 			$data['content'] 	= $this->parser->parse("inventory/bhp_permintaan/edit",$data,true);
 			$this->template->show($data,"home");
@@ -460,17 +426,14 @@ class Bhp_permintaan extends CI_Controller {
 	{	
 		$data['action']			= "add";
 		$data['kode']			= $kode;
-        $this->form_validation->set_rules('id_permohonan_barang', 'Kode Barang', 'trim|required');
-        $this->form_validation->set_rules('nama_barang', 'Nama Barang', 'trim|required');
+        $this->form_validation->set_rules('id_mst_inv_barang', 'Kode Barang', 'trim');
+        $this->form_validation->set_rules('jqxinput', 'Nama Barang', 'trim|required');
         $this->form_validation->set_rules('jumlah', 'Jumlah', 'trim|required');
         $this->form_validation->set_rules('harga', 'Harga Satuan', 'trim|required');
-        $this->form_validation->set_rules('jqxinput', 'Nama Barang', 'trim');
         $this->form_validation->set_rules('subtotal', 'subtotal', 'trim');
-        $this->form_validation->set_rules('id_mst_inv_barang', 'barang', 'trim');
 
 		if($this->form_validation->run()== FALSE){
 
-			$data['kodebarang']		= $this->bhp_permintaan_model->get_databarang();
 			$data['notice']			= validation_errors();
 			$data['kode']			= $kode;
 			$data['obat']			= $obat;
@@ -489,45 +452,39 @@ class Bhp_permintaan extends CI_Controller {
 			
 		}
 	}
-	public function edit_barang($obat=0,$id_permohonan=0,$kd_barang=0)
+	public function edit_barang($kode=0,$jenis=0,$kd_barang=0)
 	{
 		$data['action']			= "edit";
-		$data['kode']			= $id_permohonan;
-		$this->form_validation->set_rules('id_permohonan_barang', 'Kode Barang', 'trim|required');
-        $this->form_validation->set_rules('nama_barang', 'Nama Barang', 'trim|required');
+		$data['kode']			= $kode;
+		$this->form_validation->set_rules('id_mst_inv_barang', 'Kode Barang', 'trim');
+        $this->form_validation->set_rules('jqxinput', 'Nama Barang', 'trim|required');
         $this->form_validation->set_rules('jumlah', 'Jumlah', 'trim|required');
         $this->form_validation->set_rules('harga', 'Harga Satuan', 'trim|required');
-        $this->form_validation->set_rules('jqxinput', 'Nama Barang', 'trim');
         $this->form_validation->set_rules('subtotal', 'subtotal', 'trim');
-        $this->form_validation->set_rules('id_mst_inv_barang', 'barang', 'trim');
-        $this->form_validation->set_rules('jml_rusak', 'rusak', 'trim');
 		if($this->form_validation->run()== FALSE){
-			$data = $this->bhp_permintaan_model->get_data_barang_edit_table($id_permohonan,$kd_barang); 
+			$data = $this->bhp_permintaan_model->get_data_barang_edit_table($kode,$kd_barang); 
 			$data['action']			= "edit";
-			$data['kode']			= $id_permohonan;
-			$data['obat']			= $obat;
+			$data['kode']			= $kode;
+			$data['obat']			= $jenis;
+			$data['disable']		= 'disable';
 			$data['notice']			= validation_errors();
 			
-			die($this->parser->parse('inventory/bhp_permintaan/barang_form_edit', $data));
+			die($this->parser->parse('inventory/bhp_permintaan/barang_form', $data));
 		}else{
    			$values = array(
 					'jml' => $this->input->post('jumlah'),
 					'harga' => $this->input->post('harga'),
-					'tgl_update' => $this->bhp_permintaan_model->tanggal($id_permohonan),
-					'code_cl_phc' => 'P'.$this->session->userdata('puskesmas'),
-					'jml_rusak' => $this->input->post('jml_rusak'),
-					'tgl_kadaluarsa' => $tgl_kadaluarsa[2]."-".$tgl_kadaluarsa[1]."-".$tgl_kadaluarsa[0],
 				);
    			$keyupdate = array(
-					'id_inv_hasbispakai_permintaan'=>$this->input->post('id_permohonan_barang'),
+					'id_inv_hasbispakai_permintaan'=>$kode,
 					'id_mst_inv_barang_habispakai'=> $this->input->post('id_mst_inv_barang'),
    				);
 			$simpan=$this->db->update('inv_inventaris_habispakai_permintaan_item', $values,$keyupdate);
 			if($simpan==true){
 				$dataupdate['terakhir_diubah']= date('Y-m-d H:i:s');
-				$dataupdate['jumlah_unit']=  $this->bhp_permintaan_model->sum_jumlah_item( $id_permohonan,'jml');
-				$dataupdate['nilai_pembelian']= $this->bhp_permintaan_model->sum_jumlah_item_jumlah( $id_permohonan,'harga');
-				$key['id_inv_hasbispakai_permintaan'] = $id_permohonan;
+				$dataupdate['jumlah_unit']=  $this->bhp_permintaan_model->sum_jumlah_item( $kode,'jml');
+				$dataupdate['nilai_pembelian']= $this->bhp_permintaan_model->sum_jumlah_item_jumlah( $kode,'harga');
+				$key['id_inv_hasbispakai_permintaan'] = $kode;
         		$this->db->update("inv_inventaris_habispakai_permintaan",$dataupdate,$key);
 				die("OK|Data Telah di Ubah");
 			}else{
@@ -598,5 +555,212 @@ class Bhp_permintaan extends CI_Controller {
 			}
 			
 		}
+	}
+	function permintaan_export()
+	{
+		$TBS = new clsTinyButStrong;		
+		$TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN);
+		$this->authentication->verify('inventory','show');
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl_permintaan') {
+					$value = date("Y-m-d",strtotime($value));
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
+		$rows_all = $this->bhp_permintaan_model->get_data();
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl_permintaan') {
+					$value = date("Y-m-d",strtotime($value));
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
+		$rows = $this->bhp_permintaan_model->get_data();
+		$data_tabel = array();
+		$no=1;
+		foreach($rows as $act) {
+			$data_tabel[] = array(
+				'no' 							=> $no++,
+				'id_inv_hasbispakai_permintaan' => $act->id_inv_hasbispakai_permintaan,
+				'code_cl_phc' 					=> $act->code_cl_phc,
+				'tgl_permintaan' 				=> date("d-m-Y",strtotime($act->tgl_permintaan)),
+				'jumlah_unit'					=> $act->jumlah_unit,
+				'status_permintaan'				=> ucwords($act->status_permintaan),
+				'uraian'						=> $act->uraian,
+				'nilai_pembelian'				=> $act->nilai_pembelian,
+				'jumlah_unit'					=> $act->jumlah_unit,
+				'nilai_pembelian'				=> number_format($act->nilai_pembelian),
+				'value'							=> $act->value,
+				'keterangan'					=> $act->keterangan,
+				'detail'						=> 1,
+				'edit'							=> 1,
+				'delete'						=> ($act->status_permintaan=='diterima') ? 0 : 1
+			);
+		}
+		$kode_sess=$this->session->userdata('puskesmas');
+		$kd_prov = $this->inv_barang_model->get_nama('value','cl_province','code',substr($kode_sess, 0,2));
+		$kd_kab  = $this->inv_barang_model->get_nama('value','cl_district','code',substr($kode_sess, 0,4));
+		$kd_kec  = 'KEC. '.$this->inv_barang_model->get_nama('nama','cl_kec','code',substr($kode_sess, 0,7));
+		$namapus  = $this->inv_barang_model->get_nama('value','cl_phc','code','P'.$kode_sess);
+		$tahun  = date("Y");
+
+		$data_puskesmas[] = array('nama_puskesmas' => $namapus,'kd_prov' => $kd_prov,'kd_kab' => $kd_kab,'tahun' => $tahun);
+		$dir = getcwd().'/';
+		$template = $dir.'public/files/template/inventory/bhp_permintaan.xlsx';		
+		
+		$TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8);
+
+		// Merge data in the first sheet
+		$TBS->MergeBlock('a', $data_tabel);
+		$TBS->MergeBlock('b', $data_puskesmas);
+		
+		$code = uniqid();
+		$output_file_name = 'public/files/hasil/hasil_export_bhp_permintaan'.$code.'.xlsx';
+		$output = $dir.$output_file_name;
+		$TBS->Show(OPENTBS_FILE, $output); // Also merges all [onshow] automatic fields.
+		
+		echo base_url().$output_file_name ;
+
+	}
+	function permintaan_detail_export($id = 0)
+	{
+		$TBS = new clsTinyButStrong;		
+		$TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN);
+		$this->authentication->verify('inventory','show');
+
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'harga' ) {
+					$this->db->where('inv_inventaris_habispakai_permintaan_item.harga',$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		$this->db->where('inv_inventaris_habispakai_permintaan_item.id_inv_hasbispakai_permintaan',$id);
+		$rows_all_activity = $this->bhp_permintaan_model->getItem();
+
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'harga' ) {
+					$this->db->where('inv_inventaris_habispakai_permintaan_item.harga',$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+
+		$this->db->where('inv_inventaris_habispakai_permintaan_item.id_inv_hasbispakai_permintaan',$id);
+		$activity = $this->bhp_permintaan_model->getItem();
+		$data_tabel = array();
+
+		$kodepuskesmas = $this->session->userdata('puskesmas');
+		if(substr($kodepuskesmas, -2)=="01"){
+			$unlock = 1;
+		}else{
+			$unlock = 0;
+		}
+		$no=1;
+		foreach($activity as $act) {
+			$data_tabel[] = array(
+				'no'									=> $no++,
+				'id_inv_hasbispakai_permintaan'   		=> $act->id_inv_hasbispakai_permintaan,
+				'id_mst_inv_barang_habispakai'   		=> $act->id_mst_inv_barang_habispakai,
+				'uraian'								=> $act->uraian,
+				'jml'									=> $act->jml,
+				'harga'									=> number_format($act->harga,2),
+				'subtotal'								=> number_format($act->jml*$act->harga,2),
+				'tgl_permintaan'							=> $act->tgl_permintaan,
+				'status_permintaan'							=> $act->status_permintaan,
+				'pilihan_satuan'							=> $act->pilihan_satuan,
+			);
+		}
+
+		$kode_sess=$this->session->userdata('puskesmas');
+		$kd_prov = $this->inv_barang_model->get_nama('value','cl_province','code',substr($kode_sess, 0,2));
+		$kd_kab  = $this->inv_barang_model->get_nama('value','cl_district','code',substr($kode_sess, 0,4));
+		$kd_kec  = 'KEC. '.$this->inv_barang_model->get_nama('nama','cl_kec','code',substr($kode_sess, 0,7));
+		$namapus  = $this->inv_barang_model->get_nama('value','cl_phc','code','P'.$kode_sess);
+		$tahun  = date("Y");
+		$datautama = $this->bhp_permintaan_model->get_data_row($id);
+		$tgl_permintaan = date("d-m-Y",strtotime($datautama['tgl_permintaan']));
+		$kategori_barang = $this->inv_barang_model->get_nama('uraian','mst_inv_barang_habispakai_jenis','id_mst_inv_barang_habispakai_jenis',$datautama['id_mst_inv_barang_habispakai_jenis']);
+		$status = $datautama['status_permintaan'];
+		$jumlah_unit =$datautama['jumlah_unit'];
+		$nilai_unit = number_format($datautama['nilai_pembelian'],2);
+		$data_puskesmas[] = array('nama_puskesmas' => $namapus,'kd_prov' => $kd_prov,'kd_kab' => $kd_kab,'tahun' => $tahun,'kategori_barang' => $kategori_barang,'tgl_permintaan' => $tgl_permintaan,'status' => $status,'jumlah_unit' => $jumlah_unit,'nilai_unit' => $nilai_unit);
+		$dir = getcwd().'/';
+		$template = $dir.'public/files/template/inventory/bhp_permintaan_detail.xlsx';		
+		
+		$TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8);
+
+		// Merge data in the first sheet
+		$TBS->MergeBlock('a', $data_tabel);
+		$TBS->MergeBlock('b', $data_puskesmas);
+		
+		$code = uniqid();
+		$output_file_name = 'public/files/hasil/hasil_export_bhppermintaandetail_'.$code.'.xlsx';
+		$output = $dir.$output_file_name;
+		$TBS->Show(OPENTBS_FILE, $output); // Also merges all [onshow] automatic fields.
+		
+		echo base_url().$output_file_name ;
+
 	}
 }
