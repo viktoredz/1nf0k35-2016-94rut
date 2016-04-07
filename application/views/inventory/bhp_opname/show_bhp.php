@@ -219,7 +219,7 @@
 	$("#btn-export").click(function(){
 		
 		var post = "";
-		var filter = $("#jqxgridBhp").jqxGrid('getfilterinformation');
+		/*var filter = $("#jqxgridBhp").jqxGrid('getfilterinformation');
 
 		for(i=0; i < filter.length; i++){
 			var fltr 	= filter[i];
@@ -243,7 +243,7 @@
 			var sortorder = $("#jqxgridBhp").jqxGrid('getsortinformation').sortdirection.ascending ? "asc" : ($("#jqxgridBhp").jqxGrid('getsortinformation').sortdirection.descending ? "desc" : "");
 			post = post+'&sortorder='+sortorder;
 			
-		}
+		}*/
 		post = post+'&jenisbarang='+$("#jenisbarang option:selected").text()+'&nama_puskesmas='+$("#puskesmas option:selected").text()+'&bulan='+$("#bulan option:selected").text()+'&tahun='+$("#tahun option:selected").text();
 		//alert(post);
 		
