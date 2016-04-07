@@ -84,7 +84,7 @@ class Bhp_permintaan_model extends CI_Model {
     }
     public function getItem($start=0,$limit=999999,$options=array()){
         $this->db->order_by('mst_inv_barang_habispakai.uraian','asc');
-        $this->db->select("inv_inventaris_habispakai_permintaan_item.*,mst_inv_barang_habispakai.uraian, tgl_permintaan,status_permintaan,pilihan_satuan");
+        $this->db->select("inv_inventaris_habispakai_permintaan_item.*,mst_inv_barang_habispakai.uraian, tgl_permintaan,status_permintaan,pilihan_satuan,merek_tipe");
         $this->db->join("inv_inventaris_habispakai_permintaan",
             "inv_inventaris_habispakai_permintaan.id_inv_hasbispakai_permintaan = inv_inventaris_habispakai_permintaan_item.id_inv_hasbispakai_permintaan",
             "LEFT");

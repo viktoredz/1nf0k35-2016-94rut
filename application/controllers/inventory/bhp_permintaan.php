@@ -730,6 +730,7 @@ class Bhp_permintaan extends CI_Controller {
 				'tgl_permintaan'							=> $act->tgl_permintaan,
 				'status_permintaan'							=> $act->status_permintaan,
 				'pilihan_satuan'							=> $act->pilihan_satuan,
+				'merek_tipe'							=> $act->merek_tipe,
 			);
 		}
 
@@ -747,7 +748,11 @@ class Bhp_permintaan extends CI_Controller {
 		$nilai_unit = number_format($datautama['nilai_pembelian'],2);
 		$data_puskesmas[] = array('nama_puskesmas' => $namapus,'kd_prov' => $kd_prov,'kd_kab' => $kd_kab,'tahun' => $tahun,'kategori_barang' => $kategori_barang,'tgl_permintaan' => $tgl_permintaan,'status' => $status,'jumlah_unit' => $jumlah_unit,'nilai_unit' => $nilai_unit);
 		$dir = getcwd().'/';
-		$template = $dir.'public/files/template/inventory/bhp_permintaan_detail.xlsx';		
+		if ($datautama['id_mst_inv_barang_habispakai_jenis']=='8') {
+			$template = $dir.'public/files/template/inventory/bhp_permintaan_detail_obat.xlsx';		
+		}else{
+			$template = $dir.'public/files/template/inventory/bhp_permintaan_detail.xlsx';		
+		}
 		
 		$TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8);
 
@@ -756,7 +761,11 @@ class Bhp_permintaan extends CI_Controller {
 		$TBS->MergeBlock('b', $data_puskesmas);
 		
 		$code = uniqid();
-		$output_file_name = 'public/files/hasil/hasil_export_bhppermintaandetail_'.$code.'.xlsx';
+		if ($datautama['id_mst_inv_barang_habispakai_jenis']=='8') {
+			$output_file_name = 'public/files/hasil/hasil_export_bhppermintaandetailobat_'.$code.'.xlsx';
+		}else{
+			$output_file_name = 'public/files/hasil/hasil_export_bhppermintaandetail_'.$code.'.xlsx';
+		}
 		$output = $dir.$output_file_name;
 		$TBS->Show(OPENTBS_FILE, $output); // Also merges all [onshow] automatic fields.
 		
