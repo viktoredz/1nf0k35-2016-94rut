@@ -1163,7 +1163,7 @@ class Bhp_opname extends CI_Controller {
 			if($this->session->userdata('filter_jenisbarang')=="all"){
 
 			}else{
-				$this->db->where("jenis_bhp",$this->session->userdata('filter_jenisbarang'));
+				//$this->db->where("jenis_bhp",$this->session->userdata('filter_jenisbarang'));
 			}
 		}else{
 			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
@@ -1172,7 +1172,7 @@ class Bhp_opname extends CI_Controller {
 			if($this->session->userdata('filter_bulan')=="all"){
 
 			}else{
-				$this->db->where("MONTH(tgl_opname)",$this->session->userdata('filter_bulan'));
+				//$this->db->where("MONTH(tgl_opname)",$this->session->userdata('filter_bulan'));
 			}
 		}else{
 			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
@@ -1181,7 +1181,7 @@ class Bhp_opname extends CI_Controller {
 			if($this->session->userdata('filter_tahun')=="all"){
 
 			}else{
-				$this->db->where("YEAR(tgl_opname)",$this->session->userdata('filter_tahun'));
+			//	$this->db->where("YEAR(tgl_opname)",$this->session->userdata('filter_tahun'));
 			}
 		}else{
 			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
@@ -1190,7 +1190,8 @@ class Bhp_opname extends CI_Controller {
 		
 		$rows_all = $this->bhp_opname_model->get_data();
 
-
+		$filtername ='';
+		$order='';
 		if($_POST) {
 			$fil = $this->input->post('filterscount');
 			$ord = $this->input->post('sortdatafield');
@@ -1199,20 +1200,28 @@ class Bhp_opname extends CI_Controller {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
 
-				$this->db->like($field,$value);
+				$filtername ="and $field like ".'"%'.$value.'%"'."";
 			}
 
 			if(!empty($ord)) {
-				$this->db->order_by($ord, $this->input->post('sortorder'));
+				//$this->db->order_by($ord, $this->input->post('sortorder'));
+				$val =  $this->input->post('sortorder');
+				$order="order by $ord $val";
 			}
 		}
 		$filbulan=date("m");
 		$filtahun=date("Y");
+		$filterbhp ="";
 		if($this->session->userdata('filter_jenisbarang')!=''){
 			if($this->session->userdata('filter_jenisbarang')=="all"){
-				
+				$filterbhp ="";
 			}else{
-				$this->db->where("jenis_bhp",$this->session->userdata('filter_jenisbarang'));
+				if ($this->session->userdata('filter_jenisbarang')=='obat') {
+					$jenis='obat';
+				}else{
+					$jenis='umum';
+				}
+				$filterbhp = " and inv_inventaris_habispakai_opname.jenis_bhp = ".'"'.$jenis.'"'."";
 			}
 		}else{
 			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
@@ -1220,7 +1229,7 @@ class Bhp_opname extends CI_Controller {
 		if($this->session->userdata('filter_bulan')!=''){
 			if($this->session->userdata('filter_bulan')=="all"){
 			}else{
-				$this->db->where("MONTH(tgl_opname)",$this->session->userdata('filter_bulan'));
+				//$this->db->where("MONTH(tgl_opname)",$this->session->userdata('filter_bulan'));
 				$filbulan =$this->session->userdata('filter_bulan');
 			}
 		}else{
@@ -1229,14 +1238,14 @@ class Bhp_opname extends CI_Controller {
 		if($this->session->userdata('filter_tahun')!=''){
 			if($this->session->userdata('filter_tahun')=="all"){
 			}else{
-				$this->db->where("YEAR(tgl_opname)",$this->session->userdata('filter_tahun'));
+				//$this->db->where("YEAR(tgl_opname)",$this->session->userdata('filter_tahun'));
 				$filtahun =$this->session->userdata('filter_tahun');
 			}
 		}else{
 
 			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
 		}
-		$rows = $this->bhp_opname_model->get_data_lap_opname($filbulan,$filtahun);
+		$rows = $this->bhp_opname_model->get_data_lap_opname($filbulan,$filtahun,$filterbhp,$filtername,$order);
 		//die(print_r($rows));
 	//	$get_jumlahawal = $this->bhp_opname_model->get_jumlahawal();
 		$data = array();
@@ -1251,7 +1260,7 @@ class Bhp_opname extends CI_Controller {
 				if($key==$temp){
 					$data_tabel["$key"]["keluar$act"]		= $value['pengeluaranperhari'];	
 					$data_tabel["$key"]["harga"]			= $value['harga'];	
-					$data_tabel["$key"]["jumlah_op"]		= $data_tabel["$key"]["jumlah_op"]+$value['pengeluaranperhari'];	
+					$data_tabel["$key"]["jumlah_op"]		= ($data_tabel["$key"]["jumlah_op"]+$value['pengeluaranperhari'])*-1;	
 					$data_tabel["$key"]['nilai_aset_total']	= ($data_tabel["$key"]["jumlah_awal"] + $data_tabel["$key"]["jumlah_op"])*$value['harga'];
 					$data_tabel["$key"]['total']			= $data_tabel["$key"]["jumlah_awal"] + $data_tabel["$key"]["jumlah_op"];
 					$data_tabel["$key"]['nilai_aset_awal']  = $value['jumlah_awal']*$value['harga'];
@@ -1262,42 +1271,42 @@ class Bhp_opname extends CI_Controller {
 					'no'				=> $no,								
 					'uraian'			=> $key,
 					'harga'				=> $value['harga'],
-					'jumlah_op'			=> $value['pengeluaranperhari'],
+					'jumlah_op'			=> ($value['pengeluaranperhari'])*-1,
 					'jumlah_awal'		=> $value['jumlah_awal'],
 					'nilai_aset_awal'	=> $value['jumlah_awal']*$value['harga'],
 					'total'				=> $value['jumlah_awal'] + $value['pengeluaranperhari'],
 					'nilai_aset_total'	=> ($value['jumlah_awal'] + $value['pengeluaranperhari'])*$value['harga'],
-					'keluar1'			=> $act == 1 ? $value['pengeluaranperhari'] : '',
-					'keluar2'			=> $act == 2 ? $value['pengeluaranperhari'] : '',
-					'keluar3'			=> $act == 3 ? $value['pengeluaranperhari'] : '',
-					'keluar4'			=> $act == 4 ? $value['pengeluaranperhari'] : '',
-					'keluar5'			=> $act == 5 ? $value['pengeluaranperhari'] : '',
-					'keluar6'			=> $act == 6 ? $value['pengeluaranperhari'] : '',
-					'keluar7'			=> $act == 6 ? $value['pengeluaranperhari'] : '',
-					'keluar8'			=> $act == 8 ? $value['pengeluaranperhari'] : '',
-					'keluar9'			=> $act == 9 ? $value['pengeluaranperhari'] : '',
-					'keluar10'			=> $act == 10 ? $value['pengeluaranperhari'] : '',
-					'keluar11'			=> $act == 11 ? $value['pengeluaranperhari'] : '',
-					'keluar12'			=> $act == 12 ? $value['pengeluaranperhari'] : '',
-					'keluar13'			=> $act == 13 ? $value['pengeluaranperhari'] : '',
-					'keluar14'			=> $act == 14 ? $value['pengeluaranperhari'] : '',
-					'keluar15'			=> $act == 15 ? $value['pengeluaranperhari'] : '',
-					'keluar16'			=> $act == 16 ? $value['pengeluaranperhari'] : '',
-					'keluar17'			=> $act == 17 ? $value['pengeluaranperhari'] : '',
-					'keluar18'			=> $act == 18 ? $value['pengeluaranperhari'] : '',
-					'keluar19'			=> $act == 19 ? $value['pengeluaranperhari'] : '',
-					'keluar20'			=> $act == 20 ? $value['pengeluaranperhari'] : '',
-					'keluar21'			=> $act == 21 ? $value['pengeluaranperhari'] : '',
-					'keluar22'			=> $act == 22 ? $value['pengeluaranperhari'] : '',
-					'keluar23'			=> $act == 23 ? $value['pengeluaranperhari'] : '',
-					'keluar24'			=> $act == 24 ? $value['pengeluaranperhari'] : '',
-					'keluar25'			=> $act == 25 ? $value['pengeluaranperhari'] : '',
-					'keluar26'			=> $act == 26 ? $value['pengeluaranperhari'] : '',
-					'keluar27'			=> $act == 27 ? $value['pengeluaranperhari'] : '',
-					'keluar28'			=> $act == 28 ? $value['pengeluaranperhari'] : '',
-					'keluar29'			=> $act == 29 ? $value['pengeluaranperhari'] : '',
-					'keluar30'			=> $act == 30 ? $value['pengeluaranperhari'] : '',
-					'keluar31'			=> $act == 31 ? $value['pengeluaranperhari'] : '',
+					'keluar1'			=> $act == 1 ? ($value['pengeluaranperhari'])*-1 : '',
+					'keluar2'			=> $act == 2 ? ($value['pengeluaranperhari'])*-1 : '',
+					'keluar3'			=> $act == 3 ? ($value['pengeluaranperhari'])*-1 : '',
+					'keluar4'			=> $act == 4 ? ($value['pengeluaranperhari'])*-1 : '',
+					'keluar5'			=> $act == 5 ? ($value['pengeluaranperhari'])*-1 : '',
+					'keluar6'			=> $act == 6 ? ($value['pengeluaranperhari'])*-1 : '',
+					'keluar7'			=> $act == 7 ? ($value['pengeluaranperhari'])*-1 : '',
+					'keluar8'			=> $act == 8 ? ($value['pengeluaranperhari'])*-1 : '',
+					'keluar9'			=> $act == 9 ? ($value['pengeluaranperhari'])*-1 : '',
+					'keluar10'			=> $act == 10 ? ($value['pengeluaranperhari'])*-1 : '',
+					'keluar11'			=> $act == 11 ? ($value['pengeluaranperhari'])*-1 : '',
+					'keluar12'			=> $act == 12 ? ($value['pengeluaranperhari'])*-1 : '',
+					'keluar13'			=> $act == 13 ? ($value['pengeluaranperhari'])*-1 : '',
+					'keluar14'			=> $act == 14 ? ($value['pengeluaranperhari'])*-1 : '',
+					'keluar15'			=> $act == 15 ? ($value['pengeluaranperhari'])*-1 : '',
+					'keluar16'			=> $act == 16 ? ($value['pengeluaranperhari'])*-1 : '',
+					'keluar17'			=> $act == 17 ? ($value['pengeluaranperhari'])*-1 : '',
+					'keluar18'			=> $act == 18 ? ($value['pengeluaranperhari'])*-1 : '',
+					'keluar19'			=> $act == 19 ? ($value['pengeluaranperhari'])*-1 : '',
+					'keluar20'			=> $act == 20 ? ($value['pengeluaranperhari'])*-1 : '',
+					'keluar21'			=> $act == 21 ? ($value['pengeluaranperhari'])*-1 : '',
+					'keluar22'			=> $act == 22 ? ($value['pengeluaranperhari'])*-1 : '',
+					'keluar23'			=> $act == 23 ? ($value['pengeluaranperhari'])*-1 : '',
+					'keluar24'			=> $act == 24 ? ($value['pengeluaranperhari'])*-1 : '',
+					'keluar25'			=> $act == 25 ? ($value['pengeluaranperhari'])*-1 : '',
+					'keluar26'			=> $act == 26 ? ($value['pengeluaranperhari'])*-1 : '',
+					'keluar27'			=> $act == 27 ? ($value['pengeluaranperhari'])*-1 : '',
+					'keluar28'			=> $act == 28 ? ($value['pengeluaranperhari'])*-1 : '',
+					'keluar29'			=> $act == 29 ? ($value['pengeluaranperhari'])*-1 : '',
+					'keluar30'			=> $act == 30 ? ($value['pengeluaranperhari'])*-1 : '',
+					'keluar31'			=> $act == 31 ? ($value['pengeluaranperhari'])*-1 : '',
 				);
 			}
 				

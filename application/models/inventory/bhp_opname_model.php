@@ -12,6 +12,7 @@ class Bhp_opname_model extends CI_Model {
     
     function get_data($start=0,$limit=999999,$options=array())
     {
+        $this->db->where('inv_inventaris_habispakai_opname.tipe','opname');
         $this->db->select("(SELECT a.tgl_opname FROM inv_inventaris_habispakai_opname a WHERE a.jenis_bhp = inv_inventaris_habispakai_opname.jenis_bhp ORDER BY a.tgl_opname DESC LIMIT 1) AS last_tgl_opname,inv_inventaris_habispakai_opname.*");
         $query = $this->db->get('inv_inventaris_habispakai_opname',$limit,$start);
         return $query->result();
@@ -131,9 +132,14 @@ class Bhp_opname_model extends CI_Model {
         return $this->db->update("inv_inventaris_habispakai_opname",$dataupdate,$datakey);
     }
     function insertdata(){
+        if ($this->input->post('batch')=='undefined') {
+            $nobac='-';
+        }else{
+            $nobac=$this->input->post('batch');
+        }
         $this->db->where('id_inv_inventaris_habispakai_opname',$this->input->post('id_inv_inventaris_habispakai_opname'));
         $this->db->where('id_mst_inv_barang_habispakai',$this->input->post('id_mst_inv_barang_habispakai'));
-        $this->db->where('batch',$this->input->post('batch'));
+        $this->db->where('batch',$nobac);
         $this->db->select("*");
         $query = $this->db->get("inv_inventaris_habispakai_opname_item");
            if ($query->num_rows() > 0){
@@ -145,7 +151,7 @@ class Bhp_opname_model extends CI_Model {
                 $datakey = array(
                     'id_mst_inv_barang_habispakai'          =>$this->input->post('id_mst_inv_barang_habispakai'),
                     'id_inv_inventaris_habispakai_opname'   =>$this->input->post('id_inv_inventaris_habispakai_opname') ,
-                    'batch'                                 =>$this->input->post('batch'),
+                    'batch'                                 =>$nobac,
                      );
                 if($simpan=$this->db->update("inv_inventaris_habispakai_opname_item",$dataupdate,$datakey)){
                     return true;
@@ -153,11 +159,6 @@ class Bhp_opname_model extends CI_Model {
                     return mysql_error();
                 }
             }else{
-                if ($this->input->post('batch')=='undefined') {
-                    $nobac='';
-                }else{
-                    $nobac=$this->input->post('batch');
-                }
                 $values = array(
                     'jml_awal'                      => $this->input->post('jumlah'),
                     'jml_akhir'                     => $this->input->post('jumlahopname') ,
@@ -175,9 +176,14 @@ class Bhp_opname_model extends CI_Model {
             
     }
     function insertdatamaster(){
+        if ($this->input->post('batch_master')=='undefined') {
+            $nobac='-';
+        }else{
+            $nobac=$this->input->post('batch_master');
+        }
         $this->db->where('id_inv_inventaris_habispakai_opname',$this->input->post('id_inv_inventaris_habispakai_opname_master'));
         $this->db->where('id_mst_inv_barang_habispakai',$this->input->post('id_mst_inv_barang_habispakai_master'));
-        $this->db->where('batch',$this->input->post('batch_master'));
+        $this->db->where('batch',$nobac);
         $this->db->select("*");
         $query = $this->db->get("inv_inventaris_habispakai_opname_item");
            if ($query->num_rows() > 0){
@@ -189,7 +195,7 @@ class Bhp_opname_model extends CI_Model {
                 $datakey = array(
                     'id_mst_inv_barang_habispakai'          =>$this->input->post('id_mst_inv_barang_habispakai_master'),
                     'id_inv_inventaris_habispakai_opname'   =>$this->input->post('id_inv_inventaris_habispakai_opname_master') ,
-                    'batch'                                 =>$this->input->post('batch_master'),
+                    'batch'                                 => $nobac,
                      );
                 if($simpan=$this->db->update("inv_inventaris_habispakai_opname_item",$dataupdate,$datakey)){
                     return true;
@@ -197,11 +203,6 @@ class Bhp_opname_model extends CI_Model {
                     return mysql_error();
                 }
             }else{
-                if ($this->input->post('batch_master')=='undefined') {
-                    $nobac='';
-                }else{
-                    $nobac=$this->input->post('batch_master');
-                }
                 $values = array(
                     'jml_awal'                      => $this->input->post('jumlah_awal_opname'),
                     'jml_akhir'                     => $this->input->post('jumlah_masteropname') ,
@@ -279,6 +280,7 @@ class Bhp_opname_model extends CI_Model {
         $data['petugas_nama']              = $this->input->post('penerima_nama');
         $data['petugas_nip']               = $this->input->post('penerima_nip');
         $data['catatan']                    = $this->input->post('catatan');
+        $data['tipe']                       = 'opname';
         if($this->db->insert('inv_inventaris_habispakai_opname', $data)){
             return $data['id_inv_inventaris_habispakai_opname'];
         }else{
@@ -286,6 +288,7 @@ class Bhp_opname_model extends CI_Model {
         }
     }
     public function getitem($start=0,$limit=999999,$options=array()){
+        $this->db->having('jmlawal != 0'); 
         $query = $this->db->get("bhp_distribusi_opname",$limit,$start);
         return $query->result();
     }
@@ -311,8 +314,10 @@ class Bhp_opname_model extends CI_Model {
         return $query->result();
     }
 
-    function get_data_lap_opname($bulan,$tahun)
+    function get_data_lap_opname($bulan,$tahun,$jenisbhp,$filtername,$ord)
     {
+        $a_date = "$tahun-$bulan-01";
+        $last= date("Y-m-t", strtotime($a_date));
           $data = array();
         for($i=1; $i<=31;$i++){
             $tanggal = date("Y-m-d",mktime(0, 0, 0, $bulan, $i, $tahun));
@@ -320,12 +325,12 @@ class Bhp_opname_model extends CI_Model {
             $query =  $this->db->query("
                     SELECT ((Ifnull( 
                    ( 
-                            SELECT   (a.jml_akhir - a.jml_awal) 
+                            SELECT   a.jml_akhir
                             FROM     inv_inventaris_habispakai_opname_item a 
                             JOIN     inv_inventaris_habispakai_opname b 
                             ON       a.id_inv_inventaris_habispakai_opname = b.id_inv_inventaris_habispakai_opname
-                            WHERE    Month(b.tgl_opname) <'03' 
-                            AND      Year(b.tgl_opname) <='2016' 
+                            WHERE    Month(b.tgl_opname) < ".'"'.$bulan.'"'."
+                            AND      Year(b.tgl_opname) <= ".'"'.$tahun.'"'."
                             AND      a.id_mst_inv_barang_habispakai= inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai
                             AND      a.batch = inv_inventaris_habispakai_opname_item.batch 
                             AND      a.id_inv_inventaris_habispakai_opname = inv_inventaris_habispakai_opname_item.id_inv_inventaris_habispakai_opname
@@ -346,11 +351,10 @@ class Bhp_opname_model extends CI_Model {
                                           ON       f.id_inv_inventaris_habispakai_opname = g.id_inv_inventaris_habispakai_opname
                                           WHERE    g.id_mst_inv_barang_habispakai = inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai
                                           AND      g.batch = inv_inventaris_habispakai_opname_item.batch 
-                                          AND      Month(f.tgl_opname) <'03' 
-                                          AND      Year(f.tgl_opname) <='2016' 
+                                          AND      Month(f.tgl_opname) < ".'"'.$bulan.'"'." 
+                                          AND      Year(f.tgl_opname) <= ".'"'.$tahun.'"'." 
                                           ORDER BY f.tgl_opname DESC limit 1 ),'0000-00-00') 
-                          AND    ( 
-                                        inv_inventaris_habispakai_distribusi.tgl_distribusi) <=Last_day(Curdate())),0))) AS jumlah_awal,
+                          AND    ( inv_inventaris_habispakai_distribusi.tgl_distribusi) <= ".'"'.$last.'"'."),0))) AS jumlah_awal,
                    inv_inventaris_habispakai_opname_item.harga, 
                    inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai, 
                    mst_inv_barang_habispakai.uraian, 
@@ -364,6 +368,7 @@ class Bhp_opname_model extends CI_Model {
             ON     mst_inv_barang_habispakai.id_mst_inv_barang_habispakai = inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai
             WHERE  inv_inventaris_habispakai_opname.code_cl_phc = ".'"'.$pusksmas.'"'."
             AND    inv_inventaris_habispakai_opname.tgl_opname = ".'"'.$tanggal.'"'."
+            $jenisbhp $filtername $ord
      ");
             $datas = $query->result_array();  
            // print_r($datas);
@@ -410,8 +415,17 @@ class Bhp_opname_model extends CI_Model {
         }
         return $nourut;
     }
+    function deleteopname($value=0)
+    {
+
+    }
     function delete_opname($kode=0)
-    {    
+    {   
+        $this->deleteopname($kode);
+        $this->db->where('id_inv_inventaris_habispakai_opname',$kode);
+        $this->db->delete('inv_inventaris_habispakai_opname_item');
+
+        $this->deleteopname($kode);
         $this->db->where('id_inv_inventaris_habispakai_opname',$kode);
         return $this->db->delete('inv_inventaris_habispakai_opname');
     }

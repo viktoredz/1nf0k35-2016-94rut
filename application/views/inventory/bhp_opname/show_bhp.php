@@ -59,7 +59,7 @@
 				     	<div class="col-md-8">
 				     		<select name="tahun" id="tahun" class="form-control">
 								<?php for ($i=date("Y");$i>=date("Y")-10;$i--) { ;?>
-									<?php $select = $i == '2015' ? 'selected=selected' : '' ?>
+									<?php $select = $i == date("Y") ? 'selected=selected' : '' ?>
 									<option value="<?php echo $i; ?>" <?php echo $select ?>><?php echo $i; ?></option>
 								<?php	} ;?>
 					     	</select>
@@ -219,7 +219,8 @@
 	$("#btn-export").click(function(){
 		
 		var post = "";
-		var filter = $("#jqxgridBhp").jqxGrid('getfilterinformation');
+		/*var filter = $("#jqxgridBhp").jqxGrid('getfilterinformation');
+
 		for(i=0; i < filter.length; i++){
 			var fltr 	= filter[i];
 			var value	= fltr.filter.getfilters()[0].value;
@@ -242,8 +243,9 @@
 			var sortorder = $("#jqxgridBhp").jqxGrid('getsortinformation').sortdirection.ascending ? "asc" : ($("#jqxgridBhp").jqxGrid('getsortinformation').sortdirection.descending ? "desc" : "");
 			post = post+'&sortorder='+sortorder;
 			
-		}
+		}*/
 		post = post+'&jenisbarang='+$("#jenisbarang option:selected").text()+'&nama_puskesmas='+$("#puskesmas option:selected").text()+'&bulan='+$("#bulan option:selected").text()+'&tahun='+$("#tahun option:selected").text();
+		//alert(post);
 		
 		$.post("<?php echo base_url()?>inventory/bhp_opname/laporan_opname",post,function(response	){
 			//alert(response);

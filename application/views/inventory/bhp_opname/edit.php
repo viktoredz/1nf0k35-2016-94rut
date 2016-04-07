@@ -13,7 +13,8 @@
   <?php echo $this->session->flashdata('alert_form')?>
 </div>
 <?php }  ?>
-
+<div id="grid"></div>
+<section class="content">
 <div class="row">
   <form action="" method="post" name="editform" id="form-ss-edit">
   <div class="col-md-6">
@@ -117,8 +118,8 @@
     <div class="box box-primary">
       <div class="box-body">
         <div class="row" style="margin: 5px">
-          <div class="col-md-4" style="padding: 5px">Nama Penerima</div>
-          <div class="col-md-8">
+          <div class="col-md-5" style="padding: 5px">Nama Penanggungjawab</div>
+          <div class="col-md-7">
           <?php if($action!="view") {?>
             <input type="text" class="form-control" name="penerima_nama" id="penerima_nama" placeholder="Nama Penerima" value="<?php 
                 if(set_value('penerima_nama')=="" && isset($petugas_nama)){
@@ -135,8 +136,8 @@
         </div>
 
         <div class="row" style="margin: 5px">
-          <div class="col-md-4" style="padding: 5px">NIP Penerima</div>
-          <div class="col-md-8">
+          <div class="col-md-5" style="padding: 5px">NIP Penanggungjawab</div>
+          <div class="col-md-7">
             <?php if($action!="view") {?>
             <input type="text" class="form-control" name="penerima_nip" id="penerima_nip" placeholder="NIP Penerima" value="<?php 
                 if(set_value('penerima_nip')=="" && isset($petugas_nip)){
@@ -153,8 +154,8 @@
         </div>
 
         <div class="row" style="margin: 5px">
-          <div class="col-md-4" style="padding: 5px">Catatan</div>
-          <div class="col-md-8">
+          <div class="col-md-5" style="padding: 5px">Catatan</div>
+          <div class="col-md-7">
           <?php if($action!="view") {?>
             <textarea class="form-control" name="catatan" id="catatan" placeholder="Keterangan / Keperluan"><?php 
               if(set_value('catatan')=="" && isset($catatan)){
@@ -187,6 +188,7 @@
   </div><!-- /.form-box -->
 </div><!-- /.register-box -->    
  </form>
+ </section>
 <div class="row">
 
 <?php if(!isset($viewreadonly)){?>
@@ -231,7 +233,6 @@
 <?php } ?>
 
 </div>
-
 <script type="text/javascript">
 
 $(function(){
@@ -260,7 +261,10 @@ $(function(){
   });
   kodedistribusi();
     $('#btn-kembali').click(function(){
-        window.location.href="<?php echo base_url()?>inventory/bhp_opname";
+        $.get('<?php echo base_url()?>inventory/bhp_opname/tab/2', function (data) {
+            $('#addopname').hide();
+              $('#content2').html(data);
+      });
     });
 
 

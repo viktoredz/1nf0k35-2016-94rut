@@ -166,7 +166,7 @@
             }
           ?>
            <div class="row" style="margin: 5px">
-            <div class="col-md-4" style="padding: 5px">harga</div>
+            <div class="col-md-4" style="padding: 5px">Harga</div>
             <div class="col-md-8">
               <input type="number" class="form-control" name="harga_master" id="harga_master" placeholder="harga" value="<?php 
                 if(set_value('harga_master')=="" && isset($harga)){
@@ -178,7 +178,7 @@
             </div>
           </div>
           <div class="row" style="margin: 5px">
-            <div class="col-md-4" style="padding: 5px">jumlah Awal</div>
+            <div class="col-md-4" style="padding: 5px">Jumlah Awal</div>
             <div class="col-md-8">
               <input type="number" class="form-control" name="jumlah_awal_opname" id="jumlah_awal_opname" placeholder="jumlah" value="<?php 
                 if(set_value('jumlah_awal_opname')=="" && isset($jmlawal)){
@@ -204,7 +204,7 @@
                 ?>" readonly="readonly">
           </div>
           <div class="row" style="margin: 5px">
-            <div class="col-md-4" style="padding: 5px">jumlah Opname</div>
+            <div class="col-md-4" style="padding: 5px">Jumlah Opname</div>
             <div class="col-md-8">
               <input type="number" class="form-control" name="jumlah_masteropname" id="jumlah_masteropname" placeholder="jumlah Opname" value="<?php 
                 if(set_value('jumlah_masteropname')=="" && isset($jmlawal)){
@@ -216,7 +216,7 @@
             </div>
           </div>
         <div class="row" style="margin: 5px">
-            <div class="col-md-4" style="padding: 5px">selisih </div>
+            <div class="col-md-4" style="padding: 5px">Selisih </div>
             <div class="col-md-8">
               <input type="number" class="form-control" name="selisih_master" id="selisih_master" placeholder="Selisih Opname" value="<?php 
                 if(set_value('selisih_master')=="" && isset($jmlawal) && isset($jml_akhir)){
