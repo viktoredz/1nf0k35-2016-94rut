@@ -26,6 +26,14 @@
   <div class="row" style="margin: 5px">
           <div class="col-md-12">
             <div class="box box-primary">
+
+            <div class="row" style="margin: 5px">
+                <div class="col-md-4" style="padding: 5px">
+                </div>
+                <div class="col-md-8">
+                  <input type="hidden" class="form-control" name="induk_id" id="id_mst_anggaran" placeholder="ID" readonly>
+                </div>
+              </div>
              
               <div class="row" style="margin: 5px">
                 <div class="col-md-4" style="padding: 5px">
@@ -84,8 +92,25 @@
 </form>
 
 <script>
+
+ function kodeAnggaran(){
+      $.ajax({
+      url: "<?php echo base_url().'mst/keuangan_sts/kodeAnggaran';?>",
+      dataType: "json",
+      success:function(data)
+      { 
+        $.each(data,function(index,elemet){
+          var anggaran = elemet.kodeanggaran.split(".")
+          $("#id_mst_anggaran").val(anggaran[0]);
+        });
+      }
+      });
+      return false;
+  }
+
   $(function () { 
     tabIndex = 1;
+    kodeAnggaran();
 
     $("[name='btn_keuangan_induk_close']").click(function(){
         $("#popup_keuangan_sts_induk").jqxWindow('close');
@@ -95,7 +120,8 @@
         var data = new FormData();
         $('#biodata_notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
         $('#biodata_notice').show();
-
+        
+        data.append('id_mst_anggaran', $("[name='induk_id']").val());
         data.append('kode_anggaran',   $("[name='induk_kode_anggaran']").val());
         data.append('uraian',          $("[name='induk_uraian']").val());
         data.append('id_mst_akun',     $("[name='induk_kode_rek']").val());
@@ -111,7 +137,7 @@
               if(response=="OK"){
                 $("#popup_keuangan_sts_induk").jqxWindow('close');
                 alert("Data berhasil disimpan.");
-                $("#jqxgrid").jqxGrid('updatebounddata', 'filter');
+                // $("#jqxgrid").jqxGrid('updatebounddata', 'filter');
               }else{
                 $('#popup_keuangan_sts_induk_content').html(response);
               }

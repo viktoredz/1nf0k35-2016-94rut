@@ -36,6 +36,13 @@ class Keusts_model extends CI_Model {
         return $urut;
     }
 
+    function kode_anggaran($kodeAnggaran){
+        $keu_anggaran=explode(".", $kodeAnggaran);
+        $kode_anggaran = $keu_anggaran[0];
+        $urut = $this->nourutAnggaran($kode_anggaran);
+        return $urut;
+    }
+
     function nourut($kode_versi){
         $kodepuskesmas = substr($this->session->userdata('puskesmas'),0,4);
         $this->db->select("MAX(id_mst_anggaran_versi) as kd_max");
@@ -56,14 +63,31 @@ class Keusts_model extends CI_Model {
         return $nourut;
     }
 
+    function nourutAnggaran($kode_anggaran){
+        $kodepuskesmas = substr($this->session->userdata('puskesmas'),0,4);
+        $this->db->select("MAX(id_mst_anggaran) as ka_max");
+        $this->db->where("id_mst_anggaran LIKE '".$kodepuskesmas."%'");
+        $q = $this->db->get("mst_keu_anggaran")->row();
+
+        if(!empty($q->ka_max))
+        {
+            $tmp = substr($q->ka_max,-6)+1;
+            $ka  = sprintf("%06s", $tmp);
+            $nourutAnggaran = $kodepuskesmas.$ka;
+        }
+        else
+        {
+            $nourutAnggaran = $kodepuskesmas."000001";
+        }
+        return $nourutAnggaran;
+    }
+
     function insert_induk()
     {
-     //   $data['id_mst_anggaran_parent'] = $this->input->post('id_mst_anggaran_parent');
+        $data['id_mst_anggaran']        = $this->kode_anggaran($this->input->post('id_mst_anggaran'));
         $data['id_mst_akun']            = $this->input->post('id_mst_akun');
         $data['kode_anggaran']          = $this->input->post('kode_anggaran');
         $data['uraian']                 = $this->input->post('uraian');
-        $data['tarif']                  = $this->input->post('tarif');
-       // $data['id_mst_anggaran_versi']  = $this->input->post('id_mst_anggaran_versi');
     
         if($this->db->insert('mst_keu_anggaran', $data)){
             return 1;
@@ -121,7 +145,7 @@ class Keusts_model extends CI_Model {
         $this->db->where('code_cl_phc',$puskes);
         $query = $this->db->get('keu_sts_hasil');
         foreach($query->result() as $q){
-            return $q->n;
+          return $q->n;
         }       
     }
     
@@ -534,6 +558,7 @@ class Keusts_model extends CI_Model {
 
     function get_versi_sts(){
         $this->db->select('*');
+        $this->db->select ("DATE_FORMAT(tanggal_dibuat, '%d %M %Y') AS tanggal_dibuat", FALSE);
         $this->db->from('mst_keu_anggaran_versi');
         $this->db->order_by('id_mst_anggaran_versi','asc');
         $query = $this->db->get();

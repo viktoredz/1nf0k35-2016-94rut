@@ -116,9 +116,7 @@
             success : function(response){
               if(response=="OK"){
                 $("#popup_keuangan_sts").jqxWindow('close');
-                 getVersi();
                 alert("Data instansi berhasil disimpan.");
-                // $("#jqxgrid").jqxGrid('updatebounddata', 'filter');
               }else{
                 $('#popup_keuangan_sts_content').html(response);
               }

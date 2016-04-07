@@ -68,7 +68,7 @@
         <div class="col-md-2" style="padding-top:5px;"><label> Versi Daftar Tarif</label> </div>
         <div class="col-md-3 pull-left">
 
-        <div class="col-md-2" style="padding-top:5px;"><label> Pilih Versi </label> </div>
+        <div class="col-md-2" style="padding-top:5px;"><label> {versi} </label> </div>
         <div class="col-md-3 pull-left">
         <!-- <h3 class="box-title">{title_form}</h3> -->
         </div>
@@ -120,16 +120,6 @@
 </section>
 
   <script type="text/javascript">
-
-      function getVersi(){
-      $.ajax({
-        url: "<?php echo base_url().'mst/keuangan_sts/get_versi';?>",
-        success:function(data){
-            $("select[name='versi']").html(data);
-        }
-      });
-      return false;
-    }
 
     $("#btn-kembali").click(function(){
         $.get('<?php echo base_url()?>mst/keuangan_sts/kembali', function (data) {
@@ -231,19 +221,18 @@
     }
   </script>
   <script type="text/javascript">
+      
         $(document).ready(function () {
 
         $('#versi').change(function(){
-          var versi = $(this).val();
-            $.ajax({
-              url : '<?php echo site_url('mst/keuangan_sts/get_versi') ?>',
-              type : 'POST',
-              data : 'versi=' + versi,
-            success : function(data) {
-            $('#versi').html(data);
-          }
-        });
-
+        $.ajax({
+          url : '<?php echo site_url('mst/keuangan_sts/get_versi') ?>',
+          type : 'POST',
+          data : 'versi={versi}',
+          success : function(data) {
+          $("select[name='versi']").html(data);
+        }
+      });
         return false;
       }).change();
       
@@ -280,8 +269,8 @@
                 ],
                 hierarchy:
                 {
-                    keyDataField: { name: 'id_mst_anggaran' },
-                    parentDataField: { name: 'id_mst_anggaran_parent' }
+                    keyDataField: { name: 'IdMstAnggaran' },
+                    parentDataField: { name: 'IdMstAnggaranParent' }
                 },
                 id: 'id_mst_anggaran',
                 url: '<?php echo base_url()?>mst/keuangan_sts/api_data',
@@ -361,7 +350,7 @@
                 ready: function()
                 {
                     // called when the DatatreeGrid is loaded.   
-          $("#treeGrid").jqxTreeGrid('expandAll');            
+               $("#treeGrid").jqxTreeGrid('expandAll');            
                 },
                 pagerButtonsCount: 8,
                 toolbarHeight: 35,
@@ -568,7 +557,7 @@
 
     function lihat_versi(){
       $("#popup_keuangan_versi_sts #popup_keuangan_versi_sts_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-        $.get("<?php echo base_url().'mst/keuangan_sts/lihat_versi'?>/", function(data) {
+        $.get("<?php echo base_url().'mst/keuangan_sts/versi_view'?>/", function(data) {
           $("#popup_keuangan_versi_sts_content").html(data);
         });
         $("#popup_keuangan_versi_sts").jqxWindow({

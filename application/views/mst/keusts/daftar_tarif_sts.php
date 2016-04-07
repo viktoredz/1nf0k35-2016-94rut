@@ -21,12 +21,17 @@
           </button>
         </div>
 
-      <div class="col-md-3 pull-right">
+        <div class="col-md-4 pull-right">
+          <div class="row">
+            <div class="col-md-4" style="padding-top:5px;"><label> Versi </label> </div>
+            <div class="col-md-8">
+              <select name="versi" class="form-control" id="versi">
+                 <option value="0">Pilih Versi</option>
+             </select>
+             </div> 
+          </div>
+        </div>
 
-        <select name="versi" class="form-control" id="versi">
-            <option value="0">Pilih Versi</option>
-        </select>
-      </div>
       </div>
     
         <div class="box-body">
@@ -148,9 +153,18 @@
           $('#versi').html(data);
           }
         });
-
         return false;
       }).change();
+
+      function getVersi(){
+      $.ajax({
+        url: "<?php echo base_url().'mst/keuangan_sts/get_versi';?>",
+        success:function(data){
+          $("select[name='versi']").html(data);
+        }
+      });
+      return false;
+    }
             var newRowID = null;
       
       $("#doExpand").click(function(){
@@ -166,15 +180,17 @@
       });
 
      $("#btn-ubah-tarif").click(function(){
-        $.get('<?php echo base_url()?>mst/keuangan_sts/anggaran_ubah', {versi:'<?php echo $this->session->userdata('versi');?>'},function( data )  {
-          $('#content1').html(data);
+        var versi = $('#versi').val();
+        $.get('<?php echo base_url()?>mst/keuangan_sts/anggaran_ubah/'+versi, function( data )  {
+           $('#content1').html(data);
         });
       });
 
      $("select[name='versi']").change(function(){
         $.post( '<?php echo base_url()?>mst/keuangan_sts/set_versi', {versi:$(this).val()},function( data ) {
           $("#treeGrid").jqxTreeGrid('updateBoundData');
-          $("#treeGrid").jqxTreeGrid('expandAll');            
+          $("#treeGrid").jqxTreeGrid('expandAll');  
+
         });
      });
             // prepare the data
@@ -192,8 +208,8 @@
                 ],
                 hierarchy:
                 {
-                    keyDataField: { name: 'id_mst_anggaran' },
-                    parentDataField: { name: 'id_mst_anggaran_parent' }
+                    keyDataField: { name: 'IdMstAnggaran' },
+                    parentDataField: { name: 'IdMstAnggaranParent' }
                 },
                 id: 'id_mst_anggaran',
                 url: '<?php echo base_url()?>mst/keuangan_sts/api_data',

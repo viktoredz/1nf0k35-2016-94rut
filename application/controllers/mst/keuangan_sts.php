@@ -211,13 +211,19 @@ class Keuangan_sts extends CI_Controller {
 		 }
 	}
 
-	function lihat_versi(){
+	function versi_detail($versi=0){
+		$this->authentication->verify('mst','edit');
+
+		$data 		   = $this->keusts_model->get_data_sts($versi);
+		$data['versi'] = $versi;
+		die($this->parser->parse("mst/keusts/daftar_tarif_sts_form",$data));
+	}
+
+	function versi_view(){
 		$this->authentication->verify('mst','edit');
 		
 		$data['lihat_versi'] = $this->keusts_model->get_versi_sts();
-
 		die($this->parser->parse("mst/keusts/versi_sts",$data));
-		
 	}
 
 	public function kodeVersi($id=0){
@@ -231,17 +237,28 @@ class Keuangan_sts extends CI_Controller {
 		}
 	}
 
+	public function kodeAnggaran($id=0){
+		$this->db->where('code',"P".$this->session->userdata('puskesmas'));
+		$query = $this->db->get('cl_phc')->result();
+		foreach ($query as $q) {
+			$kodeAnggaran[] = array(
+				'kodeanggaran' => $q->code, 
+			);
+			echo json_encode($kodeAnggaran);
+		}
+	}
+
 	function get_versi(){
 
 	if ($this->input->post('versi')!="null") {
 		if($this->input->is_ajax_request()) {
 			$versi = $this->input->post('versi');
 			$this->session->set_userdata('versi',$this->input->post('versi'));
-			$ver 	= $this->keusts_model->get_versi_sts();
+			$ver   = $this->keusts_model->get_versi_sts();
 
-				echo '<option value="">Pilih Versi</option>';
+				echo '<option value=""></option>';
 			foreach($ver as $ver) :
-				echo $select = $ver->id_mst_anggaran_versi == $this->input->post('versi') ? 'selected' : '';
+				echo $select = $ver->id_mst_anggaran_versi == $this->session->userdata('versi') ? 'selected' : '';
 				echo '<option value="'.$ver->id_mst_anggaran_versi.'" '.$select.'>' . $ver->nama . '</option>';
 			endforeach;
 
@@ -255,11 +272,12 @@ class Keuangan_sts extends CI_Controller {
 	function induk_add(){
 		$this->authentication->verify('mst','add');
 
+	    $this->form_validation->set_rules('id_mst_anggaran', 'ID Anggaran', 'trim|required');
     	$this->form_validation->set_rules('kode_anggaran', 'Kode Anggaran', 'trim|required');
         $this->form_validation->set_rules('uraian', ' Uraian', 'trim|required');
         $this->form_validation->set_rules('id_mst_akun', 'Kode Akun', 'trim|required');
 
-		$data['id_mst_anggaran_versi']	= "";
+		$data['id_mst_anggaran']	    = "";
 		$data['kode_rek']		   	    = $this->keusts_model->get_kode_rek();
 	    $data['action']					= "add";
 		$data['alert_form']		   	    = '';
@@ -355,29 +373,22 @@ class Keuangan_sts extends CI_Controller {
 		
 	}
 
-	function anggaran_ubah(){
+	function anggaran_ubah($versi="0"){
 		$this->authentication->verify('mst','edit');
-		// $data = $this->keusts_model->get_data_row($idversi);
-	
-		$data['ambildata'] = $this->keusts_model->get_data_row($this->session->userdata('versi'));
 
-		$data['action']="edit";
-		// $data['id_mst_anggaran_versi'] = $idversi;
-		$data['alert_form'] = "";
-
+		$data 				   = $this->keusts_model->get_data_sts($versi);
+		$data['action']		   ="edit";
+		$data['alert_form']    = "";
+		$data['versi']         = $versi;
+		
 		$data['title_group']   = "Tarif Surat Tanda Setoran";
 		$data['title_form']    = "Ubah Daftar Tarif Surat Tanda Setoran";
 
 		$data['ambildata']     = $this->keusts_model->get_data();
-		// $data['versi'] 		   = $this->keusts_model->get_versi_sts();
 		$data['kode_rekening'] = $this->keusts_model->get_data_kode_rekening();
-		$data['kode_rek']	   = $this->keusts_model->get_data_kode_rek();
-		$data['dataversi']	   = $this->keusts_model->get_versi_sts();
 
 	 	die($this->parser->parse("mst/keusts/daftar_tarif_sts_form",$data));
 	}
-
-	
 
 	function anggaran_tarif(){
 		$this->authentication->verify('mst','edit');
