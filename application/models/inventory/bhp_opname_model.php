@@ -312,7 +312,7 @@ class Bhp_opname_model extends CI_Model {
         return $query->result();
     }
 
-    function get_data_lap_opname($bulan,$tahun,$jenisbhp)
+    function get_data_lap_opname($bulan,$tahun,$jenisbhp,$filtername,$ord)
     {
           $data = array();
         for($i=1; $i<=31;$i++){
@@ -364,8 +364,8 @@ class Bhp_opname_model extends CI_Model {
             JOIN   mst_inv_barang_habispakai 
             ON     mst_inv_barang_habispakai.id_mst_inv_barang_habispakai = inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai
             WHERE  inv_inventaris_habispakai_opname.code_cl_phc = ".'"'.$pusksmas.'"'."
-            AND    inv_inventaris_habispakai_opname.tgl_opname = ".'"'.$tanggal.'"'."
-            $jenisbhp
+            AND    xinv_inventaris_habispakai_opname.tgl_opname = ".'"'.$tanggal.'"'."
+            $jenisbhp $filtername $ord
      ");
             $datas = $query->result_array();  
            // print_r($datas);

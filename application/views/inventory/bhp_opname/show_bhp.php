@@ -220,6 +220,7 @@
 		
 		var post = "";
 		var filter = $("#jqxgridBhp").jqxGrid('getfilterinformation');
+
 		for(i=0; i < filter.length; i++){
 			var fltr 	= filter[i];
 			var value	= fltr.filter.getfilters()[0].value;
@@ -244,6 +245,7 @@
 			
 		}
 		post = post+'&jenisbarang='+$("#jenisbarang option:selected").text()+'&nama_puskesmas='+$("#puskesmas option:selected").text()+'&bulan='+$("#bulan option:selected").text()+'&tahun='+$("#tahun option:selected").text();
+		//alert(post);
 		
 		$.post("<?php echo base_url()?>inventory/bhp_opname/laporan_opname",post,function(response	){
 			//alert(response);
