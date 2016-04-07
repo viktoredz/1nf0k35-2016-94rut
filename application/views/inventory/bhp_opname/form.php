@@ -13,6 +13,7 @@
     <?php echo $alert_form?>
   </div>
 <?php } ?>
+<section class="content">
 <div class="row">
   <form action="" method="post" id="form-ss">
   <div class="col-md-6">
@@ -87,7 +88,7 @@
 
       <div class="box-body">
         <div class="row" style="margin: 5px">
-          <div class="col-md-4" style="padding: 5px">Nama Penerima</div>
+          <div class="col-md-4" style="padding: 5px">Nama Penanggungjawab</div>
           <div class="col-md-8">
             <input type="text" class="form-control" name="penerima_nama" id="penerima_nama" placeholder="Nama Penerima" value="<?php 
                 if(set_value('penerima_nama')=="" && isset($penerima_nama)){
@@ -100,7 +101,7 @@
         </div>
 
         <div class="row" style="margin: 5px">
-          <div class="col-md-4" style="padding: 5px">NIP Penerima</div>
+          <div class="col-md-4" style="padding: 5px">NIP Penanggungjawab</div>
           <div class="col-md-8">
             <input type="text" class="form-control" name="penerima_nip" id="penerima_nip" placeholder="NIP Penerima" value="<?php 
                 if(set_value('penerima_nip')=="" && isset($penerima_nip)){
@@ -132,11 +133,12 @@
         <button type="button" id="btn-kembali" class="btn btn-warning"><i class='fa fa-arrow-circle-left'></i> &nbsp;Kembali</button>
       </div>
       </div>
-    </form>        
+          
 
   </div><!-- /.form-box -->
+  </form>  
 </div><!-- /.register-box -->
-
+</section>
 <script type="text/javascript">
 $(function(){
   cekopname($('#tgl_opname').val(),$('#jenis_bhp').val());

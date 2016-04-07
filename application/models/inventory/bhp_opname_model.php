@@ -314,6 +314,8 @@ class Bhp_opname_model extends CI_Model {
 
     function get_data_lap_opname($bulan,$tahun,$jenisbhp,$filtername,$ord)
     {
+        $a_date = "$tahun-$bulan-01";
+        $last= date("Y-m-t", strtotime($a_date));
           $data = array();
         for($i=1; $i<=31;$i++){
             $tanggal = date("Y-m-d",mktime(0, 0, 0, $bulan, $i, $tahun));
@@ -321,12 +323,12 @@ class Bhp_opname_model extends CI_Model {
             $query =  $this->db->query("
                     SELECT ((Ifnull( 
                    ( 
-                            SELECT   (a.jml_akhir - a.jml_awal) 
+                            SELECT   a.jml_akhir
                             FROM     inv_inventaris_habispakai_opname_item a 
                             JOIN     inv_inventaris_habispakai_opname b 
                             ON       a.id_inv_inventaris_habispakai_opname = b.id_inv_inventaris_habispakai_opname
-                            WHERE    Month(b.tgl_opname) <'03' 
-                            AND      Year(b.tgl_opname) <='2016' 
+                            WHERE    Month(b.tgl_opname) < ".'"'.$bulan.'"'."
+                            AND      Year(b.tgl_opname) <= ".'"'.$tahun.'"'."
                             AND      a.id_mst_inv_barang_habispakai= inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai
                             AND      a.batch = inv_inventaris_habispakai_opname_item.batch 
                             AND      a.id_inv_inventaris_habispakai_opname = inv_inventaris_habispakai_opname_item.id_inv_inventaris_habispakai_opname
@@ -347,11 +349,10 @@ class Bhp_opname_model extends CI_Model {
                                           ON       f.id_inv_inventaris_habispakai_opname = g.id_inv_inventaris_habispakai_opname
                                           WHERE    g.id_mst_inv_barang_habispakai = inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai
                                           AND      g.batch = inv_inventaris_habispakai_opname_item.batch 
-                                          AND      Month(f.tgl_opname) <'03' 
-                                          AND      Year(f.tgl_opname) <='2016' 
+                                          AND      Month(f.tgl_opname) < ".'"'.$bulan.'"'." 
+                                          AND      Year(f.tgl_opname) <= ".'"'.$tahun.'"'." 
                                           ORDER BY f.tgl_opname DESC limit 1 ),'0000-00-00') 
-                          AND    ( 
-                                        inv_inventaris_habispakai_distribusi.tgl_distribusi) <=Last_day(Curdate())),0))) AS jumlah_awal,
+                          AND    ( inv_inventaris_habispakai_distribusi.tgl_distribusi) <= ".'"'.$last.'"'."),0))) AS jumlah_awal,
                    inv_inventaris_habispakai_opname_item.harga, 
                    inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai, 
                    mst_inv_barang_habispakai.uraian, 

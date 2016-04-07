@@ -14,6 +14,7 @@
 </div>
 <?php }  ?>
 <div id="grid"></div>
+<section class="content">
 <div class="row">
   <form action="" method="post" name="editform" id="form-ss-edit">
   <div class="col-md-6">
@@ -187,6 +188,7 @@
   </div><!-- /.form-box -->
 </div><!-- /.register-box -->    
  </form>
+ </section>
 <div class="row">
 
 <?php if(!isset($viewreadonly)){?>
@@ -231,7 +233,6 @@
 <?php } ?>
 
 </div>
-
 <script type="text/javascript">
 
 $(function(){
