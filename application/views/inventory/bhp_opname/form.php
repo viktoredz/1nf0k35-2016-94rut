@@ -162,9 +162,10 @@ $(function(){
                 url : "<?php echo base_url()?>inventory/bhp_opname/{action}_opname",
                 data : data,
                 success : function(response){
-                  $('#addopname').html(response);
+                  $('#content2').html(response);
                 }
             });
+            return false;
       }
             return false;
         });
