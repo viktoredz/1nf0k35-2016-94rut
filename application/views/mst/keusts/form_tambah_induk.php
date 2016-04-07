@@ -88,7 +88,7 @@
     tabIndex = 1;
 
     $("[name='btn_keuangan_induk_close']").click(function(){
-        $("#popup_keuangan_sts").jqxWindow('close');
+        $("#popup_keuangan_sts_induk").jqxWindow('close');
     });
 
     $("[name='btn_keuangan_induk_save']").click(function(){
@@ -109,11 +109,11 @@
             data : data,
             success : function(response){
               if(response=="OK"){
-                $("#popup_keuangan_sts").jqxWindow('close');
+                $("#popup_keuangan_sts_induk").jqxWindow('close');
                 alert("Data berhasil disimpan.");
                 $("#jqxgrid").jqxGrid('updatebounddata', 'filter');
               }else{
-                $('#popup_keuangan_sts_content').html(response);
+                $('#popup_keuangan_sts_induk_content').html(response);
               }
             }
         });

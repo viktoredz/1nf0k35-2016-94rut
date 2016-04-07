@@ -22,6 +22,13 @@ class Keusts_model extends CI_Model {
         }
     }
 
+    function delete_versi($id)
+    {
+        $this->db->where('id_mst_anggaran_versi',$id);
+
+        return $this->db->delete('mst_keu_anggaran_versi');
+    }
+
     function kode_versi($kode){
         $versi=explode(".", $kode);
         $kode_versi = $versi[0];

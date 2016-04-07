@@ -151,29 +151,25 @@
 
         return false;
       }).change();
-
-      $("#menu_keuangan").addClass("active");
-      $("#menu_keuangan_master_sts_anggaran_tarif").addClass("active");
-        
             var newRowID = null;
       
       $("#doExpand").click(function(){
         $.post( '<?php echo base_url()?>keuangan/master_sts/set_puskes', {puskes:'<?php echo $this->session->userdata('puskes');?>'},function( data ) {
           $("#treeGrid").jqxTreeGrid('expandAll');                    
         });
-            });
+      });
       
       $("#doCollapse").click(function(){
         $.post( '<?php echo base_url()?>keuangan/master_sts/set_puskes', {puskes:'<?php echo $this->session->userdata('puskes');?>'},function( data ) {
           $("#treeGrid").jqxTreeGrid('collapseAll');                    
         });
-            });
+      });
 
      $("#btn-ubah-tarif").click(function(){
         $.get('<?php echo base_url()?>mst/keuangan_sts/anggaran_ubah', {versi:'<?php echo $this->session->userdata('versi');?>'},function( data )  {
           $('#content1').html(data);
-          });
-       });
+        });
+      });
 
      $("select[name='versi']").change(function(){
         $.post( '<?php echo base_url()?>mst/keuangan_sts/set_versi', {versi:$(this).val()},function( data ) {
@@ -181,7 +177,6 @@
           $("#treeGrid").jqxTreeGrid('expandAll');            
         });
      });
-      
             // prepare the data
              var source =
             {
@@ -248,7 +243,7 @@
                 altRows: true,
                 ready: function()
                 {
-                    // called when the DatatreeGrid is loaded.         
+                // called when the DatatreeGrid is loaded.         
                 },
                 pagerButtonsCount: 8,                
            columns: [

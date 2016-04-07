@@ -16,6 +16,12 @@
   <div id="popup_keuangan_sts_induk_content">&nbsp;</div>
 </div>
 
+<div id="popup_keuangan_versi_sts" style="display:none">
+  <div id="popup_title">Semua Versi Tarif STS</div>
+  <div id="popup_keuangan_versi_sts_content">&nbsp;</div>
+</div>
+
+
 <section class="content">
 
   <div class="row">
@@ -39,7 +45,8 @@
     <div class="box-body">
       <div class="">
         <div class="col-md-7 pull-right">
-          <button class="btn btn-success" data-toggle="modal" data-target="#myModal"> Lihat Semua Versi</button>          
+          <!-- <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal"> Lihat Semua Versi</button>           -->
+          <button type="button" class="btn btn-success" onclick='lihat_versi()'> Lihat Semua Versi</button>           
           <button type="button" class="btn btn-primary" onclick='add_versi()'> Buat Versi Baru</button> 
         </div>
 
@@ -113,7 +120,7 @@
 </section>
 
   <script type="text/javascript">
-  
+
       function getVersi(){
       $.ajax({
         url: "<?php echo base_url().'mst/keuangan_sts/get_versi';?>",
@@ -252,13 +259,13 @@
       $("#doCollapse").click(function(){
           $("#treeGrid").jqxTreeGrid('collapseAll');                    
             });
-            
-    $("select[name='versi']").change(function(){
-        $.post( '<?php echo base_url()?>mst/keuangan_sts/set_versi', {versi:$(this).val()},function( data ) {
-          $("#treeGrid").jqxTreeGrid('updateBoundData');
-          $("#treeGrid").jqxTreeGrid('expandAll');            
-        });
-      });
+
+        $("select[name='versi']").change(function(){
+            $.post( '<?php echo base_url()?>mst/keuangan_sts/set_versi', {versi:$(this).val()},function( data ) {
+              $("#treeGrid").jqxTreeGrid('updateBoundData');
+              $("#treeGrid").jqxTreeGrid('expandAll');            
+            });
+          });
             // prepare the data
             var source =
             {
@@ -364,7 +371,6 @@
                         if (theme == "") return className;
                         return className + " " + className + "-" + theme;
                     }
-
                     // appends buttons to the status bar.
                     var container = $("<div style='overflow: hidden; position: relative; height: 100%; width: 100%;'></div>");
                     var buttonTemplate = "<div style='float: left; padding: 3px; margin: 2px;'><div style='margin: 4px; width: 16px; height: 16px;'></div></div>";
@@ -434,7 +440,6 @@
                                 break;
                         }
                     }
-
                     var rowKey = null;
                     $("#treeGrid").on('rowSelect', function (event) {
                         var args = event.args;
@@ -504,7 +509,6 @@
                 }
                             }
                             updateButtons('delete');
-
                         }
                     });
                 },
@@ -549,61 +553,32 @@
     }
 
     function add_induk(){
-      $("#popup_keuangan_sts #popup_keuangan_sts_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
+      $("#popup_keuangan_sts_induk #popup_keuangan_sts_induk_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
         $.get("<?php echo base_url().'mst/keuangan_sts/induk_add' ?>/", function(data) {
-          $("#popup_keuangan_sts_content").html(data);
+          $("#popup_keuangan_sts_induk_content").html(data);
         });
-        $("#popup_keuangan_sts").jqxWindow({
+        $("#popup_keuangan_sts_induk").jqxWindow({
           theme: theme, resizable: false,
           width: 600,
           height: 280,
           isModal: true, autoOpen: false, modalOpacity: 0.2
         });
-        $("#popup_keuangan_sts").jqxWindow('open');
+        $("#popup_keuangan_sts_induk").jqxWindow('open');
+    }
+
+    function lihat_versi(){
+      $("#popup_keuangan_versi_sts #popup_keuangan_versi_sts_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
+        $.get("<?php echo base_url().'mst/keuangan_sts/lihat_versi'?>/", function(data) {
+          $("#popup_keuangan_versi_sts_content").html(data);
+        });
+        $("#popup_keuangan_versi_sts").jqxWindow({
+          theme: theme, resizable: false,
+          width: 9000,
+          height: 300,
+          isModal: true, autoOpen: false, modalOpacity: 0.2
+        });
+        $("#popup_keuangan_versi_sts").jqxWindow('open');
     }
 
     </script>
 
-
-  
-  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Semua Versi Tarif STS</h4>
-      </div>
-      <div class="modal-body">
-        
-    <div class="form-group">
-      <label for="exampleInputEmail1">Kode Anggaran</label>
-      <input type="text" required id="kode_anggaran" class="form-control" name="kode_anggaran" id="exampleInputEmail1" placeholder="Kode Anggaran">
-    </div>
-    <div class="form-group">
-      <label for="exampleInputEmail1">Uraian</label>
-      <input type="text" required id="uraian" class="form-control" name="uraian" id="exampleInputEmail1" placeholder="Uraian">
-    </div>
-    <div class="form-group">
-      <label for="exampleInputEmail1">Kode Rekening</label>
-      <select id="kode_rekening" name="kode_rekening"  class="form-control" id="exampleInputEmail1">
-      <option>Select Rekening</option>
-      <?php 
-        foreach($kode_rekening as $kr){
-      ?>
-          <option value="<?=$kr['code']?>"><?=$kr['kode_rekening']."-".$kr['uraian']?></option>
-      <?php
-        }
-      ?>
-      
-      </select>
-      
-    </div>
-    <input type="hidden" name="type" value="<?php echo $this->session->userdata('tipe')?>"/>
-    
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
-      </div>
-    </div>
-  </div>
-</div>
