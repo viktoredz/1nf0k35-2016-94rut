@@ -191,7 +191,7 @@
 	$("#btn-export").click(function(){
 		
 		var post = "";
-		/*var filter = $("#jqxgrid").jqxGrid('getfilterinformation');
+		var filter = $("#jqxgrid").jqxGrid('getfilterinformation');
 		for(i=0; i < filter.length; i++){
 			var fltr 	= filter[i];
 			var value	= fltr.filter.getfilters()[0].value;
@@ -222,7 +222,7 @@
 			var sortorder = $("#jqxgrid").jqxGrid('getsortinformation').sortdirection.ascending ? "asc" : ($("#jqxgrid").jqxGrid('getsortinformation').sortdirection.descending ? "desc" : "");
 			post = post+'&sortorder='+sortorder;
 			
-		}*/
+		}
 		post = post+'&puskes='+$("#puskesmas option:selected").text();
 		
 		$.post("<?php echo base_url()?>inventory/bhp_kondisi/pengadaan_export",post,function(response	){

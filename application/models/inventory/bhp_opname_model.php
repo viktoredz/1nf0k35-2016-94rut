@@ -475,6 +475,11 @@ class Bhp_opname_model extends CI_Model {
 
         $this->deleteopname($kode);
         $this->db->where('id_inv_inventaris_habispakai_opname',$kode);
+        $this->db->delete('inv_inventaris_habispakai_kondisi');
+
+
+        $this->deleteopname($kode);
+        $this->db->where('id_inv_inventaris_habispakai_opname',$kode);
         return $this->db->delete('inv_inventaris_habispakai_opname');
     }
 }

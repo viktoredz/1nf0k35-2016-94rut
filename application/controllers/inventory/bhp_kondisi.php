@@ -77,7 +77,7 @@ class Bhp_kondisi extends CI_Controller {
 			if($this->session->userdata('filter_jenisbarang')=="all"){
 
 			}else{
-				$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$this->session->userdata('filter_jenisbarang'));
+				$this->db->where("id_mst_inv_barang_habispakai_jenis",$this->session->userdata('filter_jenisbarang'));
 			}
 		}
 		$activity = $this->bhp_kondisi_model->getitem($this->input->post('recordstartindex'), $this->input->post('pagesize'));
@@ -187,7 +187,7 @@ class Bhp_kondisi extends CI_Controller {
 			if($this->session->userdata('filter_jenisbarang')=="all"){
 
 			}else{
-				$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$this->session->userdata('filter_jenisbarang'));
+				$this->db->where("id_mst_inv_barang_habispakai_jenis",$this->session->userdata('filter_jenisbarang'));
 			}
 		}
 		$activity = $this->bhp_kondisi_model->getitem();

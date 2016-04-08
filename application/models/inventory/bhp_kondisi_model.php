@@ -19,21 +19,16 @@ class Bhp_kondisi_model extends CI_Model {
     }
 
     public function getitem($start=0,$limit=999999,$options=array()){
-        $this->db->select("inv_inventaris_habispakai_kondisi.*,mst_inv_barang_habispakai.uraian,(select jml_akhir from inv_inventaris_habispakai_opname_item where id_inv_inventaris_habispakai_opname = inv_inventaris_habispakai_kondisi.id_inv_inventaris_habispakai_opname and id_mst_inv_barang_habispakai = inv_inventaris_habispakai_kondisi.id_mst_inv_barang_habispakai and  batch = inv_inventaris_habispakai_kondisi.batch) as jml_asli,mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis,mst_inv_barang_habispakai.pilihan_satuan,(select harga from inv_inventaris_habispakai_opname_item where id_inv_inventaris_habispakai_opname = inv_inventaris_habispakai_kondisi.id_inv_inventaris_habispakai_opname and id_mst_inv_barang_habispakai = inv_inventaris_habispakai_kondisi.id_mst_inv_barang_habispakai and  batch = inv_inventaris_habispakai_kondisi.batch) as harga,");
-        $this->db->join("mst_inv_barang_habispakai",'mst_inv_barang_habispakai.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_kondisi.id_mst_inv_barang_habispakai');
-        $query = $this->db->get("inv_inventaris_habispakai_kondisi",$limit,$start);
+        $query = $this->db->get("bhp_kondisi",$limit,$start);
         return $query->result();
     }
     function get_data_detail_edit_barang_edit($barang,$batch,$pus,$tgl)
     {
         $tglop = explode("-", $tgl);
-        $this->db->where('inv_inventaris_habispakai_kondisi.id_mst_inv_barang_habispakai',$barang);
-        $this->db->where('inv_inventaris_habispakai_kondisi.batch',$batch);
-        $this->db->where('inv_inventaris_habispakai_kondisi.code_cl_phc',$pus);
-        $this->db->where('inv_inventaris_habispakai_kondisi.tgl_update',$tglop[2].'-'.$tglop[1].'-'.$tglop[0]);
-        $this->db->select("inv_inventaris_habispakai_kondisi.*,mst_inv_barang_habispakai.uraian,(select jml_akhir from inv_inventaris_habispakai_opname_item where id_inv_inventaris_habispakai_opname = inv_inventaris_habispakai_kondisi.id_inv_inventaris_habispakai_opname and id_mst_inv_barang_habispakai = inv_inventaris_habispakai_kondisi.id_mst_inv_barang_habispakai and  batch = inv_inventaris_habispakai_kondisi.batch) as jml_asli,mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis,mst_inv_barang_habispakai.pilihan_satuan,(select harga from inv_inventaris_habispakai_opname_item where id_inv_inventaris_habispakai_opname = inv_inventaris_habispakai_kondisi.id_inv_inventaris_habispakai_opname and id_mst_inv_barang_habispakai = inv_inventaris_habispakai_kondisi.id_mst_inv_barang_habispakai and  batch = inv_inventaris_habispakai_kondisi.batch) as harga,");
-        $this->db->join("mst_inv_barang_habispakai",'mst_inv_barang_habispakai.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_kondisi.id_mst_inv_barang_habispakai');
-        $query = $this->db->get("inv_inventaris_habispakai_kondisi");
+        $this->db->where('id_mst_inv_barang_habispakai',$barang);
+        $this->db->where('batch',$batch);
+        $this->db->where('code_cl_phc',$pus);
+        $query = $this->db->get("bhp_kondisi");
         if ($query->num_rows() > 0){
             $data = $query->row_array();
         }
