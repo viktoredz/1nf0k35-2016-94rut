@@ -84,27 +84,24 @@
 	    $("#menu_bahan_habis_pakai").addClass("active");
 	    $("#menu_inventory_bhp_kondisi").addClass("active");
 	});
-
 	   var source = {
 			datatype: "json",
 			type	: "POST",
 			datafields: [
-			{ name: 'id_mst_inv_barang_habispakai_jenis', type: 'string' },
-			{ name: 'uraian', type: 'string' },
-			{ name: 'no', type: 'string' },
 			{ name: 'id_mst_inv_barang_habispakai', type: 'string' },
-			{ name: 'code', type: 'string' },
-			{ name: 'negara_asal', type: 'number' },
-			{ name: 'merek_tipe', type: 'string' },
-			{ name: 'jmlbaik', type: 'string' },
+			{ name: 'batch', type: 'string' },
+			{ name: 'code_cl_phc', type: 'string' },
+			{ name: 'jml_baik', type: 'string' },
+			{ name: 'tgl_update', type: 'string' },
 			{ name: 'jml_rusak', type: 'string' },
-			{ name: 'tgl_update', type: 'date' },
-			{ name: 'tgl_opname', type: 'date' },
+			{ name: 'uraian', type: 'string' },
 			{ name: 'jml_tdkdipakai', type: 'string' },
-			{ name: 'harga', type: 'double' },
-			{ name: 'jenisuraian', type: 'string' },
-			{ name: 'pilihan_satuan', type: 'string' },
-			{ name: 'value', type: 'string' },
+			{ name: 'id_inv_inventaris_habispakai_opname', type: 'string' },
+			{ name: 'pilihan_satuan', type: 'date' },
+			{ name: 'id_mst_inv_barang_habispakai_jenis', type: 'string' },
+			{ name: 'harga', type: 'string' },
+			{ name: 'edit', type: 'number' }
+			
         ],
 		url: "<?php echo site_url('inventory/bhp_kondisi/json'); ?>",
 		cache: false,
@@ -148,21 +145,21 @@
 			columns: [
 				{ text: 'Edit', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
-				    if(dataRecord.id_mst_inv_barang_habispakai!=null){
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/condition.jpg' onclick='kondisi(\""+dataRecord.id_mst_inv_barang_habispakai+"\");'></a></div>";
+				    if(dataRecord.edit==1){
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='edit(\""+dataRecord.id_mst_inv_barang_habispakai+"\",\""+dataRecord.batch+"\",\""+dataRecord.code_cl_phc+"\",\""+dataRecord.tgl_update+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}
                  }
                 },
 				{ text: 'Nama Barang', editable:false ,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '28%' },
-				{ text: 'Satuan', editable:false ,align: 'center', cellsalign: 'center', datafield: 'value', columntype: 'textbox', filtertype: 'textbox', width: '14%' },
-				{ text: 'Batch', editable:false ,align: 'center', cellsalign: 'center', columntype: 'textbox', filtertype: 'textbox', width: '8%' },
-				{ text: 'Baik', columngroup: 'jumlah',editable:false ,align: 'center', cellsalign: 'right', datafield: 'jmlbaik', columntype: 'textbox', filtertype: 'none', width: '6%' },
+				{ text: 'Satuan', editable:false ,align: 'center', cellsalign: 'center', datafield: 'pilihan_satuan', columntype: 'textbox', filtertype: 'textbox', width: '14%' },
+				{ text: 'Batch', editable:false ,align: 'center', cellsalign: 'center', columntype: 'textbox', filtertype: 'textbox', width: '8%',datafield: 'batch' },
+				{ text: 'Baik', columngroup: 'jumlah',editable:false ,align: 'center', cellsalign: 'right', datafield: 'jml_baik', columntype: 'textbox', filtertype: 'none', width: '6%' },
 				{ text: 'Rusak', columngroup: 'jumlah',editable:false ,align: 'center', cellsalign: 'right', datafield: 'jml_rusak', columntype: 'textbox', filtertype: 'none', width: '6%' },
 				{ text: 'Tidak dipakai', columngroup: 'jumlah',editable:false ,datafield: 'jml_tdkdipakai', columntype: 'textbox', filtertype: 'none', width: '8%' ,align: 'center', cellsalign: 'right'},
 				{ text: 'Harga Satuan (Rp.)', editable:false ,datafield: 'harga', columntype: 'textbox', filtertype: 'textbox',align: 'center', cellsalign: 'right', width: '15%' },
-				{ text: 'Last Update', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false,datafield: 'tgl_opname', columntype: 'date', filtertype: 'none', cellsformat: 'dd-MM-yyyy', width: '10%'},
+				{ text: 'Last Update', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false,datafield: 'tgl_update', columntype: 'date', filtertype: 'none', cellsformat: 'dd-MM-yyyy', width: '10%'},
             ],
             columngroups: 
             [
@@ -176,16 +173,16 @@
 	    });
 	  }
 
-	function kondisi(id){
+	function edit(barang,batch,pusks,tanggal){
 		$("#popup_barang #popup_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-		$.get("<?php echo base_url().'inventory/bhp_kondisi/kondisi_barang/'; ?>"+id , function(data) {
-			timeline_kondisi_barang(id);
+		$.get("<?php echo base_url().'inventory/bhp_kondisi/kondisi_barang/'; ?>"+barang+'/'+batch+'/'+pusks+'/'+tanggal , function(data) {
+			//timeline_kondisi_barang(id);
 			$("#popup_content").html(data);
 		});
 		$("#popup_barang").jqxWindow({
 			theme: theme, resizable: false,
 			width: 500,
-			height: 600,
+			height: 450,
 			isModal: true, autoOpen: false, modalOpacity: 0.2
 		});
 		$("#popup_barang").jqxWindow('open');
@@ -229,7 +226,11 @@
 		post = post+'&puskes='+$("#puskesmas option:selected").text();
 		
 		$.post("<?php echo base_url()?>inventory/bhp_kondisi/pengadaan_export",post,function(response	){
+			//alert(response);
 			window.location.href=response;
 		});
 	});
+	function close_popup_opname(){
+		$("#popup_barang").jqxWindow('close');
+	}
 </script>

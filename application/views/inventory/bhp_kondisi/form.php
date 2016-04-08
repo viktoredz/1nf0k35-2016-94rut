@@ -1,129 +1,84 @@
-</style>
-<?php
-if(isset($disable)){if($disable='disable'){?>
 
 <script type="text/javascript">
-  $("#dateInput").jqxDateTimeInput({ width: '300px', height: '25px' });
-</script>
-<?php }} ?>
-<script type="text/javascript">  
-    function jml(status) {
-        var stok = "<?php echo $jmlstok = ($jml+$totaljumlah)-$jmlpengeluaran; ?>";
-        var jmlbaik = $("#stok").val();
-        var jmlrusak = $("#rusak").val();
-        var jmltidak = $("#tidak").val();
-        if ($("#rusak").val()<0) {
-          alert("data tidak boleh kurang dari nol");
-          $("#rusak").val("<?php echo $jml_rusak;?>");
-          $("#stok").val(stok-$("#rusak").val()-$("#tidak").val());  
-        }
-        if ($("#tidak").val()<0) {
-          alert("data tidak boleh kurang dari nol");
-          $("#tidak").val("<?php echo $jml_tdkdipakai;?>");
-          $("#stok").val(stok-$("#rusak").val()-$("#tidak").val());  
-        }
-        if($("#stok").val()<0){
-          alert("Jumlah baik tidak boleh kurang dari kosong");  
-          if (status=="tidak") {
-             $("#tidak").val("<?php echo $jml_tdkdipakai;?>");
-             $("#stok").val(stok-$("#rusak").val()-$("#tidak").val());
-          }else if (status=="rusak"){
-              $("#rusak").val("<?php echo $jml_rusak;?>");
-              $("#stok").val(stok-$("#rusak").val()-$("#tidak").val());
-          }
-        }
-        $("#stok").val(stok-$("#rusak").val()-$("#tidak").val());
 
-      /*if($("#rusak").val() < 0 || $("#tidak").val() <0){
-          alert("Maaf, data tidak boleh kurang dari nol");
-          if(status=="rusak"){
-            $("#rusak").val("");
-            $("#stok").val(stok-jmlrusak-jmltidak);
-          }else if (status=="tidak") {
-            $("#tidak").val("");
-            $("#stok").val(stok-jmlrusak-jmltidak);
-          }
-      }else{
-        if($("#tidak").val() > $("#stok").val()){
-          alert("Maaf! data tidak boleh lebih besar dari data jumlah baik");
-          $("#tidak").val("");
-          $("#stok").val(stok-jmlrusak-jmltidak);
-        }else if($("#rusak").val() > $("#stok").val()){
-          alert("Maaf! data tidak boleh lebih besar dari data jumlah baik");
-          $("#rusak").val("");
-          $("#stok").val(stok-jmlrusak-jmltidak);
-        }else{
-          if(status=="rusak"){
-            document.getElementById("stok").value = stok - jmlrusak - jmltidak;  
-          }else if (status=="tidak") {
-             document.getElementById("stok").value = stok - jmlrusak - jmltidak;  
-          }
-        }
-      }*/
-    }
-    $(function(){
-      var stok = "<?php echo $jmlstok = ($jml+$totaljumlah)-$jmlpengeluaran; ?>";
-     document.getElementById("stok").value = stok - document.getElementById("rusak").value - document.getElementById("tidak").value;
-      $("#rusak").change(function(){
-          jml("rusak");
-      });
-       $("#tidak").change(function(){
-          jml("tidak");
-      });
-      $(document).ready(function() {
-          $('#tblbarang').DataTable();
-      } );
-      $('#btn-close').click(function(){
-        close_popup();
+  $(function(){
+      $('#btn-close-opname').click(function(){
+        close_popup_opname();
       }); 
-        $('#form-ss').submit(function(){
-            var data = new FormData();
-            $('#notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
-            $('#notice').show();
-            data.append('id_mst_inv_barang_habispakai', $('#kode').val());
-            data.append('jml', $('#stok').val());
-            data.append('jml_tdkdipakai', $('#tidak').val());
-            data.append('jml_rusak', $('#rusak').val());
-            $.ajax({
-                cache : false,
-                contentType : false,
-                processData : false,
-                type : 'POST',
-                url : '<?php echo base_url()."inventory/bhp_opname/".$action."_barang/".$kode ?>',
-                data : data,
-                success : function(response){
-                //  alert(response);
-                  var res  = response.split("|");
-                  if(res[0]=="OK"){
-                      $('#notice').hide();
-                      $('#notice-content').html('<div class="alert">'+res[2]+'</div>');
-                      $('#notice').show();
-                      $("#jqxgrid").jqxGrid('updatebounddata', 'cells');
-                      timeline_kondisi_barang(res[1]);
-                  }
-                  else if(res[0]=="Error"){
-                      $('#notice').hide();
-                      $('#notice-content').html('<div class="alert">'+res[2]+'</div>');
-                      $('#notice').show();
-                      timeline_kondisi_barang(res[1]);
-                  }
-                  else{
-                      $('#popup_content').html(response);
-                      timeline_kondisi_barang($('#kode').val());
-                  }
-              }
-            });
 
-            return false;
-        });
+      $('#form-ss').submit(function(){
+        if ($('#jumlah').val()==$('#jumlahopname').val()) {
+          alert('Data jumlah tidak boleh sama dengan data opname')
+        }else{
+          var data = new FormData();
+          $('#notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
+          $('#notice').show();
+          data.append('harga', $('#harga').val());
+          data.append('jumlahopname', $('#jumlahopname').val());
+          data.append('jml_rusak', $('#jml_rusak').val());
+          data.append('jml_tdkdipakai', $('#jml_tdkdipakai').val());
 
-        
+          $.ajax({
+              cache : false,
+              contentType : false,
+              processData : false,
+              type : 'POST',
+              url : '<?php echo base_url()."inventory/bhp_kondisi/kondisi_barang/$barang/$batch/$pus/$tgl" ?>',
+              data : data,
+              success : function(response){
+                var res  = response.split("|");
+                if(res[0]=="OK"){
+                    $('#notice').hide();
+                    $('#notice-content').html('<div class="alert">'+res[1]+'</div>');
+                    $('#notice').show();
+                    $("#jqxgrid").jqxGrid('updatebounddata', 'cells');
+                    close_popup_opname();
+                }
+                else if(res[0]=="Error"){
+                    $('#notice').hide();
+                    $('#notice-content').html('<div class="alert">'+res[1]+'</div>');
+                    $('#notice').show();
+                }
+                else{
+                    $('#popup_content').html(response);
+                }
+            }
+          });
+          }
+          return false;
+      });
+      var jmlasli = "<?php if(set_value('jumlah')=="" && isset($jmlawal)){
+                            echo $jmlawal;
+                          }else{
+                            echo  set_value('jumlah');
+                          } ?>";
+      $("#jumlahopname").change(function(){
+          if ($(this).val() < 0) {
+            alert('Maaf, jumlah oname tidak boleh minus');
+            $("#jumlahopname").val(jmlasli);
+          }
+          $('#selisih').val($(this).val()-jmlasli);
+          if((parseInt($("#jml_rusak").val()) + parseInt($("#jml_tdkdipakai").val())) > $("#jumlahopname").val()){
+            $("#jml_rusak").add("#jml_tdkdipakai").val(0);
+            alert("Maaf total jumlah rusak dan jumlah tidak dipakai tidak boleh melebihi jumlah opname");
+          }
+      });
+      $('#selisih').val($("#jumlahopname").val()-jmlasli);
+      $("#jml_rusak, #jml_tdkdipakai").change(function(){
+        //alert('hai');
+          if((parseInt($("#jml_rusak").val()) + parseInt($("#jml_tdkdipakai").val())) > $("#jumlahopname").val()){
+            $("#jml_rusak").val("<?php echo $jml_rusak;?>");
+            $("#jml_tdkdipakai").val("<?php echo $jml_tdkdipakai;?>");
+            alert("Maaf total jumlah rusak dan jumlah tidak dipakai tidak boleh melebihi jumlah opname");
+          }
+      });
+
     });
 </script>
 
 <div style="padding:15px">
   <div id="notice" class="alert alert-success alert-dismissable" <?php if ($notice==""){ echo 'style="display:none"';} ?> >
-    <button class="close" type="button" data-dismiss="alert" aria-hidden="true">×</button>
+    <button class="close" type="button" data-dismiss="alert" aria-text="true">×</button>
     <h4>
     <i class="icon fa fa-check"></i>
     Information!
@@ -133,80 +88,98 @@ if(isset($disable)){if($disable='disable'){?>
   <div class="row">
     <?php echo form_open(current_url(), 'id="form-ss"') ?>
           <div class="box-body">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Nama Barang</label>
-                  <div><?php echo $uraian;?></div>
-                  <input type="hidden" class="form-control" name="kode" id="kode" placeholder="Kode" value="<?php 
-                    if(set_value('kode')=="" && isset($kode)){
-                      echo $kode;
-                    }else{
-                      echo  set_value('kode');
-                    }
-                    ?>">
-                </div>
-              </div>  
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Satuan</label>
-                  <div><?php echo $nama_satuan;?></div>
-                </div>
-              </div>
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Nama Barang</div>
+            <div class="col-md-8">
+                <?php 
+                  if(set_value('uraian')=="" && isset($uraian)){
+                    echo $uraian;
+                  }else{
+                    echo  set_value('uraian');
+                  }
+                ?>
             </div>
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Jumlah Baik</label>
-                  <?php // echo 'sotk : '.$jml.'pengeluaran ; '.$jmlpengeluaran.'total :'.$totaljumlah?>
-                  <input type="text" class="form-control" name="stok" id="stok" placeholder="Jumlah Baik" value="<?php 
-                    if(set_value('stok')=="" && isset($jml)){
-                      echo $jmlstok = ($jml+$totaljumlah)-$jmlpengeluaran;
-                    }else{
-                      echo  set_value('stok');
-                    }
-                    ?>" readonly="">
-                </div>
-              </div>  
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Jumlah Rusak</label>
-                  <input type="number" class="form-control" name="rusak" id="rusak" placeholder="Jumlah Rusak" value="<?php 
-                    if(set_value('rusak')=="" && isset($jml_rusak)){
-                      echo $jml_rusak;
-                    }else{
-                      echo  set_value('rusak');
-                    }
-                    ?>">
-                </div>
-              </div>
-            </div>  
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Jumlah Tidak dipakai</label>
-                  <input type="number" class="form-control" name="tidak" id="tidak" placeholder="Jumlah Tidak dipakai" value="<?php 
-                    if(set_value('tidak')=="" && isset($jml_tdkdipakai)){
-                      echo $jml_tdkdipakai;
-                    }else{
-                      echo  set_value('tidak');
-                    }
-                    ?>">
-                </div>
-              </div>  
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Data Update</label>
-                  <div><?php echo date("d-m-Y");?></div>
-                </div>
-              </div>
+          </div>
+          <?php 
+            if (isset($id_mst_inv_barang_habispakai_jenis)) {
+              if ($id_mst_inv_barang_habispakai_jenis=="8") {
+          ?>
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Nomor Batch</div>
+            <div class="col-md-8">
+                 <?php 
+                if(set_value('batch')=="" && isset($batch)){
+                  echo $batch;
+                }else{
+                  echo  set_value('batch');
+                }
+                ?>
             </div>
+          </div>
+          <?php
+           # code...
+              }else{
+
+              }
+            }
+          ?>
+           <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Harga</div>
+            <div class="col-md-8">
+              <input type="number" class="form-control" name="harga" id="harga" placeholder="Harga" value="<?php 
+                if(set_value('harga')=="" && isset($harga)){
+                  echo $harga;
+                }else{
+                  echo  set_value('harga');
+                }
+                ?>" readonly="" >
             </div>
-            <div class="box-footer" style="float:right;">
-                <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-disk"></i>Simpan</button>
-                <button type="button" id="btn-close" class="btn btn-warning"><i class="glyphicon glyphicon-remove"></i>Tutup</button>
+          </div>
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Jumlah Opname</div>
+            <div class="col-md-8">
+              <input type="number" class="form-control" name="jumlahopname" id="jumlahopname" placeholder="Jumlah Opname" value="<?php 
+                if(set_value('jumlahopname')=="" && isset($jml_asli)){
+                  echo $jml_asli;
+                }else{
+                  echo  set_value('jumlahopname');
+                }
+                ?>" readonly="">
             </div>
+          </div>
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Jumlah Rusak</div>
+            <div class="col-md-8">
+              <input type="number" class="form-control" name="jml_rusak" id="jml_rusak" placeholder="Jumlah Rusak" value="<?php 
+                if(set_value('jml_rusak')=="" && isset($jml_rusak)){
+                  echo $jml_rusak;
+                }else{
+                  echo  set_value('jml_rusak');
+                }
+                ?>">
+            </div>
+          </div>
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Jumlah Tidak Dipakai</div>
+            <div class="col-md-8">
+              <input type="number" class="form-control" name="jml_tdkdipakai" id="jml_tdkdipakai" placeholder="Jumlah Tidak Dipakai" value="<?php 
+                if(set_value('jml_tdkdipakai')=="" && isset($jml_tdkdipakai)){
+                  echo $jml_tdkdipakai;
+                }else{
+                  echo  set_value('jml_tdkdipakai');
+                }
+                ?>">
+            </div>
+          </div>
+        </div>
+        <div class="box-footer">
+            <button type="submit" class="btn btn-primary">Simpan</button>
+            <button type="button" id="btn-close-opname" class="btn btn-warning">Batal</button>
+        </div>
     </div>
 </form>
 </div>
-<div class="timeline-messages" id="timeline-barang"></div>
+<div id="popup_masterbarang" style="display:none">
+  <div id="popup_mastertitle">Data master Barang</div>
+  <div id="popup_mastercontent">&nbsp;</div>
+</div>

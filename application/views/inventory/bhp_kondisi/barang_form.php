@@ -35,17 +35,14 @@ if(isset($disable)){if($disable='disable'){?>
                       $('#notice-content').html('<div class="alert">'+res[2]+'</div>');
                       $('#notice').show();
                       $("#jqxgrid").jqxGrid('updatebounddata', 'cells');
-                      timeline_add_barang(res[1]);
                   }
                   else if(res[0]=="Error"){
                       $('#notice').hide();
                       $('#notice-content').html('<div class="alert">'+res[2]+'</div>');
                       $('#notice').show();
-                      timeline_add_barang(res[1]);
                   }
                   else{
                       $('#popup_content').html(response);
-                       timeline_add_barang($('#kode').val());
                   }
               }
             });

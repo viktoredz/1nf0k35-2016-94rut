@@ -924,6 +924,9 @@ class Bhp_opname extends CI_Controller {
         $this->form_validation->set_rules('uraian', 'Nama Barang', 'trim|required');
         $this->form_validation->set_rules('jumlah', 'Jumlah Awal', 'trim');
         $this->form_validation->set_rules('harga', 'harga', 'trim');
+        $this->form_validation->set_rules('jml_rusak', 'jml_rusak', 'trim');
+        $this->form_validation->set_rules('jml_tdkdipakai', 'jml_tdkdipakai', 'trim');
+        $this->form_validation->set_rules('tgl_update_opname', 'tgl_update_opname', 'trim');
         $this->form_validation->set_rules('jumlahopname', 'Jumlah Opname', 'trim|required');
 
 		if($this->form_validation->run()== FALSE){

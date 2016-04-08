@@ -19,11 +19,27 @@ class Bhp_kondisi_model extends CI_Model {
     }
 
     public function getitem($start=0,$limit=999999,$options=array()){
-        $this->db->having('jmlawal != 0'); 
-        $query = $this->db->get("bhp_distribusi_opname",$limit,$start);
+        $this->db->select("inv_inventaris_habispakai_kondisi.*,mst_inv_barang_habispakai.uraian,(select jml_akhir from inv_inventaris_habispakai_opname_item where id_inv_inventaris_habispakai_opname = inv_inventaris_habispakai_kondisi.id_inv_inventaris_habispakai_opname and id_mst_inv_barang_habispakai = inv_inventaris_habispakai_kondisi.id_mst_inv_barang_habispakai and  batch = inv_inventaris_habispakai_kondisi.batch) as jml_asli,mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis,mst_inv_barang_habispakai.pilihan_satuan,(select harga from inv_inventaris_habispakai_opname_item where id_inv_inventaris_habispakai_opname = inv_inventaris_habispakai_kondisi.id_inv_inventaris_habispakai_opname and id_mst_inv_barang_habispakai = inv_inventaris_habispakai_kondisi.id_mst_inv_barang_habispakai and  batch = inv_inventaris_habispakai_kondisi.batch) as harga,");
+        $this->db->join("mst_inv_barang_habispakai",'mst_inv_barang_habispakai.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_kondisi.id_mst_inv_barang_habispakai');
+        $query = $this->db->get("inv_inventaris_habispakai_kondisi",$limit,$start);
         return $query->result();
     }
-    
+    function get_data_detail_edit_barang_edit($barang,$batch,$pus,$tgl)
+    {
+        $tglop = explode("-", $tgl);
+        $this->db->where('inv_inventaris_habispakai_kondisi.id_mst_inv_barang_habispakai',$barang);
+        $this->db->where('inv_inventaris_habispakai_kondisi.batch',$batch);
+        $this->db->where('inv_inventaris_habispakai_kondisi.code_cl_phc',$pus);
+        $this->db->where('inv_inventaris_habispakai_kondisi.tgl_update',$tglop[2].'-'.$tglop[1].'-'.$tglop[0]);
+        $this->db->select("inv_inventaris_habispakai_kondisi.*,mst_inv_barang_habispakai.uraian,(select jml_akhir from inv_inventaris_habispakai_opname_item where id_inv_inventaris_habispakai_opname = inv_inventaris_habispakai_kondisi.id_inv_inventaris_habispakai_opname and id_mst_inv_barang_habispakai = inv_inventaris_habispakai_kondisi.id_mst_inv_barang_habispakai and  batch = inv_inventaris_habispakai_kondisi.batch) as jml_asli,mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis,mst_inv_barang_habispakai.pilihan_satuan,(select harga from inv_inventaris_habispakai_opname_item where id_inv_inventaris_habispakai_opname = inv_inventaris_habispakai_kondisi.id_inv_inventaris_habispakai_opname and id_mst_inv_barang_habispakai = inv_inventaris_habispakai_kondisi.id_mst_inv_barang_habispakai and  batch = inv_inventaris_habispakai_kondisi.batch) as harga,");
+        $this->db->join("mst_inv_barang_habispakai",'mst_inv_barang_habispakai.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_kondisi.id_mst_inv_barang_habispakai');
+        $query = $this->db->get("inv_inventaris_habispakai_kondisi");
+        if ($query->num_rows() > 0){
+            $data = $query->row_array();
+        }
+        $query->free_result();    
+        return $data;
+    }
     function get_data($start=0,$limit=999999,$options=array())
     {
         $kodepuskesmas = "P".$this->session->userdata("puskesmas");
@@ -145,36 +161,39 @@ class Bhp_kondisi_model extends CI_Model {
        /* $this->db->join('inv_inventaris_habispakai_opname',"inv_inventaris_habispakai_opname.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_kondisi.id_mst_inv_barang_habispakai and inv_inventaris_habispakai_opname.code_cl_phc=inv_inventaris_habispakai_kondisi.code_cl_phc AND inv_inventaris_habispakai_opname.tgl_update = inv_inventaris_habispakai_kondisi.tgl_update");*/
         return $query = $this->db->get('inv_inventaris_habispakai_kondisi',3,0)->result();
     }
-    function insertdata(){
-        $this->db->where('tgl_update',date('Y-m-d'));
-        $this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
-        $this->db->where('id_mst_inv_barang_habispakai',$this->input->post('id_mst_inv_barang_habispakai'));
+    function insertdata($barang,$batch,$pus,$tgl){
+        $this->db->where('tgl_update',(date('Y-m-d',strtotime($tgl))));
+        $this->db->where('code_cl_phc',$pus);
+        $this->db->where('id_mst_inv_barang_habispakai',$barang);
+        $this->db->where('batch',$batch);
         $this->db->select("*");
-        $query = $this->db->get("inv_inventaris_habispakai_opname");
+        $query = $this->db->get("inv_inventaris_habispakai_kondisi");
            if ($query->num_rows() > 0){
                 $dataupdate = array(
-                    'jml' => $this->input->post('jml'),
-                    'harga' => $this->input->post('harga'),
+                    'jml_rusak' => $this->input->post('jml_rusak'),
+                    'jml_tdkdipakai' => $this->input->post('jml_tdkdipakai'),
                     );
                 $datakey = array(
-                    'id_mst_inv_barang_habispakai'  =>$this->input->post('id_mst_inv_barang_habispakai'),
-                    'code_cl_phc'                   =>'P'.$this->session->userdata('puskesmas') ,
-                    'tgl_update'=> date('Y-m-d'),
+                    'id_mst_inv_barang_habispakai'  =>$barang,
+                    'code_cl_phc'                   =>$pus,
+                    'batch'                         =>$batch,
+                    'tgl_update'                    => date('Y-m-d',strtotime($tgl)),
                      );
-                if($simpan=$this->db->update("inv_inventaris_habispakai_opname",$dataupdate,$datakey)){
+                if($simpan=$this->db->update("inv_inventaris_habispakai_kondisi",$dataupdate,$datakey)){
                     return true;
                 }else{
                     return mysql_error();
                 }
             }else{
                 $values = array(
-                    'id_mst_inv_barang_habispakai'  =>$this->input->post('id_mst_inv_barang_habispakai'),
-                    'code_cl_phc'                   =>'P'.$this->session->userdata('puskesmas') ,
-                    'tgl_update'=> date('Y-m-d'),
-                    'jml' => $this->input->post('jml'),
-                    'harga' => $this->input->post('harga'),
+                    'id_mst_inv_barang_habispakai'  =>$barang,
+                    'code_cl_phc'                   =>$pus,
+                    'batch'                         =>$batch,
+                    'tgl_update'                    => date('Y-m-d',strtotime($tgl)),
+                    'jml_rusak' => $this->input->post('jml_rusak'),
+                    'jml_tdkdipakai' => $this->input->post('jml_tdkdipakai'),
                 );
-                if($simpan=$this->db->insert('inv_inventaris_habispakai_opname', $values)){
+                if($simpan=$this->db->insert('inv_inventaris_habispakai_kondisi', $values)){
                     return true;
                 }else{
                     return mysql_error();

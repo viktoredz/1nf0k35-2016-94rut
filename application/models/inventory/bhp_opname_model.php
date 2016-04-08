@@ -107,8 +107,33 @@ class Bhp_opname_model extends CI_Model {
             ");
         return $query = $this->db->get('inv_inventaris_habispakai_kondisi',3,0)->result();
     }
+    function tanggalp($kode,$barang,$batch)
+    {
+        $datapus = "P".$this->session->userdata('puskesmas');
+        $this->db->select('tgl_opname');
+        $this->db->where('batch',$batch);
+        $this->db->where('id_mst_inv_barang_habispakai',$barang);
+        $this->db->where('inv_inventaris_habispakai_opname.id_inv_inventaris_habispakai_opname',$kode);
+        $this->db->where('code_cl_phc',$datapus);
+        $this->db->join('inv_inventaris_habispakai_opname_item','inv_inventaris_habispakai_opname_item.id_inv_inventaris_habispakai_opname=inv_inventaris_habispakai_opname.id_inv_inventaris_habispakai_opname','left');
+        $query = $this->db->get('inv_inventaris_habispakai_opname');
+        if ($query->num_rows() > 0) {
+            foreach ($query->result() as $key) {
+                return $key->tgl_opname;
+            }
+        }else{
+            return '0000-00-00';
+        }
+    }
     function delete_entryitem($kode,$barang,$batch)
     {
+        $tgl_update = $this->tanggalp($kode,$barang,$batch);
+        $this->db->where('batch',$batch);
+        $this->db->where('id_mst_inv_barang_habispakai',$barang);
+        $this->db->where('id_inv_inventaris_habispakai_opname',$kode);
+        $this->db->where('tgl_update',$tgl_update);
+        $this->db->delete('inv_inventaris_habispakai_kondisi')->result;
+
         $this->db->where('batch',$batch);
         $this->db->where('id_mst_inv_barang_habispakai',$barang);
         $this->db->where('id_inv_inventaris_habispakai_opname',$kode);
@@ -143,10 +168,23 @@ class Bhp_opname_model extends CI_Model {
         $this->db->select("*");
         $query = $this->db->get("inv_inventaris_habispakai_opname_item");
            if ($query->num_rows() > 0){
+                $keyvaluesdata  = array(
+                    'id_mst_inv_barang_habispakai'  => $this->input->post('id_mst_inv_barang_habispakai'),
+                    'id_inv_inventaris_habispakai_opname' => $this->input->post('id_inv_inventaris_habispakai_opname'),
+                    'batch'                         => $nobac,
+                    'code_cl_phc'                   => 'P'.$this->session->userdata('puskesmas'),
+                    'tgl_update'                    => $this->input->post('tgl_update_opname')
+                );
+                $updatevaluesdata  = array(
+                    'jml_rusak'                     => $this->input->post('jml_rusak'),
+                    'jml_tdkdipakai'                => $this->input->post('jml_tdkdipakai')
+                );
+                $this->db->update('inv_inventaris_habispakai_kondisi',$updatevaluesdata,$keyvaluesdata);
+
                 $dataupdate = array(
-                    'jml_awal' => $this->input->post('jumlah'),
-                    'jml_akhir' => $this->input->post('jumlahopname'),
-                    'harga' => $this->input->post('harga'),
+                    'jml_awal'      => $this->input->post('jumlah'),
+                    'jml_akhir'     => $this->input->post('jumlahopname'),
+                    'harga'         => $this->input->post('harga'),
                     );
                 $datakey = array(
                     'id_mst_inv_barang_habispakai'          =>$this->input->post('id_mst_inv_barang_habispakai'),
@@ -159,6 +197,16 @@ class Bhp_opname_model extends CI_Model {
                     return mysql_error();
                 }
             }else{
+                $valuesdata  = array(
+                    'jml_rusak'                     => $this->input->post('jml_rusak'),
+                    'jml_tdkdipakai'                => $this->input->post('jml_tdkdipakai'),
+                    'id_mst_inv_barang_habispakai'  => $this->input->post('id_mst_inv_barang_habispakai'),
+                    'id_inv_inventaris_habispakai_opname' => $this->input->post('id_inv_inventaris_habispakai_opname'),
+                    'batch'                         => $nobac,
+                    'code_cl_phc'                   => 'P'.$this->session->userdata('puskesmas'),
+                    'tgl_update'                    => $this->input->post('tgl_update_opname')
+                );
+                $this->db->insert('inv_inventaris_habispakai_kondisi',$valuesdata);
                 $values = array(
                     'jml_awal'                      => $this->input->post('jumlah'),
                     'jml_akhir'                     => $this->input->post('jumlahopname') ,

@@ -2,6 +2,8 @@
 <script type="text/javascript">
 
   $(function(){
+    var tglopnameda = $('#tgl_opname').val().split('-');
+    $('#tgl_update_opname').val(tglopnameda[2]+'-'+tglopnameda[1]+'-'+tglopnameda[0]);
     <?php 
     if (isset($obat)) {
       if ($obat=="8") {
@@ -30,6 +32,10 @@
           data.append('jumlah', $('#jumlah').val());
           data.append('harga', $('#harga').val());
           data.append('jumlahopname', $('#jumlahopname').val());
+          data.append('jml_rusak', $('#jml_rusak').val());
+          data.append('jml_tdkdipakai', $('#jml_tdkdipakai').val());
+          data.append('tgl_update_opname', $('#tgl_update_opname').val());
+
           $.ajax({
               cache : false,
               contentType : false,
@@ -70,8 +76,21 @@
             $("#jumlahopname").val(jmlasli);
           }
           $('#selisih').val($(this).val()-jmlasli);
+          if((parseInt($("#jml_rusak").val()) + parseInt($("#jml_tdkdipakai").val())) > $("#jumlahopname").val()){
+            $("#jml_rusak").add("#jml_tdkdipakai").val(0);
+            alert("Maaf total jumlah rusak dan jumlah tidak dipakai tidak boleh melebihi jumlah opname");
+          }
       });
       $('#selisih').val($("#jumlahopname").val()-jmlasli);
+      $("#jml_rusak").add("#jml_tdkdipakai").val(0);
+      $("#jml_rusak, #jml_tdkdipakai").change(function(){
+        //alert('hai');
+          if((parseInt($("#jml_rusak").val()) + parseInt($("#jml_tdkdipakai").val())) > $("#jumlahopname").val()){
+            $("#jml_rusak").add("#jml_tdkdipakai").val(0);
+            alert("Maaf total jumlah rusak dan jumlah tidak dipakai tidak boleh melebihi jumlah opname");
+          }
+      });
+
     });
 </script>
 
@@ -186,7 +205,7 @@
                 ?>">
             </div>
           </div>
-        <div class="row" style="margin: 5px">
+          <div class="row" style="margin: 5px">
             <div class="col-md-4" style="padding: 5px">Selisih</div>
             <div class="col-md-8">
               <input type="number" class="form-control" name="selisih" id="selisih" placeholder="Selisih Opname" value="<?php 
@@ -196,6 +215,37 @@
                   echo  set_value('selisih');
                 }
                 ?>" readonly="readonly">
+            </div>
+          </div>
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Jumlah Rusak</div>
+            <div class="col-md-8">
+              <input type="number" class="form-control" name="jml_rusak" id="jml_rusak" placeholder="Jumlah Rusak" value="<?php 
+                if(set_value('jml_rusak')=="" && isset($jml_rusak)){
+                  echo $jml_rusak;
+                }else{
+                  echo  set_value('jml_rusak');
+                }
+                ?>">
+            </div>
+          </div>
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Jumlah Tidak Dipakai</div>
+            <div class="col-md-8">
+              <input type="number" class="form-control" name="jml_tdkdipakai" id="jml_tdkdipakai" placeholder="Jumlah Tidak Dipakai" value="<?php 
+                if(set_value('jml_tdkdipakai')=="" && isset($jml_tdkdipakai)){
+                  echo $jml_tdkdipakai;
+                }else{
+                  echo  set_value('jml_tdkdipakai');
+                }
+                ?>">
+                 <input type="hidden" class="form-control" name="tgl_update_opname" id="tgl_update_opname" placeholder="tanggal update" value="<?php 
+                if(set_value('tgl_update_opname')=="" && isset($tgl_opname)){
+                  echo $tgl_opname;
+                }else{
+                  echo  set_value('tgl_update_opname');
+                }
+                ?>">
             </div>
           </div>
         </div>
