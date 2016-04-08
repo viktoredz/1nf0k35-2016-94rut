@@ -73,7 +73,7 @@
 <script type="text/javascript">
 
 	function close_popup(){
-	$("#popup_barang").jqxWindow('close');
+		$("#popup_barang").jqxWindow('close');
 	}
 	$(function () {	
 		$("select[name='jenisbarang']").change(function(){
@@ -146,16 +146,7 @@
 				return obj.data;    
 			},
 			columns: [
-				{ text: 'Stok', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
-				    var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
-				    if(dataRecord.id_mst_inv_barang_habispakai!=null){
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/stok.jpg' onclick='stok(\""+dataRecord.id_mst_inv_barang_habispakai+"\");'></a></div>";
-					}else{
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lockdo.gif'></a></div>";
-					}
-                 }
-                },
-				{ text: 'Kondisi', align: 'center', filtertype: 'none', sortable: false, width: '6%', cellsrenderer: function (row) {
+				{ text: 'Edit', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
 				    if(dataRecord.id_mst_inv_barang_habispakai!=null){
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/condition.jpg' onclick='kondisi(\""+dataRecord.id_mst_inv_barang_habispakai+"\");'></a></div>";
@@ -164,10 +155,11 @@
 					}
                  }
                 },
-				{ text: 'Nama Barang', editable:false ,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '25%' },
-				{ text: 'Satuan', editable:false ,align: 'center', cellsalign: 'center', datafield: 'value', columntype: 'textbox', filtertype: 'textbox', width: '15%' },
-				{ text: 'Baik', columngroup: 'jumlah',editable:false ,align: 'center', cellsalign: 'right', datafield: 'jmlbaik', columntype: 'textbox', filtertype: 'none', width: '8%' },
-				{ text: 'Rusak', columngroup: 'jumlah',editable:false ,align: 'center', cellsalign: 'right', datafield: 'jml_rusak', columntype: 'textbox', filtertype: 'none', width: '8%' },
+				{ text: 'Nama Barang', editable:false ,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '28%' },
+				{ text: 'Satuan', editable:false ,align: 'center', cellsalign: 'center', datafield: 'value', columntype: 'textbox', filtertype: 'textbox', width: '14%' },
+				{ text: 'Batch', editable:false ,align: 'center', cellsalign: 'center', columntype: 'textbox', filtertype: 'textbox', width: '8%' },
+				{ text: 'Baik', columngroup: 'jumlah',editable:false ,align: 'center', cellsalign: 'right', datafield: 'jmlbaik', columntype: 'textbox', filtertype: 'none', width: '6%' },
+				{ text: 'Rusak', columngroup: 'jumlah',editable:false ,align: 'center', cellsalign: 'right', datafield: 'jml_rusak', columntype: 'textbox', filtertype: 'none', width: '6%' },
 				{ text: 'Tidak dipakai', columngroup: 'jumlah',editable:false ,datafield: 'jml_tdkdipakai', columntype: 'textbox', filtertype: 'none', width: '8%' ,align: 'center', cellsalign: 'right'},
 				{ text: 'Harga Satuan (Rp.)', editable:false ,datafield: 'harga', columntype: 'textbox', filtertype: 'textbox',align: 'center', cellsalign: 'right', width: '15%' },
 				{ text: 'Last Update', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false,datafield: 'tgl_opname', columntype: 'date', filtertype: 'none', cellsformat: 'dd-MM-yyyy', width: '10%'},
@@ -177,30 +169,12 @@
               { text: 'Jumlah', align: 'center', name: 'jumlah' },
             ]
 		});
-	 function timeline_add_barang(id){
-	    $.get("<?php echo base_url();?>inventory/bhp_kondisi/timeline_comment/"+id , function(response) {
-	      $("#timeline-barang").html(response);
-	    });
-	  }
+
 	  function timeline_kondisi_barang(id){
 	    $.get("<?php echo base_url();?>inventory/bhp_kondisi/timeline_kondisi_barang/"+id , function(response) {
 	      $("#timeline-barang").html(response);
 	    });
 	  }
-	function stok(id){
-		$("#popup_barang #popup_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-		$.get("<?php echo base_url().'inventory/bhp_kondisi/add_barang/'; ?>"+id , function(data) {
-			timeline_add_barang(id);
-			$("#popup_content").html(data);
-		});
-		$("#popup_barang").jqxWindow({
-			theme: theme, resizable: false,
-			width: 500,
-			height: 600,
-			isModal: true, autoOpen: false, modalOpacity: 0.2
-		});
-		$("#popup_barang").jqxWindow('open');
-	}
 
 	function kondisi(id){
 		$("#popup_barang #popup_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");

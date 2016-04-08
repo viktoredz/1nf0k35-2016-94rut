@@ -2,12 +2,26 @@
 class Bhp_kondisi_model extends CI_Model {
 
     var $tabel    = 'mst_inv_barang_habispakai';
+    var $t_puskesmas = 'cl_phc';
 	var $lang	  = '';
 
     function __construct() {
         parent::__construct();
 		$this->lang	  = $this->config->item('language');
 
+    }
+    
+    function get_data_puskesmas($start=0,$limit=999999,$options=array())
+    {
+        $this->db->order_by('value','asc');
+        $query = $this->db->get($this->t_puskesmas,$limit,$start);
+        return $query->result();
+    }
+
+    public function getitem($start=0,$limit=999999,$options=array()){
+        $this->db->having('jmlawal != 0'); 
+        $query = $this->db->get("bhp_distribusi_opname",$limit,$start);
+        return $query->result();
     }
     
     function get_data($start=0,$limit=999999,$options=array())
