@@ -24,6 +24,7 @@ class Keuangan_sts extends CI_Controller {
 			case 1:
 				$data['title_group']   = "Keuangan";
 				$data['title_form']    = "Daftar Tarif Surat Tanda Setoran";
+				$data['versists']	   = $this->keusts_model->get_versi_sts();
 				$data['ambildata']     = $this->keusts_model->get_data();
 				$data['kode_rekening'] = $this->keusts_model->get_data_kode_rekening();
 				$data['kode_rek']	   = $this->keusts_model->get_data_kode_rek();
@@ -260,6 +261,7 @@ class Keuangan_sts extends CI_Controller {
 			foreach($ver as $ver) :
 				echo $select = $ver->id_mst_anggaran_versi == $this->session->userdata('versi') ? 'selected' : '';
 				echo '<option value="'.$ver->id_mst_anggaran_versi.'" '.$select.'>' . $ver->nama . '</option>';
+			
 			endforeach;
 
 			return FALSE;
@@ -336,7 +338,7 @@ class Keuangan_sts extends CI_Controller {
 		
 		$data['ambildata'] = $this->keusts_model->get_data_type_filter($this->session->userdata('versi'));
 		foreach($data['ambildata'] as $d){
-			$txt = $d["id_mst_anggaran"]." \t ".$d["id_mst_anggaran_parent"]." \t ".$d["kode_anggaran"]." \t ".$d["uraian"]." \t ".$d["tarif"]." \t ".$d["id_mst_anggaran_versi"]." \n";				
+			$txt = $d["id_mst_anggaran"]." \t ".$d["id_mst_anggaran_parent"]."\t".$d["id_mst_akun"]." \t ".$d["kode_anggaran"]." \t ".$d["uraian"]." \t ".$d["tarif"]." \t ".$d["id_mst_anggaran_versi"]." \n";				
 			echo $txt;
 		}
 		
@@ -380,7 +382,7 @@ class Keuangan_sts extends CI_Controller {
 		$data['action']		   ="edit";
 		$data['alert_form']    = "";
 		$data['versi']         = $versi;
-		
+		$data['nama_versi']    = $this->keusts_model->get_nama_versi($versi);
 		$data['title_group']   = "Tarif Surat Tanda Setoran";
 		$data['title_form']    = "Ubah Daftar Tarif Surat Tanda Setoran";
 
@@ -416,7 +418,7 @@ class Keuangan_sts extends CI_Controller {
 	
 	function anggaran_add(){
 		$this->authentication->verify('mst','add');
-		$this->form_validation->set_rules('id_mst_anggaran_parent','id_mst_anggaran_parent','trim|required');
+		$this->form_validation->set_rules('id_mst_anggaran','ID Anggaran','trim|required');
 		$this->form_validation->set_rules('kode_anggaran','Kode Anggaran','trim|required');
 		$this->form_validation->set_rules('id_mst_akun','Kode Rekening','trim|required');
 		if($this->form_validation->run()== TRUE){
@@ -446,7 +448,7 @@ class Keuangan_sts extends CI_Controller {
 
 	function anggaran_delete(){
 		$this->authentication->verify('mst','del');
-		$this->sts_model->delete_anggaran();				
+		$this->keusts_model->delete_anggaran();				
 	}
 	
 	function kode_rekening_add(){

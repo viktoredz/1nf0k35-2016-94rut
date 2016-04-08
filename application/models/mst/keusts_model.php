@@ -89,7 +89,7 @@ class Keusts_model extends CI_Model {
         $data['kode_anggaran']          = $this->input->post('kode_anggaran');
         $data['uraian']                 = $this->input->post('uraian');
     
-        if($this->db->insert('mst_keu_anggaran', $data)){
+        if($this->db->insert('mst_keu_anggaran_versi', $data)){
             return 1;
         }else{
             return mysql_error();
@@ -137,6 +137,20 @@ class Keusts_model extends CI_Model {
         $query = $this->db->get('mst_keu_anggaran');     
         return $query->result_array();
     } 
+
+    function get_nama_versi($versi){
+        $this->db->select('nama');
+        $this->db->where ('id_mst_anggaran_versi', $versi);
+        $query = $this->db->get('mst_keu_anggaran_versi');
+        if ($query->num_rows() > 0) {
+            foreach ($query->result() as $key) {
+                $nama=$key->nama;
+            }
+        }else{
+            $nama= 'Pilih versi';
+        }
+        return $nama;
+    }
     
     function get_data_sts_total($tgl, $puskes)
     {
@@ -250,8 +264,8 @@ class Keusts_model extends CI_Model {
         }
     }
     
-    function get_new_id_keu_anggaran(){
-        $this->db->select('max(id_anggaran) as n');
+    function get_new_id_mst_keu_anggaran(){
+        $this->db->select('max(id_mst_anggaran) as n');
         $query = $this->db->get($this->tb);
         
         foreach($query->result() as $q){
@@ -269,15 +283,16 @@ class Keusts_model extends CI_Model {
     }
     
     function add_anggaran(){
-        $dataExplode = explode("-",$this->input->post('kode_rekening'));
+        $dataExplode = explode("-",$this->input->post('id_mst_akun'));
         
         $data = array(
-           'id_anggaran' => $this->get_new_id_keu_anggaran(),
-           'sub_id' => $this->input->post('sub_id') ,
-           'kode_rekening' => $dataExplode[0],
-           'kode_anggaran' => $this->input->post('kode_anggaran'),
-           'uraian' => $this->input->post('uraian'),
-           'type' => $this->session->userdata('tipe')
+           'id_mst_anggaran'        => $this->get_new_id_mst_keu_anggaran(),
+           'id_mst_anggaran_parent' => $this->input->post('id_mst_anggaran_parent') ,
+           'id_mst_akun'            => $dataExplode[0],
+           'kode_anggaran'          => $this->input->post('kode_anggaran'),
+           'uraian'                 => $this->input->post('uraian'),
+           'tarif'                  => $this->input->post('tarif'),
+           'id_mst_anggaran_versi'  => $this->session->userdata('versi')
         );
         
         return $this->db->insert($this->tb, $data);             
@@ -528,14 +543,11 @@ class Keusts_model extends CI_Model {
     }
             
     function delete_anggaran(){     
-        $this->db->where('id_anggaran', $this->input->post('id_anggaran'));
+        $this->db->where('id_mst_anggaran', $this->input->post('id_mst_anggaran'));
         $this->db->delete($this->tb);
                 
-        $this->db->where('sub_id', $this->input->post('id_anggaran'));
+        $this->db->where('id_mst_anggaran_parent', $this->input->post('id_mst_anggaran_parent'));
         $this->db->delete($this->tb);
-        
-        $this->db->where('id_keu_anggaran', $this->input->post('id_anggaran'));     
-        return $this->db->delete('keu_anggaran_tarif');
     }
     
     function delete_sts($tgl){      

@@ -1,5 +1,12 @@
-<section class="content">
+<?php if($this->session->flashdata('alert')!=""){ ?>
+<div class="alert alert-success alert-dismissable">
+  <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+  <h4>  <i class="icon fa fa-check"></i> Information!</h4>
+  <?php echo $this->session->flashdata('alert')?>
+</div>
+<?php } ?>
 
+<section class="content">
   <div class="row">
     <!-- left column -->
     <div class="col-md-12">
@@ -145,10 +152,11 @@
 
        $('#versi').change(function(){
         var versi = $(this).val();
+        var nama_versi = $("select#versi option").filter(":selected").text();
         $.ajax({
           url : '<?php echo site_url('mst/keuangan_sts/get_versi') ?>',
           type : 'POST',
-          data : 'versi=' + versi,
+          data : 'versi=' + versi ,
           success : function(data) {
           $('#versi').html(data);
           }
@@ -181,7 +189,7 @@
 
      $("#btn-ubah-tarif").click(function(){
         var versi = $('#versi').val();
-        $.get('<?php echo base_url()?>mst/keuangan_sts/anggaran_ubah/'+versi, function( data )  {
+        $.get('<?php echo base_url()?>mst/keuangan_sts/anggaran_ubah/'+versi , function( data )  {
            $('#content1').html(data);
         });
       });
@@ -204,7 +212,9 @@
                     { name: "IdMstAkun", type: "number" },
                     { name: "KodeAnggaran", type: "number" },
                     { name: "Uraian", type: "string" },
-                    { name: "Tarif", type: "number" }
+                    { name: "Tarif", type: "number" },
+                    { name: "IdMstAnggaranVersi", type: "number" }
+
                 ],
                 hierarchy:
                 {
@@ -264,10 +274,10 @@
                 pagerButtonsCount: 8,                
            columns: [
                                   
-               { text: 'Kode Anggaran', dataField: "IdMstAkun", align: 'center',cellsalign: 'center', width: '19%' },
-               { text: 'Uraian', dataField: "KodeAnggaran", align: 'center', width: '31%',cellsalign: 'center' }, 
-               { text: 'Tarif', dataField: "Uraian", align: 'center', width: '20%',cellsalign: 'center' },         
-               { text: 'Kode Rekening', dataField: 'IdMstAnggaran', width: "30%", columnType: "template", align:'center',cellsalign: 'center'}
+               { text: 'Kode Anggaran', dataField: "KodeAnggaran", align: 'center',cellsalign: 'center', width: '19%' },
+               { text: 'Uraian', dataField: "Uraian", align: 'center', width: '31%',cellsalign: 'center' }, 
+               { text: 'Tarif', dataField: "Tarif", align: 'center', width: '20%',cellsalign: 'center' },         
+               { text: 'Kode Rekening', dataField: 'IdMstAkun', width: "30%", align:'center',cellsalign: 'center'}
                 ]
             });
         });
