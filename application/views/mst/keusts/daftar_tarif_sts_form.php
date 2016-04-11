@@ -226,7 +226,7 @@
       
       $('#versi').change(function(){
       $.ajax({
-          url : '<?php echo site_url('mst/keuangan_sts/get_versi') ?>',
+          url : '<?php echo site_url('mst/keuangan_sts/get_versi_sts') ?>',
           type : 'POST',
           data : 'versi={versi}' ,
           success : function(data) {
@@ -251,6 +251,7 @@
             });
 
         $("select[name='versi']").change(function(){
+          //alert('d');
             $.post( '<?php echo base_url()?>mst/keuangan_sts/set_versi', {versi:$(this).val()},function( data ) {
               $("#treeGrid").jqxTreeGrid('updateBoundData');
               $("#treeGrid").jqxTreeGrid('expandAll');            

@@ -153,41 +153,6 @@ class Keusts_model extends CI_Model {
         return $nama;
     }
 
-    // function get_status(){
-
-    //     $kodepuskesmas = 'P'.$this->session->userdata('puskesmas');
-
-    //     $this->db->select('id_mst_anggaran_versi');
-    //     $this->db->where ('id_mst_anggaran_versi', $versi);
-    //     $query = $this->db->get('mst_keu_anggaran_versi');
-    //     if ($query->num_rows() > 0) {
-    //         foreach ($query->result() as $key) {
-    //             $nama=$key->nama;
-    //         }
-    //     }else{
-    //         $nama= 'Pilih versi';
-    //     }
-    //     return $nama;
-    // }
-
-    function get_status($jenis){
-        switch ($jenis) {
-            case 'Aktif':
-                $this->db->where('id_mst_anggaran_versi',3);
-                break;
-            case 'Non Aktif':
-                $this->db->where('(id_mst_anggaran_versi =5 OR id_keluarga=6)');
-                break;
-        }
-        
-        $this->db->select('*');
-        $this->db->from('mst_peg_keluarga');
-        $this->db->order_by('nama_keluarga','asc');
-        $query = $this->db->get();
-        return $query->result();
-    }
-
-
     function get_versi_status(){
 
         $kodepuskesmas = 'P'.$this->session->userdata('puskesmas');
