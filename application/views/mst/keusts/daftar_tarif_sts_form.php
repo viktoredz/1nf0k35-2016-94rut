@@ -84,7 +84,7 @@
         <div class="col-md-2" style="padding-top:5px;"><label> Status Versi </label> </div>
         <div class="col-md-3 pull-left">
 
-        <div class="col-md-2" style="padding-top:5px;"><label> Pilih Versi </label> </div>
+        <div class="col-md-2" style="padding-top:5px;"><label> Pilih Versi <?php echo set_value('versi');?></label> </div>
         <div class="col-md-3 pull-left">
         </div>
 
@@ -225,10 +225,17 @@
       $(document).ready(function () {
       
       $('#versi').change(function(){
+        //alert($(this).val());
+        if (($(this).val()=='0')||$(this).val()==null) {
+          var dataver = "{versi}";
+        }else{
+          var dataver =  $(this).val();
+        }
+       // alert(dataver);
       $.ajax({
           url : '<?php echo site_url('mst/keuangan_sts/get_versi_sts') ?>',
           type : 'POST',
-          data : 'versi={versi}' ,
+          data : 'versi='+dataver,
           success : function(data) {
           $("select[name='versi']").html(data);
         }
