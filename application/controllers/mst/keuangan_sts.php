@@ -262,7 +262,7 @@ class Keuangan_sts extends CI_Controller {
 
 				echo "<option value=''></option>";
 			foreach($ver as $ver) :
-				$select = $ver->id_mst_anggaran_versi == $this->nama_status() ? 'selected' : '';
+				$select = $ver->id_mst_anggaran_versi == ($this->session->userdata('versi')!='0' ?  $this->session->userdata('versi') : $this->nama_status())  ? 'selected' : '';
 				echo '<option value="'.$ver->id_mst_anggaran_versi.'" '.$select.'>' . $ver->nama . '</option>';
 			
 			endforeach;
@@ -274,17 +274,17 @@ class Keuangan_sts extends CI_Controller {
 	   }
 	}
 
-		function get_versi_sts(){
+	function get_versi_sts(){
 
 	if ($this->input->post('versi')!="null") {
 		if($this->input->is_ajax_request()) {
 			$versi = $this->input->post('versi');
 			$this->session->set_userdata('versi',$this->input->post('versi'));
 			$ver   = $this->keusts_model->get_versi_sts();
-
+			$datases=$this->session->userdata('versi');
 				echo "<option value=''></option>";
 			foreach($ver as $ver) :
-				$select = $ver->id_mst_anggaran_versi == $this->session->userdata('versi') ? 'selected' : '';
+				$select = $ver->id_mst_anggaran_versi ==  $versi ? 'selected' : '';
 				echo '<option value="'.$ver->id_mst_anggaran_versi.'" '.$select.'>' . $ver->nama . '</option>';
 			
 			endforeach;
