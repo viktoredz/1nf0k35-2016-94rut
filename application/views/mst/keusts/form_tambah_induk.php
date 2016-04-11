@@ -137,7 +137,7 @@
               if(response=="OK"){
                 $("#popup_keuangan_sts_induk").jqxWindow('close');
                 alert("Data berhasil disimpan.");
-                // $("#jqxgrid").jqxGrid('updatebounddata', 'filter');
+                $("#treeGrid").jqxTreeGrid('updateBoundData', 'filter');
               }else{
                 $('#popup_keuangan_sts_induk_content').html(response);
               }

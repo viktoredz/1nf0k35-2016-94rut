@@ -152,7 +152,59 @@ class Keusts_model extends CI_Model {
         }
         return $nama;
     }
-    
+
+    // function get_status(){
+
+    //     $kodepuskesmas = 'P'.$this->session->userdata('puskesmas');
+
+    //     $this->db->select('id_mst_anggaran_versi');
+    //     $this->db->where ('id_mst_anggaran_versi', $versi);
+    //     $query = $this->db->get('mst_keu_anggaran_versi');
+    //     if ($query->num_rows() > 0) {
+    //         foreach ($query->result() as $key) {
+    //             $nama=$key->nama;
+    //         }
+    //     }else{
+    //         $nama= 'Pilih versi';
+    //     }
+    //     return $nama;
+    // }
+
+    function get_status($jenis){
+        switch ($jenis) {
+            case 'Aktif':
+                $this->db->where('id_mst_anggaran_versi',3);
+                break;
+            case 'Non Aktif':
+                $this->db->where('(id_mst_anggaran_versi =5 OR id_keluarga=6)');
+                break;
+        }
+        
+        $this->db->select('*');
+        $this->db->from('mst_peg_keluarga');
+        $this->db->order_by('nama_keluarga','asc');
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+
+    function get_versi_status(){
+
+        $kodepuskesmas = 'P'.$this->session->userdata('puskesmas');
+
+        $this->db->select('id_mst_anggaran_versi');         
+        $this->db->where('cl_phc_code', $kodepuskesmas);  
+        $query = $this->db->get('mst_keu_versi_status');     
+        if ($query->num_rows()) {
+            foreach ($query->result() as $key) {
+                $id_data = $key->id_mst_anggaran_versi;
+            }
+        }else{
+            $id_data =0;
+        }
+        return $id_data;
+    }
+
     function get_data_sts_total($tgl, $puskes)
     {
         $this->db->select('sum(jml) as n');             
@@ -379,6 +431,7 @@ class Keusts_model extends CI_Model {
         }
         
     }
+
     function update_total_sts($tgl, $code_cl_phc, $total){
         $data=array(
             'total'=> $total
@@ -387,6 +440,7 @@ class Keusts_model extends CI_Model {
         $this->db->where('code_cl_phc', $code_cl_phc);
         $this->db->update('keu_sts', $data);                
     }
+
     function update_volume(){
         $data = array(         
            'tgl' => $this->input->post('tgl'),
@@ -513,7 +567,6 @@ class Keusts_model extends CI_Model {
         }
     }
 
-
     function add_anggaran(){
         $dataExplode = explode("-",$this->input->post('id_mst_akun'));
         
@@ -542,7 +595,7 @@ class Keusts_model extends CI_Model {
            'tarif'                  => $this->input->post('tarif'),
            'id_mst_anggaran_versi'  => $this->session->userdata('versi')
         );
-        $this->db->where('id_mst_anggaran');
+        $this->db->where('id_mst_anggaran', $this->input->post('id_mst_anggaran'));
         return $this->db->update($this->tb, $data);             
     }
             
@@ -550,7 +603,7 @@ class Keusts_model extends CI_Model {
         $this->db->where('id_mst_anggaran', $this->input->post('id_mst_anggaran'));
         $this->db->delete($this->tb);
                 
-        $this->db->where('id_mst_anggaran_parent', $this->input->post('id_mst_anggaran_parent'));
+        $this->db->where('id_mst_anggaran_parent', $this->input->post('id_mst_anggaran'));
         $this->db->delete($this->tb);
     }
     

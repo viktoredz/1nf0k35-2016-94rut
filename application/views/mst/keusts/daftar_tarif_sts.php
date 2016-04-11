@@ -148,11 +148,10 @@
   </script>
   <script type="text/javascript">
 
-       $(document).ready(function () {   
+      $(document).ready(function () {   
 
-       $('#versi').change(function(){
+      $('#versi').change(function(){
         var versi = $(this).val();
-        var nama_versi = $("select#versi option").filter(":selected").text();
         $.ajax({
           url : '<?php echo site_url('mst/keuangan_sts/get_versi') ?>',
           type : 'POST',
@@ -164,15 +163,6 @@
         return false;
       }).change();
 
-      function getVersi(){
-      $.ajax({
-        url: "<?php echo base_url().'mst/keuangan_sts/get_versi';?>",
-        success:function(data){
-          $("select[name='versi']").html(data);
-        }
-      });
-      return false;
-    }
             var newRowID = null;
       
       $("#doExpand").click(function(){

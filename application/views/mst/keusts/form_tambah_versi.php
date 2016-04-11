@@ -89,6 +89,17 @@
       return false;
   }
 
+
+function getVersi(){
+      $.ajax({
+        url: "<?php echo base_url().'mst/keuangan_sts/get_versi';?>",
+         success : function(data) {
+          $("select[name='versi']").html(data);
+        }
+      });
+      return false;
+    }
+
   $(function () { 
     tabIndex = 1;
     kodeVersi();
@@ -112,9 +123,11 @@
             processData : false,
             type : 'POST',
             url : '<?php echo base_url()."mst/keuangan_sts/versi_{action}/{id}"   ?>',
-            data : data,
+            data : data ,
             success : function(response){
               if(response=="OK"){
+                $("select[name='versi']").html(data);
+                getVersi();
                 $("#popup_keuangan_sts").jqxWindow('close');
                 alert("Data instansi berhasil disimpan.");
               }else{

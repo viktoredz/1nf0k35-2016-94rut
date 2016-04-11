@@ -21,7 +21,6 @@
   <div id="popup_keuangan_versi_sts_content">&nbsp;</div>
 </div>
 
-
 <section class="content">
 
   <div class="row">
@@ -262,7 +261,6 @@
             {
                 dataType: "tab",
                 dataFields: [
-
                     { name: "IdMstAnggaran", type: "number" },
                     { name: "IdMstAnggaranParent", type: "number" },
                     { name: "IdMstAkun", type: "number" },
@@ -270,7 +268,6 @@
                     { name: "Uraian", type: "string" },
                     { name: "Tarif", type: "number" },
                     { name: "IdMstAnggaranVersi", type: "number" }
-
                 ],
                 hierarchy:
                 {
@@ -310,9 +307,11 @@
             });
           }else{      
             //update data
-            $.post( '<?php echo base_url()?>mst/keuangan_sts/anggaran_update', {id_mst_anggaran:rowID,id_mst_anggaran_parent:arr[1], id_mst_akun:arr[2], kode_anggaran:arr[3], uraian : arr[4], tarif : arr[5], id_mst_anggaran_versi : arr[1]},function( data ) {
+            $.post( '<?php echo base_url()?>mst/keuangan_sts/anggaran_update', {id_mst_anggaran:arr[0] ,id_mst_anggaran_parent:arr[1], id_mst_akun:arr[2], kode_anggaran:arr[3], uraian : arr[4], tarif : arr[5], id_mst_anggaran_versi : arr[1]},function( data ) {
                 if(data != 0){
                   alert(data);                  
+                }else{
+                  $("#treeGrid").jqxTreeGrid('updateBoundData');
                 }
             });
           }
@@ -506,8 +505,7 @@
                         }
                     });
                 },
-
-                columns: [                             
+              columns: [                             
                { text: 'Kode Anggaran', dataField: "KodeAnggaran", align: 'center',cellsalign: 'center', width: '19%' },
                { text: 'Uraian', dataField: "Uraian", align: 'center', width: '31%',cellsalign: 'center' }, 
                { text: 'Tarif', dataField: "Tarif", align: 'center', width: '20%',cellsalign: 'center' },         
