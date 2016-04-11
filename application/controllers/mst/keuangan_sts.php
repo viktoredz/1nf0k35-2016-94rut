@@ -273,7 +273,27 @@ class Keuangan_sts extends CI_Controller {
 		 show_404();
 	   }
 	}
-
+	function statusversi($id=0)
+	{
+		$kodepusk = 'P'.$this->session->userdata('puskesmas');
+		$this->db->where('cl_phc_code',$kodepusk);
+		$this->db->where('id_mst_anggaran_versi',$id);
+		$this->db->select('id_mst_anggaran_versi');
+		$query = $this->db->get('mst_keu_versi_status');
+		if ($query->num_rows() > 0) {
+			foreach ($query->result() as $q) {
+				$totaldistribusi[] = array(
+					'mst_keu_versi_status' => ($q->id_mst_anggaran_versi==null ? 0:$q->id_mst_anggaran_versi), 
+				);
+			}
+		}else{
+			$totaldistribusi[] = array(
+				'mst_keu_versi_status' => '0', 
+			);
+		}
+		
+		echo json_encode($totaldistribusi);
+	}
 	function get_versi_sts(){
 
 	if ($this->input->post('versi')!="null") {
