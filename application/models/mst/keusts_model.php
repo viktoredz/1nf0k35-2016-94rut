@@ -85,11 +85,12 @@ class Keusts_model extends CI_Model {
     function insert_induk()
     {
         $data['id_mst_anggaran']        = $this->kode_anggaran($this->input->post('id_mst_anggaran'));
+        $data['id_mst_anggaran_versi']  = $this->session->userdata('versi');
         $data['id_mst_akun']            = $this->input->post('id_mst_akun');
         $data['kode_anggaran']          = $this->input->post('kode_anggaran');
         $data['uraian']                 = $this->input->post('uraian');
     
-        if($this->db->insert('mst_keu_anggaran_versi', $data)){
+        if($this->db->insert('mst_keu_anggaran', $data)){
             return 1;
         }else{
             return mysql_error();
@@ -281,23 +282,7 @@ class Keusts_model extends CI_Model {
                 return $q->n+1;
         }
     }
-    
-    function add_anggaran(){
-        $dataExplode = explode("-",$this->input->post('id_mst_akun'));
-        
-        $data = array(
-           'id_mst_anggaran'        => $this->get_new_id_mst_keu_anggaran(),
-           'id_mst_anggaran_parent' => $this->input->post('id_mst_anggaran_parent') ,
-           'id_mst_akun'            => $dataExplode[0],
-           'kode_anggaran'          => $this->input->post('kode_anggaran'),
-           'uraian'                 => $this->input->post('uraian'),
-           'tarif'                  => $this->input->post('tarif'),
-           'id_mst_anggaran_versi'  => $this->session->userdata('versi')
-        );
-        
-        return $this->db->insert($this->tb, $data);             
-    }
-    
+
     function add_kode_rekening(){               
         $data = array(
            'kode_rekening' => $this->input->post('kode_rekening') ,        
@@ -527,18 +512,37 @@ class Keusts_model extends CI_Model {
             return $this->db->insert('keu_anggaran_tarif', $data);
         }
     }
+
+
+    function add_anggaran(){
+        $dataExplode = explode("-",$this->input->post('id_mst_akun'));
+        
+        $data = array(
+           'id_mst_anggaran'        => $this->get_new_id_mst_keu_anggaran(),
+           'id_mst_anggaran_parent' => $this->input->post('id_mst_anggaran_parent') ,
+           'id_mst_akun'            => $dataExplode[0],
+           'kode_anggaran'          => $this->input->post('kode_anggaran'),
+           'uraian'                 => $this->input->post('uraian'),
+           'tarif'                  => $this->input->post('tarif'),
+           'id_mst_anggaran_versi'  => $this->session->userdata('versi')
+        );
+        
+        return $this->db->insert($this->tb, $data);             
+    }
     
     function update_anggaran(){
-        $dataExplode = explode("-",$this->input->post('kode_rekening'));
+        $dataExplode = explode("-",$this->input->post('id_mst_akun'));
+
         $data = array(
-           'id_anggaran' => $this->input->post('id_anggaran') ,
-           'sub_id' => $this->input->post('sub_id') ,
-           'kode_rekening' => $dataExplode[0],
-           'kode_anggaran' => $this->input->post('kode_anggaran'),
-           'uraian' => $this->input->post('uraian'),
-           'type' => $this->session->userdata('tipe')
+           'id_mst_anggaran'        => $this->get_new_id_mst_keu_anggaran(),
+           'id_mst_anggaran_parent' => $this->input->post('id_mst_anggaran_parent') ,
+           'id_mst_akun'            => $dataExplode[0],
+           'kode_anggaran'          => $this->input->post('kode_anggaran'),
+           'uraian'                 => $this->input->post('uraian'),
+           'tarif'                  => $this->input->post('tarif'),
+           'id_mst_anggaran_versi'  => $this->session->userdata('versi')
         );
-        $this->db->where('id_anggaran', $this->input->post('id_anggaran_awal'));
+        $this->db->where('id_mst_anggaran');
         return $this->db->update($this->tb, $data);             
     }
             

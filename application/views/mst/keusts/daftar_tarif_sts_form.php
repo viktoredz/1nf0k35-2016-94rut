@@ -224,26 +224,20 @@
   <script type="text/javascript">
       
       $(document).ready(function () {
-
+      
       $('#versi').change(function(){
-          // var nama_versi=$("#versi option:selected").text();
-          // alert(nama_versi);
-          // var nama_versi= $('#versi').find(":selected").text();
-          // var nama_versi = $("select#versi option").filter(":selected").text();
       $.ajax({
           url : '<?php echo site_url('mst/keuangan_sts/get_versi') ?>',
           type : 'POST',
           data : 'versi={versi}' ,
-         // data : 'versi={versi}'+'&nama_versi'=$("#versi option:selected").text(),
-         // data : 'versi={versi}'+'&nama_versi='+nama_versi,
-
           success : function(data) {
           $("select[name='versi']").html(data);
         }
       });
         return false;
       }).change();
-      
+
+     
       $("#menu_master_data").addClass("active");
       $("#menu_mst_keuangan_sts").addClass("active");
 
@@ -301,9 +295,9 @@
           
                     commit(true);
           var arr = $.map(rowData, function(el) { return el });                                                           
-          //cek tipe inputan 
-          //object -> input
-          //number -> update
+                      //cek tipe inputan 
+                      //object -> input
+                      //number -> update
           if(typeof(arr[1]) === 'object'){
             var arr2 = $.map(arr[1], function(el) { return el });
             //input data
@@ -316,7 +310,7 @@
             });
           }else{      
             //update data
-            $.post( '<?php echo base_url()?>mst/keuangan_sts/anggaran_update', {id_anggaran_awal:rowID, id_anggaran:arr[0],sub_id:arr[1], kode_rekening:arr[2], kode_anggaran:arr[3], uraian : arr[4], type : arr[5]},function( data ) {
+            $.post( '<?php echo base_url()?>mst/keuangan_sts/anggaran_update', {id_mst_anggaran:rowID,id_mst_anggaran_parent:arr[1], id_mst_akun:arr[2], kode_anggaran:arr[3], uraian : arr[4], tarif : arr[5], id_mst_anggaran_versi : arr[1]},function( data ) {
                 if(data != 0){
                   alert(data);                  
                 }

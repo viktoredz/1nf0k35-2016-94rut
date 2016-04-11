@@ -432,14 +432,12 @@ class Keuangan_sts extends CI_Controller {
 	function anggaran_update(){
 		$this->authentication->verify('mst','edit');		
 		
-		$this->form_validation->set_rules('kode_rekening','Kode Rekening','trim|required');
-		$this->form_validation->set_rules('id_anggaran','ID Anggaran','trim|required');
-		$this->form_validation->set_rules('sub_id','Sub Id','trim|required');
+		$this->form_validation->set_rules('id_mst_anggaran','ID Anggaran','trim|required');
 		$this->form_validation->set_rules('kode_anggaran','Kode Anggaran','trim|required');
-		$this->form_validation->set_rules('uraian','Uraian','trim|required');		
+		$this->form_validation->set_rules('id_mst_akun','Kode Rekening','trim|required');
 		
 		if($this->form_validation->run()== TRUE){
-			$this->sts_model->update_anggaran();
+			$this->keusts_model->update_anggaran();
 			echo "0";			
 		}else{						
 			echo validation_errors();
