@@ -129,12 +129,12 @@
 					}
                  }
                 },
-				{ text: 'No. Dokumen', editable:false ,datafield: 'nomor_dokumen', columntype: 'textbox', filtertype: 'textbox', width: '15%' },
+				{ text: 'Nomor Dokumen', align: 'center', editable:false ,datafield: 'nomor_dokumen', columntype: 'textbox', filtertype: 'textbox', width: '15%' },
 				{ text: 'Tgl. Distribusi',editable:false , align: 'center', cellsalign: 'center', datafield: 'tgl_distribusi', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '11%' },
 				{ text: 'Periode', editable:false ,align: 'center', cellsalign: 'center', datafield: 'bln_periode', columntype: 'textbox', filtertype: 'textbox', width: '12%' },
 				{ text: 'Jenis Barang', editable:false ,align: 'center', cellsalign: 'left', datafield: 'jenis_bhp', columntype: 'textbox', filtertype: 'textbox', width: '15%' },
 				{ text: 'Jumlah', editable:false ,align: 'center', cellsalign: 'right', datafield: 'jumlah', columntype: 'textbox', filtertype: 'none', width: '10%' },
-				{ text: 'Nama Penerima', editable:false ,datafield: 'penerima_nama', columntype: 'textbox', filtertype: 'textbox', width: '25%' }
+				{ text: 'Nama Penerima', align: 'center', editable:false ,datafield: 'penerima_nama', columntype: 'textbox', filtertype: 'textbox', width: '25%' }
             ]
 		});
 

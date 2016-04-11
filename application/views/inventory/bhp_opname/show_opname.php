@@ -199,12 +199,12 @@
 					}
                  }
                 },
-				{ text: 'Nomor', editable:false ,datafield: 'nomor_opname', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
+				{ text: 'Nomor Opname',align: 'center',  editable:false ,datafield: 'nomor_opname', columntype: 'textbox', filtertype: 'textbox', width: '16%', },
 				{ text: 'Tanggal', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false,datafield: 'tgl_opname', columntype: 'date', filtertype: 'none', cellsformat: 'dd-MM-yyyy', width: '10%'},
-				{ text: 'Jenis Barang', editable:false ,align: 'center', datafield: 'jenis_bhp', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
-				{ text: 'Nama Penanggungjawab', editable:false ,align: 'center', cellsalign: 'left', datafield: 'petugas_nama', columntype: 'textbox', filtertype: 'textbox', width: '25%' },
-				{ text: 'NIP Penanggungjawab', editable:false ,align: 'center', cellsalign: 'left', datafield: 'petugas_nip', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
-				{ text: 'Catatan', editable:false ,datafield: 'catatan', columntype: 'textbox', filtertype: 'textbox', width: '13%' ,align: 'center', cellsalign: 'right'}
+				{ text: 'Jenis Barang', editable:false ,align: 'center', datafield: 'jenis_bhp', columntype: 'textbox', filtertype: 'textbox', width: '10%',cellsalign: 'center' },
+				{ text: 'Nama Penanggung Jawab', editable:false ,align: 'center', cellsalign: 'left', datafield: 'petugas_nama', columntype: 'textbox', filtertype: 'textbox', width: '20%' },
+				{ text: 'NIP Penanggung Jawab', editable:false ,align: 'center', datafield: 'petugas_nip', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
+				{ text: 'Catatan', editable:false ,datafield: 'catatan', columntype: 'textbox', filtertype: 'textbox', width: '18%' ,align: 'center'}
             ]
 		});
 	  function timeline_pengeluaran_barang(id){

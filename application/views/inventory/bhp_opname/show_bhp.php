@@ -188,12 +188,12 @@
 					}
                  }
                 },
-				{ text: 'Nama Barang', editable:false ,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '30%' },
-				{ text: 'Merek', editable:false ,datafield: 'merek_tipe', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
+				{ text: 'Nama Barang', editable:false ,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '40%' },
+				{ text: 'Merek', editable:false ,datafield: 'merek_tipe', columntype: 'textbox', filtertype: 'textbox', width: '18%' },
 				{ text: 'Last Update', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false,datafield: 'tgl_opname', columntype: 'date', filtertype: 'none', cellsformat: 'dd-MM-yyyy', width: '10%'},
-				{ text: 'Jumlah Awal',sortable: true,editable:false ,align: 'center', cellsalign: 'right', datafield: 'jmlawal_opname', columntype: 'textbox', filtertype: 'none', width: '13%' },
-				{ text: 'Jumlah Akhir',sortable: true,editable:false ,align: 'center', cellsalign: 'right', datafield: 'jmlakhir_opname', columntype: 'textbox', filtertype: 'none', width: '13%' },
-				{ text: 'Selisih',sortable: false,editable:false ,datafield: 'sumselisih', columntype: 'textbox', filtertype: 'none', width: '13%' ,align: 'center', cellsalign: 'right'}
+				{ text: 'Jumlah Awal',sortable: true,editable:false ,align: 'center', cellsalign: 'right', datafield: 'jmlawal_opname', columntype: 'textbox', filtertype: 'none', width: '9%' },
+				{ text: 'Jumlah Akhir',sortable: true,editable:false ,align: 'center', cellsalign: 'right', datafield: 'jmlakhir_opname', columntype: 'textbox', filtertype: 'none', width: '9%' },
+				{ text: 'Selisih',sortable: false,editable:false ,datafield: 'sumselisih', columntype: 'textbox', filtertype: 'none', width: '9%' ,align: 'center', cellsalign: 'right'}
             ]
 		});
 	  function timeline_pengeluaran_barang(id){
