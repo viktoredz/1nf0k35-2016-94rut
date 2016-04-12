@@ -46,7 +46,17 @@
             <li style="margin-left: 15px;">
               <div style="height: 20px; margin-top: 5px;">
                   <div style="float: left;">
-                      <i class="icon fa fa-list-alt" style="font-size: 18px"></i>
+                      <i class="icon fa fa-list" style="font-size: 18px"></i>
+                  </div>
+                  <div style="margin-left: 8px; vertical-align: middle; text-align: center; float: left;">
+                      Daftar Sediaan Expiring</div>
+              </div>
+            </li>
+
+            <li style="margin-left: 15px;">
+              <div style="height: 20px; margin-top: 5px;">
+                  <div style="float: left;">
+                      <i class="icon fa fa-list" style="font-size: 18px"></i>
                   </div>
                   <div style="margin-left: 8px; vertical-align: middle; text-align: center; float: left;">
                       Daftar Telah Dimusnahkan</div>
@@ -58,6 +68,7 @@
         <div id="content2" style="background: #FAFAFA"></div>
         <div id="content3" style="background: #FAFAFA"></div>
         <div id="content4" style="background: #FAFAFA"></div>
+        <div id="content5" style="background: #FAFAFA"></div>
     </div>
 </div>
 </section>
