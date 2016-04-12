@@ -854,6 +854,7 @@ class Bhp_pemusnahan extends CI_Controller {
 		if($index==1) $this->daftar_expired();
 		if($index==2) $this->daftar_rusak();
 		if($index==3) $this->daftar_opname();
+		if($index==4) $this->daftar_expiring();
 		else $this->daftar_bhp();
 	}
 	public function kodedistribusi($id=0){
@@ -911,6 +912,16 @@ class Bhp_pemusnahan extends CI_Controller {
 		$this->session->set_userdata('filter_bulan','');
 		$data['bulan']			= array('01'=>'Januari', '02'=>'Februari', '03'=>'Maret', '04'=>'April', '05'=>'Mei', '06'=>'Juni', '07'=>'Juli', '08'=>'Agustus', '09'=>'September', '10'=>'Oktober', '11'=>'November', '12'=>'Desember');
 		die($this->parser->parse("inventory/bhp_pemusnahan/show_bhp",$data,true));
+	}
+
+	function daftar_expiring(){
+		$kodepuskesmas = $this->session->userdata('puskesmas');
+		$this->db->where('code','P'.$kodepuskesmas);
+		$data['datapuskesmas'] 	= $this->bhp_opname_model->get_data_puskesmas();
+		$data['msg_opname'] = "";
+		$this->session->set_userdata('filter_bulan','');
+		$data['bulan']			= array('00'=>'-','01'=>'Januari', '02'=>'Februari', '03'=>'Maret', '04'=>'April', '05'=>'Mei', '06'=>'Juni', '07'=>'Juli', '08'=>'Agustus', '09'=>'September', '10'=>'Oktober', '11'=>'November', '12'=>'Desember');
+		die($this->parser->parse("inventory/bhp_pemusnahan/show_expiring",$data,true));
 	}
 
 	function daftar_opname(){
