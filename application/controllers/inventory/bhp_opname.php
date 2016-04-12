@@ -1364,6 +1364,8 @@ class Bhp_opname extends CI_Controller {
 	}
 	function lastopname($bhp='obat')
 	{
+		$kodepus = $this->session->userdata('puskesmas');
+		$this->db->where('code_cl_phc','P'.$kodepus);
 		$this->db->where('jenis_bhp',$bhp);
 		$this->db->select("max(tgl_opname) as last_opname");
         $query = $this->db->get('inv_inventaris_habispakai_opname');

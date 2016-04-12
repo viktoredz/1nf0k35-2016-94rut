@@ -17,7 +17,7 @@
 			{ name: 'edit', type: 'number'},
 			{ name: 'delete', type: 'number'}
         ],
-		url: "<?php echo site_url('inventory/bhp_opname/json_opname_dalam/'.$kode); ?>",
+		url: "<?php echo site_url('inventory/bhp_pemusnahan/json_opname_dalam/'.$kode); ?>",
 		cache: false,
 		updateRow: function (rowID, rowData, commit) {
          },
@@ -95,7 +95,7 @@
 	function del_barang(id_barang,kode_batch){
 		var confirms = confirm("Hapus Data ?");
 		if(confirms == true){
-			$.post("<?php echo base_url().'inventory/bhp_opname/dodelpermohonan/'.$kode.'/'; ?>" + id_barang+'/'+kode_batch,  function(){
+			$.post("<?php echo base_url().'inventory/bhp_pemusnahan/dodelpermohonan/'.$kode.'/'; ?>" + id_barang+'/'+kode_batch,  function(){
 				alert('Data berhasil dihapus');
 				$("#jqxgrid_barang_opname").jqxGrid('updatebounddata', 'cells');
 				$("#jqxgrid_barang").jqxGrid('updatebounddata', 'cells');
@@ -113,7 +113,7 @@
 			idjenis = '0';
 		}
 		$("#popup_barang_master #popup_content_master").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-		$.get("<?php echo base_url().'inventory/bhp_opname/add_barang_opnamemaster/'.$kode.'/'?>"+idjenis, function(data) {
+		$.get("<?php echo base_url().'inventory/bhp_pemusnahan/add_barang_opnamemaster/'.$kode.'/'?>"+idjenis, function(data) {
 			$("#popup_content_master").html(data);
 		});
 		$("#popup_barang_master").jqxWindow({

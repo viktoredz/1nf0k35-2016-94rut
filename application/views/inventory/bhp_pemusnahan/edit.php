@@ -33,7 +33,7 @@
         </div>
 
         <div class="row" style="margin: 5px">
-          <div class="col-md-4" style="padding: 5px">Tanggal Opname</div>
+          <div class="col-md-4" style="padding: 5px">Tanggal Pemusnahan</div>
           <div class="col-md-8">
           
           <?php if($action!="view") {?>
@@ -46,48 +46,6 @@
           </div>
         </div>
 
-        <div class="row" style="margin: 5px">
-          <div class="col-md-4" style="padding: 5px">Nomor Opname</div>
-          <div class="col-md-8">
-          <?php if($action!="view") {?>
-            <input type="text" class="form-control" name="nomor_opname" id="nomor_opname" placeholder="Nomor Opname"  value="<?php 
-                if(set_value('nomor_opname')=="" && isset($nomor_opname)){
-                  echo $nomor_opname;
-                }else{
-                  echo  set_value('nomor_opname');
-                }
-                ?>">
-          <?php }else{
-              echo $nomor_opname;
-               }
-          ?>
-          </div>
-        </div>
-
-        <div class="row" style="margin: 5px">
-          <div class="col-md-4" style="padding: 5px">Kategori Barang<?php echo $jenis_bhp;?></div>
-          <div class="col-md-8">
-         <?php if($action!="view") {?>
-            <select  name="jenis_bhp" id="jenis_bhp" type="text" class="form-control" disabled="">
-            <?php
-              if ($jenis_bhp=="umum") {
-                $select1 = "selected=selected";
-                $select2 = "";
-              }else{
-                $select2 = "selected=selected";
-                $select1 = "";
-              }
-            ?>
-                <option value="obat" <?php echo $select2; ?>>Obat</option>
-                <option value="umum" <?php echo $select1; ?>>Umum</option>
-          </select>
-          <?php }else{
-              
-                echo $jenis_bhp;
-              }
-          ?>
-          </div>
-        </div>
 
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Puskesmas</div>
@@ -108,48 +66,72 @@
           
           </div>
         </div>
-
-      </div>
-    </div>      
-
-  </div>
-
-  <div class="col-md-6">
-    <div class="box box-primary">
-      <div class="box-body">
-        <div class="row" style="margin: 5px">
-          <div class="col-md-5" style="padding: 5px">Nama Penanggungjawab</div>
-          <div class="col-md-7">
-          <?php if($action!="view") {?>
-            <input type="text" class="form-control" name="penerima_nama" id="penerima_nama" placeholder="Nama Penerima" value="<?php 
-                if(set_value('penerima_nama')=="" && isset($petugas_nama)){
-                  echo $petugas_nama;
+<div class="row" style="margin: 5px">
+          <div class="col-md-4" style="padding: 5px">Nomor Expired</div>
+          <div class="col-md-8">
+            <input type="text" class="form-control" name="nomor_opname" id="nomor_opname" placeholder="Nomor Dokumen" value="<?php 
+                if(set_value('nomor_opname')=="" && isset($nomor_opname)){
+                  echo $nomor_opname;
                 }else{
-                  echo  set_value('penerima_nama');
+                  echo  set_value('nomor_opname');
                 }
                 ?>">
-          <?php }else{
-                    echo $petugas_nama;
-              }
-          ?>
           </div>
         </div>
+      </div>
+    </div>
+  </div><!-- /.form-box -->
 
+  <div class="col-md-6">
+    <div class="box box-warning">
+
+      <div class="box-body">
         <div class="row" style="margin: 5px">
-          <div class="col-md-5" style="padding: 5px">NIP Penanggungjawab</div>
+          <div class="col-md-5" style="padding: 5px">Saksi Satu</div>
           <div class="col-md-7">
-            <?php if($action!="view") {?>
-            <input type="text" class="form-control" name="penerima_nip" id="penerima_nip" placeholder="NIP Penerima" value="<?php 
-                if(set_value('penerima_nip')=="" && isset($petugas_nip)){
-                  echo $petugas_nip;
+            <input type="text" class="form-control" name="saksi1_nama" id="saksi1_nama" placeholder="Nama Penerima" value="<?php 
+                if(set_value('saksi1_nama')=="" && isset($saksi1_nama)){
+                  echo $saksi1_nama;
                 }else{
-                  echo  set_value('penerima_nip');
+                  echo  set_value('saksi1_nama');
                 }
                 ?>">
-          <?php }else{
-                    echo $petugas_nip;
-              }
-          ?>
+          </div>
+        </div>
+        <div class="row" style="margin: 5px">
+          <div class="col-md-5" style="padding: 5px">NIP Saksi Satu</div>
+          <div class="col-md-7">
+            <input type="text" class="form-control" name="saksi1_nip" id="saksi1_nip" placeholder="NIP Penerima" value="<?php 
+                if(set_value('saksi1_nip')=="" && isset($saksi1_nip)){
+                  echo $saksi1_nip;
+                }else{
+                  echo  set_value('saksi1_nip');
+                }
+                ?>">
+          </div>
+        </div>
+        <div class="row" style="margin: 5px">
+          <div class="col-md-5" style="padding: 5px">Saksi Dua</div>
+          <div class="col-md-7">
+            <input type="text" class="form-control" name="saksi2_nama" id="saksi2_nama" placeholder="Nama Penerima" value="<?php 
+                if(set_value('saksi2_nama')=="" && isset($saksi2_nama)){
+                  echo $saksi2_nama;
+                }else{
+                  echo  set_value('saksi2_nama');
+                }
+                ?>">
+          </div>
+        </div>
+        <div class="row" style="margin: 5px">
+          <div class="col-md-5" style="padding: 5px">NIP Saksi Dua</div>
+          <div class="col-md-7">
+            <input type="text" class="form-control" name="saksi2_nip" id="saksi2_nip" placeholder="NIP Penerima" value="<?php 
+                if(set_value('saksi2_nip')=="" && isset($saksi2_nip)){
+                  echo $saksi2_nip;
+                }else{
+                  echo  set_value('saksi2_nip');
+                }
+                ?>">
           </div>
         </div>
 
@@ -182,7 +164,7 @@
             <button type="button" id="btn-edit" class="btn btn-success"><i class='fa fa-pencil-square-o'></i> &nbsp; Ubah Distribusi</button>
           <?php } ?>
         <?php } ?>
-        <button type="button" id="btn-kembali" class="btn btn-warning"><i class='fa fa-reply'></i> &nbsp; Kembali </button>
+        <button type="button" id="btn-kembali-expired" class="btn btn-warning"><i class='fa fa-reply'></i> &nbsp; Kembali </button>
       </div>
     </div>
   </div><!-- /.form-box -->
@@ -251,7 +233,7 @@ $(function(){
           contentType : false,
           processData : false,
           type : 'POST',
-          url : "<?php echo base_url()?>inventory/bhp_opname/{action}_opname/{kode}/{jenisbarangbhp}",
+          url : "<?php echo base_url()?>inventory/bhp_pemusnahan/{action}_opname/{kode}/8",
           data : data,
           success : function(response){
             $('#addopname').html(response);
@@ -260,16 +242,16 @@ $(function(){
       return false;
   });
   kodedistribusi();
-    $('#btn-kembali').click(function(){
-        $.get('<?php echo base_url()?>inventory/bhp_opname/tab/2', function (data) {
+    $('#btn-kembali-expired').click(function(){
+        $.get('<?php echo base_url()?>inventory/bhp_pemusnahan/tab/1', function (data) {
             $('#addopname').hide();
-              $('#content2').html(data);
+              $('#content1').html(data);
       });
     });
 
 
     $("#menu_bahan_habis_pakai").addClass("active");
-    $("#menu_inventory_bhp_opname").addClass("active");
+    $("#menu_inventory_bhp_pemusnahan").addClass("active");
 
     <?php if($action!="view"){?>
       $("#tgl_opname").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme , height: '30px' , disabled: true});
@@ -289,7 +271,7 @@ $(function(){
       }
 
       $.ajax({
-      url: "<?php echo base_url().'inventory/bhp_opname/kodedistribusi';?>",
+      url: "<?php echo base_url().'inventory/bhp_pemusnahan/kodedistribusi';?>",
       dataType: "json",
       success:function(data)
       { 
@@ -310,9 +292,9 @@ $(function(){
     $("#btn-export").click(function(){
     
     var post = "";
-    post = post+'&jenis_bhp='+"<?php echo $jenisbarangbhp; ?>"+'&kode='+"<?php echo $kode; ?>";
+    post = post+'&jenis_bhp='+"<?php echo '8'; ?>"+'&kode='+"<?php echo $kode; ?>";
     
-    $.post("<?php echo base_url()?>inventory/bhp_opname/export_distribusi",post,function(response ){
+    $.post("<?php echo base_url()?>inventory/bhp_pemusnahan/export_distribusi",post,function(response ){
       window.location.href=response;
     });
   });

@@ -10,7 +10,7 @@
 	<div id="popup_content">&nbsp;</div>
 </div>
 <section class="content">
-<form action="<?php echo base_url()?>inventory/bhp_opname/dodel_multi" method="POST" name="">
+<form action="<?php echo base_url()?>inventory/bhp_pemusnahan/dodel_multi" method="POST" name="">
   <div class="row">
     <!-- left column -->
     <div class="col-md-12">
@@ -20,7 +20,7 @@
 	      	<div class="box-footer">
 		      	<div class="row"> 
 			      	<div class="col-md-12">
-					 	<button type="button" class="btn btn-primary" id="btn-add"><i class='fa fa-plus-square'></i> &nbsp; Pemusnahan Baru</button>
+					 	<button type="button" class="btn btn-primary" id="btn-add-expired"><i class='fa fa-plus-square'></i> &nbsp; Pemusnahan Baru</button>
 					 	<button type="button" class="btn btn-success" id="btn-refreshopname"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
 			          <button type="button" id="btn-export-opname" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Export</button>
 			      	</div>
@@ -104,17 +104,17 @@
 	}
 	$(function () {	
 		$("select[name='jenisbarangopname']").change(function(){
-			$.post("<?php echo base_url().'inventory/bhp_opname/filter_jenisbarang' ?>", 'jenisbarang='+$(this).val(),  function(){
+			$.post("<?php echo base_url().'inventory/bhp_pemusnahan/filter_jenisbarang' ?>", 'jenisbarang='+$(this).val(),  function(){
 				$("#jqxgridExpired").jqxGrid('updatebounddata', 'cells');
 			});
 		});
 		$("select[name='bulanopname']").change(function(){
-			$.post("<?php echo base_url().'inventory/bhp_opname/filter_bulan' ?>", 'bulan='+$(this).val(),  function(){
+			$.post("<?php echo base_url().'inventory/bhp_pemusnahan/filter_bulan' ?>", 'bulan='+$(this).val(),  function(){
 				$("#jqxgridExpired").jqxGrid('updatebounddata', 'cells');
 			});
 		});
 		$("select[name='tahunopname']").change(function(){
-			$.post("<?php echo base_url().'inventory/bhp_opname/filter_tahun' ?>", 'tahun='+$(this).val(),  function(){
+			$.post("<?php echo base_url().'inventory/bhp_pemusnahan/filter_tahun' ?>", 'tahun='+$(this).val(),  function(){
 				$("#jqxgridExpired").jqxGrid('updatebounddata', 'cells');
 			});
 		});
@@ -126,8 +126,8 @@
 			{ name: 'id_inv_inventaris_habispakai_opname', type: 'string' },
 			{ name: 'code_cl_phc', type: 'string' },
 			{ name: 'jenis_bhp', type: 'string' },
-			{ name: 'petugas_nip', type: 'string' },
-			{ name: 'petugas_nama', type: 'string' },
+			{ name: 'saksi1_nama', type: 'string' },
+			{ name: 'saksi2_nama', type: 'string' },
 			{ name: 'catatan', type: 'number' },
 			{ name: 'tgl_opname', type: 'date' },
 			{ name: 'nomor_opname', type: 'string' },
@@ -136,7 +136,7 @@
 			{ name: 'edit', type: 'number' },
 			{ name: 'delete', type: 'number' },
         ],
-		url: "<?php echo site_url('inventory/bhp_opname/json'); ?>",
+		url: "<?php echo site_url('inventory/bhp_pemusnahan/json'); ?>",
 		cache: false,
 			updateRow: function (rowID, rowData, commit) {
              
@@ -178,7 +178,7 @@
 			columns: [
 				{ text: 'Edit', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgridExpired").jqxGrid('getrowdata', row)
-				    if((dataRecord.edit==1)&&(dataRecord.last_opname > 0)){
+				    if((dataRecord.edit==1)){
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='editopname(\""+dataRecord.id_inv_inventaris_habispakai_opname+"\",\""+dataRecord.jenis_bhp+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
@@ -187,23 +187,21 @@
                 },
 				{ text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgridExpired").jqxGrid('getrowdata', row);
-				    if(dataRecord.delete==1 &&(dataRecord.last_opname > 0)){
+				    if(dataRecord.delete==1){
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del(\""+dataRecord.id_inv_inventaris_habispakai_opname+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php  echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}
                  }
                 },
-				{ text: 'Nomor', editable:false ,datafield: 'nomor_opname', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
-				{ text: 'Tanggal', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false,datafield: 'tgl_opname', columntype: 'date', filtertype: 'none', cellsformat: 'dd-MM-yyyy', width: '10%'},
-				{ text: 'Jenis Barang', editable:false ,align: 'center', datafield: 'jenis_bhp', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
-				{ text: 'Saksi 1', editable:false ,align: 'center', cellsalign: 'left', datafield: 'petugas_nama', columntype: 'textbox', filtertype: 'textbox', width: '25%' },
-				{ text: 'Saksi 2', editable:false ,align: 'center', cellsalign: 'left', datafield: 'petugas_nip', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
-				{ text: 'Catatan', editable:false ,datafield: 'catatan', columntype: 'textbox', filtertype: 'textbox', width: '13%' ,align: 'center', cellsalign: 'right'}
+				{ text: 'Nomor', editable:false ,datafield: 'nomor_opname', columntype: 'textbox', filtertype: 'textbox', width: '20%' },
+				{ text: 'Tanggal', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false,datafield: 'tgl_opname', columntype: 'date', filtertype: 'none', cellsformat: 'dd-MM-yyyy', width: '15%'},
+				{ text: 'Saksi 1', editable:false ,align: 'center', cellsalign: 'left', datafield: 'saksi1_nama', columntype: 'textbox', filtertype: 'textbox', width: '30%' },
+				{ text: 'Saksi 2', editable:false ,align: 'center', cellsalign: 'left', datafield: 'saksi2_nama', columntype: 'textbox', filtertype: 'textbox', width: '25%' }
             ]
 		});
 	  function timeline_pengeluaran_barang(id){
-	    $.get("<?php echo base_url();?>inventory/bhp_opname/timeline_pengeluaran_barang/"+id , function(response) {
+	    $.get("<?php echo base_url();?>inventory/bhp_pemusnahan/timeline_pengeluaran_barang/"+id , function(response) {
 	      $("#timeline-barang").html(response);
 	    });
 	  }
@@ -214,8 +212,8 @@
 		}else{
 			idjenis = '0';
 		}
-  		$.get("<?php echo base_url().'inventory/bhp_opname/edit_opname/' ?>"+id+'/'+idjenis,function (data) {
-	          	$('#content2').html(data);
+  		$.get("<?php echo base_url().'inventory/bhp_pemusnahan/edit_opname/' ?>"+id,function (data) {
+	          	$('#content1').html(data);
      	});
 
       return false;
@@ -224,7 +222,7 @@
 	function del(id){
 		var confirms = confirm("Hapus Data ?");
 		if(confirms == true){
-			$.post("<?php echo base_url().'inventory/bhp_opname/dodel_opname' ?>/"+id,  function(){
+			$.post("<?php echo base_url().'inventory/bhp_pemusnahan/dodel_opname' ?>/"+id,  function(){
 				alert('data berhasil dihapus');
 
 				$("#jqxgridExpired").jqxGrid('updatebounddata', 'cells');
@@ -232,14 +230,12 @@
 		}
 	}
 	
-	$('#btn-add').click(function(){
-		var opname = '';
+	$('#btn-add-expired').click(function(){
   		$.ajax({
-	        url : '<?php echo site_url('inventory/bhp_opname/add_opname/') ?>',
+	        url : '<?php echo site_url('inventory/bhp_pemusnahan/add_expired/') ?>',
 	        type : 'POST',
-	     //   data : 'opname=' + opname,
 	        success : function(data) {
-	          	$('#content2').html(data);
+	          	$('#content1').html(data);
 	        }
      	});
 
@@ -276,7 +272,7 @@
 		}
 		post = post+'&jenisbarang='+$("#jenisbarangopname option:selected").text()+'&nama_puskesmas='+$("#puskesmasopname option:selected").text()+'&bulan='+$("#bulanopname option:selected").text()+'&tahun='+$("#tahunopname option:selected").text();
 		
-		$.post("<?php echo base_url()?>inventory/bhp_opname/pengeluaran_export",post,function(response){
+		$.post("<?php echo base_url()?>inventory/bhp_pemusnahan/pengeluaran_export",post,function(response){
 			window.location.href=response;
 		});
 	});

@@ -28,7 +28,7 @@
         </div>
 
         <div class="row" style="margin: 5px">
-          <div class="col-md-4" style="padding: 5px">Tanggal Opname</div>
+          <div class="col-md-4" style="padding: 5px">Tanggal Pemusnahan</div>
           <div class="col-md-8">
             <div id='tgl_opname' name="tgl_opname" value="<?php
               echo (set_value('tgl_opname')!="") ? date("Y-m-d",strtotime(set_value('tgl_opname'))) : "";
@@ -36,36 +36,7 @@
           </div>
         </div>
 
-        <div class="row" style="margin: 5px">
-          <div class="col-md-4" style="padding: 5px">Nomor Opname</div>
-          <div class="col-md-8">
-            <input type="text" class="form-control" name="nomor_opname" id="nomor_opname" placeholder="Nomor Dokumen" value="<?php 
-                if(set_value('nomor_opname')=="" && isset($nomor_opname)){
-                  echo $nomor_opname;
-                }else{
-                  echo  set_value('nomor_opname');
-                }
-                ?>">
-          </div>
-        </div>
-        <div class="row" style="margin: 5px">
-          <div class="col-md-4" style="padding: 5px">Kategori Barang</div>
-          <div class="col-md-8">
-            <select  name="jenis_bhp" id="jenis_bhp" type="text" class="form-control">
-            <?php
-              if (set_value('jenis_bhp')=="umum") {
-                $select1 = "selected=selected";
-                $select2 = "";
-              }else{
-                $select2 = "selected=selected";
-                $select1 = "";
-              }
-            ?>
-                <option value="obat" <?php echo $select2; ?>>Obat</option>
-                <option value="umum" <?php echo $select1; ?>>Umum</option>
-          </select>
-          </div>
-        </div>
+        
 
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Puskesmas</div>
@@ -78,7 +49,18 @@
           </select>
           </div>
         </div>
-
+        <div class="row" style="margin: 5px">
+          <div class="col-md-4" style="padding: 5px">Nomor Expired</div>
+          <div class="col-md-8">
+            <input type="text" class="form-control" name="nomor_opname" id="nomor_opname" placeholder="Nomor Dokumen" value="<?php 
+                if(set_value('nomor_opname')=="" && isset($nomor_opname)){
+                  echo $nomor_opname;
+                }else{
+                  echo  set_value('nomor_opname');
+                }
+                ?>">
+          </div>
+        </div>
       </div>
     </div>
   </div><!-- /.form-box -->
@@ -88,31 +70,53 @@
 
       <div class="box-body">
         <div class="row" style="margin: 5px">
-          <div class="col-md-5" style="padding: 5px">Nama Penanggungjawab</div>
+          <div class="col-md-5" style="padding: 5px">Saksi Satu</div>
           <div class="col-md-7">
-            <input type="text" class="form-control" name="penerima_nama" id="penerima_nama" placeholder="Nama Penerima" value="<?php 
-                if(set_value('penerima_nama')=="" && isset($penerima_nama)){
-                  echo $penerima_nama;
+            <input type="text" class="form-control" name="saksi1_nama" id="saksi1_nama" placeholder="Nama Penerima" value="<?php 
+                if(set_value('saksi1_nama')=="" && isset($saksi1_nama)){
+                  echo $saksi1_nama;
                 }else{
-                  echo  set_value('penerima_nama');
+                  echo  set_value('saksi1_nama');
                 }
                 ?>">
           </div>
         </div>
-
         <div class="row" style="margin: 5px">
-          <div class="col-md-5" style="padding: 5px">NIP Penanggungjawab</div>
+          <div class="col-md-5" style="padding: 5px">NIP Saksi Satu</div>
           <div class="col-md-7">
-            <input type="text" class="form-control" name="penerima_nip" id="penerima_nip" placeholder="NIP Penerima" value="<?php 
-                if(set_value('penerima_nip')=="" && isset($penerima_nip)){
-                  echo $penerima_nip;
+            <input type="text" class="form-control" name="saksi1_nip" id="saksi1_nip" placeholder="NIP Penerima" value="<?php 
+                if(set_value('saksi1_nip')=="" && isset($saksi1_nip)){
+                  echo $saksi1_nip;
                 }else{
-                  echo  set_value('penerima_nip');
+                  echo  set_value('saksi1_nip');
                 }
                 ?>">
           </div>
         </div>
-
+        <div class="row" style="margin: 5px">
+          <div class="col-md-5" style="padding: 5px">Saksi Dua</div>
+          <div class="col-md-7">
+            <input type="text" class="form-control" name="saksi2_nama" id="saksi2_nama" placeholder="Nama Penerima" value="<?php 
+                if(set_value('saksi2_nama')=="" && isset($saksi2_nama)){
+                  echo $saksi2_nama;
+                }else{
+                  echo  set_value('saksi2_nama');
+                }
+                ?>">
+          </div>
+        </div>
+        <div class="row" style="margin: 5px">
+          <div class="col-md-5" style="padding: 5px">NIP Saksi Dua</div>
+          <div class="col-md-7">
+            <input type="text" class="form-control" name="saksi2_nip" id="saksi2_nip" placeholder="NIP Penerima" value="<?php 
+                if(set_value('saksi2_nip')=="" && isset($saksi2_nip)){
+                  echo $saksi2_nip;
+                }else{
+                  echo  set_value('saksi2_nip');
+                }
+                ?>">
+          </div>
+        </div>
         <div class="row" style="margin: 5px">
           <div class="col-md-5" style="padding: 5px">Catatan</div>
           <div class="col-md-7">
@@ -130,7 +134,7 @@
       </div>
       <div class="box-footer">
         <button type="submit" class="btn btn-primary"><i class='fa fa-save'></i> &nbsp; Simpan & Lanjutkan</button>
-        <button type="button" id="btn-kembali" class="btn btn-warning"><i class='fa fa-arrow-circle-left'></i> &nbsp;Kembali</button>
+        <button type="button" id="btn-kembali-expired" class="btn btn-warning"><i class='fa fa-arrow-circle-left'></i> &nbsp;Kembali</button>
       </div>
       </div>
           
@@ -152,21 +156,22 @@ $(function(){
             var data = new FormData();
             data.append('kode_distribusi_', $('#kode_distribusi_').val());
             data.append('tgl_opname', $('#tgl_opname').val());
-            data.append('nomor_opname', $('#nomor_opname').val());
-            data.append('jenis_bhp', $('#jenis_bhp').val());
             data.append('puskesmas', $('#puskesmas').val());
-            data.append('penerima_nama', $('#penerima_nama').val());
-            data.append('penerima_nip', $('#penerima_nip').val());
+            data.append('nomor_opname', $('#nomor_opname').val());
+            data.append('saksi1_nama', $('#saksi1_nama').val());
+            data.append('saksi1_nip', $('#saksi1_nip').val());
+            data.append('saksi2_nama', $('#saksi2_nama').val());
+            data.append('saksi2_nip', $('#saksi2_nip').val());
             data.append('catatan', $('#catatan').val());
             $.ajax({
                 cache : false,
                 contentType : false,
                 processData : false,
                 type : 'POST',
-                url : "<?php echo base_url()?>inventory/bhp_opname/{action}_opname",
+                url : "<?php echo base_url()?>inventory/bhp_pemusnahan/{action}_expired",
                 data : data,
                 success : function(response){
-                  $('#content2').html(response);
+                  $('#content1').html(response);
                 }
             });
             return false;
@@ -174,12 +179,12 @@ $(function(){
             return false;
         });
     kodedistribusi();
-    $('#btn-kembali').click(function(){
+    $('#btn-kembali-expired').click(function(){
        $.ajax({
-          url : '<?php echo site_url('inventory/bhp_opname/daftar_opname/') ?>',
+          url : '<?php echo site_url('inventory/bhp_pemusnahan/daftar_expired/') ?>',
           type : 'POST',
           success : function(data) {
-              $('#content2').html(data);
+              $('#content1').html(data);
           }
       });
 
@@ -197,7 +202,7 @@ $(function(){
     function cekopname(tgl,bhp){
      
       $.ajax({
-          url : "<?php echo base_url().'inventory/bhp_opname/lastopname/';?>"+bhp,
+          url : "<?php echo base_url().'inventory/bhp_pemusnahan/lastopname/';?>"+bhp,
           success : function(data) {
              tglop = data.split('-');
               $("#last_opname").val(tglop[2]+'-'+tglop[1]+'-'+tglop[0]);
@@ -215,7 +220,7 @@ $(function(){
       }
       
       $.ajax({
-      url: "<?php echo base_url().'inventory/bhp_opname/kodedistribusi';?>",
+      url: "<?php echo base_url().'inventory/bhp_pemusnahan/kodedistribusi';?>",
       dataType: "json",
       success:function(data)
       { 
@@ -228,28 +233,53 @@ $(function(){
 
       return false;
     }
-    $("#penerima_nama").autocomplete({
+    $("#saksi1_nama").autocomplete({
       minLength: 0,
-      source:'<?php echo base_url().'inventory/bhp_opname/autocomplite_nama/'; ?>',
+      source:'<?php echo base_url().'inventory/bhp_pemusnahan/autocomplite_nama/'; ?>',
       focus: function( event, ui ) {
-        $("#penerima_nama" ).val( ui.item.value );
+        $("#saksi1_nama" ).val( ui.item.value );
         return false;
       },
       select: function( event, ui ) {
-        $("#penerima_nama").val( ui.item.value );
+        $("#saksi1_nama").val( ui.item.value );
  
         return false;
       } 
     });
-    $("#penerima_nip").autocomplete({
+    $("#saksi1_nip").autocomplete({
       minLength: 0,
-      source:'<?php echo base_url().'inventory/bhp_opname/autocomplite_nip/'; ?>',
+      source:'<?php echo base_url().'inventory/bhp_pemusnahan/autocomplite_nip/'; ?>',
       focus: function( event, ui ) {
-        $("#penerima_nip" ).val( ui.item.value );
+        $("#saksi1_nip" ).val( ui.item.value );
         return false;
       },
       select: function( event, ui ) {
-        $("#penerima_nip").val( ui.item.value );
+        $("#saksi1_nip").val( ui.item.value );
+        return false;
+      } 
+    });
+    $("#saksi2_nama").autocomplete({
+      minLength: 0,
+      source:'<?php echo base_url().'inventory/bhp_pemusnahan/autocomplite_nama/'; ?>',
+      focus: function( event, ui ) {
+        $("#saksi2_nama" ).val( ui.item.value );
+        return false;
+      },
+      select: function( event, ui ) {
+        $("#saksi2_nama").val( ui.item.value );
+ 
+        return false;
+      } 
+    });
+    $("#saksi2_nip").autocomplete({
+      minLength: 0,
+      source:'<?php echo base_url().'inventory/bhp_pemusnahan/autocomplite_nip/'; ?>',
+      focus: function( event, ui ) {
+        $("#saksi2_nip" ).val( ui.item.value );
+        return false;
+      },
+      select: function( event, ui ) {
+        $("#saksi2_nip").val( ui.item.value );
         return false;
       } 
     });
