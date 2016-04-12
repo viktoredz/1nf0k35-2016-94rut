@@ -84,7 +84,7 @@
         <div class="col-md-2" style="padding-top:5px;"><label> Status Versi </label> </div>
         <div class="col-md-3 pull-left">
 
-        <div class="col-md-2" style="padding-top:5px;"><label> <div id="versistatusid"></div></label> </div>
+        <div class="col-md-2" style="padding-top:5px;"><label> Pilih Versi <?php echo set_value('versi');?></label> </div>
         <div class="col-md-3 pull-left">
         </div>
 
@@ -224,25 +224,6 @@
       
       $(document).ready(function () {
       
-      function statusversi(argument) {
-        $.ajax({
-        url: "<?php echo base_url().'mst/keuangan_sts/statusversi/'?>"+$("#versi").val(),
-        dataType: "json",
-        success:function(data)
-        { 
-          $.each(data,function(index,elemet){
-            if (elemet.mst_keu_versi_status == $("#versi").val()) {
-                $("#versistatusid").html("Aktif");
-            }else{
-                $("#versistatusid").html("Non Aktif");
-            }
-              
-          });
-        }
-        });
-
-        return false;
-      }
       $('#versi').change(function(){
         //alert($(this).val());
         if (($(this).val()=='0')||$(this).val()==null) {
@@ -257,7 +238,6 @@
           data : 'versi='+dataver,
           success : function(data) {
           $("select[name='versi']").html(data);
-          statusversi();
         }
       });
         return false;
