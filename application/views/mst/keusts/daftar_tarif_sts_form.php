@@ -44,7 +44,6 @@
     <div class="box-body">
       <div class="">
         <div class="col-md-7 pull-right">
-          <!-- <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal"> Lihat Semua Versi</button>           -->
           <button type="button" class="btn btn-success" onclick='lihat_versi()'> Lihat Semua Versi</button>           
           <button type="button" class="btn btn-primary" onclick='add_versi()'> Buat Versi Baru</button> 
         </div>
@@ -67,7 +66,7 @@
         <div class="col-md-2" style="padding-top:5px;"><label> Versi Daftar Tarif</label> </div>
         <div class="col-md-3 pull-left">
 
-        <div class="col-md-7" style="padding-top:5px;"><label> <div id="namaver"> </div></label> </div>
+        <div class="col-md-7" style="padding-top:5px;"><label> <div id="nama_versi"> </div></label> </div>
 
         <div class="col-md-3 pull-left">
         </div>
@@ -88,7 +87,9 @@
         </div>
 
         <div class="col-md-4 pull-right">
-        <button id="status" type="button" class="btn btn-default" onclick='aktifkan_status()'> </button> 
+        <button id="status" type="button" class="btn btn-default" name="aktifkan_status"> </button> 
+        <!-- <button id="status" type="button" class="btn btn-default" onclick='aktifkan_status()'> </button>  -->
+        
         </div>
 
       </div>
@@ -228,15 +229,17 @@
         $.ajax({
         url: "<?php echo base_url().'mst/keuangan_sts/statusversi/'?>"+$("#versi").val(),
         dataType: "json",
-        success:function(data)
-        { 
+        success:function(data){ 
           $.each(data,function(index,elemet){
             if (elemet.mst_keu_versi_status == $("#versi").val()) {
                 $("#versistatusid").html("Aktif");
-                $("#status").html("Non Aktifkan Versi Ini");
+                $("[name='aktifkan_status']").hide();
+                // $("#status").html("Non Aktifkan Versi Ini");
             }else{
                 $("#versistatusid").html("Non Aktif");
                 $("#status").html("Aktifkan Versi Ini");
+                $("[name='aktifkan_status']").show();
+
             }
           });
         }
@@ -245,11 +248,16 @@
       }
 
       function nama_versi(argument) {
+        // var namaver = $(this).val();
         $.ajax({
           url: "<?php echo base_url().'mst/keuangan_sts/nama_versi/'?>" + <?php echo $this->session->userdata('versi');?>,
           dataType: "json",
+          // data :'nama_versi=' +namaver,
            success:function(data){ 
-             $("#namaver").html(data);
+            $.each(data,function(index,elemet){
+
+             $("#nama_versi").html(data);
+            });
            }
         });
         return false;
@@ -596,15 +604,21 @@
         $("#popup_keuangan_versi_sts").jqxWindow('open');
     }
 
-    function aktifkan_status() {
+    $("[name='aktifkan_status']").click(function(){
         $.ajax({
-        url: "<?php echo base_url().'mst/keuangan_sts/aktifkan_status/'?>"+ $("#versi").val(),
-        dataType: "json",
-          success:function(data){ 
-          }
+            cache : false,
+            contentType : false,
+            processData : false,
+            type : 'POST',
+            url: "<?php echo base_url().'mst/keuangan_sts/aktifkan_status/'?>"+ $("#versi").val(),
+            success : function(response){
+                 alert("Versi berhasil di aktifkan");
+                 $("#versistatusid").html("Aktif");
+                 $("[name='aktifkan_status']").hide();
+            }
         });
         return false;
-      }
-
+    });
+ 
     </script>
 

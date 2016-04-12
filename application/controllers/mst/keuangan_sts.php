@@ -415,39 +415,15 @@ class Keuangan_sts extends CI_Controller {
 				'mst_keu_versi_status' => '0', 
 			);
 		}
-		
 		echo json_encode($status_versi);
 	}
-
-	function aktifkan_status($id) {
-
-		$kodepusk = 'P'.$this->session->userdata('puskesmas');
-
-		$this->db->where('cl_phc_code',$kodepusk);
-		$this->db->where('id_mst_anggaran_versi',$id);
-		$this->db->select('id_mst_anggaran_versi');
-		$q = $this->db->get('mst_keu_versi_status');
-
-   		if ( $q->num_rows() > 0 ) {
-
-      		$this->db->where('cl_phc_code',$kodepusk);
-			$this->db->where('id_mst_anggaran_versi',$id);
-
-      		$this->db->update('mst_keu_versi_status',$id);
-   		
-   		} else {
-      		$this->db->set('id_mst_anggaran_versi', $id);
-      		$this->db->insert('mst_keu_versi_status',$id);
-   		}
-	}
-
+	
 	function nama_versi($versi){
         $this->db->select('nama');
         $this->db->where ('id_mst_anggaran_versi', $versi);
         $query = $this->db->get('mst_keu_anggaran_versi');
         if ($query->num_rows() > 0) {
             foreach ($query->result() as $key) {
-                // $nama=$key->nama;
                 $nama_versi[] = array(
                 	'nama_versi' =>($key->nama==null ? 0:$key->nama),
                 );
@@ -460,6 +436,31 @@ class Keuangan_sts extends CI_Controller {
         echo json_encode($nama_versi);
     }
 
+	function aktifkan_status($id) {
+
+		$kodepusk = 'P'.$this->session->userdata('puskesmas');
+
+		$this->db->where('cl_phc_code',$kodepusk);
+		$this->db->select('id_mst_anggaran_versi');
+
+		$q = $this->db->get('mst_keu_versi_status');
+
+   		if ( $q->num_rows() > 0 ) {
+
+   			$pk   = array('cl_phc_code'=>$kodepusk);
+   			$data = array('id_mst_anggaran_versi'=>$id);
+
+      		$this->db->update('mst_keu_versi_status',$data,$pk);
+   		
+   		} else {
+   			$data     = array(
+   				'cl_phc_code'=>$kodepusk,
+   				'id_mst_anggaran_versi'=>$id);
+      		$this->db->insert('mst_keu_versi_status',$data);
+   		}
+
+   		 return $q->result();
+	}
 
 	function anggaran_ubah($versi="0"){
 		$this->authentication->verify('mst','edit');

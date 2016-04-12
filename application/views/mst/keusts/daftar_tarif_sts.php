@@ -21,6 +21,7 @@
       <div class="col-md-3 pull-left">
         <button id="doExpand" class="btn  btn-warning " >Expand All</button>  
         <button id="doCollapse" onclick="" class="btn  btn-warning " >Collapse All</button> 
+        
       </div>
 
         <div class="col-md pull-right">
