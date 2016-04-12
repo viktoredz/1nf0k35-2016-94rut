@@ -406,6 +406,7 @@ class Bhp_pengadaan extends CI_Controller {
 				'nomor_kontrak'					=> $act->nomor_kontrak,
 				'jumlah_unit'					=> $act->jumlah_unit,
 				'uraian'						=> $act->uraian,
+				'jenis_transaksi'				=> ucfirst($act->jenis_transaksi),
 				'nilai_pembelian'				=> $act->nilai_pembelian,
 				'jumlah_unit'					=> $act->jumlah_unit,
 				'nilai_pembelian'				=> number_format($act->nilai_pembelian),

@@ -112,6 +112,10 @@
           var harga = document.getElementById("harga").value;
           var subtotal =jumlah*harga;
           document.getElementById("subtotal").value = toRp(subtotal);
+          if ( $(this).val() < 0) {
+              $("#harga").val(0);
+              alert('Maaf data harga boleh kurang dari nol');
+          }
       });
 
       $("#jumlah").change(function(){
@@ -119,6 +123,10 @@
           var harga = document.getElementById("harga").value;
           var subtotal =jumlah*harga;
           document.getElementById("subtotal").value = toRp(subtotal);
+          if ( $(this).val() < 0) {
+              $("#jumlah").val(0);
+              alert('Maaf data jumlah tidak boleh kurang dari nol');
+          }
       });
     });
 </script>

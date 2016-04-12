@@ -85,6 +85,14 @@
       $("#jml_rusak").add("#jml_tdkdipakai").val(0);
       $("#jml_rusak, #jml_tdkdipakai").change(function(){
         //alert('hai');
+        if ($("#jml_rusak").val() < 0) {
+            alert('Maaf, data jumlah rusak tidak boleh minus');
+            $("#jml_rusak").val(0);
+          }
+          if ($("#jml_tdkdipakai").val() < 0) {
+            alert('Maaf, data tidak dipakai tidak boleh minus');
+            $("#jml_tdkdipakai").val(0);
+          }
           if((parseInt($("#jml_rusak").val()) + parseInt($("#jml_tdkdipakai").val())) > $("#jumlahopname").val()){
             $("#jml_rusak").add("#jml_tdkdipakai").val(0);
             alert("Maaf total jumlah rusak dan jumlah tidak dipakai tidak boleh melebihi jumlah opname");

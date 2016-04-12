@@ -69,6 +69,10 @@
               $("#jumlah").val(jmlasli);
               $("#jumlahdistribusi").val(jmlasli);
           }
+          if ( $(this).val() < 0) {
+              $("#jumlahdistribusi").val(jmlasli);
+              alert('Maaf data distribusi boleh kurang dari nol');
+          }
 
       });
     });

@@ -130,6 +130,10 @@ if(isset($disable)){if($disable='disable'){?>
             var harga = document.getElementById("harga").value;
             var subtotal =jumlah*harga;
             document.getElementById("subtotal").value = toRp(subtotal);
+            if ( $(this).val() < 0) {
+              $("#harga").val("<?php echo $harga;?>");
+              alert('Maaf data harga tidak boleh kurang dari nol');
+            }
         });
         $("#jml_rusak").change(function(){
           if ( parseInt($("#jml_rusak").val()) > parseInt($("#jumlah").val())) {
@@ -143,12 +147,21 @@ if(isset($disable)){if($disable='disable'){?>
           }else{
 
           }
+          if ( $(this).val() < 0) {
+              $("#jml_rusak").val("<?php echo $jml_rusak;?>");
+              alert('Maaf data jumlah rusak tidak boleh kurang dari nol');
+            }
+
       });
         $("#jumlah").change(function(){
             var jumlah = document.getElementById("jumlah").value;
             var harga = document.getElementById("harga").value;
             var subtotal =jumlah*harga;
             document.getElementById("subtotal").value = toRp(subtotal);
+            if ( $(this).val() < 0) {
+              $("#jumlah").val("<?php echo $jml;?>");
+              alert('Maaf data jumlah tidak boleh kurang dari nol');
+            }
         });
         
     });

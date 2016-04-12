@@ -52,6 +52,16 @@
                           }else{
                             echo  set_value('jumlah');
                           } ?>";
+      var jmlusak = "<?php if(set_value('jml_rusak')=="" && isset($jml_rusak)){
+                            echo $jml_rusak;
+                          }else{
+                            echo  set_value('jml_rusak');
+                          } ?>";
+      var jmltkdipakai = "<?php if(set_value('jml_tdkdipakai')=="" && isset($jml_tdkdipakai)){
+                            echo $jml_tdkdipakai;
+                          }else{
+                            echo  set_value('jml_tdkdipakai');
+                          } ?>";
       $("#jumlahopname").change(function(){
           if ($(this).val() < 0) {
             alert('Maaf, jumlah oname tidak boleh minus');
@@ -66,6 +76,14 @@
       $('#selisih').val($("#jumlahopname").val()-jmlasli);
       $("#jml_rusak, #jml_tdkdipakai").change(function(){
         //alert('hai');
+        if ($("#jml_rusak").val() < 0) {
+            alert('Maaf, data jumlah rusak tidak boleh minus');
+            $("#jml_rusak").val(jmlusak);
+          }
+          if ($("#jml_tdkdipakai").val() < 0) {
+            alert('Maaf, data tidak dipakai tidak boleh minus');
+            $("#jml_tdkdipakai").val(jmltkdipakai);
+          }
           if((parseInt($("#jml_rusak").val()) + parseInt($("#jml_tdkdipakai").val())) > $("#jumlahopname").val()){
             $("#jml_rusak").val("<?php echo $jml_rusak;?>");
             $("#jml_tdkdipakai").val("<?php echo $jml_tdkdipakai;?>");
