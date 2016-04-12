@@ -269,7 +269,6 @@ class Keuangan_sts extends CI_Controller {
 
 			return FALSE;
 		}
-
 		 show_404();
 	   }
 	}
@@ -292,16 +291,9 @@ class Keuangan_sts extends CI_Controller {
 
 			return FALSE;
 		}
-
 		 show_404();
 	   }
 	}
-
-	// function aktifkan_versi(){
-	  
-	// }
-
-	
 
 	function induk_add(){
 		$this->authentication->verify('mst','add');
@@ -427,7 +419,29 @@ class Keuangan_sts extends CI_Controller {
 		echo json_encode($status_versi);
 	}
 
-	function get_nama_versi($versi){
+	function aktifkan_status($id) {
+
+		$kodepusk = 'P'.$this->session->userdata('puskesmas');
+
+		$this->db->where('cl_phc_code',$kodepusk);
+		$this->db->where('id_mst_anggaran_versi',$id);
+		$this->db->select('id_mst_anggaran_versi');
+		$q = $this->db->get('mst_keu_versi_status');
+
+   		if ( $q->num_rows() > 0 ) {
+
+      		$this->db->where('cl_phc_code',$kodepusk);
+			$this->db->where('id_mst_anggaran_versi',$id);
+
+      		$this->db->update('mst_keu_versi_status',$id);
+   		
+   		} else {
+      		$this->db->set('id_mst_anggaran_versi', $id);
+      		$this->db->insert('mst_keu_versi_status',$id);
+   		}
+	}
+
+	function nama_versi($versi){
         $this->db->select('nama');
         $this->db->where ('id_mst_anggaran_versi', $versi);
         $query = $this->db->get('mst_keu_anggaran_versi');

@@ -514,6 +514,7 @@ class Keusts_model extends CI_Model {
             return $this->db->insert('keu_anggaran_tarif', $data);
         }
     }
+    
 
     function add_anggaran(){
         $dataExplode = explode("-",$this->input->post('id_mst_akun'));

@@ -67,10 +67,9 @@
         <div class="col-md-2" style="padding-top:5px;"><label> Versi Daftar Tarif</label> </div>
         <div class="col-md-3 pull-left">
 
-        <div class="col-md-7" style="padding-top:5px;"><label> <div id="namaversi"> </div></label> </div>
+        <div class="col-md-7" style="padding-top:5px;"><label> <div id="namaver"> </div></label> </div>
 
         <div class="col-md-3 pull-left">
-        <!-- <h3 class="box-title">{title_form}</h3> -->
         </div>
       </div>
       </div>
@@ -88,8 +87,8 @@
         <div class="col-md-3 pull-left">
         </div>
 
-            <div class="col-md-4 pull-right">
-          <a href="<?php echo base_url(); ?>keuangan/master_sts/anggaran_tarif" class="btn btn-default" >Aktifkan Versi ini</a>  
+        <div class="col-md-4 pull-right">
+        <button id="status" type="button" class="btn btn-default" onclick='aktifkan_status()'> </button> 
         </div>
 
       </div>
@@ -234,10 +233,11 @@
           $.each(data,function(index,elemet){
             if (elemet.mst_keu_versi_status == $("#versi").val()) {
                 $("#versistatusid").html("Aktif");
+                $("#status").html("Non Aktifkan Versi Ini");
             }else{
                 $("#versistatusid").html("Non Aktif");
+                $("#status").html("Aktifkan Versi Ini");
             }
-              
           });
         }
         });
@@ -246,23 +246,21 @@
 
       function nama_versi(argument) {
         $.ajax({
-          url: "<?php echo base_url().'mst/keuangan_sts/get_nama_versi/'?>"+<?php echo $this->session->userdata('versi');?>,
+          url: "<?php echo base_url().'mst/keuangan_sts/nama_versi/'?>" + <?php echo $this->session->userdata('versi');?>,
           dataType: "json",
            success:function(data){ 
-             $("#namaversi").html(data);
+             $("#namaver").html(data);
            }
         });
         return false;
       }
 
       $('#versi').change(function(){
-        //alert($(this).val());
         if (($(this).val()=='0')||$(this).val()==null) {
           var dataver = "{versi}";
         }else{
           var dataver =  $(this).val();
         }
-       // alert(dataver);
       $.ajax({
           url : '<?php echo site_url('mst/keuangan_sts/get_versi_sts') ?>',
           type : 'POST',
@@ -554,8 +552,6 @@
                
                 ]
             });
-      
-      
         });
     
        function add_versi(){
@@ -599,6 +595,16 @@
         });
         $("#popup_keuangan_versi_sts").jqxWindow('open');
     }
+
+    function aktifkan_status() {
+        $.ajax({
+        url: "<?php echo base_url().'mst/keuangan_sts/aktifkan_status/'?>"+ $("#versi").val(),
+        dataType: "json",
+          success:function(data){ 
+          }
+        });
+        return false;
+      }
 
     </script>
 

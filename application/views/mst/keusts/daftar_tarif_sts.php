@@ -188,6 +188,7 @@
         $.post( '<?php echo base_url()?>mst/keuangan_sts/set_versi', {versi:$(this).val()},function( data ) {
           $("#treeGrid").jqxTreeGrid('updateBoundData');
           $("#treeGrid").jqxTreeGrid('expandAll');  
+
         });
      });
             // prepare the data
