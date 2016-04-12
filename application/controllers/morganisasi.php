@@ -79,14 +79,14 @@ class Morganisasi extends CI_Controller {
 		//	if(substr($kodepuskesmas, -2)=="01"){
 		//		$this->db->like('code','P'.substr($kodepuskesmas, 0,7));
 		//	}else {
-			$this->db->like('code','P'.$kodepuskesmas);
+		$this->db->like('code','P'.$kodepuskesmas);
 		//	}
 		$datapuskesmas = $this->inv_ruangan_model->get_data_puskesmas();
 		foreach ($datapuskesmas as $row) {
 			$bar[$row->code]['puskesmas'] = $row->value;
 		}
 
-
+		
 		$j_barang_baik = $this->admin_model->get_jum_aset();
 		foreach ($j_barang_baik as $row) {
 			$bar[$row->id_cl_phc]['j_barang_baik'] = $row->jml;
@@ -119,7 +119,7 @@ class Morganisasi extends CI_Controller {
 			$bar[$row->id_cl_phc]['j_barang_rb1'] = $row->nilai;
 		}
 
-
+		
 		$nilai_aset = $this->admin_model->get_jum_nilai_aset();
 		foreach ($nilai_aset as $row) {
 			$bar[$row->id_cl_phc]['nilai_aset'] = $row->jml;

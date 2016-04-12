@@ -120,7 +120,6 @@
   </div><!-- /.col -->
 </div><!-- /.row -->
 
-
 <!-- <script src="<?php  base_url()?>public/themes/disbun/dist/js/pages/dashboard2.js" type="text/javascript"></script> -->
 <script>
   $(function () { 
