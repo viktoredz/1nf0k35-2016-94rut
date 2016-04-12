@@ -119,7 +119,7 @@
     </div><!-- /.box -->
   </div><!-- /.col -->
 </div><!-- /.row -->
-
+<?php // print_r($bar); echo "<br/> session :".$this->session->userdata('puskesmas');;?>
 
 <!-- <script src="<?php  base_url()?>public/themes/disbun/dist/js/pages/dashboard2.js" type="text/javascript"></script> -->
 <script>

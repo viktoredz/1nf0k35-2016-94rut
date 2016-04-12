@@ -30,7 +30,7 @@
 
         <div class="col-md-4 pull-right">
           <div class="row">
-            <div class="col-md-4" style="padding-top:5px;"><label> Versi </label> </div>
+            <div class="col-md-4" style="padding-top:5px;"><label> Versi</label> </div>
             <div class="col-md-8">
               <select name="versi" class="form-control" id="versi">
                  <option value="0">Pilih Versi</option>
