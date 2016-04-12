@@ -23,7 +23,7 @@
               contentType : false,
               processData : false,
               type : 'POST',
-              url : '<?php echo base_url()."inventory/bhp_kondisi/kondisi_barang/$barang/$batch/$pus/$tgl" ?>',
+              url : '<?php echo base_url()."inventory/bhp_kondisi/kondisi_barang/$barang/$batch/$pus/$tgl/$opname" ?>',
               data : data,
               success : function(response){
                 var res  = response.split("|");

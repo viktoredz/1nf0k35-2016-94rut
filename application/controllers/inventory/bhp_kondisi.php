@@ -224,9 +224,16 @@ class Bhp_kondisi extends CI_Controller {
 		
 		$puskes = $this->input->post('puskes'); 
 		$tahun = date("Y");
-		$data_puskesmas[] = array('nama_puskesmas' => $nama_puskesmas,'tahun' => $tahun,'kd_kab' => $kd_kab,'kd_prov' => $kd_prov);
+		$jenisbarang = strtoupper($this->input->post("jenisbarang"));
+		$data_puskesmas[] = array('nama_puskesmas' => $nama_puskesmas,'tahun' => $tahun,'kd_kab' => $kd_kab,'kd_prov' => $kd_prov,'jenisbarang' => $jenisbarang);
 		$dir = getcwd().'/';
-		$template = $dir.'public/files/template/inventory/bhp_kondisi.xlsx';		
+		
+		if (($jenisbarang=='ALL')||$jenisbarang=='OBAT') {
+			$template = $dir.'public/files/template/inventory/bhp_kondisi.xlsx';		
+		}else{
+			$template = $dir.'public/files/template/inventory/bhp_kondisi_umum.xlsx';		
+		}
+		
 		$TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8);
 
 		// Merge data in the first sheet
@@ -234,6 +241,7 @@ class Bhp_kondisi extends CI_Controller {
 		$TBS->MergeBlock('b', $data_puskesmas);
 		
 		$code = uniqid();
+
 		$output_file_name = 'public/files/hasil/hasil_export_bhpkondisi'.$code.'.xlsx';
 		$output = $dir.$output_file_name;
 		$TBS->Show(OPENTBS_FILE, $output); // Also merges all [onshow] automatic fields.
@@ -288,7 +296,7 @@ class Bhp_kondisi extends CI_Controller {
 			
 		}
 	}
-	public function kondisi_barang($barang=0,$batch=0,$pus=0,$tgl=0)
+	public function kondisi_barang($barang=0,$batch=0,$pus=0,$tgl=0,$opname=0)
 	{	
 		$data['action']			= "add";
 		$data['kode']			= $barang;
@@ -299,17 +307,18 @@ class Bhp_kondisi extends CI_Controller {
 
 		if($this->form_validation->run()== FALSE){
 
-			$data = $this->bhp_kondisi_model->get_data_detail_edit_barang_edit($barang,$batch,$pus,$tgl); 
+			$data = $this->bhp_kondisi_model->get_data_detail_edit_barang_edit($barang,$batch,$pus,$tgl,$opname); 
 			$data['action']			= "add";
 			$data['barang']			= $barang;
 			$data['batch']			= $batch;
 			$data['pus']			= $pus;
 			$data['tgl']			= $tgl;
+			$data['opname']			= $opname;
 			$data['notice']			= validation_errors();
 
 			die($this->parser->parse('inventory/bhp_kondisi/form', $data));
 		}else{
-			if($simpan=$this->bhp_kondisi_model->insertdata($barang,$batch,$pus,$tgl)){
+			if($simpan=$this->bhp_kondisi_model->insertdata($barang,$batch,$pus,$tgl,$opname)){
 				$id=$this->input->post('id_mst_inv_barang');
 				die("OK|$id|Tersimpan");
 			}else{

@@ -189,6 +189,7 @@ class Bhp_pengadaan extends CI_Controller {
 				'id_mst_inv_barang_habispakai'   		=> $act->id_mst_inv_barang_habispakai,
 				'uraian'								=> $act->uraian,
 				'jml'									=> $act->jml,
+				'batch'									=> $act->batch,
 				'harga'									=> number_format($act->harga,2),
 				'subtotal'								=> number_format($act->jml*$act->harga,2),
 				'tgl_update'							=> date("d-m-Y",strtotime($act->tgl_update)),
@@ -215,7 +216,12 @@ class Bhp_pengadaan extends CI_Controller {
 		$TBS->ResetVarRef(false);
 		$TBS->VarRef =  &$onshow;	
 		$dir = getcwd().'/';
-		$template = $dir.'public/files/template/inventory/bhp_pengadaanpermohonan.xlsx';		
+		if ($data_puskesmas['id_mst_inv_barang_habispakai_jenis']=='8') {
+			$template = $dir.'public/files/template/inventory/bhp_pengadaanpermohonan_obat.xlsx';	
+		}else{
+			$template = $dir.'public/files/template/inventory/bhp_pengadaanpermohonan.xlsx';	
+		}
+		
 		$TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8);
 
 		

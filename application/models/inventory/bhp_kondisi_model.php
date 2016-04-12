@@ -22,10 +22,11 @@ class Bhp_kondisi_model extends CI_Model {
         $query = $this->db->get("bhp_kondisi",$limit,$start);
         return $query->result();
     }
-    function get_data_detail_edit_barang_edit($barang,$batch,$pus,$tgl)
+    function get_data_detail_edit_barang_edit($barang,$batch,$pus,$tgl,$opname)
     {
         $tglop = explode("-", $tgl);
         $this->db->where('id_mst_inv_barang_habispakai',$barang);
+        $this->db->where('id_inv_inventaris_habispakai_opname',$opname);
         $this->db->where('batch',$batch);
         $this->db->where('code_cl_phc',$pus);
         $query = $this->db->get("bhp_kondisi");
@@ -156,11 +157,12 @@ class Bhp_kondisi_model extends CI_Model {
        /* $this->db->join('inv_inventaris_habispakai_opname',"inv_inventaris_habispakai_opname.id_mst_inv_barang_habispakai=inv_inventaris_habispakai_kondisi.id_mst_inv_barang_habispakai and inv_inventaris_habispakai_opname.code_cl_phc=inv_inventaris_habispakai_kondisi.code_cl_phc AND inv_inventaris_habispakai_opname.tgl_update = inv_inventaris_habispakai_kondisi.tgl_update");*/
         return $query = $this->db->get('inv_inventaris_habispakai_kondisi',3,0)->result();
     }
-    function insertdata($barang,$batch,$pus,$tgl){
-        $this->db->where('tgl_update',(date('Y-m-d',strtotime($tgl))));
+    function insertdata($barang,$batch,$pus,$tgl,$opname){
+        $this->db->where('tgl_update',(date('Y-m-d')));
         $this->db->where('code_cl_phc',$pus);
         $this->db->where('id_mst_inv_barang_habispakai',$barang);
         $this->db->where('batch',$batch);
+        $this->db->where('id_inv_inventaris_habispakai_opname',$opname);
         $this->db->select("*");
         $query = $this->db->get("inv_inventaris_habispakai_kondisi");
            if ($query->num_rows() > 0){
@@ -172,7 +174,8 @@ class Bhp_kondisi_model extends CI_Model {
                     'id_mst_inv_barang_habispakai'  =>$barang,
                     'code_cl_phc'                   =>$pus,
                     'batch'                         =>$batch,
-                    'tgl_update'                    => date('Y-m-d',strtotime($tgl)),
+                    'tgl_update'                    => date('Y-m-d'),
+                    'id_inv_inventaris_habispakai_opname'                        => $opname,
                      );
                 if($simpan=$this->db->update("inv_inventaris_habispakai_kondisi",$dataupdate,$datakey)){
                     return true;
@@ -184,7 +187,8 @@ class Bhp_kondisi_model extends CI_Model {
                     'id_mst_inv_barang_habispakai'  =>$barang,
                     'code_cl_phc'                   =>$pus,
                     'batch'                         =>$batch,
-                    'tgl_update'                    => date('Y-m-d',strtotime($tgl)),
+                    'id_inv_inventaris_habispakai_opname'                        => $opname,
+                    'tgl_update'                    => date('Y-m-d'),
                     'jml_rusak' => $this->input->post('jml_rusak'),
                     'jml_tdkdipakai' => $this->input->post('jml_tdkdipakai'),
                 );

@@ -157,6 +157,7 @@
 			post = post+'&kode={kode}';
 			
 			$.post("<?php echo base_url()?>inventory/bhp_pengadaan/pengadaan_detail_export",post  ,function(response){
+				//alert(response);
 				window.location.href=response;
 			});
 		});
