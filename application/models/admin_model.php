@@ -31,75 +31,67 @@ class Admin_model extends CI_Model {
 
 		return $query->result();
 	}
-	
+
 	function get_jum_aset(){
-		$namapuskes = 'P'.$this->session->userdata('puskesmas');
 		$query =  $this->db->query("SELECT id_cl_phc, COUNT(inv_inventaris_barang.id_inventaris_barang) AS jml FROM inv_inventaris_barang 
 		INNER JOIN inv_inventaris_distribusi ON inv_inventaris_barang.id_inventaris_barang=inv_inventaris_distribusi.id_inventaris_barang AND inv_inventaris_distribusi.status=1 
 		LEFT JOIN cl_phc ON inv_inventaris_distribusi.id_cl_phc=cl_phc.code
-		WHERE (pilihan_keadaan_barang = 'B' || pilihan_keadaan_barang = 'KB') and inv_inventaris_distribusi.id_cl_phc=".'"'.$namapuskes.'"'." GROUP BY inv_inventaris_distribusi.id_cl_phc ORDER BY 'value' asc");
+		WHERE (pilihan_keadaan_barang = 'B' || pilihan_keadaan_barang = 'KB') GROUP BY inv_inventaris_distribusi.id_cl_phc ORDER BY 'value' asc");
 
 		return $query->result();
 	}
 
 	function get_nilai_aset(){
-		$namapuskes = 'P'.$this->session->userdata('puskesmas');
 		$query =  $this->db->query("SELECT id_cl_phc, SUM(harga) AS nilai FROM inv_inventaris_barang 
 		INNER JOIN inv_inventaris_distribusi ON inv_inventaris_barang.id_inventaris_barang=inv_inventaris_distribusi.id_inventaris_barang AND inv_inventaris_distribusi.status=1 
 		LEFT JOIN cl_phc ON inv_inventaris_distribusi.id_cl_phc=cl_phc.code
-		WHERE (pilihan_keadaan_barang = 'B' || pilihan_keadaan_barang = 'KB') and inv_inventaris_distribusi.id_cl_phc=".'"'.$namapuskes.'"'." GROUP BY inv_inventaris_distribusi.id_cl_phc ORDER BY 'value' asc");
+		WHERE (pilihan_keadaan_barang = 'B' || pilihan_keadaan_barang = 'KB') GROUP BY inv_inventaris_distribusi.id_cl_phc ORDER BY 'value' asc");
 
 		return $query->result();
 	}
 
 	function get_jum_aset1(){
-		$namapuskes = 'P'.$this->session->userdata('puskesmas');
 		$query =  $this->db->query("SELECT id_cl_phc, COUNT(inv_inventaris_barang.id_inventaris_barang) AS jml FROM inv_inventaris_barang 
 		INNER JOIN inv_inventaris_distribusi ON inv_inventaris_barang.id_inventaris_barang=inv_inventaris_distribusi.id_inventaris_barang  AND inv_inventaris_distribusi.status=1
 		LEFT JOIN cl_phc ON inv_inventaris_distribusi.id_cl_phc=cl_phc.code
-		WHERE pilihan_keadaan_barang = 'RR' and inv_inventaris_distribusi.id_cl_phc=".'"'.$namapuskes.'"'." GROUP BY inv_inventaris_distribusi.id_cl_phc ORDER BY 'value' asc");
+		WHERE pilihan_keadaan_barang = 'RR'  GROUP BY inv_inventaris_distribusi.id_cl_phc ORDER BY 'value' asc");
 
 		return $query->result();
 	}
 
 	function get_nilai_aset1(){
-		$namapuskes = 'P'.$this->session->userdata('puskesmas');
 		$query =  $this->db->query("SELECT id_cl_phc, SUM(harga) AS nilai FROM inv_inventaris_barang 
 		INNER JOIN inv_inventaris_distribusi ON inv_inventaris_barang.id_inventaris_barang=inv_inventaris_distribusi.id_inventaris_barang  AND inv_inventaris_distribusi.status=1 
 		LEFT JOIN cl_phc ON inv_inventaris_distribusi.id_cl_phc=cl_phc.code
-		WHERE pilihan_keadaan_barang = 'RR' and inv_inventaris_distribusi.id_cl_phc=".'"'.$namapuskes.'"'." GROUP BY inv_inventaris_distribusi.id_cl_phc ORDER BY 'value' asc");
+		WHERE pilihan_keadaan_barang = 'RR' GROUP BY inv_inventaris_distribusi.id_cl_phc ORDER BY 'value' asc");
 
 		return $query->result();
 	}
 
 
 	function get_jum_aset2(){
-		$namapuskes = 'P'.$this->session->userdata('puskesmas');
 		$query =  $this->db->query("SELECT id_cl_phc, COUNT(inv_inventaris_barang.id_inventaris_barang) AS jml FROM inv_inventaris_barang 
 		INNER JOIN inv_inventaris_distribusi ON inv_inventaris_barang.id_inventaris_barang=inv_inventaris_distribusi.id_inventaris_barang AND inv_inventaris_distribusi.status=1 
 		LEFT JOIN cl_phc ON inv_inventaris_distribusi.id_cl_phc=cl_phc.code
-		WHERE pilihan_keadaan_barang = 'RB'  and inv_inventaris_distribusi.id_cl_phc=".'"'.$namapuskes.'"'." GROUP BY inv_inventaris_distribusi.id_cl_phc ORDER BY 'value' asc");
+		WHERE pilihan_keadaan_barang = 'RB'  GROUP BY inv_inventaris_distribusi.id_cl_phc ORDER BY 'value' asc");
 
 		return $query->result();
 	}
 
 	function get_nilai_aset2(){
-		$namapuskes = 'P'.$this->session->userdata('puskesmas');
 		$query =  $this->db->query("SELECT id_cl_phc, SUM(harga) AS nilai FROM inv_inventaris_barang 
 		INNER JOIN inv_inventaris_distribusi ON inv_inventaris_barang.id_inventaris_barang=inv_inventaris_distribusi.id_inventaris_barang AND inv_inventaris_distribusi.status=1 
 		LEFT JOIN cl_phc ON inv_inventaris_distribusi.id_cl_phc=cl_phc.code
-		WHERE pilihan_keadaan_barang = 'RB' and inv_inventaris_distribusi.id_cl_phc=".'"'.$namapuskes.'"'."  GROUP BY inv_inventaris_distribusi.id_cl_phc ORDER BY 'value' asc");
+		WHERE pilihan_keadaan_barang = 'RB'  GROUP BY inv_inventaris_distribusi.id_cl_phc ORDER BY 'value' asc");
 
 		return $query->result();
 	}
 
 	function get_jum_nilai_aset()
 	{
-		$namapuskes = 'P'.$this->session->userdata('puskesmas');
 		$query = $this->db->query("SELECT cl_phc.value,id_cl_phc, COUNT(inv_inventaris_barang.id_inventaris_barang) AS jml FROM inv_inventaris_barang 
 			INNER JOIN inv_inventaris_distribusi ON inv_inventaris_barang.id_inventaris_barang=inv_inventaris_distribusi.id_inventaris_barang AND inv_inventaris_distribusi.status=1 
 			LEFT JOIN cl_phc ON inv_inventaris_distribusi.id_cl_phc=cl_phc.code 
-			where inv_inventaris_distribusi.id_cl_phc=".'"'.$namapuskes.'"'."
 			GROUP BY inv_inventaris_distribusi.id_cl_phc ORDER BY 'value' asc");
 
 		return $query->result();
@@ -107,11 +99,9 @@ class Admin_model extends CI_Model {
 
 	function get_jum_nilai_aset2()
 	{
-		$namapuskes = 'P'.$this->session->userdata('puskesmas');
 		$query = $this->db->query("SELECT cl_phc.value,id_cl_phc, SUM(harga) AS nilai FROM inv_inventaris_barang 
 			INNER JOIN inv_inventaris_distribusi ON inv_inventaris_barang.id_inventaris_barang=inv_inventaris_distribusi.id_inventaris_barang AND inv_inventaris_distribusi.status=1 
 			LEFT JOIN cl_phc ON inv_inventaris_distribusi.id_cl_phc=cl_phc.code  
-			where inv_inventaris_distribusi.id_cl_phc=".'"'.$namapuskes.'"'."
 			GROUP BY inv_inventaris_distribusi.id_cl_phc ORDER BY 'value' asc");
 
 		return $query->result();

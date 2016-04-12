@@ -139,19 +139,6 @@ class Keusts_model extends CI_Model {
         return $query->result_array();
     } 
 
-    function get_nama_versi($versi){
-        $this->db->select('nama');
-        $this->db->where ('id_mst_anggaran_versi', $versi);
-        $query = $this->db->get('mst_keu_anggaran_versi');
-        if ($query->num_rows() > 0) {
-            foreach ($query->result() as $key) {
-                $nama=$key->nama;
-            }
-        }else{
-            $nama= 'Pilih versi';
-        }
-        return $nama;
-    }
 
     function get_versi_status(){
 
@@ -169,6 +156,7 @@ class Keusts_model extends CI_Model {
         }
         return $id_data;
     }
+
 
     function get_data_sts_total($tgl, $puskes)
     {
@@ -424,7 +412,6 @@ class Keusts_model extends CI_Model {
         }else{
             //input
             $this->db->insert('keu_sts_hasil', $data);
-            
         }
         $total = $this->get_data_sts_total($data['tgl'], $data['code_cl_phc']);
         $this->update_total_sts($data['tgl'], $data['code_cl_phc'], $total);
@@ -509,12 +496,8 @@ class Keusts_model extends CI_Model {
                     $this->db->where('code_cl_phc',$q->code_cl_phc);
                     $this->db->update('keu_sts_hasil_rekap', $data);
                 }
-                
-                
-                
             }
         }
-    
     }
     
     function add_tarif(){

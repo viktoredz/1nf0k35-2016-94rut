@@ -9,7 +9,14 @@ class Bhp_opname_model extends CI_Model {
 		$this->lang	  = $this->config->item('language');
 
     }
-    
+    function get_data_puskesmas($start=0,$limit=999999,$options=array())
+    {
+        $this->db->order_by('value','asc');
+        // $this->db->where(code)
+        $query = $this->db->get('cl_phc',$limit,$start);
+        return $query->result();
+    }
+
     function get_data($start=0,$limit=999999,$options=array())
     {
         $this->db->where('inv_inventaris_habispakai_opname.tipe','opname');

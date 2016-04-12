@@ -20,10 +20,7 @@
 	      	<div class="box-footer">
 		      	<div class="row"> 
 			      	<div class="col-md-12">
-			      		<?php //if($unlock==1){ ?>
-					<!-- 	<button type="button" class="btn btn-primary" onclick="add(0)"><i class='fa fa-plus-square-o'></i> &nbsp; Tambah Pengeluaran</button>-->
-						<?php //} ?>		 	
-					 	<button type="button" class="btn btn-primary" id="btn-add"><i class='fa fa-plus-square'></i> &nbsp; Stock Opname Baru</button>
+					 	<button type="button" class="btn btn-primary" id="btn-add"><i class='fa fa-plus-square'></i> &nbsp; Pemusnahan Baru</button>
 					 	<button type="button" class="btn btn-success" id="btn-refreshopname"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
 			          <button type="button" id="btn-export-opname" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Export</button>
 			      	</div>
@@ -121,8 +118,6 @@
 				$("#jqxgridopname").jqxGrid('updatebounddata', 'cells');
 			});
 		});
-	    $("#menu_bahan_habis_pakai").addClass("active");
-	    $("#menu_inventory_bhp_opname").addClass("active");
 	});
 	   var source = {
 			datatype: "json",
@@ -199,12 +194,12 @@
 					}
                  }
                 },
-				{ text: 'Nomor Opname',align: 'center',  editable:false ,datafield: 'nomor_opname', columntype: 'textbox', filtertype: 'textbox', width: '16%', },
+				{ text: 'Nomor', editable:false ,datafield: 'nomor_opname', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
 				{ text: 'Tanggal', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false,datafield: 'tgl_opname', columntype: 'date', filtertype: 'none', cellsformat: 'dd-MM-yyyy', width: '10%'},
-				{ text: 'Jenis Barang', editable:false ,align: 'center', datafield: 'jenis_bhp', columntype: 'textbox', filtertype: 'textbox', width: '10%',cellsalign: 'center' },
-				{ text: 'Nama Penanggung Jawab', editable:false ,align: 'center', cellsalign: 'left', datafield: 'petugas_nama', columntype: 'textbox', filtertype: 'textbox', width: '20%' },
-				{ text: 'NIP Penanggung Jawab', editable:false ,align: 'center', datafield: 'petugas_nip', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
-				{ text: 'Catatan', editable:false ,datafield: 'catatan', columntype: 'textbox', filtertype: 'textbox', width: '18%' ,align: 'center'}
+				{ text: 'Jenis Barang', editable:false ,align: 'center', datafield: 'jenis_bhp', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
+				{ text: 'Saksi 1', editable:false ,align: 'center', cellsalign: 'left', datafield: 'petugas_nama', columntype: 'textbox', filtertype: 'textbox', width: '25%' },
+				{ text: 'Saksi 2', editable:false ,align: 'center', cellsalign: 'left', datafield: 'petugas_nip', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
+				{ text: 'Catatan', editable:false ,datafield: 'catatan', columntype: 'textbox', filtertype: 'textbox', width: '13%' ,align: 'center', cellsalign: 'right'}
             ]
 		});
 	  function timeline_pengeluaran_barang(id){
@@ -282,7 +277,6 @@
 		post = post+'&jenisbarang='+$("#jenisbarangopname option:selected").text()+'&nama_puskesmas='+$("#puskesmasopname option:selected").text()+'&bulan='+$("#bulanopname option:selected").text()+'&tahun='+$("#tahunopname option:selected").text();
 		
 		$.post("<?php echo base_url()?>inventory/bhp_opname/pengeluaran_export",post,function(response){
-			//\\alert(response);
 			window.location.href=response;
 		});
 	});
