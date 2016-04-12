@@ -19,6 +19,7 @@ class Bhp_kondisi_model extends CI_Model {
     }
 
     public function getitem($start=0,$limit=999999,$options=array()){
+        $this->db->having('jml_asli > 0');
         $query = $this->db->get("bhp_kondisi",$limit,$start);
         return $query->result();
     }
