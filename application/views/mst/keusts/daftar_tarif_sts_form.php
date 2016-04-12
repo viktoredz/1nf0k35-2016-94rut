@@ -67,7 +67,7 @@
         <div class="col-md-2" style="padding-top:5px;"><label> Versi Daftar Tarif</label> </div>
         <div class="col-md-3 pull-left">
 
-        <div class="col-md-7" style="padding-top:5px;"><label> <?php echo $nama_versi ?></label> </div>
+        <div class="col-md-7" style="padding-top:5px;"><label> <div id="namaversi"> </div></label> </div>
 
         <div class="col-md-3 pull-left">
         <!-- <h3 class="box-title">{title_form}</h3> -->
@@ -84,7 +84,7 @@
         <div class="col-md-2" style="padding-top:5px;"><label> Status Versi </label> </div>
         <div class="col-md-3 pull-left">
 
-        <div class="col-md-2" style="padding-top:5px;"><label> Pilih Versi <?php echo set_value('versi');?></label> </div>
+        <div class="col-md-5" style="padding-top:5px;"><label> <div id="versistatusid"> </div></label> </div>
         <div class="col-md-3 pull-left">
         </div>
 
@@ -220,10 +220,41 @@
       var er = error;
     }
   </script>
+
   <script type="text/javascript">
       
       $(document).ready(function () {
       
+      function statusversi(argument) {
+        $.ajax({
+        url: "<?php echo base_url().'mst/keuangan_sts/statusversi/'?>"+$("#versi").val(),
+        dataType: "json",
+        success:function(data)
+        { 
+          $.each(data,function(index,elemet){
+            if (elemet.mst_keu_versi_status == $("#versi").val()) {
+                $("#versistatusid").html("Aktif");
+            }else{
+                $("#versistatusid").html("Non Aktif");
+            }
+              
+          });
+        }
+        });
+        return false;
+      }
+
+      function nama_versi(argument) {
+        $.ajax({
+          url: "<?php echo base_url().'mst/keuangan_sts/get_nama_versi/'?>"+<?php echo $this->session->userdata('versi');?>,
+          dataType: "json",
+           success:function(data){ 
+             $("#namaversi").html(data);
+           }
+        });
+        return false;
+      }
+
       $('#versi').change(function(){
         //alert($(this).val());
         if (($(this).val()=='0')||$(this).val()==null) {
@@ -238,6 +269,8 @@
           data : 'versi='+dataver,
           success : function(data) {
           $("select[name='versi']").html(data);
+          statusversi();
+          nama_versi();
         }
       });
         return false;
@@ -525,21 +558,7 @@
       
         });
     
-    // function addParent(){
-    //   var id_mst_anggaran_versi = 0;
-    //   var id_mst_akun = document.getElementById("id_mst_akun").value;
-    //   var kode_anggaran = document.getElementById("kode_anggaran").value;
-    //   var uraian = document.getElementById("uraian").value;
-    //   $.post( '<?php echo base_url()?>mst/keuangan_sts/anggaran_add', {id_mst_anggaran_versi:id_mst_anggaran_versi, id_mst_akun:id_mst_akun, kode_anggaran:kode_anggaran, uraian:uraian},function( data ) {
-    //       $("#treeGrid").jqxTreeGrid('updateBoundData');
-    //       $("#treeGrid").jqxTreeGrid('expandAll');            
-    //       document.getElementById("id_mst_akun").value='';
-    //       document.getElementById("kode_anggaran").value='';
-    //       document.getElementById("uraian").value = '';
-    //     });
-    // }
-
-    function add_versi(){
+       function add_versi(){
       $("#popup_keuangan_sts #popup_keuangan_sts_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
         $.get("<?php echo base_url().'mst/keuangan_sts/versi_add' ?>/", function(data) {
           $("#popup_keuangan_sts_content").html(data);

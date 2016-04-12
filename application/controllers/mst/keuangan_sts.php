@@ -282,6 +282,7 @@ class Keuangan_sts extends CI_Controller {
 			$this->session->set_userdata('versi',$this->input->post('versi'));
 			$ver   = $this->keusts_model->get_versi_sts();
 			$datases=$this->session->userdata('versi');
+				
 				echo "<option value=''></option>";
 			foreach($ver as $ver) :
 				$select = $ver->id_mst_anggaran_versi ==  $versi ? 'selected' : '';
@@ -295,6 +296,12 @@ class Keuangan_sts extends CI_Controller {
 		 show_404();
 	   }
 	}
+
+	// function aktifkan_versi(){
+	  
+	// }
+
+	
 
 	function induk_add(){
 		$this->authentication->verify('mst','add');
@@ -398,6 +405,47 @@ class Keuangan_sts extends CI_Controller {
 		$this->session->set_userdata('versi',$this->input->post('versi'));		
 	}
 
+	function statusversi($id=0)
+	{
+		$kodepusk = 'P'.$this->session->userdata('puskesmas');
+		$this->db->where('cl_phc_code',$kodepusk);
+		$this->db->where('id_mst_anggaran_versi',$id);
+		$this->db->select('id_mst_anggaran_versi');
+		$query = $this->db->get('mst_keu_versi_status');
+		if ($query->num_rows() > 0) {
+			foreach ($query->result() as $q) {
+				$status_versi[] = array(
+					'mst_keu_versi_status' => ($q->id_mst_anggaran_versi==null ? 0:$q->id_mst_anggaran_versi), 
+				);
+			}
+		}else{
+			$status_versi[] = array(
+				'mst_keu_versi_status' => '0', 
+			);
+		}
+		
+		echo json_encode($status_versi);
+	}
+
+	function get_nama_versi($versi){
+        $this->db->select('nama');
+        $this->db->where ('id_mst_anggaran_versi', $versi);
+        $query = $this->db->get('mst_keu_anggaran_versi');
+        if ($query->num_rows() > 0) {
+            foreach ($query->result() as $key) {
+                // $nama=$key->nama;
+                $nama_versi[] = array(
+                	'nama_versi' =>($key->nama==null ? 0:$key->nama),
+                );
+            }
+        }else{
+            $nama[] = array(
+            	'nama_versi' =>'0',
+            );
+        }
+        echo json_encode($nama_versi);
+    }
+
 
 	function anggaran_ubah($versi="0"){
 		$this->authentication->verify('mst','edit');
@@ -406,7 +454,7 @@ class Keuangan_sts extends CI_Controller {
 		$data['action']		   ="edit";
 		$data['alert_form']    = "";
 		$data['versi']         = $versi;
-		$data['nama_versi']    = $this->keusts_model->get_nama_versi($versi);
+		// $data['nama_versi']    = $this->keusts_model->get_nama_versi($versi);
 		$data['title_group']   = "Tarif Surat Tanda Setoran";
 		$data['title_form']    = "Ubah Daftar Tarif Surat Tanda Setoran";
 
@@ -516,8 +564,6 @@ class Keuangan_sts extends CI_Controller {
 			echo "ups";
 		}	
 	}
-
-
 
 }
 
