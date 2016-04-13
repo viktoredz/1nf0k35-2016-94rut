@@ -157,9 +157,9 @@
           url : '<?php echo site_url('mst/keuangan_sts/get_versi') ?>',
           type : 'POST',
           data : 'versi=' + versi ,
-          success : function(data) {
-          $('#versi').html(data);
-          }
+            success : function(data) {
+              $('#versi').html(data);
+            }
         });
         return false;
       }).change();

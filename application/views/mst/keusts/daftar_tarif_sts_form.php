@@ -67,7 +67,6 @@
         <div class="col-md-3 pull-left">
 
         <div class="col-md-7" style="padding-top:5px;"><label> <div id="nama_versi"> </div></label> </div>
-
         <div class="col-md-3 pull-left">
         </div>
       </div>
@@ -88,8 +87,6 @@
 
         <div class="col-md-4 pull-right">
         <button id="status" type="button" class="btn btn-default" name="aktifkan_status"> </button> 
-        <!-- <button id="status" type="button" class="btn btn-default" onclick='aktifkan_status()'> </button>  -->
-        
         </div>
 
       </div>
@@ -234,12 +231,10 @@
             if (elemet.mst_keu_versi_status == $("#versi").val()) {
                 $("#versistatusid").html("Aktif");
                 $("[name='aktifkan_status']").hide();
-                // $("#status").html("Non Aktifkan Versi Ini");
             }else{
                 $("#versistatusid").html("Non Aktif");
                 $("#status").html("Aktifkan Versi Ini");
                 $("[name='aktifkan_status']").show();
-
             }
           });
         }
@@ -248,16 +243,10 @@
       }
 
       function nama_versi(argument) {
-        // var namaver = $(this).val();
         $.ajax({
-          url: "<?php echo base_url().'mst/keuangan_sts/nama_versi/'?>" + <?php echo $this->session->userdata('versi');?>,
-          dataType: "json",
-          // data :'nama_versi=' +namaver,
+          url: "<?php echo base_url().'mst/keuangan_sts/nama_versi/'?>" + $("#versi").val(),
            success:function(data){ 
-            $.each(data,function(index,elemet){
-
-             $("#nama_versi").html(data);
-            });
+          $("#nama_versi").html(data);
            }
         });
         return false;
@@ -268,13 +257,16 @@
           var dataver = "{versi}";
         }else{
           var dataver =  $(this).val();
-        }
+          // var nama_versi=$("#versi:selected").text();
+         }
       $.ajax({
           url : '<?php echo site_url('mst/keuangan_sts/get_versi_sts') ?>',
           type : 'POST',
           data : 'versi='+dataver,
           success : function(data) {
           $("select[name='versi']").html(data);
+          // $("#nama_versi").html(data);
+
           statusversi();
           nama_versi();
         }
@@ -282,7 +274,6 @@
         return false;
       }).change();
 
-     
       $("#menu_master_data").addClass("active");
       $("#menu_mst_keuangan_sts").addClass("active");
 
