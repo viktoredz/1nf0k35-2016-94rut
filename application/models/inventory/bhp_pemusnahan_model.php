@@ -19,7 +19,6 @@ class Bhp_pemusnahan_model extends CI_Model {
 
     function get_data($start=0,$limit=999999,$options=array())
     {
-        $this->db->where('inv_inventaris_habispakai_opname.tipe','retur');
         $this->db->select("(SELECT a.tgl_opname FROM inv_inventaris_habispakai_opname a WHERE a.jenis_bhp = inv_inventaris_habispakai_opname.jenis_bhp ORDER BY a.tgl_opname DESC LIMIT 1) AS last_tgl_opname,inv_inventaris_habispakai_opname.*");
         $query = $this->db->get('inv_inventaris_habispakai_opname',$limit,$start);
         return $query->result();
@@ -149,13 +148,15 @@ class Bhp_pemusnahan_model extends CI_Model {
     }
     function update_entry()
     {   $tanggal =explode("-", $this->input->post('tgl_opname'));
-        $dataupdate = array(
-            'jenis_bhp'     => $this->input->post('jenis_bhp'),
-            'petugas_nip'   => $this->input->post('penerima_nip'),
-            'petugas_nama'  => $this->input->post('penerima_nama'),
-            'catatan'       => $this->input->post('catatan'),
-            'nomor_opname'  => $this->input->post('nomor_opname'),
-        );
+        $dataupdate = array();
+        $dataupdate['jenis_bhp']                  = 'obat';
+        $dataupdate['saksi1_nama']                = $this->input->post('saksi1_nama');
+        $dataupdate['saksi1_nip']                 = $this->input->post('saksi1_nip');
+        $dataupdate['saksi2_nama']                = $this->input->post('saksi2_nama');
+        $dataupdate['saksi2_nip']                 = $this->input->post('saksi2_nip');
+        $dataupdate['catatan']                    = $this->input->post('catatan');
+        $dataupdate['nomor_opname']               = $this->input->post('nomor_opname');
+        $dataupdate['tipe']                       = $this->input->post('tipe_data');
         $datakey = array(
             'id_inv_inventaris_habispakai_opname'           =>$this->input->post('id_inv_inventaris_habispakai_opname'),
             'tgl_opname'                                    =>$tanggal[2].'-'.$tanggal[1].'-'.$tanggal[0],
@@ -336,8 +337,8 @@ class Bhp_pemusnahan_model extends CI_Model {
         $data['saksi2_nama']                = $this->input->post('saksi2_nama');
         $data['saksi2_nip']                 = $this->input->post('saksi2_nip');
         $data['catatan']                    = $this->input->post('catatan');
-        $data['nomor_opname']                    = $this->input->post('nomor_opname');
-        $data['tipe']                       = 'retur';
+        $data['nomor_opname']               = $this->input->post('nomor_opname');
+        $data['tipe']                       = $this->input->post('tipe_data');
         if($this->db->insert('inv_inventaris_habispakai_opname', $data)){
             return $data['id_inv_inventaris_habispakai_opname'];
         }else{
@@ -361,10 +362,15 @@ class Bhp_pemusnahan_model extends CI_Model {
         
     }
     public function getitemopname($start=0,$limit=999999,$options=array()){
+        $this->db->having('(jmlawal_opname + sumselisih) > 0');
         $query = $this->db->get("bhp_expired",$limit,$start);
         return $query->result();
     }
-
+    public function getitemdimusnahkan($start=0,$limit=999999,$options=array()){
+        $this->db->having('(jmlawal_opname + sumselisih) > 0');
+        $query = $this->db->get("bhp_expired",$limit,$start);
+        return $query->result();
+    }
     function get_data_lap_opname($bulan,$tahun,$jenisbhp,$filtername,$ord)
     {
         $a_date = "$tahun-$bulan-01";

@@ -182,7 +182,7 @@ class Bhp_pemusnahan extends CI_Controller {
 			}
 		}
 	}
-	function json(){
+	function json($tipe='retur'){
 		$this->authentication->verify('inventory','show');
 
 		if($_POST) {
@@ -231,6 +231,7 @@ class Bhp_pemusnahan extends CI_Controller {
 		if(($this->session->userdata('puskesmas')!='')and !empty($this->session->userdata('puskesmas'))){
 			$this->db->where("code_cl_phc",'P'.$this->session->userdata('puskesmas'));
 		}
+		$this->db->where('inv_inventaris_habispakai_opname.tipe',$tipe);
 		$rows_all = $this->bhp_pemusnahan_model->get_data();
 
 
@@ -277,9 +278,11 @@ class Bhp_pemusnahan extends CI_Controller {
 		}else{
 			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
 		}
+		
 		if(($this->session->userdata('puskesmas')!='')and !empty($this->session->userdata('puskesmas'))){
 			$this->db->where("code_cl_phc",'P'.$this->session->userdata('puskesmas'));
 		}
+		$this->db->where('inv_inventaris_habispakai_opname.tipe',$tipe);
 		$rows = $this->bhp_pemusnahan_model->get_data($this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();
 		$no=1;
@@ -297,7 +300,7 @@ class Bhp_pemusnahan extends CI_Controller {
 				'nomor_opname'			=> $act->nomor_opname,
 				'last_opname' 			=> ($act->tgl_opname >= $act->last_tgl_opname) ? 1 :0,
 				'edit'					=> 1,
-				'delete'				=> 1,
+				'delete'				=> 1
 			);
 		}
 
@@ -322,11 +325,14 @@ class Bhp_pemusnahan extends CI_Controller {
         $this->form_validation->set_rules('nomor_opname', 'Nomor Expired', 'trim|required');
         $this->form_validation->set_rules('catatan', 'Catatan', 'trim|required');
         $this->form_validation->set_rules('puskesmas', 'puskesmas', 'trim');
+        $this->form_validation->set_rules('tipe_data', 'tipe_data', 'trim');
+
 		$data['title_group'] 	= "Bahan Habis Pakai";
 		$data['title_form']		= "Tambah Opname";
 		$data['action']			= "add";
 		$data['kode']			= "";
 		$data['alert_form']="";
+		$data['tipe_data']		= $value;
 		$kodepuskesmas = $this->session->userdata('puskesmas');
 		$this->db->where('code','P'.$kodepuskesmas);
 		$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
@@ -340,7 +346,7 @@ class Bhp_pemusnahan extends CI_Controller {
 		}
 		//die($this->parser->parse("inventory/bhp_pemusnahan/form",$data,true));
 	}
-	function edit_opname($id_opname=0){
+	function edit_opname($id_opname=0,$value=''){
 
 		if ($this->input->post('idjenis')!='' || !empty($this->input->post('idjenis'))) {
 			$jenis_bhp=$this->input->post('idjenis');
@@ -361,11 +367,14 @@ class Bhp_pemusnahan extends CI_Controller {
         $this->form_validation->set_rules('nomor_opname', 'Nomor Expired', 'trim|required');
         $this->form_validation->set_rules('catatan', 'Catatan', 'trim|required');
         $this->form_validation->set_rules('puskesmas', 'puskesmas', 'trim');
+        $this->form_validation->set_rules('tipe_data', 'tipe_data', 'trim');
+        $this->form_validation->set_rules('id_inv_inventaris_habispakai_opname', 'id_inv_inventaris_habispakai_opname', 'trim');
 
     	$data 	= $this->bhp_pemusnahan_model->get_data_row($id_opname);
 		$data['title_group'] 	= "Barang Habis Pakai";
 		$data['title_form']		= "Ubah Sediaan Expired";
 		$data['action']			= "edit";
+		$data['tipe_data']		= $value;
 		$data['kode']			= $id_opname;
 		$kodepuskesmas = $this->session->userdata('puskesmas');
 		$this->db->where('code','P'.$kodepuskesmas);
@@ -909,7 +918,7 @@ class Bhp_pemusnahan extends CI_Controller {
 		$this->session->set_userdata('filter_jenisbarang','');
 		$this->session->set_userdata('filter_bulan','');
 		$data['bulan']			= array('01'=>'Januari', '02'=>'Februari', '03'=>'Maret', '04'=>'April', '05'=>'Mei', '06'=>'Juni', '07'=>'Juli', '08'=>'Agustus', '09'=>'September', '10'=>'Oktober', '11'=>'November', '12'=>'Desember');
-		die($this->parser->parse("inventory/bhp_pemusnahan/show_bhp",$data,true));
+		die($this->parser->parse("inventory/bhp_pemusnahan/show_musnahkan",$data,true));
 	}
 
 	function daftar_expiring(){
@@ -1397,7 +1406,9 @@ class Bhp_pemusnahan extends CI_Controller {
 	}
 	function lastopname($bhp='obat')
 	{
-		$this->db->where('jenis_bhp',$bhp);
+		$kodepus = $this->session->userdata('puskesmas');
+		$this->db->where('code_cl_phc','P'.$kodepus);
+		$this->db->where('jenis_bhp','obat');
 		$this->db->select("max(tgl_opname) as last_opname");
         $query = $this->db->get('inv_inventaris_habispakai_opname');
         if ($query->num_rows()>0) {

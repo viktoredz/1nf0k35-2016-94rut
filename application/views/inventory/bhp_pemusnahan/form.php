@@ -15,7 +15,7 @@
 <?php } ?>
 <section class="content">
 <div class="row">
-  <form action="" method="post" id="form-ss">
+  <form  method="post" id="form-ss">
   <div class="col-md-6">
     <div class="box box-primary">
       <div class="box-body">
@@ -41,7 +41,7 @@
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Puskesmas</div>
           <div class="col-md-8">
-          <select  name="codepus" id="puskesmas" name="puskesmas" class="form-control">
+          <select  name="codepus" id="namapuskesmas" name="namapuskesmas" class="form-control">
               <?php foreach($kodepuskesmas as $pus) : ?>
                 <?php $select = $pus->code == set_value('codepus') ? 'selected' : '' ?>
                 <option value="<?php echo $pus->code ?>" <?php echo $select ?>><?php echo $pus->value ?></option>
@@ -128,6 +128,13 @@
               }
               ?></textarea>
               <input type="hidden" id="last_opname" name="last_opname" />
+              <input type="text" class="form-control" name="tipe_data" id="tipe_data" placeholder="tipe data" value="<?php 
+                if(set_value('tipe_data')=="" && isset($tipe_data)){
+                  echo $tipe_data;
+                }else{
+                  echo  set_value('tipe_data');
+                }
+                ?>">
           </div>  
         </div>
 
@@ -145,33 +152,41 @@
 </section>
 <script type="text/javascript">
 $(function(){
-  cekopname($('#tgl_opname').val(),$('#jenis_bhp').val());
-    $('#form-ss').submit(function(){
-      var tglper1 = $('#tgl_opname').val().split('-');
-      var tglper2 = $('#last_opname').val().split('-');
+  cekopname($("[name='#tgl_opname']").val(),$("[name='jenis_bhp']").val());
+    $("#form-ss").submit(function(event){
+      var tglper1 = $("[name='tgl_opname']").val().split('-');
+      var tglper2 = $("[name='last_opname']").val().split('-');
       if (tglper2[2]+'-'+tglper2[1]+'-'+tglper2[0] >= tglper1[2]+'-'+tglper1[1]+'-'+tglper1[0]) {
-      alert("Maaf! Kategori barang "+$('#jenis_bhp').val()+" sudah di opname pada "+$('#last_opname').val()+','+'\n'+"Silahkan ganti ke tanggal berikutnya");
+      alert("Maaf! Kategori barang "+$("[name='jenis_bhp']").val()+" sudah di opname pada "+$("[name='last_opname']").val()+','+'\n'+"Silahkan ganti ke tanggal berikutnya");
 
       }else{
             var data = new FormData();
-            data.append('kode_distribusi_', $('#kode_distribusi_').val());
-            data.append('tgl_opname', $('#tgl_opname').val());
-            data.append('puskesmas', $('#puskesmas').val());
-            data.append('nomor_opname', $('#nomor_opname').val());
-            data.append('saksi1_nama', $('#saksi1_nama').val());
-            data.append('saksi1_nip', $('#saksi1_nip').val());
-            data.append('saksi2_nama', $('#saksi2_nama').val());
-            data.append('saksi2_nip', $('#saksi2_nip').val());
-            data.append('catatan', $('#catatan').val());
+            alert($("select[name=namapuskesmas]").value());
+            data.append('kode_distribusi_', $("[name='kode_distribusi_']").val());
+            data.append('tgl_opname', $("[name='tgl_opname']").val());
+            data.append('puskesmas', $("[name='puskesmas']").val());
+            data.append('nomor_opname', $("[name='nomor_opname']").val());
+            data.append('saksi1_nama', $("[name='saksi1_nama']").val());
+            data.append('saksi1_nip', $("[name='saksi1_nip']").val());
+            data.append('saksi2_nama', $("[name='saksi2_nama']").val());
+            data.append('saksi2_nip', $("[name='saksi2_nip']").val());
+            data.append('catatan', $("[name='catatan']").val());
+            data.append('tipe_data', $("[name='tipe_data']").val());
             $.ajax({
                 cache : false,
                 contentType : false,
                 processData : false,
                 type : 'POST',
-                url : "<?php echo base_url()?>inventory/bhp_pemusnahan/{action}_expired",
+                url : "<?php echo base_url()?>inventory/bhp_pemusnahan/{action}_expired/{tipe_data}",
                 data : data,
                 success : function(response){
-                  $('#content1').html(response);
+                  <?php if ($tipe_data=='expired'){ ?>
+                    $("[name='content1']").html(response);
+                  <?php }else if ($tipe_data=='terimarusak'){ ?>
+                    $("[name='content2']").html(response);
+                  <?php }else if ($tipe_data=='tidakdipakai'){ ?>
+                    $("[name='content3']").html(response);
+                  <?php }?>
                 }
             });
             return false;
@@ -184,20 +199,26 @@ $(function(){
           url : '<?php echo site_url('inventory/bhp_pemusnahan/daftar_expired/') ?>',
           type : 'POST',
           success : function(data) {
-              $('#content1').html(data);
+              <?php if ($tipe_data=='expired'){ ?>
+                    $("[name='content1']").html(response);
+                  <?php }else if ($tipe_data=='terimarusak'){ ?>
+                    $("[name='content2']").html(response);
+                  <?php }else if ($tipe_data=='tidakdipakai'){ ?>
+                    $("[name='content3']").html(response);
+                  <?php }?>
           }
       });
 
       return false;
     });
 
-    $("#tgl_opname").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme , height: '30px'});
-    $("#tgl_opname").change(function() {
-        kodedistribusi($("#tgl_opname").val());
-        
+    $("[name='tgl_opname']").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme , height: '30px'});
+    $("[name='tgl_opname']").change(function() {
+        kodedistribusi($("[name='tgl_opname']").val());
+        alert($( "select.namapuskesmas option:selected").val());
     });
-    $("#jenis_bhp").change(function(){
-        cekopname($('#tgl_opname').val(),$(this).val());
+    $("[name='jenis_bhp']").change(function(){
+        cekopname($("[name='tgl_opname']").val(),$(this).val());
     });
     function cekopname(tgl,bhp){
      
@@ -205,7 +226,7 @@ $(function(){
           url : "<?php echo base_url().'inventory/bhp_pemusnahan/lastopname/';?>"+bhp,
           success : function(data) {
              tglop = data.split('-');
-              $("#last_opname").val(tglop[2]+'-'+tglop[1]+'-'+tglop[0]);
+              $("[name='last_opname']").val(tglop[2]+'-'+tglop[1]+'-'+tglop[0]);
           }
       });
 
@@ -226,60 +247,60 @@ $(function(){
       { 
         $.each(data,function(index,elemet){
           var lokasi = elemet.kodeinv.split(".")
-          $("#kode_distribusi_").val(lokasi[0]+"."+lokasi[1]+"."+lokasi[2]+"."+lokasi[3]+"."+lokasi[4]+"."+tahun+'.'+lokasi[5]);
+          $("[name='kode_distribusi_']").val(lokasi[0]+"."+lokasi[1]+"."+lokasi[2]+"."+lokasi[3]+"."+lokasi[4]+"."+tahun+'.'+lokasi[5]);
         });
       }
       });
 
       return false;
     }
-    $("#saksi1_nama").autocomplete({
+    $("[name='saksi1_nama']").autocomplete({
       minLength: 0,
       source:'<?php echo base_url().'inventory/bhp_pemusnahan/autocomplite_nama/'; ?>',
       focus: function( event, ui ) {
-        $("#saksi1_nama" ).val( ui.item.value );
+        $("[name='saksi1_nama']").val( ui.item.value );
         return false;
       },
       select: function( event, ui ) {
-        $("#saksi1_nama").val( ui.item.value );
+        $("[name='saksi1_nama']").val( ui.item.value );
  
         return false;
       } 
     });
-    $("#saksi1_nip").autocomplete({
+   $("[name='saksi1_nip']").autocomplete({
       minLength: 0,
       source:'<?php echo base_url().'inventory/bhp_pemusnahan/autocomplite_nip/'; ?>',
       focus: function( event, ui ) {
-        $("#saksi1_nip" ).val( ui.item.value );
+        $("[name='saksi1_nip']").val( ui.item.value );
         return false;
       },
       select: function( event, ui ) {
-        $("#saksi1_nip").val( ui.item.value );
+       $("[name='saksi1_nip']").val( ui.item.value );
         return false;
       } 
     });
-    $("#saksi2_nama").autocomplete({
+    $("[name='saksi2_nama']").autocomplete({
       minLength: 0,
       source:'<?php echo base_url().'inventory/bhp_pemusnahan/autocomplite_nama/'; ?>',
       focus: function( event, ui ) {
-        $("#saksi2_nama" ).val( ui.item.value );
+        $("[name='saksi2_nama']").val( ui.item.value );
         return false;
       },
       select: function( event, ui ) {
-        $("#saksi2_nama").val( ui.item.value );
+        $("[name='saksi2_nama']").val( ui.item.value );
  
         return false;
       } 
     });
-    $("#saksi2_nip").autocomplete({
+    $("[name='saksi2_nip']").autocomplete({
       minLength: 0,
       source:'<?php echo base_url().'inventory/bhp_pemusnahan/autocomplite_nip/'; ?>',
       focus: function( event, ui ) {
-        $("#saksi2_nip" ).val( ui.item.value );
+        $("[name='saksi2_nip']").val( ui.item.value );
         return false;
       },
       select: function( event, ui ) {
-        $("#saksi2_nip").val( ui.item.value );
+        $("[name='saksi2_nip']").val( ui.item.value );
         return false;
       } 
     });

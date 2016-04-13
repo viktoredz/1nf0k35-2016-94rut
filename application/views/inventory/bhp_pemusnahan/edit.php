@@ -150,6 +150,20 @@
                     echo $catatan;
               }
           ?>
+          <input type="hidden" class="form-control" name="id_inv_inventaris_habispakai_opname" id="id_inv_inventaris_habispakai_opname" placeholder="Nama Penerima" value="<?php 
+                if(set_value('id_inv_inventaris_habispakai_opname')=="" && isset($id_inv_inventaris_habispakai_opname)){
+                  echo $id_inv_inventaris_habispakai_opname;
+                }else{
+                  echo  set_value('id_inv_inventaris_habispakai_opname');
+                }
+                ?>">
+                <input type="hidden" class="form-control" name="tipe_data" id="tipe_data" placeholder="Nama Penerima" value="<?php 
+                if(set_value('tipe_data')=="" && isset($tipe_data)){
+                  echo $tipe_data;
+                }else{
+                  echo  set_value('tipe_data');
+                }
+                ?>">
           </div>  
         </div>
 
@@ -218,25 +232,34 @@
 <script type="text/javascript">
 
 $(function(){
-  $('#form-ss-edit').submit(function(){
+ $("[name='form-ss-edit']").submit(function(){
       var data = new FormData();
-      data.append('kode_distribusi_', $('#kode_distribusi_').val());
-      data.append('tgl_opname', $('#tgl_opname').val());
-      data.append('nomor_opname', $('#nomor_opname').val());
-      data.append('jenis_bhp', $('#jenis_bhp').val());
-      data.append('puskesmas', $('#puskesmas').val());
-      data.append('penerima_nama', $('#penerima_nama').val());
-      data.append('penerima_nip', $('#penerima_nip').val());
-      data.append('catatan', $('#catatan').val());
+      data.append('kode_distribusi_', $("[name='kode_distribusi_']").val());
+      data.append('tgl_opname', $("[name='tgl_opname']").val());
+      data.append('puskesmas', $("[name='puskesmas']").val());
+      data.append('nomor_opname', $("[name='nomor_opname']").val());
+      data.append('saksi1_nama', $("[name='saksi1_nama']").val());
+      data.append('saksi1_nip', $("[name='saksi1_nip']").val());
+      data.append('saksi2_nama', $("[name='saksi2_nama']").val());
+      data.append('saksi2_nip', $("[name='saksi2_nip']").val());
+      data.append('catatan', $("[name='catatan']").val());
+      data.append('tipe_data', $("[name='tipe_data']").val());
+      data.append('id_inv_inventaris_habispakai_opname', $("[name='id_inv_inventaris_habispakai_opname']").val());
       $.ajax({
           cache : false,
           contentType : false,
           processData : false,
           type : 'POST',
-          url : "<?php echo base_url()?>inventory/bhp_pemusnahan/{action}_opname/{kode}/8",
+          url : "<?php echo base_url()?>inventory/bhp_pemusnahan/{action}_opname/{kode}/{tipe_data}",
           data : data,
           success : function(response){
-            $('#addopname').html(response);
+            <?php if ($tipe_data=='expired'){ ?>
+              $("[name='content1']").html(response);
+            <?php }else if ($tipe_data=='terimarusak'){ ?>
+              $("[name='content2']").html(response);
+            <?php }else if ($tipe_data=='tidakdipakai'){ ?>
+              $("[name='content3']").html(response);
+            <?php }?>
           }
       });
       return false;
@@ -244,8 +267,13 @@ $(function(){
   kodedistribusi();
     $('#btn-kembali-expired').click(function(){
         $.get('<?php echo base_url()?>inventory/bhp_pemusnahan/tab/1', function (data) {
-            $('#addopname').hide();
-              $('#content1').html(data);
+            <?php if ($tipe_data=='expired'){ ?>
+              $("[name='content1']").html(response);
+            <?php }else if ($tipe_data=='terimarusak'){ ?>
+              $("[name='content2']").html(response);
+            <?php }else if ($tipe_data=='tidakdipakai'){ ?>
+              $("[name='content3']").html(response);
+            <?php }?>
       });
     });
 
@@ -254,10 +282,10 @@ $(function(){
     $("#menu_inventory_bhp_pemusnahan").addClass("active");
 
     <?php if($action!="view"){?>
-      $("#tgl_opname").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme , height: '30px' , disabled: true});
+      $("[name='tgl_opname']").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme , height: '30px' , disabled: true});
     
-      $("#tgl_opname").change(function() {
-          kodedistribusi($("#tgl_opname").val());
+      $("[name='tgl_opname']").change(function() {
+          kodedistribusi($("[name='tgl_opname']").val());
       });
     <?php } ?>
     });
@@ -279,9 +307,9 @@ $(function(){
          // alert( );
           var lokasi = elemet.kodeinv.split(".")
           <?php if($action!="view") {?>
-          $("#kode_distribusi_").val(/*lokasi[0]+"."+lokasi[1]+"."+lokasi[2]+"."+lokasi[3]+"."+lokasi[4]+"."+tahun+'.'+lokasi[5]*/elemet.kodeinv);
+          $("[name='kode_distribusi_']").val(/*lokasi[0]+"."+lokasi[1]+"."+lokasi[2]+"."+lokasi[3]+"."+lokasi[4]+"."+tahun+'.'+lokasi[5]*/elemet.kodeinv);
           <?php }else{?>
-          $("#kode_distribusi_").html(/*lokasi[0]+"."+lokasi[1]+"."+lokasi[2]+"."+lokasi[3]+"."+lokasi[4]+"."+tahun+'.'+lokasi[5]*/elemet.kodeinv;
+          $("[name='kode_distribusi_']").html(/*lokasi[0]+"."+lokasi[1]+"."+lokasi[2]+"."+lokasi[3]+"."+lokasi[4]+"."+tahun+'.'+lokasi[5]*/elemet.kodeinv;
           <?php }?>
         });
       }
@@ -289,7 +317,7 @@ $(function(){
 
       return false;
     }
-    $("#btn-export").click(function(){
+    $("[name='btn-export']").click(function(){
     
     var post = "";
     post = post+'&jenis_bhp='+"<?php echo '8'; ?>"+'&kode='+"<?php echo $kode; ?>";

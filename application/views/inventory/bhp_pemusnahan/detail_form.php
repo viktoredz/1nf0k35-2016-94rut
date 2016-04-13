@@ -35,7 +35,7 @@
               contentType : false,
               processData : false,
               type : 'POST',
-              url : '<?php echo base_url()."inventory/bhp_opname/".$action."_barang/" ?>',
+              url : '<?php echo base_url()."inventory/bhp_opname/".$action."_barang/$tipe_data" ?>',
               data : data,
               success : function(response){
                 var res  = response.split("|");

@@ -136,7 +136,7 @@
 			{ name: 'edit', type: 'number' },
 			{ name: 'delete', type: 'number' },
         ],
-		url: "<?php echo site_url('inventory/bhp_pemusnahan/json'); ?>",
+		url: "<?php echo site_url('inventory/bhp_pemusnahan/json/expired'); ?>",
 		cache: false,
 			updateRow: function (rowID, rowData, commit) {
              
@@ -212,7 +212,7 @@
 		}else{
 			idjenis = '0';
 		}
-  		$.get("<?php echo base_url().'inventory/bhp_pemusnahan/edit_opname/' ?>"+id,function (data) {
+  		$.get("<?php echo base_url().'inventory/bhp_pemusnahan/edit_opname/' ?>"+id+'/expired',function (data) {
 	          	$('#content1').html(data);
      	});
 
@@ -232,7 +232,7 @@
 	
 	$('#btn-add-expired').click(function(){
   		$.ajax({
-	        url : '<?php echo site_url('inventory/bhp_pemusnahan/add_expired/') ?>',
+	        url : '<?php echo site_url('inventory/bhp_pemusnahan/add_expired/expired') ?>',
 	        type : 'POST',
 	        success : function(data) {
 	          	$('#content1').html(data);

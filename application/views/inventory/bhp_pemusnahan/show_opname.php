@@ -10,7 +10,7 @@
 	<div id="popup_content">&nbsp;</div>
 </div>
 <section class="content">
-<form action="<?php echo base_url()?>inventory/bhp_opname/dodel_multi" method="POST" name="">
+<form action="<?php echo base_url()?>inventory/bhp_pemusnahan/dodel_multi" method="POST" name="">
   <div class="row">
     <!-- left column -->
     <div class="col-md-12">
@@ -104,17 +104,17 @@
 	}
 	$(function () {	
 		$("select[name='jenisbarangopname']").change(function(){
-			$.post("<?php echo base_url().'inventory/bhp_opname/filter_jenisbarang' ?>", 'jenisbarang='+$(this).val(),  function(){
+			$.post("<?php echo base_url().'inventory/bhp_pemusnahan/filter_jenisbarang' ?>", 'jenisbarang='+$(this).val(),  function(){
 				$("#jqxgridopname").jqxGrid('updatebounddata', 'cells');
 			});
 		});
 		$("select[name='bulanopname']").change(function(){
-			$.post("<?php echo base_url().'inventory/bhp_opname/filter_bulan' ?>", 'bulan='+$(this).val(),  function(){
+			$.post("<?php echo base_url().'inventory/bhp_pemusnahan/filter_bulan' ?>", 'bulan='+$(this).val(),  function(){
 				$("#jqxgridopname").jqxGrid('updatebounddata', 'cells');
 			});
 		});
 		$("select[name='tahunopname']").change(function(){
-			$.post("<?php echo base_url().'inventory/bhp_opname/filter_tahun' ?>", 'tahun='+$(this).val(),  function(){
+			$.post("<?php echo base_url().'inventory/bhp_pemusnahan/filter_tahun' ?>", 'tahun='+$(this).val(),  function(){
 				$("#jqxgridopname").jqxGrid('updatebounddata', 'cells');
 			});
 		});
@@ -136,7 +136,7 @@
 			{ name: 'edit', type: 'number' },
 			{ name: 'delete', type: 'number' },
         ],
-		url: "<?php echo site_url('inventory/bhp_opname/json'); ?>",
+		url: "<?php echo site_url('inventory/bhp_pemusnahan/json/tidakdipakai'); ?>",
 		cache: false,
 			updateRow: function (rowID, rowData, commit) {
              
@@ -203,7 +203,7 @@
             ]
 		});
 	  function timeline_pengeluaran_barang(id){
-	    $.get("<?php echo base_url();?>inventory/bhp_opname/timeline_pengeluaran_barang/"+id , function(response) {
+	    $.get("<?php echo base_url();?>inventory/bhp_pemusnahan/timeline_pengeluaran_barang/"+id , function(response) {
 	      $("#timeline-barang").html(response);
 	    });
 	  }
@@ -214,8 +214,8 @@
 		}else{
 			idjenis = '0';
 		}
-  		$.get("<?php echo base_url().'inventory/bhp_opname/edit_opname/' ?>"+id+'/'+idjenis,function (data) {
-	          	$('#content2').html(data);
+  		$.get("<?php echo base_url().'inventory/bhp_pemusnahan/edit_opname/' ?>"+id+'/'+idjenis,function (data) {
+	          	$('#content3').html(data);
      	});
 
       return false;
@@ -224,7 +224,7 @@
 	function del(id){
 		var confirms = confirm("Hapus Data ?");
 		if(confirms == true){
-			$.post("<?php echo base_url().'inventory/bhp_opname/dodel_opname' ?>/"+id,  function(){
+			$.post("<?php echo base_url().'inventory/bhp_pemusnahan/dodel_opname' ?>/"+id,  function(){
 				alert('data berhasil dihapus');
 
 				$("#jqxgridopname").jqxGrid('updatebounddata', 'cells');
@@ -235,11 +235,11 @@
 	$('#btn-add').click(function(){
 		var opname = '';
   		$.ajax({
-	        url : '<?php echo site_url('inventory/bhp_opname/add_opname/') ?>',
+	        url : '<?php echo site_url('inventory/bhp_pemusnahan/add_expired/tidakdipakai') ?>',
 	        type : 'POST',
 	     //   data : 'opname=' + opname,
 	        success : function(data) {
-	          	$('#content2').html(data);
+	          	$('#content3').html(data);
 	        }
      	});
 
@@ -276,7 +276,7 @@
 		}
 		post = post+'&jenisbarang='+$("#jenisbarangopname option:selected").text()+'&nama_puskesmas='+$("#puskesmasopname option:selected").text()+'&bulan='+$("#bulanopname option:selected").text()+'&tahun='+$("#tahunopname option:selected").text();
 		
-		$.post("<?php echo base_url()?>inventory/bhp_opname/pengeluaran_export",post,function(response){
+		$.post("<?php echo base_url()?>inventory/bhp_pemusnahan/pengeluaran_export",post,function(response){
 			window.location.href=response;
 		});
 	});

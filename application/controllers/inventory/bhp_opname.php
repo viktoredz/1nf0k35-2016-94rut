@@ -365,6 +365,7 @@ class Bhp_opname extends CI_Controller {
         $this->form_validation->set_rules('nomor_opname', 'Nomor Opname', 'trim|required');
         $this->form_validation->set_rules('catatan', 'Catatan', 'trim|required');
         $this->form_validation->set_rules('jenis_bhp', 'jenis_bhp', 'trim');
+        $this->form_validation->set_rules('id_inv_inventaris_habispakai_opname', 'id_inv_inventaris_habispakai_opname', 'trim');
         $this->form_validation->set_rules('puskesmas', 'jenis_bhp', 'trim');
 
     	$data 	= $this->bhp_opname_model->get_data_row($id_opname);

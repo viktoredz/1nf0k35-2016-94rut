@@ -163,8 +163,14 @@
 				{ text: 'Nama Sediaan', editable:false ,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '45%' },
 				{ text: 'Batch', align: 'center',cellsalign: 'center', editable:false ,datafield: 'batch', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
 				{ text: 'Tgl Kadaluarsa', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false,datafield: 'tgl_kadaluarsa', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '11%'},
-				{ text: 'Lama', align: 'center', cellsalign: 'right',filtertype: 'none', editable:false , columntype: 'textbox', width: '11%',datafield: 'jmlexpired' },
-				{ text: 'Jumlah',sortable: false,editable:false ,datafield: 'sumselisih', columntype: 'textbox', filtertype: 'text', width: '11%' ,align: 'center', cellsalign: 'right'},
+				{ text: 'Lama', align: 'center', cellsalign: 'right',filtertype: 'none', editable:false , columntype: 'textbox', width: '11%',datafield: 'jmlexpired', cellsrenderer: function (row) {
+				    var dataRecord = $("#jqxgridExpiring").jqxGrid('getrowdata', row);
+				    if(dataRecord.jmlexpired=='0'){
+				    	return "<div style='width:100%;padding:4px;padding-top:6px;text-align:left;font-weight:bold; color:#a31919'>"+dataRecord.jmlexpired+"</div>";
+				    }
+                 }
+                },
+				{ text: 'Jumlah',sortable: false,editable:false ,datafield: 'jmlakhir_opname', columntype: 'textbox', filtertype: 'text', width: '11%' ,align: 'center', cellsalign: 'right'},
 				{ text: 'Sumber Dana', editable:false ,columntype: 'textbox', width: '12%' ,align: 'center', datafield: 'pilihan_sumber_dana',cellsalign: 'left'}
             ]
 		});
@@ -191,31 +197,6 @@
 	$("#btn-export").click(function(){
 		
 		var post = "";
-		/*var filter = $("#jqxgridExpiring").jqxGrid('getfilterinformation');
-
-		for(i=0; i < filter.length; i++){
-			var fltr 	= filter[i];
-			var value	= fltr.filter.getfilters()[0].value;
-			var condition	= fltr.filter.getfilters()[0].condition;
-			var filteroperation	= fltr.filter.getfilters()[0].operation;
-			var filterdatafield	= fltr.filtercolumn;
-			post = post+'&filtervalue'+i+'='+value;
-			post = post+'&filtercondition'+i+'='+condition;
-			post = post+'&filteroperation'+i+'='+filteroperation;
-			post = post+'&filterdatafield'+i+'='+filterdatafield;
-			post = post+'&'+filterdatafield+'operator=and';
-		}
-		post = post+'&filterscount='+i;
-		
-		var sortdatafield = $("#jqxgridExpiring").jqxGrid('getsortcolumn');
-		if(sortdatafield != "" && sortdatafield != null){
-			post = post + '&sortdatafield='+sortdatafield;
-		}
-		if(sortdatafield != null){
-			var sortorder = $("#jqxgridExpiring").jqxGrid('getsortinformation').sortdirection.ascending ? "asc" : ($("#jqxgridExpiring").jqxGrid('getsortinformation').sortdirection.descending ? "desc" : "");
-			post = post+'&sortorder='+sortorder;
-			
-		}*/
 		post = post+'&jenisbarang='+$("#jenisbarang option:selected").text()+'&nama_puskesmas='+$("#puskesmas option:selected").text()+'&bulan='+$("#bulan option:selected").text()+'&tahun='+$("#tahun option:selected").text();
 		//alert(post);
 		

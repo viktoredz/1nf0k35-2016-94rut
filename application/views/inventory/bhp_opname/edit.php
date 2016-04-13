@@ -168,6 +168,13 @@
                     echo $catatan;
               }
           ?>
+          <input type="hidden" class="form-control" name="id_inv_inventaris_habispakai_opname" id="id_inv_inventaris_habispakai_opname" placeholder="Nama Penerima" value="<?php 
+                if(set_value('id_inv_inventaris_habispakai_opname')=="" && isset($id_inv_inventaris_habispakai_opname)){
+                  echo $id_inv_inventaris_habispakai_opname;
+                }else{
+                  echo  set_value('id_inv_inventaris_habispakai_opname');
+                }
+                ?>">
           </div>  
         </div>
 
@@ -246,6 +253,7 @@ $(function(){
       data.append('penerima_nama', $('#penerima_nama').val());
       data.append('penerima_nip', $('#penerima_nip').val());
       data.append('catatan', $('#catatan').val());
+      data.append('id_inv_inventaris_habispakai_opname', $('#id_inv_inventaris_habispakai_opname').val());
       $.ajax({
           cache : false,
           contentType : false,
