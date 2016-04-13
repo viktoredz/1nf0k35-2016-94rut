@@ -1,3 +1,4 @@
+<section class="content">
 <?php if(validation_errors()!=""){ ?>
 <div class="alert alert-warning alert-dismissable">
   <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
@@ -27,7 +28,7 @@
         </div>
 
         <div class="row" style="margin: 5px">
-          <div class="col-md-4" style="padding: 5px">Tanggal Opname</div>
+          <div class="col-md-4" style="padding: 5px">Tanggal Retur</div>
           <div class="col-md-8">
             <div id='tgl_opname' name="tgl_opname" value="<?php
               echo (set_value('tgl_opname')!="") ? date("Y-m-d",strtotime(set_value('tgl_opname'))) : "";
@@ -36,7 +37,7 @@
         </div>
 
         <div class="row" style="margin: 5px">
-          <div class="col-md-4" style="padding: 5px">Nomor Opname</div>
+          <div class="col-md-4" style="padding: 5px">Nomor Retur</div>
           <div class="col-md-8">
             <input type="text" class="form-control" name="nomor_opname" id="nomor_opname" placeholder="Nomor Dokumen" value="<?php 
                 if(set_value('nomor_opname')=="" && isset($nomor_opname)){
@@ -48,24 +49,44 @@
           </div>
         </div>
         <div class="row" style="margin: 5px">
-          <div class="col-md-4" style="padding: 5px">Kategori Barang</div>
+          <div class="col-md-4" style="padding: 5px">Penanggung Jawab</div>
           <div class="col-md-8">
-            <select  name="jenis_bhp" id="jenis_bhp" type="text" class="form-control">
-            <?php
-              if (set_value('jenis_bhp')=="umum") {
-                $select1 = "selected=selected";
-                $select2 = "";
-              }else{
-                $select2 = "selected=selected";
-                $select1 = "";
-              }
-            ?>
-                <option value="obat" <?php echo $select2; ?>>Obat</option>
-                <option value="umum" <?php echo $select1; ?>>Umum</option>
-          </select>
+            <input type="text" class="form-control" name="penerima_nama" id="penerima_nama" placeholder="Nama Penanggung Jawab" value="<?php 
+                if(set_value('penerima_nama')=="" && isset($penerima_nama)){
+                  echo $penerima_nama;
+                }else{
+                  echo  set_value('penerima_nama');
+                }
+                ?>">
           </div>
         </div>
 
+        <div class="row" style="margin: 5px">
+          <div class="col-md-4" style="padding: 5px">NIP Penanggung Jawab</div>
+          <div class="col-md-8">
+            <input type="text" class="form-control" name="penerima_nip" id="penerima_nip" placeholder="NIP Penanggung Jawab" value="<?php 
+                if(set_value('penerima_nip')=="" && isset($penerima_nip)){
+                  echo $penerima_nip;
+                }else{
+                  echo  set_value('penerima_nip');
+                }
+                ?>">
+          </div>
+        </div>
+
+        <div class="row" style="margin: 5px">
+          <div class="col-md-4" style="padding: 5px">Catatan</div>
+          <div class="col-md-8">
+          <textarea class="form-control" name="catatan" id="catatan" placeholder="Catatan / Keperluan"><?php 
+              if(set_value('catatan')=="" && isset($catatan)){
+                echo $catatan;
+              }else{
+                echo  set_value('catatan');
+              }
+              ?></textarea>
+              <input type="hidden" id="last_opname" name="last_opname" />
+          </div>  
+        </div>        
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Puskesmas</div>
           <div class="col-md-8">
@@ -87,9 +108,30 @@
 
       <div class="box-body">
         <div class="row" style="margin: 5px">
-          <div class="col-md-4" style="padding: 5px">Nama Penerima</div>
+          <div class="col-md-4" style="padding: 5px">Tanggal Faktur</div>
           <div class="col-md-8">
-            <input type="text" class="form-control" name="penerima_nama" id="penerima_nama" placeholder="Nama Penerima" value="<?php 
+            <div id='tgl_faktur' name="tgl_faktur" value="<?php
+              echo (set_value('tgl_faktur')!="") ? date("Y-m-d",strtotime(set_value('tgl_faktur'))) : "";
+            ?>"></div>
+          </div>
+        </div>
+
+        <div class="row" style="margin: 5px">
+          <div class="col-md-4" style="padding: 5px">Nomor Faktur</div>
+          <div class="col-md-8">
+            <input type="text" disabled class="form-control" name="nomor_opname" id="nomor_opname" placeholder="Nomor Faktur" value="<?php 
+                if(set_value('nomor_opname')=="" && isset($nomor_opname)){
+                  echo $nomor_opname;
+                }else{
+                  echo  set_value('nomor_opname');
+                }
+                ?>">
+          </div>
+        </div>
+        <div class="row" style="margin: 5px">
+          <div class="col-md-4" style="padding: 5px">Instansi / PBF</div>
+          <div class="col-md-8">
+            <input type="text" disabled class="form-control" name="penerima_nama" id="penerima_nama" placeholder="Instansi / PBF" value="<?php 
                 if(set_value('penerima_nama')=="" && isset($penerima_nama)){
                   echo $penerima_nama;
                 }else{
@@ -100,9 +142,9 @@
         </div>
 
         <div class="row" style="margin: 5px">
-          <div class="col-md-4" style="padding: 5px">NIP Penerima</div>
+          <div class="col-md-4" style="padding: 5px">Nama Barang</div>
           <div class="col-md-8">
-            <input type="text" class="form-control" name="penerima_nip" id="penerima_nip" placeholder="NIP Penerima" value="<?php 
+            <input type="text" disabled class="form-control" name="penerima_nip" id="penerima_nip" placeholder="Nama Barang" value="<?php 
                 if(set_value('penerima_nip')=="" && isset($penerima_nip)){
                   echo $penerima_nip;
                 }else{
@@ -113,22 +155,57 @@
         </div>
 
         <div class="row" style="margin: 5px">
-          <div class="col-md-4" style="padding: 5px">Catatan</div>
+          <div class="col-md-4" style="padding: 5px">Merek Barang</div>
           <div class="col-md-8">
-          <textarea class="form-control" name="catatan" id="catatan" placeholder="catatan / Keperluan"><?php 
-              if(set_value('catatan')=="" && isset($catatan)){
-                echo $catatan;
-              }else{
-                echo  set_value('catatan');
-              }
-              ?></textarea>
-              <input type="hidden" id="last_opname" name="last_opname" />
-          </div>  
+            <input type="text" disabled class="form-control" name="penerima_nip" id="penerima_nip" placeholder="Merek Barang" value="<?php 
+                if(set_value('penerima_nip')=="" && isset($penerima_nip)){
+                  echo $penerima_nip;
+                }else{
+                  echo  set_value('penerima_nip');
+                }
+                ?>">
+          </div>
         </div>
 
+        <div class="row" style="margin: 5px">
+          <div class="col-md-4" style="padding: 5px">Batch</div>
+          <div class="col-md-8">
+            <input type="text" disabled class="form-control" name="penerima_nip" id="penerima_nip" placeholder="Batch" value="<?php 
+                if(set_value('penerima_nip')=="" && isset($penerima_nip)){
+                  echo $penerima_nip;
+                }else{
+                  echo  set_value('penerima_nip');
+                }
+                ?>">
+          </div>
+        </div>
+        <div class="row" style="margin: 5px">
+          <div class="col-md-4" style="padding: 5px">Total Penerimaan</div>
+          <div class="col-md-8">
+            <input type="number" disabled class="form-control" name="penerima_nip" id="penerima_nip" placeholder="Total Penerimaan" value="<?php 
+                if(set_value('penerima_nip')=="" && isset($penerima_nip)){
+                  echo $penerima_nip;
+                }else{
+                  echo  set_value('penerima_nip');
+                }
+                ?>">
+          </div>
+        </div>
+        <div class="row" style="margin: 5px">
+          <div class="col-md-4" style="padding: 5px">Jumlah Retur</div>
+          <div class="col-md-8">
+            <input type="number" class="form-control" name="penerima_nip" id="penerima_nip" placeholder="Jumlah Retur" value="<?php 
+                if(set_value('penerima_nip')=="" && isset($penerima_nip)){
+                  echo $penerima_nip;
+                }else{
+                  echo  set_value('penerima_nip');
+                }
+                ?>">
+          </div>
+        </div>
       </div>
       <div class="box-footer">
-        <button type="submit" class="btn btn-primary"><i class='fa fa-save'></i> &nbsp; Simpan & Lanjutkan</button>
+        <button type="submit" class="btn btn-primary"><i class='fa fa-save'></i> &nbsp; Simpan </button>
         <button type="button" id="btn-kembali" class="btn btn-warning"><i class='fa fa-arrow-circle-left'></i> &nbsp;Kembali</button>
       </div>
       </div>
@@ -159,7 +236,7 @@ $(function(){
                 contentType : false,
                 processData : false,
                 type : 'POST',
-                url : "<?php echo base_url()?>inventory/bhp_opname/{action}_opname",
+                url : "<?php echo base_url()?>inventory/bhp_retur/{action}_opname",
                 data : data,
                 success : function(response){
                   $('#addopname').html(response);
@@ -171,16 +248,17 @@ $(function(){
     kodedistribusi();
     $('#btn-kembali').click(function(){
        $.ajax({
-          url : '<?php echo site_url('inventory/bhp_opname/daftar_opname/') ?>',
+          url : '<?php echo site_url('inventory/bhp_retur/daftar_retur/') ?>',
           type : 'POST',
           success : function(data) {
-              $('#content2').html(data);
+              $('#content1').html(data);
           }
       });
 
       return false;
     });
 
+    $("#tgl_faktur").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme , height: '30px', disabled:true});
     $("#tgl_opname").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme , height: '30px'});
     $("#tgl_opname").change(function() {
         kodedistribusi($("#tgl_opname").val());
@@ -192,7 +270,7 @@ $(function(){
     function cekopname(tgl,bhp){
      
       $.ajax({
-          url : "<?php echo base_url().'inventory/bhp_opname/lastopname/';?>"+bhp,
+          url : "<?php echo base_url().'inventory/bhp_retur/lastopname/';?>"+bhp,
           success : function(data) {
              tglop = data.split('-');
               $("#last_opname").val(tglop[2]+'-'+tglop[1]+'-'+tglop[0]);
@@ -210,7 +288,7 @@ $(function(){
       }
       
       $.ajax({
-      url: "<?php echo base_url().'inventory/bhp_opname/kodedistribusi';?>",
+      url: "<?php echo base_url().'inventory/bhp_retur/kodedistribusi';?>",
       dataType: "json",
       success:function(data)
       { 
@@ -225,7 +303,7 @@ $(function(){
     }
     $("#penerima_nama").autocomplete({
       minLength: 0,
-      source:'<?php echo base_url().'inventory/bhp_opname/autocomplite_nama/'; ?>',
+      source:'<?php echo base_url().'inventory/bhp_retur/autocomplite_nama/'; ?>',
       focus: function( event, ui ) {
         $("#penerima_nama" ).val( ui.item.value );
         return false;
@@ -238,7 +316,7 @@ $(function(){
     });
     $("#penerima_nip").autocomplete({
       minLength: 0,
-      source:'<?php echo base_url().'inventory/bhp_opname/autocomplite_nip/'; ?>',
+      source:'<?php echo base_url().'inventory/bhp_retur/autocomplite_nip/'; ?>',
       focus: function( event, ui ) {
         $("#penerima_nip" ).val( ui.item.value );
         return false;

@@ -20,16 +20,16 @@
                       <i class="icon fa fa-list-alt" style="font-size: 18px"></i>
                   </div>
                   <div style="margin-left: 8px; vertical-align: middle; text-align: center; float: left;">
-                      Daftar Bahan Habis Pakai</div>
+                      Retur Barang</div>
               </div>
             </li>
             <li style="margin-left: 15px;">
               <div style="height: 20px; margin-top: 5px;">
                   <div style="float: left;">
-                      <i class="icon fa fa-list-alt" style="font-size: 18px"></i>
+                      <i class="icon fa fa-list" style="font-size: 18px"></i>
                   </div>
                   <div style="margin-left: 8px; vertical-align: middle; text-align: center; float: left;">
-                      Daftar Stock Opname</div>
+                      Daftar Barang Retur</div>
               </div>
             </li>
 

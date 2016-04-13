@@ -16,9 +16,15 @@ class Keuangan_sts extends CI_Controller {
 		
 		$this->template->show($data,"home");
 	}
+
 	function nama_status(){
 		return $this->keusts_model->get_versi_status();
 	}
+
+	// function nama_versi($versi){
+	// 	return $this->keusts_model->nama_versi($versi);
+	// }
+
 	function sts($pageIndex){
 		$data = array();
 
@@ -91,6 +97,7 @@ class Keuangan_sts extends CI_Controller {
 				'nama'					=> $act->nama,
 				'deskripsi'    			=> $act->deskripsi,
 				'tanggal_dibuat'  		=> $act->tanggal_dibuat,
+				'status'			    => $act->status,
 				'edit'		 	        => 1,
 				'delete'	     	    => 1
 			);
@@ -417,23 +424,15 @@ class Keuangan_sts extends CI_Controller {
 		}
 		echo json_encode($status_versi);
 	}
-	
-	function nama_versi($versi){
+
+    function nama_versi($id=0){
         $this->db->select('nama');
-        $this->db->where ('id_mst_anggaran_versi', $versi);
+        $this->db->where ('id_mst_anggaran_versi', $id);
         $query = $this->db->get('mst_keu_anggaran_versi');
         if ($query->num_rows() > 0) {
-            foreach ($query->result() as $key) {
-                $nama_versi[] = array(
-                	'nama_versi' =>($key->nama==null ? 0:$key->nama),
-                );
-            }
-        }else{
-            $nama[] = array(
-            	'nama_versi' =>'0',
-            );
-        }
-        echo json_encode($nama_versi);
+           $row = $query->row();
+        echo $row->nama; 
+       }
     }
 
 	function aktifkan_status($id) {
@@ -469,7 +468,7 @@ class Keuangan_sts extends CI_Controller {
 		$data['action']		   ="edit";
 		$data['alert_form']    = "";
 		$data['versi']         = $versi;
-		// $data['nama_versi']    = $this->keusts_model->get_nama_versi($versi);
+	    // $data['nama_versi']    = $this->keusts_model->get_nama_versi($versi);
 		$data['title_group']   = "Tarif Surat Tanda Setoran";
 		$data['title_form']    = "Ubah Daftar Tarif Surat Tanda Setoran";
 
