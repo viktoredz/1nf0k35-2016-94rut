@@ -21,8 +21,8 @@
 		      	<div class="row"> 
 			      	<div class="col-md-12">
 					 	<button type="button" class="btn btn-primary" id="btn-add-rusak"><i class='fa fa-plus-square'></i> &nbsp; Pemusnahan Baru</button>
-					 	<button type="button" class="btn btn-success" id="btn-refreshopname"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
-			          <button type="button" id="btn-export-opname" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Export</button>
+					 	<button type="button" class="btn btn-success" id="btn-refreshrusak"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
+			          <button type="button" id="btn-export-rusak" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Export</button>
 			      	</div>
 		      	</div>
 		    <div class="box-body">
@@ -128,6 +128,8 @@
 			{ name: 'jenis_bhp', type: 'string' },
 			{ name: 'petugas_nip', type: 'string' },
 			{ name: 'petugas_nama', type: 'string' },
+			{ name: 'saksi1_nama', type: 'string' },
+			{ name: 'saksi2_nama', type: 'string' },
 			{ name: 'catatan', type: 'number' },
 			{ name: 'tgl_opname', type: 'date' },
 			{ name: 'nomor_opname', type: 'string' },
@@ -161,7 +163,7 @@
 			}
 		});
      
-		$('#btn-refreshopname').click(function () {
+		$('#btn-refreshrusak').click(function () {
 			$("#jqxgridRusak").jqxGrid('clearfilters');
 		});
 
@@ -178,8 +180,8 @@
 			columns: [
 				{ text: 'Edit', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgridRusak").jqxGrid('getrowdata', row)
-				    if((dataRecord.edit==1)&&(dataRecord.last_opname > 0)){
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='editopname(\""+dataRecord.id_inv_inventaris_habispakai_opname+"\",\""+dataRecord.jenis_bhp+"\");'></a></div>";
+				    if((dataRecord.edit==1)){
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='edit_rusak(\""+dataRecord.id_inv_inventaris_habispakai_opname+"\",\""+dataRecord.jenis_bhp+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}
@@ -187,8 +189,8 @@
                 },
 				{ text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgridRusak").jqxGrid('getrowdata', row);
-				    if(dataRecord.delete==1 &&(dataRecord.last_opname > 0)){
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del(\""+dataRecord.id_inv_inventaris_habispakai_opname+"\");'></a></div>";
+				    if(dataRecord.delete==1){
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del_rusak(\""+dataRecord.id_inv_inventaris_habispakai_opname+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php  echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}
@@ -196,32 +198,27 @@
                 },
 				{ text: 'Nomor', editable:false ,datafield: 'nomor_opname', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
 				{ text: 'Tanggal', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false,datafield: 'tgl_opname', columntype: 'date', filtertype: 'none', cellsformat: 'dd-MM-yyyy', width: '10%'},
-				{ text: 'Jenis Barang', editable:false ,align: 'center', datafield: 'jenis_bhp', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
-				{ text: 'Saksi 1', editable:false ,align: 'center', cellsalign: 'left', datafield: 'petugas_nama', columntype: 'textbox', filtertype: 'textbox', width: '25%' },
-				{ text: 'Saksi 2', editable:false ,align: 'center', cellsalign: 'left', datafield: 'petugas_nip', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
+				{ text: 'Saksi 1', editable:false ,align: 'center', cellsalign: 'left', datafield: 'saksi1_nama', columntype: 'textbox', filtertype: 'textbox', width: '27%' },
+				{ text: 'Saksi 2', editable:false ,align: 'center', cellsalign: 'left', datafield: 'saksi2_nama', columntype: 'textbox', filtertype: 'textbox', width: '24%' },
 				{ text: 'Catatan', editable:false ,datafield: 'catatan', columntype: 'textbox', filtertype: 'textbox', width: '13%' ,align: 'center', cellsalign: 'right'}
             ]
 		});
-	  function timeline_pengeluaran_barang(id){
-	    $.get("<?php echo base_url();?>inventory/bhp_pemusnahan/timeline_pengeluaran_barang/"+id , function(response) {
-	      $("#timeline-barang").html(response);
-	    });
-	  }
-	function editopname(id,jenis){
+	
+	function edit_rusak(id,jenis){
 		var idjenis = '0';
 		if (jenis.toLowerCase()=="obat") {
 			idjenis = '8';
 		}else{
 			idjenis = '0';
 		}
-  		$.get("<?php echo base_url().'inventory/bhp_pemusnahan/edit_opname/' ?>"+id+'/'+idjenis,function (data) {
+  		$.get("<?php echo base_url().'inventory/bhp_pemusnahan/edit_rusak/' ?>"+id+'/terimarusak',function (data) {
 	          	$('#content2').html(data);
      	});
 
       return false;
 	}
 
-	function del(id){
+	function del_rusak(id){
 		var confirms = confirm("Hapus Data ?");
 		if(confirms == true){
 			$.post("<?php echo base_url().'inventory/bhp_pemusnahan/dodel_opname' ?>/"+id,  function(){
@@ -235,7 +232,7 @@
 	$('#btn-add-rusak').click(function(){
 		var opname = '';
   		$.ajax({
-	        url : '<?php echo site_url('inventory/bhp_pemusnahan/add_expired/terimarusak') ?>',
+	        url : '<?php echo site_url('inventory/bhp_pemusnahan/add_rusak/terimarusak') ?>',
 	        type : 'POST',
 	        success : function(data) {
 	          	$('#content2').html(data);
@@ -246,7 +243,7 @@
 
   	});
 
-	$("#btn-export-opname").click(function(){
+	$("#btn-export-rusak").click(function(){
 		
 		var post = "";
 		var filter = $("#jqxgridRusak").jqxGrid('getfilterinformation');

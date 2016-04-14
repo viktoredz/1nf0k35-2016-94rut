@@ -2,25 +2,11 @@
 <script type="text/javascript">
 
   $(function(){
-    var tglopnameda = $('#tgl_opname').val().split('-');
-    $('#tgl_update_opname').val(tglopnameda[2]+'-'+tglopnameda[1]+'-'+tglopnameda[0]);
-    <?php 
-    if (isset($obat)) {
-      if ($obat=="8") {
-    ?>
-      $("[name='tgl_kadaluarsa']").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme , height: '30px'});
-    <?php
-      }else{}
-    }
-    ?>
       $('#btn-close-opname').click(function(){
         close_popup_opname();
       }); 
 
       $('#form-ss').submit(function(){
-        if ($('#jumlah').val()==$('#jumlahopname').val()) {
-          alert('Data jumlah tidak boleh sama dengan data opname')
-        }else{
           var data = new FormData();
           $('#notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
           $('#notice').show();
@@ -32,16 +18,14 @@
           data.append('jumlah', $('#jumlah').val());
           data.append('harga', $('#harga').val());
           data.append('jumlahopname', $('#jumlahopname').val());
-          data.append('jml_rusak', $('#jml_rusak').val());
-          data.append('jml_tdkdipakai', $('#jml_tdkdipakai').val());
-          data.append('tgl_update_opname', $('#tgl_update_opname').val());
+          data.append('merek_tipe', $('#merek_tipe').val());
 
           $.ajax({
               cache : false,
               contentType : false,
               processData : false,
               type : 'POST',
-              url : '<?php echo base_url()."inventory/bhp_opname/".$action."_barang/{tanggal_opnam}" ?>',
+              url : '<?php echo base_url()."inventory/bhp_pemusnahan/".$action."_barang/{tanggal_opnam}/{kodeopname}/{idbarang}/{batch}" ?>',
               data : data,
               success : function(response){
                 var res  = response.split("|");
@@ -62,7 +46,6 @@
                 }
             }
           });
-          }
           return false;
       });
       var jmlasli = "<?php if(set_value('jumlah')=="" && isset($jmlawal)){
@@ -70,25 +53,19 @@
                           }else{
                             echo  set_value('jumlah');
                           } ?>";
-      $("#jumlahopname").change(function(){
-          if ($(this).val() < 0) {
-            alert('Maaf, jumlah oname tidak boleh minus');
+      $("#jumlahopname").val(jmlasli - $("#jumlahmusnah").val());
+      $("#jumlahmusnah").change(function(){
+          if ($("#jumlahmusnah").val() < 0) {
+            alert('Maaf, jumlah pemusnahan tidak boleh minus');
             $("#jumlahopname").val(jmlasli);
+            $("#jumlahmusnah").val(jmlasli);
           }
-          $('#selisih').val($(this).val()-jmlasli);
-          if((parseInt($("#jml_rusak").val()) + parseInt($("#jml_tdkdipakai").val())) > $("#jumlahopname").val()){
-            $("#jml_rusak").add("#jml_tdkdipakai").val(0);
-            alert("Maaf total jumlah rusak dan jumlah tidak dipakai tidak boleh melebihi jumlah opname");
+          if (parseInt($("#jumlahmusnah").val()) > parseInt(jmlasli)) {
+            alert('Maaf, jumlah pemusnahan tidak boleh lebih dari '+ jmlasli);
+            $("#jumlahopname").val(jmlasli);
+            $("#jumlahmusnah").val(jmlasli);
           }
-      });
-      $('#selisih').val($("#jumlahopname").val()-jmlasli);
-      $("#jml_rusak").add("#jml_tdkdipakai").val(0);
-      $("#jml_rusak, #jml_tdkdipakai").change(function(){
-        //alert('hai');
-          if((parseInt($("#jml_rusak").val()) + parseInt($("#jml_tdkdipakai").val())) > $("#jumlahopname").val()){
-            $("#jml_rusak").add("#jml_tdkdipakai").val(0);
-            alert("Maaf total jumlah rusak dan jumlah tidak dipakai tidak boleh melebihi jumlah opname");
-          }
+          $("#jumlahopname").val(jmlasli- $(this).val());
       });
 
     });
@@ -155,6 +132,18 @@
               }
             }
           ?>
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Merek Tipe</div>
+            <div class="col-md-8">
+              <input type="text" class="form-control" name="merek_tipe" id="merek_tipe" placeholder="merek_tipe" value="<?php 
+                if(set_value('merek_tipe')=="" && isset($merek_tipe)){
+                  echo $merek_tipe;
+                }else{
+                  echo  set_value('merek_tipe');
+                }
+                ?>" readonly="" >
+            </div>
+          </div>
            <div class="row" style="margin: 5px">
             <div class="col-md-4" style="padding: 5px">Harga</div>
             <div class="col-md-8">
@@ -164,20 +153,18 @@
                 }else{
                   echo  set_value('harga');
                 }
-                ?>" >
+                ?>" readonly="" >
             </div>
           </div>
-          <div class="row" style="margin: 5px">
-            <div class="col-md-4" style="padding: 5px">Jumlah Awal</div>
-            <div class="col-md-8">
-              <input type="number" class="form-control" name="jumlah" id="jumlah" placeholder="Jumlah" value="<?php 
+          
+              <input type="hidden" class="form-control" name="jumlah" id="jumlah" placeholder="Jumlah" value="<?php 
                 if(set_value('jumlah')=="" && isset($jmlawal)){
                   echo $jmlawal;
                 }else{
                   echo  set_value('jumlah');
                 }
                 ?>" readonly="readonly">
-            </div>
+          
             <input type="hidden" class="form-control" name="id_mst_inv_barang_habispakai_jenis" id="id_mst_inv_barang_habispakai_jenis" placeholder="Jumlah" value="<?php 
                 if(set_value('id_mst_inv_barang_habispakai_jenis')=="" && isset($id_mst_inv_barang_habispakai_jenis)){
                   echo $id_mst_inv_barang_habispakai_jenis;
@@ -192,58 +179,22 @@
                   echo  set_value('id_mst_inv_barang_habispakai');
                 }
                 ?>" readonly="readonly">
-          </div>
+          
           <div class="row" style="margin: 5px">
-            <div class="col-md-4" style="padding: 5px">Jumlah Opname</div>
+            <div class="col-md-4" style="padding: 5px">Jumlah Pemusnahan</div>
             <div class="col-md-8">
-              <input type="number" class="form-control" name="jumlahopname" id="jumlahopname" placeholder="Jumlah Opname" value="<?php 
+              <input type="hidden" class="form-control" name="jumlahopname" id="jumlahopname" placeholder="Jumlah Opname" value="<?php 
                 if(set_value('jumlahopname')=="" && isset($jmlawal)){
                   echo $jmlawal;
                 }else{
                   echo  set_value('jumlahopname');
                 }
                 ?>">
-            </div>
-          </div>
-          <div class="row" style="margin: 5px">
-            <div class="col-md-4" style="padding: 5px">Selisih</div>
-            <div class="col-md-8">
-              <input type="number" class="form-control" name="selisih" id="selisih" placeholder="Selisih Opname" value="<?php 
-                if(set_value('selisih')=="" && isset($jmlawal) && isset($jml_akhir)){
-                  echo $jmlawal-$jml_akhir;
+                 <input type="number" class="form-control" name="jumlahmusnah" id="jumlahmusnah" placeholder="Jumlah Pemusnahan" value="<?php 
+                if(set_value('jumlahmusnah')=="" && isset($jmlawal)){
+                  echo $jmlawal;
                 }else{
-                  echo  set_value('selisih');
-                }
-                ?>" readonly="readonly">
-            </div>
-          </div>
-          <div class="row" style="margin: 5px">
-            <div class="col-md-4" style="padding: 5px">Jumlah Rusak</div>
-            <div class="col-md-8">
-              <input type="number" class="form-control" name="jml_rusak" id="jml_rusak" placeholder="Jumlah Rusak" value="<?php 
-                if(set_value('jml_rusak')=="" && isset($jml_rusak)){
-                  echo $jml_rusak;
-                }else{
-                  echo  set_value('jml_rusak');
-                }
-                ?>">
-            </div>
-          </div>
-          <div class="row" style="margin: 5px">
-            <div class="col-md-4" style="padding: 5px">Jumlah Tidak Dipakai</div>
-            <div class="col-md-8">
-              <input type="number" class="form-control" name="jml_tdkdipakai" id="jml_tdkdipakai" placeholder="Jumlah Tidak Dipakai" value="<?php 
-                if(set_value('jml_tdkdipakai')=="" && isset($jml_tdkdipakai)){
-                  echo $jml_tdkdipakai;
-                }else{
-                  echo  set_value('jml_tdkdipakai');
-                }
-                ?>">
-                 <input type="hidden" class="form-control" name="tgl_update_opname" id="tgl_update_opname" placeholder="tanggal update" value="<?php 
-                if(set_value('tgl_update_opname')=="" && isset($tgl_opname)){
-                  echo $tgl_opname;
-                }else{
-                  echo  set_value('tgl_update_opname');
+                  echo  set_value('jumlahmusnah');
                 }
                 ?>">
             </div>

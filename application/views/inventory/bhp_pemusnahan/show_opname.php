@@ -20,7 +20,7 @@
 	      	<div class="box-footer">
 		      	<div class="row"> 
 			      	<div class="col-md-12">
-					 	<button type="button" class="btn btn-primary" id="btn-add"><i class='fa fa-plus-square'></i> &nbsp; Pemusnahan Baru</button>
+					 	<button type="button" class="btn btn-primary" id="btn-add-opname"><i class='fa fa-plus-square'></i> &nbsp; Pemusnahan Baru</button>
 					 	<button type="button" class="btn btn-success" id="btn-refreshopname"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
 			          <button type="button" id="btn-export-opname" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Export</button>
 			      	</div>
@@ -132,6 +132,8 @@
 			{ name: 'tgl_opname', type: 'date' },
 			{ name: 'nomor_opname', type: 'string' },
 			{ name: 'no', type: 'string' },
+			{ name: 'saksi1_nama', type: 'string' },
+			{ name: 'saksi2_nama', type: 'string' },
 			{ name: 'last_opname', type: 'number' },
 			{ name: 'edit', type: 'number' },
 			{ name: 'delete', type: 'number' },
@@ -178,7 +180,7 @@
 			columns: [
 				{ text: 'Edit', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgridopname").jqxGrid('getrowdata', row)
-				    if((dataRecord.edit==1)&&(dataRecord.last_opname > 0)){
+				    if((dataRecord.edit==1)){
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='editopname(\""+dataRecord.id_inv_inventaris_habispakai_opname+"\",\""+dataRecord.jenis_bhp+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
@@ -187,8 +189,8 @@
                 },
 				{ text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgridopname").jqxGrid('getrowdata', row);
-				    if(dataRecord.delete==1 &&(dataRecord.last_opname > 0)){
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del(\""+dataRecord.id_inv_inventaris_habispakai_opname+"\");'></a></div>";
+				    if(dataRecord.delete==1){
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del_opname(\""+dataRecord.id_inv_inventaris_habispakai_opname+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php  echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}
@@ -196,17 +198,12 @@
                 },
 				{ text: 'Nomor', editable:false ,datafield: 'nomor_opname', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
 				{ text: 'Tanggal', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false,datafield: 'tgl_opname', columntype: 'date', filtertype: 'none', cellsformat: 'dd-MM-yyyy', width: '10%'},
-				{ text: 'Jenis Barang', editable:false ,align: 'center', datafield: 'jenis_bhp', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
-				{ text: 'Saksi 1', editable:false ,align: 'center', cellsalign: 'left', datafield: 'petugas_nama', columntype: 'textbox', filtertype: 'textbox', width: '25%' },
-				{ text: 'Saksi 2', editable:false ,align: 'center', cellsalign: 'left', datafield: 'petugas_nip', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
+				{ text: 'Saksi 1', editable:false ,align: 'center', cellsalign: 'left', datafield: 'saksi1_nama', columntype: 'textbox', filtertype: 'textbox', width: '28%' },
+				{ text: 'Saksi 2', editable:false ,align: 'center', cellsalign: 'left', datafield: 'saksi2_nama', columntype: 'textbox', filtertype: 'textbox', width: '23%' },
 				{ text: 'Catatan', editable:false ,datafield: 'catatan', columntype: 'textbox', filtertype: 'textbox', width: '13%' ,align: 'center', cellsalign: 'right'}
             ]
 		});
-	  function timeline_pengeluaran_barang(id){
-	    $.get("<?php echo base_url();?>inventory/bhp_pemusnahan/timeline_pengeluaran_barang/"+id , function(response) {
-	      $("#timeline-barang").html(response);
-	    });
-	  }
+	
 	function editopname(id,jenis){
 		var idjenis = '0';
 		if (jenis.toLowerCase()=="obat") {
@@ -214,14 +211,14 @@
 		}else{
 			idjenis = '0';
 		}
-  		$.get("<?php echo base_url().'inventory/bhp_pemusnahan/edit_opname/' ?>"+id+'/'+idjenis,function (data) {
+  		$.get("<?php echo base_url().'inventory/bhp_pemusnahan/edit_opname/' ?>"+id+'/tidakdipakai',function (data) {
 	          	$('#content3').html(data);
      	});
 
       return false;
 	}
 
-	function del(id){
+	function del_opname(id){
 		var confirms = confirm("Hapus Data ?");
 		if(confirms == true){
 			$.post("<?php echo base_url().'inventory/bhp_pemusnahan/dodel_opname' ?>/"+id,  function(){
@@ -232,10 +229,10 @@
 		}
 	}
 	
-	$('#btn-add').click(function(){
+	$('#btn-add-opname').click(function(){
 		var opname = '';
   		$.ajax({
-	        url : '<?php echo site_url('inventory/bhp_pemusnahan/add_expired/tidakdipakai') ?>',
+	        url : '<?php echo site_url('inventory/bhp_pemusnahan/add_opname/tidakdipakai') ?>',
 	        type : 'POST',
 	     //   data : 'opname=' + opname,
 	        success : function(data) {

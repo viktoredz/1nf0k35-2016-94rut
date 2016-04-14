@@ -53,17 +53,9 @@
 			},
 
 			columns: [
-			<?php if ($jenis_bhp=="8") { ?>
 				{ text: 'Nama Barang ', editable: false,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '40%'},
-				{ text: 'Batch ',datafield: 'batch' ,align: 'center', editable: false, columntype: 'textbox', filtertype: 'textbox', width: '20%'},
-				{ text: 'Jumlah Akhir ', align: 'center',cellsalign: 'right',editable: false,datafield: 'jml_akhir', columntype: 'textbox', filtertype: 'textbox', width: '15%'},
-				{ text: 'Selisih ', align: 'center',cellsalign: 'right',editable: false,datafield: 'selisih', columntype: 'textbox', filtertype: 'textbox', width: '15%'},
-			<?php }else{
-				?>
-				{ text: 'Nama Barang ', editable: false,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '50%'},
-				{ text: 'Jumlah Akhir ', align: 'center',cellsalign: 'right',editable: false,datafield: 'jml_akhir', columntype: 'textbox', filtertype: 'textbox', width: '20%'},
-				{ text: 'Selisih ', align: 'center',cellsalign: 'right',editable: false,datafield: 'selisih', columntype: 'textbox', filtertype: 'textbox', width: '20%'},
-				<?php } ?>
+				{ text: 'Batch ',datafield: 'batch' ,align: 'center', editable: false, columntype: 'textbox', filtertype: 'textbox', width: '25%'},
+				{ text: 'Jumlah Akhir ', align: 'center',cellsalign: 'right',editable: false,datafield: 'jml_akhir', columntype: 'textbox', filtertype: 'textbox', width: '25%'},
 				{ text: 'Hapus', align: 'center', editable: false,filtertype: 'none', sortable: false, width: '10%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid_barang_opname").jqxGrid('getrowdata', row);
 				    if (dataRecord.edit==1){

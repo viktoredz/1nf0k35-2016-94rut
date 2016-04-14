@@ -146,7 +146,7 @@ class Bhp_pemusnahan_model extends CI_Model {
         $query = $this->db->delete('inv_inventaris_habispakai_opname_item');
         return $query->result();
     }
-    function update_entry()
+    function update_expired()
     {   $tanggal =explode("-", $this->input->post('tgl_opname'));
         $dataupdate = array();
         $dataupdate['jenis_bhp']                  = 'obat';
@@ -164,6 +164,42 @@ class Bhp_pemusnahan_model extends CI_Model {
          );
         return $this->db->update("inv_inventaris_habispakai_opname",$dataupdate,$datakey);
     }
+    function update_rusak()
+    {   $tanggal =explode("-", $this->input->post('tgl_opname_rusak'));
+        $dataupdate = array();
+        $dataupdate['jenis_bhp']                  = 'obat';
+        $dataupdate['saksi1_nama']                = $this->input->post('saksi1_nama_rusak');
+        $dataupdate['saksi1_nip']                 = $this->input->post('saksi1_nip_rusak');
+        $dataupdate['saksi2_nama']                = $this->input->post('saksi2_nama_rusak');
+        $dataupdate['saksi2_nip']                 = $this->input->post('saksi2_nip_rusak');
+        $dataupdate['catatan']                    = $this->input->post('catatan_rusak');
+        $dataupdate['nomor_opname']               = $this->input->post('nomor_opname_rusak');
+        $dataupdate['tipe']                       = $this->input->post('tipe_data_rusak');
+        $datakey = array(
+            'id_inv_inventaris_habispakai_opname'           =>$this->input->post('id_inv_inventaris_habispakai_opname_rusak'),
+            'tgl_opname'                                    =>$tanggal[2].'-'.$tanggal[1].'-'.$tanggal[0],
+            'code_cl_phc'                                   =>$this->input->post('puskesmas_rusak'),
+         );
+        return $this->db->update("inv_inventaris_habispakai_opname",$dataupdate,$datakey);
+    }
+    function update_opname()
+    {  $tanggal =explode("-", $this->input->post('tgl_opname_opname'));
+        $dataupdate = array();
+        $dataupdate['jenis_bhp']                  = 'obat';
+        $dataupdate['saksi1_nama']                = $this->input->post('saksi1_nama_opname');
+        $dataupdate['saksi1_nip']                 = $this->input->post('saksi1_nip_opname');
+        $dataupdate['saksi2_nama']                = $this->input->post('saksi2_nama_opname');
+        $dataupdate['saksi2_nip']                 = $this->input->post('saksi2_nip_opname');
+        $dataupdate['catatan']                    = $this->input->post('catatan_opname');
+        $dataupdate['nomor_opname']               = $this->input->post('nomor_opname_opname');
+        $dataupdate['tipe']                       = $this->input->post('tipe_data_opname');
+        $datakey = array(
+            'id_inv_inventaris_habispakai_opname'           =>$this->input->post('id_inv_inventaris_habispakai_opname_opname'),
+            'tgl_opname'                                    =>$tanggal[2].'-'.$tanggal[1].'-'.$tanggal[0],
+            'code_cl_phc'                                   =>$this->input->post('puskesmas_opname'),
+         );
+        return $this->db->update("inv_inventaris_habispakai_opname",$dataupdate,$datakey);
+    }
     function insertdata(){
         if ($this->input->post('batch')=='undefined') {
             $nobac='-';
@@ -176,19 +212,6 @@ class Bhp_pemusnahan_model extends CI_Model {
         $this->db->select("*");
         $query = $this->db->get("inv_inventaris_habispakai_opname_item");
            if ($query->num_rows() > 0){
-                $keyvaluesdata  = array(
-                    'id_mst_inv_barang_habispakai'  => $this->input->post('id_mst_inv_barang_habispakai'),
-                    'id_inv_inventaris_habispakai_opname' => $this->input->post('id_inv_inventaris_habispakai_opname'),
-                    'batch'                         => $nobac,
-                    'code_cl_phc'                   => 'P'.$this->session->userdata('puskesmas'),
-                    'tgl_update'                    => $this->input->post('tgl_update_opname')
-                );
-                $updatevaluesdata  = array(
-                    'jml_rusak'                     => $this->input->post('jml_rusak'),
-                    'jml_tdkdipakai'                => $this->input->post('jml_tdkdipakai')
-                );
-                $this->db->update('inv_inventaris_habispakai_kondisi',$updatevaluesdata,$keyvaluesdata);
-
                 $dataupdate = array(
                     'jml_awal'      => $this->input->post('jumlah'),
                     'jml_akhir'     => $this->input->post('jumlahopname'),
@@ -205,16 +228,6 @@ class Bhp_pemusnahan_model extends CI_Model {
                     return mysql_error();
                 }
             }else{
-                $valuesdata  = array(
-                    'jml_rusak'                     => $this->input->post('jml_rusak'),
-                    'jml_tdkdipakai'                => $this->input->post('jml_tdkdipakai'),
-                    'id_mst_inv_barang_habispakai'  => $this->input->post('id_mst_inv_barang_habispakai'),
-                    'id_inv_inventaris_habispakai_opname' => $this->input->post('id_inv_inventaris_habispakai_opname'),
-                    'batch'                         => $nobac,
-                    'code_cl_phc'                   => 'P'.$this->session->userdata('puskesmas'),
-                    'tgl_update'                    => $this->input->post('tgl_update_opname')
-                );
-                $this->db->insert('inv_inventaris_habispakai_kondisi',$valuesdata);
                 $values = array(
                     'jml_awal'                      => $this->input->post('jumlah'),
                     'jml_akhir'                     => $this->input->post('jumlahopname') ,
@@ -349,6 +362,49 @@ class Bhp_pemusnahan_model extends CI_Model {
         $this->db->having('jmlawal != 0'); 
         $query = $this->db->get("bhp_distribusi_opname",$limit,$start);
         return $query->result();
+    }
+    public function getitemrusakkanan($start=0,$limit=999999,$options=array()){
+        $query = $this->db->get("bhp_pemusnahan_rusak",$limit,$start);
+        return $query->result();
+    }
+
+    function insert_rusak()
+    {
+        $data['id_inv_inventaris_habispakai_opname'] = $this->kode_distribusi($this->input->post('kode_distribusi_rusak'));
+        $data['code_cl_phc']                = $this->input->post('puskesmas');
+        $data['jenis_bhp']                  = 'obat';
+        $data['tgl_opname']                 = date("Y-m-d",strtotime($this->input->post('tgl_opname_rusak')));
+        $data['saksi1_nama']                = $this->input->post('saksi1_nama_rusak');
+        $data['saksi1_nip']                 = $this->input->post('saksi1_nip_rusak');
+        $data['saksi2_nama']                = $this->input->post('saksi2_nama_rusak');
+        $data['saksi2_nip']                 = $this->input->post('saksi2_nip_rusak');
+        $data['catatan']                    = $this->input->post('catatan_rusak');
+        $data['nomor_opname']               = $this->input->post('nomor_opname_rusak');
+        $data['tipe']                       = $this->input->post('tipe_data_rusak');
+        if($this->db->insert('inv_inventaris_habispakai_opname', $data)){
+            return $data['id_inv_inventaris_habispakai_opname'];
+        }else{
+            return mysql_error();
+        }
+    }
+    function insert_opname()
+    {
+        $data['id_inv_inventaris_habispakai_opname'] = $this->kode_distribusi($this->input->post('kode_distribusi_opname'));
+        $data['code_cl_phc']                = $this->input->post('puskesmas');
+        $data['jenis_bhp']                  = 'obat';
+        $data['tgl_opname']                 = date("Y-m-d",strtotime($this->input->post('tgl_opname_opname')));
+        $data['saksi1_nama']                = $this->input->post('saksi1_nama_opname');
+        $data['saksi1_nip']                 = $this->input->post('saksi1_nip_opname');
+        $data['saksi2_nama']                = $this->input->post('saksi2_nama_opname');
+        $data['saksi2_nip']                 = $this->input->post('saksi2_nip_opname');
+        $data['catatan']                    = $this->input->post('catatan_opname');
+        $data['nomor_opname']               = $this->input->post('nomor_opname_opname');
+        $data['tipe']                       = $this->input->post('tipe_data_opname');
+        if($this->db->insert('inv_inventaris_habispakai_opname', $data)){
+            return $data['id_inv_inventaris_habispakai_opname'];
+        }else{
+            return mysql_error();
+        }
     }
     function get_data_opname($start=0,$limit=999999,$options=array())
     {

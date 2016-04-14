@@ -166,7 +166,7 @@
 				{ text: 'Lama', align: 'center', cellsalign: 'right',filtertype: 'none', editable:false , columntype: 'textbox', width: '11%',datafield: 'jmlexpired', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgridExpiring").jqxGrid('getrowdata', row);
 				    if(dataRecord.jmlexpired=='0'){
-				    	return "<div style='width:100%;padding:4px;padding-top:6px;text-align:left;font-weight:bold; color:#a31919'>"+dataRecord.jmlexpired+"</div>";
+				    	return "<div style='width:100%;padding:4px;padding-top:6px;text-align:right;font-weight:bold; color:#a31919'>"+dataRecord.jmlexpired+"</div>";
 				    }
                  }
                 },

@@ -21,8 +21,8 @@
 		      	<div class="row"> 
 			      	<div class="col-md-12">
 					 	<button type="button" class="btn btn-primary" id="btn-add-expired"><i class='fa fa-plus-square'></i> &nbsp; Pemusnahan Baru</button>
-					 	<button type="button" class="btn btn-success" id="btn-refreshopname"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
-			          <button type="button" id="btn-export-opname" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Export</button>
+					 	<button type="button" class="btn btn-success" id="btn-refreshexpired"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
+			          <button type="button" id="btn-export-expired" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Export</button>
 			      	</div>
 		      	</div>
 		    <div class="box-body">
@@ -161,7 +161,7 @@
 			}
 		});
      
-		$('#btn-refreshopname').click(function () {
+		$('#btn-refreshexpired').click(function () {
 			$("#jqxgridExpired").jqxGrid('clearfilters');
 		});
 
@@ -179,7 +179,7 @@
 				{ text: 'Edit', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgridExpired").jqxGrid('getrowdata', row)
 				    if((dataRecord.edit==1)){
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='editopname(\""+dataRecord.id_inv_inventaris_habispakai_opname+"\",\""+dataRecord.jenis_bhp+"\");'></a></div>";
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='edit_expired(\""+dataRecord.id_inv_inventaris_habispakai_opname+"\",\""+dataRecord.jenis_bhp+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}
@@ -188,7 +188,7 @@
 				{ text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgridExpired").jqxGrid('getrowdata', row);
 				    if(dataRecord.delete==1){
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del(\""+dataRecord.id_inv_inventaris_habispakai_opname+"\");'></a></div>";
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del_expired(\""+dataRecord.id_inv_inventaris_habispakai_opname+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php  echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}
@@ -200,26 +200,21 @@
 				{ text: 'Saksi 2', editable:false ,align: 'center', cellsalign: 'left', datafield: 'saksi2_nama', columntype: 'textbox', filtertype: 'textbox', width: '25%' }
             ]
 		});
-	  function timeline_pengeluaran_barang(id){
-	    $.get("<?php echo base_url();?>inventory/bhp_pemusnahan/timeline_pengeluaran_barang/"+id , function(response) {
-	      $("#timeline-barang").html(response);
-	    });
-	  }
-	function editopname(id,jenis){
+	function edit_expired(id,jenis){
 		var idjenis = '0';
 		if (jenis.toLowerCase()=="obat") {
 			idjenis = '8';
 		}else{
 			idjenis = '0';
 		}
-  		$.get("<?php echo base_url().'inventory/bhp_pemusnahan/edit_opname/' ?>"+id+'/expired',function (data) {
+  		$.get("<?php echo base_url().'inventory/bhp_pemusnahan/edit_expired/' ?>"+id+'/expired',function (data) {
 	          	$('#content1').html(data);
      	});
 
       return false;
 	}
 
-	function del(id){
+	function del_expired(id){
 		var confirms = confirm("Hapus Data ?");
 		if(confirms == true){
 			$.post("<?php echo base_url().'inventory/bhp_pemusnahan/dodel_opname' ?>/"+id,  function(){
@@ -243,7 +238,7 @@
 
   	});
 
-	$("#btn-export-opname").click(function(){
+	$("#btn-export-expired").click(function(){
 		
 		var post = "";
 		var filter = $("#jqxgridExpired").jqxGrid('getfilterinformation');
