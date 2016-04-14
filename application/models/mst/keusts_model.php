@@ -527,12 +527,12 @@ class Keusts_model extends CI_Model {
     
 
     function add_anggaran(){
-        $dataExplode = explode("-",$this->input->post('id_mst_akun'));
+        // $dataExplode = explode("-",$this->input->post('id_mst_akun'));
         
         $data = array(
            'id_mst_anggaran'        => $this->get_new_id_mst_keu_anggaran(),
            'id_mst_anggaran_parent' => $this->input->post('id_mst_anggaran_parent') ,
-           'id_mst_akun'            => $dataExplode[0],
+           // 'id_mst_akun'            => $dataExplode[0],
            'kode_anggaran'          => $this->input->post('kode_anggaran'),
            'uraian'                 => $this->input->post('uraian'),
            'tarif'                  => $this->input->post('tarif'),
@@ -583,9 +583,12 @@ class Keusts_model extends CI_Model {
     }
 
    function get_versi_sts(){
+        $kodepusk = 'P'.$this->session->userdata('puskesmas');
+
         $this->db->select("mst_keu_anggaran_versi.*,DATE_FORMAT(tanggal_dibuat,'%d/%m/%Y') AS tanggal_dibuat,IF(mst_keu_versi_status.id_mst_anggaran_versi IS NOT NULL,'Aktif','Non Aktif') AS status", false);
         $this->db->order_by('id_mst_anggaran_versi','asc');
         $this->db->join('mst_keu_versi_status','mst_keu_versi_status.id_mst_anggaran_versi=mst_keu_anggaran_versi.id_mst_anggaran_versi','left');
+        $this->db->where('mst_keu_versi_status.cl_phc_code',$kodepusk);
         $query = $this->db->get('mst_keu_anggaran_versi');
         return $query->result();
     }

@@ -21,10 +21,6 @@ class Keuangan_sts extends CI_Controller {
 		return $this->keusts_model->get_versi_status();
 	}
 
-	// function nama_versi($versi){
-	// 	return $this->keusts_model->nama_versi($versi);
-	// }
-
 	function sts($pageIndex){
 		$data = array();
 
@@ -286,8 +282,8 @@ class Keuangan_sts extends CI_Controller {
 		if($this->input->is_ajax_request()) {
 			$versi = $this->input->post('versi');
 			$this->session->set_userdata('versi',$this->input->post('versi'));
-			$ver   = $this->keusts_model->get_versi_sts();
-			$datases=$this->session->userdata('versi');
+			$ver     = $this->keusts_model->get_versi_sts();
+			$datases = $this->session->userdata('versi');
 				
 				echo "<option value=''></option>";
 			foreach($ver as $ver) :

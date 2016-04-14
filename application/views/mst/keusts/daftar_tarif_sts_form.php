@@ -544,7 +544,7 @@
                { text: 'Kode Anggaran', dataField: "kode_anggaran", align: 'center',cellsalign: 'center', width: '19%' },
                { text: 'Uraian', dataField: "uraian", align: 'center', width: '31%',cellsalign: 'center' }, 
                { text: 'Tarif', dataField: "tarif", align: 'center', width: '20%',cellsalign: 'center' },         
-               { text: 'Kode Rekening', dataField: 'id_mst_akun', width: "30%", align:'center',cellsalign: 'center'}
+               { text: 'Kode Rekening', dataField: 'id_mst_akun', width: "30%", align:'center',cellsalign: 'center',columnType: "template"}
                
                 ]
             });
