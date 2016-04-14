@@ -558,7 +558,7 @@ class Keusts_model extends CI_Model {
         return $this->db->update($this->tb, $data);             
     }
             
-    function delete_anggaran(){     
+    function delete_anggaran(){  
         $this->db->where('id_mst_anggaran', $this->input->post('id_mst_anggaran'));
         $this->db->delete($this->tb);
                 
@@ -574,7 +574,6 @@ class Keusts_model extends CI_Model {
         $this->db->where('tgl', $tgl);
         $this->db->where('code_cl_phc', $this->session->userdata('puskes'));
         $this->db->delete('keu_sts_hasil');
-        
     }
     
     function get_data_kode_rekening_all($start=0,$limit=100,$options=array()){
@@ -590,7 +589,6 @@ class Keusts_model extends CI_Model {
         $query = $this->db->get('mst_keu_anggaran_versi');
         return $query->result();
     }
-
 
     function get_kode_rek(){
         $this->db->select('*');

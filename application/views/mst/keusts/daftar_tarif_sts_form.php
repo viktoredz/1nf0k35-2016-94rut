@@ -34,8 +34,7 @@
 
       <div class="box-body">
       <div class="">
-        <div class="col-md-4 pull-right">
-          <button class="btn btn-success" data-toggle="modal" data-target="#myModal">Simpan Perubahan</button>          
+        <div class="col-md-2 pull-right">
           <button type="button" id="btn-kembali" class="btn btn-primary"><i class='fa  fa-arrow-circle-o-left'></i> &nbsp;Kembali</button>
         </div>
       </div>
@@ -257,7 +256,6 @@
           var dataver = "{versi}";
         }else{
           var dataver =  $(this).val();
-          // var nama_versi=$("#versi:selected").text();
          }
       $.ajax({
           url : '<?php echo site_url('mst/keuangan_sts/get_versi_sts') ?>',
@@ -265,7 +263,6 @@
           data : 'versi='+dataver,
           success : function(data) {
           $("select[name='versi']").html(data);
-          // $("#nama_versi").html(data);
 
           statusversi();
           nama_versi();
@@ -299,18 +296,18 @@
             {
                 dataType: "tab",
                 dataFields: [
-                    { name: "IdMstAnggaran", type: "number" },
-                    { name: "IdMstAnggaranParent", type: "number" },
-                    { name: "IdMstAkun", type: "number" },
-                    { name: "KodeAnggaran", type: "number" },
-                    { name: "Uraian", type: "string" },
-                    { name: "Tarif", type: "number" },
-                    { name: "IdMstAnggaranVersi", type: "number" }
+                    { name: "id_mst_anggaran", type: "number" },
+                    { name: "id_mst_anggaran_parent", type: "number" },
+                    { name: "id_mst_akun", type: "number" },
+                    { name: "kode_anggaran", type: "number" },
+                    { name: "uraian", type: "string" },
+                    { name: "tarif", type: "number" },
+                    { name: "id_mst_anggaran_versi", type: "number" }
                 ],
                 hierarchy:
                 {
-                    keyDataField: { name: 'IdMstAnggaran' },
-                    parentDataField: { name: 'IdMstAnggaranParent' }
+                    keyDataField: { name: 'id_mst_anggaran' },
+                    parentDataField: { name: 'id_mst_anggaran_parent' }
                 },
                 id: 'id_mst_anggaran',
                 url: '<?php echo base_url()?>mst/keuangan_sts/api_data',
@@ -330,9 +327,9 @@
           
                     commit(true);
           var arr = $.map(rowData, function(el) { return el });                                                           
-                      //cek tipe inputan 
-                      //object -> input
-                      //number -> update
+                    //cek tipe inputan 
+                    //object -> input
+                    //number -> update
           if(typeof(arr[1]) === 'object'){
             var arr2 = $.map(arr[1], function(el) { return el });
             //input data
@@ -345,7 +342,7 @@
             });
           }else{      
             //update data
-            $.post( '<?php echo base_url()?>mst/keuangan_sts/anggaran_update', {id_mst_anggaran:arr[0] ,id_mst_anggaran_parent:arr[1], id_mst_akun:arr[2], kode_anggaran:arr[3], uraian : arr[4], tarif : arr[5], id_mst_anggaran_versi : arr[1]},function( data ) {
+            $.post( '<?php echo base_url()?>mst/keuangan_sts/anggaran_update', {row:rowID,id_mst_anggaran:arr[0] ,id_mst_anggaran_parent:arr[1], id_mst_akun:arr[2], kode_anggaran:arr[3], uraian : arr[4], tarif : arr[5], id_mst_anggaran_versi : arr[1]},function( data ) {
                 if(data != 0){
                   alert(data);                  
                 }else{
@@ -365,16 +362,14 @@
                 $("#treeGrid").jqxTreeGrid('updateBoundData');
               });
             }
-            
           }else{
             $.post( '<?php echo base_url()?>mst/keuangan_sts/anggaran_delete', {id_mst_anggaran:rowID},function( data ) {
-              $("#treeGrid").jqxTreeGrid('updateBoundData');
+              // $("#treeGrid").jqxTreeGrid('updateBoundData');
             });
           }
                      commit(true);
                  }
              };
-
             var dataAdapter = new $.jqx.dataAdapter(source, {
                 loadComplete: function () {
                     // data is loaded.
@@ -522,6 +517,7 @@
 
                         }
                     });
+
                     deleteButton.click(function () {
                         if (!deleteButton.jqxButton('disabled')) {
                             var selection = $("#treeGrid").jqxTreeGrid('getSelection');
@@ -543,17 +539,18 @@
                         }
                     });
                 },
+
               columns: [                             
-               { text: 'Kode Anggaran', dataField: "KodeAnggaran", align: 'center',cellsalign: 'center', width: '19%' },
-               { text: 'Uraian', dataField: "Uraian", align: 'center', width: '31%',cellsalign: 'center' }, 
-               { text: 'Tarif', dataField: "Tarif", align: 'center', width: '20%',cellsalign: 'center' },         
-               { text: 'Kode Rekening', dataField: 'IdMstAkun', width: "30%", align:'center',cellsalign: 'center'}
+               { text: 'Kode Anggaran', dataField: "kode_anggaran", align: 'center',cellsalign: 'center', width: '19%' },
+               { text: 'Uraian', dataField: "uraian", align: 'center', width: '31%',cellsalign: 'center' }, 
+               { text: 'Tarif', dataField: "tarif", align: 'center', width: '20%',cellsalign: 'center' },         
+               { text: 'Kode Rekening', dataField: 'id_mst_akun', width: "30%", align:'center',cellsalign: 'center'}
                
                 ]
             });
         });
     
-       function add_versi(){
+      function add_versi(){
       $("#popup_keuangan_sts #popup_keuangan_sts_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
         $.get("<?php echo base_url().'mst/keuangan_sts/versi_add' ?>/", function(data) {
           $("#popup_keuangan_sts_content").html(data);
