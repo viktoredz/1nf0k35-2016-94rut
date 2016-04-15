@@ -126,15 +126,13 @@
 			{ name: 'uraian', type: 'string' },
 			{ name: 'jml_awal', type: 'number' },
 			{ name: 'jml_akhir', type: 'number' },
-			{ name: 'jmlawal_opname', type: 'number' },
-			{ name: 'jmlakhir_opname', type: 'number' },
-			{ name: 'sumselisih', type: 'number' },
+			{ name: 'tipe', type: 'string' },
 			{ name: 'harga', type: 'string' },
 			{ name: 'merek_tipe', type: 'string' },
 			{ name: 'tgl_opname', type: 'string' },
 			{ name: 'jml_selisih', type: 'number' }
         ],
-		url: "<?php echo site_url('inventory/bhp_pemusnahan/json_opname'); ?>",
+		url: "<?php echo site_url('inventory/bhp_pemusnahan/json_allopname'); ?>",
 		cache: false,
 			updateRow: function (rowID, rowData, commit) {
              
@@ -183,12 +181,13 @@
 					}
                  }
                 },
-				{ text: 'Nama Barang', editable:false ,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '30%' },
-				{ text: 'Merek', editable:false ,datafield: 'merek_tipe', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
+				{ text: 'Nama Barang', editable:false ,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '22%' },
+				{ text: 'Merek', editable:false ,datafield: 'merek_tipe', columntype: 'textbox', filtertype: 'textbox', width: '14%' },
+				{ text: 'Tipe', editable:false ,datafield: 'tipe', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
 				{ text: 'Tanggal', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false,datafield: 'tgl_opname', columntype: 'date', filtertype: 'none', cellsformat: 'dd-MM-yyyy', width: '10%'},
-				{ text: 'Jumlah Awal',sortable: true,editable:false ,align: 'center', cellsalign: 'right', datafield: 'jmlawal_opname', columntype: 'textbox', filtertype: 'none', width: '13%' },
-				{ text: 'Jumlah Akhir',sortable: true,editable:false ,align: 'center', cellsalign: 'right', datafield: 'jmlakhir_opname', columntype: 'textbox', filtertype: 'none', width: '13%' },
-				{ text: 'Selisih',sortable: false,editable:false ,datafield: 'sumselisih', columntype: 'textbox', filtertype: 'none', width: '13%' ,align: 'center', cellsalign: 'right'}
+				{ text: 'Jumlah Awal',sortable: true,editable:false ,align: 'center', cellsalign: 'right', datafield: 'jml_awal', columntype: 'textbox', filtertype: 'none', width: '13%' },
+				{ text: 'Jumlah Akhir',sortable: true,editable:false ,align: 'center', cellsalign: 'right', datafield: 'jml_akhir', columntype: 'textbox', filtertype: 'none', width: '13%' },
+				{ text: 'Selisih',sortable: false,editable:false ,datafield: 'jml_selisih', columntype: 'textbox', filtertype: 'none', width: '13%' ,align: 'center', cellsalign: 'right'}
             ]
 		});
 	  function timeline_pengeluaran_barang(id){

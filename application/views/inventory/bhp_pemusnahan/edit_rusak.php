@@ -186,15 +186,12 @@
  </section>
 <div class="row">
 
-<?php if(!isset($viewreadonly)){?>
   <div class="col-md-6">
     <div class="box box-success">
       <div class="box-body">
-        <label>Barang </label>
+        <label>Pemusnahan Barang Terima Rusak </label>
         <div class="div-grid">
-            <div id="jqxTabs">
-              <?php echo $barang_opname;?>
-            </div>
+              <?php echo $barang_rusakkiri;?>
         </div>
       </div>
     </div>
@@ -205,27 +202,11 @@
       <div class="box-body">
       <label>Daftar Barang Terima Rusak </label>
         <div class="div-grid">
-            <div id="jqxTabs">
-              <?php echo $barang;?>
-            </div>
+              <?php echo $barang_rusakkanan;?>
         </div>
       </div>
     </div>
   </div>
-<?php }else{ ?>
-  <div class="col-md-12">
-    <div class="box box-success">
-      <div class="box-body">
-        <label>Barang Hasil</label>
-        <div class="div-grid">
-            <div id="jqxTabs">
-              <?php echo $barang_opname;?>
-            </div>
-        </div>
-      </div>
-    </div>
-  </div>  
-<?php } ?>
 
 </div>
 <script type="text/javascript">

@@ -12,7 +12,161 @@ class Bhp_pemusnahan extends CI_Controller {
 		$this->load->model('inventory/bhp_pemusnahan_model');
 		$this->load->model('mst/invbarang_model');
 	}
+	function json_allopname($id=0){
+		$this->authentication->verify('inventory','show');
 
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl_update' ) {
+					$value = date("Y-m-d",strtotime($value));
+
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+
+		if ($id!=0) {
+			$this->db->where('inv_inventaris_habispakai_opname_item.id_inv_inventaris_habispakai_opname',$id);
+		}
+		if($this->session->userdata('filter_jenisbarang')!=''){
+			if($this->session->userdata('filter_jenisbarang')=="all"){
+
+			}else{
+				$this->db->where("jenis_bhp",$this->session->userdata('filter_jenisbarang'));
+			}
+		}else{
+			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
+		}
+		if($this->session->userdata('filter_bulan')!=''){
+			if($this->session->userdata('filter_bulan')=="all"){
+
+			}else{
+				$this->db->where("MONTH(tgl_opname)",$this->session->userdata('filter_bulan'));
+			}
+		}else{
+				$this->db->where("MONTH(tgl_opname)",date("m"));
+		}
+		if($this->session->userdata('filter_tahun')!=''){
+			if($this->session->userdata('filter_tahun')=="all"){
+
+			}else{
+				$this->db->where("YEAR(tgl_opname)",$this->session->userdata('filter_tahun'));
+			}
+		}else{
+			$this->db->where("YEAR(tgl_opname)",date("Y"));
+		}
+		if ($this->session->userdata('puskesmas')!='' or !empty($this->session->userdata('puskesmas'))) {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
+		$rows_all_activity = $this->bhp_pemusnahan_model->getallopname();
+
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl_update' ) {
+					$value = date("Y-m-d",strtotime($value));
+
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+
+		if ($id!=0) {
+			$this->db->where('inv_inventaris_habispakai_opname_item.id_inv_inventaris_habispakai_opname',$id);
+		}
+		if($this->session->userdata('filter_jenisbarang')!=''){
+			if($this->session->userdata('filter_jenisbarang')=="all"){
+
+			}else{
+				$this->db->where("jenis_bhp",$this->session->userdata('filter_jenisbarang'));
+			}
+		}else{
+			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
+		}
+		if($this->session->userdata('filter_bulan')!=''){
+			if($this->session->userdata('filter_bulan')=="all"){
+
+			}else{
+				$this->db->where("MONTH(tgl_opname)",$this->session->userdata('filter_bulan'));
+			}
+		}else{
+			$this->db->where("MONTH(tgl_opname)",date("m"));
+		}
+		if($this->session->userdata('filter_tahun')!=''){
+			if($this->session->userdata('filter_tahun')=="all"){
+
+			}else{
+				$this->db->where("YEAR(tgl_opname)",$this->session->userdata('filter_tahun'));
+			}
+		}else{
+			$this->db->where("YEAR(tgl_opname)",date("Y"));
+		}
+		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
+		$activity = $this->bhp_pemusnahan_model->getallopname($this->input->post('recordstartindex'), $this->input->post('pagesize'));
+		$data = array();
+
+		$kodepuskesmas = $this->session->userdata('puskesmas');
+		if(substr($kodepuskesmas, -2)=="01"){
+			$unlock = 1;
+		}else{
+			$unlock = 0;
+		}
+		
+		foreach($activity as $act) {
+			$data[] = array(
+				'id_mst_inv_barang_habispakai'   			=> $act->id_mst_inv_barang_habispakai,
+				'batch'										=> $act->batch,
+				'uraian'									=> $act->uraian,
+				'id_inv_inventaris_habispakai_opname'		=> $act->id_inv_inventaris_habispakai_opname,
+				'jml_awal'									=> $act->jml_awal,
+				'jml_akhir'									=> $act->jml_akhir,
+				'tipe'										=> ucfirst($act->tipe),
+				'harga'										=> $act->harga,
+				'merek_tipe'								=> $act->merek_tipe,
+				'tgl_opname'								=> date("d-m-Y",strtotime($act->tgl_opname)),
+				'jml_selisih'								=> ($act->jml_akhir-$act->jml_awal)*-1,
+				'edit'		=> 1,
+				'delete'	=> 1
+			);
+		}
+
+
+		
+		$size = sizeof($rows_all_activity);
+		$json = array(
+			'TotalRows' => (int) $size,
+			'Rows' => $data
+		);
+
+		echo json_encode(array($json));
+	}
 	function pengeluaran_export(){
 		
 		$TBS = new clsTinyButStrong;		
@@ -491,8 +645,8 @@ class Bhp_pemusnahan extends CI_Controller {
 		$this->db->where('code','P'.$kodepuskesmas);
 		$data['kodepuskesmas_rusak'] = $this->puskesmas_model->get_data();
 		$data['kodestatus_inv'] = $this->bhp_pemusnahan_model->pilih_data_status('status_pembelian');
-		$data['barang']	  			= $this->parser->parse('inventory/bhp_pemusnahan/barangrusakkiri', $data, TRUE);
-		$data['barang_opname'] 	= $this->parser->parse('inventory/bhp_pemusnahan/barangrusakkanan', $data, TRUE);
+		$data['barang_rusakkiri']	  			= $this->parser->parse('inventory/bhp_pemusnahan/barangrusakkiri', $data, TRUE);
+		$data['barang_rusakkanan'] 	= $this->parser->parse('inventory/bhp_pemusnahan/barangrusakkanan', $data, TRUE);
 		$data['alert_form_rusak'] ='';
 		
 		if($this->form_validation->run()== FALSE){
@@ -537,8 +691,8 @@ class Bhp_pemusnahan extends CI_Controller {
 		$this->db->where('code','P'.$kodepuskesmas);
 		$data['kodepuskesmas_opname'] = $this->puskesmas_model->get_data();
 		$data['kodestatus_inv'] = $this->bhp_pemusnahan_model->pilih_data_status('status_pembelian');
-		$data['barang']	  			= $this->parser->parse('inventory/bhp_pemusnahan/barangopnamekiri', $data, TRUE);
-		$data['barang_opname'] 	= $this->parser->parse('inventory/bhp_pemusnahan/barangopnamekanan', $data, TRUE);
+		$data['barangopnamekiri']	  			= $this->parser->parse('inventory/bhp_pemusnahan/barangopnamekiri', $data, TRUE);
+		$data['barangopnamekanan'] 	= $this->parser->parse('inventory/bhp_pemusnahan/barangopnamekanan', $data, TRUE);
 		$data['alert_form_opname'] ='';
 		
 		if($this->form_validation->run()== FALSE){
@@ -1031,6 +1185,104 @@ class Bhp_pemusnahan extends CI_Controller {
 			echo json_encode($kode);
 		}
 	}
+	function json_rusakkiri($id=0,$tgl_opname='0000-00-00'){
+		$this->authentication->verify('inventory','show');
+
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl_update' ) {
+					$value = date("Y-m-d",strtotime($value));
+
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		if ($this->session->userdata('puskesmas')!='' or !empty($this->session->userdata('puskesmas'))) {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
+		$this->db->where('inv_inventaris_habispakai_opname.id_inv_inventaris_habispakai_opname',$id);
+		$rows_all_activity = $this->bhp_pemusnahan_model->getitemrusakkiri();
+
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl_update' ) {
+					$value = date("Y-m-d",strtotime($value));
+
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		if ($this->session->userdata('puskesmas')!='' or !empty($this->session->userdata('puskesmas'))) {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
+		$this->db->where('inv_inventaris_habispakai_opname.id_inv_inventaris_habispakai_opname',$id);
+		$activity = $this->bhp_pemusnahan_model->getitemrusakkiri($this->input->post('recordstartindex'), $this->input->post('pagesize'));
+		$data = array();
+
+		$kodepuskesmas = $this->session->userdata('puskesmas');
+		if(substr($kodepuskesmas, -2)=="01"){
+			$unlock = 1;
+		}else{
+			$unlock = 0;
+		}
+		$no=1;
+		foreach($activity as $act) {
+			$data[] = array(
+				'no'					=> $no++,
+				'id_inv_inventaris_habispakai_opname'	=> $act->id_inv_inventaris_habispakai_opname,
+				'code_cl_phc'			=> $act->code_cl_phc,
+				'id_mst_inv_barang_habispakai'	=> $act->id_mst_inv_barang_habispakai,
+				'tgl_opname'			=> date("d-m-Y",strtotime($act->tgl_opname)),
+				'jenis_bhp'				=> ucfirst($act->jenis_bhp),
+				'petugas_nip'			=> $act->petugas_nip,
+				'petugas_nama'			=> $act->petugas_nama,
+				'catatan'				=> $act->catatan,
+				'nomor_opname'			=> $act->nomor_opname,
+				'jml_awal'				=> $act->jml_awal,
+				'jml_akhir'				=> $act->jml_akhir,
+				'uraian'				=> $act->uraian,
+				'batch'					=> $act->batch,
+				'edit'		=> 1,
+				'delete'	=> 1
+			);
+		}
+
+
+		
+		$size = sizeof($rows_all_activity);
+		$json = array(
+			'TotalRows' => (int) $size,
+			'Rows' => $data
+		);
+
+		echo json_encode(array($json));
+	}
 	function json_rusakkanan($id=0,$tgl_opname='0000-00-00'){
 		$this->authentication->verify('inventory','show');
 
@@ -1109,8 +1361,204 @@ class Bhp_pemusnahan extends CI_Controller {
 				'tgl_kadaluarsa'						=> $act->tgl_kadaluarsa,
 				'id_mst_inv_barang_habispakai'			=> $act->id_mst_inv_barang_habispakai,
 				'uraian'								=> $act->uraian,
+				'merek_tipe'							=> $act->merek_tipe,
 				'id_mst_inv_barang_habispakai_jenis'	=> $act->id_mst_inv_barang_habispakai_jenis,
 				'jumlahrusak'							=> $act->jumlahrusak,
+				'batch'									=> $act->batch,
+				'hargaterakhir'							=> $act->hargaterakhir,
+				'edit'		=> 1,
+				'delete'	=> 1
+			);
+		}
+
+
+		
+		$size = sizeof($rows_all_activity);
+		$json = array(
+			'TotalRows' => (int) $size,
+			'Rows' => $data
+		);
+
+		echo json_encode(array($json));
+	}
+	function json_opnamekiri($id=0,$tgl_opname='0000-00-00'){
+		$this->authentication->verify('inventory','show');
+
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl_update' ) {
+					$value = date("Y-m-d",strtotime($value));
+
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		if ($this->session->userdata('puskesmas')!='' or !empty($this->session->userdata('puskesmas'))) {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
+		$this->db->where('inv_inventaris_habispakai_opname.id_inv_inventaris_habispakai_opname',$id);
+		$rows_all_activity = $this->bhp_pemusnahan_model->getitemopnamekiri();
+
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl_update' ) {
+					$value = date("Y-m-d",strtotime($value));
+
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		if ($this->session->userdata('puskesmas')!='' or !empty($this->session->userdata('puskesmas'))) {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
+		$this->db->where('inv_inventaris_habispakai_opname.id_inv_inventaris_habispakai_opname',$id);
+		$activity = $this->bhp_pemusnahan_model->getitemopnamekiri($this->input->post('recordstartindex'), $this->input->post('pagesize'));
+		$data = array();
+
+		$kodepuskesmas = $this->session->userdata('puskesmas');
+		if(substr($kodepuskesmas, -2)=="01"){
+			$unlock = 1;
+		}else{
+			$unlock = 0;
+		}
+		$no=1;
+		foreach($activity as $act) {
+			$data[] = array(
+				'no'					=> $no++,
+				'id_inv_inventaris_habispakai_opname'	=> $act->id_inv_inventaris_habispakai_opname,
+				'id_mst_inv_barang_habispakai'	=> $act->id_mst_inv_barang_habispakai,
+				'code_cl_phc'			=> $act->code_cl_phc,
+				'tgl_opname'			=> date("d-m-Y",strtotime($act->tgl_opname)),
+				'jenis_bhp'				=> ucfirst($act->jenis_bhp),
+				'petugas_nip'			=> $act->petugas_nip,
+				'petugas_nama'			=> $act->petugas_nama,
+				'catatan'				=> $act->catatan,
+				'nomor_opname'			=> $act->nomor_opname,
+				'jml_awal'				=> $act->jml_awal,
+				'jml_akhir'				=> $act->jml_akhir,
+				'uraian'				=> $act->uraian,
+				'batch'					=> $act->batch,
+				'edit'		=> 1,
+				'delete'	=> 1
+			);
+		}
+
+
+		
+		$size = sizeof($rows_all_activity);
+		$json = array(
+			'TotalRows' => (int) $size,
+			'Rows' => $data
+		);
+
+		echo json_encode(array($json));
+	}
+	function json_opnamekanan($id=0,$tgl_opname='0000-00-00'){
+		$this->authentication->verify('inventory','show');
+
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl_update' ) {
+					$value = date("Y-m-d",strtotime($value));
+
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		if ($this->session->userdata('puskesmas')!='' or !empty($this->session->userdata('puskesmas'))) {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
+		if ($tgl_opname!='0000-00-00' or empty($tgl_opname)) {
+			$this->db->query("set @tglkondisi =".'"'.$tgl_opname.'"'."");
+		}
+		$rows_all_activity = $this->bhp_pemusnahan_model->getitemopnamekanan();
+
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl_update' ) {
+					$value = date("Y-m-d",strtotime($value));
+
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		if ($this->session->userdata('puskesmas')!='' or !empty($this->session->userdata('puskesmas'))) {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
+		if ($tgl_opname!='0000-00-00' or empty($tgl_opname)) {
+			$this->db->query("set @tglkondisi =".'"'.$tgl_opname.'"'."");
+		}
+		$activity = $this->bhp_pemusnahan_model->getitemopnamekanan($this->input->post('recordstartindex'), $this->input->post('pagesize'));
+		$data = array();
+
+		$kodepuskesmas = $this->session->userdata('puskesmas');
+		if(substr($kodepuskesmas, -2)=="01"){
+			$unlock = 1;
+		}else{
+			$unlock = 0;
+		}
+		
+		foreach($activity as $act) {
+			$data[] = array(
+				'jumlahtidakdipakaiterakhir'  			=> $act->jumlahtidakdipakaiterakhir,
+				'code_cl_phc'   						=> $act->code_cl_phc,
+				'tgl_updateterakhir'					=> $act->tgl_updateterakhir,
+				'id_mst_inv_barang_habispakai'			=> $act->id_mst_inv_barang_habispakai,
+				'uraian'								=> $act->uraian,
+				'merek_tipe'							=> $act->merek_tipe,
+				'id_mst_inv_barang_habispakai_jenis'	=> $act->id_mst_inv_barang_habispakai_jenis,
 				'batch'									=> $act->batch,
 				'hargaterakhir'							=> $act->hargaterakhir,
 				'edit'		=> 1,
@@ -1259,6 +1707,82 @@ class Bhp_pemusnahan extends CI_Controller {
 				die("OK|$id|Tersimpan");
 			}else{
 				$id=$this->input->post('id_mst_inv_barang');
+				 die("Error|$id|Proses data gagal");
+			}
+			
+		}
+	}
+	
+
+	public function add_barang_rusak($tanggal_opnam='0000-00-00',$kodeopname=0,$idbarang=0,$batch='')
+	{	
+		$data['action']			= "add";
+		$data['kode']			= $kodeopname;
+
+        $this->form_validation->set_rules('id_mst_inv_barang_habispakai_jenis_rusak', 'ID Barang', 'trim');
+        $this->form_validation->set_rules('id_inv_inventaris_habispakai_opname_rusak', 'Nama Barang', 'trim');
+        $this->form_validation->set_rules('id_mst_inv_barang_habispakai_rusak', 'Batch', 'trim|required');
+        $this->form_validation->set_rules('batch_rusak', 'Nama Barang', 'trim|required');
+        $this->form_validation->set_rules('uraian_rusak', 'Jumlah Awal', 'trim');
+        $this->form_validation->set_rules('jumlah_rusak', 'harga', 'trim');
+        $this->form_validation->set_rules('harga_rusak', 'tgl_update_opname', 'trim');
+        $this->form_validation->set_rules('jumlah_rusakopname', 'Jumlah Opname', 'trim|required');
+        $this->form_validation->set_rules('merek_tipe_rusak', 'Jumlah Opname', 'trim|required');
+
+		if($this->form_validation->run()== FALSE){
+
+			$data = $this->bhp_pemusnahan_model->get_data_detail_edit_barang_rusak($kodeopname,$idbarang,$batch,$tanggal_opnam); 
+			$data['action_rusak']			= "add";
+			$data['notice_rusak']			= validation_errors();
+			$data['tanggal_opname_rusak']	= $tanggal_opnam;
+			$data['koderusak']				= $kodeopname;
+			$data['idbarang_rusak']			= $idbarang;
+			$data['batch_rusak']			= $batch;
+			
+			die($this->parser->parse('inventory/bhp_pemusnahan/barang_form_rusak',$data));
+		}else{
+			if($simpan=$this->bhp_pemusnahan_model->insertdata_rusak()){
+				$id=$this->input->post('id_inv_inventaris_habispakai_opname_rusak');
+				die("OK|$id|Tersimpan");
+			}else{
+				$id=$this->input->post('id_inv_inventaris_habispakai_opname_rusak');
+				 die("Error|$id|Proses data gagal");
+			}
+			
+		}
+	}
+	public function add_barang_opname($tanggal_opnam='0000-00-00',$kodeopname=0,$idbarang=0,$batch='')
+	{	
+		$data['action']			= "add";
+		$data['kode']			= $kodeopname;
+
+        $this->form_validation->set_rules('id_mst_inv_barang_habispakai_jenis_opname', 'ID Barang', 'trim');
+        $this->form_validation->set_rules('id_inv_inventaris_habispakai_opname_opname', 'Nama Barang', 'trim');
+        $this->form_validation->set_rules('id_mst_inv_barang_habispakai_opname', 'Batch', 'trim|required');
+        $this->form_validation->set_rules('batch_opname', 'Nama Barang', 'trim|required');
+        $this->form_validation->set_rules('uraian_opname', 'Jumlah Awal', 'trim');
+        $this->form_validation->set_rules('jumlah_opname', 'harga', 'trim');
+        $this->form_validation->set_rules('harga_opname', 'tgl_update_opname', 'trim');
+        $this->form_validation->set_rules('jumlah_opnameopname', 'Jumlah Opname', 'trim|required');
+        $this->form_validation->set_rules('merek_tipe_opname', 'Jumlah Opname', 'trim|required');
+
+		if($this->form_validation->run()== FALSE){
+
+			$data = $this->bhp_pemusnahan_model->get_data_detail_edit_barang_opname($kodeopname,$idbarang,$batch,$tanggal_opnam); 
+			$data['action_opname']			= "add";
+			$data['notice_opname']			= validation_errors();
+			$data['tanggal_opname_opname']	= $tanggal_opnam;
+			$data['koderusak']				= $kodeopname;
+			$data['idbarang_opname']			= $idbarang;
+			$data['batch_opname']			= $batch;
+			
+			die($this->parser->parse('inventory/bhp_pemusnahan/barang_form_opname',$data));
+		}else{
+			if($simpan=$this->bhp_pemusnahan_model->insertdata_opname()){
+				$id=$this->input->post('id_inv_inventaris_habispakai_opname_opname');
+				die("OK|$id|Tersimpan");
+			}else{
+				$id=$this->input->post('id_inv_inventaris_habispakai_opname_opname');
 				 die("Error|$id|Proses data gagal");
 			}
 			

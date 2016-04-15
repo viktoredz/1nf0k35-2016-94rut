@@ -111,7 +111,7 @@
 		$("#popup_barang_master").jqxWindow({
 			theme: theme, resizable: false,
 			width: 600,
-			height: 500,
+			height: 400,
 			isModal: true, autoOpen: false, modalOpacity: 0.2
 		});
 		$("#popup_barang_master").jqxWindow('open');

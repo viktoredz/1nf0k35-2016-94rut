@@ -9,6 +9,14 @@ class Bhp_pemusnahan_model extends CI_Model {
 		$this->lang	  = $this->config->item('language');
 
     }
+    function getallopname($start=0,$limit=999999,$options=array()){
+        $this->db->where("inv_inventaris_habispakai_opname.tipe != 'opname'");
+        $this->db->select('mst_inv_barang_habispakai.uraian,mst_inv_barang_habispakai.merek_tipe,inv_inventaris_habispakai_opname.* ,inv_inventaris_habispakai_opname_item.*');
+        $this->db->join('inv_inventaris_habispakai_opname_item','inv_inventaris_habispakai_opname.id_inv_inventaris_habispakai_opname = inv_inventaris_habispakai_opname_item.id_inv_inventaris_habispakai_opname','left');
+        $this->db->join('mst_inv_barang_habispakai','mst_inv_barang_habispakai.id_mst_inv_barang_habispakai = inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai');
+        $query =$this->db->get('inv_inventaris_habispakai_opname',$limit,$start);
+        return $query->result();
+    }
     function get_data_puskesmas($start=0,$limit=999999,$options=array())
     {
         $this->db->order_by('value','asc');
@@ -80,6 +88,38 @@ class Bhp_pemusnahan_model extends CI_Model {
         $query->free_result();    
         return $data;
     }
+    function get_data_detail_edit_barang_rusak($kodeopname,$idbarang,$batch,$tanggal_opnam='0000-00-00'){
+        $kodepuskesmas = "P".$this->session->userdata("puskesmas");
+        $data = array();
+        $this->db->query("set @tglrusak =".'"'.$tanggal_opnam.'"'."");
+        $this->db->where("id_mst_inv_barang_habispakai",$idbarang);
+        $this->db->where("batch",$batch);
+        $this->db->where("code_cl_phc",$kodepuskesmas);
+        $this->db->select("*");
+        $query = $this->db->get('bhp_pemusnahan_rusak',1,0);
+
+        if ($query->num_rows() > 0){
+            $data = $query->row_array();
+        }
+        $query->free_result();    
+        return $data;
+    }
+    function get_data_detail_edit_barang_opname($kodeopname,$idbarang,$batch,$tanggal_opnam='0000-00-00'){
+        $kodepuskesmas = "P".$this->session->userdata("puskesmas");
+        $data = array();
+        $this->db->query("set @tglkondisi =".'"'.$tanggal_opnam.'"'."");
+        $this->db->where("id_mst_inv_barang_habispakai",$idbarang);
+        $this->db->where("batch",$batch);
+        $this->db->where("code_cl_phc",$kodepuskesmas);
+        $this->db->select("*");
+        $query = $this->db->get('bhp_kondisi_opname',1,0);
+
+        if ($query->num_rows() > 0){
+            $data = $query->row_array();
+        }
+        $query->free_result();    
+        return $data;
+    }
     function get_data_detail_bhp($kodeopname,$idbarang,$batch){
         $kodepuskesmas = "P".$this->session->userdata("puskesmas");
         $data = array();
@@ -133,14 +173,7 @@ class Bhp_pemusnahan_model extends CI_Model {
     }
     function delete_entryitem($kode,$barang,$batch)
     {
-        $tgl_update = $this->tanggalp($kode,$barang,$batch);
-        $this->db->where('batch',$batch);
-        $this->db->where('id_mst_inv_barang_habispakai',$barang);
-        $this->db->where('id_inv_inventaris_habispakai_opname',$kode);
-        $this->db->where('tgl_update',$tgl_update);
-        $this->db->delete('inv_inventaris_habispakai_kondisi')->result;
-
-        $this->db->where('batch',$batch);
+       $this->db->where('batch',$batch);
         $this->db->where('id_mst_inv_barang_habispakai',$barang);
         $this->db->where('id_inv_inventaris_habispakai_opname',$kode);
         $query = $this->db->delete('inv_inventaris_habispakai_opname_item');
@@ -234,6 +267,94 @@ class Bhp_pemusnahan_model extends CI_Model {
                     'harga'                         => $this->input->post('harga'),
                     'id_mst_inv_barang_habispakai'  => $this->input->post('id_mst_inv_barang_habispakai'),
                     'id_inv_inventaris_habispakai_opname' => $this->input->post('id_inv_inventaris_habispakai_opname'),
+                    'batch'                         => $nobac,
+                );
+                if($simpan=$this->db->insert('inv_inventaris_habispakai_opname_item', $values)){
+                    return true;
+                }else{
+                    return mysql_error();
+                }
+            }
+            
+    }
+    function insertdata_rusak(){
+        if ($this->input->post('batch_rusak')=='undefined') {
+            $nobac='-';
+        }else{
+            $nobac=$this->input->post('batch_rusak');
+        }
+        $this->db->where('id_inv_inventaris_habispakai_opname',$this->input->post('id_inv_inventaris_habispakai_opname_rusak'));
+        $this->db->where('id_mst_inv_barang_habispakai',$this->input->post('id_mst_inv_barang_habispakai_rusak'));
+        $this->db->where('batch',$nobac);
+        $this->db->select("*");
+        $query = $this->db->get("inv_inventaris_habispakai_opname_item");
+           if ($query->num_rows() > 0){
+                $dataupdate = array(
+                    'jml_awal'      => $this->input->post('jumlah_rusak'),
+                    'jml_akhir'     => $this->input->post('jumlah_rusakopname'),
+                    'harga'         => $this->input->post('harga_rusak'),
+                    );
+                $datakey = array(
+                    'id_mst_inv_barang_habispakai'          =>$this->input->post('id_mst_inv_barang_habispakai_rusak'),
+                    'id_inv_inventaris_habispakai_opname'   =>$this->input->post('id_inv_inventaris_habispakai_opname_rusak') ,
+                    'batch'                                 =>$nobac,
+                     );
+                if($simpan=$this->db->update("inv_inventaris_habispakai_opname_item",$dataupdate,$datakey)){
+                    return true;
+                }else{
+                    return mysql_error();
+                }
+            }else{
+                $values = array(
+                    'jml_awal'                      => $this->input->post('jumlah_rusak'),
+                    'jml_akhir'                     => $this->input->post('jumlah_rusakopname') ,
+                    'harga'                         => $this->input->post('harga_rusak'),
+                    'id_mst_inv_barang_habispakai'  => $this->input->post('id_mst_inv_barang_habispakai_rusak'),
+                    'id_inv_inventaris_habispakai_opname' => $this->input->post('id_inv_inventaris_habispakai_opname_rusak'),
+                    'batch'                         => $nobac,
+                );
+                if($simpan=$this->db->insert('inv_inventaris_habispakai_opname_item', $values)){
+                    return true;
+                }else{
+                    return mysql_error();
+                }
+            }
+            
+    }
+    function insertdata_opname(){
+        if ($this->input->post('batch_opname')=='undefined') {
+            $nobac='-';
+        }else{
+            $nobac=$this->input->post('batch_opname');
+        }
+        $this->db->where('id_inv_inventaris_habispakai_opname',$this->input->post('id_inv_inventaris_habispakai_opname_opname'));
+        $this->db->where('id_mst_inv_barang_habispakai',$this->input->post('id_mst_inv_barang_habispakai_opname'));
+        $this->db->where('batch',$nobac);
+        $this->db->select("*");
+        $query = $this->db->get("inv_inventaris_habispakai_opname_item");
+           if ($query->num_rows() > 0){
+                $dataupdate = array(
+                    'jml_awal'      => $this->input->post('jumlah_opname'),
+                    'jml_akhir'     => $this->input->post('jumlah_opnameopname'),
+                    'harga'         => $this->input->post('harga_opname'),
+                    );
+                $datakey = array(
+                    'id_mst_inv_barang_habispakai'          =>$this->input->post('id_mst_inv_barang_habispakai_opname'),
+                    'id_inv_inventaris_habispakai_opname'   =>$this->input->post('id_inv_inventaris_habispakai_opname_opname') ,
+                    'batch'                                 =>$nobac,
+                     );
+                if($simpan=$this->db->update("inv_inventaris_habispakai_opname_item",$dataupdate,$datakey)){
+                    return true;
+                }else{
+                    return mysql_error();
+                }
+            }else{
+                $values = array(
+                    'jml_awal'                      => $this->input->post('jumlah_opname'),
+                    'jml_akhir'                     => $this->input->post('jumlah_opnameopname') ,
+                    'harga'                         => $this->input->post('harga_opname'),
+                    'id_mst_inv_barang_habispakai'  => $this->input->post('id_mst_inv_barang_habispakai_opname'),
+                    'id_inv_inventaris_habispakai_opname' => $this->input->post('id_inv_inventaris_habispakai_opname_opname'),
                     'batch'                         => $nobac,
                 );
                 if($simpan=$this->db->insert('inv_inventaris_habispakai_opname_item', $values)){
@@ -365,6 +486,24 @@ class Bhp_pemusnahan_model extends CI_Model {
     }
     public function getitemrusakkanan($start=0,$limit=999999,$options=array()){
         $query = $this->db->get("bhp_pemusnahan_rusak",$limit,$start);
+        return $query->result();
+    }
+    public function getitemrusakkiri($start=0,$limit=999999,$options=array()){
+        $this->db->select('inv_inventaris_habispakai_opname.*,inv_inventaris_habispakai_opname_item.*,mst_inv_barang_habispakai.uraian');
+        $this->db->join('inv_inventaris_habispakai_opname_item','inv_inventaris_habispakai_opname_item.id_inv_inventaris_habispakai_opname = inv_inventaris_habispakai_opname.id_inv_inventaris_habispakai_opname','left');
+        $this->db->join("mst_inv_barang_habispakai","mst_inv_barang_habispakai.id_mst_inv_barang_habispakai = inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai");
+        $query = $this->db->get("inv_inventaris_habispakai_opname",$limit,$start);
+        return $query->result();
+    }
+    public function getitemopnamekiri($start=0,$limit=999999,$options=array()){
+        $this->db->select('inv_inventaris_habispakai_opname.*,inv_inventaris_habispakai_opname_item.*,mst_inv_barang_habispakai.uraian');
+        $this->db->join('inv_inventaris_habispakai_opname','inv_inventaris_habispakai_opname_item.id_inv_inventaris_habispakai_opname = inv_inventaris_habispakai_opname.id_inv_inventaris_habispakai_opname');
+        $this->db->join("mst_inv_barang_habispakai","mst_inv_barang_habispakai.id_mst_inv_barang_habispakai = inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai");
+        $query = $this->db->get("inv_inventaris_habispakai_opname_item",$limit,$start);
+        return $query->result();
+    }
+    public function getitemopnamekanan($start=0,$limit=999999,$options=array()){
+        $query = $this->db->get("bhp_kondisi_opname",$limit,$start);
         return $query->result();
     }
 

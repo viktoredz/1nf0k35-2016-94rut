@@ -1,0 +1,9 @@
+CREATE  FUNCTION `func`() RETURNS DATE
+RETURN @var$$
+
+CREATE  FUNCTION `tglrusak`() RETURNS DATE
+RETURN @tglrusak$$
+
+
+CREATE  FUNCTION tglkondisi() RETURNS DATE
+RETURN @tglkondisi
