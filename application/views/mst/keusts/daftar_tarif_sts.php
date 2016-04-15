@@ -164,7 +164,7 @@
         return false;
       }).change();
 
-            var newRowID = null;
+      var newRowID = null;
       
       $("#doExpand").click(function(){
         $.post( '<?php echo base_url()?>keuangan/master_sts/set_puskes', {puskes:'<?php echo $this->session->userdata('puskes');?>'},function( data ) {

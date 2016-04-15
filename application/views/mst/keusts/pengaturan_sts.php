@@ -18,12 +18,11 @@
       <div class="box box-primary">
           <div class="box-footer">
             <div class="row"> 
+
               <div class="col-md-3 pull-right">
-                <?php //if($unlock==1){ ?>
-          <!--  <button type="button" class="btn btn-primary" onclick="add(0)"><i class='fa fa-plus-square-o'></i> &nbsp; Tambah Pengeluaran</button>-->
-            <?php //} ?>      
-                <button type="button" id="btn-export" class="btn btn-primary"></i> &nbsp; Simpan Perubahan</button>
+                <button type="button" name="btn-simpan" class="btn btn-primary"></i> &nbsp; Simpan Perubahan</button>
               </div>
+
             </div>
         <div class="box-body">
             <div class="row">
@@ -31,12 +30,19 @@
               <div class="row">
               <div class="col-md-4" style="padding-top:5px;"><label> Akun Penerimaan STS </label> </div>
               <div class="col-md-8">
-                <select name="code_cl_phc" id="puskesmas" class="form-control">
-                  <option value="all">All</option>
-                <?php foreach ($datapuskesmas as $row ) { ;?>
-                  <option value="<?php echo $row->code; ?>" onchange="" ><?php echo $row->value; ?></option>
-                <?php } ;?>
-                </select>
+                <select  name="akun_penerimaan" type="text" class="form-control">
+                <?php foreach($akun_penerimaan_sts as $penerimaan) : ?>
+                    <?php
+                       if(set_value('value')=="" && isset($value)){
+                         $value = $value;
+                       }else{
+                         $value = set_value('value');
+                       }
+                         $select = $penerimaan->id_mst_akun == $value ? 'selected' : '' ;
+                    ?>
+                     <option value="<?php echo $penerimaan->id_mst_akun ?>" <?php echo $select ?>><?php echo $penerimaan->kode?>-<?php echo $penerimaan->uraian ?></option>
+                      <?php endforeach ?>
+                 </select>
                </div> 
             </div>
            </div>
@@ -49,23 +55,59 @@
             <div class="row">
               <div class="col-md-4" style="padding-top:5px;"><label> Akun Penyetoran STS </label> </div>
               <div class="col-md-8">
-                <select name="bulan" id="bulan" class="form-control">
-                  <option value="all">All</option>
-                <?php foreach ($bulan as $val=>$key ) { ;?>
-                  <option value="<?php echo $val; ?>" ><?php echo $key; ?></option>
-                <?php } ;?>
-                </select>
+                <select  name="akun_penyetoran" type="text" class="form-control">
+                <?php foreach($akun_penyetoran_sts as $penyetoran) : ?>
+                    <?php
+                       if(set_value('value')=="" && isset($value)){
+                         $value = $value;
+                       }else{
+                         $value = set_value('value');
+                       }
+                         $select = $penyetoran->id_mst_akun == $value ? 'selected' : '' ;
+                    ?>
+                     <option value="<?php echo $penyetoran->id_mst_akun ?>" <?php echo $select ?>><?php echo $penyetoran->kode?>-<?php echo $penyetoran->uraian ?></option>
+                      <?php endforeach ?>
+                 </select>
                </div> 
             </div>
           </div> 
-</div>
-     </div>
-    </div>
-      
+        </div>
       </div>
+    </div>
   </div>
+</div>
 </div>
 </form>
 </section>
+
+<script type="text/javascript">
+
+      $("[name='btn-simpan']").click(function(){
+        var data = new FormData();
+
+        data.append('value',  $("[name='akun_penerimaan']").val());
+        data.append('value',  $("[name='akun_penyetoran']").val());
+
+        $.ajax({
+            cache : false,
+            contentType : false,
+            processData : false,
+            type : 'POST',
+            url : '<?php echo base_url()."kepegawaian/drh_keluarga/biodata_keluarga_ortu_{action}/{id}/{urut}"   ?>',
+            data : data,
+            success : function(response){
+              if(response=="OK"){
+                $("#popup_keluarga_ortu").jqxWindow('close');
+                alert("Data keluarga berhasil disimpan.");
+                $("#jqxgridKeluarga").jqxGrid('updatebounddata', 'filter');
+              }else{
+                $('#popup_keluarga_ortu_content').html(response);
+              }
+            }
+        });
+
+        return false;
+    });
+</script>
 
 

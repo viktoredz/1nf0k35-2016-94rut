@@ -34,10 +34,6 @@
 </section>
 
 <script type="text/javascript">
-  $(function () { 
-    $("#menu_kepegawaian_drh").addClass("active");
-    $("#menu_kepegawaian").addClass("active");
-  });
 
   function detail(id_pegawai){
       document.location.href="<?php echo base_url()?>kepegawaian/drh/detail/" + id_pegawai;

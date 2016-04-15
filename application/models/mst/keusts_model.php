@@ -9,8 +9,7 @@ class Keusts_model extends CI_Model {
         $this->lang   = $this->config->item('language');
     }
 
-    function insert_versi(){
-        $data['id_mst_anggaran_versi'] = $this->kode_versi($this->input->post('id_mst_anggaran_versi'));
+    function versi_add(){
         $data['nama']                  = $this->input->post('nama');
         $data['deskripsi']             = $this->input->post('deskripsi');
     
@@ -22,69 +21,13 @@ class Keusts_model extends CI_Model {
         }
     }
 
-    function delete_versi($id)
-    {
+    function delete_versi($id){
         $this->db->where('id_mst_anggaran_versi',$id);
 
         return $this->db->delete('mst_keu_anggaran_versi');
     }
 
-    function kode_versi($kode){
-        $versi=explode(".", $kode);
-        $kode_versi = $versi[0];
-        $urut = $this->nourut($kode_versi);
-        return $urut;
-    }
-
-    function kode_anggaran($kodeAnggaran){
-        $keu_anggaran=explode(".", $kodeAnggaran);
-        $kode_anggaran = $keu_anggaran[0];
-        $urut = $this->nourutAnggaran($kode_anggaran);
-        return $urut;
-    }
-
-    function nourut($kode_versi){
-        $kodepuskesmas = substr($this->session->userdata('puskesmas'),0,4);
-        $this->db->select("MAX(id_mst_anggaran_versi) as kd_max");
-        $this->db->where("id_mst_anggaran_versi LIKE '".$kodepuskesmas."%'");
-        $q = $this->db->get("mst_keu_anggaran_versi")->row();
-        $nourut="";
-        $kd="";
-        if(!empty($q->kd_max))
-        {
-                $tmp  = substr($q->kd_max,-6)+1;
-                $kd  = sprintf("%06s", $tmp);
-                $nourut = $kodepuskesmas.$kd;
-        }
-        else
-        {
-            $nourut = $kodepuskesmas."000001";
-        }
-        return $nourut;
-    }
-
-    function nourutAnggaran($kode_anggaran){
-        $kodepuskesmas = substr($this->session->userdata('puskesmas'),0,4);
-        $this->db->select("MAX(id_mst_anggaran) as ka_max");
-        $this->db->where("id_mst_anggaran LIKE '".$kodepuskesmas."%'");
-        $q = $this->db->get("mst_keu_anggaran")->row();
-
-        if(!empty($q->ka_max))
-        {
-            $tmp = substr($q->ka_max,-6)+1;
-            $ka  = sprintf("%06s", $tmp);
-            $nourutAnggaran = $kodepuskesmas.$ka;
-        }
-        else
-        {
-            $nourutAnggaran = $kodepuskesmas."000001";
-        }
-        return $nourutAnggaran;
-    }
-
-    function insert_induk()
-    {
-        $data['id_mst_anggaran']        = $this->kode_anggaran($this->input->post('id_mst_anggaran'));
+    function insert_induk(){
         $data['id_mst_anggaran_versi']  = $this->session->userdata('versi');
         $data['id_mst_akun']            = $this->input->post('id_mst_akun');
         $data['kode_anggaran']          = $this->input->post('kode_anggaran');
@@ -124,11 +67,18 @@ class Keusts_model extends CI_Model {
         }
     }
     
-    function get_data()
-    {
+    function get_data(){
         $this->db->select('*');     
         $query = $this->db->get($this->tb);     
         return $query->result_array();
+    }
+
+    function get_akun_sts(){
+        $this->db->select('*');
+        $this->db->from('mst_keu_akun');
+        $this->db->order_by('uraian','asc');
+        $query = $this->db->get();
+        return $query->result();
     }
 
     function get_data_sts($versi)
@@ -138,7 +88,6 @@ class Keusts_model extends CI_Model {
         $query = $this->db->get('mst_keu_anggaran');     
         return $query->result_array();
     } 
-
 
     function get_versi_status(){
 
@@ -325,7 +274,6 @@ class Keusts_model extends CI_Model {
     function delete_kode_rekening(){        
         $this->db->where('code', $this->input->post('code'));
         return $this->db->delete('mst_keu_rekening');
-        
     }
     
     function get_puskesmas_name($id){
@@ -340,6 +288,7 @@ class Keusts_model extends CI_Model {
             return "";
         }   
     }
+    
     function add_sts(){
         $datatgl = explode('/', $this->input->post('tgl'));
         $tgl = $datatgl[2].'-'.$datatgl[0].'-'.$datatgl[1];
@@ -348,12 +297,10 @@ class Keusts_model extends CI_Model {
            'tgl' => $tgl,                  
            'code_cl_phc' => $this->input->post('code_cl_phc') ,       
         );
-        
         return $this->db->insert("keu_sts", $data);             
     }
     
     function reopen(){
-        
         $data = array(         
            'status' => 'buka'
         );
@@ -379,6 +326,7 @@ class Keusts_model extends CI_Model {
                 }
         }
     }
+
     function cek_volume($tgl, $puskes, $id_keu_anggaran){
         $this->db->select('count(tgl) as n');
         $this->db->where('id_keu_anggaran', $id_keu_anggaran);
@@ -395,7 +343,6 @@ class Keusts_model extends CI_Model {
                     // need input
                 }
         }
-        
     }
 
     function update_total_sts($tgl, $code_cl_phc, $total){
@@ -429,9 +376,8 @@ class Keusts_model extends CI_Model {
         $total = $this->get_data_sts_total($data['tgl'], $data['code_cl_phc']);
         $this->update_total_sts($data['tgl'], $data['code_cl_phc'], $total);
         return $total;
-        
-        
     }
+
     function update_ttd(){
         $data = array(         
            'ttd_pimpinan_nip' => $this->input->post('ttd_pimpinan_nip'),
@@ -441,12 +387,10 @@ class Keusts_model extends CI_Model {
            'ttd_penyetor_nip' => $this->input->post('ttd_penyetor_nip'),
            'ttd_penyetor_nama' => $this->input->post('ttd_penyetor_nama')
         );
-                
         //update
         $this->db->where('tgl', $this->input->post('tgl'));     
         $this->db->where('code_cl_phc', $this->input->post('puskes'));
         $this->db->update('keu_sts', $data);
-        
     }   
     
     function tutup_sts(){
@@ -460,7 +404,6 @@ class Keusts_model extends CI_Model {
         $this->db->where('code_cl_phc', $this->input->post('puskes'));
         $this->db->update('keu_sts', $data);
     }
-    
     
     function cek_rekap_sts_rekening($tgl, $kode_rekening, $code_cl_phc){
         $this->db->select('count(tgl) as n');
@@ -478,6 +421,7 @@ class Keusts_model extends CI_Model {
             }
         }
     }
+
     function rekap_sts_rekening(){
         $tgl = $this->input->post('tgl');
         $code_cl_phc = $this->input->post('puskes');
@@ -524,15 +468,12 @@ class Keusts_model extends CI_Model {
             return $this->db->insert('keu_anggaran_tarif', $data);
         }
     }
-    
 
     function add_anggaran(){
-        // $dataExplode = explode("-",$this->input->post('id_mst_akun'));
         
         $data = array(
            'id_mst_anggaran'        => $this->get_new_id_mst_keu_anggaran(),
            'id_mst_anggaran_parent' => $this->input->post('id_mst_anggaran_parent') ,
-           // 'id_mst_akun'            => $dataExplode[0],
            'kode_anggaran'          => $this->input->post('kode_anggaran'),
            'uraian'                 => $this->input->post('uraian'),
            'tarif'                  => $this->input->post('tarif'),
@@ -582,13 +523,10 @@ class Keusts_model extends CI_Model {
         return $query->result();
     }
 
-   function get_versi_sts(){
+    function get_versi_sts(){
         $kodepusk = 'P'.$this->session->userdata('puskesmas');
-
-        $this->db->select("mst_keu_anggaran_versi.*,DATE_FORMAT(tanggal_dibuat,'%d/%m/%Y') AS tanggal_dibuat,IF(mst_keu_versi_status.id_mst_anggaran_versi IS NOT NULL,'Aktif','Non Aktif') AS status", false);
         $this->db->order_by('id_mst_anggaran_versi','asc');
-        $this->db->join('mst_keu_versi_status','mst_keu_versi_status.id_mst_anggaran_versi=mst_keu_anggaran_versi.id_mst_anggaran_versi','left');
-        $this->db->where('mst_keu_versi_status.cl_phc_code',$kodepusk);
+        $this->db->select("mst_keu_anggaran_versi.*, DATE_FORMAT(tanggal_dibuat, '%d/%m/%Y') AS tanggal_dibuat, (IF((SELECT id_mst_anggaran_versi FROM mst_keu_versi_status  WHERE `cl_phc_code` =".'"'.$kodepusk.'"'." AND  `id_mst_anggaran_versi` = mst_keu_anggaran_versi.`id_mst_anggaran_versi` LIMIT 1)IS NOT NULL,'aktif','nonaktif')) AS status", false);
         $query = $this->db->get('mst_keu_anggaran_versi');
         return $query->result();
     }

@@ -38,6 +38,9 @@ class Keuangan_sts extends CI_Controller {
 
 				break;
 			case 2:
+				$data['akun_penerimaan_sts'] = $this->keusts_model->get_akun_sts();
+				$data['akun_penyetoran_sts'] = $this->keusts_model->get_akun_sts();
+				
 				die($this->parser->parse("mst/keusts/pengaturan_sts",$data));
 
 				break;
@@ -182,23 +185,19 @@ class Keuangan_sts extends CI_Controller {
 		echo json_encode(array($json));
 	}
 
-
 	function versi_add(){
 		$this->authentication->verify('mst','add');
 		
-	    $this->form_validation->set_rules('id_mst_anggaran_versi', 'Kode Versi', 'trim|required');
     	$this->form_validation->set_rules('nama', 'Nama', 'trim|required');
         $this->form_validation->set_rules('deskripsi', ' Deskripsi', 'trim|required');
 
 		$data['id_mst_anggaran_versi']	= "";
 	    $data['action']					= "add";
 		$data['alert_form']		   	    = '';
-		$data['versi'] 		            = $this->keusts_model->get_versi_sts();
-	    $data['kode']		         	= "";
 
 		if($this->form_validation->run()== FALSE){
 			die($this->parser->parse("mst/keusts/form_tambah_versi",$data));
-		}elseif($this->keusts_model->insert_versi()){
+		}elseif($this->keusts_model->versi_add()){
 			die("OK");
 		}else{
 			$data['alert_form'] = 'Save data failed...';
@@ -233,28 +232,6 @@ class Keuangan_sts extends CI_Controller {
 		die($this->parser->parse("mst/keusts/versi_sts",$data));
 	}
 
-	public function kodeVersi($id=0){
-		$this->db->where('code',"P".$this->session->userdata('puskesmas'));
-		$query = $this->db->get('cl_phc')->result();
-		foreach ($query as $q) {
-			$kode[] = array(
-				'kodeversi' => $q->code, 
-			);
-			echo json_encode($kode);
-		}
-	}
-
-	public function kodeAnggaran($id=0){
-		$this->db->where('code',"P".$this->session->userdata('puskesmas'));
-		$query = $this->db->get('cl_phc')->result();
-		foreach ($query as $q) {
-			$kodeAnggaran[] = array(
-				'kodeanggaran' => $q->code, 
-			);
-			echo json_encode($kodeAnggaran);
-		}
-	}
-
 	function get_versi(){
 
 	if ($this->input->post('versi')!="null") {
@@ -264,9 +241,9 @@ class Keuangan_sts extends CI_Controller {
 			$ver   = $this->keusts_model->get_versi_sts();
 
 				echo "<option value=''></option>";
-			foreach($ver as $ver) :
-				$select = $ver->id_mst_anggaran_versi == ($this->session->userdata('versi')!='0' ?  $this->session->userdata('versi') : $this->nama_status())  ? 'selected' : '';
-				echo '<option value="'.$ver->id_mst_anggaran_versi.'" '.$select.'>' . $ver->nama . '</option>';
+			foreach($ver as $v) :
+				$select = $v->id_mst_anggaran_versi == ($this->session->userdata('versi')!='0' ?  $this->session->userdata('versi') : $this->nama_status())  ? 'selected' : '';
+				echo '<option value="'.$v->id_mst_anggaran_versi.'" '.$select.'>' . $v->nama . '</option>';
 			
 			endforeach;
 
@@ -301,7 +278,6 @@ class Keuangan_sts extends CI_Controller {
 	function induk_add(){
 		$this->authentication->verify('mst','add');
 
-	    $this->form_validation->set_rules('id_mst_anggaran', 'ID Anggaran', 'trim|required');
     	$this->form_validation->set_rules('kode_anggaran', 'Kode Anggaran', 'trim|required');
         $this->form_validation->set_rules('uraian', ' Uraian', 'trim|required');
         $this->form_validation->set_rules('id_mst_akun', 'Kode Akun', 'trim|required');

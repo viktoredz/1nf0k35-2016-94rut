@@ -2,21 +2,7 @@
 <form action="#" method="POST" name="frmPegawai">
   <div class="row" style="margin: 15px 5px 15px 5px">
     <div class="col-sm-8">
-      <?php if(validation_errors()!=""){ ?>
-      <div class="alert alert-warning alert-dismissable">
-        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-        <h4>  <i class="icon fa fa-check"></i> Information!</h4>
-        <?php echo validation_errors()?>
-      </div>
-      <?php } ?>
-
-      <?php if($alert_form!=""){ ?>
-      <div class="alert alert-success alert-dismissable">
-        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-        <h4>  <i class="icon fa fa-check"></i> Information!</h4>
-        <?php echo $alert_form?>
-      </div>
-      <?php } ?>
+ 
     </div>
     <div class="col-sm-12" style="text-align: right">
       <button type="button" name="btn_keuangan_versi_save" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Simpan</button>
@@ -28,14 +14,6 @@
           <div class="col-md-12">
             <div class="box box-primary">
              
-              <div class="row" style="margin: 5px">
-                <div class="col-md-4" style="padding: 5px">
-                </div>
-                <div class="col-md-8">
-                  <input type="hidden" class="form-control" name="versi_id" id="id_mst_anggaran_versi" placeholder="ID" readonly>
-                </div>
-              </div>
-
               <div class="row" style="margin: 5px">
                 <div class="col-md-4" style="padding: 5px">
                  Judul Versi
@@ -74,22 +52,6 @@
 
 <script>
 
- function kodeVersi(){
-      $.ajax({
-      url: "<?php echo base_url().'mst/keuangan_sts/kodeVersi';?>",
-      dataType: "json",
-      success:function(data)
-      { 
-        $.each(data,function(index,elemet){
-          var lokasi = elemet.kodeversi.split(".")
-          $("#id_mst_anggaran_versi").val(lokasi[0]);
-        });
-      }
-      });
-      return false;
-  }
-
-
 function getVersi(){
       $.ajax({
         url: "<?php echo base_url().'mst/keuangan_sts/get_versi';?>",
@@ -102,7 +64,6 @@ function getVersi(){
 
   $(function () { 
     tabIndex = 1;
-    kodeVersi();
     
    $("[name='btn_keuangan_versi_close']").click(function(){
         $("#popup_keuangan_sts").jqxWindow('close');
@@ -113,7 +74,6 @@ function getVersi(){
         $('#biodata_notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
         $('#biodata_notice').show();
 
-        data.append('id_mst_anggaran_versi', $("[name='versi_id']").val());
         data.append('nama',                  $("[name='versi_nama']").val());
         data.append('deskripsi',             $("[name='versi_deskripsi']").val());
         
