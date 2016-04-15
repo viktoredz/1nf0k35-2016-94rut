@@ -200,7 +200,7 @@
 		post = post+'&jenisbarang='+$("#jenisbarang option:selected").text()+'&nama_puskesmas='+$("#puskesmas option:selected").text()+'&bulan='+$("#bulan option:selected").text()+'&tahun='+$("#tahun option:selected").text();
 		//alert(post);
 		
-		$.post("<?php echo base_url()?>inventory/bhp_pemusnahan/laporan_opname",post,function(response	){
+		$.post("<?php echo base_url()?>inventory/bhp_pemusnahan/laporan_json_opname",post,function(response	){
 			//alert(response);
 			window.location.href=response;
 		});

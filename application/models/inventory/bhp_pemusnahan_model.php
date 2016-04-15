@@ -128,7 +128,7 @@ class Bhp_pemusnahan_model extends CI_Model {
         $this->db->where('inv_inventaris_habispakai_opname_item.batch',$batch);
         $this->db->where('inv_inventaris_habispakai_opname_item.id_inv_inventaris_habispakai_opname',$kodeopname);
         $this->db->select("inv_inventaris_habispakai_opname_item.*,mst_inv_barang_habispakai.uraian,mst_inv_barang_habispakai.pilihan_satuan,mst_inv_barang_habispakai.merek_tipe,inv_inventaris_habispakai_opname.tgl_opname,inv_inventaris_habispakai_opname.petugas_nip,inv_inventaris_habispakai_opname.petugas_nama,inv_inventaris_habispakai_opname.nomor_opname,,inv_inventaris_habispakai_opname.catatan,
-
+            inv_inventaris_habispakai_opname.saksi1_nama,inv_inventaris_habispakai_opname.saksi1_nip,inv_inventaris_habispakai_opname.saksi2_nama,inv_inventaris_habispakai_opname.saksi2_nip
             ");
         $this->db->join("mst_inv_barang_habispakai","mst_inv_barang_habispakai.id_mst_inv_barang_habispakai = inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai");
         $this->db->join("inv_inventaris_habispakai_opname","inv_inventaris_habispakai_opname.id_inv_inventaris_habispakai_opname = inv_inventaris_habispakai_opname_item.id_inv_inventaris_habispakai_opname");
@@ -676,11 +676,6 @@ class Bhp_pemusnahan_model extends CI_Model {
         $this->deleteopname($kode);
         $this->db->where('id_inv_inventaris_habispakai_opname',$kode);
         $this->db->delete('inv_inventaris_habispakai_opname_item');
-
-        $this->deleteopname($kode);
-        $this->db->where('id_inv_inventaris_habispakai_opname',$kode);
-        $this->db->delete('inv_inventaris_habispakai_kondisi');
-
 
         $this->deleteopname($kode);
         $this->db->where('id_inv_inventaris_habispakai_opname',$kode);

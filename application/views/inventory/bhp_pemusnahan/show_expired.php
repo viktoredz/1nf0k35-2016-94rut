@@ -196,7 +196,7 @@
                 },
 				{ text: 'Nomor', editable:false ,datafield: 'nomor_opname', columntype: 'textbox', filtertype: 'textbox', width: '20%' },
 				{ text: 'Tanggal', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false,datafield: 'tgl_opname', columntype: 'date', filtertype: 'none', cellsformat: 'dd-MM-yyyy', width: '15%'},
-				{ text: 'Saksi 1', editable:false ,align: 'center', cellsalign: 'left', datafield: 'last_opname', columntype: 'textbox', filtertype: 'textbox', width: '30%' },
+				{ text: 'Saksi 1', editable:false ,align: 'center', cellsalign: 'left', datafield: 'saksi1_nama', columntype: 'textbox', filtertype: 'textbox', width: '30%' },
 				{ text: 'Saksi 2', editable:false ,align: 'center', cellsalign: 'left', datafield: 'saksi2_nama', columntype: 'textbox', filtertype: 'textbox', width: '25%' }
             ]
 		});
@@ -267,8 +267,9 @@
 		}
 		post = post+'&jenisbarang='+$("#jenisbarangopname option:selected").text()+'&nama_puskesmas='+$("#puskesmasopname option:selected").text()+'&bulan='+$("#bulanopname option:selected").text()+'&tahun='+$("#tahunopname option:selected").text();
 		
-		$.post("<?php echo base_url()?>inventory/bhp_pemusnahan/pengeluaran_export",post,function(response){
+		$.post("<?php echo base_url()?>inventory/bhp_pemusnahan/pengeluaran_export_expired/expired",post,function(response){
 			window.location.href=response;
+			//alert(response);
 		});
 	});
 </script>

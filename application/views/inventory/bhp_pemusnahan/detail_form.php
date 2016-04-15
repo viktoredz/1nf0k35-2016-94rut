@@ -11,7 +11,7 @@
       }else{}
     }
     ?>
-      $('#btn-close-bhp').click(function(){
+      $('#btn-close-bhp_musnahkan').click(function(){
         close_popup_bhp();
       }); 
 
@@ -20,8 +20,8 @@
           alert('Data jumlah tidak boleh sama dengan data opname')
         }else{
           var data = new FormData();
-          $('#notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
-          $('#notice').show();
+          $('#notice-musnahkan-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
+          $('#notice-musnahkan').show();
           data.append('id_mst_inv_barang_habispakai_jenis', $('#id_mst_inv_barang_habispakai_jenis').val());
           data.append('id_inv_inventaris_habispakai_opname', $('#id_inv_inventaris_habispakai_opname').val());
           data.append('id_mst_inv_barang_habispakai', $('#id_mst_inv_barang_habispakai').val());
@@ -35,21 +35,21 @@
               contentType : false,
               processData : false,
               type : 'POST',
-              url : '<?php echo base_url()."inventory/bhp_opname/".$action."_barang/$tipe_data" ?>',
+              url : '<?php echo base_url()."inventory/bhp_opname/".$action_musnahkan."_barang/" ?>',
               data : data,
               success : function(response){
                 var res  = response.split("|");
                 if(res[0]=="OK"){
-                    $('#notice').hide();
-                    $('#notice-content').html('<div class="alert">'+res[1]+'</div>');
-                    $('#notice').show();
+                    $('#notice-musnahkan').hide();
+                    $('#notice-musnahkan-content').html('<div class="alert">'+res[1]+'</div>');
+                    $('#notice-musnahkan').show();
                     $("#jqxgrid_barang").jqxGrid('updatebounddata', 'cells');
                     close_popup_opname();
                 }
                 else if(res[0]=="Error"){
-                    $('#notice').hide();
-                    $('#notice-content').html('<div class="alert">'+res[1]+'</div>');
-                    $('#notice').show();
+                    $('#notice-musnahkan').hide();
+                    $('#notice-musnahkan-content').html('<div class="alert">'+res[1]+'</div>');
+                    $('#notice-musnahkan').show();
                 }
                 else{
                     $('#popup_content').html(response);
@@ -76,13 +76,13 @@
 </script>
 
 <div style="padding:15px">
-  <div id="notice" class="alert alert-success alert-dismissable" <?php if ($notice==""){ echo 'style="display:none"';} ?> >
+  <div id="notice-musnahkan" class="alert alert-success alert-dismissable" <?php if ($notice_musnahkan==""){ echo 'style="display:none"';} ?> >
     <button class="close" type="button" data-dismiss="alert" aria-hidden="true">×</button>
     <h4>
     <i class="icon fa fa-check"></i>
     Information!
     </h4>
-    <div id="notice-content">{notice}</div>
+    <div id="notice-musnahkan-content">{notice_musnahkan}</div>
   </div>
   <div class="row">
     <?php echo form_open(current_url(), 'id="form-ss"') ?>
@@ -121,11 +121,11 @@
         <div class="row">
         <div class="col-md-6">
           <div class="row" style="margin: 5px">
-            <div class="col-md-4" style="padding: 5px">Nama Penerima</div>
+            <div class="col-md-4" style="padding: 5px">Nama Saksi 1</div>
             <div class="col-md-8">
-              <input type="text" class="form-control" name="petugas_nama" id="petugas_nama" placeholder="Nama Barang" value="<?php 
-                if(set_value('petugas_nama')=="" && isset($petugas_nama)){
-                  echo $petugas_nama;
+              <input type="text" class="form-control" name="petugas_nama" id="petugas_nama" placeholder="Nama Saksi 1" value="<?php 
+                if(set_value('petugas_nama')=="" && isset($saksi1_nama)){
+                  echo $saksi1_nama;
                 }else{
                   echo  set_value('petugas_nama');
                 }
@@ -135,11 +135,41 @@
         </div>
         <div class="col-md-6">
           <div class="row" style="margin: 5px">
-            <div class="col-md-4" style="padding: 5px">NIP Penerima</div>
+            <div class="col-md-4" style="padding: 5px">Nama Saksi 2</div>
             <div class="col-md-8">
-              <input type="text" class="form-control" name="petugas_nip" id="petugas_nip" placeholder="petugas" value="<?php 
-                if(set_value('petugas_nip')=="" && isset($petugas_nip)){
-                  echo $petugas_nip;
+              <input type="text" class="form-control" name="petugas_nip" id="petugas_nip" placeholder="Nama Saksi 2" value="<?php 
+                if(set_value('petugas_nip')=="" && isset($saksi2_nama)){
+                  echo $saksi2_nama;
+                }else{
+                  echo  set_value('petugas_nip');
+                }
+                ?>" readonly="readonly">
+            </div>
+          </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-6">
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">Nip Saksi Satu</div>
+            <div class="col-md-8">
+              <input type="text" class="form-control" name="petugas_nama" id="petugas_nama" placeholder="NIP Saksi 1" value="<?php 
+                if(set_value('petugas_nama')=="" && isset($saksi1_nama)){
+                  echo $saksi1_nama;
+                }else{
+                  echo  set_value('petugas_nama');
+                }
+                ?>" readonly="readonly">
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="row" style="margin: 5px">
+            <div class="col-md-4" style="padding: 5px">NIP Saksi Dua</div>
+            <div class="col-md-8">
+              <input type="text" class="form-control" name="petugas_nip" id="petugas_nip" placeholder="NIP Saksi 2" value="<?php 
+                if(set_value('petugas_nip')=="" && isset($saksi2_nip)){
+                  echo $saksi2_nip;
                 }else{
                   echo  set_value('petugas_nip');
                 }
@@ -309,7 +339,7 @@
         </div>
         <div class="box-footer">
          <!--   <button type="submit" class="btn btn-primary">Simpan</button>-->
-            <button type="button" id="btn-close-bhp" class="btn btn-warning">Keluar</button>
+            <button type="button" id="btn-close-bhp_musnahkan" class="btn btn-warning">Keluar</button>
         </div>
     </div>
 </form>

@@ -15,6 +15,7 @@
 			{ name: 'harga', type: 'string' },
 			{ name: 'jml_akhir', type: 'string' },
 			{ name: 'jml_akhir', type: 'string' },
+			{ name: 'jml_selisih', type: 'string' },
 			{ name: 'edit', type: 'number' },
 			{ name: 'delete', type: 'number' },
         ],
@@ -56,7 +57,7 @@
 			columns: [
 				{ text: 'Nama Barang ', editable: false,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '40%'},
 				{ text: 'Batch ',datafield: 'batch' ,align: 'center', editable: false, columntype: 'textbox', filtertype: 'textbox', width: '25%'},
-				{ text: 'Jumlah Akhir ', align: 'center',cellsalign: 'right',editable: false,datafield: 'jml_akhir', columntype: 'textbox', filtertype: 'textbox', width: '25%'},
+				{ text: 'Jumlah Pemusnahan ', align: 'center',cellsalign: 'right',editable: false,datafield: 'jml_selisih', columntype: 'textbox', filtertype: 'textbox', width: '25%'},
 				{ text: 'Hapus', align: 'center', editable: false,filtertype: 'none', sortable: false, width: '10%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid_barang_opname_kiri").jqxGrid('getrowdata', row);
 				    if (dataRecord.edit==1){

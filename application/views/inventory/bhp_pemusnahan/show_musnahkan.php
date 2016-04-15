@@ -5,9 +5,9 @@
 	<?php echo $this->session->flashdata('alert')?>
 </div>
 <?php } ?>
-<div id="popup_barang_bhp" style="display:none">
+<div id="popup_barang_bhp_musnahkan" style="display:none">
 	<div id="popup_title">Detail Opname Barang</div>
-	<div id="popup_content_bhp">&nbsp;</div>
+	<div id="popup_content_bhp_musnahkan">&nbsp;</div>
 </div>
 <section class="content">
 <form action="<?php echo base_url()?>inventory/bhp_pemusnahan/dodel_multi" method="POST" name="">
@@ -19,8 +19,8 @@
 	      	<div class="box-footer">
 		      	<div class="row"> 
 			      	<div class="col-md-12">
-					 	<button type="button" class="btn btn-success" id="btn-refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
-			          <button type="button" id="btn-export" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Export</button>
+					 	<button type="button" class="btn btn-success" id="btn-refresh-dimusnahkan"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
+			          <button type="button" id="btn-export-musnahkan" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Export</button>
 			      	</div>
 		      	</div>
 		    <div class="box-body">
@@ -97,7 +97,7 @@
 <script type="text/javascript">
 
 	function close_popup_bhp(){
-	$("#popup_barang_bhp").jqxWindow('close');
+	$("#popup_barang_bhp_musnahkan").jqxWindow('close');
 	}
 	$(function () {	
 		$("select[name='jenisbarang']").change(function(){
@@ -157,7 +157,7 @@
 			}
 		});
      
-		$('#btn-refresh').click(function () {
+		$('#btn-refresh-dimusnahkan').click(function () {
 			$("#jqxgridBhp").jqxGrid('clearfilters');
 		});
 
@@ -175,7 +175,7 @@
 				{ text: 'Detail', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgridBhp").jqxGrid('getrowdata', row)
 				    if((dataRecord.id_mst_inv_barang_habispakai!=null)&&(dataRecord.tgl_opname!="<?php echo date('Y-m-d');?>")){
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_view.gif' onclick='add(\""+dataRecord.id_inv_inventaris_habispakai_opname+"\",\""+dataRecord.id_mst_inv_barang_habispakai+"\",\""+dataRecord.batch+"\");'></a></div>";
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_view.gif' onclick='add_musnahkan(\""+dataRecord.id_inv_inventaris_habispakai_opname+"\",\""+dataRecord.id_mst_inv_barang_habispakai+"\",\""+dataRecord.batch+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}
@@ -196,21 +196,21 @@
 	    });
 	  }
 	
-	function add(id,barang,batch){
-		$("#popup_barang_bhp #popup_content_bhp").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-		$.get("<?php echo base_url().'inventory/bhp_pemusnahan/detailbhp/'; ?>"+id+'/'+barang+'/'+batch , function(data) {
-			$("#popup_content_bhp").html(data);
+	function add_musnahkan(id,barang,batch){
+		$("#popup_barang_bhp_musnahkan #popup_content_bhp_musnahkan").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
+		$.get("<?php echo base_url().'inventory/bhp_pemusnahan/detailbhpmusnaknan/'; ?>"+id+'/'+barang+'/'+batch , function(data) {
+			$("#popup_content_bhp_musnahkan").html(data);
 		});
-		$("#popup_barang_bhp").jqxWindow({
+		$("#popup_barang_bhp_musnahkan").jqxWindow({
 			theme: theme, resizable: false,
 			width: 1100,
-			height: 570,
+			height: 600,
 			isModal: true, autoOpen: false, modalOpacity: 0.2
 		});
-		$("#popup_barang_bhp").jqxWindow('open');
+		$("#popup_barang_bhp_musnahkan").jqxWindow('open');
 	}
 
-	$("#btn-export").click(function(){
+	$("#btn-export-musnahkan").click(function(){
 		
 		var post = "";
 		/*var filter = $("#jqxgridBhp").jqxGrid('getfilterinformation');
@@ -241,7 +241,7 @@
 		post = post+'&jenisbarang='+$("#jenisbarang option:selected").text()+'&nama_puskesmas='+$("#puskesmas option:selected").text()+'&bulan='+$("#bulan option:selected").text()+'&tahun='+$("#tahun option:selected").text();
 		//alert(post);
 		
-		$.post("<?php echo base_url()?>inventory/bhp_pemusnahan/laporan_opname",post,function(response	){
+		$.post("<?php echo base_url()?>inventory/bhp_pemusnahan/laporan_json_allopname",post,function(response	){
 			//alert(response);
 			window.location.href=response;
 		});
