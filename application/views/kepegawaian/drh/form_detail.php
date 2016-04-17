@@ -167,7 +167,7 @@
                       <i class="icon fa fa-list-alt" style="font-size: 18px"></i>
                   </div>
                   <div style="margin-left: 8px; vertical-align: middle; text-align: center; float: left;">
-                      Peghargaan</div>
+                      Penghargaan</div>
               </div>
             </li>
             <li style="margin-left: 15px;">
