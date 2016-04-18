@@ -49,7 +49,7 @@
           </div>
         </div>
         <div class="row" style="margin: 5px">
-          <div class="col-md-4" style="padding: 5px">Penanggung Jawab</div>
+          <div class="col-md-4" style="padding: 5px">Nama Penanggung Jawab</div>
           <div class="col-md-8">
             <input type="text" class="form-control" name="penerima_nama" id="penerima_nama" placeholder="Nama Penanggung Jawab" value="<?php 
                 if(set_value('penerima_nama')=="" && isset($penerima_nama)){
@@ -111,7 +111,7 @@
           <div class="col-md-4" style="padding: 5px">Tanggal Faktur</div>
           <div class="col-md-8">
             <div id='tgl_faktur' name="tgl_faktur" value="<?php
-              echo (set_value('tgl_faktur')!="") ? date("Y-m-d",strtotime(set_value('tgl_faktur'))) : "";
+              echo ($tgl_kwitansi!="") ? date("Y-m-d",strtotime($tgl_kwitansi)) : "";
             ?>"></div>
           </div>
         </div>
@@ -119,11 +119,11 @@
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Nomor Faktur</div>
           <div class="col-md-8">
-            <input type="text" disabled class="form-control" name="nomor_opname" id="nomor_opname" placeholder="Nomor Faktur" value="<?php 
-                if(set_value('nomor_opname')=="" && isset($nomor_opname)){
-                  echo $nomor_opname;
+            <input type="text" disabled class="form-control" name="nomor_kwitansi" id="nomor_kwitansi" placeholder="Nomor Faktur" value="<?php 
+                if(set_value('nomor_kwitansi')=="" && isset($nomor_kwitansi)){
+                  echo $nomor_kwitansi;
                 }else{
-                  echo  set_value('nomor_opname');
+                  echo  set_value('nomor_kwitansi');
                 }
                 ?>">
           </div>
@@ -131,11 +131,18 @@
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Instansi / PBF</div>
           <div class="col-md-8">
-            <input type="text" disabled class="form-control" name="penerima_nama" id="penerima_nama" placeholder="Instansi / PBF" value="<?php 
-                if(set_value('penerima_nama')=="" && isset($penerima_nama)){
-                  echo $penerima_nama;
+            <input type="text" disabled class="form-control" name="instansi" id="instansi" placeholder="Instansi / PBF" value="<?php 
+                if(set_value('instansi')=="" && isset($nama)){
+                  echo $nama;
                 }else{
-                  echo  set_value('penerima_nama');
+                  echo  set_value('instansi');
+                }
+                ?>">
+                <input type="hidden" disabled class="form-control" name="id_instansi" id="id_instansi" placeholder="Instansi / PBF" value="<?php 
+                if(set_value('id_instansi')=="" && isset($mst_inv_pbf_code)){
+                  echo $mst_inv_pbf_code;
+                }else{
+                  echo  set_value('id_instansi');
                 }
                 ?>">
           </div>
@@ -144,11 +151,11 @@
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Nama Barang</div>
           <div class="col-md-8">
-            <input type="text" disabled class="form-control" name="penerima_nip" id="penerima_nip" placeholder="Nama Barang" value="<?php 
-                if(set_value('penerima_nip')=="" && isset($penerima_nip)){
-                  echo $penerima_nip;
+            <input type="text" disabled class="form-control" name="uraian" id="uraian" placeholder="Nama Barang" value="<?php 
+                if(set_value('uraian')=="" && isset($uraian)){
+                  echo $uraian;
                 }else{
-                  echo  set_value('penerima_nip');
+                  echo  set_value('uraian');
                 }
                 ?>">
           </div>
@@ -157,11 +164,11 @@
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Merek Barang</div>
           <div class="col-md-8">
-            <input type="text" disabled class="form-control" name="penerima_nip" id="penerima_nip" placeholder="Merek Barang" value="<?php 
-                if(set_value('penerima_nip')=="" && isset($penerima_nip)){
-                  echo $penerima_nip;
+            <input type="text" disabled class="form-control" name="merek_tipe" id="merek_tipe" placeholder="Merek Barang" value="<?php 
+                if(set_value('merek_tipe')=="" && isset($merek_tipe)){
+                  echo $merek_tipe;
                 }else{
-                  echo  set_value('penerima_nip');
+                  echo  set_value('merek_tipe');
                 }
                 ?>">
           </div>
@@ -170,11 +177,11 @@
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Batch</div>
           <div class="col-md-8">
-            <input type="text" disabled class="form-control" name="penerima_nip" id="penerima_nip" placeholder="Batch" value="<?php 
-                if(set_value('penerima_nip')=="" && isset($penerima_nip)){
-                  echo $penerima_nip;
+            <input type="text" disabled class="form-control" name="batch" id="batch" placeholder="Batch" value="<?php 
+                if(set_value('batch')=="" && isset($batch)){
+                  echo $batch;
                 }else{
-                  echo  set_value('penerima_nip');
+                  echo  set_value('batch');
                 }
                 ?>">
           </div>
@@ -182,11 +189,11 @@
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Total Penerimaan</div>
           <div class="col-md-8">
-            <input type="number" disabled class="form-control" name="penerima_nip" id="penerima_nip" placeholder="Total Penerimaan" value="<?php 
-                if(set_value('penerima_nip')=="" && isset($penerima_nip)){
-                  echo $penerima_nip;
+            <input type="number" disabled class="form-control" name="total_penerimaan" id="total_penerimaan" placeholder="Total Penerimaan" value="<?php 
+                if(set_value('total_penerimaan')=="" && isset($total_penerimaan)){
+                  echo $total_penerimaan;
                 }else{
-                  echo  set_value('penerima_nip');
+                  echo  set_value('total_penerimaan');
                 }
                 ?>">
           </div>
@@ -194,11 +201,18 @@
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Jumlah Retur</div>
           <div class="col-md-8">
-            <input type="number" class="form-control" name="penerima_nip" id="penerima_nip" placeholder="Jumlah Retur" value="<?php 
-                if(set_value('penerima_nip')=="" && isset($penerima_nip)){
-                  echo $penerima_nip;
+            <input type="hidden" class="form-control" name="jml_rusakakhir_simpan" id="jml_rusakakhir_simpan" placeholder="Jumlah Retur" value="<?php 
+                if(set_value('jml_rusakakhir_simpan')=="" && isset($jml_rusakakhir)){
+                  echo $jml_rusakakhir;
                 }else{
-                  echo  set_value('penerima_nip');
+                  echo  set_value('jml_rusakakhir_simpan');
+                }
+                ?>">
+                <input type="number" class="form-control" name="jml_rusakakhir" id="jml_rusakakhir" placeholder="Jumlah Retur" value="<?php 
+                if(set_value('jml_rusakakhir')=="" && isset($jml_rusakakhir)){
+                  echo $jml_rusakakhir;
+                }else{
+                  echo  set_value('jml_rusakakhir');
                 }
                 ?>">
           </div>
@@ -215,31 +229,56 @@
 </div><!-- /.register-box -->
 
 <script type="text/javascript">
+ var jmlasli = "<?php if(set_value('jml_rusakakhir_simpan')=="" && isset($jml_rusakakhir)){
+                            echo $jml_rusakakhir;
+                          }else{
+                            echo  set_value('jml_rusakakhir_simpan');
+                          } ?>";
+      $("#jml_rusakakhir_simpan").val(jmlasli - $("#jml_rusakakhir").val());
+      $("#jml_rusakakhir").change(function(){
+          if ($("#jml_rusakakhir").val() < 0) {
+            alert('Maaf, Jumlah retur tidak boleh minus');
+            $("#jml_rusakakhir").val(jmlasli);
+            $("#jml_rusakakhir_simpan").val(jmlasli);
+          }
+          if (parseInt($("#jml_rusakakhir").val()) > parseInt(jmlasli)) {
+            alert('Maaf, Jumlah retur tidak boleh lebih dari '+ jmlasli);
+            $("#jml_rusakakhir").val(jmlasli);
+            $("#jml_rusakakhir_simpan").val(jmlasli);
+          }
+          $("#jml_rusakakhir_simpan").val(jmlasli- $(this).val());
+      });
 $(function(){
-  cekopname($('#tgl_opname').val(),$('#jenis_bhp').val());
+  cekopname({jenis});
     $('#form-ss').submit(function(){
       if ($('#last_opname').val() >= $('#tgl_opname').val()) {
-      alert("Maaf! Kategori barang "+$('#jenis_bhp').val()+" sudah di opname pada "+$('#last_opname').val()+','+'\n'+"Silahkan ganti ke tanggal berikutnya");
+      alert("Maaf! Barang ini sudah di musnahkan atau di retur pada "+$('#last_opname').val()+','+'\n'+"Silahkan ganti ke tanggal berikutnya");
 
       }else{
             var data = new FormData();
             data.append('kode_distribusi_', $('#kode_distribusi_').val());
             data.append('tgl_opname', $('#tgl_opname').val());
             data.append('nomor_opname', $('#nomor_opname').val());
-            data.append('jenis_bhp', $('#jenis_bhp').val());
             data.append('puskesmas', $('#puskesmas').val());
             data.append('penerima_nama', $('#penerima_nama').val());
             data.append('penerima_nip', $('#penerima_nip').val());
             data.append('catatan', $('#catatan').val());
+            data.append('instansi', $('#instansi').val());
+            data.append('uraian', $('#uraian').val());
+            data.append('batch', $('#batch').val());
+            data.append('total_penerimaan', $('#total_penerimaan').val());
+            data.append('jml_rusakakhir', $('#jml_rusakakhir').val());
+            data.append('id_instansi', $('#id_instansi').val());
+            data.append('id_uraian', "<?php echo $barang;?>");
             $.ajax({
                 cache : false,
                 contentType : false,
                 processData : false,
                 type : 'POST',
-                url : "<?php echo base_url()?>inventory/bhp_retur/{action}_opname",
+                url : "<?php echo base_url()?>inventory/bhp_retur/{action}_retur/{jenis}/{barang}/{batch}",
                 data : data,
                 success : function(response){
-                  $('#addopname').html(response);
+                  $('#content1').html(response);
                 }
             });
       }
@@ -264,10 +303,7 @@ $(function(){
         kodedistribusi($("#tgl_opname").val());
         
     });
-    $("#jenis_bhp").change(function(){
-        cekopname($('#tgl_opname').val(),$(this).val());
-    });
-    function cekopname(tgl,bhp){
+    function cekopname(bhp){
      
       $.ajax({
           url : "<?php echo base_url().'inventory/bhp_retur/lastopname/';?>"+bhp,

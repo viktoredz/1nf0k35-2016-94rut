@@ -9,7 +9,7 @@ class Bhp_retur extends CI_Controller {
 
 		$this->load->model('inventory/inv_barang_model');
 		$this->load->model('mst/puskesmas_model');
-		$this->load->model('inventory/bhp_opname_model');
+		$this->load->model('inventory/bhp_retur_model');
 		$this->load->model('mst/invbarang_model');
 	}
 
@@ -39,7 +39,7 @@ class Bhp_retur extends CI_Controller {
 			if($this->session->userdata('filter_jenisbarang')=="all"){
 
 			}else{
-				$this->db->where("jenis_bhp",$this->session->userdata('filter_jenisbarang'));
+				$this->db->where("id_mst_inv_barang_habispakai_jenis",$this->session->userdata('filter_jenisbarang'));
 			}
 		}else{
 			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
@@ -66,7 +66,7 @@ class Bhp_retur extends CI_Controller {
 			$this->db->where("code_cl_phc",'P'.$this->session->userdata('puskesmas'));
 		}
 		
-		$rows_all = $this->bhp_opname_model->get_data();
+		$rows_all = $this->bhp_retur_model->get_data();
 
 
 		if($_POST) {
@@ -89,7 +89,7 @@ class Bhp_retur extends CI_Controller {
 			if($this->session->userdata('filter_jenisbarang')=="all"){
 				
 			}else{
-				$this->db->where("jenis_bhp",$this->session->userdata('filter_jenisbarang'));
+				$this->db->where("id_mst_inv_barang_habispakai_jenis",$this->session->userdata('filter_jenisbarang'));
 			}
 		}else{
 			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
@@ -115,7 +115,7 @@ class Bhp_retur extends CI_Controller {
 		if(($this->session->userdata('puskesmas')!='')and !empty($this->session->userdata('puskesmas'))){
 			$this->db->where("code_cl_phc",'P'.$this->session->userdata('puskesmas'));
 		}
-		$rows = $this->bhp_opname_model->get_data();
+		$rows = $this->bhp_retur_model->get_data();
 		$data_tabel = array();
 		$no=1;
 		//$unlock = 1;
@@ -215,7 +215,12 @@ class Bhp_retur extends CI_Controller {
 			if($this->session->userdata('filter_jenisbarang')=="all"){
 
 			}else{
-				$this->db->where("jenis_bhp",$this->session->userdata('filter_jenisbarang'));
+				if ($this->session->userdata('filter_jenisbarang')=='8') {
+					$this->db->where("id_mst_inv_barang_habispakai_jenis",$this->session->userdata('filter_jenisbarang'));
+				}else{
+					$this->db->where("id_mst_inv_barang_habispakai_jenis !=",'8');
+				}
+				
 			}
 		}else{
 			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
@@ -224,24 +229,24 @@ class Bhp_retur extends CI_Controller {
 			if($this->session->userdata('filter_bulan')=="all"){
 
 			}else{
-				$this->db->where("MONTH(tgl_opname)",$this->session->userdata('filter_bulan'));
+				$this->db->where("MONTH(tgl_pembelian_terakhir)",$this->session->userdata('filter_bulan'));
 			}
 		}else{
-				$this->db->where("MONTH(tgl_opname)",date("m"));
+				$this->db->where("MONTH(tgl_pembelian_terakhir)",date("m"));
 		}
 		if($this->session->userdata('filter_tahun')!=''){
 			if($this->session->userdata('filter_tahun')=="all"){
 
 			}else{
-				$this->db->where("YEAR(tgl_opname)",$this->session->userdata('filter_tahun'));
+				$this->db->where("YEAR(tgl_pembelian_terakhir)",$this->session->userdata('filter_tahun'));
 			}
 		}else{
-			$this->db->where("YEAR(tgl_opname)",date("Y"));
+			$this->db->where("YEAR(tgl_pembelian_terakhir)",date("Y"));
 		}
 		if ($this->session->userdata('puskesmas')!='' or !empty($this->session->userdata('puskesmas'))) {
 			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
 		}
-		$rows_all_activity = $this->bhp_opname_model->getitemopname();
+		$rows_all_activity = $this->bhp_retur_model->getitemopname();
 
 
 		if($_POST) {
@@ -273,7 +278,11 @@ class Bhp_retur extends CI_Controller {
 			if($this->session->userdata('filter_jenisbarang')=="all"){
 
 			}else{
-				$this->db->where("jenis_bhp",$this->session->userdata('filter_jenisbarang'));
+				if ($this->session->userdata('filter_jenisbarang')=='8') {
+					$this->db->where("id_mst_inv_barang_habispakai_jenis",$this->session->userdata('filter_jenisbarang'));
+				}else{
+					$this->db->where("id_mst_inv_barang_habispakai_jenis !=",'8');
+				}
 			}
 		}else{
 			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
@@ -282,24 +291,24 @@ class Bhp_retur extends CI_Controller {
 			if($this->session->userdata('filter_bulan')=="all"){
 
 			}else{
-				$this->db->where("MONTH(tgl_opname)",$this->session->userdata('filter_bulan'));
+				$this->db->where("MONTH(tgl_pembelian_terakhir)",$this->session->userdata('filter_bulan'));
 			}
 		}else{
-			$this->db->where("MONTH(tgl_opname)",date("m"));
+			$this->db->where("MONTH(tgl_pembelian_terakhir)",date("m"));
 		}
 		if($this->session->userdata('filter_tahun')!=''){
 			if($this->session->userdata('filter_tahun')=="all"){
 
 			}else{
-				$this->db->where("YEAR(tgl_opname)",$this->session->userdata('filter_tahun'));
+				$this->db->where("YEAR(tgl_pembelian_terakhir)",$this->session->userdata('filter_tahun'));
 			}
 		}else{
-			$this->db->where("YEAR(tgl_opname)",date("Y"));
+			$this->db->where("YEAR(tgl_pembelian_terakhir)",date("Y"));
 		}
 		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
 			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
 		}
-		$activity = $this->bhp_opname_model->getitemopname($this->input->post('recordstartindex'), $this->input->post('pagesize'));
+		$activity = $this->bhp_retur_model->getitemopname($this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();
 
 		$kodepuskesmas = $this->session->userdata('puskesmas');
@@ -314,16 +323,13 @@ class Bhp_retur extends CI_Controller {
 				'id_mst_inv_barang_habispakai'   			=> $act->id_mst_inv_barang_habispakai,
 				'batch'										=> $act->batch,
 				'uraian'									=> $act->uraian,
-				'id_inv_inventaris_habispakai_opname'		=> $act->id_inv_inventaris_habispakai_opname,
-				'jml_awal'									=> $act->jml_awal,
-				'jml_akhir'									=> $act->jml_akhir,
-				'jmlawal_opname'							=> $act->jmlawal_opname,
-				'sumselisih'								=> ($act->sumselisih)*-1,
-				'jmlakhir_opname'							=> $act->jmlawal_opname + $act->sumselisih,
-				'harga'										=> $act->harga,
+				'total_penerimaan'							=> $act->total_penerimaan,
+				'jml_rusakakhir'							=> $act->jml_rusakakhir,
+				'id_mst_inv_barang_habispakai_jenis'		=> $act->id_mst_inv_barang_habispakai_jenis,
 				'merek_tipe'								=> $act->merek_tipe,
-				'tgl_opname'								=> date("d-m-Y",strtotime($act->tgl_opname)),
-				'jml_selisih'								=> $act->jml_akhir-$act->jml_awal,
+				'nama'										=> $act->nama,
+				'harga'										=> $act->harga,
+				'tgl_pembelian_terakhir'					=> date("d-m-Y",strtotime($act->tgl_pembelian_terakhir)),
 				'edit'		=> 1,
 				'delete'	=> 1
 			);
@@ -339,21 +345,31 @@ class Bhp_retur extends CI_Controller {
 
 		echo json_encode(array($json));
 	}
-	function add($value='')
+	function add_retur($jenis=8,$barang=0,$batch='')
 	{
 		$this->authentication->verify('inventory','add');
-
-		$this->form_validation->set_rules('kode_distribusi_', 'Kode Opname', 'trim|required');
+			
+		$this->form_validation->set_rules('kode_distribusi_', 'Kode Lokasi', 'trim|required');
         $this->form_validation->set_rules('tgl_opname', 'Tanggal Opname', 'trim|required');
         $this->form_validation->set_rules('penerima_nama', 'Nama Penerima', 'trim|required');
         $this->form_validation->set_rules('penerima_nip', 'NIP Penerima', 'trim|required');
         $this->form_validation->set_rules('nomor_opname', 'Nomor Opname', 'trim|required');
         $this->form_validation->set_rules('catatan', 'Catatan', 'trim|required');
-        $this->form_validation->set_rules('jenis_bhp', 'jenis_bhp', 'trim');
-        $this->form_validation->set_rules('puskesmas', 'jenis_bhp', 'trim');
+        $this->form_validation->set_rules('puskesmas', 'puskesmas', 'trim');
+        $this->form_validation->set_rules('instansi', 'Nama Instansi Pbf', 'trim|required');
+        $this->form_validation->set_rules('uraian', 'Uraian Barang', 'trim|required');
+        $this->form_validation->set_rules('batch', 'Batch', 'trim|required');
+        $this->form_validation->set_rules('total_penerimaan', 'Total Terima', 'trim|required');
+        $this->form_validation->set_rules('jml_rusakakhir', 'Jumlah Rusak', 'trim|required');
+        $this->form_validation->set_rules('id_instansi', 'Id instansi', 'trim|required');
+        $this->form_validation->set_rules('id_uraian', 'Id Uraian', 'trim|required');
+        $data 	= $this->bhp_retur_model->get_data_row_rusak($jenis,$barang,$batch);
 		$data['title_group'] 	= "Bahan Habis Pakai";
 		$data['title_form']		= "Tambah Opname";
 		$data['action']			= "add";
+		$data['barang']			= $barang;
+		$data['jenis']			= $jenis;
+		$data['batch']			= $batch;
 		$data['kode']			= "";
 		$data['alert_form']="";
 		$kodepuskesmas = $this->session->userdata('puskesmas');
@@ -361,14 +377,15 @@ class Bhp_retur extends CI_Controller {
 		$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
 		if($this->form_validation->run()== FALSE){
 			die($this->parser->parse("inventory/bhp_retur/form",$data,true));
-		}elseif($id = $this->bhp_opname_model->insert_entry()){
+		}elseif($id = $this->bhp_retur_model->insert_entry($jenis,$barang,$batch)){
 			$data['alert_form']='Save data successful...';
 			if ($this->input->post('jenis_bhp')=="obat") {
 				$jenis='8';
 			}else{
 				$jenis='0';
 			}
-			$this->edit_opname($id,$jenis);
+			//$this->edit_opname($id,$jenis);
+			$this->daftar_retur();
 		}else{
 			$data['alert_form']='Save data failed...';
 		}
@@ -394,7 +411,7 @@ class Bhp_retur extends CI_Controller {
         $this->form_validation->set_rules('jenis_bhp', 'jenis_bhp', 'trim');
         $this->form_validation->set_rules('puskesmas', 'jenis_bhp', 'trim');
 
-    	$data 	= $this->bhp_opname_model->get_data_row($id_opname);
+    	$data 	= $this->bhp_retur_model->get_data_row($id_opname);
 		$data['title_group'] 	= "Barang Habis Pakai";
 		$data['title_form']		= "Ubah Stok Opname";
 		$data['action']			= "edit";
@@ -403,7 +420,7 @@ class Bhp_retur extends CI_Controller {
 		$kodepuskesmas = $this->session->userdata('puskesmas');
 		$this->db->where('code','P'.$kodepuskesmas);
 		$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
-		$data['kodestatus_inv'] = $this->bhp_opname_model->pilih_data_status('status_pembelian');
+		$data['kodestatus_inv'] = $this->bhp_retur_model->pilih_data_status('status_pembelian');
 		$data['barang']	  			= $this->parser->parse('inventory/bhp_retur/barang', $data, TRUE);
 		$data['barang_opname'] 	= $this->parser->parse('inventory/bhp_retur/barang_opname', $data, TRUE);
 		$data['alert_form'] ='';
@@ -411,7 +428,7 @@ class Bhp_retur extends CI_Controller {
 		if($this->form_validation->run()== FALSE){
 
 			die($this->parser->parse("inventory/bhp_retur/edit",$data,true));
-		}elseif($this->bhp_opname_model->update_entry($id_opname)){
+		}elseif($this->bhp_retur_model->update_entry($id_opname)){
 			$data['alert_form'] 	= 'Save data successful...';
 		}else{
 			$data['alert_form'] 	= 'Save data failed...';
@@ -446,7 +463,7 @@ class Bhp_retur extends CI_Controller {
 
 	function dodelpermohonan($kode=0,$barang=0,$batch=0){
 		
-		if($this->bhp_opname_model->delete_entryitem($kode,$barang,$batch)){
+		if($this->bhp_retur_model->delete_entryitem($kode,$barang,$batch)){
 				return true;
 		}else{
 			$this->session->set_flashdata('alert', 'Delete data error');
@@ -457,8 +474,8 @@ class Bhp_retur extends CI_Controller {
 		$kodepuskesmas = $this->session->userdata('puskesmas');
 		$this->db->where('code','P'.$kodepuskesmas);
 		$this->session->set_userdata('filter_jenisbarang','');
-		$data['datapuskesmas'] 	= $this->bhp_opname_model->get_data_puskesmas();
-		$data['jenisbaranghabis'] = array('obat'=>'Obat','umum'=>'Umum');
+		$data['datapuskesmas'] 	= $this->bhp_retur_model->get_data_puskesmas();
+		$data['jenisbaranghabis'] = array('8'=>'Obat','umum'=>'Umum');
 		$data['msg_opname'] = "";
 		$this->session->set_userdata('filter_jenisbarang','');
 		$this->session->set_userdata('filter_bulan','');
@@ -469,8 +486,8 @@ class Bhp_retur extends CI_Controller {
 	function daftar_retur(){
 		$kodepuskesmas = $this->session->userdata('puskesmas');
 		$this->db->where('code','P'.$kodepuskesmas);
-		$data['datapuskesmas'] 	= $this->bhp_opname_model->get_data_puskesmas();
-		$data['jenisbaranghabis'] = array('obat'=>'Obat','umum'=>'Umum');
+		$data['datapuskesmas'] 	= $this->bhp_retur_model->get_data_puskesmas();
+		$data['jenisbaranghabis'] = array('8'=>'Obat','umum'=>'Umum');
 		$data['msg_opname'] = "";
 		$this->session->set_userdata('filter_jenisbarang','');
 		$this->session->set_userdata('filter_bulan','');
@@ -519,7 +536,7 @@ class Bhp_retur extends CI_Controller {
 	function dodel_opname($kode=0,$id_barang="",$table=0){
 		$this->authentication->verify('inventory','del');
 
-		if($this->bhp_opname_model->delete_opname($kode,$id_barang,$table)){
+		if($this->bhp_retur_model->delete_opname($kode,$id_barang,$table)){
 			$data['msg_opname'] = "Delete data $kode";
 			die($this->parser->parse("inventory/bhp_retur/show_opname",$data,true));
 		}else{
@@ -527,5 +544,27 @@ class Bhp_retur extends CI_Controller {
 			die($this->parser->parse("inventory/bhp_retur/show_opname",$data,true));
 		}
 	}
+	function lastopname($bhp='obat')
+	{
+		$kodepus = $this->session->userdata('puskesmas');
+		$this->db->order_by('tgl_opname','desc');
+		$this->db->where('code_cl_phc','P'.$kodepus);
+		$this->db->where('jenis_bhp',$bhp);
+		$this->db->where("tipe ='terimarusak' or tipe='retur'");
+		$this->db->select("max(tgl_opname) as last_opname");
+        $query = $this->db->get('inv_inventaris_habispakai_opname',1);
+        if ($query->num_rows()>0) {
+        	foreach ($query->result() as $key) {
+        		if ($key->last_opname !=null) {
+        			die($key->last_opname);
+        		}else{
+        			die('0000-00-00');	
+        		}
+        	}
+        }else{
+        	die('0000-00-00');	
+        }
+        
 
+	}
 }

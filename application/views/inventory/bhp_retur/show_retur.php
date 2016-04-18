@@ -112,19 +112,18 @@
 			datatype: "json",
 			type	: "POST",
 			datafields: [
-			{ name: 'id_inv_inventaris_habispakai_opname', type: 'string' },
 			{ name: 'id_mst_inv_barang_habispakai', type: 'string' },
 			{ name: 'batch', type: 'string' },
 			{ name: 'uraian', type: 'string' },
-			{ name: 'jml_awal', type: 'number' },
-			{ name: 'jml_akhir', type: 'number' },
-			{ name: 'jmlawal_opname', type: 'number' },
-			{ name: 'jmlakhir_opname', type: 'number' },
-			{ name: 'sumselisih', type: 'number' },
+			{ name: 'total_penerimaan', type: 'string' },
+			{ name: 'jml_rusakakhir', type: 'string' },
+			{ name: 'id_mst_inv_barang_habispakai_jenis', type: 'string' },
+			{ name: 'nama', type: 'string' },
+			{ name: 'tgl_pembelian_terakhir', type: 'string' },
 			{ name: 'harga', type: 'string' },
 			{ name: 'merek_tipe', type: 'string' },
-			{ name: 'tgl_opname', type: 'string' },
-			{ name: 'jml_selisih', type: 'number' }
+			{ name: 'edit', type: 'number' },
+			{ name: 'delete', type: 'number' }
         ],
 		url: "<?php echo site_url('inventory/bhp_retur/json'); ?>",
 		cache: false,
@@ -169,7 +168,7 @@
 				{ text: 'Retur', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgridRetur").jqxGrid('getrowdata', row)
 				    if((dataRecord.id_mst_inv_barang_habispakai!=null)&&(dataRecord.tgl_opname!="<?php echo date('Y-m-d');?>")){
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/return.png' onclick='add(\""+dataRecord.id_inv_inventaris_habispakai_opname+"\",\""+dataRecord.id_mst_inv_barang_habispakai+"\",\""+dataRecord.batch+"\");'></a></div>";
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/return.png' onclick='add(\""+dataRecord.id_mst_inv_barang_habispakai_jenis+"\",\""+dataRecord.id_mst_inv_barang_habispakai+"\",\""+dataRecord.batch+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}
@@ -177,22 +176,17 @@
                 },
 				{ text: 'Nama Barang', align: 'center', editable:false ,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '31%' },
 				{ text: 'Merek', align: 'center', editable:false ,datafield: 'merek_tipe', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
-				{ text: 'Instansi / PBF', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false, columntype: 'date', filtertype: 'none', cellsformat: 'dd-MM-yyyy', width: '20%'},
-				{ text: 'Tgl Terima',datafield: 'tgl_opname', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false, columntype: 'date', filtertype: 'none', cellsformat: 'dd-MM-yyyy', width: '10%'},
-				{ text: 'Jml Terima',sortable: true,editable:false ,align: 'center', cellsalign: 'right', datafield: 'jmlakhir_opname', columntype: 'textbox', filtertype: 'none', width: '9%' },
-				{ text: 'Jml Rusak',sortable: false,editable:false ,datafield: 'sumselisih', columntype: 'textbox', filtertype: 'none', width: '9%' ,align: 'center', cellsalign: 'right'}
+				{ text: 'Instansi / PBF', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false, columntype: 'date', filtertype: 'none', cellsformat: 'dd-MM-yyyy', width: '20%',datafield: 'nama'},
+				{ text: 'Tgl Terima',datafield: 'tgl_pembelian_terakhir', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false, columntype: 'date', filtertype: 'none', cellsformat: 'dd-MM-yyyy', width: '10%'},
+				{ text: 'Jml Terima',sortable: true,editable:false ,align: 'center', cellsalign: 'right', datafield: 'total_penerimaan', columntype: 'textbox', filtertype: 'none', width: '9%' },
+				{ text: 'Jml Rusak',sortable: false,editable:false ,datafield: 'jml_rusakakhir', columntype: 'textbox', filtertype: 'none', width: '9%' ,align: 'center', cellsalign: 'right'}
             ]
 		});
 
-	function add(id,barang,batch){
-  		$.ajax({
-	        url : '<?php echo site_url('inventory/bhp_retur/add/') ?>',
-	        type : 'POST',
-	        success : function(data) {
-	          	$('#content1').html(data);
-	        }
-     	});
-
+	function add(jenis,barang,batch){
+		$.get("<?php echo base_url().'inventory/bhp_retur/add_retur/'?>"+jenis+'/'+barang+'/'+batch, function(data) {
+			$("#content1").html(data);
+		});
       return false;
 	}
 
