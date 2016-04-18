@@ -63,7 +63,7 @@
 							<b>Puskesmas</b>
 						</td>
 						<td>
-							<?=$ds['code_cl_phc']?> - <?=$ds['value']?>
+							<?=$ds['code_pl_phc']?> - <?=$ds['value']?>
 						</td>
 						<td>
 						</td>
@@ -82,7 +82,7 @@
 					<form method="post" action="<?=base_url()?>keuangan/sts/update_ttd">
 					
 					<input type="hidden" name="tgl" value="<?=$ds['tgl']?>" >
-					<input type="hidden" name="puskes" value="<?=$ds['code_cl_phc']?>" >
+					<input type="hidden" name="puskes" value="<?=$ds['code_pl_phc']?>" >
                     <tr>
 						<td></td>
 						<td>
@@ -210,7 +210,7 @@
 			<div class="">		
 				<div class="col-md-6 pull-right" style="text-align:right">
 					<input type="hidden" name="tgl" value="<?=$ds['tgl']?>" >
-					<input type="hidden" name="puskes" value="<?=$ds['code_cl_phc']?>" >
+					<input type="hidden" name="puskes" value="<?=$ds['code_pl_phc']?>" >
 					<input type="submit" name="save" class="btn btn-success" value="Simpan Sementara" >								
 					<input type="submit" name="delete" class="btn btn-danger" onclick="return confirm('apakah Anda yakin telah selesai mengisi form STS ? form yang telah ditutup tidak dapat diedit kembali')" value="Simpan & Tutup STS">
 					<a href="<?=base_url()?>keuangan/sts/general" name="save" class="btn btn-primary" value="" >Kembali</a>						
@@ -357,7 +357,6 @@
 				$.post( '<?php echo base_url()?>keuangan/master_sts/set_puskes', {puskes:$(this).val()},function( data ) {
 					
 					$("#treeGrid").jqxTreeGrid('updateBoundData');
-
 					
 				});
             });
@@ -442,11 +441,11 @@
                 },
                 //pagerButtonsCount: 8,                
                 columns: [				                                 
-                  { text: 'Kode Anggaran', editable:false, dataField: "KodeAnggaran", align: 'center', width: '25%' },
-                  { text: 'Uraian', editable:false, dataField: "Uraian", align: 'center', width: '43%' },
-				  { text: 'Volume', dataField: "Volume",cellClassName: "min", editable:<?php echo $ds['status']!='buka' ? "false" : "true" ?>, align: 'center', cellsAlign: 'right',  cellsFormat: "f", width: '8%' },
-				  { text: 'Tarif', dataField: "Tarif", editable:false, align: 'center', cellsAlign: 'right', cellsFormat: "f", width: '12%' },                                    
-				  { text: 'Sub Total', dataField: "Subtotal", editable:false, align: 'center', cellsAlign: 'right', cellsFormat: "f", width: '12%' }      
+                  { text: 'Kode Anggaran', editable:false, dataField: "KodeAnggaran", align: 'center', width: '25%',cellsalign: 'center' },
+                  { text: 'Uraian', editable:false, dataField: "Uraian", align: 'center', width: '43%',cellsalign: 'center' },
+				  { text: 'Volume', dataField: "Volume",cellClassName: "min", editable:<?php echo $ds['status']!='buka' ? "false" : "true" ?>, align: 'center', cellsFormat: "f", width: '8%',cellsalign: 'center' },
+				  { text: 'Tarif', dataField: "Tarif", editable:false, align: 'center', cellsFormat: "f", width: '12%',cellsalign: 'center' },                                    
+				  { text: 'Sub Total', dataField: "Subtotal", editable:false, align: 'center', cellsFormat: "f", width: '12%',cellsalign: 'center' }      
                 ]
             });
 			
