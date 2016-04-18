@@ -119,15 +119,12 @@
 			{ name: 'uraian', type: 'string' },
 			{ name: 'jml_awal', type: 'number' },
 			{ name: 'jml_akhir', type: 'number' },
-			{ name: 'jmlawal_opname', type: 'number' },
-			{ name: 'jmlakhir_opname', type: 'number' },
-			{ name: 'sumselisih', type: 'number' },
 			{ name: 'harga', type: 'string' },
 			{ name: 'merek_tipe', type: 'string' },
 			{ name: 'tgl_opname', type: 'string' },
 			{ name: 'jml_selisih', type: 'number' }
         ],
-		url: "<?php echo site_url('inventory/bhp_retur/json'); ?>",
+		url: "<?php echo site_url('inventory/bhp_retur/json_retur'); ?>",
 		cache: false,
 			updateRow: function (rowID, rowData, commit) {
              
@@ -178,10 +175,10 @@
                 },
 				{ text: 'Nama Barang', align: 'center', editable:false ,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '31%' },
 				{ text: 'Merek', align: 'center', editable:false ,datafield: 'merek_tipe', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
-				{ text: 'Instansi / PBF', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false, columntype: 'date', filtertype: 'none', cellsformat: 'dd-MM-yyyy', width: '20%'},
+				{ text: 'Instansi / PBF', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false, columntype: 'date', filtertype: 'none', cellsformat: 'dd-MM-yyyy',datafield: 'nama', width: '20%'},
 				{ text: 'Tgl Retur',datafield: 'tgl_opname', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false, columntype: 'date', filtertype: 'none', cellsformat: 'dd-MM-yyyy', width: '10%'},
-				{ text: 'Jml Terima',sortable: true,editable:false ,align: 'center', cellsalign: 'right', datafield: 'jmlakhir_opname', columntype: 'textbox', filtertype: 'none', width: '9%' },
-				{ text: 'Jml Retur',sortable: false,editable:false ,datafield: 'sumselisih', columntype: 'textbox', filtertype: 'none', width: '9%' ,align: 'center', cellsalign: 'right'}
+				{ text: 'Jml Terima',sortable: true,editable:false ,align: 'center', cellsalign: 'right', datafield: 'jml_awal', columntype: 'textbox', filtertype: 'none', width: '9%' },
+				{ text: 'Jml Retur',sortable: false,editable:false ,datafield: 'jml_akhir', columntype: 'textbox', filtertype: 'none', width: '9%' ,align: 'center', cellsalign: 'right'}
             ]
 		});
 

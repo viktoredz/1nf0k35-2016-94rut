@@ -201,7 +201,7 @@
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Jumlah Retur</div>
           <div class="col-md-8">
-            <input type="hidden" class="form-control" name="jml_rusakakhir_simpan" id="jml_rusakakhir_simpan" placeholder="Jumlah Retur" value="<?php 
+            <input type="text" class="form-control" name="jml_rusakakhir_simpan" id="jml_rusakakhir_simpan" placeholder="Jumlah Retur" value="<?php 
                 if(set_value('jml_rusakakhir_simpan')=="" && isset($jml_rusakakhir)){
                   echo $jml_rusakakhir;
                 }else{
@@ -268,6 +268,7 @@ $(function(){
             data.append('batch', $('#batch').val());
             data.append('total_penerimaan', $('#total_penerimaan').val());
             data.append('jml_rusakakhir', $('#jml_rusakakhir').val());
+            data.append('jml_rusakakhir_simpan', $('#jml_rusakakhir_simpan').val());
             data.append('id_instansi', $('#id_instansi').val());
             data.append('id_uraian', "<?php echo $barang;?>");
             $.ajax({

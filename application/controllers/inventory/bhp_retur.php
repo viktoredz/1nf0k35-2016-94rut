@@ -345,6 +345,169 @@ class Bhp_retur extends CI_Controller {
 
 		echo json_encode(array($json));
 	}
+	function json_retur($id=0){
+		$this->authentication->verify('inventory','show');
+
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl_update' ) {
+					$value = date("Y-m-d",strtotime($value));
+
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+
+		if ($id!=0) {
+			$this->db->where('inv_inventaris_habispakai_opname_item.id_inv_inventaris_habispakai_opname',$id);
+		}
+		if($this->session->userdata('filter_jenisbarang')!=''){
+			if($this->session->userdata('filter_jenisbarang')=="all"){
+
+			}else{
+				if ($this->session->userdata('filter_jenisbarang')=='8') {
+					$this->db->where("id_mst_inv_barang_habispakai_jenis",$this->session->userdata('filter_jenisbarang'));
+				}else{
+					$this->db->where("id_mst_inv_barang_habispakai_jenis !=",'8');
+				}
+				
+			}
+		}else{
+			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
+		}
+		if($this->session->userdata('filter_bulan')!=''){
+			if($this->session->userdata('filter_bulan')=="all"){
+
+			}else{
+				$this->db->where("MONTH(tgl_opname)",$this->session->userdata('filter_bulan'));
+			}
+		}else{
+				$this->db->where("MONTH(tgl_opname)",date("m"));
+		}
+		if($this->session->userdata('filter_tahun')!=''){
+			if($this->session->userdata('filter_tahun')=="all"){
+
+			}else{
+				$this->db->where("YEAR(tgl_opname)",$this->session->userdata('filter_tahun'));
+			}
+		}else{
+			$this->db->where("YEAR(tgl_opname)",date("Y"));
+		}
+		if ($this->session->userdata('puskesmas')!='' or !empty($this->session->userdata('puskesmas'))) {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
+		$rows_all_activity = $this->bhp_retur_model->getitemopname_retur();
+
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl_update' ) {
+					$value = date("Y-m-d",strtotime($value));
+
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+
+		if ($id!=0) {
+			$this->db->where('inv_inventaris_habispakai_opname_item.id_inv_inventaris_habispakai_opname',$id);
+		}
+		if($this->session->userdata('filter_jenisbarang')!=''){
+			if($this->session->userdata('filter_jenisbarang')=="all"){
+
+			}else{
+				if ($this->session->userdata('filter_jenisbarang')=='8') {
+					$this->db->where("id_mst_inv_barang_habispakai_jenis",$this->session->userdata('filter_jenisbarang'));
+				}else{
+					$this->db->where("id_mst_inv_barang_habispakai_jenis !=",'8');
+				}
+			}
+		}else{
+			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
+		}
+		if($this->session->userdata('filter_bulan')!=''){
+			if($this->session->userdata('filter_bulan')=="all"){
+
+			}else{
+				$this->db->where("MONTH(tgl_opname)",$this->session->userdata('filter_bulan'));
+			}
+		}else{
+			$this->db->where("MONTH(tgl_opname)",date("m"));
+		}
+		if($this->session->userdata('filter_tahun')!=''){
+			if($this->session->userdata('filter_tahun')=="all"){
+
+			}else{
+				$this->db->where("YEAR(tgl_opname)",$this->session->userdata('filter_tahun'));
+			}
+		}else{
+			$this->db->where("YEAR(tgl_opname)",date("Y"));
+		}
+		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
+		$activity = $this->bhp_retur_model->getitemopname_retur($this->input->post('recordstartindex'), $this->input->post('pagesize'));
+		$data = array();
+
+		$kodepuskesmas = $this->session->userdata('puskesmas');
+		if(substr($kodepuskesmas, -2)=="01"){
+			$unlock = 1;
+		}else{
+			$unlock = 0;
+		}
+		
+		foreach($activity as $act) {
+			$data[] = array(
+				'id_mst_inv_barang_habispakai'   			=> $act->id_mst_inv_barang_habispakai,
+				'batch'										=> $act->batch,
+				'uraian'									=> $act->uraian,
+				'id_inv_inventaris_habispakai_opname'		=> $act->id_inv_inventaris_habispakai_opname,
+				'jml_awal'									=> $act->jml_awal,
+				'jml_akhir'									=> $act->jml_akhir,
+				'harga'										=> $act->harga,
+				'merek_tipe'								=> $act->merek_tipe,
+				'tgl_opname'								=> date("d-m-Y",strtotime($act->tgl_opname)),
+				'jml_selisih'								=> ($act->jml_akhir-$act->jml_awal)*-1,
+				'edit'		=> 1,
+				'delete'	=> 1
+			);
+		}
+
+
+		
+		$size = sizeof($rows_all_activity);
+		$json = array(
+			'TotalRows' => (int) $size,
+			'Rows' => $data
+		);
+
+		echo json_encode(array($json));
+	}
 	function add_retur($jenis=8,$barang=0,$batch='')
 	{
 		$this->authentication->verify('inventory','add');
@@ -363,6 +526,7 @@ class Bhp_retur extends CI_Controller {
         $this->form_validation->set_rules('jml_rusakakhir', 'Jumlah Rusak', 'trim|required');
         $this->form_validation->set_rules('id_instansi', 'Id instansi', 'trim|required');
         $this->form_validation->set_rules('id_uraian', 'Id Uraian', 'trim|required');
+        $this->form_validation->set_rules('jml_rusakakhir_simpan', 'jml_rusakakhir_simpan', 'trim');
         $data 	= $this->bhp_retur_model->get_data_row_rusak($jenis,$barang,$batch);
 		$data['title_group'] 	= "Bahan Habis Pakai";
 		$data['title_form']		= "Tambah Opname";

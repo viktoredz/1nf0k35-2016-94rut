@@ -188,6 +188,19 @@ class Bhp_retur_model extends CI_Model {
         $query = $this->db->get("bhp_retur",$limit,$start);
         return $query->result();
     }
+    function getitemopname_retur($start=0,$limit=999999,$options=array())
+    {
+        $this->db->where("inv_inventaris_habispakai_opname.tipe = 'retur'");
+        $this->db->select('(SELECT mst_inv_pbf.nama FROM mst_inv_pbf JOIN  inv_inventaris_habispakai_pembelian  ON
+        (mst_inv_pbf.code = inv_inventaris_habispakai_pembelian.mst_inv_pbf_code) LEFT JOIN inv_inventaris_habispakai_pembelian_item 
+       ON(inv_inventaris_habispakai_pembelian_item.id_inv_hasbispakai_pembelian= inv_inventaris_habispakai_pembelian.id_inv_hasbispakai_pembelian)
+    WHERE inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai =inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai
+    AND inv_inventaris_habispakai_pembelian_item.batch = inv_inventaris_habispakai_opname_item.batch) AS nama,mst_inv_barang_habispakai.uraian,mst_inv_barang_habispakai.merek_tipe,inv_inventaris_habispakai_opname.* ,inv_inventaris_habispakai_opname_item.*');
+        $this->db->join('inv_inventaris_habispakai_opname_item','inv_inventaris_habispakai_opname.id_inv_inventaris_habispakai_opname = inv_inventaris_habispakai_opname_item.id_inv_inventaris_habispakai_opname','left');
+        $this->db->join('mst_inv_barang_habispakai','mst_inv_barang_habispakai.id_mst_inv_barang_habispakai = inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai');
+        $query =$this->db->get('inv_inventaris_habispakai_opname',$limit,$start);
+        return $query->result();
+    }
 
     
     function get_data_row($kode){
