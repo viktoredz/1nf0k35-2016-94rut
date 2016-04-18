@@ -39,7 +39,7 @@
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Nomor Retur</div>
           <div class="col-md-8">
-            <input type="text" class="form-control" name="nomor_opname" id="nomor_opname" placeholder="Nomor Dokumen" value="<?php 
+            <input type="text" class="form-control" name="nomor_opname" id="nomor_opname" autocomplete="off" placeholder="Nomor Dokumen" value="<?php 
                 if(set_value('nomor_opname')=="" && isset($nomor_opname)){
                   echo $nomor_opname;
                 }else{
@@ -201,9 +201,23 @@
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Jumlah Retur</div>
           <div class="col-md-8">
-            <input type="text" class="form-control" name="jml_rusakakhir_simpan" id="jml_rusakakhir_simpan" placeholder="Jumlah Retur" value="<?php 
+            <input type="hidden" class="form-control" name="jml_rusakakhir_simpan" id="jml_rusakakhir_simpan" placeholder="Jumlah Retur" value="<?php 
                 if(set_value('jml_rusakakhir_simpan')=="" && isset($jml_rusakakhir)){
                   echo $jml_rusakakhir;
+                }else{
+                  echo  set_value('jml_rusakakhir_simpan');
+                }
+                ?>">
+                <input type="hidden" class="form-control" name="jml_rusaktotal" id="jml_rusaktotal" placeholder="Jumlah Retur" value="<?php 
+                if(set_value('jml_rusaktotal')=="" && isset($jml_rusakakhir)){
+                  echo $jml_rusakakhir;
+                }else{
+                  echo  set_value('jml_rusaktotal');
+                }
+                ?>">
+                <input type="hidden" class="form-control" name="jml_awalopname" id="jml_awalopname" placeholder="Jumlah Retur" value="<?php 
+                if(set_value('jml_awalopname')=="" && isset($jml_awalopname)){
+                  echo $jml_awalopname;
                 }else{
                   echo  set_value('jml_rusakakhir_simpan');
                 }
@@ -213,6 +227,13 @@
                   echo $jml_rusakakhir;
                 }else{
                   echo  set_value('jml_rusakakhir');
+                }
+                ?>">
+                 <input type="hidden" class="form-control" name="hargaterakhir" id="hargaterakhir" placeholder="Jumlah Retur" value="<?php 
+                if(set_value('hargaterakhir')=="" && isset($hargaterakhir)){
+                  echo $hargaterakhir;
+                }else{
+                  echo  set_value('hargaterakhir');
                 }
                 ?>">
           </div>
@@ -229,11 +250,9 @@
 </div><!-- /.register-box -->
 
 <script type="text/javascript">
- var jmlasli = "<?php if(set_value('jml_rusakakhir_simpan')=="" && isset($jml_rusakakhir)){
-                            echo $jml_rusakakhir;
-                          }else{
-                            echo  set_value('jml_rusakakhir_simpan');
-                          } ?>";
+ var jmlasli = "<?php echo $jml_rusakakhir; ?>";
+ var opname =  "<?php echo $jml_awalopname; ?>";
+ $("#jml_awalopname").val(opname);
       $("#jml_rusakakhir_simpan").val(jmlasli - $("#jml_rusakakhir").val());
       $("#jml_rusakakhir").change(function(){
           if ($("#jml_rusakakhir").val() < 0) {
@@ -260,12 +279,14 @@ $(function(){
             data.append('tgl_opname', $('#tgl_opname').val());
             data.append('nomor_opname', $('#nomor_opname').val());
             data.append('puskesmas', $('#puskesmas').val());
+            data.append('jml_rusaktotal', $('#jml_rusaktotal').val());
             data.append('penerima_nama', $('#penerima_nama').val());
             data.append('penerima_nip', $('#penerima_nip').val());
             data.append('catatan', $('#catatan').val());
             data.append('instansi', $('#instansi').val());
             data.append('uraian', $('#uraian').val());
             data.append('batch', $('#batch').val());
+            data.append('jml_awalopname', $('#jml_awalopname').val());
             data.append('total_penerimaan', $('#total_penerimaan').val());
             data.append('jml_rusakakhir', $('#jml_rusakakhir').val());
             data.append('jml_rusakakhir_simpan', $('#jml_rusakakhir_simpan').val());

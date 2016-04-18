@@ -50,20 +50,14 @@ class Bhp_retur_model extends CI_Model {
             return '0000-00-00';
         }
     }
-    function delete_entryitem($kode,$barang,$batch)
+    function delete_entryitem($kode)
     {
-        $tgl_update = $this->tanggalp($kode,$barang,$batch);
-        $this->db->where('batch',$batch);
-        $this->db->where('id_mst_inv_barang_habispakai',$barang);
         $this->db->where('id_inv_inventaris_habispakai_opname',$kode);
-        $this->db->where('tgl_update',$tgl_update);
-        $this->db->delete('inv_inventaris_habispakai_kondisi')->result;
+        $this->db->delete('inv_inventaris_habispakai_opname_item');
 
-        $this->db->where('batch',$batch);
-        $this->db->where('id_mst_inv_barang_habispakai',$barang);
         $this->db->where('id_inv_inventaris_habispakai_opname',$kode);
-        $query = $this->db->delete('inv_inventaris_habispakai_opname_item');
-        return $query->result();
+        $this->db->delete('inv_inventaris_habispakai_opname');
+        return true;
     }
     function update_entry()
     {   $tanggal =explode("-", $this->input->post('tgl_opname'));
@@ -173,9 +167,9 @@ class Bhp_retur_model extends CI_Model {
             $datachild['id_inv_inventaris_habispakai_opname']       = $data['id_inv_inventaris_habispakai_opname'];
             $datachild['id_mst_inv_barang_habispakai']      = $barang;
             $datachild['batch']                             = $batch;
-            $datachild['jml_awal']                          = $this->input->post('jml_rusakakhir');
-            $datachild['jml_akhir']                         = $this->input->post('jml_rusakakhir_simpan');
-            $datachild['harga']                             = $jenis;//$this->$this->input->post('harga');
+            $datachild['jml_awal']                          = $this->input->post('jml_awalopname')+$this->input->post('jml_rusakakhir_simpan');
+            $datachild['jml_akhir']                         = $this->input->post('jml_awalopname');
+            $datachild['harga']                             = $this->input->post('hargaterakhir');
             $this->db->insert('inv_inventaris_habispakai_opname_item', $datachild);
             return $data['id_inv_inventaris_habispakai_opname'];
         }else{
@@ -205,9 +199,23 @@ class Bhp_retur_model extends CI_Model {
     
     function get_data_row($kode){
         $data = array();
-        $this->db->where("id_inv_inventaris_habispakai_opname",$kode);
-        $this->db->select("inv_inventaris_habispakai_opname.*");
-        $query = $this->db->get('inv_inventaris_habispakai_opname');
+        $this->db->where("inv_inventaris_habispakai_opname.id_inv_inventaris_habispakai_opname",$kode);
+        $this->db->select('(SELECT mst_inv_pbf.nama FROM mst_inv_pbf JOIN  inv_inventaris_habispakai_pembelian  ON
+        (mst_inv_pbf.code = inv_inventaris_habispakai_pembelian.mst_inv_pbf_code) LEFT JOIN inv_inventaris_habispakai_pembelian_item 
+       ON(inv_inventaris_habispakai_pembelian_item.id_inv_hasbispakai_pembelian= inv_inventaris_habispakai_pembelian.id_inv_hasbispakai_pembelian)
+    WHERE inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai =inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai
+    AND inv_inventaris_habispakai_pembelian_item.batch = inv_inventaris_habispakai_opname_item.batch) AS nama,mst_inv_barang_habispakai.uraian,mst_inv_barang_habispakai.merek_tipe,inv_inventaris_habispakai_opname.* ,inv_inventaris_habispakai_opname_item.*,(SELECT nomor_kwitansi
+   FROM inv_inventaris_habispakai_pembelian 
+   LEFT JOIN inv_inventaris_habispakai_pembelian_item ON(inv_inventaris_habispakai_pembelian_item.id_inv_hasbispakai_pembelian= inv_inventaris_habispakai_pembelian.id_inv_hasbispakai_pembelian)
+   WHERE inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai =inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai
+     AND inv_inventaris_habispakai_pembelian_item.batch = inv_inventaris_habispakai_opname_item.batch) AS nomor_kwitansi,(SELECT tgl_kwitansi
+   FROM inv_inventaris_habispakai_pembelian 
+   LEFT JOIN inv_inventaris_habispakai_pembelian_item ON(inv_inventaris_habispakai_pembelian_item.id_inv_hasbispakai_pembelian= inv_inventaris_habispakai_pembelian.id_inv_hasbispakai_pembelian)
+   WHERE inv_inventaris_habispakai_pembelian_item.id_mst_inv_barang_habispakai =inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai
+     AND inv_inventaris_habispakai_pembelian_item.batch = inv_inventaris_habispakai_opname_item.batch) AS tgl_kwitansi');
+        $this->db->join('inv_inventaris_habispakai_opname_item','inv_inventaris_habispakai_opname.id_inv_inventaris_habispakai_opname = inv_inventaris_habispakai_opname_item.id_inv_inventaris_habispakai_opname','left');
+        $this->db->join('mst_inv_barang_habispakai','mst_inv_barang_habispakai.id_mst_inv_barang_habispakai = inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai');
+        $query =$this->db->get('inv_inventaris_habispakai_opname');
         if ($query->num_rows() > 0){
             $data = $query->row_array();
         }

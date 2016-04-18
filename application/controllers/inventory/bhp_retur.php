@@ -490,9 +490,10 @@ class Bhp_retur extends CI_Controller {
 				'jml_awal'									=> $act->jml_awal,
 				'jml_akhir'									=> $act->jml_akhir,
 				'harga'										=> $act->harga,
+				'nama'										=> $act->nama,
 				'merek_tipe'								=> $act->merek_tipe,
 				'tgl_opname'								=> date("d-m-Y",strtotime($act->tgl_opname)),
-				'jml_selisih'								=> ($act->jml_akhir-$act->jml_awal)*-1,
+				'jml_selisih'								=> ($act->jml_awal - $act->jml_akhir),
 				'edit'		=> 1,
 				'delete'	=> 1
 			);
@@ -527,6 +528,9 @@ class Bhp_retur extends CI_Controller {
         $this->form_validation->set_rules('id_instansi', 'Id instansi', 'trim|required');
         $this->form_validation->set_rules('id_uraian', 'Id Uraian', 'trim|required');
         $this->form_validation->set_rules('jml_rusakakhir_simpan', 'jml_rusakakhir_simpan', 'trim');
+        $this->form_validation->set_rules('jml_awalopname', 'jml_awalopname', 'trim');
+        $this->form_validation->set_rules('jml_rusaktotal', 'jml_rusaktotal', 'trim');
+        $this->form_validation->set_rules('hargaterakhir', 'hargaterakhir', 'trim');
         $data 	= $this->bhp_retur_model->get_data_row_rusak($jenis,$barang,$batch);
 		$data['title_group'] 	= "Bahan Habis Pakai";
 		$data['title_form']		= "Tambah Opname";
@@ -580,15 +584,11 @@ class Bhp_retur extends CI_Controller {
 		$data['title_form']		= "Ubah Stok Opname";
 		$data['action']			= "edit";
 		$data['kode']			= $id_opname;
-		$data['jenisbarangbhp']		= $jenis_bhp;
 		$kodepuskesmas = $this->session->userdata('puskesmas');
 		$this->db->where('code','P'.$kodepuskesmas);
 		$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
 		$data['kodestatus_inv'] = $this->bhp_retur_model->pilih_data_status('status_pembelian');
-		$data['barang']	  			= $this->parser->parse('inventory/bhp_retur/barang', $data, TRUE);
-		$data['barang_opname'] 	= $this->parser->parse('inventory/bhp_retur/barang_opname', $data, TRUE);
 		$data['alert_form'] ='';
-		
 		if($this->form_validation->run()== FALSE){
 
 			die($this->parser->parse("inventory/bhp_retur/edit",$data,true));
@@ -625,10 +625,10 @@ class Bhp_retur extends CI_Controller {
 		}
 	}
 
-	function dodelpermohonan($kode=0,$barang=0,$batch=0){
+	function dodelpermohonan($kode=0){
 		
-		if($this->bhp_retur_model->delete_entryitem($kode,$barang,$batch)){
-				return true;
+		if($this->bhp_retur_model->delete_entryitem($kode)==true){
+				$this->daftar_barangretur();
 		}else{
 			$this->session->set_flashdata('alert', 'Delete data error');
 		}

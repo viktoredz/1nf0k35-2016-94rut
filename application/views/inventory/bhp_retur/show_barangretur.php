@@ -16,7 +16,7 @@
 	      	<div class="box-footer">
 		      	<div class="row"> 
 			      	<div class="col-md-12">
-					 	<button type="button" class="btn btn-success" id="btn-refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
+					 	<button type="button" class="btn btn-success" id="btn-refresh-retur"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
 			          <button type="button" id="btn-export" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Export</button>
 			      	</div>
 		      	</div>
@@ -121,7 +121,9 @@
 			{ name: 'jml_akhir', type: 'number' },
 			{ name: 'harga', type: 'string' },
 			{ name: 'merek_tipe', type: 'string' },
+			{ name: 'nama', type: 'string' },
 			{ name: 'tgl_opname', type: 'string' },
+			{ name: 'jml_selisih', type: 'string' },
 			{ name: 'jml_selisih', type: 'number' }
         ],
 		url: "<?php echo site_url('inventory/bhp_retur/json_retur'); ?>",
@@ -149,7 +151,7 @@
 			}
 		});
      
-		$('#btn-refresh').click(function () {
+		$('#btn-refresh-retur').click(function () {
 			$("#jqxgridBRetur").jqxGrid('clearfilters');
 		});
 
@@ -177,19 +179,15 @@
 				{ text: 'Merek', align: 'center', editable:false ,datafield: 'merek_tipe', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
 				{ text: 'Instansi / PBF', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false, columntype: 'date', filtertype: 'none', cellsformat: 'dd-MM-yyyy',datafield: 'nama', width: '20%'},
 				{ text: 'Tgl Retur',datafield: 'tgl_opname', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false, columntype: 'date', filtertype: 'none', cellsformat: 'dd-MM-yyyy', width: '10%'},
-				{ text: 'Jml Terima',sortable: true,editable:false ,align: 'center', cellsalign: 'right', datafield: 'jml_awal', columntype: 'textbox', filtertype: 'none', width: '9%' },
-				{ text: 'Jml Retur',sortable: false,editable:false ,datafield: 'jml_akhir', columntype: 'textbox', filtertype: 'none', width: '9%' ,align: 'center', cellsalign: 'right'}
+				{ text: 'Jml Terima',sortable: true,editable:false ,align: 'center', cellsalign: 'right', datafield: 'total_penerimaan', columntype: 'textbox', filtertype: 'none', width: '9%' },
+				{ text: 'Jml Retur',sortable: false,editable:false ,datafield: 'jml_selisih', columntype: 'textbox', filtertype: 'none', width: '9%' ,align: 'center', cellsalign: 'right'}
             ]
 		});
 
 	function detail(id,barang,batch){
-  		$.ajax({
-	        url : '<?php echo site_url('inventory/bhp_retur/detail/') ?>',
-	        type : 'POST',
-	        success : function(data) {
-	          	$('#content2').html(data);
-	        }
-     	});
+		$.get("<?php echo base_url().'inventory/bhp_retur/detail/' ?>"+id,function(data){
+			$('#content2').html(data);
+		});
 
       return false;
 	}
