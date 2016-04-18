@@ -22,89 +22,57 @@
 </div>
 
 <section class="content">
-
   <div class="row">
-    <!-- left column -->
     <div class="col-md-12">
-      <!-- general form elements -->
       <div class="box box-primary">
         <div class="box-header">
            <h3 class="box-title">{title_form}</h3> 
       </div>
 
       <div class="box-body">
-      <div class="">
-        <div class="col-md-2 pull-right">
-          <button type="button" id="btn-kembali" class="btn btn-primary"><i class='fa  fa-arrow-circle-o-left'></i> &nbsp;Kembali</button>
+      <div class="row">
+        <div class="col-md-2" style="padding-top:8px;"><label> Pilih Versi </label> </div>
+        <div class="col-md-3">
+          <select name="versi" class="form-control" id="versi">
+            <option value="0">Pilih Versi</option>
+          </select>
+        </div>
+        <div class="col-md-7">
+          <button type="button" class="btn btn-success" onclick="lihat_versi()"><i class='fa fa-search'></i> &nbsp;Lihat Semua Versi</button>           
+          <button type="button" class="btn btn-danger" onclick="add_versi()"><i class='fa fa-plus-square'></i> &nbsp;Buat Versi Baru</button> 
+          <button type="button" id="btn-kembali" class="btn btn-primary pull-right"><i class='fa  fa-arrow-circle-o-left'></i> &nbsp;Kembali</button>
         </div>
       </div>
       </div>
 
     <div class="box-body">
-      <div class="">
-        <div class="col-md-7 pull-right">
-          <button type="button" class="btn btn-success" onclick='lihat_versi()'> Lihat Semua Versi</button>           
-          <button type="button" class="btn btn-primary" onclick='add_versi()'> Buat Versi Baru</button> 
-        </div>
-
-        <div class="col-md-2" style="padding-top:5px;"><label> Pilih Versi </label> </div>
-        <div class="col-md-3 pull-left">
-
-        <select name="versi" class="form-control" id="versi">
-          <option value="0">Pilih Versi</option>
-        </select>
-        </div>
+      <div class="row">
+        <div class="col-md-2"><label> Versi Daftar Tarif</label> </div>
+        <div class="col-md-10"><label> <div id="nama_versi"> </div></label> </div>
       </div>
-      </div>
-
-      <br>
+    </div>
 
     <div class="box-body">
-      <div class="">
-
-        <div class="col-md-2" style="padding-top:5px;"><label> Versi Daftar Tarif</label> </div>
-        <div class="col-md-3 pull-left">
-
-        <div class="col-md-7" style="padding-top:5px;"><label> <div id="nama_versi"> </div></label> </div>
-        <div class="col-md-3 pull-left">
+      <div class="row">
+        <div class="col-md-2"><label> Status Versi </label> </div>
+        <div class="col-md-2"><label> <div id="versistatusid"> </div></label> </div>
+        <div class="col-md-6">
+          <button id="status" type="button" class="btn btn-danger" name="aktifkan_status"> </button> 
         </div>
       </div>
-      </div>
-      </div>
-
-      <br>
+    </div>
 
     <div class="box-body">
-      <div class="">
-
-        <div class="col-md-2" style="padding-top:5px;"><label> Status Versi </label> </div>
-        <div class="col-md-3 pull-left">
-
-        <div class="col-md-5" style="padding-top:5px;"><label> <div id="versistatusid"> </div></label> </div>
-        <div class="col-md-3 pull-left">
+      <div class="row">
+        <div class="col-md-12 pull-left">
+          <button id="doExpand" class="btn btn-warning " ><i class="icon fa fa-plus-square-o"></i> &nbsp;Expand</button>  
+          <button id="doCollapse" class="btn btn-warning " ><i class="icon fa fa-minus-square-o"></i> &nbsp;Collapse</button> 
+          <button id="doInduk" onclick='add_induk()' class="btn btn-success"><i class="icon fa fa-plus-square"></i> &nbsp;Tambah Induk</button> 
         </div>
-
-        <div class="col-md-4 pull-right">
-        <button id="status" type="button" class="btn btn-default" name="aktifkan_status"> </button> 
-        </div>
-
       </div>
-      </div>
-      </div>
-
-      <br>
-
-       <div class="box-body">
-      <div class="">
-
-        <div class="col-md-7 pull-left">
-          <button id="doExpand"   onclick='' class="btn  btn-warning " >Expand All</button>  
-          <button id="doCollapse" onclick='' class="btn btn-warning " >Collapse All</button> 
-          <button id="doInduk"    onclick='add_induk()' class="btn btn-success" >Tambah Induk</button> 
-      
-      </div><br/><br/><br/>
+    </div>
     
-        <div class="box-body">
+    <div class="box-body">
       <div class="default">
         <div id="treeGrid"></div>
       </div>
@@ -299,10 +267,12 @@
                     { name: "id_mst_anggaran", type: "number" },
                     { name: "id_mst_anggaran_parent", type: "number" },
                     { name: "id_mst_akun", type: "number" },
-                    { name: "kode_anggaran", type: "number" },
+                    { name: "kode_anggaran", type: "string" },
                     { name: "uraian", type: "string" },
                     { name: "tarif", type: "number" },
-                    { name: "id_mst_anggaran_versi", type: "number" }
+                    { name: "id_mst_anggaran_versi", type: "number" },
+                    { name: "kode_rekening", type: "string" },
+                    { name: "uraian_rekening", type: "string" }
                 ],
                 hierarchy:
                 {
@@ -333,7 +303,7 @@
           if(typeof(arr[1]) === 'object'){
             var arr2 = $.map(arr[1], function(el) { return el });
             //input data
-            $.post( '<?php echo base_url()?>mst/keuangan_sts/anggaran_add', {id_mst_anggaran:arr[2],id_mst_anggaran_parent:arr2[0], id_mst_akun:arr[2], kode_anggaran:arr[4], uraian : arr[5], tarif : arr[6], id_mst_anggaran_versi : arr[0]}, function( data ) {
+            $.post( '<?php echo base_url()?>mst/keuangan_sts/anggaran_add', {id_mst_anggaran:arr[2],id_mst_anggaran_parent:arr2[0], id_mst_akun:arr[7], kode_anggaran:arr[4], uraian : arr[5], tarif : arr[6], id_mst_anggaran_versi : arr[0]}, function( data ) {
                 if(data != 0){
                   alert(data);                  
                 }else{
@@ -342,9 +312,21 @@
             });
           }else{      
             //update data
-            $.post( '<?php echo base_url()?>mst/keuangan_sts/anggaran_update', {row:rowID,id_mst_anggaran:arr[0] ,id_mst_anggaran_parent:arr[1], id_mst_akun:arr[2], kode_anggaran:arr[3], uraian : arr[4], tarif : arr[5], id_mst_anggaran_versi : arr[1]},function( data ) {
+            alert(arr);
+            $.post( '<?php echo base_url()?>mst/keuangan_sts/anggaran_update', 
+              {
+                row:rowID,
+                id_mst_anggaran:arr[0] ,
+                id_mst_anggaran_parent:arr[1], 
+                kode_anggaran:arr[3], 
+                uraian : arr[4], 
+                tarif : arr[5], 
+                id_mst_akun:arr[7], 
+                id_mst_anggaran_versi : arr[1]
+              },
+              function( data ) {
                 if(data != 0){
-                  alert(data);                  
+                  alert(data);
                 }else{
                   $("#treeGrid").jqxTreeGrid('updateBoundData');
                 }
@@ -386,8 +368,7 @@
                 altRows: true,
                 ready: function()
                 {
-                    // called when the DatatreeGrid is loaded.   
-               $("#treeGrid").jqxTreeGrid('expandAll');            
+                   $("#treeGrid").jqxTreeGrid('expandAll');            
                 },
                 pagerButtonsCount: 8,
                 toolbarHeight: 35,
@@ -539,14 +520,23 @@
                         }
                     });
                 },
-
               columns: [                             
-               { text: 'Kode Anggaran', dataField: "kode_anggaran", align: 'center',cellsalign: 'center', width: '19%' },
-               { text: 'Uraian', dataField: "uraian", align: 'center', width: '31%',cellsalign: 'center' }, 
+               { text: 'Kode Anggaran', dataField: "kode_anggaran", align: 'center', width: '19%' },
+               { text: 'Uraian', dataField: "uraian", align: 'center', width: '31%' }, 
                { text: 'Tarif', dataField: "tarif", align: 'center', width: '20%',cellsalign: 'center' },         
-               { text: 'Kode Rekening', dataField: 'id_mst_akun', width: "30%", align:'center',cellsalign: 'center',columnType: "template"}
-               
-                ]
+               { text: 'Kode Rekening', dataField: 'kode_rekening', width: "30%", align:'center',cellsalign: 'center',columnType: "template",
+                   createEditor: function (row, cellvalue, editor, cellText, width, height) {
+                       var source = [1,2,3];
+                       editor.jqxDropDownList({autoDropDownHeight: true, source: source, width: '100%', height: '100%' });
+                   },
+                   initEditor: function (row, cellvalue, editor, celltext, width, height) {
+                       editor.jqxDropDownList('selectItem', cellvalue);
+                   },
+                   getEditorValue: function (row, cellvalue, editor) {
+                       return editor.val();
+                   }
+                }
+              ]
             });
         });
     
@@ -571,8 +561,8 @@
         });
         $("#popup_keuangan_sts_induk").jqxWindow({
           theme: theme, resizable: false,
-          width: 600,
-          height: 280,
+          width: 620,
+          height: 300,
           isModal: true, autoOpen: false, modalOpacity: 0.2
         });
         $("#popup_keuangan_sts_induk").jqxWindow('open');
@@ -585,8 +575,8 @@
         });
         $("#popup_keuangan_versi_sts").jqxWindow({
           theme: theme, resizable: false,
-          width: 9000,
-          height: 300,
+          width: 620,
+          height: 420,
           isModal: true, autoOpen: false, modalOpacity: 0.2
         });
         $("#popup_keuangan_versi_sts").jqxWindow('open');

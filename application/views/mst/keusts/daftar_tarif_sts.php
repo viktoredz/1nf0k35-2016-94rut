@@ -8,53 +8,45 @@
 
 <section class="content">
   <div class="row">
-    <!-- left column -->
     <div class="col-md-12">
-      <!-- general form elements -->
       <div class="box box-primary">
         <div class="box-header">
           <h3 class="box-title">{title_form}</h3>
       </div>
-    
       <div class="box-body">
-    
-      <div class="col-md-3 pull-left">
-        <button id="doExpand" class="btn  btn-warning " >Expand All</button>  
-        <button id="doCollapse" onclick="" class="btn  btn-warning " >Collapse All</button> 
-        
-      </div>
+        <div class="row">
+          <div class="col-md-6 pull-left">
+            <button id="doExpand" class="btn  btn-warning"><i class="icon fa fa-plus-square-o"></i> &nbsp;Expand</button>  
+            <button id="doCollapse" onclick="" class="btn  btn-warning"><i class="icon fa fa-minus-square-o"></i> &nbsp;Collapse</button> 
+          </div>
 
-        <div class="col-md pull-right">
-          <button type="button" class="btn btn-primary" id="btn-ubah-tarif"></i> &nbsp; Ubah Tarif
-          </button>
-        </div>
+          <div class="col-md-2 pull-right">
+            <button type="button" class="btn btn-primary pull-right" id="btn-ubah-tarif"><i class="icon fa fa-edit"></i> &nbsp; Ubah Tarif
+            </button>
+          </div>
 
-        <div class="col-md-4 pull-right">
-          <div class="row">
-            <div class="col-md-4" style="padding-top:5px;"><label> Versi </label> </div>
-            <div class="col-md-8">
-              <select name="versi" class="form-control" id="versi">
-                 <option value="0">Pilih Versi</option>
-             </select>
-             </div> 
+          <div class="col-md-4 pull-right">
+            <div class="row">
+              <div class="col-md-8 pull-right">
+                <select name="versi" class="form-control" id="versi">
+                   <option value="0">Pilih Versi</option>
+               </select>
+               </div> 
+              <div class="col-md-4 pull-right" style="padding-top:8px">Pilih Versi :</div>
+            </div>
           </div>
         </div>
-
       </div>
     
-        <div class="box-body">
-      <div class="default">
+      <div class="box-body">
         <div id="treeGrid"></div>
-      </div>
       </div>
     </div>
   </div>
   </div>
 
 </section>
-
-
-  <script type="text/javascript">
+<script type="text/javascript">
     function getDemoTheme() {
       var theme = document.body ? $.data(document.body, 'theme') : null
       if (theme == null) {
@@ -146,23 +138,8 @@
     catch (error) {
       var er = error;
     }
-  </script>
-  <script type="text/javascript">
 
-      $(document).ready(function () {   
-
-      $('#versi').change(function(){
-        var versi = $(this).val();
-        $.ajax({
-          url : '<?php echo site_url('mst/keuangan_sts/get_versi') ?>',
-          type : 'POST',
-          data : 'versi=' + versi ,
-            success : function(data) {
-              $('#versi').html(data);
-            }
-        });
-        return false;
-      }).change();
+    $(document).ready(function () {   
 
       var newRowID = null;
       
@@ -178,56 +155,66 @@
         });
       });
 
-     $("#btn-ubah-tarif").click(function(){
+      $("#btn-ubah-tarif").click(function(){
         var versi = $('#versi').val();
         $.get('<?php echo base_url()?>mst/keuangan_sts/anggaran_ubah/'+versi , function( data )  {
            $('#content1').html(data);
         });
       });
 
-     $("select[name='versi']").change(function(){
-        $.post( '<?php echo base_url()?>mst/keuangan_sts/set_versi', {versi:$(this).val()},function( data ) {
+      $.ajax({
+        url : '<?php echo site_url('mst/keuangan_sts/get_versi') ?>',
+        type : 'GET',
+          success : function(data) {
+            $("select[name='versi']").html(data);
+            $("select[name='versi']").change();
+          }
+      });
+
+      $("select[name='versi']").change(function(){
+        var versi = $(this).val();
+
+        $.post( '<?php echo base_url()?>mst/keuangan_sts/set_versi', {versi:versi},function( data ) {
           $("#treeGrid").jqxTreeGrid('updateBoundData');
           $("#treeGrid").jqxTreeGrid('expandAll');  
 
         });
-     });
-            // prepare the data
-             var source =
-            {
-                dataType: "tab",
-                dataFields: [
-                  
-                    { name: "IdMstAnggaran", type: "number" },
-                    { name: "IdMstAnggaranParent", type: "number" },
-                    { name: "IdMstAkun", type: "number" },
-                    { name: "KodeAnggaran", type: "number" },
-                    { name: "Uraian", type: "string" },
-                    { name: "Tarif", type: "number" },
-                    { name: "IdMstAnggaranVersi", type: "number" }
+      });
 
-                ],
-                hierarchy:
-                {
-                    keyDataField: { name: 'IdMstAnggaran' },
-                    parentDataField: { name: 'IdMstAnggaranParent' }
-                },
-                id: 'id_mst_anggaran',
-                url: '<?php echo base_url()?>mst/keuangan_sts/api_data',
-                 addRow: function (rowID, rowData, position, parentID, commit) {        
-                     // POST to server using $.post or $.ajax          
-                     // synchronize with the server - send insert command
-                     // call commit with parameter true if the synchronization with the server is successful 
-                     // and with parameter false if the synchronization failed.
-                     // you can pass additional argument to the commit callback which represents the new ID if it is generated from a DB.
-                     commit(true);
-                     newRowID = rowID;
-                 },
-                 updateRow: function (rowID, rowData, commit) {
-                     // synchronize with the server - send update command
-                     // call commit with parameter true if the synchronization with the server is successful 
-                     // and with parameter false if the synchronization failed.         
-                    commit(true);
+         var source = {
+            dataType: "tab",
+            dataFields: [
+                { name: "IdMstAnggaran", type: "number" },
+                { name: "IdMstAnggaranParent", type: "number" },
+                { name: "IdMstAkun", type: "number" },
+                { name: "KodeAnggaran", type: "string" },
+                { name: "Uraian", type: "string" },
+                { name: "Tarif", type: "number" },
+                { name: "IdMstAnggaranVersi", type: "number"},
+                { name: "KodeRekening", type: "string" },
+                { name: "UraianRekening", type: "string" }
+            ],
+            hierarchy:
+            {
+                keyDataField: { name: 'IdMstAnggaran' },
+                parentDataField: { name: 'IdMstAnggaranParent' }
+            },
+            id: 'id_mst_anggaran',
+            url: '<?php echo base_url()?>mst/keuangan_sts/api_data',
+             addRow: function (rowID, rowData, position, parentID, commit) {        
+                 // POST to server using $.post or $.ajax          
+                 // synchronize with the server - send insert command
+                 // call commit with parameter true if the synchronization with the server is successful 
+                 // and with parameter false if the synchronization failed.
+                 // you can pass additional argument to the commit callback which represents the new ID if it is generated from a DB.
+                 commit(true);
+                 newRowID = rowID;
+             },
+             updateRow: function (rowID, rowData, commit) {
+                 // synchronize with the server - send update command
+                 // call commit with parameter true if the synchronization with the server is successful 
+                 // and with parameter false if the synchronization failed.         
+                commit(true);
           var arr = $.map(rowData, function(el) { return el });                             
           $.post( '<?php echo base_url()?>keuangan/master_sts/add_tarif', {id_anggaran:arr[0],tarif:arr[8]},function( data ) {
             if(data != 0){
@@ -255,21 +242,21 @@
             {
                 width: '100%',
                 source: dataAdapter,
-                pageable: false,pageSize:999,
-                editable: true,                
+                pageable: false,
+                pageSize:999,
+                editable: false,                
                 altRows: true,
                 ready: function()
                 {
                 // called when the DatatreeGrid is loaded.         
                 },
                 pagerButtonsCount: 8,                
-           columns: [
-                                  
-               { text: 'Kode Anggaran', dataField: "KodeAnggaran", align: 'center',cellsalign: 'center', width: '19%' },
-               { text: 'Uraian', dataField: "Uraian", align: 'center', width: '31%',cellsalign: 'center' }, 
+              columns: [
+               { text: 'Kode Anggaran', dataField: "KodeAnggaran", align: 'center',width: '19%' },
+               { text: 'Uraian', dataField: "Uraian", align: 'center', width: '31%'}, 
                { text: 'Tarif', dataField: "Tarif", align: 'center', width: '20%',cellsalign: 'center' },         
-               { text: 'Kode Rekening', dataField: 'IdMstAkun', width: "30%", align:'center',cellsalign: 'center'}
-                ]
+               { text: 'Kode Rekening', dataField: 'KodeRekening', width: "30%", align:'center',cellsalign: 'center'}
+              ]
             });
         });
     

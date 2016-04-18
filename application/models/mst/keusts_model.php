@@ -145,9 +145,10 @@ class Keusts_model extends CI_Model {
 
     function get_data_type_filter($versi)
     {     
-        $this->db->select('*');        
-        $this->db->where('id_mst_anggaran_versi', $versi);        
-        $this->db->order_by('id_mst_anggaran','asc');
+        $this->db->select('mst_keu_anggaran.*,mst_keu_akun.kode AS kode_rekening, mst_keu_akun.uraian AS uraian_rekening',false);
+        $this->db->join('mst_keu_akun','mst_keu_akun.id_mst_akun=mst_keu_anggaran.id_mst_akun','left');
+        $this->db->where('mst_keu_anggaran.id_mst_anggaran_versi', $versi);        
+        $this->db->order_by('mst_keu_anggaran.id_mst_anggaran','asc');
         $query = $this->db->get($this->tb);     
         return $query->result_array();  
     }
@@ -487,11 +488,10 @@ class Keusts_model extends CI_Model {
         $dataExplode = explode("-",$this->input->post('id_mst_akun'));
 
         $data = array(
-           'id_mst_anggaran'        => $this->get_new_id_mst_keu_anggaran(),
            'id_mst_anggaran_parent' => $this->input->post('id_mst_anggaran_parent') ,
-           'id_mst_akun'            => $dataExplode[0],
+           'id_mst_akun'            => $this->input->post('id_mst_akun') ,
            'kode_anggaran'          => $this->input->post('kode_anggaran'),
-           'uraian'                 => $this->input->post('uraian'),
+           'uraian'                 => trim($this->input->post('uraian')),
            'tarif'                  => $this->input->post('tarif'),
            'id_mst_anggaran_versi'  => $this->session->userdata('versi')
         );
@@ -547,7 +547,6 @@ class Keusts_model extends CI_Model {
         if ($query->num_rows() > 0){
             $data = $query->row_array();
         }
-
         $query->free_result();    
         return $data;
     }

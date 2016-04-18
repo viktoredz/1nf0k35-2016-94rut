@@ -5,10 +5,7 @@
   <?php echo $this->session->flashdata('alert')?>
 </div>
 <?php } ?>
-<div id="popup_barang_bhp" style="display:none">
-  <div id="popup_title">Detail Opname Barang</div>
-  <div id="popup_content_bhp">&nbsp;</div>
-</div>
+
 <section class="content">
 <form action="<?php echo base_url()?>inventory/bhp_opname/dodel_multi" method="POST" name="">
   <div class="row">
@@ -93,11 +90,10 @@
             contentType : false,
             processData : false,
             type : 'POST',
-            url : '<?php echo base_url()."kepegawaian/drh_keluarga/biodata_keluarga_ortu_{action}/{id}/{urut}"   ?>',
+            url : '<?php echo base_url()."mst/keuangan_sts/pengaturan_sts_save" ?>',
             data : data,
             success : function(response){
               if(response=="OK"){
-                $("#popup_keluarga_ortu").jqxWindow('close');
                 alert("Data keluarga berhasil disimpan.");
                 $("#jqxgridKeluarga").jqxGrid('updatebounddata', 'filter');
               }else{

@@ -9,7 +9,7 @@ class Keuangan_sts extends CI_Controller {
 	function index(){
 		$this->authentication->verify('mst','edit');
 		$data['title_group']   = "Keuangan";
-		$data['title_form']    = "Daftar Tarif Surat Tanda Setoran";
+		$data['title_form']    = "Tarif Surat Tanda Setoran";
 		$data['ambildata'] 	   = $this->keusts_model->get_data();
 		$data['kode_rekening'] = $this->keusts_model->get_kode_rek();
 		$data['content']       = $this->parser->parse("mst/keusts/show",$data,true);		
@@ -27,7 +27,7 @@ class Keuangan_sts extends CI_Controller {
 		switch ($pageIndex) {
 			case 1:
 				$data['title_group']   = "Keuangan";
-				$data['title_form']    = "Daftar Tarif Surat Tanda Setoran";
+				$data['title_form']    = "Tarif Surat Tanda Setoran";
 				$data['versists']	   = $this->keusts_model->get_versi_sts();
 				$data['ambildata']     = $this->keusts_model->get_data();
 				$data['kode_rekening'] = $this->keusts_model->get_data_kode_rekening();
@@ -110,7 +110,6 @@ class Keuangan_sts extends CI_Controller {
 
 		echo json_encode(array($json));
 	}
-
 
 	function json_penggunaan_tarif_sts($id){
 		$this->authentication->verify('mst','show');
@@ -207,7 +206,6 @@ class Keuangan_sts extends CI_Controller {
 	}
 
 	function versi_del($id=0){
-
 		 $this->authentication->verify('mst','del');
 
 		 if($this->keusts_model->delete_versi($id)){
@@ -239,8 +237,6 @@ class Keuangan_sts extends CI_Controller {
 			$versi = $this->input->post('versi');
 			$this->session->set_userdata('versi',$this->input->post('versi'));
 			$ver   = $this->keusts_model->get_versi_sts();
-
-				echo "<option value=''></option>";
 			foreach($ver as $v) :
 				$select = $v->id_mst_anggaran_versi == ($this->session->userdata('versi')!='0' ?  $this->session->userdata('versi') : $this->nama_status())  ? 'selected' : '';
 				echo '<option value="'.$v->id_mst_anggaran_versi.'" '.$select.'>' . $v->nama . '</option>';
@@ -261,8 +257,6 @@ class Keuangan_sts extends CI_Controller {
 			$this->session->set_userdata('versi',$this->input->post('versi'));
 			$ver     = $this->keusts_model->get_versi_sts();
 			$datases = $this->session->userdata('versi');
-				
-				echo "<option value=''></option>";
 			foreach($ver as $ver) :
 				$select = $ver->id_mst_anggaran_versi ==  $versi ? 'selected' : '';
 				echo '<option value="'.$ver->id_mst_anggaran_versi.'" '.$select.'>' . $ver->nama . '</option>';
@@ -285,7 +279,7 @@ class Keuangan_sts extends CI_Controller {
 		$data['id_mst_anggaran']	    = "";
 		$data['kode_rek']		   	    = $this->keusts_model->get_kode_rek();
 	    $data['action']					= "add";
-		$data['alert_form']		   	    = '';
+		$data['alert_form']		   	    = "";
 
 		if($this->form_validation->run()== FALSE){
 			die($this->parser->parse("mst/keusts/form_tambah_induk",$data));
@@ -324,10 +318,15 @@ class Keuangan_sts extends CI_Controller {
 		die($this->parser->parse("mst/keusts/form_tambah_induk",$data));
 	}
 
+	function pengaturan_sts_save(){
+		
+
+	}
+
 	function kembali(){
 
 		$data['title_group']   = "Keuangan";
-		$data['title_form']    = "Daftar Tarif Surat Tanda Setoran";
+		$data['title_form']    = "Tarif Surat Tanda Setoran";
 		$data['ambildata']     = $this->keusts_model->get_data();
 		$data['versi'] 		   = $this->keusts_model->get_versi_sts();
 		$data['kode_rekening'] = $this->keusts_model->get_data_kode_rekening();
@@ -341,7 +340,7 @@ class Keuangan_sts extends CI_Controller {
 		
 		$data['ambildata'] = $this->keusts_model->get_data_type_filter($this->session->userdata('versi'));
 		foreach($data['ambildata'] as $d){
-			$txt = $d["id_mst_anggaran"]." \t ".$d["id_mst_anggaran_parent"]."\t".$d["id_mst_akun"]." \t ".$d["kode_anggaran"]." \t ".$d["uraian"]." \t ".$d["tarif"]." \t ".$d["id_mst_anggaran_versi"]." \n";				
+			$txt = $d["id_mst_anggaran"]." \t ".$d["id_mst_anggaran_parent"]."\t".$d["id_mst_akun"]." \t ".$d["kode_anggaran"]." \t ".$d["uraian"]." \t ".$d["tarif"]." \t ".$d["id_mst_anggaran_versi"]." \t ".$d["kode_rekening"]." \t ".$d["uraian_rekening"]." \n";				
 			echo $txt;
 		}
 		
@@ -440,9 +439,8 @@ class Keuangan_sts extends CI_Controller {
 		$data['action']		   ="edit";
 		$data['alert_form']    = "";
 		$data['versi']         = $versi;
-	    // $data['nama_versi']    = $this->keusts_model->get_nama_versi($versi);
 		$data['title_group']   = "Tarif Surat Tanda Setoran";
-		$data['title_form']    = "Ubah Daftar Tarif Surat Tanda Setoran";
+		$data['title_form']    = "Ubah Tarif Surat Tanda Setoran";
 
 		$data['ambildata']     = $this->keusts_model->get_data();
 		$data['kode_rekening'] = $this->keusts_model->get_data_kode_rekening();
@@ -550,6 +548,7 @@ class Keuangan_sts extends CI_Controller {
 			echo "ups";
 		}	
 	}
+
 
 }
 

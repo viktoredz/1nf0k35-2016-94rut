@@ -72,7 +72,7 @@
                         }
                         $select = $rek->id_mst_akun == $id_mst_akun ? 'selected' : '' ;
                         ?>
-                        <option value="<?php echo $rek->id_mst_akun ?>" <?php echo $select ?>><?php echo $rek->id_mst_akun ?></option>
+                        <option value="<?php echo $rek->id_mst_akun ?>" <?php echo $select ?>><?php echo $rek->kode." - ". $rek->uraian ?></option>
                       <?php endforeach ?>
                   </select>
                 </div>
