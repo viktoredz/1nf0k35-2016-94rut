@@ -60,6 +60,25 @@ class Sts extends CI_Controller {
 			}
 		}
 
+		if($this->session->userdata('filter_bulan')!=''){
+			if($this->session->userdata('filter_bulan')=="all"){
+
+			}else{
+				$this->db->where("MONTH(tgl)",$this->session->userdata('filter_bulan'));
+			}
+		}else{
+				$this->db->where("MONTH(tgl)",date("m"));
+		}
+		if($this->session->userdata('filter_tahun')!=''){
+			if($this->session->userdata('filter_tahun')=="all"){
+
+			}else{
+				$this->db->where("YEAR(tgl)",$this->session->userdata('filter_tahun'));
+			}
+		}else{
+			$this->db->where("YEAR(tgl)",date("Y"));
+		}
+
 		$rows_all = $this->sts_model->get_data();
 
 		if($_POST) {
@@ -69,18 +88,30 @@ class Sts extends CI_Controller {
 			for($i=0;$i<$fil;$i++) {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
-
-				if($field == 'tgl_lhr') {
-					$value = date("Y-m-d",strtotime($value));
-					$this->db->where($field,$value);
-				}else{
-					$this->db->like($field,$value);
-				}
 			}
 
 			if(!empty($ord)) {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
+		}
+
+		if($this->session->userdata('filter_bulan')!=''){
+			if($this->session->userdata('filter_bulan')=="all"){
+
+			}else{
+				$this->db->where("MONTH(tgl)",$this->session->userdata('filter_bulan'));
+			}
+		}else{
+			$this->db->where("MONTH(tgl)",date("m"));
+		}
+		if($this->session->userdata('filter_tahun')!=''){
+			if($this->session->userdata('filter_tahun')=="all"){
+
+			}else{
+				$this->db->where("YEAR(tgl)",$this->session->userdata('filter_tahun'));
+			}
+		}else{
+			$this->db->where("YEAR(tgl)",date("Y"));
 		}
 
 		$rows = $this->sts_model->get_data($this->input->post('recordstartindex'), $this->input->post('pagesize'));
@@ -105,12 +136,14 @@ class Sts extends CI_Controller {
 		echo json_encode(array($json));
 	}
 
-	function delete_sts(){
-		$this->authentication->verify('keuangan','edit');
-		
-		$tgl=$this->input->post('tgl');
-		$this->sts_model->delete_sts($tgl);
-		redirect(base_url().'keuangan/sts/general', 'refresh');
+	function delete_sts($id=0){
+		$this->authentication->verify('keuangan','del');
+
+		if($this->sts_model->delete_sts($id)){
+			$this->session->set_flashdata('alert', 'Delete data ('.$id.')');
+		}else{
+			$this->session->set_flashdata('alert', 'Delete data error');
+		}
 	}
 
 	// function add_sts(){		
@@ -129,7 +162,6 @@ class Sts extends CI_Controller {
 	// 		echo validation_errors();
 	// 	}
 	// }
-
 
 	function add_sts(){
 		$this->authentication->verify('keuangan','add');
@@ -193,16 +225,35 @@ class Sts extends CI_Controller {
 		$this->authentication->verify('keuangan','add');
 		$this->session->set_userdata('puskes',$this->input->post('puskes'));
 	}
+
+	function filter_bulan(){
+		if($_POST) {
+			if($this->input->post('bulan') != '') {
+				$this->session->set_userdata('filter_bulan',$this->input->post('bulan'));
+			}
+		}
+	}
+
+	function filter_tahun(){
+		if($_POST) {
+			if($this->input->post('tahun') != '') {
+				$this->session->set_userdata('filter_tahun',$this->input->post('tahun'));
+			}
+		}
+	}
 	
 	function general(){
 		$this->authentication->verify('keuangan','add');
 		$data['data_puskesmas']	= $this->sts_model->get_data_puskesmas();
-		$data['title_group'] = "Surat Tanda Setoran";
-		$data['title_form'] = "Surat Tanda Setoran";
-		$data['ambildata'] = $this->sts_model->get_data();
-		$data['kode_rekening'] = $this->sts_model->get_data_kode_rekening_all();
-		$data['nomor'] = $this->generate_nomor(date("Y-m-d H:i:s"));		
-		$data['nama_puskes'] = "";
+		$data['title_group']    = "Surat Tanda Setoran";
+		$data['title_form']     = "Surat Tanda Setoran";
+		$data['ambildata']      = $this->sts_model->get_data();
+		$data['kode_rekening']  = $this->sts_model->get_data_kode_rekening_all();
+		$data['nomor'] 			= $this->generate_nomor(date("Y-m-d H:i:s"));		
+		$data['nama_puskes'] 	= "";
+		$this->session->set_userdata('filter_bulan','');
+		$this->session->set_userdata('filter_tahun','');
+		$data['bulan']			= array('01'=>'Januari', '02'=>'Februari', '03'=>'Maret', '04'=>'April', '05'=>'Mei', '06'=>'Juni', '07'=>'Juli', '08'=>'Agustus', '09'=>'September', '10'=>'Oktober', '11'=>'November', '12'=>'Desember');
 
 		if(!empty($this->session->userdata('puskes')) and $this->session->userdata('puskes')!= '0'){
 			$data['nama_puskes'] = $this->sts_model->get_puskesmas_name($this->session->userdata('puskes'));

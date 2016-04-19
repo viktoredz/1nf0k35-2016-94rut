@@ -90,7 +90,7 @@
               if(response=="OK"){
                 $("#popup_keuangan_sts").jqxWindow('close');
                 alert("Data instansi berhasil disimpan.");
-                $("#treeGrid").jqxTreeGrid('updateBoundData', 'filter');
+                $("#jqxgrid").jqxGrid('updatebounddata', 'cells');
               }else{
                 $('#popup_keuangan_sts_content').html(response);
               }

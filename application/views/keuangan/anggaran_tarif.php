@@ -274,14 +274,7 @@ if($this->session->flashdata('alert')!=""){ ?>
                 },
                 pagerButtonsCount: 8,                
                 columns: [
-				/*
-				{ name: "Id", type: "number" },
-                    { name: "ParentID", type: "number" },
-                    { name: "KodeRekening", type: "string" },
-                    { name: "KodeAnggaran", type: "string" },
-                    { name: "Uraian", type: "string" },
-                    { name: "Type", type: "string" }
-				*/                                   
+		                                 
                   { text: 'Kode Anggaran', editable:false, dataField: "KodeAnggaran", align: 'center', width: '25%' },
                   { text: 'Uraian', editable:false, dataField: "Uraian", align: 'center', width: '45%' },
 				  { text: 'Tarif', dataField: "Tarif", align: 'center', cellsAlign: 'right', cellsFormat: "f", width: '15%' },

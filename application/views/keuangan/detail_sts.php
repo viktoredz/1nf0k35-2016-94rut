@@ -10,7 +10,7 @@
     </style>
 <?php if($this->session->flashdata('alert')!=""){ ?>
 <div class="alert alert-success alert-dismissable">
-	<button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+	<button aria-hidden="true" data-dismiss="alert" class="close" type="button">ï¾—</button>
 	<h4>	<i class="icon fa fa-check"></i> Information!</h4>
 	<?php echo $this->session->flashdata('alert')?>
 </div>
@@ -353,13 +353,13 @@
 				});
             });
 			
-			$("select[name='pilih_type']").change(function(){
-				$.post( '<?php echo base_url()?>keuangan/master_sts/set_puskes', {puskes:$(this).val()},function( data ) {
+			// $("select[name='pilih_type']").change(function(){
+			// 	$.post( '<?php echo base_url()?>keuangan/master_sts/set_puskes', {puskes:$(this).val()},function( data ) {
 					
-					$("#treeGrid").jqxTreeGrid('updateBoundData');
+			// 		$("#treeGrid").jqxTreeGrid('updateBoundData');
 					
-				});
-            });
+			// 	});
+   //          });
 			
             // prepare the data
             var source =
@@ -441,7 +441,7 @@
                 },
                 //pagerButtonsCount: 8,                
                 columns: [				                                 
-                  { text: 'Kode Anggaran', editable:false, dataField: "KodeAnggaran", align: 'center', width: '25%',cellsalign: 'center' },
+                  { text: 'Kode Anggaran', editable:false, dataField: "KodeAnggaran", align: 'center', width: '25%',cellsalign: 'left' },
                   { text: 'Uraian', editable:false, dataField: "Uraian", align: 'center', width: '43%',cellsalign: 'center' },
 				  { text: 'Volume', dataField: "Volume",cellClassName: "min", editable:<?php echo $ds['status']!='buka' ? "false" : "true" ?>, align: 'center', cellsFormat: "f", width: '8%',cellsalign: 'center' },
 				  { text: 'Tarif', dataField: "Tarif", editable:false, align: 'center', cellsFormat: "f", width: '12%',cellsalign: 'center' },                                    
