@@ -120,15 +120,15 @@
         <div class="row" style="margin: 5px">
           <div class="col-md-5" style="padding: 5px">Catatan</div>
           <div class="col-md-7">
-          <textarea class="form-control" name="catatan_opname" id="catatan_opname" placeholder="catatan_opname / Keperluan"><?php 
+          <textarea class="form-control" name="catatan_opname" id="catatan_opname" placeholder="Catatan / Keperluan"><?php 
               if(set_value('catatan_opname')=="" && isset($catatan)){
                 echo $catatan;
               }else{
                 echo  set_value('catatan_opname');
               }
               ?></textarea>
-              <input type="text" id="last_opname_opname" name="last_opname_opname" />
-              <input type="text" class="form-control" name="tipe_data_opname" id="tipe_data_opname" placeholder="tipe data" value="<?php 
+              <input type="hidden" id="last_opname_opname" name="last_opname_opname" />
+              <input type="hidden" class="form-control" name="tipe_data_opname" id="tipe_data_opname" placeholder="tipe data" value="<?php 
                 if(set_value('tipe_data_opname')=="" && isset($tipe_data_opname)){
                   echo $tipe_data_opname;
                 }else{

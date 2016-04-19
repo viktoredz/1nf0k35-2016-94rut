@@ -19,6 +19,8 @@
           data.append('harga_rusak', $('#harga_rusak').val());
           data.append('jumlah_rusakopname', $('#jumlah_rusakopname').val());
           data.append('merek_tipe_rusak', $('#merek_tipe_rusak').val());
+          data.append('jml_awalopname', $('#jml_awalopname').val());
+          data.append('jumlah_rusakmusnah', $('#jumlah_rusakmusnah').val());
 
           $.ajax({
               cache : false,
@@ -184,6 +186,13 @@
                   echo $jumlahrusak;
                 }else{
                   echo  set_value('jumlah_rusakmusnah');
+                }
+                ?>">
+                 <input type="hidden" class="form-control" name="jml_awalopname" id="jml_awalopname" placeholder="jumlah_rusak Pemusnahan" value="<?php 
+                if(set_value('jml_awalopname')=="" && isset($jml_awalopname)){
+                  echo $jml_awalopname;
+                }else{
+                  echo  set_value('jml_awalopname');
                 }
                 ?>">
             </div>

@@ -215,7 +215,7 @@
                   echo  set_value('jml_rusaktotal');
                 }
                 ?>">
-                <input type="hidden" class="form-control" name="jml_awalopname" id="jml_awalopname" placeholder="Jumlah Retur" value="<?php 
+                <input type="text" class="form-control" name="jml_awalopname" id="jml_awalopname" placeholder="Jumlah Retur" value="<?php 
                 if(set_value('jml_awalopname')=="" && isset($jml_awalopname)){
                   echo $jml_awalopname;
                 }else{

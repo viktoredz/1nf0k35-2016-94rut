@@ -1729,7 +1729,8 @@ class Bhp_pemusnahan extends CI_Controller {
         $this->form_validation->set_rules('jumlah_rusak', 'harga', 'trim');
         $this->form_validation->set_rules('harga_rusak', 'tgl_update_opname', 'trim');
         $this->form_validation->set_rules('jumlah_rusakopname', 'Jumlah Opname', 'trim|required');
-        $this->form_validation->set_rules('merek_tipe_rusak', 'Jumlah Opname', 'trim|required');
+        $this->form_validation->set_rules('merek_tipe_rusak', 'Jumlah Opname', 'trim');
+        $this->form_validation->set_rules('jumlah_rusakmusnah', 'jumlah_rusakmusnah', 'trim|');
 
 		if($this->form_validation->run()== FALSE){
 
@@ -1764,9 +1765,11 @@ class Bhp_pemusnahan extends CI_Controller {
         $this->form_validation->set_rules('batch_opname', 'Nama Barang', 'trim|required');
         $this->form_validation->set_rules('uraian_opname', 'Jumlah Awal', 'trim');
         $this->form_validation->set_rules('jumlah_opname', 'harga', 'trim');
+        $this->form_validation->set_rules('jml_awalopname', 'jml_awalopname', 'trim');
         $this->form_validation->set_rules('harga_opname', 'tgl_update_opname', 'trim');
         $this->form_validation->set_rules('jumlah_opnameopname', 'Jumlah Opname', 'trim|required');
-        $this->form_validation->set_rules('merek_tipe_opname', 'Jumlah Opname', 'trim|required');
+        $this->form_validation->set_rules('merek_tipe_opname', 'Jumlah Opname', 'trim');
+        $this->form_validation->set_rules('jumlah_opnamemusnah', 'jumlah_opnamemusnah Opname', 'trim');
 
 		if($this->form_validation->run()== FALSE){
 
@@ -1774,8 +1777,8 @@ class Bhp_pemusnahan extends CI_Controller {
 			$data['action_opname']			= "add";
 			$data['notice_opname']			= validation_errors();
 			$data['tanggal_opname_opname']	= $tanggal_opnam;
-			$data['koderusak']				= $kodeopname;
-			$data['idbarang_opname']			= $idbarang;
+			$data['kodeopname']				= $kodeopname;
+			$data['idbarang_opname']		= $idbarang;
 			$data['batch_opname']			= $batch;
 			
 			die($this->parser->parse('inventory/bhp_pemusnahan/barang_form_opname',$data));

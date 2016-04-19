@@ -492,6 +492,7 @@ class Bhp_retur extends CI_Controller {
 				'harga'										=> $act->harga,
 				'nama'										=> $act->nama,
 				'merek_tipe'								=> $act->merek_tipe,
+				'total_penerimaan'							=> $act->total_penerimaan,
 				'tgl_opname'								=> date("d-m-Y",strtotime($act->tgl_opname)),
 				'jml_selisih'								=> ($act->jml_awal - $act->jml_akhir),
 				'edit'		=> 1,

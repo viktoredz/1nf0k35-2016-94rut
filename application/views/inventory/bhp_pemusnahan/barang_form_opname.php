@@ -19,6 +19,8 @@
           data.append('harga_opname', $('#harga_opname').val());
           data.append('jumlah_opnameopname', $('#jumlah_opnameopname').val());
           data.append('merek_tipe_opname', $('#merek_tipe_opname').val());
+          data.append('jumlah_opnamemusnah', $('#jumlah_opnamemusnah').val());
+          data.append('jml_awalopname', $('#jml_awalopname').val())
 
           $.ajax({
               cache : false,
@@ -176,6 +178,13 @@
               <input type="hidden" class="form-control" name="jumlah_opnameopname" id="jumlah_opnameopname" placeholder="jumlah_opname Opname" value="<?php 
                 if(set_value('jumlah_opnameopname')=="" && isset($jumlahtidakdipakaiterakhir)){
                   echo $jumlahtidakdipakaiterakhir;
+                }else{
+                  echo  set_value('jumlah_opnameopname');
+                }
+                ?>">
+                <input type="hidden" class="form-control" name="jml_awalopname" id="jml_awalopname" placeholder="jumlah_opname Opname" value="<?php 
+                if(set_value('jml_awalopname')=="" && isset($jml_awalopname)){
+                  echo $jml_awalopname;
                 }else{
                   echo  set_value('jumlah_opnameopname');
                 }

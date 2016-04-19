@@ -205,7 +205,9 @@
         </div>
       </div>
       <div class="box-footer">
+        <?php if($tgl_opname >= $tgl_opnameterakhir){?>
         <button id="deletedata" class="btn btn-danger"><i class='fa fa-ban'></i> &nbsp; Batal & Hapus </button>
+        <?php }?>
         <button type="button" id="btn-kembali" class="btn btn-warning"><i class='fa fa-arrow-circle-left'></i> &nbsp;Kembali</button>
       </div>
       </div>
@@ -218,9 +220,12 @@
 
 $(function(){
   $("#deletedata").click(function(){
-      $.get("<?php echo base_url().'inventory/bhp_retur/dodelpermohonan/'?>{id_inv_inventaris_habispakai_opname}",function(data){
-          $("#content2").html(data);
-      });
+      var confirms = confirm('Hapus Data ?');
+      if (confirms==true) {
+        $.get("<?php echo base_url().'inventory/bhp_retur/dodelpermohonan/'?>{id_inv_inventaris_habispakai_opname}",function(data){
+            $("#content2").html(data);
+        });
+      }
   });
     /*$('#form-ss').submit(function(){
       if ($('#last_opname_retur').val() >= $('#tgl_opname_retur').val()) {

@@ -122,6 +122,7 @@
 			{ name: 'harga', type: 'string' },
 			{ name: 'merek_tipe', type: 'string' },
 			{ name: 'nama', type: 'string' },
+			{ name: 'total_penerimaan', type: 'string' },
 			{ name: 'tgl_opname', type: 'string' },
 			{ name: 'jml_selisih', type: 'string' },
 			{ name: 'jml_selisih', type: 'number' }

@@ -10,7 +10,7 @@ class Bhp_pemusnahan_model extends CI_Model {
 
     }
     function getallopname($start=0,$limit=999999,$options=array()){
-        $this->db->where("inv_inventaris_habispakai_opname.tipe != 'opname'");
+        $this->db->where("inv_inventaris_habispakai_opname.tipe = 'tidakdipakai' or inv_inventaris_habispakai_opname.tipe = 'terimarusak' or inv_inventaris_habispakai_opname.tipe = 'expired'");
         $this->db->select('mst_inv_barang_habispakai.uraian,mst_inv_barang_habispakai.merek_tipe,inv_inventaris_habispakai_opname.* ,inv_inventaris_habispakai_opname_item.*');
         $this->db->join('inv_inventaris_habispakai_opname_item','inv_inventaris_habispakai_opname.id_inv_inventaris_habispakai_opname = inv_inventaris_habispakai_opname_item.id_inv_inventaris_habispakai_opname','left');
         $this->db->join('mst_inv_barang_habispakai','mst_inv_barang_habispakai.id_mst_inv_barang_habispakai = inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai');
@@ -112,7 +112,7 @@ class Bhp_pemusnahan_model extends CI_Model {
         $this->db->where("batch",$batch);
         $this->db->where("code_cl_phc",$kodepuskesmas);
         $this->db->select("*");
-        $query = $this->db->get('bhp_kondisi_opname',1,0);
+        $query = $this->db->get('bhp_kondisi_opname2',1,0);
 
         if ($query->num_rows() > 0){
             $data = $query->row_array();
@@ -290,8 +290,8 @@ class Bhp_pemusnahan_model extends CI_Model {
         $query = $this->db->get("inv_inventaris_habispakai_opname_item");
            if ($query->num_rows() > 0){
                 $dataupdate = array(
-                    'jml_awal'      => $this->input->post('jumlah_rusak'),
-                    'jml_akhir'     => $this->input->post('jumlah_rusakopname'),
+                    'jml_awal'      => $this->input->post('jml_awalopname')+$this->input->post('jumlah_rusakmusnah'),//$this->input->post('jumlah_rusak'),
+                    'jml_akhir'     => $this->input->post('jml_awalopname'),//$this->input->post('jumlah_rusakopname'),
                     'harga'         => $this->input->post('harga_rusak'),
                     );
                 $datakey = array(
@@ -306,8 +306,8 @@ class Bhp_pemusnahan_model extends CI_Model {
                 }
             }else{
                 $values = array(
-                    'jml_awal'                      => $this->input->post('jumlah_rusak'),
-                    'jml_akhir'                     => $this->input->post('jumlah_rusakopname') ,
+                    'jml_awal'                      => $this->input->post('jml_awalopname')+$this->input->post('jumlah_rusakmusnah'),
+                    'jml_akhir'                     => $this->input->post('jml_awalopname'),
                     'harga'                         => $this->input->post('harga_rusak'),
                     'id_mst_inv_barang_habispakai'  => $this->input->post('id_mst_inv_barang_habispakai_rusak'),
                     'id_inv_inventaris_habispakai_opname' => $this->input->post('id_inv_inventaris_habispakai_opname_rusak'),
@@ -334,8 +334,8 @@ class Bhp_pemusnahan_model extends CI_Model {
         $query = $this->db->get("inv_inventaris_habispakai_opname_item");
            if ($query->num_rows() > 0){
                 $dataupdate = array(
-                    'jml_awal'      => $this->input->post('jumlah_opname'),
-                    'jml_akhir'     => $this->input->post('jumlah_opnameopname'),
+                    'jml_awal'      => $this->input->post('jml_awalopname'),//$this->input->post('jumlah_opname'),
+                    'jml_akhir'     => $this->input->post('jml_awalopname')-$this->input->post('jumlah_opnamemusnah'),//$this->input->post('jumlah_opnameopname'),
                     'harga'         => $this->input->post('harga_opname'),
                     );
                 $datakey = array(
@@ -350,8 +350,8 @@ class Bhp_pemusnahan_model extends CI_Model {
                 }
             }else{
                 $values = array(
-                    'jml_awal'                      => $this->input->post('jumlah_opname'),
-                    'jml_akhir'                     => $this->input->post('jumlah_opnameopname') ,
+                    'jml_awal'                      => $this->input->post('jml_awalopname'),
+                    'jml_akhir'                     => $this->input->post('jml_awalopname')-$this->input->post('jumlah_opnamemusnah') ,
                     'harga'                         => $this->input->post('harga_opname'),
                     'id_mst_inv_barang_habispakai'  => $this->input->post('id_mst_inv_barang_habispakai_opname'),
                     'id_inv_inventaris_habispakai_opname' => $this->input->post('id_inv_inventaris_habispakai_opname_opname'),
@@ -503,7 +503,7 @@ class Bhp_pemusnahan_model extends CI_Model {
         return $query->result();
     }
     public function getitemopnamekanan($start=0,$limit=999999,$options=array()){
-        $query = $this->db->get("bhp_kondisi_opname",$limit,$start);
+        $query = $this->db->get("bhp_kondisi_opname2",$limit,$start);
         return $query->result();
     }
 
