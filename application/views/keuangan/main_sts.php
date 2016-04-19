@@ -1,426 +1,174 @@
-<style>
-.datepicker{
-    z-index: 100000 !important;
-}
-
-</style>
-
-
 <?php if($this->session->flashdata('alert')!=""){ ?>
 <div class="alert alert-success alert-dismissable">
-    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">Ã—</button>
     <h4>    <i class="icon fa fa-check"></i> Information!</h4>
     <?php echo $this->session->flashdata('alert')?>
 </div>
 <?php } ?>
+<section class="content">
+<form action="<?php echo base_url()?>mst/keuangan_instansi/dodel_multi" method="POST" name="">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="box box-primary">
+        <div class="box-header">
+          <h3 class="box-title">{title_form}</h3>
+        </div>
+          <div class="box-footer">
+            <button type="button" class="btn btn-primary" onclick='add_sts()'><i class='fa fa-plus-square-o'></i> &nbsp;Tambah STS</button> 
+                 <div class="col-md-3 pull-right">
+                    <div class="row">
+                        <div class="col-md-4" style="padding-top:5px;"><label> Tahun </label> </div>
+                        <div class="col-md-8">
+                            <select name="tahun" id="tahun" class="form-control">
+                                <?php for ($i=date("Y");$i>=date("Y")-10;$i--) { ;?>
+                                    <?php $select = $i == date("Y") ? 'selected=selected' : '' ?>
+                                    <option value="<?php echo $i; ?>" <?php echo $select ?>><?php echo $i; ?></option>
+                                <?php   } ;?>
+                            </select>
+                         </div> 
+                    </div>
+                  </div>
+                 <div class="col-md-3 pull-right">
+                    <div class="row">
+                        <div class="col-md-4" style="padding-top:5px;"><label> Bulan </label> </div>
+                        <div class="col-md-8">
+                            <select name="bulan" id="bulan" class="form-control">
+                                <?php foreach ($bulan as $val=>$key ) { ;?>
+                                <?php $select = $val == date("m") ? 'selected=selected' : '' ?>
+                                    <option value="<?php echo $val; ?>" <?php echo $select ?>><?php echo $key; ?></option>
+                                <?php   } ;?>
+                            </select>
+                         </div> 
+                    </div>
+                  </div>    
+         </div>
+        <div class="box-body">
+            <div class="div-grid">
+            <div id="jqxgrid"></div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+</section>
 
 <div id="popup_keuangan_sts" style="display:none">
   <div id="popup_title">Tambah STS Baru</div>
   <div id="popup_keuangan_sts_content">&nbsp;</div>
 </div>
 
-<section class="content">
+<script type="text/javascript">
+    $(function () { 
+        $("#menu_keuangan").addClass("active");
+        $("#menu_keuangan_sts_general").addClass("active");
 
-  <div class="row">
-    <!-- left column -->
-    <div class="col-md-12">
-      <!-- general form elements -->
-      <div class="box box-primary">
-        <div class="box-header">
-          <h3 class="box-title">{title_form}</h3>
-        </div>
-        
-        <div class="box-body">
-            <div class="">
-                
-                <div id="buttonTambah" style="" class="col-md-2 pull-left">
-                    <button type="button" class="btn btn-primary" onclick='add_sts()'>Tambah STS</button> 
-                    <!-- <button class="btn btn-block btn-primary " data-toggle="modal" data-target="#myModal">Tambah STS</button>                    -->
-                </div> 
-
-                <div class="col-md-4 pull-right">
-                  <div class="row">
-                    <div class="col-md-4" style="padding-top:5px;"><label> Periode </label> </div>
-                    <div class="col-md-8">
-                      <select class="form-control" name="pilih_type">             
-                        <option value="0">Select Puskesmas</option>
-                          <?php foreach($data_puskesmas as $p){ 
-                            if($p['code'] == $this->session->userdata('puskes')){
-                          ?>
-                            <option selected value="<?=$p['code'].'#'.$p['value']?>" ><?=$p['value']?></option>
-                           <?php                   
-                            }else{
-                            ?>  
-                            <option value="<?=$p['code'].'#'.$p['value']?>" ><?=$p['value']?></option>
-                            <?php
-                            }
-                            ?>
-                        
-                    <?php } ?>
-                    
-                </select>
-                    </div> 
-                  </div>
-                </div>
-
-            </div>
-        </div>
-        
-        <div class="box-body">
-            <div class="default">
-                <div id="treeGrid"></div>
-            </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-</section>
-
-
-    <script type="text/javascript">
-    
-        function getDemoTheme() {
-            var theme = document.body ? $.data(document.body, 'theme') : null
-            if (theme == null) {
-                theme = '';
-            }
-            else {
-                return theme;
-            }
-            var themestart = window.location.toString().indexOf('?');
-            if (themestart == -1) {
-                return '';
-            }
-
-            var theme = window.location.toString().substring(1 + themestart);
-            if (theme.indexOf('(') >= 0)
-            {
-                theme = theme.substring(1);
-            }
-            if (theme.indexOf(')') >= 0) {
-                theme = theme.substring(0, theme.indexOf(')'));
-            }
-
-            var url = "<?=base_url()?>jqwidgets/styles/jqx." + theme + '.css';
-
-            if (document.createStyleSheet != undefined) {
-                var hasStyle = false;
-                $.each(document.styleSheets, function (index, value) {
-                    if (value.href != undefined && value.href.indexOf(theme) != -1) {
-                        hasStyle = true;
-                        return false;
-                    }
-                });
-                if (!hasStyle) {
-                    document.createStyleSheet(url);
-                }
-            }
-            else {
-                var hasStyle = false;
-                if (document.styleSheets) {
-                    $.each(document.styleSheets, function (index, value) {
-                        if (value.href != undefined && value.href.indexOf(theme) != -1) {
-                            hasStyle = true;
-                            return false;
-                        }
-                    });
-                }
-                if (!hasStyle) {
-                    var link = $('<link rel="stylesheet" href="' + url + '" media="screen" />');
-                    link[0].onload = function () {
-                        if ($.jqx && $.jqx.ready) {
-                            $.jqx.ready();
-                        };
-                    }
-                    $(document).find('head').append(link);
-                }
-            }
-            $.jqx = $.jqx || {};
-            $.jqx.theme = theme;
-            return theme;
-        };
-        var theme = '';
-        try
-        {
-            if (jQuery) {
-                theme = getDemoTheme();
-                if (window.location.toString().indexOf('file://') >= 0) {
-                    var loc = window.location.toString();
-                    var addMessage = false;
-                    if (loc.indexOf('grid') >= 0 || loc.indexOf('chart') >= 0 || loc.indexOf('scheduler') >= 0 || loc.indexOf('tree') >= 0 || loc.indexOf('list') >= 0 || loc.indexOf('combobox') >= 0 || loc.indexOf('php') >= 0 || loc.indexOf('adapter') >= 0 || loc.indexOf('datatable') >= 0 || loc.indexOf('ajax') >= 0) {
-                        addMessage = true;
-                    }
-
-                    if (addMessage) {
-                        $(document).ready(function () {
-                            setTimeout(function () {
-                                $(document.body).prepend($('<div style="font-size: 12px; font-family: Verdana;">Note: To run a sample that includes data binding, you must open it via "http://..." protocol since Ajax makes http requests.</div><br/>'));
-                            }
-                            , 50);
-                        });
-                    }
-                }
-            }
-            else {
-                $(document).ready(function () {
-                    theme = getDemoTheme();
-                });
-            }
-        }
-        catch (error) {
-            var er = error;
-        }
-    </script>
-    <script type="text/javascript">
-    
-        function doDeleteSts(tgl){
-            if(confirm('hapus ?')){
-                $.post( '<?php echo base_url()?>keuangan/sts/delete_sts', {tgl:tgl},function( data ) {
-                    $("#treeGrid").jqxTreeGrid('updateBoundData');      
-                });
-            }
-        }
-
-        $(document).ready(function () {
-            $("#menu_keuangan").addClass("active");
-            $("#menu_keuangan_sts_general").addClass("active");
-
-            <?php                   
-                if(empty($this->session->userdata('puskes')) and $this->session->userdata('puskes')=='0'){                                      
-            ?>              
-                $("#buttonTambah").hide();
-            <?php
-                }
-            ?>
-
-            
-            var newRowID = null;            
-            $("select[name='pilih_type']").change(function(){
-                var datapuskes = $(this).val().split("#");
-                $.post( '<?php echo base_url()?>keuangan/sts/set_puskes', {puskes:datapuskes[0]},function( data ) {
-                    $("#treeGrid").jqxTreeGrid('updateBoundData');                  
-                    document.getElementById("puskesmas_id").value= datapuskes[0];
-                    document.getElementById("puskesmas_nama").value= datapuskes[1];
-                    if(datapuskes[0] == "0"){
-                        $("#buttonTambah").hide();
-                    }else{
-                        $("#buttonTambah").show();
-                    }
-                });
-            });
-            
-            // prepare the data
-            var source =
-            {
-                dataType: "tab",
-                dataFields: [
-                    { name: "tgl", type: "string" },
-                    { name: "nomor", type: "string" },
-                    { name: "total", type: "number" },
-                    { name: "status", type: "string" },                    
-                    { name: "tombolShow", type: "string" },                    
-                    { name: "tombolDelete", type: "string" },                    
-                ],
-                hierarchy:
-                {
-                    keyDataField: { name: 'Id' },
-                    parentDataField: { name: 'ParentID' }
-                },
-                id: 'Id',
-                url: '<?php echo base_url()?>keuangan/sts/api_data_sts_general',
-                 addRow: function (rowID, rowData, position, parentID, commit) {                
-                     // POST to server using $.post or $.ajax                    
-                     // synchronize with the server - send insert command
-                     // call commit with parameter true if the synchronization with the server is successful 
-                     // and with parameter false if the synchronization failed.
-                     // you can pass additional argument to the commit callback which represents the new ID if it is generated from a DB.
-                     commit(true);
-                     newRowID = rowID;
-                 },
-                                  
-             };
-
-            var dataAdapter = new $.jqx.dataAdapter(source, {
-                loadComplete: function () {
-                    // data is loaded.
-                }
-            });
-
-            $("#treeGrid").jqxTreeGrid(
-            {
-                width: '100%',
-                source: dataAdapter, 
-                pageable: true,
-                editable: false,
-                
-                altRows: true,
-                ready: function()
-                {
-                    // called when the DatatreeGrid is loaded.   
-                    $("#treeGrid").jqxTreeGrid('expandAll');                        
-                },
-                pagerButtonsCount: 8,
-                toolbarHeight: 35,
-                renderToolbar: function(toolBar)
-                {
-                    var toTheme = function (className) {
-                        if (theme == "") return className;
-                        return className + " " + className + "-" + theme;
-                    }
-
-                    // appends buttons to the status bar.
-                    var container = $("<div style='overflow: hidden; position: relative; height: 100%; width: 100%;'></div>");
-                    var buttonTemplate = "<div style='float: left; padding: 3px; margin: 2px;'><div style='margin: 4px; width: 16px; height: 16px;'></div></div>";
-                    var addButton = $(buttonTemplate);
-                    var editButton = $(buttonTemplate);
-                    var deleteButton = $(buttonTemplate);
-                    var cancelButton = $(buttonTemplate);
-                    var updateButton = $(buttonTemplate);                    
-                    
-                    container.append(addButton);
-                    container.append(editButton);
-                    container.append(deleteButton);
-                    container.append(cancelButton);
-                    container.append(updateButton);
-
-                    toolBar.append(container);
-                    
-                    
-                    addButton.jqxButton({cursor: "pointer", enableDefault: false, disabled: true, height: 25, width: 25 });
-                    addButton.find('div:first').addClass(toTheme('jqx-icon-plus'));
-                    addButton.jqxTooltip({ position: 'bottom', content: "Tambah Cabang"});
-
-                    editButton.jqxButton({ cursor: "pointer", disabled: true, enableDefault: false,  height: 25, width: 25 });
-                    editButton.find('div:first').addClass(toTheme('jqx-icon-edit'));
-                    editButton.jqxTooltip({ position: 'bottom', content: "Edit"});
-
-                    deleteButton.jqxButton({ cursor: "pointer", disabled: true, enableDefault: false,  height: 25, width: 25 });
-                    deleteButton.find('div:first').addClass(toTheme('jqx-icon-delete'));
-                    deleteButton.jqxTooltip({ position: 'bottom', content: "Delete"});
-
-                    updateButton.jqxButton({ cursor: "pointer", disabled: true, enableDefault: false,  height: 25, width: 25 });
-                    updateButton.find('div:first').addClass(toTheme('jqx-icon-save'));
-                    updateButton.jqxTooltip({ position: 'bottom', content: "Save Changes"});
-
-                    cancelButton.jqxButton({ cursor: "pointer", disabled: true, enableDefault: false,  height: 25, width: 25 });
-                    cancelButton.find('div:first').addClass(toTheme('jqx-icon-cancel'));
-                    cancelButton.jqxTooltip({ position: 'bottom', content: "Cancel"});
-
-                    var updateButtons = function (action) {
-                        switch (action) {
-                            case "Select":
-                                addButton.jqxButton({ disabled: false });
-                                deleteButton.jqxButton({ disabled: false });
-                                editButton.jqxButton({ disabled: false });
-                                cancelButton.jqxButton({ disabled: true });
-                                updateButton.jqxButton({ disabled: true });
-                                break;
-                            case "Unselect":
-                                addButton.jqxButton({ disabled: true });
-                                deleteButton.jqxButton({ disabled: true });
-                                editButton.jqxButton({ disabled: true });
-                                cancelButton.jqxButton({ disabled: true });
-                                updateButton.jqxButton({ disabled: true });
-                                break;
-                            case "Edit":
-                                addButton.jqxButton({ disabled: true });
-                                deleteButton.jqxButton({ disabled: true });
-                                editButton.jqxButton({ disabled: true });
-                                cancelButton.jqxButton({ disabled: false });
-                                updateButton.jqxButton({ disabled: false });
-                                break;
-                            case "End Edit":
-                                addButton.jqxButton({ disabled: false });
-                                deleteButton.jqxButton({ disabled: false });
-                                editButton.jqxButton({ disabled: false });
-                                cancelButton.jqxButton({ disabled: true });
-                                updateButton.jqxButton({ disabled: true });
-                                break;
-
-                        }
-                    }
-
-                    var rowKey = null;
-                    $("#treeGrid").on('rowSelect', function (event) {
-                        var args = event.args;
-                        rowKey = args.key;
-                        updateButtons('Select');
-                    });
-                    $("#treeGrid").on('rowUnselect', function (event) {
-                        updateButtons('Unselect');
-                    });
-                    $("#treeGrid").on('rowEndEdit', function (event) {
-                        updateButtons('End Edit');
-                    });
-                    $("#treeGrid").on('rowBeginEdit', function (event) {
-                        updateButtons('Edit');
-                    });
-                    
-                    addButton.click(function (event) {
-                        if (!addButton.jqxButton('disabled')) {                         
-                            $("#treeGrid").jqxTreeGrid('expandRow', rowKey);
-                            // add new empty row.
-                            $("#treeGrid").jqxTreeGrid('addRow', null, {}, 'first', rowKey);
-                            // select the first row and clear the selection.
-                            $("#treeGrid").jqxTreeGrid('clearSelection');
-                            $("#treeGrid").jqxTreeGrid('selectRow', newRowID);
-                            // edit the new row.
-                            $("#treeGrid").jqxTreeGrid('beginRowEdit', newRowID);
-                            updateButtons('add');
-                        }
-                    });
-
-                    cancelButton.click(function (event) {
-                        if (!cancelButton.jqxButton('disabled')) {
-                            // cancel changes.
-                            $("#treeGrid").jqxTreeGrid('endRowEdit', rowKey, true);
-                        }
-                    });
-
-                    updateButton.click(function (event) {
-                        if (!updateButton.jqxButton('disabled')) {
-                            // save changes.
-                            $("#treeGrid").jqxTreeGrid('endRowEdit', rowKey, false);
-                        }
-                    });
-
-                    editButton.click(function () {
-                        if (!editButton.jqxButton('disabled')) {
-                            $("#treeGrid").jqxTreeGrid('beginRowEdit', rowKey);
-                            updateButtons('edit');
-                        }
-                    });
-
-                    deleteButton.click(function () {
-                        if (!deleteButton.jqxButton('disabled')) {
-                            var selection = $("#treeGrid").jqxTreeGrid('getSelection');
-                            if (selection.length > 1) {
-                                var keys = new Array();
-                                for (var i = 0; i < selection.length; i++) {
-                                    keys.push($("#treeGrid").jqxTreeGrid('getKey', selection[i]));
-                                }
-                                $("#treeGrid").jqxTreeGrid('deleteRow', keys);
-                            }
-                            else {
-                                $("#treeGrid").jqxTreeGrid('deleteRow', rowKey);
-                            }
-                            updateButtons('delete');
-                        }
-                    });
-                },
-                columns: [
-                                                       
-                  { text: 'Detail', cellsAlign: 'center', dataField: "tombolShow", align: 'center', width: '5%' },
-                  { text: 'Delete', cellsAlign: 'center', dataField: "tombolDelete", align: 'center', width: '5%' },
-                  { text: 'Tanggal', dataField: "tgl", align: 'center', width: '20%', cellsalign: 'center' },               
-                  { text: 'Nomor', dataField: "nomor", align: 'center', width: '25%',align: 'center',cellsalign: 'center' },               
-                  { text: 'Total', dataField: "total", cellsFormat: "f", align: 'right', width: '25%',align: 'center', cellsalign: 'center' },                 
-                  { text: 'Status', dataField: "status", align: 'center', width: '20%',align: 'center',cellsalign: 'center' },                 
-                ]
+        $("select[name='bulan']").change(function(){
+            $.post("<?php echo base_url().'keuangan/sts/filter_bulan' ?>", 'bulan='+$(this).val(),  function(){
+                $("#jqxgrid").jqxGrid('updatebounddata', 'cells');
             });
         });
-        
+
+        $("select[name='tahun']").change(function(){
+            $.post("<?php echo base_url().'keuangan/sts/filter_tahun' ?>", 'tahun='+$(this).val(),  function(){
+                $("#jqxgrid").jqxGrid('updatebounddata', 'cells');
+
+            });
+        });
+    });
+
+       var source = {
+            datatype: "json",
+            type    : "POST",
+            datafields: [
+            { name: 'id_sts', type: 'string'},
+            { name: 'tgl', type: 'string'},
+            { name: 'nomor', type: 'string'},
+            { name: 'total', type: 'string'},
+            { name: 'status',type: 'string'},   
+            { name: 'edit', type: 'number'},
+            { name: 'delete', type: 'number'}
+        ],
+        url: "<?php echo site_url('keuangan/sts/json_sts'); ?>",
+        cache: false,
+        updaterow: function (rowid, rowdata, commit) {
+            },
+        filter: function(){
+            $("#jqxgrid").jqxGrid('updatebounddata', 'filter');
+        },
+        sort: function(){
+            $("#jqxgrid").jqxGrid('updatebounddata', 'sort');
+        },
+        root: 'Rows',
+        pagesize: 10,
+        beforeprocessing: function(data){       
+            if (data != null){
+                source.totalrecords = data[0].TotalRows;                    
+            }
+        }
+        };      
+        var dataadapter = new $.jqx.dataAdapter(source, {
+            loadError: function(xhr, status, error){
+                alert(error);
+            }
+        });
+     
+        $('#btn-refresh').click(function () {
+            $("#jqxgrid").jqxGrid('clearfilters');
+        });
+
+        $("#jqxgrid").jqxGrid(
+        {       
+            width: '100%',
+            selectionmode: 'singlerow',
+            source: dataadapter, theme: theme,columnsresize: true,showtoolbar: false, pagesizeoptions: ['10', '25', '50', '100'],
+            showfilterrow: true, filterable: true, sortable: true, autoheight: true, pageable: true, virtualmode: true, editable: false,
+            rendergridrows: function(obj)
+            {
+                return obj.data;    
+            },
+            columns: [
+                { text: 'Detail', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
+                    var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
+                    if(dataRecord.edit==1){
+                        return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='detail(\""+dataRecord.tgl+"\");'></a></div>";
+                    }else{
+                        return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_view.gif'></a></div>";
+                    }
+                 }
+                },
+                
+                { text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
+                    var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
+                    if(dataRecord.delete==1){
+                        return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del(\""+dataRecord.id_sts+"\");'></a></div>";
+                    }else{
+                        return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
+                    }
+                 }
+                },
+                { text: 'Tanggal', datafield: 'tgl', columntype: 'textbox', filtertype: 'textbox',align: 'center', width: '20%',cellsalign: 'center' },
+                { text: 'Nomor', datafield: 'nomor', columntype: 'textbox', filtertype: 'textbox',align: 'center', cellsalign: 'center', width: '21%',cellsalign: 'center'},
+                { text: 'Total', datafield: 'total', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '29%',cellsalign: 'center' },
+                { text: 'Status', datafield: 'status', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '20%',cellsalign: 'center' }
+            ]
+        });
+
+    function detail(tgl){
+        document.location.href="<?php echo base_url().'keuangan/sts/detail';?>/" + tgl ;
+    }
+
+    function del(id){
+        var confirms = confirm("Hapus Data ?");
+        if(confirms == true){
+            $.post("<?php echo base_url().'keuangan/sts/delete_sts' ?>/" + id,  function(){
+                alert('Data berhasil dihapus');
+
+                $("#jqxgrid").jqxGrid('updatebounddata', 'cells');
+            });
+        }
+    }
+
     function add_sts(){
       $("#popup_keuangan_sts #popup_keuangan_sts_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
         $.get("<?php echo base_url().'keuangan/sts/add_sts' ?>/", function(data) {
@@ -434,6 +182,6 @@
         });
         $("#popup_keuangan_sts").jqxWindow('open');
     }
-        
-    </script>
-    
+
+</script>
+

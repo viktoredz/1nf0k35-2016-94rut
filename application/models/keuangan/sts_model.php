@@ -9,21 +9,25 @@ class Sts_model extends CI_Model {
 		$this->lang	  = $this->config->item('language');
     }
     
-    function get_data()
-    {
+    function get_data(){
+    	
  		$this->db->select('*');		
 		$query = $this->db->get($this->tb);		
 		return $query->result();
     }
 
-	function delete_sts($tgl){		
-		$this->db->where('tgl', $tgl);
-		$this->db->where('code_pl_phc', $this->session->userdata('puskes'));
-		$this->db->delete('keu_sts');
+	// function delete_sts($id){		
+	// 	$this->db->where('id_sts', $id);
+	// 	$this->db->where('code_pl_phc', $this->session->userdata('puskes'));
+	// 	$this->db->delete('keu_sts');
 		
-		$this->db->where('tgl', $tgl);
-		$this->db->where('code_pl_phc', $this->session->userdata('puskes'));
-		$this->db->delete('keu_sts_hasil');
+	// 	// $this->db->where('id_sts', $id);
+	// 	// $this->db->delete('keu_sts_hasil');
+	// }
+
+	function delete_sts($id){		
+		$this->db->where('id_sts', $id);
+		$this->db->delete('keu_sts');
 	}
 
 	function add_sts(){
