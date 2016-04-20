@@ -557,7 +557,8 @@ class Bhp_pemusnahan_model extends CI_Model {
         
     }
     public function getitemopname($start=0,$limit=999999,$options=array()){
-        $this->db->having('(jmlawal_opname + sumselisih) > 0');
+        //$this->db->having('(jmlawal_opname + sumselisih) > 0');
+        $this->db->having('(jmlawal_opname) > 0');
         $query = $this->db->get("bhp_expired",$limit,$start);
         return $query->result();
     }

@@ -1032,7 +1032,7 @@ class Bhp_pemusnahan extends CI_Controller {
 				'jmlexpired'								=> $act->jmlexpired,
 				'jmlawal_opname'							=> $act->jmlawal_opname,
 				'sumselisih'								=> ($act->sumselisih)*-1,
-				'jmlakhir_opname'							=> $act->jmlawal_opname + $act->sumselisih,
+				'jmlakhir_opname'							=> $act->jmlawal_opname,//$act->jmlawal_opname + $act->sumselisih,
 				'harga'										=> $act->harga,
 				'merek_tipe'								=> $act->merek_tipe,
 				'pilihan_sumber_dana'						=> $act->pilihan_sumber_dana,
