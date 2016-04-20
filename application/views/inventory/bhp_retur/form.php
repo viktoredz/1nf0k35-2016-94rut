@@ -215,7 +215,7 @@
                   echo  set_value('jml_rusaktotal');
                 }
                 ?>">
-                <input type="text" class="form-control" name="jml_awalopname" id="jml_awalopname" placeholder="Jumlah Retur" value="<?php 
+                <input type="hidden" class="form-control" name="jml_awalopname" id="jml_awalopname" placeholder="Jumlah Retur" value="<?php 
                 if(set_value('jml_awalopname')=="" && isset($jml_awalopname)){
                   echo $jml_awalopname;
                 }else{
@@ -234,6 +234,13 @@
                   echo $hargaterakhir;
                 }else{
                   echo  set_value('hargaterakhir');
+                }
+                ?>">
+                 <input type="text" class="form-control" name="id_mst_inv_barang_habispakai_jenis" id="id_mst_inv_barang_habispakai_jenis" placeholder="Jumlah Retur" value="<?php 
+                if(set_value('id_mst_inv_barang_habispakai_jenis')=="" && isset($id_mst_inv_barang_habispakai_jenis)){
+                  echo $id_mst_inv_barang_habispakai_jenis;
+                }else{
+                  echo  set_value('id_mst_inv_barang_habispakai_jenis');
                 }
                 ?>">
           </div>
@@ -255,7 +262,7 @@
  $("#jml_awalopname").val(opname);
       $("#jml_rusakakhir_simpan").val(jmlasli - $("#jml_rusakakhir").val());
       $("#jml_rusakakhir").change(function(){
-          if ($("#jml_rusakakhir").val() < 0) {
+          if ($("#jml_rusakakhir").val() < 1) {
             alert('Maaf, Jumlah retur tidak boleh minus');
             $("#jml_rusakakhir").val(jmlasli);
             $("#jml_rusakakhir_simpan").val(jmlasli);
@@ -286,6 +293,7 @@ $(function(){
             data.append('instansi', $('#instansi').val());
             data.append('uraian', $('#uraian').val());
             data.append('batch', $('#batch').val());
+            data.append('id_mst_inv_barang_habispakai_jenis', $('#id_mst_inv_barang_habispakai_jenis').val());
             data.append('jml_awalopname', $('#jml_awalopname').val());
             data.append('total_penerimaan', $('#total_penerimaan').val());
             data.append('jml_rusakakhir', $('#jml_rusakakhir').val());

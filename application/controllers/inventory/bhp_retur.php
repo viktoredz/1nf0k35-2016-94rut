@@ -752,6 +752,7 @@ class Bhp_retur extends CI_Controller {
         $this->form_validation->set_rules('jml_awalopname', 'jml_awalopname', 'trim');
         $this->form_validation->set_rules('jml_rusaktotal', 'jml_rusaktotal', 'trim');
         $this->form_validation->set_rules('hargaterakhir', 'hargaterakhir', 'trim');
+        $this->form_validation->set_rules('id_mst_inv_barang_habispakai_jenis', 'id_mst_inv_barang_habispakai_jenis', 'trim');
         $data 	= $this->bhp_retur_model->get_data_row_rusak($jenis,$barang,$batch);
 		$data['title_group'] 	= "Bahan Habis Pakai";
 		$data['title_form']		= "Tambah Opname";

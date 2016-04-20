@@ -154,9 +154,14 @@ class Bhp_retur_model extends CI_Model {
     }
     function insert_entry($jenis,$barang,$batch)
     {
+        if ($this->input->post('id_mst_inv_barang_habispakai_jenis')=='8') {
+            $jenisbhp = 'obat';
+        }else{
+            $jenisbhp = 'umum';
+        }
         $data['id_inv_inventaris_habispakai_opname'] = $this->kode_distribusi($this->input->post('kode_distribusi_'));
         $data['code_cl_phc']                = $this->input->post('puskesmas');
-        $data['jenis_bhp']                  = 'obat';
+        $data['jenis_bhp']                  = $jenisbhp;
         $data['tgl_opname']                 = date("Y-m-d",strtotime($this->input->post('tgl_opname')));
         $data['nomor_opname']               = $this->input->post('nomor_opname');
         $data['petugas_nama']              = $this->input->post('penerima_nama');
