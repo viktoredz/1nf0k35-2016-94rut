@@ -17,7 +17,7 @@
 		      	<div class="row"> 
 			      	<div class="col-md-12">
 					 	<button type="button" class="btn btn-success" id="btn-refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
-			          <button type="button" id="btn-export" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Export</button>
+			          <button type="button" id="btn-export-retur" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Export</button>
 			      	</div>
 		      	</div>
 		    <div class="box-body">
@@ -93,17 +93,17 @@
 <script type="text/javascript">
 	$(function () {	
 		$("select[name='jenisbarang']").change(function(){
-			$.post("<?php echo base_url().'inventory/bhp_opname/filter_jenisbarang' ?>", 'jenisbarang='+$(this).val(),  function(){
+			$.post("<?php echo base_url().'inventory/bhp_retur/filter_jenisbarang' ?>", 'jenisbarang='+$(this).val(),  function(){
 				$("#jqxgridRetur").jqxGrid('updatebounddata', 'cells');
 			});
 		});
 		$("select[name='bulan']").change(function(){
-			$.post("<?php echo base_url().'inventory/bhp_opname/filter_bulan' ?>", 'bulan='+$(this).val(),  function(){
+			$.post("<?php echo base_url().'inventory/bhp_retur/filter_bulan' ?>", 'bulan='+$(this).val(),  function(){
 				$("#jqxgridRetur").jqxGrid('updatebounddata', 'cells');
 			});
 		});
 		$("select[name='tahun']").change(function(){
-			$.post("<?php echo base_url().'inventory/bhp_opname/filter_tahun' ?>", 'tahun='+$(this).val(),  function(){
+			$.post("<?php echo base_url().'inventory/bhp_retur/filter_tahun' ?>", 'tahun='+$(this).val(),  function(){
 				$("#jqxgridRetur").jqxGrid('updatebounddata', 'cells');
 			});
 		});
@@ -190,10 +190,10 @@
       return false;
 	}
 
-	$("#btn-export").click(function(){
+	$("#btn-export-retur").click(function(){
 		
 		var post = "";
-		var filter = $("#jqxgridRetur").jqxGrid('getfilterinformation');
+		/*var filter = $("#jqxgridRetur").jqxGrid('getfilterinformation');
 		for(i=0; i < filter.length; i++){
 			var fltr 	= filter[i];
 			var value	= fltr.filter.getfilters()[0].value;
@@ -216,10 +216,10 @@
 			var sortorder = $("#jqxgridRetur").jqxGrid('getsortinformation').sortdirection.ascending ? "asc" : ($("#jqxgridRetur").jqxGrid('getsortinformation').sortdirection.descending ? "desc" : "");
 			post = post+'&sortorder='+sortorder;
 			
-		}
+		}*/
 		post = post+'&jenisbarang='+$("#jenisbarang option:selected").text()+'&nama_puskesmas='+$("#puskesmas option:selected").text()+'&bulan='+$("#bulan option:selected").text()+'&tahun='+$("#tahun option:selected").text();
 		
-		$.post("<?php echo base_url()?>inventory/bhp_opname/laporan_opname",post,function(response	){
+		$.post("<?php echo base_url()?>inventory/bhp_retur/laporan_opname_retur",post,function(response	){
 			//alert(response);
 			window.location.href=response;
 		});

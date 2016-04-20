@@ -247,7 +247,7 @@
 	$("#btn-export-opname").click(function(){
 		
 		var post = "";
-		var filter = $("#jqxgridopname").jqxGrid('getfilterinformation');
+		/*var filter = $("#jqxgridopname").jqxGrid('getfilterinformation');
 		for(i=0; i < filter.length; i++){
 			var fltr 	= filter[i];
 			var value	= fltr.filter.getfilters()[0].value;
@@ -270,7 +270,7 @@
 			var sortorder = $("#jqxgridopname").jqxGrid('getsortinformation').sortdirection.ascending ? "asc" : ($("#jqxgridopname").jqxGrid('getsortinformation').sortdirection.descending ? "desc" : "");
 			post = post+'&sortorder='+sortorder;
 			
-		}
+		}*/
 		post = post+'&jenisbarang='+$("#jenisbarangopname option:selected").text()+'&nama_puskesmas='+$("#puskesmasopname option:selected").text()+'&bulan='+$("#bulanopname option:selected").text()+'&tahun='+$("#tahunopname option:selected").text();
 		
 		$.post("<?php echo base_url()?>inventory/bhp_pemusnahan/pengeluaran_export_expired/tidakdipakai",post,function(response){

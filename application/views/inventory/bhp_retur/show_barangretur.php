@@ -94,17 +94,17 @@
 
 	$(function () {	
 		$("select[name='jenisbarang']").change(function(){
-			$.post("<?php echo base_url().'inventory/bhp_opname/filter_jenisbarang' ?>", 'jenisbarang='+$(this).val(),  function(){
+			$.post("<?php echo base_url().'inventory/bhp_retur/filter_jenisbarang' ?>", 'jenisbarang='+$(this).val(),  function(){
 				$("#jqxgridBRetur").jqxGrid('updatebounddata', 'cells');
 			});
 		});
 		$("select[name='bulan']").change(function(){
-			$.post("<?php echo base_url().'inventory/bhp_opname/filter_bulan' ?>", 'bulan='+$(this).val(),  function(){
+			$.post("<?php echo base_url().'inventory/bhp_retur/filter_bulan' ?>", 'bulan='+$(this).val(),  function(){
 				$("#jqxgridBRetur").jqxGrid('updatebounddata', 'cells');
 			});
 		});
 		$("select[name='tahun']").change(function(){
-			$.post("<?php echo base_url().'inventory/bhp_opname/filter_tahun' ?>", 'tahun='+$(this).val(),  function(){
+			$.post("<?php echo base_url().'inventory/bhp_retur/filter_tahun' ?>", 'tahun='+$(this).val(),  function(){
 				$("#jqxgridBRetur").jqxGrid('updatebounddata', 'cells');
 			});
 		});
@@ -196,7 +196,7 @@
 	$("#btn-export").click(function(){
 		
 		var post = "";
-		var filter = $("#jqxgridBRetur").jqxGrid('getfilterinformation');
+		/*var filter = $("#jqxgridBRetur").jqxGrid('getfilterinformation');
 		for(i=0; i < filter.length; i++){
 			var fltr 	= filter[i];
 			var value	= fltr.filter.getfilters()[0].value;
@@ -219,10 +219,10 @@
 			var sortorder = $("#jqxgridBRetur").jqxGrid('getsortinformation').sortdirection.ascending ? "asc" : ($("#jqxgridBRetur").jqxGrid('getsortinformation').sortdirection.descending ? "desc" : "");
 			post = post+'&sortorder='+sortorder;
 			
-		}
+		}*/
 		post = post+'&jenisbarang='+$("#jenisbarang option:selected").text()+'&nama_puskesmas='+$("#puskesmas option:selected").text()+'&bulan='+$("#bulan option:selected").text()+'&tahun='+$("#tahun option:selected").text();
 		
-		$.post("<?php echo base_url()?>inventory/bhp_opname/laporan_opname",post,function(response	){
+		$.post("<?php echo base_url()?>inventory/bhp_retur/laporan_opname_barang_retur",post,function(response	){
 			//alert(response);
 			window.location.href=response;
 		});
