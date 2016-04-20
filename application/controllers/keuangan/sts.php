@@ -28,12 +28,12 @@ class Sts extends CI_Controller {
 		}		
 	}
 	
-	function api_data_sts_detail($tgl){
+	function api_data_sts_detail($id){
 		$this->authentication->verify('keuangan','add');		
 		
 		
 		if(!empty($this->session->userdata('puskes')) and  $this->session->userdata('puskes') != '0'){
-			$data['ambildata'] = $this->sts_model->get_data_puskesmas_isi_sts($this->session->userdata('puskes'), $tgl);
+			$data['ambildata'] = $this->sts_model->get_data_puskesmas_isi_sts($id);
 			
 			foreach($data['ambildata'] as $d){
 				$txt = $d["id_mst_anggaran"]." \t ".$d["id_mst_anggaran_parent"]." \t ".$d["id_mst_akun"]." \t ".$d["kode_anggaran"]." \t ".$d["uraian"]." \t ".$d["tarif"]." \t ".$d["vol"]." \t ".$d["jumlah"]."\n";				
@@ -122,7 +122,7 @@ class Sts extends CI_Controller {
 				'tgl'	   => $act->tgl,
 				'nomor'	   => $act->nomor,
 				'total'    => $act->total,
-				'status'   => $act->status,
+				'status'   => ucwords($act->status),
 				'edit'	   => 1,
 				'delete'   => 1
 			);
@@ -146,23 +146,6 @@ class Sts extends CI_Controller {
 		}
 	}
 
-	// function add_sts(){		
-	// 	$this->authentication->verify('keuangan','add');
-	// 	$this->form_validation->set_rules('nomor','Nomor','trim|required');
-	// 	$this->form_validation->set_rules('tgl','Tanggal','trim|required');
-		
-	// 	if($this->form_validation->run()== TRUE){
-	// 		if($this->cek_tgl_sts($this->input->post('tgl'))){	
-	// 			$this->sts_model->add_sts();
-	// 			echo 0;
-	// 		}else{
-	// 			echo "Data Tanggal harus lebih dari tanggal terakhir input dan tidak lebih dari tanggal hari ini, terimakasih.";
-	// 		}
-	// 	}else{			
-	// 		echo validation_errors();
-	// 	}
-	// }
-
 	function add_sts(){
 		$this->authentication->verify('keuangan','add');
 
@@ -177,12 +160,13 @@ class Sts extends CI_Controller {
 
 		if($this->form_validation->run()== FALSE){
 			die($this->parser->parse("keuangan/form_tambah_sts",$data));
-		}elseif($this->sts_model->add_sts()){
+		}elseif($this->cek_tgl_sts($this->input->post('tgl'))){
+				$this->sts_model->add_sts();
 			die("OK");
 		}else{
-			$data['alert_form'] = 'Save data failed...';
+			$this->session->set_flashdata('alert_form', 'Tanggal harus lebih dari tanggal terakhir input dan tidak lebih dari tanggal hari ini.');
+			redirect(base_url()."keuangan/sts/add_sts");
 		}
-
 		die($this->parser->parse("keuangan/form_tambah_sts",$data));
 	}
 
@@ -264,22 +248,24 @@ class Sts extends CI_Controller {
 		$this->template->show($data,"home");
 	}
 
-	function detail($tgl){
+	function detail($id){
 		$this->authentication->verify('keuangan','add');
 		$data['data_puskesmas']	= $this->sts_model->get_data_puskesmas();
 		$data['title_group'] = "Detail Surat Tanda Setoran";
 		$data['title_form'] = "Detail Surat Tanda Setoran";
-		$data['data_sts'] = $this->sts_model->get_data_sts($tgl, $this->session->userdata('puskes'));
-		$data['data_sts_total'] = $this->sts_model->get_data_sts_total($tgl, $this->session->userdata('puskes'));
+		$data['data_sts'] = $this->sts_model->get_data_sts($id, $this->session->userdata('puskes'));
+		$data['data_sts_total'] = $this->sts_model->get_data_sts_total($id, $this->session->userdata('puskes'));
 		//$data['ambildata'] = $this->sts_model->get_data();
 		//$data['kode_rekening'] = $this->sts_model->get_data_kode_rekening();
 		$data['nomor'] = $this->generate_nomor(date("Y-m-d H:i:s"));		
-		$data['tgl'] = $tgl;
-		$data['tgl2'] = $this->convert_tgl($tgl);
+		$data['id'] = $id;
+		// $data['tgl'] = $tgl;
+		// $data['tgl2'] = $this->convert_tgl($tgl);
 		$data['content'] = $this->parser->parse("keuangan/detail_sts",$data,true);		
 				
 		$this->template->show($data,"home");
-	}		
+	}	
+
 	function cek_tgl_sts($tgl_input){
 		$this->db->select('tgl');
 		$this->db->order_by('tgl','desc');
@@ -311,11 +297,8 @@ class Sts extends CI_Controller {
 		}else{
 			return true;
 		}
-		
-		
 	}
 
-	
 	function reopen(){
 		$this->authentication->verify('keuangan','edit');
 		$this->sts_model->reopen();

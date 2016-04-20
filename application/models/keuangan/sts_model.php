@@ -16,18 +16,12 @@ class Sts_model extends CI_Model {
 		return $query->result();
     }
 
-	// function delete_sts($id){		
-	// 	$this->db->where('id_sts', $id);
-	// 	$this->db->where('code_pl_phc', $this->session->userdata('puskes'));
-	// 	$this->db->delete('keu_sts');
-		
-	// 	// $this->db->where('id_sts', $id);
-	// 	// $this->db->delete('keu_sts_hasil');
-	// }
-
 	function delete_sts($id){		
 		$this->db->where('id_sts', $id);
 		$this->db->delete('keu_sts');
+
+		$this->db->where('id_sts', $id);
+		$this->db->delete('keu_sts_hasil');
 	}
 
 	function add_sts(){
@@ -35,11 +29,12 @@ class Sts_model extends CI_Model {
 		$tgl = $datatgl[2].'-'.$datatgl[0].'-'.$datatgl[1];
 
 		$data['id_sts'] 		 = $this->kode_sts($this->input->post('id_sts'));
+		$data['code_pl_phc']	 = $this->session->userdata('puskes');
         $data['nomor']           = $this->input->post('nomor');
         $data['tgl']             = $tgl;
-        $data['code_pl_phc']	 = $this->session->userdata('puskes');
 
-        if($this->db->insert('keu_sts', $data)){
+		if($this->db->set('status',"draft")){
+          ($this->db->insert('keu_sts', $data));
             return 1;
         }else{
             return mysql_error();
@@ -73,12 +68,10 @@ class Sts_model extends CI_Model {
         return $nourut;
     }
 
-
-	
-	function get_data_sts_total($tgl, $puskes)
+	function get_data_sts_total($id, $puskes)
     {
  		$this->db->select('sum(jumlah) as n');				
-		// $this->db->where('tgl',$tgl);
+		$this->db->where('id_sts',$id);
 		// $this->db->where('code_pl_phc',$puskes);
 		$query = $this->db->get('keu_sts_hasil');
 		foreach($query->result() as $q){
@@ -86,9 +79,9 @@ class Sts_model extends CI_Model {
 		}		
     }
 	
-	function get_data_sts($tgl, $puskes){
+	function get_data_sts($id, $puskes){
  		$this->db->select('*');		
-		$this->db->where('tgl', $tgl);
+		$this->db->where('id_sts', $id);
 		$this->db->where('code_pl_phc', $puskes);
 		$this->db->join('cl_phc','cl_phc.code = keu_sts.code_pl_phc');
 		$query = $this->db->get('keu_sts');		
@@ -138,20 +131,14 @@ class Sts_model extends CI_Model {
 		return $query->result_array();
     }
 	
-	function get_data_puskesmas_isi_sts(){				
+	function get_data_puskesmas_isi_sts($id){	
  		$this->db->select('*');		
-		
-		$kodepuskesmas = $this->session->userdata('puskesmas');
-		$this->db->join('mst_keu_anggaran',"mst_keu_anggaran.id_mst_anggaran = keu_sts_hasil.id_mst_anggaran",'left');
-		if(substr($kodepuskesmas, -2)=="01"){			
-			$this->db->join('keu_sts', "keu_sts.id_sts=keu_sts_hasil.id_sts",'left');			
-		}else{
-			$this->db->join('keu_sts', "keu_sts.id_sts=keu_sts_hasil.id_sts",'left');
-		}
-		$query = $this->db->get('keu_sts_hasil');		
+		$this->db->join('keu_sts_hasil',"keu_sts_hasil.id_sts = keu_sts.id_sts",'left');
+		$this->db->join('mst_keu_anggaran', "mst_keu_anggaran.id_mst_anggaran=keu_sts_hasil.id_mst_anggaran",'left');	
+        $this->db->where("keu_sts.id_sts",$id);
+		$query = $this->db->get('keu_sts');		
 		return $query->result_array();
     }
-
 	
 	function get_data_puskesmas(){
 		
@@ -295,7 +282,7 @@ class Sts_model extends CI_Model {
 	}
 	function update_volume(){
 		$data = array(		   
-		   'tgl' => $this->input->post('tgl'),
+		   'id_sts' => $this->input->post('id'),
 		   'id_keu_anggaran' => $this->input->post('id_keu_anggaran'),
 		   'tarif' => $this->input->post('tarif'),
 		   'vol' => $this->input->post('vol'),

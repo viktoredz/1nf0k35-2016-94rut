@@ -51,7 +51,7 @@
 							<b>Tanggal</b>
 						</td>
 						<td>
-							<?=$tgl2?>
+							<?=$ds['tgl']?>
 						</td>
 						<td>
 						</td>
@@ -75,53 +75,28 @@
                     <tr>
 						<th></th>
 						<th>Pimpinan</th>
+						<td><input <?php echo $ds['status']!='buka' ? "readonly" : "" ?> type="text" name="ttd_pimpinan_nama" value="<?=$ds['ttd_pimpinan_nama']?>" class="form-control" id="pimpinan_nama" placeholder="Nama Pimpinan"></td>
+						<td><input <?php echo $ds['status']!='buka' ? "readonly" : "" ?> type="text" name="ttd_pimpinan_nip" value="<?=$ds['ttd_pimpinan_nip']?>" class="form-control" id="pimpinan_nip" placeholder="NIP Pimpinan"></td>
+						<th></th>
+                    </tr>
+                    <tr>
+						<th></th>
 						<th>Penerima</th>
+						<td><input <?php echo $ds['status']!='buka' ? "readonly" : "" ?> type="text" name="ttd_penerima_nama" value="<?=$ds['ttd_penerima_nama']?>" class="form-control" id="penerima_nama" placeholder="Nama Penerima"></td>
+						<td><input <?php echo $ds['status']!='buka' ? "readonly" : "" ?> type="text" name="ttd_penerima_nip" value="<?=$ds['ttd_penerima_nip']?>" class="form-control" id="penerima_nip" placeholder="NIP Penerima"></td>
+						<th></th>
+                    </tr>
+                    <tr>
+						<th></th>
 						<th>Penyetor</th>
+						<td><input <?php echo $ds['status']!='buka' ? "readonly" : "" ?> type="text" name="ttd_penyetor_nama" value="<?=$ds['ttd_penyetor_nama']?>" class="form-control" id="penyetor_nama" placeholder="Nama Penyetor"></td>
+						<td><input <?php echo $ds['status']!='buka' ? "readonly" : "" ?> type="text" name="ttd_penyetor_nip" value="<?=$ds['ttd_penyetor_nip']?>" class="form-control" id="penyetor_nip" placeholder="NIP Penyetor"></td>
 						<th></th>
                     </tr>
 					<form method="post" action="<?=base_url()?>keuangan/sts/update_ttd">
 					
 					<input type="hidden" name="tgl" value="<?=$ds['tgl']?>" >
 					<input type="hidden" name="puskes" value="<?=$ds['code_pl_phc']?>" >
-                    <tr>
-						<td></td>
-						<td>
-							<div class="form-group">
-								<input <?php echo $ds['status']!='buka' ? "readonly" : "" ?> type="text" name="ttd_pimpinan_nama" value="<?=$ds['ttd_pimpinan_nama']?>" class="form-control" id="pimpinan_nama" placeholder="Nama Pimpinan">
-							</div>
-						</td>
-						<td>
-							<div class="form-group">
-								<input <?php echo $ds['status']!='buka' ? "readonly" : "" ?> type="text" name="ttd_penerima_nama" value="<?=$ds['ttd_penerima_nama']?>" class="form-control" id="penerima_nama" placeholder="Nama Penerima">
-							</div>
-						</td>
-						<td>
-							<div class="form-group">
-							  <input <?php echo $ds['status']!='buka' ? "readonly" : "" ?> type="text" name="ttd_penyetor_nama" value="<?=$ds['ttd_penyetor_nama']?>" class="form-control" id="penyetor_nama" placeholder="Nama Penyetor">
-							</div>
-						</td>
-						<td></td>
-                    </tr>
-					<tr>
-						<td></td>
-						<td>
-							<div class="form-group">
-								<input <?php echo $ds['status']!='buka' ? "readonly" : "" ?> type="text" name="ttd_pimpinan_nip" value="<?=$ds['ttd_pimpinan_nip']?>" class="form-control" id="pimpinan_nip" placeholder="NIP Pimpinan">
-							</div>
-						</td>
-						<td>
-							<div class="form-group">
-								<input <?php echo $ds['status']!='buka' ? "readonly" : "" ?> type="text" name="ttd_penerima_nip" value="<?=$ds['ttd_penerima_nip']?>" class="form-control" id="penerima_nip" placeholder="NIP Penerima">
-							</div>
-						</td>
-						<td>
-							<div class="form-group">
-							  <input <?php echo $ds['status']!='buka' ? "readonly" : "" ?> type="text" name="ttd_penyetor_nip" value="<?=$ds['ttd_penyetor_nip']?>" class="form-control" id="penyetor_nip" placeholder="NIP Penyetor">
-							</div>
-						</td>
-						<td></td>
-                    </tr>
-					
 					<tr>
 						<td></td><td></td><td></td><td></td><td></td>
 					</tr>
@@ -169,10 +144,9 @@
 				}
 			?>
 			
-		
 			<div class="col-md-4 pull-left">
-				<p id="doExpand" class="btn btn-warning" >Expand All</p>	
-				<p id="doCollapse" onclick="" class="btn btn-warning" >Collapse All</p>	
+				<p id="doExpand" class="btn btn-warning"><i class="icon fa fa-plus-square-o"></i> &nbsp;Expand All</p>	
+				<p id="doCollapse" onclick="" class="btn btn-warning"><i class="icon fa fa-minus-square-o"></i> &nbsp;Collapse All</p>	
 			</div>
 			<?php if($ds['status']=='tutup'){ ?>
 				<div class="col-md-6 pull-right" style="text-align:right">
@@ -192,8 +166,6 @@
 								//kelurahan
 							}
 						?>
-						
-						
 					
 				</form>
 					<a href="<?=base_url()?>keuangan/sts/general" class="btn btn-primary" >Kembali<a>					
@@ -211,9 +183,10 @@
 				<div class="col-md-6 pull-right" style="text-align:right">
 					<input type="hidden" name="tgl" value="<?=$ds['tgl']?>" >
 					<input type="hidden" name="puskes" value="<?=$ds['code_pl_phc']?>" >
+					<a href="#" name="btn-export" class="btn btn-warning" value="" ><i class='fa fa-save'></i> &nbsp; Export</a>						
 					<input type="submit" name="save" class="btn btn-success" value="Simpan Sementara" >								
 					<input type="submit" name="delete" class="btn btn-danger" onclick="return confirm('apakah Anda yakin telah selesai mengisi form STS ? form yang telah ditutup tidak dapat diedit kembali')" value="Simpan & Tutup STS">
-					<a href="<?=base_url()?>keuangan/sts/general" name="save" class="btn btn-primary" value="" >Kembali</a>						
+					<a href="<?=base_url()?>keuangan/sts/general" name="save" class="btn btn-primary" value="" ><i class='fa  fa-arrow-circle-o-left'></i> &nbsp;Kembali</a>						
 				</div>
 				</form>
 			</div>
@@ -353,14 +326,6 @@
 				});
             });
 			
-			// $("select[name='pilih_type']").change(function(){
-			// 	$.post( '<?php echo base_url()?>keuangan/master_sts/set_puskes', {puskes:$(this).val()},function( data ) {
-					
-			// 		$("#treeGrid").jqxTreeGrid('updateBoundData');
-					
-			// 	});
-   //          });
-			
             // prepare the data
             var source =
             {
@@ -381,7 +346,8 @@
                     parentDataField: { name: 'ParentID' }
                 },
                 id: 'Id',
-                url: '<?php echo base_url()?>keuangan/sts/api_data_sts_detail/<?php echo $tgl ?>',
+                url: '<?php echo base_url()?>keuangan/sts/api_data_sts_detail/<?php echo $id ?>',
+                
                  addRow: function (rowID, rowData, position, parentID, commit) {				
 					// POST to server using $.post or $.ajax					
                      // synchronize with the server - send insert command
@@ -403,7 +369,7 @@
 					
 					//0,6
 					//update volume data
-					$.post( '<?php echo base_url()?>keuangan/sts/update_volume', {tgl:'<?=$tgl?>',id_keu_anggaran: arr[0], tarif:arr[5], vol:arr[6], code_cl_phc:'<?=$this->session->userdata['puskes']?>', },function( data ) {
+					$.post( '<?php echo base_url()?>keuangan/sts/update_volume', {id_sts:'<?=$id?>',id_keu_anggaran: arr[0], tarif:arr[5], vol:arr[6], code_cl_phc:'<?=$this->session->userdata['puskes']?>', },function( data ) {
 						$("#treeGrid").jqxTreeGrid('updateBoundData');	
 						//alert(data);
 						document.getElementById("terbilangTotal").innerHTML = terbilang(data.split('.')[0]);
@@ -437,19 +403,17 @@
                 ready: function()
                 {
 					
-                    // called when the DatatreeGrid is loaded.         
+                // called when the DatatreeGrid is loaded.         
                 },
                 //pagerButtonsCount: 8,                
                 columns: [				                                 
                   { text: 'Kode Anggaran', editable:false, dataField: "KodeAnggaran", align: 'center', width: '25%',cellsalign: 'left' },
-                  { text: 'Uraian', editable:false, dataField: "Uraian", align: 'center', width: '43%',cellsalign: 'center' },
+                  { text: 'Uraian', editable:false, dataField: "Uraian", align: 'center', width: '43%',cellsalign: 'left' },
 				  { text: 'Volume', dataField: "Volume",cellClassName: "min", editable:<?php echo $ds['status']!='buka' ? "false" : "true" ?>, align: 'center', cellsFormat: "f", width: '8%',cellsalign: 'center' },
 				  { text: 'Tarif', dataField: "Tarif", editable:false, align: 'center', cellsFormat: "f", width: '12%',cellsalign: 'center' },                                    
 				  { text: 'Sub Total', dataField: "Subtotal", editable:false, align: 'center', cellsFormat: "f", width: '12%',cellsalign: 'center' }      
                 ]
             });
-			
-			
         });
 		
 		function addParent(){

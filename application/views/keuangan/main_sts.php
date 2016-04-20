@@ -14,7 +14,7 @@
           <h3 class="box-title">{title_form}</h3>
         </div>
           <div class="box-footer">
-            <button type="button" class="btn btn-primary" onclick='add_sts()'><i class='fa fa-plus-square-o'></i> &nbsp;Tambah STS</button> 
+            <button type="button" class="btn btn-primary" onclick='add_sts()'><i class='fa fa-plus-square'></i> &nbsp;Tambah STS</button> 
                  <div class="col-md-3 pull-right">
                     <div class="row">
                         <div class="col-md-4" style="padding-top:5px;"><label> Tahun </label> </div>
@@ -40,8 +40,8 @@
                             </select>
                          </div> 
                     </div>
-                  </div>    
-         </div>
+                </div>    
+           </div>
         <div class="box-body">
             <div class="div-grid">
             <div id="jqxgrid"></div>
@@ -59,6 +59,7 @@
 </div>
 
 <script type="text/javascript">
+
     $(function () { 
         $("#menu_keuangan").addClass("active");
         $("#menu_keuangan_sts_general").addClass("active");
@@ -82,9 +83,9 @@
             type    : "POST",
             datafields: [
             { name: 'id_sts', type: 'string'},
-            { name: 'tgl', type: 'string'},
-            { name: 'nomor', type: 'string'},
-            { name: 'total', type: 'string'},
+            { name: 'tgl', type: 'date'},
+            { name: 'nomor', type: 'double'},
+            { name: 'total', type: 'double'},
             { name: 'status',type: 'string'},   
             { name: 'edit', type: 'number'},
             { name: 'delete', type: 'number'}
@@ -131,7 +132,7 @@
                 { text: 'Detail', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
                     var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
                     if(dataRecord.edit==1){
-                        return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='detail(\""+dataRecord.tgl+"\");'></a></div>";
+                        return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='detail(\""+dataRecord.id_sts+"\");'></a></div>";
                     }else{
                         return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_view.gif'></a></div>";
                     }
@@ -147,15 +148,15 @@
                     }
                  }
                 },
-                { text: 'Tanggal', datafield: 'tgl', columntype: 'textbox', filtertype: 'textbox',align: 'center', width: '20%',cellsalign: 'center' },
+                { text: 'Tanggal',editable:false , align: 'center', cellsalign: 'center', datafield: 'tgl', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '20%' },
                 { text: 'Nomor', datafield: 'nomor', columntype: 'textbox', filtertype: 'textbox',align: 'center', cellsalign: 'center', width: '21%',cellsalign: 'center'},
                 { text: 'Total', datafield: 'total', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '29%',cellsalign: 'center' },
                 { text: 'Status', datafield: 'status', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '20%',cellsalign: 'center' }
             ]
         });
 
-    function detail(tgl){
-        document.location.href="<?php echo base_url().'keuangan/sts/detail';?>/" + tgl ;
+    function detail(id){
+        document.location.href="<?php echo base_url().'keuangan/sts/detail';?>/" + id ;
     }
 
     function del(id){
@@ -177,7 +178,7 @@
         $("#popup_keuangan_sts").jqxWindow({
           theme: theme, resizable: false,
           width: 600,
-          height: 220,
+          height: 300,
           isModal: true, autoOpen: false, modalOpacity: 0.2
         });
         $("#popup_keuangan_sts").jqxWindow('open');

@@ -1,3 +1,10 @@
+<?php if($this->session->flashdata('alert_form')!=""){ ?>
+<div class="alert alert-danger alert-dismissable">
+  <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+  <h4>  <i class="icon fa fa-check"></i> Information!</h4>
+  <?php echo $this->session->flashdata('alert_form')?>
+</div>
+<?php } ?>
 
 <form action="#" method="POST" name="frmPegawai">
   <div class="row" style="margin: 15px 5px 15px 5px">
@@ -16,7 +23,7 @@
 
               <div class="row" style="margin: 5px">
                 <div class="col-md-8">
-                  <input type="hidden" class="form-control" name="sts_id" id="id_sts" placeholder="ID" readonly>
+                  <input type="hidden" class="form-control" name="sts_id" id="id_sts">
                 </div>
               </div>
              
@@ -51,8 +58,7 @@
       $.ajax({
       url: "<?php echo base_url().'keuangan/sts/kodeSts';?>",
       dataType: "json",
-      success:function(data)
-      { 
+      success:function(data){ 
         $.each(data,function(index,elemet){
           var sts = elemet.kodests.split(".")
           $("#id_sts").val(sts[0]);
@@ -89,7 +95,7 @@
             success : function(response){
               if(response=="OK"){
                 $("#popup_keuangan_sts").jqxWindow('close');
-                alert("Data instansi berhasil disimpan.");
+                alert("Data STS berhasil disimpan.");
                 $("#jqxgrid").jqxGrid('updatebounddata', 'cells');
               }else{
                 $('#popup_keuangan_sts_content').html(response);
