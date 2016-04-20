@@ -51,15 +51,15 @@ class Bhp_pengadaan_model extends CI_Model {
                         'tgl_update' => $this->bhp_pengadaan_model->tanggal($kode),
                         'code_cl_phc' => 'P'.$this->session->userdata('puskesmas'),
             );
-            if ($this->cekdata($values['id_mst_inv_barang_habispakai'],$values['batch'],$values['tgl_update'],$values['code_cl_phc'])==1) {
+            /*if ($this->cekdata($values['id_mst_inv_barang_habispakai'],$values['batch'],$values['tgl_update'],$values['code_cl_phc'])==1) {
                 return false;
-            }else{
+            }else{*/
                 if($this->db->insert('inv_inventaris_habispakai_pembelian_item', $values)){
                     return true;
                 }else{
                     return false;
                 }
-            }
+          //  }
         }
 
     }
@@ -69,7 +69,7 @@ class Bhp_pengadaan_model extends CI_Model {
         $this->db->where('batch',$batch);
         $this->db->where('tgl_distribusi >=',$tgl_update);
         $this->db->where('code_cl_phc',$code_cl_phc);
-        $query = $this->db->get('bhp_distribusi_item');
+        $query = $this->db->get('inv_inventaris_habispakai_pembelian_item');
         if ($query->num_rows() > 0) {
             return 1;
         }else{
