@@ -236,7 +236,7 @@
                   echo  set_value('hargaterakhir');
                 }
                 ?>">
-                 <input type="text" class="form-control" name="id_mst_inv_barang_habispakai_jenis" id="id_mst_inv_barang_habispakai_jenis" placeholder="Jumlah Retur" value="<?php 
+                 <input type="hidden" class="form-control" name="id_mst_inv_barang_habispakai_jenis" id="id_mst_inv_barang_habispakai_jenis" placeholder="Jumlah Retur" value="<?php 
                 if(set_value('id_mst_inv_barang_habispakai_jenis')=="" && isset($id_mst_inv_barang_habispakai_jenis)){
                   echo $id_mst_inv_barang_habispakai_jenis;
                 }else{
