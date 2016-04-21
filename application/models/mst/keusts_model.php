@@ -145,7 +145,7 @@ class Keusts_model extends CI_Model {
 
     function get_data_type_filter($versi)
     {     
-        $this->db->select('mst_keu_anggaran.*,mst_keu_akun.kode AS kode_rekening, mst_keu_akun.uraian AS uraian_rekening',false);
+        $this->db->select('mst_keu_anggaran.*,mst_keu_akun.id_mst_akun AS kode_rekening, mst_keu_akun.uraian AS uraian_rekening',false);
         $this->db->join('mst_keu_akun','mst_keu_akun.id_mst_akun=mst_keu_anggaran.id_mst_akun','left');
         $this->db->where('mst_keu_anggaran.id_mst_anggaran_versi', $versi);        
         $this->db->order_by('mst_keu_anggaran.id_mst_anggaran','asc');

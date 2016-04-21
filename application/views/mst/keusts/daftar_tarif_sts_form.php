@@ -358,6 +358,9 @@
                 }
             });
 
+
+            var kode_rekening_source = ["Modal","Kas","Pendapatan"];
+
             $("#treeGrid").jqxTreeGrid(
             {
                 width: '100%',
@@ -526,8 +529,7 @@
                { text: 'Tarif', dataField: "tarif", align: 'center', width: '20%',cellsalign: 'center' },         
                { text: 'Kode Rekening', dataField: 'kode_rekening', width: "30%", align:'center',cellsalign: 'center',columnType: "template",
                    createEditor: function (row, cellvalue, editor, cellText, width, height) {
-                       var source = [1,2,3];
-                       editor.jqxDropDownList({autoDropDownHeight: true, source: source, width: '100%', height: '100%' });
+                       editor.jqxDropDownList({autoDropDownHeight: true, source: kode_rekening_source,  width: '100%', height: '100%' });
                    },
                    initEditor: function (row, cellvalue, editor, celltext, width, height) {
                        editor.jqxDropDownList('selectItem', cellvalue);
