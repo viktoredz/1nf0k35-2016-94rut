@@ -66,9 +66,9 @@
           </div>
         </div>
 <div class="row" style="margin: 5px">
-          <div class="col-md-4" style="padding: 5px">Nomor Expired</div>
+          <div class="col-md-4" style="padding: 5px">Nomor Opname</div>
           <div class="col-md-8">
-            <input type="text" class="form-control" name="nomor_opname_opname" id="nomor_opname_opname" placeholder="Nomor Dokumen" value="<?php 
+            <input type="text" class="form-control" name="nomor_opname_opname" id="nomor_opname_opname" placeholder="Nomor Opname" value="<?php 
                 if(set_value('nomor_opname_opname')=="" && isset($nomor_opname)){
                   echo $nomor_opname;
                 }else{
@@ -86,9 +86,9 @@
 
       <div class="box-body">
         <div class="row" style="margin: 5px">
-          <div class="col-md-5" style="padding: 5px">Saksi Satu</div>
+          <div class="col-md-5" style="padding: 5px">Nama Saksi 1</div>
           <div class="col-md-7">
-            <input type="text" class="form-control" name="saksi1_nama_opname" id="saksi1_nama_opname" placeholder="Nama Penerima" value="<?php 
+            <input type="text" class="form-control" name="saksi1_nama_opname" id="saksi1_nama_opname" placeholder="Nama Saksi 1" value="<?php 
                 if(set_value('saksi1_nama_opname')=="" && isset($saksi1_nama)){
                   echo $saksi1_nama;
                 }else{
@@ -98,9 +98,9 @@
           </div>
         </div>
         <div class="row" style="margin: 5px">
-          <div class="col-md-5" style="padding: 5px">NIP Saksi Satu</div>
+          <div class="col-md-5" style="padding: 5px">NIP Saksi 1</div>
           <div class="col-md-7">
-            <input type="text" class="form-control" name="saksi1_nip_opname" id="saksi1_nip_opname" placeholder="NIP Penerima" value="<?php 
+            <input type="text" class="form-control" name="saksi1_nip_opname" id="saksi1_nip_opname" placeholder="NIP Saksi 1" value="<?php 
                 if(set_value('saksi1_nip_opname')=="" && isset($saksi1_nip)){
                   echo $saksi1_nip;
                 }else{
@@ -110,9 +110,9 @@
           </div>
         </div>
         <div class="row" style="margin: 5px">
-          <div class="col-md-5" style="padding: 5px">Saksi Dua</div>
+          <div class="col-md-5" style="padding: 5px">Nama Saksi 2</div>
           <div class="col-md-7">
-            <input type="text" class="form-control" name="saksi2_nama_opname" id="saksi2_nama_opname" placeholder="Nama Penerima" value="<?php 
+            <input type="text" class="form-control" name="saksi2_nama_opname" id="saksi2_nama_opname" placeholder="Nama Saksi 2" value="<?php 
                 if(set_value('saksi2_nama_opname')=="" && isset($saksi2_nama)){
                   echo $saksi2_nama;
                 }else{
@@ -122,9 +122,9 @@
           </div>
         </div>
         <div class="row" style="margin: 5px">
-          <div class="col-md-5" style="padding: 5px">NIP Saksi Dua</div>
+          <div class="col-md-5" style="padding: 5px">NIP Saksi 2</div>
           <div class="col-md-7">
-            <input type="text" class="form-control" name="saksi2_nip_opname" id="saksi2_nip_opname" placeholder="NIP Penerima" value="<?php 
+            <input type="text" class="form-control" name="saksi2_nip_opname" id="saksi2_nip_opname" placeholder="NIP Saksi 2" value="<?php 
                 if(set_value('saksi2_nip_opname')=="" && isset($saksi2_nip)){
                   echo $saksi2_nip;
                 }else{
@@ -135,10 +135,10 @@
         </div>
 
         <div class="row" style="margin: 5px">
-          <div class="col-md-5" style="padding: 5px">catatan_opname</div>
+          <div class="col-md-5" style="padding: 5px">Catatan</div>
           <div class="col-md-7">
           <?php if($action!="view") {?>
-            <textarea class="form-control" name="catatan_opname" id="catatan_opname" placeholder="Keterangan / Keperluan"><?php 
+            <textarea class="form-control" name="catatan_opname" id="catatan_opname" placeholder="Catatan / Keterangan"><?php 
               if(set_value('catatan_opname')=="" && isset($catatan)){
                 echo $catatan;
               }else{

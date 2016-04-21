@@ -126,7 +126,7 @@
           <div class="row" style="margin: 5px">
             <div class="col-md-4" style="padding: 5px">Merek Tipe</div>
             <div class="col-md-8">
-              <input type="text" class="form-control" name="merek_tipe_rusak" id="merek_tipe_rusak" placeholder="merek_tipe_rusak" value="<?php 
+              <input type="text" class="form-control" name="merek_tipe_rusak" id="merek_tipe_rusak" placeholder="Merek Tipe" value="<?php 
                 if(set_value('merek_tipe_rusak')=="" && isset($merek_tipe)){
                   echo $merek_tipe;
                 }else{
@@ -148,7 +148,7 @@
             </div>
           </div>
           
-              <input type="hidden" class="form-control" name="jumlah_rusak" id="jumlah_rusak" placeholder="jumlah_rusak" value="<?php 
+              <input type="hidden" class="form-control" name="jumlah_rusak" id="jumlah_rusak" placeholder="Jumlah Rusak" value="<?php 
                 if(set_value('jumlah_rusak')=="" && isset($jumlahrusak)){
                   echo $jumlahrusak;
                 }else{
@@ -181,7 +181,7 @@
                   echo  set_value('jumlah_rusakopname');
                 }
                 ?>">
-                 <input type="number" class="form-control" name="jumlah_rusakmusnah" id="jumlah_rusakmusnah" placeholder="jumlah_rusak Pemusnahan" value="<?php 
+                 <input type="number" class="form-control" name="jumlah_rusakmusnah" id="jumlah_rusakmusnah" placeholder="Jumlah Pemusnahan" value="<?php 
                 if(set_value('jumlah_rusakmusnah')=="" && isset($jumlahrusak)){
                   echo $jumlahrusak;
                 }else{

@@ -52,7 +52,7 @@
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Nomor Expired</div>
           <div class="col-md-8">
-            <input type="text" class="form-control" name="nomor_opname_rusak" id="nomor_opname_rusak" placeholder="Nomor Dokumen" value="<?php 
+            <input type="text" class="form-control" name="nomor_opname_rusak" id="nomor_opname_rusak" placeholder="Nomor Expired" value="<?php 
                 if(set_value('nomor_opname_rusak')=="" && isset($nomor_opname)){
                   echo $nomor_opname;
                 }else{
@@ -70,9 +70,9 @@
 
       <div class="box-body">
         <div class="row" style="margin: 5px">
-          <div class="col-md-5" style="padding: 5px">Nama Saksi 2</div>
+          <div class="col-md-5" style="padding: 5px">Nama Saksi 1</div>
           <div class="col-md-7">
-            <input type="text" class="form-control" name="saksi1_nama_rusak" id="saksi1_nama_rusak" placeholder="Nama Penerima" value="<?php 
+            <input type="text" class="form-control" name="saksi1_nama_rusak" id="saksi1_nama_rusak" placeholder="Nama Saksi 1" value="<?php 
                 if(set_value('saksi1_nama_rusak')=="" && isset($saksi1_nama)){
                   echo $saksi1_nama;
                 }else{
@@ -84,7 +84,7 @@
         <div class="row" style="margin: 5px">
           <div class="col-md-5" style="padding: 5px">NIP Saksi 1</div>
           <div class="col-md-7">
-            <input type="text" class="form-control" name="saksi1_nip_rusak" id="saksi1_nip_rusak" placeholder="NIP Penerima" value="<?php 
+            <input type="text" class="form-control" name="saksi1_nip_rusak" id="saksi1_nip_rusak" placeholder="NIP Saksi 1" value="<?php 
                 if(set_value('saksi1_nip_rusak')=="" && isset($saksi1_nip)){
                   echo $saksi1_nip;
                 }else{
@@ -96,7 +96,7 @@
         <div class="row" style="margin: 5px">
           <div class="col-md-5" style="padding: 5px">Nama Saksi 2</div>
           <div class="col-md-7">
-            <input type="text" class="form-control" name="saksi2_nama_rusak" id="saksi2_nama_rusak" placeholder="Nama Penerima" value="<?php 
+            <input type="text" class="form-control" name="saksi2_nama_rusak" id="saksi2_nama_rusak" placeholder="Nama Saksi 2" value="<?php 
                 if(set_value('saksi2_nama_rusak')=="" && isset($saksi2_nama)){
                   echo $saksi2_nama;
                 }else{
@@ -108,7 +108,7 @@
         <div class="row" style="margin: 5px">
           <div class="col-md-5" style="padding: 5px">NIP Saksi 2</div>
           <div class="col-md-7">
-            <input type="text" class="form-control" name="saksi2_nip_rusak" id="saksi2_nip_rusak" placeholder="NIP Penerima" value="<?php 
+            <input type="text" class="form-control" name="saksi2_nip_rusak" id="saksi2_nip_rusak" placeholder="NIP Saksi 2" value="<?php 
                 if(set_value('saksi2_nip_rusak')=="" && isset($saksi2_nip_rusak)){
                   echo $saksi2_nip_rusak;
                 }else{

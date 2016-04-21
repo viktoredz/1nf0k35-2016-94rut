@@ -55,7 +55,7 @@
 				     	<div class="col-md-4" style="padding-top:5px;"><label> Tahun </label> </div>
 				     	<div class="col-md-8">
 				     		<select name="tahun" id="tahun" class="form-control">
-								<?php for ($i=date("Y");$i>=date("Y")-10;$i--) { ;?>
+								<?php for ($i=date("Y")+5;$i>=date("Y")-5;$i--) { ;?>
 									<?php $select = $i == date("Y") ? 'selected=selected' : '' ?>
 									<option value="<?php echo $i; ?>" <?php echo $select ?>><?php echo $i; ?></option>
 								<?php	} ;?>
@@ -76,7 +76,16 @@
 </div>
 </form>
 </section>
-
+<style type="text/css">
+        .redClass
+        {
+            background-color: #FF9595;
+        }
+        .greenClass
+        {
+            background-color: #FCF185;
+        }
+    </style>
 <script type="text/javascript">
 
 	function close_popup_bhp(){
@@ -117,7 +126,7 @@
 			{ name: 'pilihan_sumber_dana', type: 'string' },
 			{ name: 'jmlexpired', type: 'string' },
 			{ name: 'tgl_opname', type: 'string' },
-			{ name: 'tgl_kadaluarsa', type: 'string' },
+			{ name: 'tgl_kadaluarsa', type: 'date' },
 			{ name: 'jml_selisih', type: 'number' }
         ],
 		url: "<?php echo site_url('inventory/bhp_pemusnahan/json_opname'); ?>",
@@ -138,7 +147,14 @@
 				source.totalrecords = data[0].TotalRows;					
 			}
 		}
-		};		
+		};	
+		 var cellclass = function (row, column, value, data) {
+                if (data.jmlexpired ==0) {
+                    return "redClass";
+                } else if (data.jmlexpired <= 10 && data.jmlexpired > 0) {
+                    return "greenClass";
+                };
+            };	
 		var dataadapter = new $.jqx.dataAdapter(source, {
 			loadError: function(xhr, status, error){
 				alert(error);
@@ -162,13 +178,8 @@
 			columns: [
 				{ text: 'Nama Sediaan', editable:false ,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '45%' },
 				{ text: 'Batch', align: 'center',cellsalign: 'center', editable:false ,datafield: 'batch', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
-				{ text: 'Tgl Kadaluarsa', align: 'center', cellsalign: 'center', columngroup: 'update',editable: false,datafield: 'tgl_kadaluarsa', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '11%'},
-				{ text: 'Lama', align: 'center', cellsalign: 'right',filtertype: 'none', editable:false , columntype: 'textbox', width: '11%',datafield: 'jmlexpired', cellsrenderer: function (row) {
-				    var dataRecord = $("#jqxgridExpiring").jqxGrid('getrowdata', row);
-				    if(dataRecord.jmlexpired=='0'){
-				    	return "<div style='width:100%;padding:4px;padding-top:6px;text-align:right;font-weight:bold; color:#a31919'>"+dataRecord.jmlexpired+"</div>";
-				    }
-                 }
+				{ text: 'Tgl. Permintaa', align: 'center', cellsalign: 'center', editable:false,datafield: 'tgl_kadaluarsa', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '11%' },
+				{ text: 'Lama', align: 'center', cellsalign: 'right',filtertype: 'none', editable:false , columntype: 'textbox', width: '11%',datafield: 'jmlexpired',cellclassname: cellclass
                 },
 				{ text: 'Jumlah',sortable: false,editable:false ,datafield: 'jmlakhir_opname', columntype: 'textbox', filtertype: 'text', width: '11%' ,align: 'center', cellsalign: 'right'},
 				{ text: 'Sumber Dana', editable:false ,columntype: 'textbox', width: '12%' ,align: 'center', datafield: 'pilihan_sumber_dana',cellsalign: 'left'}
@@ -205,4 +216,14 @@
 			window.location.href=response;
 		});
 	});
+	/*
+	, cellsrenderer: function (row) {
+				    var dataRecord = $("#jqxgridExpiring").jqxGrid('getrowdata', row);
+				    if(dataRecord.jmlexpired=='0'){
+				    	return "<div style='width:100%;padding:4px;padding-top:6px;text-align:right;font-weight:bold; color:#a31919'>"+dataRecord.jmlexpired+"</div>";
+				    }else if((dataRecord.jmlexpired < '10') && (dataRecord.jmlexpired > '0') ){
+				    	return "<div style='width:100%;padding:4px;padding-top:6px;text-align:right;font-weight:bold; color: '#888888'>"+dataRecord.jmlexpired+"</div>";
+				    }
+                 }
+	*/
 </script>

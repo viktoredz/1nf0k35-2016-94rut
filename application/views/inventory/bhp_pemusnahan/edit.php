@@ -68,7 +68,7 @@
 <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Nomor Expired</div>
           <div class="col-md-8">
-            <input type="text" class="form-control" name="nomor_opname" id="nomor_opname" placeholder="Nomor Dokumen" value="<?php 
+            <input type="text" class="form-control" name="nomor_opname" id="nomor_opname" placeholder="Nomor Expired" value="<?php 
                 if(set_value('nomor_opname')=="" && isset($nomor_opname)){
                   echo $nomor_opname;
                 }else{
@@ -86,9 +86,9 @@
 
       <div class="box-body">
         <div class="row" style="margin: 5px">
-          <div class="col-md-5" style="padding: 5px">Saksi Satu</div>
+          <div class="col-md-5" style="padding: 5px">Nama Saksi 1</div>
           <div class="col-md-7">
-            <input type="text" class="form-control" name="saksi1_nama" id="saksi1_nama" placeholder="Nama Penerima" value="<?php 
+            <input type="text" class="form-control" name="saksi1_nama" id="saksi1_nama" placeholder="Nama Saksi 1" value="<?php 
                 if(set_value('saksi1_nama')=="" && isset($saksi1_nama)){
                   echo $saksi1_nama;
                 }else{
@@ -98,9 +98,9 @@
           </div>
         </div>
         <div class="row" style="margin: 5px">
-          <div class="col-md-5" style="padding: 5px">NIP Saksi Satu</div>
+          <div class="col-md-5" style="padding: 5px">NIP Saksi 1</div>
           <div class="col-md-7">
-            <input type="text" class="form-control" name="saksi1_nip" id="saksi1_nip" placeholder="NIP Penerima" value="<?php 
+            <input type="text" class="form-control" name="saksi1_nip" id="saksi1_nip" placeholder="NIP Saksi 1" value="<?php 
                 if(set_value('saksi1_nip')=="" && isset($saksi1_nip)){
                   echo $saksi1_nip;
                 }else{
@@ -110,9 +110,9 @@
           </div>
         </div>
         <div class="row" style="margin: 5px">
-          <div class="col-md-5" style="padding: 5px">Saksi Dua</div>
+          <div class="col-md-5" style="padding: 5px">Nama Saksi 2</div>
           <div class="col-md-7">
-            <input type="text" class="form-control" name="saksi2_nama" id="saksi2_nama" placeholder="Nama Penerima" value="<?php 
+            <input type="text" class="form-control" name="saksi2_nama" id="saksi2_nama" placeholder="Nama Saksi 2" value="<?php 
                 if(set_value('saksi2_nama')=="" && isset($saksi2_nama)){
                   echo $saksi2_nama;
                 }else{
@@ -122,9 +122,9 @@
           </div>
         </div>
         <div class="row" style="margin: 5px">
-          <div class="col-md-5" style="padding: 5px">NIP Saksi Dua</div>
+          <div class="col-md-5" style="padding: 5px">NIP Saksi 2</div>
           <div class="col-md-7">
-            <input type="text" class="form-control" name="saksi2_nip" id="saksi2_nip" placeholder="NIP Penerima" value="<?php 
+            <input type="text" class="form-control" name="saksi2_nip" id="saksi2_nip" placeholder="NIP Saksi 2" value="<?php 
                 if(set_value('saksi2_nip')=="" && isset($saksi2_nip)){
                   echo $saksi2_nip;
                 }else{
@@ -138,7 +138,7 @@
           <div class="col-md-5" style="padding: 5px">Catatan</div>
           <div class="col-md-7">
           <?php if($action!="view") {?>
-            <textarea class="form-control" name="catatan" id="catatan" placeholder="Keterangan / Keperluan"><?php 
+            <textarea class="form-control" name="catatan" id="catatan" placeholder="Keterangan / Catatan"><?php 
               if(set_value('catatan')=="" && isset($catatan)){
                 echo $catatan;
               }else{
@@ -190,7 +190,7 @@
   <div class="col-md-6">
     <div class="box box-success">
       <div class="box-body">
-        <label>Barang Pemusnahan</label>
+        <label>Barang Pemusnahan Expired</label>
         <div class="div-grid">
             <div id="jqxTabs">
               <?php echo $barang_opname;?>

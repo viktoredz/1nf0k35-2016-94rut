@@ -38,7 +38,11 @@ if(isset($disable)){if($disable='disable'){?>
     if (isset($obat)) {
       if ($obat=="8") {
     ?>
-      $("[name='tgl_kadaluarsa']").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme , height: '30px'});
+    var dates = new Date();
+    var tahuns = dates.getFullYear()+1;
+    var bulans = dates.getMonth(); 
+    var haris  = dates.getDate();
+      $("#tgl_kadaluarsa").jqxDateTimeInput({ width: '150px', height: '25px', formatString: 'dd-MM-yyyy', theme: theme, value: new Date(tahuns,bulans,haris) })
     <?php
       }else{}
     }

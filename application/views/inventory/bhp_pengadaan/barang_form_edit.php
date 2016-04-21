@@ -261,7 +261,7 @@ if(isset($disable)){if($disable='disable'){?>
             <div class="col-md-4" style="padding: 5px">Tanggal Kadaluarsa</div>
             <div class="col-md-8">
             <div id='tgl_kadaluarsa' name="tgl_kadaluarsa" value="<?php
-                echo (set_value('tgl_kadaluarsa')!="") ? date("Y-m-d",strtotime(set_value('tgl_kadaluarsa'))) : "";
+                echo ($tgl_kadaluarsa!="") ? date("Y-m-d",strtotime($tgl_kadaluarsa)) : "";
               ?>"></div>
             </div>
           </div>

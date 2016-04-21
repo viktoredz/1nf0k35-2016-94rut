@@ -1591,11 +1591,11 @@ class Bhp_pemusnahan extends CI_Controller {
 		$kodepuskesmas = $this->session->userdata('puskesmas');
 		$this->db->where('code','P'.$kodepuskesmas);
 		$this->session->set_userdata('filter_jenisbarang','');
+		$this->session->set_userdata('filter_bulan','');
+		$this->session->set_userdata('filter_tahun','');
 		$data['datapuskesmas'] 	= $this->bhp_pemusnahan_model->get_data_puskesmas();
 		$data['jenisbaranghabis'] = array('obat'=>'Obat','umum'=>'Umum');
 		$data['msg_opname'] = "";
-		$this->session->set_userdata('filter_jenisbarang','');
-		$this->session->set_userdata('filter_bulan','');
 		$data['bulan']			= array('01'=>'Januari', '02'=>'Februari', '03'=>'Maret', '04'=>'April', '05'=>'Mei', '06'=>'Juni', '07'=>'Juli', '08'=>'Agustus', '09'=>'September', '10'=>'Oktober', '11'=>'November', '12'=>'Desember');
 		die($this->parser->parse("inventory/bhp_pemusnahan/show_expired",$data,true));
 	}
@@ -1603,11 +1603,11 @@ class Bhp_pemusnahan extends CI_Controller {
 		$kodepuskesmas = $this->session->userdata('puskesmas');
 		$this->db->where('code','P'.$kodepuskesmas);
 		$this->session->set_userdata('filter_jenisbarang','');
+		$this->session->set_userdata('filter_bulan','');
+		$this->session->set_userdata('filter_tahun','');
 		$data['datapuskesmas'] 	= $this->bhp_pemusnahan_model->get_data_puskesmas();
 		$data['jenisbaranghabis'] = array('obat'=>'Obat','umum'=>'Umum');
 		$data['msg_opname'] = "";
-		$this->session->set_userdata('filter_jenisbarang','');
-		$this->session->set_userdata('filter_bulan','');
 		$data['bulan']			= array('01'=>'Januari', '02'=>'Februari', '03'=>'Maret', '04'=>'April', '05'=>'Mei', '06'=>'Juni', '07'=>'Juli', '08'=>'Agustus', '09'=>'September', '10'=>'Oktober', '11'=>'November', '12'=>'Desember');
 		die($this->parser->parse("inventory/bhp_pemusnahan/show_rusak",$data,true));
 	}
@@ -1615,11 +1615,11 @@ class Bhp_pemusnahan extends CI_Controller {
 		$kodepuskesmas = $this->session->userdata('puskesmas');
 		$this->db->where('code','P'.$kodepuskesmas);
 		$this->session->set_userdata('filter_jenisbarang','');
+		$this->session->set_userdata('filter_bulan','');
+		$this->session->set_userdata('filter_tahun','');
 		$data['datapuskesmas'] 	= $this->bhp_pemusnahan_model->get_data_puskesmas();
 		$data['jenisbaranghabis'] = array('obat'=>'Obat','umum'=>'Umum');
 		$data['msg_opname'] = "";
-		$this->session->set_userdata('filter_jenisbarang','');
-		$this->session->set_userdata('filter_bulan','');
 		$data['bulan']			= array('01'=>'Januari', '02'=>'Februari', '03'=>'Maret', '04'=>'April', '05'=>'Mei', '06'=>'Juni', '07'=>'Juli', '08'=>'Agustus', '09'=>'September', '10'=>'Oktober', '11'=>'November', '12'=>'Desember');
 		die($this->parser->parse("inventory/bhp_pemusnahan/show_musnahkan",$data,true));
 	}
@@ -1629,8 +1629,10 @@ class Bhp_pemusnahan extends CI_Controller {
 		$this->db->where('code','P'.$kodepuskesmas);
 		$data['datapuskesmas'] 	= $this->bhp_pemusnahan_model->get_data_puskesmas();
 		$data['msg_opname'] = "";
+		$this->session->set_userdata('filter_jenisbarang','');
 		$this->session->set_userdata('filter_bulan','');
-		$data['bulan']			= array('00'=>'-','01'=>'Januari', '02'=>'Februari', '03'=>'Maret', '04'=>'April', '05'=>'Mei', '06'=>'Juni', '07'=>'Juli', '08'=>'Agustus', '09'=>'September', '10'=>'Oktober', '11'=>'November', '12'=>'Desember');
+		$this->session->set_userdata('filter_tahun','');
+		$data['bulan']			= array('all'=>'-','01'=>'Januari', '02'=>'Februari', '03'=>'Maret', '04'=>'April', '05'=>'Mei', '06'=>'Juni', '07'=>'Juli', '08'=>'Agustus', '09'=>'September', '10'=>'Oktober', '11'=>'November', '12'=>'Desember');
 		die($this->parser->parse("inventory/bhp_pemusnahan/show_expiring",$data,true));
 	}
 
