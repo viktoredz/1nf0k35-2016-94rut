@@ -17,7 +17,7 @@ class Permohonanbarang_model extends CI_Model {
         return  $kode_permohonan.$urut;
     }
     function urut($kode){
-        $q = $this->db->query("select MAX(RIGHT(id_inv_permohonan_barang,6)) as kd_max from inv_permohonan_barang where (LEFT(id_inv_permohonan_barang,14))=$kode");
+        $q = $this->db->query("select MAX(RIGHT(id_inv_permohonan_barang,6)) as kd_max from inv_permohonan_barang where (LEFT(id_inv_permohonan_barang,15))=$kode");
         $nourut="";
         if($q->num_rows()>0)
         {
