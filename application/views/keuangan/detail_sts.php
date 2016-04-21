@@ -94,8 +94,7 @@
 						<th></th>
                     </tr>
 					<form method="post" action="<?=base_url()?>keuangan/sts/update_ttd">
-					
-					<input type="hidden" name="tgl" value="<?=$ds['tgl']?>" >
+					<input type="hidden" name="id_sts" value="<?=$ds['id_sts']?>" >
 					<input type="hidden" name="puskes" value="<?=$ds['code_pl_phc']?>" >
 					<tr>
 						<td></td><td></td><td></td><td></td><td></td>
@@ -183,7 +182,7 @@
 				<div class="col-md-6 pull-right" style="text-align:right">
 					<input type="hidden" name="tgl" value="<?=$ds['tgl']?>" >
 					<input type="hidden" name="puskes" value="<?=$ds['code_pl_phc']?>" >
-					<a href="#" name="btn-export" class="btn btn-warning" value="" ><i class='fa fa-save'></i> &nbsp; Export</a>						
+	   	            <button type="button" id="btn-export" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Export</button>
 					<input type="submit" name="save" class="btn btn-success" value="Simpan Sementara" >								
 					<input type="submit" name="delete" class="btn btn-danger" onclick="return confirm('apakah Anda yakin telah selesai mengisi form STS ? form yang telah ditutup tidak dapat diedit kembali')" value="Simpan & Tutup STS">
 					<a href="<?=base_url()?>keuangan/sts/general" name="save" class="btn btn-primary" value="" ><i class='fa  fa-arrow-circle-o-left'></i> &nbsp;Kembali</a>						
@@ -525,6 +524,48 @@ function terbilang(bilangan) {
 
 	  return kaLimat + "Rupiah";
 	}
+
+	$("#btn-export").click(function(){
+		
+		var post 		= "";
+		var filter 		= $("#jqxgrid").jqxGrid('getfilterinformation');
+		for(i=0; i < filter.length; i++){
+			var fltr 	= filter[i];
+			var value	= fltr.filter.getfilters()[0].value;
+			var condition		= fltr.filter.getfilters()[0].condition;
+			var filteroperation	= fltr.filter.getfilters()[0].operation;
+			var filterdatafield	= fltr.filtercolumn;
+			if(filterdatafield=="tgl"){
+				var d 		= new Date(value);
+				var day 	= d.getDate();
+				var month 	= d.getMonth();
+				var year 	= d.getYear();
+				value 		= year+'-'+month+'-'+day;
+			}
+			post = post+'&filtervalue'+i+'='+value;
+			post = post+'&filtercondition'+i+'='+condition;
+			post = post+'&filteroperation'+i+'='+filteroperation;
+			post = post+'&filterdatafield'+i+'='+filterdatafield;
+			post = post+'&'+filterdatafield+'operator=and';
+		}
+		post = post+'&filterscount='+i;
+		
+		var sortdatafield = $("#jqxgrid").jqxGrid('getsortcolumn');
+		if(sortdatafield != "" && sortdatafield != null){
+			post = post + '&sortdatafield='+sortdatafield;
+		}
+		if(sortdatafield != null){
+			var sortorder = $("#jqxgrid").jqxGrid('getsortinformation').sortdirection.ascending ? "asc" : ($("#jqxgrid").jqxGrid('getsortinformation').sortdirection.descending ? "desc" : "");
+			post = post+'&sortorder='+sortorder;
+			
+		}
+		// post = post+'&puskes='+$("#puskesmas option:selected").text();
+		
+		$.post("<?php echo base_url()?>inventory/bhp_permintaan/permintaan_export",post,function(response	){
+			//alert(response);
+			window.location.href=response;
+		});
+	});
     </script>
 	
 		

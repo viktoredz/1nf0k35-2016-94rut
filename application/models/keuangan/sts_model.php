@@ -25,13 +25,13 @@ class Sts_model extends CI_Model {
 	}
 
 	function add_sts(){
-		$datatgl = explode('/', $this->input->post('tgl'));
-		$tgl = $datatgl[2].'-'.$datatgl[0].'-'.$datatgl[1];
+		 $datatgl = explode('-', $this->input->post('tgl'));
+		 $tgl = $datatgl[2].'-'.$datatgl[1].'-'.$datatgl[0];
 
 		$data['id_sts'] 		 = $this->kode_sts($this->input->post('id_sts'));
 		$data['code_pl_phc']	 = $this->session->userdata('puskes');
         $data['nomor']           = $this->input->post('nomor');
-        $data['tgl']             = $tgl;
+       	$data['tgl']             = $tgl;
 
 		if($this->db->set('status',"draft")){
           ($this->db->insert('keu_sts', $data));
@@ -42,14 +42,13 @@ class Sts_model extends CI_Model {
     }
 
 	function kode_sts($kode){
-        $sts=explode(".", $kode);
-        $kode_sts = $sts[0];
+        $kode_sts = $kode;
         $urut = $this->nourut($kode_sts);
         return $urut;
     }
 
     function nourut($kode_sts){
-        $kodepuskesmas = $this->session->userdata('puskesmas');
+        $kodepuskesmas = 'P'.$this->session->userdata('puskesmas');
         $this->db->select("MAX(id_sts) as kd_max");
         $this->db->where("id_sts LIKE '".$kodepuskesmas."%'");
         $q = $this->db->get("keu_sts")->row();
@@ -315,9 +314,8 @@ class Sts_model extends CI_Model {
 		   'ttd_penyetor_nip' => $this->input->post('ttd_penyetor_nip'),
 		   'ttd_penyetor_nama' => $this->input->post('ttd_penyetor_nama')
 		);
-				
 		//update
-		$this->db->where('tgl', $this->input->post('tgl'));		
+		$this->db->where('id_sts', $this->input->post('id_sts'));		
 		$this->db->where('code_pl_phc', $this->input->post('puskes'));
 		$this->db->update('keu_sts', $data);
 		

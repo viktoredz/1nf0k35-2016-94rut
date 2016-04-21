@@ -32,20 +32,20 @@
                  Nomor
                 </div>
                 <div class="col-md-8">
-                  <input type="text" class="form-control" name="sts_nomor" placeholder="Nomor" value="
-              <?=$nomor?>">
+                  <input type="text" class="form-control" name="sts_nomor" placeholder="Nomor" value="<?=$nomor?>">
                 </div>
               </div>
 
               <div class="row" style="margin: 5px">
                 <div class="col-md-4" style="padding: 5px">
-                  Tanggal
+                  Tanggal 
                 </div>
                 <div class="col-md-8">
-                  <input type="text" class="form-control" name="sts_tgl" placeholder=" Tanggal " value="
-                 <?=date("m/d/Y")?>">
+                  <div id='tgl' name="sts_tgl" value="<?=date("m/d/Y")?>" >
+                  </div>
                 </div>
               </div>
+
               <br>
             </div>
           </div>
@@ -53,7 +53,7 @@
 </form>
 
 <script>
- 
+
  function kodeSTS(){
       $.ajax({
       url: "<?php echo base_url().'keuangan/sts/kodeSts';?>",
@@ -71,6 +71,9 @@
   $(function () { 
     tabIndex = 1;
     kodeSTS();
+
+    $("[name='sts_tgl']").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme, height:30});
+
     
    $("[name='btn_keuangan_close']").click(function(){
         $("#popup_keuangan_sts").jqxWindow('close');
