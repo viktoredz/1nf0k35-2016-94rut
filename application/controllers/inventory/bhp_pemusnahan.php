@@ -150,6 +150,7 @@ class Bhp_pemusnahan extends CI_Controller {
 				'tipe'										=> ucfirst($act->tipe),
 				'harga'										=> $act->harga,
 				'merek_tipe'								=> $act->merek_tipe,
+				'tipeopname'								=> $act->tipeopname,
 				'tgl_opname'								=> date("d-m-Y",strtotime($act->tgl_opname)),
 				'jml_selisih'								=> ($act->jml_akhir-$act->jml_awal)*-1,
 				'edit'		=> 1,

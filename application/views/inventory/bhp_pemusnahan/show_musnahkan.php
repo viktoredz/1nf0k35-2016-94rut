@@ -129,6 +129,7 @@
 			{ name: 'tipe', type: 'string' },
 			{ name: 'harga', type: 'string' },
 			{ name: 'merek_tipe', type: 'string' },
+			{ name: 'tipeopname', type: 'string' },
 			{ name: 'tgl_opname', type: 'string' },
 			{ name: 'jml_selisih', type: 'number' }
         ],
@@ -188,7 +189,7 @@
 				{ text: 'Dimusnahkan',sortable: false,editable:false ,datafield: 'jml_selisih', columntype: 'textbox', filtertype: 'none', width: '9%' ,align: 'center', cellsalign: 'right'},
 				{ text: 'Jumlah Awal',sortable: true,editable:false ,align: 'center', cellsalign: 'right', datafield: 'jml_awal', columntype: 'textbox', filtertype: 'none', width: '8%' },
 				{ text: 'Jumlah Akhir',sortable: true,editable:false ,align: 'center', cellsalign: 'right', datafield: 'jml_akhir', columntype: 'textbox', filtertype: 'none', width: '8%' },
-				{ text: 'Tipe', editable:false ,datafield: 'tipe', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
+				{ text: 'Tipe', editable:false ,datafield: 'tipeopname', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
             ]
 		});
 	  function timeline_pengeluaran_barang(id){

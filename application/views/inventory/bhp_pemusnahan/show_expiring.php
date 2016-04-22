@@ -176,13 +176,13 @@
 				return obj.data;    
 			},
 			columns: [
-				{ text: 'Nama Sediaan', editable:false ,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '45%' },
-				{ text: 'Batch', align: 'center',cellsalign: 'center', editable:false ,datafield: 'batch', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
-				{ text: 'Tgl. Permintaa', align: 'center', cellsalign: 'center', editable:false,datafield: 'tgl_kadaluarsa', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '11%' },
+				{ text: 'Nama Sediaan', editable:false ,datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox', width: '45%',cellclassname: cellclass },
+				{ text: 'Batch', align: 'center',cellsalign: 'center', editable:false ,datafield: 'batch', columntype: 'textbox', filtertype: 'textbox', width: '10%',cellclassname: cellclass },
+				{ text: 'Tgl. Permintaa', align: 'center', cellsalign: 'center', editable:false,datafield: 'tgl_kadaluarsa', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '11%',cellclassname: cellclass },
 				{ text: 'Lama', align: 'center', cellsalign: 'right',filtertype: 'none', editable:false , columntype: 'textbox', width: '11%',datafield: 'jmlexpired',cellclassname: cellclass
                 },
-				{ text: 'Jumlah',sortable: false,editable:false ,datafield: 'jmlakhir_opname', columntype: 'textbox', filtertype: 'text', width: '11%' ,align: 'center', cellsalign: 'right'},
-				{ text: 'Sumber Dana', editable:false ,columntype: 'textbox', width: '12%' ,align: 'center', datafield: 'pilihan_sumber_dana',cellsalign: 'left'}
+				{ text: 'Jumlah',sortable: false,editable:false ,datafield: 'jmlakhir_opname', columntype: 'textbox', filtertype: 'text', width: '11%' ,align: 'center', cellsalign: 'right',cellclassname: cellclass},
+				{ text: 'Sumber Dana', editable:false ,columntype: 'textbox', width: '12%' ,align: 'center', datafield: 'pilihan_sumber_dana',cellsalign: 'left',cellclassname: cellclass}
             ]
 		});
 	  function timeline_pengeluaran_barang(id){
