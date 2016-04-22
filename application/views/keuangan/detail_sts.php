@@ -27,7 +27,7 @@
 		<div class="box">
 		
                 <div class="box-header">
-                  <h3 class="box-title">Data Penanggung Jawab <?php if($ds['status']!='buka') echo "<b style=\"color:red\"> [STS TUTUP BUKU]</b>"  ?></h3>
+                  <h3 class="box-title">Data Penanggung Jawab <?php if($ds['status']!='draft') echo "<b style=\"color:red\"> [STS TUTUP BUKU]</b>"  ?></h3>
                 </div><!-- /.box-header -->
                 <div class="box-body no-padding">
 				
@@ -72,37 +72,39 @@
 					<tr>
 						<td></td><td></td><td></td><td></td><td></td>
 					</tr>
+
+					<form method="post" action="<?=base_url()?>keuangan/sts/update_ttd">
+					<input type="hidden" name="id_sts" value="<?=$ds['id_sts']?>" >
+					<input type="hidden" name="puskes" value="<?=$ds['code_pl_phc']?>" >
+                    
                     <tr>
 						<th></th>
 						<th>Pimpinan</th>
-						<td><input <?php echo $ds['status']!='buka' ? "readonly" : "" ?> type="text" name="ttd_pimpinan_nama" value="<?=$ds['ttd_pimpinan_nama']?>" class="form-control" id="pimpinan_nama" placeholder="Nama Pimpinan"></td>
-						<td><input <?php echo $ds['status']!='buka' ? "readonly" : "" ?> type="text" name="ttd_pimpinan_nip" value="<?=$ds['ttd_pimpinan_nip']?>" class="form-control" id="pimpinan_nip" placeholder="NIP Pimpinan"></td>
+						<td><input <?php echo $ds['status']!='draft' ? "readonly" : "" ?> type="text" name="ttd_pimpinan_nama" value="<?=$ds['ttd_pimpinan_nama']?>" class="form-control" id="pimpinan_nama" placeholder="Nama Pimpinan"></td>
+						<td><input <?php echo $ds['status']!='draft' ? "readonly" : "" ?> type="text" name="ttd_pimpinan_nip" value="<?=$ds['ttd_pimpinan_nip']?>" class="form-control" id="pimpinan_nip" placeholder="NIP Pimpinan"></td>
 						<th></th>
                     </tr>
                     <tr>
 						<th></th>
 						<th>Penerima</th>
-						<td><input <?php echo $ds['status']!='buka' ? "readonly" : "" ?> type="text" name="ttd_penerima_nama" value="<?=$ds['ttd_penerima_nama']?>" class="form-control" id="penerima_nama" placeholder="Nama Penerima"></td>
-						<td><input <?php echo $ds['status']!='buka' ? "readonly" : "" ?> type="text" name="ttd_penerima_nip" value="<?=$ds['ttd_penerima_nip']?>" class="form-control" id="penerima_nip" placeholder="NIP Penerima"></td>
+						<td><input <?php echo $ds['status']!='draft' ? "readonly" : "" ?> type="text" name="ttd_penerima_nama" value="<?=$ds['ttd_penerima_nama']?>" class="form-control" id="penerima_nama" placeholder="Nama Penerima"></td>
+						<td><input <?php echo $ds['status']!='draft' ? "readonly" : "" ?> type="text" name="ttd_penerima_nip" value="<?=$ds['ttd_penerima_nip']?>" class="form-control" id="penerima_nip" placeholder="NIP Penerima"></td>
 						<th></th>
                     </tr>
                     <tr>
 						<th></th>
 						<th>Penyetor</th>
-						<td><input <?php echo $ds['status']!='buka' ? "readonly" : "" ?> type="text" name="ttd_penyetor_nama" value="<?=$ds['ttd_penyetor_nama']?>" class="form-control" id="penyetor_nama" placeholder="Nama Penyetor"></td>
-						<td><input <?php echo $ds['status']!='buka' ? "readonly" : "" ?> type="text" name="ttd_penyetor_nip" value="<?=$ds['ttd_penyetor_nip']?>" class="form-control" id="penyetor_nip" placeholder="NIP Penyetor"></td>
+						<td><input <?php echo $ds['status']!='draft' ? "readonly" : "" ?> type="text" name="ttd_penyetor_nama" value="<?=$ds['ttd_penyetor_nama']?>" class="form-control" id="penyetor_nama" placeholder="Nama Penyetor"></td>
+						<td><input <?php echo $ds['status']!='draft' ? "readonly" : "" ?> type="text" name="ttd_penyetor_nip" value="<?=$ds['ttd_penyetor_nip']?>" class="form-control" id="penyetor_nip" placeholder="NIP Penyetor"></td>
 						<th></th>
                     </tr>
-					<form method="post" action="<?=base_url()?>keuangan/sts/update_ttd">
-					<input type="hidden" name="id_sts" value="<?=$ds['id_sts']?>" >
-					<input type="hidden" name="puskes" value="<?=$ds['code_pl_phc']?>" >
+			
 					<tr>
 						<td></td><td></td><td></td><td></td><td></td>
 					</tr>
 					<tr>
 						<td></td>
 						<td><b>Uang Total</b></td><td colspan="3" id="angkaTotal">
-						
 						
 					</tr>
 					<tr>
@@ -147,18 +149,18 @@
 				<p id="doExpand" class="btn btn-warning"><i class="icon fa fa-plus-square-o"></i> &nbsp;Expand All</p>	
 				<p id="doCollapse" onclick="" class="btn btn-warning"><i class="icon fa fa-minus-square-o"></i> &nbsp;Collapse All</p>	
 			</div>
-			<?php if($ds['status']=='tutup'){ ?>
+			<?php if($ds['status']=='disetor'){ ?>
 				<div class="col-md-6 pull-right" style="text-align:right">
 					<input disabled type="submit" class="btn btn-warning" value="STS Telah Ditutup" >								
 					
 					
-						<input type="hidden" name="tgl" value="<?=$ds['tgl']?>" >
-						<input type="hidden" name="puskes" value="<?=$ds['code_cl_phc']?>" >
+						<input type="hidden" name="id" value="<?=$ds['id_sts']?>" >
+						<!-- <input type="hidden" name="puskes" value="<?=$ds['code_cl_phc']?>" > -->
 						<?php 
 							$kodepuskesmas = $this->session->userdata('puskesmas');							
 							if(substr($kodepuskesmas, -2)=="01"){											
 						?>
-							<input type="button" onclick="reopen('<?=$ds['tgl']?>','<?=$ds['code_cl_phc']?>')" class="btn btn-success" name="openlagi" value="Buka STS" >
+							<input type="button" onclick="reopen('<?=$ds['id_sts']?>','<?=$ds['code_pl_phc']?>')" class="btn btn-success" name="openlagi" value="Buka STS" >
 						<?php
 								//kecamatan
 							}else{								
@@ -368,7 +370,7 @@
 					
 					//0,6
 					//update volume data
-					$.post( '<?php echo base_url()?>keuangan/sts/update_volume', {id_sts:'<?=$id?>',id_keu_anggaran: arr[0], tarif:arr[5], vol:arr[6], code_cl_phc:'<?=$this->session->userdata['puskes']?>', },function( data ) {
+					$.post( '<?php echo base_url()?>keuangan/sts/update_volume', {id_sts:'<?=$id?>',id_mst_anggaran: arr[0], tarif:arr[5], vol:arr[6]},function( data ) {
 						$("#treeGrid").jqxTreeGrid('updateBoundData');	
 						//alert(data);
 						document.getElementById("terbilangTotal").innerHTML = terbilang(data.split('.')[0]);
@@ -397,7 +399,7 @@
                 width: '100%',				
                 source: dataAdapter, 
                 //pageable: true,
-                editable: <?php echo $ds['status']!='buka' ? "false" : "true" ?>,                
+                editable: <?php echo $ds['status']!='draft' ? "false" : "true" ?>,                
                 altRows: true,
                 ready: function()
                 {
@@ -408,30 +410,16 @@
                 columns: [				                                 
                   { text: 'Kode Anggaran', editable:false, dataField: "KodeAnggaran", align: 'center', width: '25%',cellsalign: 'left' },
                   { text: 'Uraian', editable:false, dataField: "Uraian", align: 'center', width: '43%',cellsalign: 'left' },
-				  { text: 'Volume', dataField: "Volume",cellClassName: "min", editable:<?php echo $ds['status']!='buka' ? "false" : "true" ?>, align: 'center', cellsFormat: "f", width: '8%',cellsalign: 'center' },
+				  { text: 'Volume', dataField: "Volume",cellClassName: "min", editable:<?php echo $ds['status']!='draft' ? "false" : "true" ?>, align: 'center', cellsFormat: "f", width: '8%',cellsalign: 'center' },
 				  { text: 'Tarif', dataField: "Tarif", editable:false, align: 'center', cellsFormat: "f", width: '12%',cellsalign: 'center' },                                    
 				  { text: 'Sub Total', dataField: "Subtotal", editable:false, align: 'center', cellsFormat: "f", width: '12%',cellsalign: 'center' }      
                 ]
             });
         });
 		
-		function addParent(){
-			var sub_id = 0;
-			var kode_rekening = document.getElementById("kode_rekening").value;
-			var kode_anggaran = document.getElementById("kode_anggaran").value;
-			var uraian = document.getElementById("uraian").value;
-			$.post( '<?php echo base_url()?>keuangan/master_sts/anggaran_add', {sub_id:sub_id, kode_rekening:kode_rekening, kode_anggaran:kode_anggaran, uraian:uraian},function( data ) {
-					$("#treeGrid").jqxTreeGrid('updateBoundData');
-					
-					document.getElementById("kode_rekening").value='';
-					document.getElementById("kode_anggaran").value='';
-					document.getElementById("uraian").value = '';
-				});
-		}
-		
-		function reopen(tgl, code_cl_phc){
+		function reopen(id_sts, code_pl_phc){
 			
-			$.post( '<?php echo base_url()?>keuangan/sts/reopen', {tgl:tgl, code_cl_phc:code_cl_phc},function( data ) {
+			$.post( '<?php echo base_url()?>keuangan/sts/reopen', {id_sts:id_sts, code_pl_phc:code_pl_phc},function( data ) {
 					location.reload();
 				});
 		}
@@ -526,42 +514,42 @@ function terbilang(bilangan) {
 	}
 
 	$("#btn-export").click(function(){
-		
+
 		var post 		= "";
-		var filter 		= $("#jqxgrid").jqxGrid('getfilterinformation');
-		for(i=0; i < filter.length; i++){
-			var fltr 	= filter[i];
-			var value	= fltr.filter.getfilters()[0].value;
-			var condition		= fltr.filter.getfilters()[0].condition;
-			var filteroperation	= fltr.filter.getfilters()[0].operation;
-			var filterdatafield	= fltr.filtercolumn;
-			if(filterdatafield=="tgl"){
-				var d 		= new Date(value);
-				var day 	= d.getDate();
-				var month 	= d.getMonth();
-				var year 	= d.getYear();
-				value 		= year+'-'+month+'-'+day;
-			}
-			post = post+'&filtervalue'+i+'='+value;
-			post = post+'&filtercondition'+i+'='+condition;
-			post = post+'&filteroperation'+i+'='+filteroperation;
-			post = post+'&filterdatafield'+i+'='+filterdatafield;
-			post = post+'&'+filterdatafield+'operator=and';
-		}
-		post = post+'&filterscount='+i;
+		// var filter 		= $("#treeGrid").jqxTreeGrid('getfilterinformation');
+		// for(i=0; i < filter.length; i++){
+		// 	var fltr 	= filter[i];
+		// 	var value	= fltr.filter.getfilters()[0].value;
+		// 	var condition		= fltr.filter.getfilters()[0].condition;
+		// 	var filteroperation	= fltr.filter.getfilters()[0].operation;
+		// 	var filterdatafield	= fltr.filtercolumn;
+		// 	if(filterdatafield=="tgl"){
+		// 		var d 		= new Date(value);
+		// 		var day 	= d.getDate();
+		// 		var month 	= d.getMonth();
+		// 		var year 	= d.getYear();
+		// 		value 		= year+'-'+month+'-'+day;
+		// 	}
+		// 	post = post+'&filtervalue'+i+'='+value;
+		// 	post = post+'&filtercondition'+i+'='+condition;
+		// 	post = post+'&filteroperation'+i+'='+filteroperation;
+		// 	post = post+'&filterdatafield'+i+'='+filterdatafield;
+		// 	post = post+'&'+filterdatafield+'operator=and';
+		// }
+		// post = post+'&filterscount='+i;
 		
-		var sortdatafield = $("#jqxgrid").jqxGrid('getsortcolumn');
-		if(sortdatafield != "" && sortdatafield != null){
-			post = post + '&sortdatafield='+sortdatafield;
-		}
-		if(sortdatafield != null){
-			var sortorder = $("#jqxgrid").jqxGrid('getsortinformation').sortdirection.ascending ? "asc" : ($("#jqxgrid").jqxGrid('getsortinformation').sortdirection.descending ? "desc" : "");
-			post = post+'&sortorder='+sortorder;
+		// var sortdatafield = $("#treeGrid").jqxTreeGrid('getsortcolumn');
+		// if(sortdatafield != "" && sortdatafield != null){
+		// 	post = post + '&sortdatafield='+sortdatafield;
+		// }
+		// if(sortdatafield != null){
+		// 	var sortorder = $("#treeGrid").jqxTreeGrid('getsortinformation').sortdirection.ascending ? "asc" : ($("#treeGrid").jqxTreeGrid('getsortinformation').sortdirection.descending ? "desc" : "");
+		// 	post = post+'&sortorder='+sortorder;
 			
-		}
+		// }
 		// post = post+'&puskes='+$("#puskesmas option:selected").text();
 		
-		$.post("<?php echo base_url()?>inventory/bhp_permintaan/permintaan_export",post,function(response	){
+		$.post("<?php echo base_url()?>keuangan/sts/detail_sts_export",post,function(response	){
 			//alert(response);
 			window.location.href=response;
 		});

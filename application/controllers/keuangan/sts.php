@@ -3,17 +3,27 @@ class Sts extends CI_Controller {
 
     public function __construct(){
 		parent::__construct();
+		$this->load->add_package_path(APPPATH.'third_party/tbs_plugin_opentbs_1.8.0/');
+		require_once(APPPATH.'third_party/tbs_plugin_opentbs_1.8.0/demo/tbs_class.php');
+		require_once(APPPATH.'third_party/tbs_plugin_opentbs_1.8.0/tbs_plugin_opentbs.php');
+
 		$this->load->model('keuangan/sts_model');
 	}
+
 	function convert_tgl($tgl){
 		//2015-11-12
 		$dataTgl = explode('-',$tgl);
 		$tgl = $dataTgl[2].'-'.$dataTgl[1].'-'.$dataTgl[0];
 		return $tgl;		
 	}
-		
+
 	function index(){
 		header("location:sts/general");
+	}
+
+	function set_versi(){
+		$this->authentication->verify('keuangan','edit');
+		$this->session->set_userdata('versi',$this->input->post('versi'));		
 	}
 
 	function api_data_sts_general(){
@@ -254,12 +264,8 @@ class Sts extends CI_Controller {
 		$data['title_form'] = "Detail Surat Tanda Setoran";
 		$data['data_sts'] = $this->sts_model->get_data_sts($id, $this->session->userdata('puskes'));
 		$data['data_sts_total'] = $this->sts_model->get_data_sts_total($id, $this->session->userdata('puskes'));
-		//$data['ambildata'] = $this->sts_model->get_data();
-		//$data['kode_rekening'] = $this->sts_model->get_data_kode_rekening();
 		$data['nomor'] = $this->generate_nomor(date("Y-m-d H:i:s"));		
 		$data['id'] = $id;
-		// $data['tgl'] = $tgl;
-		// $data['tgl2'] = $this->convert_tgl($tgl);
 		$data['content'] = $this->parser->parse("keuangan/detail_sts",$data,true);		
 				
 		$this->template->show($data,"home");
@@ -321,7 +327,7 @@ class Sts extends CI_Controller {
 		if(empty($this->input->post('delete'))){
 			$this->sts_model->update_ttd();
 		}
-				
+
 		$this->form_validation->set_rules('ttd_pimpinan_nama', 'Nama Pimpinan', 'trim|required');
 		$this->form_validation->set_rules('ttd_penerima_nama', 'Nama Penerima', 'trim|required');
 		$this->form_validation->set_rules('ttd_penyetor_nama', 'Nama Penyetor', 'trim|required');
@@ -376,11 +382,11 @@ class Sts extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
+
 		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
 			$this->db->where('code_pl_phc','P'.$this->session->userdata('puskesmas'));
 		}
-		$rows_all = $this->sts_model->get_data();
-
+		$rows_all = $this->sts_model->get_data_for_export();
 
 		if($_POST) {
 			$fil = $this->input->post('filterscount');
@@ -403,9 +409,10 @@ class Sts extends CI_Controller {
 			}
 		}
 		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
-			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+			$this->db->where('code_pl_phc','P'.$this->session->userdata('puskesmas'));
 		}
-		$rows = $this->sts_model->get_data();
+		$rows = $this->sts_model->get_data_for_export();
+
 		$data_tabel = array();
 		$no=1;
 		foreach($rows as $act) {
@@ -413,12 +420,6 @@ class Sts extends CI_Controller {
 				'no' 							=> $no++,
 				'id_sts'  						=> $act->id_sts,
 				'tgl'	   						=> $act->tgl,
-				'nomor'	   						=> $act->nomor,
-				'total'    						=> $act->total,
-				'status'   						=> $act->status,
-				'ttd_pimpinan_nama'				=> $act->ttd_pimpinan_nama,
-				'ttd_penerima_nama'				=> $act->ttd_penerima_nama,
-				'ttd_penyetor_nama'				=> $act->ttd_penyetor_nama,
 				'tarif'							=> $act->tarif,
 				'vol'							=> $act->vol,
 				'jumlah'						=> $act->jumlah,
@@ -430,10 +431,10 @@ class Sts extends CI_Controller {
 			);
 		}
 		$kode_sess=$this->session->userdata('puskesmas');
-		// $kd_prov = $this->inv_barang_model->get_nama('value','cl_province','code',substr($kode_sess, 0,2));
-		// $kd_kab  = $this->inv_barang_model->get_nama('value','cl_district','code',substr($kode_sess, 0,4));
+		$kd_prov = $this->inv_barang_model->get_nama('value','cl_province','code',substr($kode_sess, 0,2));
+		$kd_kab  = $this->inv_barang_model->get_nama('value','cl_district','code',substr($kode_sess, 0,4));
 		// $kd_kec  = 'KEC. '.$this->inv_barang_model->get_nama('nama','cl_kec','code',substr($kode_sess, 0,7));
-		// $namapus  = $this->inv_barang_model->get_nama('value','cl_phc','code','P'.$kode_sess);
+		$namapus  = $this->inv_barang_model->get_nama('value','cl_phc','code','P'.$kode_sess);
 		$tahun  = date("Y");
 
 		$data_puskesmas[] = array('nama_puskesmas' => $namapus,'kd_prov' => $kd_prov,'kd_kab' => $kd_kab,'tahun' => $tahun);
@@ -447,12 +448,11 @@ class Sts extends CI_Controller {
 		$TBS->MergeBlock('b', $data_puskesmas);
 		
 		$code = uniqid();
-		$output_file_name = 'public/files/hasil/hasil_export_bhp_permintaan'.$code.'.xlsx';
+		$output_file_name = 'public/files/hasil/hasil_export_keuangan_sts_detail'.$code.'.xlsx';
 		$output = $dir.$output_file_name;
 		$TBS->Show(OPENTBS_FILE, $output); // Also merges all [onshow] automatic fields.
 		
 		echo base_url().$output_file_name ;
-
 	}
 
 	function koderekening(){
