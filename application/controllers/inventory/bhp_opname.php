@@ -624,19 +624,27 @@ class Bhp_opname extends CI_Controller {
 			if($this->session->userdata('filter_bulan')=="all"){
 
 			}else{
-				$this->db->where("MONTH(tgl_opname)",$this->session->userdata('filter_bulan'));
+				$bl =$this->session->userdata('filter_bulan');
+				$this->db->query("set @bulan = ".'"'.$bl.'"'."");
+				//$this->db->where("MONTH(tgl_opname)",$this->session->userdata('filter_bulan'));
 			}
 		}else{
-				$this->db->where("MONTH(tgl_opname)",date("m"));
+				$bl = date("m");
+				$this->db->query("set @bulan = ".'"'.$bl.'"'."");
+				//$this->db->where("MONTH(tgl_opname)",date("m"));
 		}
 		if($this->session->userdata('filter_tahun')!=''){
 			if($this->session->userdata('filter_tahun')=="all"){
 
 			}else{
-				$this->db->where("YEAR(tgl_opname)",$this->session->userdata('filter_tahun'));
+				$th =$this->session->userdata('filter_tahun');
+				$this->db->query("set @tahun = ".'"'.$th.'"'."");
+				//$this->db->where("YEAR(tgl_opname)",$this->session->userdata('filter_tahun'));
 			}
 		}else{
-			$this->db->where("YEAR(tgl_opname)",date("Y"));
+			$th =date("Y");
+			$this->db->query("set @tahun = ".'"'.$th.'"'."");
+			//$this->db->where("YEAR(tgl_opname)",date("Y"));
 		}
 		if ($this->session->userdata('puskesmas')!='' or !empty($this->session->userdata('puskesmas'))) {
 			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
@@ -682,19 +690,27 @@ class Bhp_opname extends CI_Controller {
 			if($this->session->userdata('filter_bulan')=="all"){
 
 			}else{
-				$this->db->where("MONTH(tgl_opname)",$this->session->userdata('filter_bulan'));
+				$bl =$this->session->userdata('filter_bulan');
+				$this->db->query("set @bulan = ".'"'.$bl.'"'."");
+				//$this->db->where("MONTH(tgl_opname)",$this->session->userdata('filter_bulan'));
 			}
 		}else{
-			$this->db->where("MONTH(tgl_opname)",date("m"));
+			$bl = date("m");
+			$this->db->query("set @bulan = ".'"'.$bl.'"'."");
+			//$this->db->where("MONTH(tgl_opname)",date("m"));
 		}
 		if($this->session->userdata('filter_tahun')!=''){
 			if($this->session->userdata('filter_tahun')=="all"){
 
 			}else{
-				$this->db->where("YEAR(tgl_opname)",$this->session->userdata('filter_tahun'));
+				$th =$this->session->userdata('filter_tahun');
+				$this->db->query("set @tahun = ".'"'.$th.'"'."");
+				//$this->db->where("YEAR(tgl_opname)",$this->session->userdata('filter_tahun'));
 			}
 		}else{
-			$this->db->where("YEAR(tgl_opname)",date("Y"));
+			$th =date("Y");
+			$this->db->query("set @tahun = ".'"'.$th.'"'."");
+			//$this->db->where("YEAR(tgl_opname)",date("Y"));
 		}
 		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
 			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));

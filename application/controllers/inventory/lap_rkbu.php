@@ -174,7 +174,8 @@ class Lap_rkbu extends CI_Controller {
 		}else{
 			$ruang = $this->inv_barang_model->get_nama('nama_ruangan','mst_inv_ruangan','id_mst_inv_ruangan',$this->input->post('ruang'));
 		}
-		$data_puskesmas[] = array('nama_puskesmas' => $nama,'tanggal' => $tanggal,'tanggal1' => $tanggal1,'ruang' => $ruang);
+		$tahun =date("Y");
+		$data_puskesmas[] = array('nama_puskesmas' => $nama,'tanggal' => $tanggal,'tanggal1' => $tanggal1,'ruang' => $ruang,'tahun' =>$tahun);
 		
 		$dir = getcwd().'/';
 		$template = $dir.'public/files/template/inventory/rkbu.xlsx';		

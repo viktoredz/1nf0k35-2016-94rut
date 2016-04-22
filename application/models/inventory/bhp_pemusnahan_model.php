@@ -10,7 +10,7 @@ class Bhp_pemusnahan_model extends CI_Model {
 
     }
     function getallopname($start=0,$limit=999999,$options=array()){
-        $this->db->where("inv_inventaris_habispakai_opname.tipe = 'tidakdipakai' or inv_inventaris_habispakai_opname.tipe = 'terimarusak' or inv_inventaris_habispakai_opname.tipe = 'expired'");
+        $this->db->where("(inv_inventaris_habispakai_opname.tipe = 'tidakdipakai' or inv_inventaris_habispakai_opname.tipe = 'terimarusak' or inv_inventaris_habispakai_opname.tipe = 'expired')");
         $this->db->select("(IF((tipe='terimarusak'),'Terima Rusak',IF((tipe='tidakdipakai'),'Tidak Dipakai',IF((tipe='opname'),'Opname',IF((tipe='retur'),'Retur',IF((tipe='expired'),'Expired','')))))) AS tipeopname,mst_inv_barang_habispakai.uraian,mst_inv_barang_habispakai.merek_tipe,inv_inventaris_habispakai_opname.* ,inv_inventaris_habispakai_opname_item.*",false);
         $this->db->join('inv_inventaris_habispakai_opname_item','inv_inventaris_habispakai_opname.id_inv_inventaris_habispakai_opname = inv_inventaris_habispakai_opname_item.id_inv_inventaris_habispakai_opname','left');
         $this->db->join('mst_inv_barang_habispakai','mst_inv_barang_habispakai.id_mst_inv_barang_habispakai = inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai');
