@@ -418,6 +418,8 @@ class Bhp_opname_model extends CI_Model {
             ON     mst_inv_barang_habispakai.id_mst_inv_barang_habispakai = inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai
             WHERE  inv_inventaris_habispakai_opname.code_cl_phc = ".'"'.$pusksmas.'"'."
             AND    inv_inventaris_habispakai_opname.tgl_opname = ".'"'.$tanggal.'"'."
+            and    (inv_inventaris_habispakai_opname.tipe!='terimarusak'
+            and    inv_inventaris_habispakai_opname.tipe!='retur')
             $jenisbhp $filtername $ord
      ");
             $datas = $query->result_array();  

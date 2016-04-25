@@ -113,6 +113,7 @@
 		var ruang 		= $("#code_ruangan").val();
 		var tanggal		= $("#tgl").val();
 		var tanggal1 	= $("#tgl1").val();
+		var jenisbarang 	= $("#jenisbarang").val();
 		
 		var t = tanggal.split('-');
 		var tgl = t[2]+'-'+t[1]+'-'+t[0];
@@ -121,7 +122,7 @@
 		$.ajax({
 		        url : '<?php echo site_url('inventory/lap_bhp_pengeluaran/permohonan_export') ?>',
 		        type : 'POST',
-		        data : 'namepuskes='+namepuskes+'&puskes=' + puskes+'&filter_tanggal='+tgl+'&filter_tanggal1='+tgl1,
+		        data : 'namepuskes='+namepuskes+'&puskes=' + puskes+'&filter_tanggal='+tgl+'&filter_tanggal1='+tgl1+'&jenisbarang='+jenisbarang,
 		        success : function(data) {
 					if(data != ""){
 						//alert(data);

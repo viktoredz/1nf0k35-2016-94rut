@@ -1297,9 +1297,9 @@ class Bhp_opname extends CI_Controller {
 			foreach ($val as $act => $value) {
 				
 				if($key==$temp){
-					$data_tabel["$key"]["keluar$act"]		= $value['pengeluaranperhari'];	
+					$data_tabel["$key"]["keluar$act"]		= $value['pengeluaranperhari']*-1;	
 					$data_tabel["$key"]["harga"]			= $value['harga'];	
-					$data_tabel["$key"]["jumlah_op"]		= ($data_tabel["$key"]["jumlah_op"]+$value['pengeluaranperhari'])*-1;	
+					$data_tabel["$key"]["jumlah_op"]		= ($data_tabel["$key"]["jumlah_op"]+$value['pengeluaranperhari']);	
 					$data_tabel["$key"]['nilai_aset_total']	= ($data_tabel["$key"]["jumlah_awal"] + $data_tabel["$key"]["jumlah_op"])*$value['harga'];
 					$data_tabel["$key"]['total']			= $data_tabel["$key"]["jumlah_awal"] + $data_tabel["$key"]["jumlah_op"];
 					$data_tabel["$key"]['nilai_aset_awal']  = $value['jumlah_awal']*$value['harga'];
@@ -1310,7 +1310,7 @@ class Bhp_opname extends CI_Controller {
 					'no'				=> $no,								
 					'uraian'			=> $key,
 					'harga'				=> $value['harga'],
-					'jumlah_op'			=> ($value['pengeluaranperhari'])*-1,
+					'jumlah_op'			=> ($value['pengeluaranperhari']),
 					'jumlah_awal'		=> $value['jumlah_awal'],
 					'nilai_aset_awal'	=> $value['jumlah_awal']*$value['harga'],
 					'total'				=> $value['jumlah_awal'] + $value['pengeluaranperhari'],
@@ -1351,7 +1351,7 @@ class Bhp_opname extends CI_Controller {
 				
 			}
 		}
-		//die(print_r($data_tabel));
+		///die(print_r($data_tabel));
 		
 		$kode_sess=$this->session->userdata('puskesmas');
 		$kd_prov = $this->inv_barang_model->get_nama('value','cl_province','code',substr($kode_sess, 0,2));
