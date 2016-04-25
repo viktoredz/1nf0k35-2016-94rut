@@ -52,6 +52,22 @@ class Sts extends CI_Controller {
 		}		
 	}
 
+	function filter_bulan(){
+		if($_POST) {
+			if($this->input->post('bulan') != '') {
+				$this->session->set_userdata('filter_bulan',$this->input->post('bulan'));
+			}
+		}
+	}
+
+	function filter_tahun(){
+		if($_POST) {
+			if($this->input->post('tahun') != '') {
+				$this->session->set_userdata('filter_tahun',$this->input->post('tahun'));
+			}
+		}
+	}
+
 	function json_sts(){
 		$this->authentication->verify('keuangan','show');
 
@@ -62,6 +78,13 @@ class Sts extends CI_Controller {
 			for($i=0;$i<$fil;$i++) {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl') {
+					$value = date("Y-m-d",strtotime($value));
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
 			}
 
 			if(!empty($ord)) {
@@ -69,7 +92,7 @@ class Sts extends CI_Controller {
 			}
 		}
 
-		if($this->session->userdata('filter_bulan')!=''){
+			if($this->session->userdata('filter_bulan')!=''){
 			if($this->session->userdata('filter_bulan')=="all"){
 
 			}else{
@@ -97,6 +120,13 @@ class Sts extends CI_Controller {
 			for($i=0;$i<$fil;$i++) {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl') {
+					$value = date("Y-m-d",strtotime($value));
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
 			}
 
 			if(!empty($ord)) {
@@ -111,7 +141,7 @@ class Sts extends CI_Controller {
 				$this->db->where("MONTH(tgl)",$this->session->userdata('filter_bulan'));
 			}
 		}else{
-			$this->db->where("MONTH(tgl)",date("m"));
+				$this->db->where("MONTH(tgl)",date("m"));
 		}
 		if($this->session->userdata('filter_tahun')!=''){
 			if($this->session->userdata('filter_tahun')=="all"){
@@ -125,10 +155,11 @@ class Sts extends CI_Controller {
 
 		$rows = $this->sts_model->get_data($this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();
+		
 		foreach($rows as $act) {
-			$data[] = array(
+	 		$data[] = array(
 				'id_sts'   => $act->id_sts,
-				'tgl'	   => $act->tgl,
+				'tgl'	   => date("d-m-Y",strtotime($act->tgl)),
 				'nomor'	   => $act->nomor,
 				'total'    => $act->total,
 				'status'   => ucwords($act->status),
@@ -136,6 +167,7 @@ class Sts extends CI_Controller {
 				'delete'   => 1
 			);
 		}
+		
 		$size = sizeof($rows_all);
 		$json = array(
 			'TotalRows' => (int) $size,
@@ -219,38 +251,20 @@ class Sts extends CI_Controller {
 		$this->session->set_userdata('puskes',$this->input->post('puskes'));
 	}
 
-	function filter_bulan(){
-		if($_POST) {
-			if($this->input->post('bulan') != '') {
-				$this->session->set_userdata('filter_bulan',$this->input->post('bulan'));
-			}
-		}
-	}
-
-	function filter_tahun(){
-		if($_POST) {
-			if($this->input->post('tahun') != '') {
-				$this->session->set_userdata('filter_tahun',$this->input->post('tahun'));
-			}
-		}
-	}
-	
 	function general(){
 		$this->authentication->verify('keuangan','add');
 		$data['data_puskesmas']	= $this->sts_model->get_data_puskesmas();
 		$data['title_group']    = "Surat Tanda Setoran";
 		$data['title_form']     = "Surat Tanda Setoran";
-		$data['ambildata']      = $this->sts_model->get_data();
-		$data['kode_rekening']  = $this->sts_model->get_data_kode_rekening_all();
 		$data['nomor'] 			= $this->generate_nomor(date("Y-m-d H:i:s"));		
-		$data['nama_puskes'] 	= "";
+		// $data['nama_puskes'] 	= "";
 		$this->session->set_userdata('filter_bulan','');
 		$this->session->set_userdata('filter_tahun','');
 		$data['bulan']			= array('01'=>'Januari', '02'=>'Februari', '03'=>'Maret', '04'=>'April', '05'=>'Mei', '06'=>'Juni', '07'=>'Juli', '08'=>'Agustus', '09'=>'September', '10'=>'Oktober', '11'=>'November', '12'=>'Desember');
 
-		if(!empty($this->session->userdata('puskes')) and $this->session->userdata('puskes')!= '0'){
-			$data['nama_puskes'] = $this->sts_model->get_puskesmas_name($this->session->userdata('puskes'));
-		}
+		// if(!empty($this->session->userdata('puskes')) and $this->session->userdata('puskes')!= '0'){
+		// 	$data['nama_puskes'] = $this->sts_model->get_puskesmas_name($this->session->userdata('puskes'));
+		// }
 			
 		$data['content'] = $this->parser->parse("keuangan/main_sts",$data,true);						
 		

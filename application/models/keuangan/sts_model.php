@@ -25,31 +25,32 @@ class Sts_model extends CI_Model {
 	}
 
 	function add_sts(){
-		 $datatgl = explode('-', $this->input->post('tgl'));
-		 $tgl = $datatgl[2].'-'.$datatgl[1].'-'.$datatgl[0];
+    	$kodepuskesmas = 'P'.$this->session->userdata('puskesmas');
+
+		$datatgl = explode('-', $this->input->post('tgl'));
+		$tgl = $datatgl[2].'-'.$datatgl[1].'-'.$datatgl[0];
 
 		$data['id_sts'] 		 = $this->kode_sts($this->input->post('id_sts'));
 		$data['code_pl_phc']	 = $this->session->userdata('puskes');
         $data['nomor']           = $this->input->post('nomor');
        	$data['tgl']             = $tgl;
 
-       	$id = array(
-		   'id_sts' => $this->kode_sts($this->input->post('id_sts')),
-		);
-
 		if($this->db->set('status',"draft")){
           ($this->db->insert('keu_sts', $data));
-          ($this->db->insert('keu_sts_hasil',$id));
+           $this->db->query(" INSERT INTO `keu_sts_hasil` (
+							  SELECT `mst_keu_anggaran`.`id_mst_anggaran`,".'"'.$data['id_sts'] .'"'.",`mst_keu_anggaran`.`tarif`,0,0
+							  FROM `mst_keu_versi_status`
+							  LEFT JOIN `mst_keu_anggaran` ON `mst_keu_anggaran`.`id_mst_anggaran_versi` = `mst_keu_versi_status`.`id_mst_anggaran_versi` 
+							  WHERE `cl_phc_code` =".'"'.$kodepuskesmas.'"'.")");
             return 1;
         }else{
             return mysql_error();
         }
     }
 
-    function get_versi(){
+    function get_versi($id){
     	$kodepuskesmas = 'P'.$this->session->userdata('puskesmas');
-
-        $this->db->select("mst_keu_versi_status.id_mst_anggaran_versi");
+        $this->db->select("mst_keu_anggaran.tarif,mst_keu_anggaran.id_mst_anggaran");
 		$this->db->join('mst_keu_anggaran','mst_keu_anggaran.id_mst_anggaran_versi = mst_keu_versi_status.id_mst_anggaran_versi');
         $this->db->where("cl_phc_code",$kodepuskesmas);
         $query = $this->db->get("mst_keu_versi_status");
