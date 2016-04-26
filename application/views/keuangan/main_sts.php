@@ -6,7 +6,7 @@
 </div>
 <?php } ?>
 <section class="content">
-<form action="<?php echo base_url()?>mst/keuangan_instansi/dodel_multi" method="POST" name="">
+<form action="<?php echo base_url()?>keuangan/sts/dodel_multi" method="POST" name="">
   <div class="row">
     <div class="col-md-12">
       <div class="box box-primary">
@@ -42,9 +42,9 @@
                     </div>
                 </div>    
            </div>
-        <div class="box-body">
+      <div class="box-body">
             <div class="div-grid">
-            <div id="jqxgrid"></div>
+                <div id="jqxgrid"></div>
             </div>
         </div>
       </div>
@@ -84,8 +84,8 @@
             datafields: [
             { name: 'id_sts', type: 'string'},
             { name: 'tgl', type: 'date'},
-            { name: 'nomor', type: 'double'},
-            { name: 'total', type: 'double'},
+            { name: 'nomor', type: 'string'},
+            { name: 'total', type: 'string'},
             { name: 'status',type: 'string'},   
             { name: 'edit', type: 'number'},
             { name: 'delete', type: 'number'}
@@ -136,7 +136,7 @@
                     }else{
                         return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_view.gif'></a></div>";
                     }
-                 }
+                  }
                 },
                 
                 { text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
@@ -148,10 +148,10 @@
                     }
                  }
                 },
-                { text: 'Tanggal',editable:false , align: 'center', cellsalign: 'center', datafield: 'tgl', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '20%' },
+                { text: 'Tanggal', align: 'center', cellsalign: 'center', datafield: 'tgl', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '20%' },
                 { text: 'Nomor', datafield: 'nomor', columntype: 'textbox', filtertype: 'textbox',align: 'center', cellsalign: 'center', width: '21%',cellsalign: 'center'},
                 { text: 'Total', datafield: 'total', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '29%',cellsalign: 'center' },
-                { text: 'Status', datafield: 'status', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '20%',cellsalign: 'center' }
+                { text: 'Status', datafield: 'status', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '20%' }
             ]
         });
 
