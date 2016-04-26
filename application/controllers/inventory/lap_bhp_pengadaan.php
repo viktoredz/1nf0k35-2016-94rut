@@ -115,76 +115,73 @@ class Lap_bhp_pengadaan extends CI_Controller {
 		$data = array();
 		//die(print_r($rows));
 		$no=0;
+		$temp='';
 		$data_tabel = array();
 		foreach ($rows as $key => $val) {
 			$no++;
 			foreach ($val as $act => $value) {
-				if((isset($value['tgl_pembelian']))||(isset($value['tgl_opname']))){
-		          if ($value['tgl_pembelian'] >= $value['tgl_opname']) {
-		            $harga = $value['harga_belian'];
-		          }else{
-		            $harga =$value['hargaopname'];
-		          }
-		        }else{
-		          $harga = $value['harga_asli'];
-		        }
-				$bulanex = $act;
 				
-				$data_tabel[$key] = array(
-					'no'				=> $no,								
-					'uraian'			=> $key,			
-					'harga_akhir'		=> $harga,
-					'value'				=> $value['value'],
-					'totaljumlah'		=> $value['totaljumlah'],
-					'nilaiaset'			=> $value['totaljumlah']*$harga,
-					'harga_beli1'		=> $bulanex == '01' ? $value['harga_beli'] : '',
-					'jmlbeli1'			=> $bulanex == '01' ? $value['jmlpembelian'] : '',
-					'total1'			=> $value['harga_beli']*$value['jmlpembelian'],
-					'harga_beli2'		=> $bulanex == '02' ? isset($data_tabel[$key]['harga_beli2']) ? $data_tabel[$key]['harga_beli2'] : $value['harga_beli'] :'',
-					'jmlbeli2'			=> $bulanex == '02' ?  isset($data_tabel[$key]['jmlbeli2']) ?  array_slice($data_tabel, $value['jmlpembelian'], $data_tabel[$key]['jmlbeli2']) : $value['jmlpembelian'] : '',
-					'total2'			=> $value['harga_beli']*$value['jmlpembelian'],
-					'harga_beli3'		=> $bulanex == '03' ? $value['harga_beli'] : '',
-					'jmlbeli3'			=> $bulanex == '03' ? $value['jmlpembelian'] : '',
-					'total3'			=> $value['harga_beli']*$value['jmlpembelian'],
-					'harga_beli4'		=> $bulanex == '04' ? $value['harga_beli'] : '',
-					'jmlbeli4'			=> $bulanex == '04' ? $value['jmlpembelian'] : '',
-					'total4'			=> $value['harga_beli']*$value['jmlpembelian'],
-					'harga_beli5'		=> $bulanex == '05' ? $value['harga_beli'] : '',
-					'jmlbeli5'			=> $bulanex == '05' ? $value['jmlpembelian'] : '',
-					'total5'			=> $value['harga_beli']*$value['jmlpembelian'],
-					'harga_beli6'		=> $bulanex == '06' ? $value['harga_beli'] : '',
-					'jmlbeli6'			=> $bulanex == '06' ? $value['jmlpembelian'] : '',
-					'total6'			=> $value['harga_beli']*$value['jmlpembelian'],
-					'harga_beli7'		=> $bulanex == '07' ? $value['harga_beli'] : '',
-					'jmlbeli7'			=> $bulanex == '07' ? $value['jmlpembelian'] : '',
-					'total7'			=> $value['harga_beli']*$value['jmlpembelian'],
-					'harga_beli8'		=> $bulanex == '08' ? $value['harga_beli'] : '',
-					'jmlbeli8'			=> $bulanex == '08' ? $value['jmlpembelian'] : '',
-					'total8'			=> $value['harga_beli']*$value['jmlpembelian'],
-					'harga_beli9'		=> $bulanex == '09' ? $value['harga_beli'] : '',
-					'jmlbeli9'			=> $bulanex == '09' ? $value['jmlpembelian'] : '',
-					'total9'			=> $value['harga_beli']*$value['jmlpembelian'],
-					'harga_beli10'		=> $bulanex == '10' ? $value['harga_beli'] : '',
-					'jmlbeli10'			=> $bulanex == '10' ? $value['jmlpembelian'] : '',
-					'total10'			=> $value['harga_beli']*$value['jmlpembelian'],
-					'harga_beli11'		=> $bulanex == '11' ? $value['harga_beli'] : '',
-					'jmlbeli11'			=> $bulanex == '11' ? $value['jmlpembelian'] : '',
-					'total11'			=> $value['harga_beli']*$value['jmlpembelian'],
-					'harga_beli12'		=> $bulanex == '12' ? $value['harga_beli'] : '',
-					'jmlbeli12'			=> $bulanex == '12' ? $value['jmlpembelian'] : '',
-					'total12'			=> $value['harga_beli']*$value['jmlpembelian'],
-				);
-				
+				if($key==$temp){	
+					$data_tabel[$key]["harga_akhir"]		= $value['hargabeli'];	
+					$data_tabel[$key]["totaljumlah"]		= ($data_tabel["$key"]["totaljumlah"]+$value['total']);	
+					$data_tabel[$key]['nilaiaset']			= ($data_tabel["$key"]["totaljumlah"] * $data_tabel["$key"]["harga_akhir"]);
+					$data_tabel[$key]["harga_beli$act"] 	= $value['hargabeli'];
+					$data_tabel[$key]["jmlbeli$act"]  		= $value['total'];
+					$data_tabel[$key]["total$act"]			= $value['total']*$value['hargabeli'];
+															  
+				}else{
+					$temp = $key;
+					$bulanex = $act;
+					
+					$data_tabel[$key] = array(
+						'no'				=> $no,								
+						'uraian'			=> $key,			
+						'harga_akhir'		=> $value['hargabeli'],
+						'value'				=> $value['pilihan_satuan'],
+						'totaljumlah'		=> $value['total'],
+						'nilaiaset'			=> $value['total']*$value['hargabeli'],
+						'harga_beli1'		=> $bulanex == '01' ? $value['hargabeli'] : '',
+						'jmlbeli1'			=> $bulanex == '01' ? $value['total'] : '',
+						'total1'			=> $bulanex == '01' ? $value['total']*$value['hargabeli'] : '',
+						'harga_beli2'		=> $bulanex == '02' ? $value['hargabeli'] : '',
+						'jmlbeli2'			=> $bulanex == '02' ? $value['total'] : '',
+						'total2'			=> $bulanex == '02' ? $value['total']*$value['hargabeli'] : '',
+						'harga_beli3'		=> $bulanex == '03' ? $value['hargabeli'] : '',
+						'jmlbeli3'			=> $bulanex == '03' ? $value['total'] : '',
+						'total3'			=> $bulanex == '03' ? $value['total']*$value['hargabeli'] : '',
+						'harga_beli4'		=> $bulanex == '04' ? $value['hargabeli'] : '',
+						'jmlbeli4'			=> $bulanex == '04' ? $value['total'] : '',
+						'total4'			=> $bulanex == '04' ? $value['total']*$value['hargabeli'] : '',
+						'harga_beli5'		=> $bulanex == '05' ? $value['hargabeli'] : '',
+						'jmlbeli5'			=> $bulanex == '05' ? $value['total'] : '',
+						'total5'			=> $bulanex == '05' ? $value['total']*$value['hargabeli'] : '',
+						'harga_beli6'		=> $bulanex == '06' ? $value['hargabeli'] : '',
+						'jmlbeli6'			=> $bulanex == '06' ? $value['total'] : '',
+						'total6'			=> $bulanex == '06' ? $value['total']*$value['hargabeli'] : '',
+						'harga_beli7'		=> $bulanex == '07' ? $value['hargabeli'] : '',
+						'jmlbeli7'			=> $bulanex == '07' ? $value['total'] : '',
+						'total7'			=> $bulanex == '07' ? $value['total']*$value['hargabeli'] : '',
+						'harga_beli8'		=> $bulanex == '08' ? $value['hargabeli'] : '',
+						'jmlbeli8'			=> $bulanex == '08' ? $value['total'] : '',
+						'total8'			=> $bulanex == '08' ? $value['total']*$value['hargabeli'] : '',
+						'harga_beli9'		=> $bulanex == '09' ? $value['hargabeli'] : '',
+						'jmlbeli9'			=> $bulanex == '09' ? $value['total'] : '',
+						'total9'			=> $bulanex == '09' ? $value['total']*$value['hargabeli'] : '',
+						'harga_beli10'		=> $bulanex == '10' ? $value['hargabeli'] : '',
+						'jmlbeli10'			=> $bulanex == '10' ? $value['total'] : '',
+						'total10'			=> $bulanex == '10' ? $value['total']*$value['hargabeli'] : '',
+						'harga_beli11'		=> $bulanex == '11' ? $value['hargabeli'] : '',
+						'jmlbeli11'			=> $bulanex == '11' ? $value['total'] : '',
+						'total11'			=> $bulanex == '11' ? $value['total']*$value['hargabeli'] : '',
+						'harga_beli12'		=> $bulanex == '12' ? $value['hargabeli'] : '',
+						'jmlbeli12'			=> $bulanex == '12' ? $value['total'] : '',
+						'total12'			=> $bulanex == '12' ? $value['total']*$value['hargabeli'] : '',
+					);
+				}	
 			}
 		}
 		
-		//die(print_r($data_tabel));
-		/*
-		$data_tabel[] = array('no'=> '1', 'tgl'=>'10/10/2010' , 'ruangan'=>'Hill'      , 'jumlah'=>'19', 'keterangan'=>'bagus', 'status'=>'bagus');
-		$data_tabel[] = array('no'=> '2', 'tgl'=>'10/10/2010' , 'ruangan'=>'Hill'      , 'jumlah'=>'19', 'keterangan'=>'bagus', 'status'=>'bagus');
-		$data_tabel[] = array('no'=> '3', 'tgl'=>'10/10/2010' , 'ruangan'=>'Hill'      , 'jumlah'=>'19', 'keterangan'=>'bagus', 'status'=>'bagus');
-		$data_tabel[] = array('no'=> '4', 'tgl'=>'10/10/2010' , 'ruangan'=>'Hill'      , 'jumlah'=>'19', 'keterangan'=>'bagus', 'status'=>'bagus');
-		*/
+		// die(print_r($data_tabel));
 		$puskes = $this->input->post('puskes'); 
 		if(empty($puskes) or $puskes == 'Pilih Puskesmas'){	
 				$nama = 'Semua Data Puskesmas';

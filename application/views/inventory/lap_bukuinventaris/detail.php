@@ -104,6 +104,7 @@
 		        data : 'namepuskes='+namepuskes+'&puskes=' + puskes+'&ruang=' + ruang +'&filter_tanggal='+tgl+'&filter_tanggal1='+tgl1,
 		        success : function(data) {
 					if(data != ""){
+						//alert(data);
 						location.href = data;
 					}
         		}

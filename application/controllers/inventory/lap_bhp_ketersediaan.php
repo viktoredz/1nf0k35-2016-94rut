@@ -61,8 +61,8 @@ class Lap_bhp_ketersediaan extends CI_Controller {
 			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
 		}
 		if((!empty($this->input->post('filter_tanggal')))||(!empty($this->input->post('filter_tanggal1')))){
-			$this->db->where('inv_inventaris_habispakai_opname.tgl_update >=', $this->input->post('filter_tanggal'));
-			$this->db->where('inv_inventaris_habispakai_opname.tgl_update <=', $this->input->post('filter_tanggal1'));
+			$this->db->where('inv_inventaris_habispakai_opname.tgl_opname >=', $this->input->post('filter_tanggal'));
+			$this->db->where('inv_inventaris_habispakai_opname.tgl_opname <=', $this->input->post('filter_tanggal1'));
 		}
 		
 		$rows_all = $this->lap_bhp_ketersediaan_model->get_data_export();
@@ -93,8 +93,8 @@ class Lap_bhp_ketersediaan extends CI_Controller {
 			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
 		}
 		if((!empty($this->input->post('filter_tanggal')))||(!empty($this->input->post('filter_tanggal1')))){
-			$this->db->where('inv_inventaris_habispakai_opname.tgl_update >=', $this->input->post('filter_tanggal'));
-			$this->db->where('inv_inventaris_habispakai_opname.tgl_update <=', $this->input->post('filter_tanggal1'));
+			$this->db->where('inv_inventaris_habispakai_opname.tgl_opname >=', $this->input->post('filter_tanggal'));
+			$this->db->where('inv_inventaris_habispakai_opname.tgl_opname <=', $this->input->post('filter_tanggal1'));
 		}
 		
 		$rows = $this->lap_bhp_ketersediaan_model->get_data_export(/*$this->input->post('recordstartindex'), $this->input->post('pagesize')*/);
@@ -103,7 +103,7 @@ class Lap_bhp_ketersediaan extends CI_Controller {
 		//$unlock = 1;
 		
 		foreach($rows as $act) {
-			if((isset($act->tgl_pembelian))||(isset($act->tgl_opname))){
+			/*if((isset($act->tgl_pembelian))||(isset($act->tgl_opname))){
 	          if ($act->tgl_pembelian >= $act->tgl_opname) {
 	            $harga = $act->harga_pembelian;
 	          }else{
@@ -111,27 +111,16 @@ class Lap_bhp_ketersediaan extends CI_Controller {
 	          }
 	        }else{
 	          $harga = $act->harga;
-	        }
+	        }*/
 			$data_tabel[] = array(
 				'no'					=> $no++,
-				'code'					=> $act->code,
 				'uraian'				=> $act->uraian,
 				'merek_tipe'			=> $act->merek_tipe,
-			//	'nama_jenis'			=> $act->nama_jenis,
-				'negara_asal'			=> $act->negara_asal,
-				'jmlbaik'				=> ($act->jmlbaik+$act->totaljumlah)-($act->jml_rusak+$act->jml_tdkdipakai+$act->jmlpengeluaran),
-				'jml_rusak'				=> $act->jml_rusak,
-				'jml_tdkdipakai'		=> $act->jml_tdkdipakai,
-				'pilihan_satuan'		=> $act->pilihan_satuan,
-				'value'					=> $act->value,
-				'nilaiakhirpersidiaan'  => number_format(((($act->jmlbaik+$act->totaljumlah)-($act->jml_rusak+$act->jml_tdkdipakai+$act->jmlpengeluaran))*($harga)),2),
-				'totaljumlah'			=> $act->totaljumlah,
-				'jmlpengeluaran'		=> $act->jmlpengeluaran,
-				'tgl_update'			=> $act->tgl_update,
-				'keterangan'			=> '-',
-				'harga'					=> number_format($harga,2),
-				'id_mst_inv_barang_habispakai'			=> $act->id_mst_inv_barang_habispakai,
-				'id_mst_inv_barang_habispakai_jenis'	=> $act->id_mst_inv_barang_habispakai_jenis
+				'jmlawal_opname'		=> $act->jmlawal_opname,
+				'harga'					=> number_format($act->hargaterakhir,2),
+				'nilaiakhirpersidiaan'	=> number_format($act->hargaterakhir*$act->jmlawal_opname,2),
+				'keterangan'			=> $act->catatan,
+				
 			);
 		}
 

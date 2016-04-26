@@ -9,7 +9,11 @@ class Lap_bukuinventaris_model extends CI_Model {
         parent::__construct();
 		$this->lang	  = $this->config->item('language');
     }
-    
+    function get_laporan_inv($start=0, $limit=9999999, $options=array()){
+    	$query = $this->db->get('get_laporan_inv');
+        return $query->result();
+    }
+
 	function get_pilihan_kondisi(){
 		$this->db->select('code as id, value as val');
 		$this->db->where('tipe','keadaan_barang');
