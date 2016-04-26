@@ -221,7 +221,7 @@ class Sts extends CI_Controller {
 			echo json_encode($kode);
 		}
 	}
-	
+
 	function generate_nomor($date){
 		//120/1/IX/15
 		//nomorpertahun/tgldesimal/bulanromawi/2digittahun
@@ -235,11 +235,14 @@ class Sts extends CI_Controller {
 		$this->db->where('code_pl_phc',$this->session->userdata('puskes'));
 		$this->db->order_by('tgl','desc');
 		$this->db->limit('1');
-		$query=$this->db->get('keu_sts');
-		$no = 1;
+		$query = $this->db->get('keu_sts');
+		$no = '001';
 		if(!empty($query->result())){
 			foreach($query->result() as $q ){
-				$no = explode('/',$q->nomor)[0]+1;				
+      
+				$num  = explode('/',$q->nomor)[0]+1;	
+                $kd   = sprintf("%03s", $num);
+				$no   = $kd;		
 			}
 		}
 		$ready = $no."/".$tanggal."/".$bulan."/".$tahun;
