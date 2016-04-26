@@ -127,20 +127,33 @@ class Lap_mutasibarang extends CI_Controller {
 			}else{
 				$date = date("m",strtotime($act->tgl_distribusi));
 			}
+			if ($act->jml_berkurang=='0') {
+				$jmlkurang="";
+				$hargakurang="";
+				$jumlahhargakurang="";
+				$satuan = "";
+			}else{
+				$jmlkurang=$act->jml_berkurang;
+				$hargakurang=number_format($act->harga,2);
+				$jumlahhargakurang=number_format($act->jumlahharga,2);
+				$satuan = $act->satuan;
+			}
 			$data_tabel[] = array(
 				'no'   							=> $no++,
 				'uraian'						=> $act->uraian,
 				'spkd'		   					=> $act->Dikes,
 				'id_mst_inv_barang'		   		=> $act->id_mst_inv_barang,
 				'tahunperolehan'				=> $date,
-				'pkt'							=> $act->pkt,
+				'satuantmb'						=> $act->satuan,
+				'hargatmb'						=> $act->harga,
 				'merek'		   					=> $act->merek,
 				'jml_bertambah'		   			=> $act->jml_bertambah,
 				'harga'		   					=> number_format($act->harga,2),
 				'jml_harga'						=> number_format($act->jml_harga,2),
-				'jml_berkurang'				   	=> $act->jml_berkurang,
-				'harga'							=> number_format($act->harga,2),
-				'jumlahharga'					=> number_format($act->jumlahharga,2),
+				'jml_berkurang'				   	=> $jmlkurang,
+				'harga'							=> $hargakurang,
+				'jumlahharga'					=> $jumlahhargakurang,
+				'satuan'						=> $satuan,
 				'total'		   					=> number_format($act->jml_harga - $act->jumlahharga,2),
 				'keterangan'					=> $act->keterangan,
 				'edit'		=> 1,
@@ -148,7 +161,7 @@ class Lap_mutasibarang extends CI_Controller {
 			);
 		}
 		//die(print_r($data_tabel));
-		$puskes = $this->input->post('puskes'); 
+		$puskes = $this->input->post('namepuskes'); 
 		$ruang = $this->input->post('ruang'); 
 		if(empty($puskes) or $puskes == 'Pilih Puskesmas'){
 			$namapus = 'Semua Data Puskesmas';
@@ -166,8 +179,9 @@ class Lap_mutasibarang extends CI_Controller {
 		$subunit = 'Bidang Kesehatan';
 		$upb = 'Bidang Kesehatan';
 		$tahun = explode("-", $this->input->post('filter_tanggal'));
-		$kib = $this->input->post('filter_tanggal');
-		$data_puskesmas[] = array('nama_puskesmas' => $namapus,'kd_prov' => $kd_prov,'kd_kab' => $kd_kab,'bidang' => $bidang,'unit' => $unit,'subunit' => $subunit,'upb' => $upb,'tahun' =>$tahun[2],'kib' =>$kib);
+		$tahun1 = explode("-", $this->input->post('filter_tanggal1'));
+		$kib = $this->input->post('kib');
+		$data_puskesmas[] = array('nama_puskesmas' => $kd_upb,'kd_prov' => $kd_prov,'kd_kab' => $kd_kab,'bidang' => $bidang,'unit' => $unit,'subunit' => $subunit,'upb' => $upb,'tahun1' =>$tahun1[2].'-'.$tahun1[1].'-'.$tahun1[0],'tahun' =>$tahun[2].'-'.$tahun[1].'-'.$tahun[0],'kib' =>$kib);
 		$dir = getcwd().'/';
 		$template = $dir.'public/files/template/inventory/lap_mutasibarang.xlsx';		
 		$TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8);
