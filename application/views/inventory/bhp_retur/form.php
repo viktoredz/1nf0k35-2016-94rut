@@ -277,9 +277,11 @@
 $(function(){
   cekopname({jenis});
     $('#form-ss').submit(function(){
-      if ($('#last_opname').val() >= $('#tgl_opname').val()) {
-      alert("Maaf! Barang ini sudah di musnahkan atau di retur pada "+$('#last_opname').val()+','+'\n'+"Silahkan ganti ke tanggal berikutnya");
-
+      var tgllast = $('#last_opname').val().split('-');
+      var tglopn = $('#tgl_opname').val().split('-');
+      if ( (tgllast[2]+'-'+tgllast[1]+'-'+tgllast[0]) >=  (tglopn[2]+'-'+tglopn[1]+'-'+tglopn[0])) {
+        alert("Maaf! Barang ini sudah di musnahkan atau di retur pada "+$('#last_opname').val()+','+'\n'+"Silahkan ganti ke tanggal berikutnya");
+      alert($('#last_opname').val());
       }else{
             var data = new FormData();
             data.append('kode_distribusi_', $('#kode_distribusi_').val());

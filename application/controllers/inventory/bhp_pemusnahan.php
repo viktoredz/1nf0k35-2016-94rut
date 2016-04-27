@@ -820,6 +820,7 @@ class Bhp_pemusnahan extends CI_Controller {
 			$this->db->query("set @var =".'"'.$tgl_opname.'"'."");
 		}
 		$this->db->where('month(tgl_kadaluarsa)',date("m",strtotime($tgl_opname)));
+		$this->db->where('YEAR(tgl_kadaluarsa)',date("Y",strtotime($tgl_opname)));
 		$rows_all_activity = $this->bhp_pemusnahan_model->getitem();
 
 
@@ -856,6 +857,7 @@ class Bhp_pemusnahan extends CI_Controller {
 			$this->db->query("set @var =".'"'.$tgl_opname.'"'."");
 		}
 		$this->db->where('month(tgl_kadaluarsa)',date("m",strtotime($tgl_opname)));
+		$this->db->where('YEAR(tgl_kadaluarsa)',date("Y",strtotime($tgl_opname)));
 		$activity = $this->bhp_pemusnahan_model->getitem($this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();
 
