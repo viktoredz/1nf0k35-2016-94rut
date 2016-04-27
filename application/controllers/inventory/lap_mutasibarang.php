@@ -125,7 +125,7 @@ class Lap_mutasibarang extends CI_Controller {
 			if($act->tgl_distribusi == null){
 				$date="00-00-0000";
 			}else{
-				$date = date("m",strtotime($act->tgl_distribusi));
+				$date = date("Y",strtotime($act->tgl_distribusi));
 			}
 			if ($act->jml_berkurang=='0') {
 				$jmlkurang="";
@@ -136,15 +136,31 @@ class Lap_mutasibarang extends CI_Controller {
 				$jmlkurang=$act->jml_berkurang;
 				$hargakurang=number_format($act->harga,2);
 				$jumlahhargakurang=number_format($act->jumlahharga,2);
-				$satuan = $act->satuan;
+				if ($act->satuan!="") {
+					$satuan = $act->satuan;
+				}else{
+					$satuan = "-";
+				}
+
 			}
+			if ($act->satuan!="") {
+				$satuantmb = $act->satuan;
+			}else{
+				$satuantmb ="-";
+			}
+			$s = array();
+			$s[0] = substr($act->id_mst_inv_barang, 0,2);
+			$s[1] = substr($act->id_mst_inv_barang, 2,2);
+			$s[2] = substr($act->id_mst_inv_barang, 4,2);
+			$s[3] = substr($act->id_mst_inv_barang, 6,2);
+			$s[4] = substr($act->id_mst_inv_barang, 8,2);
 			$data_tabel[] = array(
 				'no'   							=> $no++,
 				'uraian'						=> $act->uraian,
 				'spkd'		   					=> $act->Dikes,
-				'id_mst_inv_barang'		   		=> $act->id_mst_inv_barang,
+				'id_mst_inv_barang'		   		=> implode(".", $s),
 				'tahunperolehan'				=> $date,
-				'satuantmb'						=> $act->satuan,
+				'satuantmb'						=> $satuantmb,
 				'hargatmb'						=> $act->harga,
 				'merek'		   					=> $act->merek,
 				'jml_bertambah'		   			=> $act->jml_bertambah,
