@@ -120,7 +120,7 @@
         <div class="row" style="margin: 5px">
           <div class="col-md-5" style="padding: 5px">Catatan</div>
           <div class="col-md-7">
-          <textarea class="form-control" name="catatan_rusak" id="catatan_rusak" placeholder="catatan_rusak / Keperluan"><?php 
+          <textarea class="form-control" name="catatan_rusak" id="catatan_rusak" placeholder="Catatan / Keperluan"><?php 
               if(set_value('catatan_rusak')=="" && isset($catatan)){
                 echo $catatan;
               }else{
@@ -157,7 +157,7 @@ $(function(){
       var tglper1 = $("#tgl_opname_rusak").val().split('-');
       var tglper2 = $("#last_opname_rusak").val().split('-');
       if (tglper2[2]+'-'+tglper2[1]+'-'+tglper2[0] >= tglper1[2]+'-'+tglper1[1]+'-'+tglper1[0]) {
-      alert("Maaf! Kategori barang obat sudah di opname pada "+$("#last_opname_rusak").val()+','+'\n'+"Silahkan ganti ke tanggal berikutnya");
+      alert("Maaf! Data sudah di opname atau dimusnahkan pada "+$("#last_opname_rusak").val()+','+'\n'+"Silahkan ganti ke tanggal berikutnya");
 
       }else{
             var data = new FormData();
@@ -207,7 +207,7 @@ $(function(){
     function cekopname(tgl,bhp){
      
       $.ajax({
-          url : "<?php echo base_url().'inventory/bhp_pemusnahan/lastopname/';?>"+bhp,
+          url : "<?php echo base_url().'inventory/bhp_pemusnahan/lastopnameumum/';?>"+bhp,
           success : function(data) {
              tglop = data.split('-');
               $("#last_opname_rusak").val(tglop[2]+'-'+tglop[1]+'-'+tglop[0]);

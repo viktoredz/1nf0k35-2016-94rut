@@ -116,7 +116,7 @@
         <div class="row" style="margin: 5px">
           <div class="col-md-5" style="padding: 5px">Catatan</div>
           <div class="col-md-7">
-          <textarea class="form-control" name="catatan" id="catatan" placeholder="catatan / Keperluan"><?php 
+          <textarea class="form-control" name="catatan" id="catatan" placeholder="Catatan / Keperluan"><?php 
               if(set_value('catatan')=="" && isset($catatan)){
                 echo $catatan;
               }else{

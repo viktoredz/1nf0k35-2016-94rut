@@ -2212,6 +2212,26 @@ class Bhp_pemusnahan extends CI_Controller {
         
 
 	}
+	function lastopnameumum($bhp='obat')
+	{
+		$kodepus = $this->session->userdata('puskesmas');
+		$this->db->where('code_cl_phc','P'.$kodepus);
+		$this->db->select("max(tgl_opname) as last_opname");
+        $query = $this->db->get('inv_inventaris_habispakai_opname');
+        if ($query->num_rows()>0) {
+        	foreach ($query->result() as $key) {
+        		if ($key->last_opname !=null) {
+        			die($key->last_opname);
+        		}else{
+        			die('0000-00-00');	
+        		}
+        	}
+        }else{
+        	die('0000-00-00');	
+        }
+        
+
+	}
 	function pengeluaran_export_expired($tipe='retur'){
 		$TBS = new clsTinyButStrong;		
 		$TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN);

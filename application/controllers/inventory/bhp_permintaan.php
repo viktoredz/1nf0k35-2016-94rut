@@ -88,7 +88,7 @@ class Bhp_permintaan extends CI_Controller {
     function deskripsi($id){
     	$kodepuskesmas = "P".$this->session->userdata("puskesmas");
 		$this->db->where("id_mst_inv_barang_habispakai","$id");
-		$this->db->select("mst_inv_barang_habispakai.*");
+		$this->db->select("IFNULL((SELECT b.harga FROM inv_inventaris_habispakai_permintaan_item b JOIN inv_inventaris_habispakai_permintaan a ON (a.id_inv_hasbispakai_permintaan = b.id_inv_hasbispakai_permintaan) WHERE b.id_mst_inv_barang_habispakai =mst_inv_barang_habispakai.id_mst_inv_barang_habispakai ORDER BY a.tgl_permintaan DESC LIMIT 1 ),mst_inv_barang_habispakai.harga) AS harga",false);
 		$query= $this->db->get("mst_inv_barang_habispakai")->result();
 		foreach ($query as $q) {
 	          $hargabarang = $q->harga;

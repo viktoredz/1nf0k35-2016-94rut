@@ -178,7 +178,7 @@ class Bhp_kondisi_model extends CI_Model {
                     'tgl_update'                    => date('Y-m-d'),
                     'id_inv_inventaris_habispakai_opname'                        => $opname,
                      );
-                if($simpan=$this->db->update("inv_inventaris_habispakai_kondisi",$dataupdate,$datakey)){
+                if($simpan=$this->db->update("xinv_inventaris_habispakai_kondisi",$dataupdate,$datakey)){
                     return true;
                 }else{
                     return mysql_error();
