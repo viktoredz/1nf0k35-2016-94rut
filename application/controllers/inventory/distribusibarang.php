@@ -181,8 +181,8 @@ class Distribusibarang extends CI_Controller {
 		if($this->form_validation->run()== FALSE){
 			echo validation_errors();
 		}else{
-			$this->distribusibarang_model->update_register();
 			$this->distribusibarang_model->update_kondisi();
+			$this->distribusibarang_model->update_register();
 		}
 		
 	}

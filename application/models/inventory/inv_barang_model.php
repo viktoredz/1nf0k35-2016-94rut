@@ -338,7 +338,7 @@ class Inv_barang_model extends CI_Model {
 
         }else if($pilih_table=='inv_inventaris_barang_b'){
 
-            $sql= "xSELECT inv_inventaris_barang_b.*, inv_inventaris_barang.*,
+            $sql= "SELECT inv_inventaris_barang_b.*, inv_inventaris_barang.*,
                     (SELECT COUNT(DISTINCT(id_inventaris_barang)) AS jml FROM inv_inventaris_distribusi WHERE id_inventaris_barang IN 
                     (SELECT id_inventaris_barang FROM inv_inventaris_barang WHERE barang_kembar_proc = ".'"'.$kembarproc.'"'.")) 
                     AS jumlah
