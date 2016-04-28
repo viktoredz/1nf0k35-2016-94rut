@@ -89,7 +89,7 @@
 				//var arr2 = $.map(arr[8], function(el) { return el });
 				//input data
 
-				$.post( '<?php echo base_url()?>inventory/permohonanbarang/updatestatus', {pilihan_status_pengadaan:arr[6],inv_permohonan_barang:arr[2]},function( data ) {
+				$.post( '<?php echo base_url()?>inventory/permohonanbarang/updatestatus', {pilihan_status_pengadaan:arr[7],inv_permohonan_barang:arr[2]},function( data ) {
 						$("#jqxgrid").jqxGrid('updateBoundData');
 						
 				 });
