@@ -51,6 +51,13 @@ class Keuangan_sts extends CI_Controller {
 		}
 	}
 
+
+	function json_kode_rekening(){
+		$rows = $this->keusts_model->json_kode_rekening();
+
+		echo json_encode($rows);
+	}
+
 	function json_anggaran_versi(){
 		$this->authentication->verify('mst','show');
 
@@ -232,41 +239,41 @@ class Keuangan_sts extends CI_Controller {
 
 	function get_versi(){
 
-	if ($this->input->post('versi')!="null") {
-		if($this->input->is_ajax_request()) {
-			$versi = $this->input->post('versi');
-			$this->session->set_userdata('versi',$this->input->post('versi'));
-			$ver   = $this->keusts_model->get_versi_sts();
-			foreach($ver as $v) :
-				$select = $v->id_mst_anggaran_versi == ($this->session->userdata('versi')!='0' ?  $this->session->userdata('versi') : $this->nama_status())  ? 'selected' : '';
-				echo '<option value="'.$v->id_mst_anggaran_versi.'" '.$select.'>' . $v->nama . '</option>';
-			
-			endforeach;
+		if ($this->input->post('versi')!="null") {
+			if($this->input->is_ajax_request()) {
+				$versi = $this->input->post('versi');
+				$this->session->set_userdata('versi',$this->input->post('versi'));
+				$ver   = $this->keusts_model->get_versi_sts();
+				foreach($ver as $v) :
+					$select = $v->id_mst_anggaran_versi == ($this->session->userdata('versi')!='0' ?  $this->session->userdata('versi') : $this->nama_status())  ? 'selected' : '';
+					echo '<option value="'.$v->id_mst_anggaran_versi.'" '.$select.'>' . $v->nama . '</option>';
+				
+				endforeach;
 
-			return FALSE;
-		}
+				return FALSE;
+			}
 		 show_404();
-	   }
+	   	}
 	}
 
 	function get_versi_sts(){
 
-	if ($this->input->post('versi')!="null") {
-		if($this->input->is_ajax_request()) {
-			$versi = $this->input->post('versi');
-			$this->session->set_userdata('versi',$this->input->post('versi'));
-			$ver     = $this->keusts_model->get_versi_sts();
-			$datases = $this->session->userdata('versi');
-			foreach($ver as $ver) :
-				$select = $ver->id_mst_anggaran_versi ==  $versi ? 'selected' : '';
-				echo '<option value="'.$ver->id_mst_anggaran_versi.'" '.$select.'>' . $ver->nama . '</option>';
-			
-			endforeach;
+		if ($this->input->post('versi')!="null") {
+			if($this->input->is_ajax_request()) {
+				$versi = $this->input->post('versi');
+				$this->session->set_userdata('versi',$this->input->post('versi'));
+				$ver     = $this->keusts_model->get_versi_sts();
+				$datases = $this->session->userdata('versi');
+				foreach($ver as $ver) :
+					$select = $ver->id_mst_anggaran_versi ==  $versi ? 'selected' : '';
+					echo '<option value="'.$ver->id_mst_anggaran_versi.'" '.$select.'>' . $ver->nama . '</option>';
+				
+				endforeach;
 
-			return FALSE;
-		}
+				return FALSE;
+			}
 		 show_404();
-	   }
+	   	}
 	}
 
 	function induk_add(){
@@ -340,7 +347,7 @@ class Keuangan_sts extends CI_Controller {
 		
 		$data['ambildata'] = $this->keusts_model->get_data_type_filter($this->session->userdata('versi'));
 		foreach($data['ambildata'] as $d){
-			$txt = $d["id_mst_anggaran"]." \t ".$d["id_mst_anggaran_parent"]."\t".$d["id_mst_akun"]." \t ".$d["kode_anggaran"]." \t ".$d["uraian"]." \t ".$d["tarif"]." \t ".$d["id_mst_anggaran_versi"]." \t ".$d["kode_rekening"]." \t ".$d["uraian_rekening"]." \n";				
+			$txt = $d["id_mst_anggaran"]." \t ".$d["id_mst_anggaran_parent"]."\t".$d["id_mst_akun"]." \t ".$d["kode_anggaran"]." \t ".$d["uraian"]." \t ".$d["tarif"]." \t ".$d["id_mst_anggaran_versi"]." \t ".$d["kode_rekening"]." - ".$d["uraian_rekening"]." \n";				
 			echo $txt;
 		}
 		
