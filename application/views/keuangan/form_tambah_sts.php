@@ -96,10 +96,12 @@
             url : '<?php echo base_url()."keuangan/sts/add_sts"   ?>',
             data : data ,
             success : function(response){
-              if(response=="OK"){
+              a = response.split(" | ");
+              if(a[0]=="OK"){
                 $("#popup_keuangan_sts").jqxWindow('close');
                 alert("Data STS berhasil disimpan.");
                 $("#jqxgrid").jqxGrid('updatebounddata', 'cells');
+                window.location.href="<?php echo base_url().'keuangan/sts/detail';?>/" + a[1];
               }else{
                 $('#popup_keuangan_sts_content').html(response);
               }

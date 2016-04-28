@@ -9,9 +9,7 @@ class Sts_model extends CI_Model {
 		$this->lang	  = $this->config->item('language');
     }
     
-    function get_data(){
-    	
- 		$this->db->select('*');		
+    function get_data($start=0,$limit=999999,$options=array()){
 		$query = $this->db->get($this->tb);		
 		return $query->result();
     }
@@ -42,7 +40,7 @@ class Sts_model extends CI_Model {
 							  FROM `mst_keu_versi_status`
 							  LEFT JOIN `mst_keu_anggaran` ON `mst_keu_anggaran`.`id_mst_anggaran_versi` = `mst_keu_versi_status`.`id_mst_anggaran_versi` 
 							  WHERE `cl_phc_code` =".'"'.$kodepuskesmas.'"'.")");
-            return 1;
+            return $data['id_sts'];
         }else{
             return mysql_error();
         }
@@ -152,13 +150,28 @@ class Sts_model extends CI_Model {
 		return $query->result_array();
     }
 
-    function get_data_for_export(){	
- 		$this->db->select('*');		
+    function get_data_for_export($table,$id){	
+		$this->db->select('*');		
 		$this->db->join('keu_sts_hasil',"keu_sts_hasil.id_sts = keu_sts.id_sts",'left');
 		$this->db->join('mst_keu_anggaran', "mst_keu_anggaran.id_mst_anggaran=keu_sts_hasil.id_mst_anggaran",'left');	
-		$query = $this->db->get('keu_sts');		
-		return $query->result_array();
+		return $this->db->get_where($table,$id);	
     }
+
+    function get_data_row($id){
+		$data = array();
+        $this->db->where("keu_sts.id_sts",$id);
+		$this->db->select('*');
+		$this->db->join('keu_sts_hasil',"keu_sts_hasil.id_sts = keu_sts.id_sts",'left');
+		$this->db->join('mst_keu_anggaran', "mst_keu_anggaran.id_mst_anggaran=keu_sts_hasil.id_mst_anggaran",'left');	
+
+		$query = $this->db->get('keu_sts');
+		if ($query->num_rows() > 0){
+			$data = $query->row_array();
+		}
+
+		$query->free_result();    
+		return $data;
+	}
 	
 	function get_data_puskesmas(){
 		
@@ -174,6 +187,19 @@ class Sts_model extends CI_Model {
 		$query = $this->db->get('cl_phc');
 		return $query->result_array();
 	}
+
+	function get_data_nama($id){
+        $data = array();
+        $this->db->select('*');
+        $this->db->where('code',$id);
+        $query=$this->db->get('cl_phc');
+        if ($query->num_rows() > 0){
+            $data = $query->row_array();
+        }
+
+        $query->free_result();    
+        return $data;
+    }
 	
 	function cek_duplicate(){
 		$this->db->select('count(id_anggaran) as n');
@@ -245,6 +271,8 @@ class Sts_model extends CI_Model {
 			return "";
 		}	
 	}
+
+
 
 	
 	function reopen(){

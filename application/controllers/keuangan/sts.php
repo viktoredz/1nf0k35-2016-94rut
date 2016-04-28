@@ -68,9 +68,10 @@ class Sts extends CI_Controller {
 		}
 	}
 
-	function json_sts(){
+	function json_sts($id=0){
 		$this->authentication->verify('keuangan','show');
 
+
 		if($_POST) {
 			$fil = $this->input->post('filterscount');
 			$ord = $this->input->post('sortdatafield');
@@ -79,8 +80,9 @@ class Sts extends CI_Controller {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
 
-				if($field == 'tgl') {
+				if($field == 'tgl' ) {
 					$value = date("Y-m-d",strtotime($value));
+
 					$this->db->where($field,$value);
 				}elseif($field != 'year') {
 					$this->db->like($field,$value);
@@ -91,49 +93,7 @@ class Sts extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
-
-			if($this->session->userdata('filter_bulan')!=''){
-			if($this->session->userdata('filter_bulan')=="all"){
-
-			}else{
-				$this->db->where("MONTH(tgl)",$this->session->userdata('filter_bulan'));
-			}
-		}else{
-				$this->db->where("MONTH(tgl)",date("m"));
-		}
-		if($this->session->userdata('filter_tahun')!=''){
-			if($this->session->userdata('filter_tahun')=="all"){
-
-			}else{
-				$this->db->where("YEAR(tgl)",$this->session->userdata('filter_tahun'));
-			}
-		}else{
-			$this->db->where("YEAR(tgl)",date("Y"));
-		}
-
-		$rows_all = $this->sts_model->get_data();
-
-		if($_POST) {
-			$fil = $this->input->post('filterscount');
-			$ord = $this->input->post('sortdatafield');
-
-			for($i=0;$i<$fil;$i++) {
-				$field = $this->input->post('filterdatafield'.$i);
-				$value = $this->input->post('filtervalue'.$i);
-
-				if($field == 'tgl') {
-					$value = date("Y-m-d",strtotime($value));
-					$this->db->where($field,$value);
-				}elseif($field != 'year') {
-					$this->db->like($field,$value);
-				}
-			}
-
-			if(!empty($ord)) {
-				$this->db->order_by($ord, $this->input->post('sortorder'));
-			}
-		}
-
+	
 		if($this->session->userdata('filter_bulan')!=''){
 			if($this->session->userdata('filter_bulan')=="all"){
 
@@ -152,11 +112,54 @@ class Sts extends CI_Controller {
 		}else{
 			$this->db->where("YEAR(tgl)",date("Y"));
 		}
+	
+		$rows_all = $this->sts_model->get_data();
 
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl' ) {
+					$value = date("Y-m-d",strtotime($value));
+
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		
+		if($this->session->userdata('filter_bulan')!=''){
+			if($this->session->userdata('filter_bulan')=="all"){
+
+			}else{
+				$this->db->where("MONTH(tgl)",$this->session->userdata('filter_bulan'));
+			}
+		}else{
+			$this->db->where("MONTH(tgl)",date("m"));
+		}
+		if($this->session->userdata('filter_tahun')!=''){
+			if($this->session->userdata('filter_tahun')=="all"){
+
+			}else{
+				$this->db->where("YEAR(tgl)",$this->session->userdata('filter_tahun'));
+			}
+		}else{
+			$this->db->where("YEAR(tgl)",date("Y"));
+		}
+		
 		$rows = $this->sts_model->get_data($this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();
-		
-		foreach($rows as $act) {
+
+			foreach($rows as $act) {
 	 		$data[] = array(
 				'id_sts'   => $act->id_sts,
 				'tgl'	   => date("d-m-Y",strtotime($act->tgl)),
@@ -202,8 +205,8 @@ class Sts extends CI_Controller {
 		if($this->form_validation->run()== FALSE){
 			die($this->parser->parse("keuangan/form_tambah_sts",$data));
 		}elseif($this->cek_tgl_sts($this->input->post('tgl'))){
-				$this->sts_model->add_sts();
-			die("OK");
+				$id=$this->sts_model->add_sts();
+				die("OK | $id");
 		}else{
 			$this->session->set_flashdata('alert_form', 'Tanggal harus lebih dari tanggal terakhir input dan tidak lebih dari tanggal hari ini.');
 			redirect(base_url()."keuangan/sts/add_sts");
@@ -265,10 +268,6 @@ class Sts extends CI_Controller {
 		$this->session->set_userdata('filter_tahun','');
 		$data['bulan']			= array('01'=>'Januari', '02'=>'Februari', '03'=>'Maret', '04'=>'April', '05'=>'Mei', '06'=>'Juni', '07'=>'Juli', '08'=>'Agustus', '09'=>'September', '10'=>'Oktober', '11'=>'November', '12'=>'Desember');
 
-		// if(!empty($this->session->userdata('puskes')) and $this->session->userdata('puskes')!= '0'){
-		// 	$data['nama_puskes'] = $this->sts_model->get_puskesmas_name($this->session->userdata('puskes'));
-		// }
-			
 		$data['content'] = $this->parser->parse("keuangan/main_sts",$data,true);						
 		
 		$this->template->show($data,"home");
@@ -374,10 +373,12 @@ class Sts extends CI_Controller {
 	}
 
 	function detail_sts_export(){
+		$this->authentication->verify('keuangan','show');
+
+		$id 	= $this->input->post('id');
 
 		$TBS = new clsTinyButStrong;		
 		$TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN);
-		$this->authentication->verify('keuangan','show');
 
 		if($_POST) {
 			$fil = $this->input->post('filterscount');
@@ -399,72 +400,39 @@ class Sts extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
+		
+		$data = array();
 
-		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
-			$this->db->where('code_pl_phc','P'.$this->session->userdata('puskesmas'));
-		}
-		$rows_all = $this->sts_model->get_data_for_export();
-
-		if($_POST) {
-			$fil = $this->input->post('filterscount');
-			$ord = $this->input->post('sortdatafield');
-
-			for($i=0;$i<$fil;$i++) {
-				$field = $this->input->post('filterdatafield'.$i);
-				$value = $this->input->post('filtervalue'.$i);
-
-				if($field == 'tgl') {
-					$value = date("Y-m-d",strtotime($value));
-					$this->db->where($field,$value);
-				}elseif($field != 'year') {
-					$this->db->like($field,$value);
-				}
-			}
-
-			if(!empty($ord)) {
-				$this->db->order_by($ord, $this->input->post('sortorder'));
-			}
-		}
-		if ($this->session->userdata('puskesmas')!='' or empty($this->session->userdata('puskesmas'))) {
-			$this->db->where('code_pl_phc','P'.$this->session->userdata('puskesmas'));
-		}
-		$rows = $this->sts_model->get_data_for_export();
-
-		$data_tabel = array();
-		$no=1;
-		foreach($rows as $act) {
-			$data_tabel[] = array(
-				'no' 							=> $no++,
-				'id_sts'  						=> $act->id_sts,
-				'tgl'	   						=> $act->tgl,
-				'tarif'							=> $act->tarif,
+		$activity = $this->sts_model->get_data_for_export('keu_sts', array('keu_sts.id_sts'=>$id))->result();
+		foreach($activity as $act) {
+			$data[] = array(
+				'kode_anggaran'	   		        => $act->kode_anggaran,
+				'uraian'   						=> $act->uraian,
 				'vol'							=> $act->vol,
-				'jumlah'						=> $act->jumlah,
-				'kode_anggaran'					=> $act->kode_anggaran,
-				'uraian'						=> $act->uraian,
-				'detail'						=> 1,
-				'edit'							=> 1,
-				'delete'						=> ($act->status_permintaan=='diterima') ? 0 : 1
+				'tarif'							=> $act->tarif,
+				'jumlah'						=> $act->jumlah,	
 			);
 		}
-		$kode_sess=$this->session->userdata('puskesmas');
-		$kd_prov = $this->inv_barang_model->get_nama('value','cl_province','code',substr($kode_sess, 0,2));
-		$kd_kab  = $this->inv_barang_model->get_nama('value','cl_district','code',substr($kode_sess, 0,4));
-		// $kd_kec  = 'KEC. '.$this->inv_barang_model->get_nama('nama','cl_kec','code',substr($kode_sess, 0,7));
-		$namapus  = $this->inv_barang_model->get_nama('value','cl_phc','code','P'.$kode_sess);
-		$tahun  = date("Y");
 
-		$data_puskesmas[] = array('nama_puskesmas' => $namapus,'kd_prov' => $kd_prov,'kd_kab' => $kd_kab,'tahun' => $tahun);
+		$data_puskesmas						= $this->sts_model->get_data_row($id);
+		$nama_puskesmas						= $this->sts_model->get_data_nama($data_puskesmas['code_pl_phc']);
+		$data_puskesmas['puskesmas']		= $nama_puskesmas['value'];
+		$data_puskesmas['tgl']				= date("d-m-Y",strtotime($data_puskesmas['tgl']));
+		$data_puskesmas['nomor']			= $data_puskesmas['nomor'];
+		$data_puskesmas['pimpinan']			= $data_puskesmas['ttd_pimpinan_nama'];
+		$data_puskesmas['penerima']			= $data_puskesmas['ttd_penerima_nama'];
+		$data_puskesmas['penyetor']			= $data_puskesmas['ttd_penyetor_nama'];
+		$data_puskesmas['total']			= $data_puskesmas['total'];
+
+		$TBS->ResetVarRef(false);
+		$TBS->VarRef =  &$data_puskesmas;	
 		$dir = getcwd().'/';
-		$template = $dir.'public/files/template/keuangan_sts_detail.xlsx';		
-		
+	    $template = $dir.'public/files/template/keuangan_sts_detail.xlsx';
 		$TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8);
-
-		// Merge data in the first sheet
-		$TBS->MergeBlock('a', $data_tabel);
-		$TBS->MergeBlock('b', $data_puskesmas);
 		
-		$code = uniqid();
+		$TBS->MergeBlock('a', $data);
+		
+		$code = date('Y-m-d-H-i-s');
 		$output_file_name = 'public/files/hasil/hasil_export_keuangan_sts_detail'.$code.'.xlsx';
 		$output = $dir.$output_file_name;
 		$TBS->Show(OPENTBS_FILE, $output); // Also merges all [onshow] automatic fields.
