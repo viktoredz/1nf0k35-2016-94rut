@@ -35,7 +35,6 @@
 	     	</div>
 		  </div>
 		</div>
-		</div>
         <div class="box-body">
 		    <div class="div-grid">
 		        <div id="jqxgrid"></div>
