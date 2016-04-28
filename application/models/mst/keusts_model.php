@@ -73,6 +73,14 @@ class Keusts_model extends CI_Model {
         return $query->result_array();
     }
 
+    function json_puskesmas(){
+        $this->db->select("cl_phc.code,cl_phc.value,mst_keu_anggaran_versi.nama",false);
+        $this->db->join("mst_keu_versi_status","mst_keu_versi_status.cl_phc_code=cl_phc.code");
+        $this->db->join("mst_keu_anggaran_versi","mst_keu_anggaran_versi.id_mst_anggaran_versi=mst_keu_versi_status.id_mst_anggaran_versi");
+        $query = $this->db->get('cl_phc');     
+        return $query->result_array();
+    }
+
     function json_kode_rekening(){
         $this->db->select("id_mst_akun,kode,uraian, CONCAT(kode,' - ',uraian) as rekening",false);
         $this->db->where('aktif', 1);

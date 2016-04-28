@@ -43,22 +43,11 @@
       datatype: "json",
       type  : "POST",
       datafields: [
-      { name: 'id_pegawai', type: 'string'},
-      { name: 'nip_lama', type: 'string'},
-      { name: 'nip_baru', type: 'string'},
-      { name: 'nik', type: 'string'},
-      { name: 'nama', type: 'string'},
-      { name: 'jenis_kelamin', type: 'string'},
-      { name: 'tgl_lhr', type: 'date'},
-      { name: 'tmp_lhr', type: 'string'},
-      { name: 'kode_mst_agama', type: 'string'},
-      { name: 'kode_mst_nikah', type: 'string'},
-      { name: 'usia', type: 'string'},
-      { name: 'goldar', type: 'string'},
-      { name: 'edit', type: 'number'},
-      { name: 'delete', type: 'number'}
+      { name: 'code', type: 'string'},
+      { name: 'value', type: 'string'},
+      { name: 'nama', type: 'string'}
         ],
-    url: "<?php echo site_url('kepegawaian/drh/json'); ?>",
+    url: "<?php echo site_url('mst/keuangan_sts/json_puskesmas'); ?>",
     cache: false,
     updaterow: function (rowid, rowdata, commit) {
       },
@@ -97,10 +86,9 @@
         return obj.data;    
       },
       columns: [
-      
-        { text: 'Kode Puskesmas', datafield: 'nip_baru', columntype: 'textbox', filtertype: 'textbox', align: 'center' , cellsalign: 'center', width: '20%'},
-        { text: 'Nama Puskesmas', datafield: 'nama', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '40%' },
-        { text: 'Versi Tarif STS', datafield: 'jenis_kelamin', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '40%' }
+        { text: 'Kode Puskesmas', datafield: 'code', columntype: 'textbox', filtertype: 'textbox', align: 'center' , cellsalign: 'center', width: '20%'},
+        { text: 'Nama Puskesmas', datafield: 'value', columntype: 'textbox', filtertype: 'textbox', align: 'center', width: '40%' },
+        { text: 'Versi STS Aktif', datafield: 'nama', columntype: 'textbox', filtertype: 'textbox', align: 'center', width: '40%' }
           ]
     });
 
