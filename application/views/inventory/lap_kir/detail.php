@@ -72,7 +72,7 @@
 		
 		$('#code_cl_phc').change(function(){
 	      	var code_cl_phc = $(this).val();
-	      	var id_mst_inv_ruangan = "2";
+	      	var id_mst_inv_ruangan = "999999";
 	      	$.ajax({
 		        url : '<?php echo site_url('inventory/inv_ruangan/get_ruangan') ?>',
 		        type : 'POST',
@@ -90,41 +90,46 @@
 	});
 	
 	function doExport(){
-		var code_cl_phc 		= $("#code_cl_phc").val();
-		var id_mst_inv_ruangan 	= $("#code_ruangan").val();
-		var tanggal 			= $("#inputtgl").val();
-		if ($("#filter_group:checked").val()==1){
-			group = '1';
+		if ($("#code_ruangan").val()=='999999'){
+			alert("Silahkan pilih ruangan terlebih dahulu !");
 		}else{
-			group = '0';
-		}
-		
-		var t = tanggal.split('-');
-		var tgl = t[2]+'-'+t[1]+'-'+t[0];
-		$.ajax({
-		        url : '<?php echo site_url('inventory/lap_kir/set_detail_filter') ?>',
-		        type : 'POST',
-		        data : 'filter_code_cl_phc=' + code_cl_phc+'&filter_id_ruang=' + id_mst_inv_ruangan +'&filter_tanggal='+tgl+'&filter_group='+group,
-		        success : function(data) {
-					if(data != ""){
-						var d = data.split('_data_');
-						$("#view_puskesmas").html(d[0]);
-						$("#view_ruang").html(d[1]);
-						$("#view_keterangan").html(d[2]);
-					}
-
-					$.ajax({
-						url : '<?php echo site_url('inventory/inv_ruangan/export_detail') ?>',
-						type : 'POST',
-						data : 'filter_code_cl_phc=' + code_cl_phc+'&filter_id_ruang=' + id_mst_inv_ruangan +'&filter_tanggal='+tgl+'&filter_group='+group,
-						success : function(data) {
-							if(data != ""){
-								location.href = data;
-							}
+			var code_cl_phc 		= $("#code_cl_phc").val();
+			var id_mst_inv_ruangan 	= $("#code_ruangan").val();
+			var tanggal 			= $("#inputtgl").val();
+			if ($("#filter_group:checked").val()==1){
+				group = '1';
+			}else{
+				group = '0';
+			}
+			
+			var t = tanggal.split('-');
+			var tgl = t[2]+'-'+t[1]+'-'+t[0];
+			$.ajax({
+			        url : '<?php echo site_url('inventory/lap_kir/set_detail_filter') ?>',
+			        type : 'POST',
+			        data : 'filter_code_cl_phc=' + code_cl_phc+'&filter_id_ruang=' + id_mst_inv_ruangan +'&filter_tanggal='+tgl+'&filter_group='+group,
+			        success : function(data) {
+						if(data != ""){
+							var d = data.split('_data_');
+							$("#view_puskesmas").html(d[0]);
+							$("#view_ruang").html(d[1]);
+							$("#view_keterangan").html(d[2]);
 						}
-					});		          	
-        		}
-	    	});
+
+						$.ajax({
+							url : '<?php echo site_url('inventory/lap_kir/export_detail') ?>',
+							type : 'POST',
+							data : 'filter_code_cl_phc=' + code_cl_phc+'&filter_id_ruang=' + id_mst_inv_ruangan +'&filter_tanggal='+tgl+'&filter_group='+group,
+							success : function(data) {
+								if(data != ""){
+									 location.href = data;
+									// alert(data);
+								}
+							}
+						});		          	
+	        		}
+		    	});
+		}	
 	}
 	
 </script>

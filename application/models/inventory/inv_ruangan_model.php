@@ -16,7 +16,7 @@ class inv_ruangan_model extends CI_Model {
 		$q = $this->db->get('mst_inv_pilihan');
 		return $q;
 	}
-
+	
 	function get_data_detail($start=0, $limit=9999999, $options=array()){
 		$txt = "SELECT * FROM(
 			SELECT * FROM
@@ -112,7 +112,7 @@ class inv_ruangan_model extends CI_Model {
 					IFNULL(
 						b.pilihan_keadaan_barang,
 						a.pilihan_keadaan_barang
-					) AS kondisi
+					) AS kondisi,'bahan'
 				FROM
 					inv_inventaris_barang a
 				LEFT JOIN (
@@ -155,29 +155,55 @@ class inv_ruangan_model extends CI_Model {
 		return $rows;
 	}
 
-
 	function get_detail_inventaris($id){
-		$this->db->select('inv_inventaris_barang_b.*,bahan.value as bahan');
+		/*$this->db->select('inv_inventaris_barang_b.*,bahan.value as bahan');
 		$this->db->join('mst_inv_pilihan as bahan','bahan.code=inv_inventaris_barang_b.pilihan_bahan AND bahan.tipe="bahan"','left');
 		$this->db->where('id_inventaris_barang',$id);
 		$q = $this->db->get('inv_inventaris_barang_b');
 		$datab = $q->row_array();
 
 		$this->db->where('id_inventaris_barang',$id);
-		$q = $this->db->get('inv_inventaris_barang_e');
-		$datae = $q->row_array();
+		$q = $this->db->get('inv_inventaris_barang_e');*/
+		$this->db->where('a.id_inventaris_barang',$id);
+		$this->db->select("IF((LEFT(a.id_mst_inv_barang, 2) = '02'), bahan_b.value, 
+IF((LEFT(a.id_mst_inv_barang, 2) = '03'), bahan_c.value, 
+IF((LEFT(a.id_mst_inv_barang, 2) = '05'), bahan_e.value, 
+IF((LEFT(a.id_mst_inv_barang, 2) = '06'), bahan_f.value, '-')))) AS bahan,
+IF((LEFT(a.id_mst_inv_barang, 2) = '02'), inv_inventaris_barang_b.merek_type, '-') AS merek_type,
+IF((LEFT(a.id_mst_inv_barang, 2) = '01'), inv_inventaris_barang_a.luas, 
+IF((LEFT(a.id_mst_inv_barang, 2) = '02'), inv_inventaris_barang_b.ukuran_barang, 
+IF((LEFT(a.id_mst_inv_barang, 2) = '03'), inv_inventaris_barang_c.luas_lantai, 
+IF((LEFT(a.id_mst_inv_barang, 2) = '04'), inv_inventaris_barang_d.luas, 
+IF((LEFT(a.id_mst_inv_barang, 2) = '05'), inv_inventaris_barang_e.flora_fauna_ukuran, 
+IF((LEFT(a.id_mst_inv_barang, 2) = '06'), inv_inventaris_barang_f.luas, '-')))))) AS ukuran_barang,
+IF((LEFT(a.id_mst_inv_barang, 2) = '01'), inv_inventaris_barang_a.status_sertifikat_nomor, 
+IF((LEFT(a.id_mst_inv_barang, 2) = '02'), IFNULL(inv_inventaris_barang_b.nomor_bpkb, inv_inventaris_barang_b.no_polisi), 
+IF((LEFT(a.id_mst_inv_barang, 2) = '03'), IFNULL(inv_inventaris_barang_c.dokumen_nomor, inv_inventaris_barang_c.nomor_kode_tanah), 
+IF((LEFT(a.id_mst_inv_barang, 2) = '04'), IFNULL(inv_inventaris_barang_d.dokumen_nomor, inv_inventaris_barang_d.nomor_kode_tanah), 
+IF((LEFT(a.id_mst_inv_barang, 2) = '06'),inv_inventaris_barang_f.dokumen_nomor, '-'))))) AS identitas_barang",false);
+		$this->db->join('inv_inventaris_barang_a',"inv_inventaris_barang_a.id_inventaris_barang = a.id_inventaris_barang",'left');
+		$this->db->join('inv_inventaris_barang_b',"inv_inventaris_barang_b.id_inventaris_barang = a.id_inventaris_barang",'left');
+		$this->db->join('inv_inventaris_barang_c',"inv_inventaris_barang_c.id_inventaris_barang = a.id_inventaris_barang",'left');
+		$this->db->join('inv_inventaris_barang_d',"inv_inventaris_barang_d.id_inventaris_barang = a.id_inventaris_barang",'left');
+		$this->db->join('inv_inventaris_barang_e',"inv_inventaris_barang_e.id_inventaris_barang = a.id_inventaris_barang",'left');
+		$this->db->join('inv_inventaris_barang_f',"inv_inventaris_barang_f.id_inventaris_barang = a.id_inventaris_barang",'left');
+		$this->db->join('mst_inv_pilihan bahan_b',"inv_inventaris_barang_b.pilihan_bahan = bahan_b.code AND bahan_b.tipe = 'bahan'",'left');
+		$this->db->join('mst_inv_pilihan bahan_c',"inv_inventaris_barang_c.pilihan_kons_beton = bahan_c.code AND bahan_c.tipe = 'kons_beton'",'left');
+		$this->db->join('mst_inv_pilihan bahan_e',"inv_inventaris_barang_e.pilihan_budaya_bahan = bahan_e.code AND bahan_e.tipe = 'bahan' ",'left');
+		$this->db->join('mst_inv_pilihan bahan_f',"inv_inventaris_barang_f.pilihan_konstruksi_beton = bahan_f.code AND bahan_f.tipe = 'kons_beton'",'left');
+		$q= $this->db->get('inv_inventaris_barang a');
+		$data = $q->row_array();
 
-		$data = array_merge($datab,$datae);
+		//$data = array_merge($datab,$datae);
 
 		if(!empty($data)){
 			return $data;
 		}else{
 			$data = array(
-				'merek_type'		=>'',
-				'identitas_barang'	=>'',
-				'ukuran_barang'		=>'',
-				'merek_type'		=>'',
-				'merek_type'		=>'',
+				'merek_type'		=>'-',
+				'identitas_barang'	=>'-',
+				'ukuran_barang'		=>'-',
+				'merek_type'		=>'-',
 				);
 			return $data;
 		}

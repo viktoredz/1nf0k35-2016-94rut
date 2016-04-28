@@ -243,6 +243,7 @@
 						success : function(data) {
 							if(data != ""){
 								location.href = data;
+								// alert(data);
 							}
 						}
 					});		          	

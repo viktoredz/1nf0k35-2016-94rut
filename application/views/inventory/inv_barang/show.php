@@ -2029,6 +2029,7 @@
 			
 					$.post("<?php echo base_url()?>inventory/export/permohonan_export_inventori",post,function(response	){
 						window.location.href=response;
+						// alert(response);
 					});
 		<?php	}else  if(isset($filter_golongan_invetaris)){
 			    		if($filter_golongan_invetaris=='0100000000'){ ?> 

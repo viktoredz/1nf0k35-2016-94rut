@@ -36,8 +36,8 @@ class Lap_kir_model extends CI_Model {
 				) z
 			INNER JOIN (
 				SELECT
-					id_inventaris_barang,
-					id_mst_inv_barang,
+					a.id_inventaris_barang,
+					a.id_mst_inv_barang,
 					nama_barang,
 					tanggal_pengadaan,
 					year(tanggal_diterima) as tahun,
@@ -47,7 +47,23 @@ class Lap_kir_model extends CI_Model {
 					IFNULL(
 						b.pilihan_keadaan_barang,
 						a.pilihan_keadaan_barang
-					) AS kondisi
+					) AS kondisi,
+			        IF((LEFT(a.id_mst_inv_barang, 2) = '02'), bahan_b.value, 
+			        IF((LEFT(a.id_mst_inv_barang, 2) = '03'), bahan_c.value, 
+			        IF((LEFT(a.id_mst_inv_barang, 2) = '05'), bahan_e.value, 
+					IF((LEFT(a.id_mst_inv_barang, 2) = '06'), bahan_f.value, '-')))) AS bahan,
+					IF((LEFT(a.id_mst_inv_barang, 2) = '02'), inv_inventaris_barang_b.merek_type, '-') AS merek_type,
+					IF((LEFT(a.id_mst_inv_barang, 2) = '01'), inv_inventaris_barang_a.luas, 
+					IF((LEFT(a.id_mst_inv_barang, 2) = '02'), inv_inventaris_barang_b.ukuran_barang, 
+					IF((LEFT(a.id_mst_inv_barang, 2) = '03'), inv_inventaris_barang_c.luas_lantai, 
+					IF((LEFT(a.id_mst_inv_barang, 2) = '04'), inv_inventaris_barang_d.luas, 
+					IF((LEFT(a.id_mst_inv_barang, 2) = '05'), inv_inventaris_barang_e.flora_fauna_ukuran, 
+					IF((LEFT(a.id_mst_inv_barang, 2) = '06'), inv_inventaris_barang_f.luas, '-')))))) AS ukuran_barang,
+					IF((LEFT(a.id_mst_inv_barang, 2) = '01'), inv_inventaris_barang_a.status_sertifikat_nomor, 
+					IF((LEFT(a.id_mst_inv_barang, 2) = '02'), IFNULL(inv_inventaris_barang_b.nomor_bpkb, inv_inventaris_barang_b.no_polisi), 
+					IF((LEFT(a.id_mst_inv_barang, 2) = '03'), IFNULL(inv_inventaris_barang_c.dokumen_nomor, inv_inventaris_barang_c.nomor_kode_tanah), 
+					IF((LEFT(a.id_mst_inv_barang, 2) = '04'), IFNULL(inv_inventaris_barang_d.dokumen_nomor, inv_inventaris_barang_d.nomor_kode_tanah), 
+					IF((LEFT(a.id_mst_inv_barang, 2) = '06'),inv_inventaris_barang_f.dokumen_nomor, '-'))))) AS identitas_barang
 				FROM
 					inv_inventaris_barang a
 				LEFT JOIN (
@@ -55,7 +71,17 @@ class Lap_kir_model extends CI_Model {
 					WHERE tanggal <= ?
 					ORDER BY tanggal DESC,id_keadaan_barang DESC
 				) b USING (id_inventaris_barang)	
-				GROUP BY id_inventaris_barang
+				LEFT JOIN inv_inventaris_barang_a ON(inv_inventaris_barang_a.id_inventaris_barang = a.id_inventaris_barang)
+				LEFT JOIN inv_inventaris_barang_b ON(inv_inventaris_barang_b.id_inventaris_barang = a.id_inventaris_barang)
+				LEFT JOIN inv_inventaris_barang_c ON(inv_inventaris_barang_c.id_inventaris_barang = a.id_inventaris_barang)
+				LEFT JOIN inv_inventaris_barang_d ON(inv_inventaris_barang_d.id_inventaris_barang = a.id_inventaris_barang)
+				LEFT JOIN inv_inventaris_barang_e ON(inv_inventaris_barang_e.id_inventaris_barang = a.id_inventaris_barang)
+				LEFT JOIN inv_inventaris_barang_f ON(inv_inventaris_barang_f.id_inventaris_barang = a.id_inventaris_barang)
+				LEFT JOIN mst_inv_pilihan bahan_b ON(inv_inventaris_barang_b.pilihan_bahan = bahan_b.code) AND(bahan_b.tipe = 'bahan') 
+				LEFT JOIN mst_inv_pilihan bahan_c ON(inv_inventaris_barang_c.pilihan_kons_beton = bahan_c.code) AND(bahan_c.tipe = 'kons_beton') 
+				LEFT JOIN mst_inv_pilihan bahan_e ON(inv_inventaris_barang_e.pilihan_budaya_bahan = bahan_e.code) AND(bahan_e.tipe = 'bahan') 
+				LEFT JOIN mst_inv_pilihan bahan_f ON(inv_inventaris_barang_f.pilihan_konstruksi_beton = bahan_f.code) AND(bahan_f.tipe = 'kons_beton') 
+				GROUP BY a.id_inventaris_barang
 				ORDER BY tanggal DESC
 			) x USING (id_inventaris_barang)
 			WHERE
@@ -76,8 +102,8 @@ class Lap_kir_model extends CI_Model {
 			foreach($kondisi as $k){
 				$row[$k->id] = ($real_kondisi==$k->id ? 1:0);
 			}
-			$detail = $this->get_detail_inventaris($row['id_inventaris_barang']);
-			$row = array_merge($row,$detail);
+			//$detail = $this->get_detail_inventaris($row['id_inventaris_barang']);
+			//$row = array_merge($row,$detail);
 			$row['jml'] = 1;
 			$rows[] = $row;
 		}
@@ -102,8 +128,8 @@ class Lap_kir_model extends CI_Model {
 				) z
 			INNER JOIN (
 				SELECT
-					id_inventaris_barang,
-					id_mst_inv_barang,
+					a.id_inventaris_barang,
+					a.id_mst_inv_barang,
 					nama_barang,
 					tanggal_pengadaan,
 					year(tanggal_diterima) as tahun,
@@ -112,7 +138,24 @@ class Lap_kir_model extends CI_Model {
 					IFNULL(
 						b.pilihan_keadaan_barang,
 						a.pilihan_keadaan_barang
-					) AS kondisi
+					) AS kondisi,
+IF((LEFT(a.id_mst_inv_barang, 2) = '02'), bahan_b.value, 
+IF((LEFT(a.id_mst_inv_barang, 2) = '03'), bahan_c.value, 
+IF((LEFT(a.id_mst_inv_barang, 2) = '05'), bahan_e.value, 
+IF((LEFT(a.id_mst_inv_barang, 2) = '06'), bahan_f.value, '-')))) AS bahan,
+IF((LEFT(a.id_mst_inv_barang, 2) = '02'), inv_inventaris_barang_b.merek_type, '-') AS merek_type,
+IF((LEFT(a.id_mst_inv_barang, 2) = '01'), inv_inventaris_barang_a.luas, 
+IF((LEFT(a.id_mst_inv_barang, 2) = '02'), inv_inventaris_barang_b.ukuran_barang, 
+IF((LEFT(a.id_mst_inv_barang, 2) = '03'), inv_inventaris_barang_c.luas_lantai, 
+IF((LEFT(a.id_mst_inv_barang, 2) = '04'), inv_inventaris_barang_d.luas, 
+IF((LEFT(a.id_mst_inv_barang, 2) = '05'), inv_inventaris_barang_e.flora_fauna_ukuran, 
+IF((LEFT(a.id_mst_inv_barang, 2) = '06'), inv_inventaris_barang_f.luas, '-')))))) AS ukuran_barang,
+IF((LEFT(a.id_mst_inv_barang, 2) = '01'), inv_inventaris_barang_a.status_sertifikat_nomor, 
+IF((LEFT(a.id_mst_inv_barang, 2) = '02'), IFNULL(inv_inventaris_barang_b.nomor_bpkb, inv_inventaris_barang_b.no_polisi), 
+IF((LEFT(a.id_mst_inv_barang, 2) = '03'), IFNULL(inv_inventaris_barang_c.dokumen_nomor, inv_inventaris_barang_c.nomor_kode_tanah), 
+IF((LEFT(a.id_mst_inv_barang, 2) = '04'), IFNULL(inv_inventaris_barang_d.dokumen_nomor, inv_inventaris_barang_d.nomor_kode_tanah), 
+IF((LEFT(a.id_mst_inv_barang, 2) = '06'),inv_inventaris_barang_f.dokumen_nomor, '-'))))) AS identitas_barang
+
 				FROM
 					inv_inventaris_barang a
 				LEFT JOIN (
@@ -120,7 +163,17 @@ class Lap_kir_model extends CI_Model {
 					WHERE tanggal <= ?
 					ORDER BY tanggal DESC,id_keadaan_barang DESC
 				) b USING (id_inventaris_barang)	
-				GROUP BY id_inventaris_barang
+LEFT JOIN inv_inventaris_barang_a ON(inv_inventaris_barang_a.id_inventaris_barang = a.id_inventaris_barang)
+LEFT JOIN inv_inventaris_barang_b ON(inv_inventaris_barang_b.id_inventaris_barang = a.id_inventaris_barang)
+LEFT JOIN inv_inventaris_barang_c ON(inv_inventaris_barang_c.id_inventaris_barang = a.id_inventaris_barang)
+LEFT JOIN inv_inventaris_barang_d ON(inv_inventaris_barang_d.id_inventaris_barang = a.id_inventaris_barang)
+LEFT JOIN inv_inventaris_barang_e ON(inv_inventaris_barang_e.id_inventaris_barang = a.id_inventaris_barang)
+LEFT JOIN inv_inventaris_barang_f ON(inv_inventaris_barang_f.id_inventaris_barang = a.id_inventaris_barang)
+LEFT JOIN mst_inv_pilihan bahan_b ON(inv_inventaris_barang_b.pilihan_bahan = bahan_b.code) AND(bahan_b.tipe = 'bahan') 
+LEFT JOIN mst_inv_pilihan bahan_c ON(inv_inventaris_barang_c.pilihan_kons_beton = bahan_c.code) AND(bahan_c.tipe = 'kons_beton') 
+LEFT JOIN mst_inv_pilihan bahan_e ON(inv_inventaris_barang_e.pilihan_budaya_bahan = bahan_e.code) AND(bahan_e.tipe = 'bahan') 
+LEFT JOIN mst_inv_pilihan bahan_f ON(inv_inventaris_barang_f.pilihan_konstruksi_beton = bahan_f.code) AND(bahan_f.tipe = 'kons_beton')
+				GROUP BY a.id_inventaris_barang
 				ORDER BY tanggal DESC
 			) x USING (id_inventaris_barang)
 			WHERE
@@ -146,8 +199,8 @@ class Lap_kir_model extends CI_Model {
 				$jml += $n;
 			}
 
-			$detail = $this->get_detail_inventaris($row['id_inventaris_barang']);
-			$row = array_merge($row,$detail);
+			//$detail = $this->get_detail_inventaris($row['id_inventaris_barang']);
+			//$row = array_merge($row,$detail);
 			$row['jml'] = $jml;
 			$rows[] = $row;
 		}
