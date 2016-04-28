@@ -1,11 +1,3 @@
-<?php if($this->session->flashdata('alert')!=""){ ?>
-<div class="alert alert-success alert-dismissable">
-      <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-      <h4>  <i class="icon fa fa-check"></i> Information!</h4>
-      <?php echo $this->session->flashdata('alert')?>
-</div>
-<?php } ?>
-
 <section class="content">
 <div class="box box-primary">
     <div class="box-footer" style="text-align: right">
@@ -84,7 +76,7 @@
                   },
           { text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '8%', cellsrenderer: function (row) {
               var dataRecord = $("#jqxgridVersi").jqxGrid('getrowdata', row);
-              if(dataRecord.delete==1){
+              if(dataRecord.delete==1 && dataRecord.status!="Aktif"){
               return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del(\""+dataRecord.id_mst_anggaran_versi+"\");'></a></div>";
             }else{
               return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
@@ -99,13 +91,8 @@
       });
  
       function view(versi){
-         $.ajax({
-          url: "<?php echo base_url().'mst/keuangan_sts/versi_detail';?>/" +versi,
-            success:function(data){
-            $("#popup_keuangan_versi_sts").jqxWindow('close');
-             $("select[name='versi']").html(data);
-            }
-         });
+        $("#popup_keuangan_versi_sts").jqxWindow('close');
+        $("select[name='versi']").val(versi).change();
       }
 
       function del(id){

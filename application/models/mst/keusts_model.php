@@ -73,14 +73,6 @@ class Keusts_model extends CI_Model {
         return $query->result_array();
     }
 
-    function get_akun_sts(){
-        $this->db->select('*');
-        $this->db->from('mst_keu_akun');
-        $this->db->order_by('uraian','asc');
-        $query = $this->db->get();
-        return $query->result();
-    }
-
     function json_kode_rekening(){
         $this->db->select("id_mst_akun,kode,uraian, CONCAT(kode,' - ',uraian) as rekening",false);
         $this->db->where('aktif', 1);
@@ -141,6 +133,34 @@ class Keusts_model extends CI_Model {
     function get_data_kode_rekening()
     {
         return array();
+    }
+
+    function get_akun_sts(){
+        $this->db->select('*');
+        $this->db->from('mst_keu_akun');
+        $this->db->order_by('kode','asc');
+        $this->db->where('kode <> ""');
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    function get_setting(){
+        $data = array();
+        $query = $this->db->get('keu_setting');     
+        $setting = $query->result_array();
+        foreach ($setting as $sets) {
+            $data[$sets['key']] = $sets['value'];
+        }
+        return $data;
+    }
+
+    function save_setting($key,$value){
+        $data = array(
+            'value'   =>  $value
+        );
+
+        $this->db->where('key',$key);
+        return $this->db->update('keu_setting',$data);     
     }
 
     function get_data_kode_rek()

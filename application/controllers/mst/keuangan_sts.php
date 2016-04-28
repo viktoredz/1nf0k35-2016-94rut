@@ -38,8 +38,8 @@ class Keuangan_sts extends CI_Controller {
 
 				break;
 			case 2:
-				$data['akun_penerimaan_sts'] = $this->keusts_model->get_akun_sts();
-				$data['akun_penyetoran_sts'] = $this->keusts_model->get_akun_sts();
+				$data = $this->keusts_model->get_setting();
+				$data['akun_option'] = $this->keusts_model->get_akun_sts();
 				
 				die($this->parser->parse("mst/keusts/pengaturan_sts",$data));
 
@@ -103,7 +103,7 @@ class Keuangan_sts extends CI_Controller {
 				'nama'					=> $act->nama,
 				'deskripsi'    			=> $act->deskripsi,
 				'tanggal_dibuat'  		=> $act->tanggal_dibuat,
-				'status'			    => $act->status,
+				'status'			    => ucwords($act->status),
 				'edit'		 	        => 1,
 				'delete'	     	    => 1
 			);
@@ -325,11 +325,6 @@ class Keuangan_sts extends CI_Controller {
 		die($this->parser->parse("mst/keusts/form_tambah_induk",$data));
 	}
 
-	function pengaturan_sts_save(){
-		
-
-	}
-
 	function kembali(){
 
 		$data['title_group']   = "Keuangan";
@@ -413,6 +408,16 @@ class Keuangan_sts extends CI_Controller {
        }
     }
 
+	function pengaturan_sts_save(){
+		$update_penerimaan = $this->keusts_model->save_setting('akun_penerimaan_sts',$this->input->post('akun_penerimaan_sts'));
+		$update_pengeluaran = $this->keusts_model->save_setting('akun_penyetoran_sts',$this->input->post('akun_penyetoran_sts'));
+		if($update_penerimaan && $update_pengeluaran){
+			echo "OK";
+		}else{
+			echo "Failed";
+		}
+	}
+
 	function aktifkan_status($id) {
 
 		$kodepusk = 'P'.$this->session->userdata('puskesmas');
@@ -484,11 +489,13 @@ class Keuangan_sts extends CI_Controller {
 		$this->form_validation->set_rules('id_mst_anggaran','ID Anggaran','trim|required');
 		$this->form_validation->set_rules('kode_anggaran','Kode Anggaran','trim|required');
 		$this->form_validation->set_rules('id_mst_akun','Kode Rekening','trim|required');
+
 		if($this->form_validation->run()== TRUE){
 			$this->keusts_model->add_anggaran();	
 			echo "0";
 		}else{			
-			echo validation_errors();
+			$err = validation_errors();
+			echo str_replace("<p>", "", str_replace("</p>", "\n", $err));
 		}	
 	}
 

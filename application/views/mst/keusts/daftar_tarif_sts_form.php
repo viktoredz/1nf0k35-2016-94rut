@@ -65,6 +65,7 @@
     <div class="box-body">
       <div class="row">
         <div class="col-md-12 pull-left">
+          <button id="doRefresh" class="btn btn-primary " ><i class="icon fa fa-refresh"></i> &nbsp;Refresh</button>  
           <button id="doExpand" class="btn btn-warning " ><i class="icon fa fa-plus-square-o"></i> &nbsp;Expand</button>  
           <button id="doCollapse" class="btn btn-warning " ><i class="icon fa fa-minus-square-o"></i> &nbsp;Collapse</button> 
           <button id="doInduk" onclick='add_induk()' class="btn btn-success"><i class="icon fa fa-plus-square"></i> &nbsp;Tambah Induk</button> 
@@ -248,6 +249,10 @@
         });
       });
 
+      $("#doRefresh").click(function(){
+          $("#treeGrid").jqxTreeGrid('updateBoundData');
+      });
+
 
       var source =
       {
@@ -288,23 +293,19 @@
                  },
                  updateRow: function (rowID, rowData, commit) {
                     commit(true);
-                    var arr = $.map(rowData, function(el) { return el });                                                           
-                    //cek tipe inputan 
-                    //object -> input
-                    //number -> update
+                    var arr = $.map(rowData, function(el) { return el });         
                     if(typeof(arr[1]) === 'object'){
                       var arr2 = $.map(arr[1], function(el) { return el });
-                      //input data
-                      $.post( '<?php echo base_url()?>mst/keuangan_sts/anggaran_add', {id_mst_anggaran:arr[2],id_mst_anggaran_parent:arr2[0], id_mst_akun:arr[7], kode_anggaran:arr[4], uraian : arr[5], tarif : arr[6], id_mst_anggaran_versi : arr[0]}, function( data ) {
-                          if(data != 0){
-                            alert(data);                  
-                          }else{
-                            $("#treeGrid").jqxTreeGrid('updateBoundData');
-                            $("#doExpand").click();
-                          }
-                      });
+                      if(arr[4] + '' + arr[5] + '' + arr[6] + '' + arr[7]!='') {
+                        $.post( '<?php echo base_url()?>mst/keuangan_sts/anggaran_add', {id_mst_anggaran:arr[2],id_mst_anggaran_parent:arr2[0], id_mst_akun:arr[7], kode_anggaran:arr[4], uraian : arr[5], tarif : arr[6], id_mst_anggaran_versi : arr[0]}, function( data ) {
+                            if(data != 0){
+                              alert(data);                  
+                            }else{
+                              alert("Data "+arr[5]+" berhasil disimpan");                  
+                            }
+                        });
+                      }
                     }else{      
-                      //alert(arr);
                       $.post( '<?php echo base_url()?>mst/keuangan_sts/anggaran_update', 
                         {
                           row:rowID,
@@ -355,7 +356,7 @@
                    $("#treeGrid").jqxTreeGrid('expandAll');            
                 },
                 pagerButtonsCount: 8,
-                toolbarHeight: 35,
+                toolbarHeight: 40,
                 renderToolbar: function(toolBar)
                 {
                     var toTheme = function (className) {
@@ -446,7 +447,6 @@
                     $("#treeGrid").on('rowBeginEdit', function (event) {
                         updateButtons('Edit');
                     });
-          
                     addButton.click(function (event) {
                         if (!addButton.jqxButton('disabled')) {             
                             $("#treeGrid").jqxTreeGrid('expandRow', rowKey);
@@ -505,9 +505,9 @@
                     });
                 },
               columns: [                             
-               { text: 'Kode Anggaran', dataField: "kode_anggaran", align: 'center', width: '19%' },
+               { text: 'Kode Anggaran', dataField: "kode_anggaran", align: 'center', width: '27%' },
                { text: 'Uraian', dataField: "uraian", align: 'center', width: '31%' }, 
-               { text: 'Tarif', dataField: "tarif", align: 'center', width: '20%', cellsalign: 'right' },         
+               { text: 'Tarif', dataField: "tarif", align: 'center', width: '12%', cellsalign: 'right' },         
                { text: 'Kode Rekening', dataField: 'kode_rekening', width: "30%", align:'center',columnType: "template",
                    createEditor: function (row, cellvalue, editor, cellText, width, height) {
                        editor.jqxDropDownList({autoDropDownHeight: true, width: '100%', height: '100%' , source: kode_rekening_source, displayMember: "rekening", valueMember: "rekening"});

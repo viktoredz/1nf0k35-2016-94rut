@@ -78,7 +78,6 @@
             <span class="sr-only">Toggle navigation</span>
           </a>
 
-
           <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
               <li class="dropdown user user-menu">
@@ -115,115 +114,7 @@
       <aside class="main-sidebar">
         <!-- sidebar: style can be found in sidebar.less -->
         <section class="sidebar">
-          <!-- Sidebar user panel -->
-          <!-- sidebar menu: : style can be found in sidebar.less -->
-          <?php /* 
-		  <ul class="sidebar-menu">
-            <li id="menu_dashboard" class="treeview">
-              <a href="#">
-                <i class="fa fa-dashboard"></i> <span>Dashboard</span> <i class="fa fa-angle-left pull-right"></i>
-              </a>
-              <ul class="treeview-menu">
-                <li id="menu_dashboard_home"><a href="<?php echo base_url()?>"><i class="fa fa-circle-o"></i> Home</a></li>
-                <li id="menu_dashboard_profile"><a href="<?php echo base_url()?>morganisasi/profile"><i class="fa fa-circle-o"></i> Profile</a></li>
-              </ul>
-            </li>
-            <?php if($this->session->userdata('level')=="administrator" || $this->session->userdata('level')=="super administrator"){ ?>
-            <li id="menu_kepegawaian" class="treeview">
-              <a href="#">
-                <i class="fa fa-pie-chart"></i>
-                <span>Kepegawaian</span>
-                <i class="fa fa-angle-left pull-right"></i>
-              </a>
-              <ul class="treeview-menu">
-                <li id="menu_chart_penangkar"><a href="<?php echo base_url()?>"><i class="fa fa-circle-o"></i> Daftar Riwayat Hidup</a></li>
-              </ul>
-            </li>
-            <li id="menu_keuangan" class="treeview">
-              <a href="#">
-                <i class="fa fa-money"></i>
-                <span>Keuangan</span>
-                <i class="fa fa-angle-left pull-right"></i>
-              </a>
-              <ul class="treeview-menu">
-                <li id="menu_chart_penangkar"><a href="<?php echo base_url()?>"><i class="fa fa-circle-o"></i> BKU</a></li>
-              </ul>
-            </li>
-            <li id="menu_inventory" class="treeview">
-              <a href="#">
-                <i class="fa fa-inbox"></i>
-                <span>Inventory</span>
-                <i class="fa fa-angle-left pull-right"></i>
-              </a>
-              <ul class="treeview-menu">
-                <li id="menu_chart_penangkar"><a href="<?php echo base_url()?>"><i class="fa fa-circle-o"></i> Aset</a></li>
-              </ul>
-            </li>
-            <li id="menu_sms" class="treeview">
-              <a href="#">
-                <i class="fa fa fa-envelope"></i>
-                <span>SMS Gateway</span>
-                <i class="fa fa-angle-left pull-right"></i>
-              </a>
-              <ul class="treeview-menu">
-                <li id="menu_sms_dashboard"><a href="<?php echo base_url()?>sms/home"><i class="fa fa-circle-o"></i> Dashboard</a></li>
-                <li id="menu_sms_inbox"><a href="<?php echo base_url()?>sms/inbox"><i class="fa fa-circle-o"></i> Inbox</a></li>
-                <li id="menu_sms_phonebook"><a href="<?php echo base_url()?>sms/pbk"><i class="fa fa-circle-o"></i> Phonebook</a></li>
-                <li id="menu_sms_group"><a href="<?php echo base_url()?>sms/group"><i class="fa fa-circle-o"></i> Group</a></li>
-                <li id="menu_sms_autoreply"><a href="<?php echo base_url()?>sms/autoreply"><i class="fa fa-circle-o"></i> Autoreply</a></li>
-                <li id="menu_sms_schedule"><a href="<?php echo base_url()?>sms/shcedule"><i class="fa fa-circle-o"></i> Schedule</a></li>
-              </ul>
-            </li>
-            <li id="menu_laporan" class="treeview">
-              <a href="#">
-                <i class="fa fa-building-o"></i>
-                <span>Laporan</span>
-                <i class="fa fa-angle-left pull-right"></i>
-              </a>
-              <ul class="treeview-menu">
-                <li id="menu_lap_pegawai"><a href="<?php echo base_url()?>lap_penangkar"><i class="fa fa-circle-o"></i>Daftar Pegawai</a></li>
-              </ul>
-            </li>
-            <li  id="menu_admin" class="treeview">
-              <a href="#">
-                <i class="fa fa-cogs"></i>
-                <span>Admin Panel</span>
-                <i class="fa fa-angle-left pull-right"></i>
-              </a>
-              <ul class="treeview-menu">
-                <li id="menu_admin_config"><a href="<?php echo base_url()?>admin_config"><i class="fa fa-circle-o"></i> Configuration</a></li>
-                <li id="menu_admin_user"><a href="<?php echo base_url()?>admin_user"><i class="fa fa-circle-o"></i> User Management</a></li>
-                <li id="menu_admin_file"><a href="<?php echo base_url()?>admin_file"><i class="fa fa-circle-o"></i> File Management</a></li>
-                <li id="menu_admin_role"><a href="<?php echo base_url()?>admin_role"><i class="fa fa-circle-o"></i> Group Role</a></li>
-                <li id="menu_admin_menu"><a href="<?php echo base_url()?>admin_menu"><i class="fa fa-circle-o"></i> Menu Management</a></li>
-                <li id="menu_admin_config"><a href="<?php echo base_url()?>sms_setting"><i class="fa fa-circle-o"></i> SMS Setting</a></li>
-              </ul>
-            </li>
-            <li id="menu_parameter" class="treeview">
-              <a href="#">
-                <i class="fa fa-archive"></i>
-                <span>Master Data</span>
-                <i class="fa fa-angle-left pull-right"></i>
-              </a>
-              <ul class="treeview-menu">
-                <li id="menu_mst_puskesmas"><a href="<?php echo base_url()?>mst/puskesmas"><i class="fa fa-circle-o"></i> Puskesmas</a></li>
-                <li id="menu_mst_agama"><a href="<?php echo base_url()?>mst/agama"><i class="fa fa-circle-o"></i> Agama</a></li>
-                <li id="menu_mst_desa"><a href="<?php echo base_url()?>mst/desa"><i class="fa fa-circle-o"></i> Desa / Kelurahan</a></li>
-                <li id="menu_mst_kabupatenkota"><a href="<?php echo base_url()?>mst/kabupatenkota"><i class="fa fa-circle-o"></i> Kota / Kabupaten</a></li>
-                <li id="menu_mst_kecamatan"><a href="<?php echo base_url()?>mst/kecamatan"><i class="fa fa-circle-o"></i> Kecamatan</a></li>
-                <li id="menu_mst_provinsi"><a href="<?php echo base_url()?>mst/provinsi"><i class="fa fa-circle-o"></i> Porvinsi</a></li>
-<<<<<<< HEAD
-                <li id="menu_mst_inv_ruangan"><a href="<?php echo base_url()?>mst/inv_ruangan"><i class="fa fa-circle-o"></i> Inventory Ruangan</a></li>
-=======
-                <li id="menu_mst_invbarang"><a href="<?php echo base_url()?>mst/invbarang"><i class="fa fa-circle-o"></i> Inv Barang</a></li>
-                <li id="menu_mst_invkondisibarang"><a href="<?php echo base_url()?>mst/invkondisibarang"><i class="fa fa-circle-o"></i> Inv Kondisi Barang</a></li>
->>>>>>> b2a0863d40e5cbe86d9781618c8e4571de9457d6
-              </ul>
-            </li>
-            <?php }?>
-          </ul> */ ?>
-		  
-		  {menu}
+    		  {menu}
         </section>
         <!-- /.sidebar -->
       </aside>
@@ -270,6 +161,5 @@
     <script src="<?php echo base_url()?>public/themes/sik/plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
     <script src="<?php echo base_url()?>public/themes/sik/plugins/slimScroll/jquery.slimscroll.min.js" type="text/javascript"></script>
     <script src="<?php echo base_url()?>public/themes/sik/plugins/chartjs/Chart.min.js" type="text/javascript"></script>
-
   </body>
 </html>

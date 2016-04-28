@@ -252,9 +252,9 @@
                 },
                 pagerButtonsCount: 8,                
               columns: [
-               { text: 'Kode Anggaran', dataField: "KodeAnggaran", align: 'center',width: '19%' },
+               { text: 'Kode Anggaran', dataField: "KodeAnggaran", align: 'center',width: '27%' },
                { text: 'Uraian', dataField: "Uraian", align: 'center', width: '31%'}, 
-               { text: 'Tarif', dataField: "Tarif", align: 'center', width: '20%',cellsalign: 'right' },         
+               { text: 'Tarif', dataField: "Tarif", align: 'center', width: '12%',cellsalign: 'right' },         
                { text: 'Kode Rekening', dataField: 'KodeRekening', width: "30%", align:'center'}
               ]
             });

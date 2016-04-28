@@ -1,11 +1,3 @@
-<?php if($this->session->flashdata('alert')!=""){ ?>
-<div class="alert alert-success alert-dismissable">
-  <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-  <h4>  <i class="icon fa fa-check"></i> Information!</h4>
-  <?php echo $this->session->flashdata('alert')?>
-</div>
-<?php } ?>
-
 <section class="content">
 <form action="<?php echo base_url()?>inventory/bhp_opname/dodel_multi" method="POST" name="">
   <div class="row">
@@ -27,15 +19,15 @@
               <div class="row">
               <div class="col-md-4" style="padding-top:5px;"><label> Akun Penerimaan STS </label> </div>
               <div class="col-md-8">
-                <select  name="akun_penerimaan" type="text" class="form-control">
-                <?php foreach($akun_penerimaan_sts as $penerimaan) : ?>
+                <select  name="akun_penerimaan_sts" type="text" class="form-control">
+                <?php foreach($akun_option as $penerimaan) : ?>
                     <?php
-                       if(set_value('value')=="" && isset($value)){
-                         $value = $value;
-                       }else{
-                         $value = set_value('value');
-                       }
-                         $select = $penerimaan->id_mst_akun == $value ? 'selected' : '' ;
+                        if(set_value('akun_penerimaan_sts')=="" && isset($akun_penerimaan_sts)){
+                         $value = $akun_penerimaan_sts;
+                        }else{
+                         $value = set_value('akun_penerimaan_sts');
+                        }
+                        $select = $penerimaan->id_mst_akun == $value ? 'selected' : '' ;
                     ?>
                      <option value="<?php echo $penerimaan->id_mst_akun ?>" <?php echo $select ?>><?php echo $penerimaan->kode?>-<?php echo $penerimaan->uraian ?></option>
                       <?php endforeach ?>
@@ -52,15 +44,15 @@
             <div class="row">
               <div class="col-md-4" style="padding-top:5px;"><label> Akun Penyetoran STS </label> </div>
               <div class="col-md-8">
-                <select  name="akun_penyetoran" type="text" class="form-control">
-                <?php foreach($akun_penyetoran_sts as $penyetoran) : ?>
+                <select  name="akun_penyetoran_sts" type="text" class="form-control">
+                <?php foreach($akun_option as $penyetoran) : ?>
                     <?php
-                       if(set_value('value')=="" && isset($value)){
-                         $value = $value;
-                       }else{
-                         $value = set_value('value');
-                       }
-                         $select = $penyetoran->id_mst_akun == $value ? 'selected' : '' ;
+                        if(set_value('akun_penyetoran_sts')=="" && isset($akun_penyetoran_sts)){
+                         $value = $akun_penyetoran_sts;
+                        }else{
+                         $value = set_value('akun_penyetoran_sts');
+                        }
+                        $select = $penyetoran->id_mst_akun == $value ? 'selected' : '' ;
                     ?>
                      <option value="<?php echo $penyetoran->id_mst_akun ?>" <?php echo $select ?>><?php echo $penyetoran->kode?>-<?php echo $penyetoran->uraian ?></option>
                       <?php endforeach ?>
@@ -82,8 +74,8 @@
       $("[name='btn-simpan']").click(function(){
         var data = new FormData();
 
-        data.append('value',  $("[name='akun_penerimaan']").val());
-        data.append('value',  $("[name='akun_penyetoran']").val());
+        data.append('akun_penerimaan_sts',  $("[name='akun_penerimaan_sts']").val());
+        data.append('akun_penyetoran_sts',  $("[name='akun_penyetoran_sts']").val());
 
         $.ajax({
             cache : false,
@@ -94,10 +86,9 @@
             data : data,
             success : function(response){
               if(response=="OK"){
-                alert("Data keluarga berhasil disimpan.");
-                $("#jqxgridKeluarga").jqxGrid('updatebounddata', 'filter');
+                alert("Data berhasil disimpan.");
               }else{
-                $('#popup_keluarga_ortu_content').html(response);
+                alert("Data gagal disimpan.");
               }
             }
         });
