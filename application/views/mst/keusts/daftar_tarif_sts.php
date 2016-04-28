@@ -218,7 +218,7 @@
           var arr = $.map(rowData, function(el) { return el });                             
           $.post( '<?php echo base_url()?>keuangan/master_sts/add_tarif', {id_anggaran:arr[0],tarif:arr[8]},function( data ) {
             if(data != 0){
-              alert(data);                  
+              alert(data);
             }else{
               //$("#treeGrid").jqxTreeGrid('updateBoundData');
             }
@@ -254,8 +254,8 @@
               columns: [
                { text: 'Kode Anggaran', dataField: "KodeAnggaran", align: 'center',width: '19%' },
                { text: 'Uraian', dataField: "Uraian", align: 'center', width: '31%'}, 
-               { text: 'Tarif', dataField: "Tarif", align: 'center', width: '20%',cellsalign: 'center' },         
-               { text: 'Kode Rekening', dataField: 'KodeRekening', width: "30%", align:'center',cellsalign: 'center'}
+               { text: 'Tarif', dataField: "Tarif", align: 'center', width: '20%',cellsalign: 'right' },         
+               { text: 'Kode Rekening', dataField: 'KodeRekening', width: "30%", align:'center'}
               ]
             });
         });

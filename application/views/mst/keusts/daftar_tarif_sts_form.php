@@ -80,24 +80,20 @@
     </div>
   </div>
   </div>
-
 </section>
 
-  <script type="text/javascript">
-
+<script type="text/javascript">
     $("#btn-kembali").click(function(){
-        $.get('<?php echo base_url()?>mst/keuangan_sts/kembali', function (data) {
-          $('#content1').html(data);
-          });
-       });
+      $.get('<?php echo base_url()?>mst/keuangan_sts/kembali', function (data) {
+        $('#content1').html(data);
+      });
+    });
 
-      function getDemoTheme() {
+    function getDemoTheme() {
       var theme = document.body ? $.data(document.body, 'theme') : null
       if (theme == null) {
         theme = '';
-      }
-      
-      else {
+      } else {
         return theme;
       }
       var themestart = window.location.toString().indexOf('?');
@@ -106,8 +102,7 @@
       }
 
       var theme = window.location.toString().substring(1 + themestart);
-      if (theme.indexOf('(') >= 0)
-      {
+      if (theme.indexOf('(') >= 0){
         theme = theme.substring(1);
       }
       if (theme.indexOf(')') >= 0) {
@@ -183,11 +178,10 @@
     catch (error) {
       var er = error;
     }
-  </script>
+</script>
 
-  <script type="text/javascript">
-      
-      $(document).ready(function () {
+<script type="text/javascript">
+  $(document).ready(function () {
       
       function statusversi(argument) {
         $.ajax({
@@ -221,45 +215,52 @@
 
       $('#versi').change(function(){
         if (($(this).val()=='0')||$(this).val()==null) {
-          var dataver = "{versi}";
+            var dataver = "{versi}";
         }else{
-          var dataver =  $(this).val();
-         }
-      $.ajax({
-          url : '<?php echo site_url('mst/keuangan_sts/get_versi_sts') ?>',
-          type : 'POST',
-          data : 'versi='+dataver,
-          success : function(data) {
-          $("select[name='versi']").html(data);
-
-          statusversi();
-          nama_versi();
+            var dataver =  $(this).val();
         }
-      });
+        $.ajax({
+            url : '<?php echo site_url('mst/keuangan_sts/get_versi_sts') ?>',
+            type : 'POST',
+            data : 'versi='+dataver,
+            success : function(data) {
+            $("select[name='versi']").html(data);
+
+            statusversi();
+            nama_versi();
+          }
+        });
         return false;
       }).change();
 
-      $("#menu_master_data").addClass("active");
-      $("#menu_mst_keuangan_sts").addClass("active");
-
-            var newRowID = null;
-      
+      var newRowID = null;
       $("#doExpand").click(function(){
           $("#treeGrid").jqxTreeGrid('expandAll');                    
-            });
+      });
       
       $("#doCollapse").click(function(){
           $("#treeGrid").jqxTreeGrid('collapseAll');                    
-            });
+      });
 
-        $("select[name='versi']").change(function(){
-          //alert('d');
-            $.post( '<?php echo base_url()?>mst/keuangan_sts/set_versi', {versi:$(this).val()},function( data ) {
-              $("#treeGrid").jqxTreeGrid('updateBoundData');
-              $("#treeGrid").jqxTreeGrid('expandAll');            
-            });
-          });
-            // prepare the data
+      $("select[name='versi']").change(function(){
+        $.post( '<?php echo base_url()?>mst/keuangan_sts/set_versi', {versi:$(this).val()},function( data ) {
+          $("#treeGrid").jqxTreeGrid('updateBoundData');
+        });
+      });
+
+
+      var source =
+      {
+          datatype: "json",
+          datafields: [
+              { name: 'id_mst_akun' },
+              { name: 'rekening' }
+          ],
+          url: '<?php echo base_url()?>mst/keuangan_sts/json_kode_rekening',
+          async: true
+      };
+      var kode_rekening_source = new $.jqx.dataAdapter(source);
+
             var source =
             {
                 dataType: "tab",
@@ -282,74 +283,59 @@
                 id: 'id_mst_anggaran',
                 url: '<?php echo base_url()?>mst/keuangan_sts/api_data',
                  addRow: function (rowID, rowData, position, parentID, commit) {        
-                     // POST to server using $.post or $.ajax          
-                     // synchronize with the server - send insert command
-                     // call commit with parameter true if the synchronization with the server is successful 
-                     // and with parameter false if the synchronization failed.
-                     // you can pass additional argument to the commit callback which represents the new ID if it is generated from a DB.
-                     commit(true);
-                     newRowID = rowID;
+                    commit(true);
+                    newRowID = rowID;
                  },
                  updateRow: function (rowID, rowData, commit) {
-                     // synchronize with the server - send update command
-                     // call commit with parameter true if the synchronization with the server is successful 
-                     // and with parameter false if the synchronization failed.         
-          
                     commit(true);
-          var arr = $.map(rowData, function(el) { return el });                                                           
+                    var arr = $.map(rowData, function(el) { return el });                                                           
                     //cek tipe inputan 
                     //object -> input
                     //number -> update
-          if(typeof(arr[1]) === 'object'){
-            var arr2 = $.map(arr[1], function(el) { return el });
-            //input data
-            $.post( '<?php echo base_url()?>mst/keuangan_sts/anggaran_add', {id_mst_anggaran:arr[2],id_mst_anggaran_parent:arr2[0], id_mst_akun:arr[7], kode_anggaran:arr[4], uraian : arr[5], tarif : arr[6], id_mst_anggaran_versi : arr[0]}, function( data ) {
-                if(data != 0){
-                  alert(data);                  
-                }else{
-                  $("#treeGrid").jqxTreeGrid('updateBoundData');
-                }
-            });
-          }else{      
-            //update data
-            alert(arr);
-            $.post( '<?php echo base_url()?>mst/keuangan_sts/anggaran_update', 
-              {
-                row:rowID,
-                id_mst_anggaran:arr[0] ,
-                id_mst_anggaran_parent:arr[1], 
-                kode_anggaran:arr[3], 
-                uraian : arr[4], 
-                tarif : arr[5], 
-                id_mst_akun:arr[7], 
-                id_mst_anggaran_versi : arr[1]
-              },
-              function( data ) {
-                if(data != 0){
-                  alert(data);
-                }else{
-                  $("#treeGrid").jqxTreeGrid('updateBoundData');
-                }
-            });
-          }
+                    if(typeof(arr[1]) === 'object'){
+                      var arr2 = $.map(arr[1], function(el) { return el });
+                      //input data
+                      $.post( '<?php echo base_url()?>mst/keuangan_sts/anggaran_add', {id_mst_anggaran:arr[2],id_mst_anggaran_parent:arr2[0], id_mst_akun:arr[7], kode_anggaran:arr[4], uraian : arr[5], tarif : arr[6], id_mst_anggaran_versi : arr[0]}, function( data ) {
+                          if(data != 0){
+                            alert(data);                  
+                          }else{
+                            $("#treeGrid").jqxTreeGrid('updateBoundData');
+                            $("#doExpand").click();
+                          }
+                      });
+                    }else{      
+                      //alert(arr);
+                      $.post( '<?php echo base_url()?>mst/keuangan_sts/anggaran_update', 
+                        {
+                          row:rowID,
+                          id_mst_anggaran:arr[0] ,
+                          id_mst_anggaran_parent:arr[1], 
+                          kode_anggaran:arr[3], 
+                          uraian : arr[4], 
+                          tarif : arr[5], 
+                          id_mst_akun:arr[7], 
+                          id_mst_anggaran_versi : arr[1]
+                        },
+                        function( data ) {
+                          if(data != 0){
+                            alert(data);
+                          }
+                      });
+                    }
                  },
                  deleteRow: function (rowID, commit) {
-                     // synchronize with the server - send delete command
-                     // call commit with parameter true if the synchronization with the server is successful 
-                     // and with parameter false if the synchronization failed.
-          
-          if( Object.prototype.toString.call( rowID ) === '[object Array]' ) {
-            for(var i=0; i< rowID.length; i++){
-              $.post( '<?php echo base_url()?>mst/keuangan_sts/anggaran_delete', {id_mst_anggaran:rowID[i]},function( data ) {
-                $("#treeGrid").jqxTreeGrid('updateBoundData');
-              });
-            }
-          }else{
-            $.post( '<?php echo base_url()?>mst/keuangan_sts/anggaran_delete', {id_mst_anggaran:rowID},function( data ) {
-              // $("#treeGrid").jqxTreeGrid('updateBoundData');
-            });
-          }
-                     commit(true);
+                    if( Object.prototype.toString.call( rowID ) === '[object Array]' ) {
+                      for(var i=0; i< rowID.length; i++){
+                        $.post( '<?php echo base_url()?>mst/keuangan_sts/anggaran_delete', {id_mst_anggaran:rowID[i]},function( data ) {
+                          $("#treeGrid").jqxTreeGrid('updateBoundData');
+                        });
+                      }
+                    }else{
+                      $.post( '<?php echo base_url()?>mst/keuangan_sts/anggaran_delete', {id_mst_anggaran:rowID},function( data ) {
+                        // $("#treeGrid").jqxTreeGrid('updateBoundData');
+                      });
+                    }
+                    commit(true);
                  }
              };
             var dataAdapter = new $.jqx.dataAdapter(source, {
@@ -358,19 +344,14 @@
                 }
             });
 
-
-            var kode_rekening_source = ["Modal","Kas","Pendapatan"];
-
-            $("#treeGrid").jqxTreeGrid(
-            {
+            $("#treeGrid").jqxTreeGrid({
                 width: '100%',
                 source: dataAdapter, 
                 pageable: false,
                 editable: true,
                 showToolbar: true,
                 altRows: true,
-                ready: function()
-                {
+                ready: function(){
                    $("#treeGrid").jqxTreeGrid('expandAll');            
                 },
                 pagerButtonsCount: 8,
@@ -510,14 +491,14 @@
                                 for (var i = 0; i < selection.length; i++) {
                                     keys.push($("#treeGrid").jqxTreeGrid('getKey', selection[i]));
                                 }
-                if(confirm('Apakah anda yakin akan menghapus beberapa data sekaligus ? Data yang telah terhapus tidak dapat di kembalikan lagi')){
-                  $("#treeGrid").jqxTreeGrid('deleteRow', keys);
-                }
+                                if(confirm('Apakah anda yakin akan menghapus beberapa data sekaligus ? Data yang telah terhapus tidak dapat di kembalikan lagi')){
+                                  $("#treeGrid").jqxTreeGrid('deleteRow', keys);
+                                }
                             }
                             else {
-                if(confirm('Apakah anda yakin akan menghapus data ini ? Data yang telah terhapus tidak dapat di kembalikan lagi')){
-                  $("#treeGrid").jqxTreeGrid('deleteRow', rowKey);
-                }
+                                if(confirm('Apakah anda yakin akan menghapus data ini ? Data yang telah terhapus tidak dapat di kembalikan lagi')){
+                                  $("#treeGrid").jqxTreeGrid('deleteRow', rowKey);
+                                }
                             }
                             updateButtons('delete');
                         }
@@ -526,10 +507,11 @@
               columns: [                             
                { text: 'Kode Anggaran', dataField: "kode_anggaran", align: 'center', width: '19%' },
                { text: 'Uraian', dataField: "uraian", align: 'center', width: '31%' }, 
-               { text: 'Tarif', dataField: "tarif", align: 'center', width: '20%',cellsalign: 'center' },         
-               { text: 'Kode Rekening', dataField: 'kode_rekening', width: "30%", align:'center',cellsalign: 'center',columnType: "template",
+               { text: 'Tarif', dataField: "tarif", align: 'center', width: '20%', cellsalign: 'right' },         
+               { text: 'Kode Rekening', dataField: 'kode_rekening', width: "30%", align:'center',columnType: "template",
                    createEditor: function (row, cellvalue, editor, cellText, width, height) {
-                       editor.jqxDropDownList({autoDropDownHeight: true, source: kode_rekening_source,  width: '100%', height: '100%' });
+                       editor.jqxDropDownList({autoDropDownHeight: true, width: '100%', height: '100%' , source: kode_rekening_source, displayMember: "rekening", valueMember: "rekening"});
+
                    },
                    initEditor: function (row, cellvalue, editor, celltext, width, height) {
                        editor.jqxDropDownList('selectItem', cellvalue);
@@ -600,5 +582,5 @@
         return false;
     });
  
-    </script>
+</script>
 

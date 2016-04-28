@@ -81,6 +81,13 @@ class Keusts_model extends CI_Model {
         return $query->result();
     }
 
+    function json_kode_rekening(){
+        $this->db->select("id_mst_akun,kode,uraian, CONCAT(kode,' - ',uraian) as rekening",false);
+        $this->db->where('aktif', 1);
+        $query = $this->db->get('mst_keu_akun');     
+        return $query->result_array();
+    }
+
     function get_data_sts($versi)
     {
         $this->db->select('*');     
@@ -145,7 +152,7 @@ class Keusts_model extends CI_Model {
 
     function get_data_type_filter($versi)
     {     
-        $this->db->select('mst_keu_anggaran.*,mst_keu_akun.id_mst_akun AS kode_rekening, mst_keu_akun.uraian AS uraian_rekening',false);
+        $this->db->select('mst_keu_anggaran.*,mst_keu_akun.kode AS kode_rekening, mst_keu_akun.uraian AS uraian_rekening',false);
         $this->db->join('mst_keu_akun','mst_keu_akun.id_mst_akun=mst_keu_anggaran.id_mst_akun','left');
         $this->db->where('mst_keu_anggaran.id_mst_anggaran_versi', $versi);        
         $this->db->order_by('mst_keu_anggaran.id_mst_anggaran','asc');
@@ -485,11 +492,15 @@ class Keusts_model extends CI_Model {
     }
     
     function update_anggaran(){
-        $dataExplode = explode("-",$this->input->post('id_mst_akun'));
+        $dataExplode = explode(" - ",$this->input->post('id_mst_akun'));
+        $this->db->select('id_mst_akun');
+        $this->db->where('kode', $dataExplode[0]);
+        $this->db->where('uraian', $dataExplode[1]);
+        $id_mst_akun = $this->db->get('mst_keu_akun')->row();             
 
         $data = array(
            'id_mst_anggaran_parent' => $this->input->post('id_mst_anggaran_parent') ,
-           'id_mst_akun'            => $this->input->post('id_mst_akun') ,
+           'id_mst_akun'            => $id_mst_akun->id_mst_akun,
            'kode_anggaran'          => $this->input->post('kode_anggaran'),
            'uraian'                 => trim($this->input->post('uraian')),
            'tarif'                  => $this->input->post('tarif'),
