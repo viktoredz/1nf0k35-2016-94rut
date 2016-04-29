@@ -11,7 +11,6 @@ class Sts extends CI_Controller {
 	}
 
 	function convert_tgl($tgl){
-		//2015-11-12
 		$dataTgl = explode('-',$tgl);
 		$tgl = $dataTgl[2].'-'.$dataTgl[1].'-'.$dataTgl[0];
 		return $tgl;		
