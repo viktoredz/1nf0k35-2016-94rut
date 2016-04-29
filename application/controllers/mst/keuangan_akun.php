@@ -23,7 +23,7 @@ class Keuangan_akun extends CI_Controller {
 		switch ($pageIndex) {
 			case 1:
 				$data['title_group']   = "Keuangan";
-				$data['title_form']    = "Master Data Keuangan";
+				$data['title_form']    = "Daftar Akun";
 				$data['ambildata']     = $this->keuakun_model->get_data();
 
 				die($this->parser->parse("mst/keuakun/akun",$data));
@@ -44,6 +44,65 @@ class Keuangan_akun extends CI_Controller {
 				die($this->parser->parse("mst/keuakun/akun_non_aktif",$data));
 				break;
 		}
+	}
+
+	function api_data(){
+		$this->authentication->verify('mst','edit');		
+		
+		$data['ambildata'] = $this->keuakun_model->get_data_akun();
+		foreach($data['ambildata'] as $d){
+			$txt = $d["id_mst_akun"]." \t ".$d["id_mst_akun_parent"]."\t".$d["kode"]." \t ".$d["uraian"]." \t ".$d["saldo_normal"]." \t ".$d["saldo_awal"]." \t ".$d["mendukung_anggaran"]." \n";				
+			echo $txt;
+		}
+		
+	}
+
+	function set_puskes(){
+		$this->authentication->verify('mst','edit');
+		$this->session->set_userdata('puskes',$this->input->post('puskes'));		
+		
+	}
+
+	function induk_add(){
+		$this->authentication->verify('mst','add');
+
+    	$this->form_validation->set_rules('uraian', 'Uraian', 'trim|required');
+        $this->form_validation->set_rules('saldo_normal', ' Saldo Normal', 'trim|required');
+
+	    $data['action']				= "add";
+		$data['alert_form']		    = '';
+
+		if($this->form_validation->run()== FALSE){
+			die($this->parser->parse("mst/keuakun/form_tambah_induk",$data));
+		}elseif($this->keuakun_model->insert_entry()){
+			die("OK");
+		}else{
+			$data['alert_form'] = 'Save data failed...';
+		}
+		die($this->parser->parse("mst/keuakun/form_tambah_induk",$data));
+	}
+
+	function induk_delete(){
+		$this->authentication->verify('mst','del');
+		$this->keuakun_model->induk_delete();				
+	}
+
+	function akun_add(){
+		$this->authentication->verify('mst','add');
+		$this->form_validation->set_rules('id_mst_akun_parent','ID Akun Parent','trim|required');
+		$this->form_validation->set_rules('kode','Kode','trim|required');
+		$this->form_validation->set_rules('uraian','Uraian','trim|required');
+		$this->form_validation->set_rules('saldo_awal','Saldo Awal','trim|required');
+		$this->form_validation->set_rules('saldo_normal','Saldo Normal','trim|required');
+
+
+		if($this->form_validation->run()== TRUE){
+			$this->keuakun_model->akun_add();	
+			echo "0";
+		}else{			
+			$err = validation_errors();
+			echo str_replace("<p>", "", str_replace("</p>", "\n", $err));
+		}	
 	}
 
 	function json_akun(){
