@@ -301,7 +301,7 @@
                 <div class="form-group">
                   <label>QR Code / Barcode</label>
                   <br>
-                  <img src="<?php echo base_url()?>inventory/qrcodes/draw/<?php echo $kd_proc.'/'.$id_barang.'/'.$kode; ?>" ><br><br>
+                  <img src="<?php echo base_url()?>inventory/qrcodes/draw/<?php echo $kd_proc.'/'.$id_barang.'/'.$kode.'/'.$id_distribusi; ?>" ><br><br>
                   <img src="<?php echo base_url()?>inventory/barcode/draw/<?php echo $kode; ?>" >
                   <button type="button" class="btn btn-info btn-sl" data-toggle="modal" data-target="#myModal" style="float:right;">Print</button>
                 </div>

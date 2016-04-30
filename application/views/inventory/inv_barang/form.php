@@ -10,7 +10,7 @@ if(isset($disable)){if($disable='disable'){?>
 
 function edit_barang(id_barang,barang_kembar_proc,id_inventaris_barang){
     $("#popup_barang #popup_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-    $.get("<?php echo base_url().'inventory/inv_barang/edit_barang/';?>" + id_barang+'/'+barang_kembar_proc+'/'+id_inventaris_barang, function(data) {
+    $.get("<?php echo base_url().'inventory/inv_barang/edit_barang/';?>" + id_barang+'/'+barang_kembar_proc+'/'+id_inventaris_barang+'/'+'0'+'/'+'1', function(data) {
       $("#popup_content").html(data);
     });
     $("#popup_barang").jqxWindow({

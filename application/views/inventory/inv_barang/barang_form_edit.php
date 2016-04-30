@@ -123,7 +123,7 @@ if(isset($disable)){if($disable='disable'){?>
                 contentType : false,
                 processData : false,
                 type : 'POST',
-                url : '<?php echo base_url()."inventory/inv_barang/".$action."_barang/".$id_barang."/".$kd_proc."/".$kode."/".$id_pengadaan."/" ?>',
+                url : '<?php echo base_url()."inventory/inv_barang/".$action."_barang/".$id_barang."/".$kd_proc."/".$kode."/".$id_pengadaan."/".$id_distribusi."/" ?>',
                 data : data,
                 success : function(response){
                 
@@ -291,7 +291,7 @@ if(isset($disable)){if($disable='disable'){?>
             </div>
             <?php if(isset($disable)){if($disable='disable'){?>
             <div class="form-group">
-              <label>Tanggal Diterima</label>
+              <label>Tanggal Diterima </label>
               <div id='dateInput' name="tanggal_diterima" value="<?php
               echo (!empty($tanggal_diterima)) ? date("Y-m-d",strtotime($tanggal_diterima)) :  date("d-m-Y");
             ?>"></div>
@@ -674,7 +674,7 @@ if(isset($disable)){if($disable='disable'){?>
             </div>
       <div class="form-group">
         <label>Nomor Dokumen</label>
-        <input type="text" class="form-control" name="dokumen_nomor" id="dokumen_nomor1" placeholder="dokumen_nomor"  value="<?php
+        <input type="text" class="form-control" name="dokumen_nomor" id="dokumen_nomor1" placeholder="Nomor Dokumen"  value="<?php
         if(set_value('dokumen_nomor')=="" && isset($dokumen_nomor)){
             echo $dokumen_nomor;
           }else{

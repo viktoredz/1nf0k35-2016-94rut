@@ -7,7 +7,7 @@ class Qrcodes extends CI_Controller {
 		$this->load->model('inventory/inv_barang_model');
 	}
 
-	function draw($kode_proc=0,$id_barang=0,$kd_inventaris=0){
+	function draw($kode_proc=0,$id_barang=0,$kd_inventaris=0,$id_distribusi=0){
 		$tabel=substr($id_barang, 0,2);
 		if ($tabel=="01") {
 			$tabel ="inv_inventaris_barang_a";
@@ -23,7 +23,7 @@ class Qrcodes extends CI_Controller {
 			$tabel ="inv_inventaris_barang_f";
 		}
 
-		$data = $this->inv_barang_model->get_data_barang_edit_table($kode_proc,$id_barang,$kd_inventaris,$tabel); 
+		$data = $this->inv_barang_model->get_data_barang_edit_table_all($kode_proc,$id_barang,$kd_inventaris,$tabel,$id_distribusi); 
 
 	      $s = array();
 	      $s[0] = substr($data['barang_kembar_proc'], 0,2);
