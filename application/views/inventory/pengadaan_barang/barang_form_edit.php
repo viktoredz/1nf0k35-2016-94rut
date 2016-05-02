@@ -648,7 +648,7 @@ if(isset($disable)){if($disable='disable'){?>
             </div>
       <div class="form-group">
         <label>Nomor Dokumen</label>
-        <input type="text" class="form-control" name="dokumen_nomor" id="dokumen_nomor1" placeholder="dokumen_nomor"  value="<?php
+        <input type="text" class="form-control" name="dokumen_nomor" id="dokumen_nomor1" placeholder="Nomor Dokumen"  value="<?php
         if(set_value('dokumen_nomor')=="" && isset($dokumen_nomor)){
             echo $dokumen_nomor;
           }else{
