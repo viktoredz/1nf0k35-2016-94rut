@@ -139,6 +139,13 @@ function edit_barang(id_barang,barang_kembar_proc,id_inventaris_barang){
             document.getElementById("subtotal").value = toRp(subtotal);
         });
         $("#jumlah").change(function(){
+          var idbarang = $("#id_inventaris_barang").val().split(".");
+            if ((idbarang[0]!="02")||(idbarang[0]!="05")) {
+              if ($("#jumlah").val() >= 1) {
+                alert('Maaf Jumlah KIB ini tidak boleh lebih dari satu');
+                $("#jumlah").val(1);
+              }
+            }
             var jumlah = document.getElementById("jumlah").value;
             var harga = document.getElementById("harga").value;
             var subtotal =jumlah*harga;

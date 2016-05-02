@@ -142,7 +142,7 @@ function edit_barang(id_inventaris_barang,kodeproc){
         });
         $("#jumlah").change(function(){
             var idbarang = $("#id_inventaris_barang").val().split(".");
-            if ((idbarang[0]=="02")||(idbarang[0]=="05")) {
+            if ((idbarang[0]!="02")||(idbarang[0]!="05")) {
               if ($("#jumlah").val() >= 1) {
                 alert('Maaf Jumlah KIB ini tidak boleh lebih dari satu');
                 $("#jumlah").val(1);
