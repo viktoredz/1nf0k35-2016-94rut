@@ -764,7 +764,7 @@ class Pengadaanbarang extends CI_Controller {
 			//for($i=1;$i<=$jumlah;$i++){
 			//	$id = $this->pengadaanbarang_model->insert_data_from($id_barang,$kode_proc,$tanggal_diterima,$id_pengadaan);
 					/*simpan pada bedadatabase*/
-			$id_inv = $this->db->query("SELECT id_inventaris_barang,id_mst_inv_barang FROM inv_inventaris_barang WHERE  barang_kembar_proc=$kode_proc")->result();
+			$id_inv = $this->db->query("SELECT id_inventaris_barang,id_mst_inv_barang FROM inv_inventaris_barang WHERE  barang_kembar_proc=".'"'.$kode_proc.'"'."")->result();
         	foreach ($id_inv as $keyinv) {
         		$kodebarang_ = substr($keyinv->id_mst_inv_barang,0,2);
 		   		if($kodebarang_=='01') {	
