@@ -538,7 +538,7 @@ class Pengadaanbarang extends CI_Controller {
 		}
 		$activity = $this->pengadaanbarang_model->getItem('inv_inventaris_barang', array('id_pengadaan'=>$id))->result();
 		foreach($activity as $act) {
-			$juml =$act->register+$act->jumlah;
+			$juml =($act->register-1)+$act->jumlah;
 			$data[] = array(
 				'id_inventaris_barang'   		=> $act->id_inventaris_barang,
 				'id_mst_inv_barang'   			=> substr(chunk_split($act->id_mst_inv_barang, 2, '.'),0,14),
@@ -550,7 +550,7 @@ class Pengadaanbarang extends CI_Controller {
 				'pilihan_status_invetaris'		=> $act->pilihan_status_invetaris,
 				'barang_kembar_proc'			=> $act->barang_kembar_proc,
 				'register'						=> $act->register,
-				'register_sampai'				=> $act->register.' s/d '.sprintf("%04s",$juml),
+				'register_sampai'				=> (($juml == 1) ? $act->register: $act->register.' s/d '.sprintf("%04s",$juml)),
 				'tanggal_diterima'				=> $act->tanggal_diterima,
 				'waktu_dibuat'					=> $act->waktu_dibuat,
 				'terakhir_diubah'				=> $act->terakhir_diubah,

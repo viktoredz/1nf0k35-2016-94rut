@@ -38,6 +38,7 @@ class inv_ruangan_model extends CI_Model {
 				SELECT
 					id_inventaris_barang,
 					id_mst_inv_barang,
+					register,
 					nama_barang,
 					tanggal_pengadaan,
 					year(tanggal_diterima) as tahun,

@@ -140,8 +140,8 @@ function edit_barang(id_barang,barang_kembar_proc,id_inventaris_barang){
         });
         $("#jumlah").change(function(){
           var idbarang = $("#id_inventaris_barang").val().split(".");
-            if ((idbarang[0]!="02")||(idbarang[0]!="05")) {
-              if ($("#jumlah").val() >= 1) {
+            if ((idbarang[0]=='01')  || (idbarang[0]=='03')|| (idbarang[0]=='04')|| (idbarang[0]=='06')) {
+              if ($("#jumlah").val() > 1) {
                 alert('Maaf Jumlah KIB ini tidak boleh lebih dari satu');
                 $("#jumlah").val(1);
               }

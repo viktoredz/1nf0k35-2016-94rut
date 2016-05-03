@@ -94,7 +94,7 @@ class Pengadaanbarang_model extends CI_Model {
         return $query->result();
     }
     public function getItem($table,$data){
-        $this->db->select(" inv_inventaris_barang.register,inv_inventaris_barang.id_inventaris_barang,inv_inventaris_barang.id_mst_inv_barang,inv_inventaris_barang.nama_barang,inv_inventaris_barang.harga,inv_inventaris_barang.barang_kembar_proc,
+        $this->db->select("(select b.register from inv_inventaris_barang b where b.barang_kembar_proc = inv_inventaris_barang.barang_kembar_proc order by b.register asc limit 1) as register,inv_inventaris_barang.id_inventaris_barang,inv_inventaris_barang.id_mst_inv_barang,inv_inventaris_barang.nama_barang,inv_inventaris_barang.harga,inv_inventaris_barang.barang_kembar_proc,
                         COUNT(inv_inventaris_barang.id_mst_inv_barang) AS jumlah,
                         COUNT(inv_inventaris_barang.id_mst_inv_barang)*inv_inventaris_barang.harga AS totalharga,
                         inv_inventaris_barang.keterangan_pengadaan,mst_inv_pilihan.value,inv_inventaris_barang.tanggal_diterima,

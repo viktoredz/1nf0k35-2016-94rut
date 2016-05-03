@@ -176,7 +176,7 @@ class Inv_ruangan extends CI_Controller {
 		$this->authentication->verify('inventory','edit');
 		$data['title_group'] 	= "Inventory";
 		$data['title_form'] 	= "Inventaris Ruangan";
-
+		
 		$this->db->like('code','p'.substr($this->session->userdata('puskesmas'),0,7));
 
 		$kodepuskesmas = $this->session->userdata('puskesmas');
