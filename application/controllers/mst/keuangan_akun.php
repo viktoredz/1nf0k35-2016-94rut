@@ -30,16 +30,25 @@ class Keuangan_akun extends CI_Controller {
 
 				break;
 			case 2:
-				
+				$data['title_group']   = "Keuangan";
+				$data['title_form']    = "Anggaran Akun";
+				$data['ambildata']     = $this->keuakun_model->get_data();
+
 				die($this->parser->parse("mst/keuakun/anggaran_akun",$data));
 
 				break;
 			case 3:
-				
+				$data['title_group']   = "Keuangan";
+				$data['title_form']    = "Target Penerimaan Akun";
+				$data['ambildata']     = $this->keuakun_model->get_data();
 				die($this->parser->parse("mst/keuakun/target_penerimaan",$data));
 
 				break;
 			default:
+
+				$data['title_group']   = "Keuangan";
+				$data['title_form']    = "Daftar Akun Non Aktif ";
+				$data['ambildata']     = $this->keuakun_model->get_data();
 
 				die($this->parser->parse("mst/keuakun/akun_non_aktif",$data));
 				break;
@@ -51,7 +60,7 @@ class Keuangan_akun extends CI_Controller {
 		
 		$data['ambildata'] = $this->keuakun_model->get_data_akun();
 		foreach($data['ambildata'] as $d){
-			$txt = $d["id_mst_akun"]." \t ".$d["id_mst_akun_parent"]."\t".$d["kode"]." \t ".$d["uraian"]." \t ".$d["saldo_normal"]." \t ".$d["saldo_awal"]." \t ".$d["mendukung_anggaran"]." \n";				
+			$txt = $d["id_mst_akun"]." \t ".$d["id_mst_akun_parent"]."\t".$d["kode"]." \t ".$d["uraian"]." \t ".ucwords($d["saldo_normal"])." \t ".$d["saldo_awal"]." \t ".$d["mendukung_transaksi"]." \n";				
 			echo $txt;
 		}
 		
@@ -71,6 +80,7 @@ class Keuangan_akun extends CI_Controller {
 
 	    $data['action']				= "add";
 		$data['alert_form']		    = '';
+		$data['akun']				= $this->keuakun_model->get_parent_akun();
 
 		if($this->form_validation->run()== FALSE){
 			die($this->parser->parse("mst/keuakun/form_tambah_induk",$data));
@@ -81,6 +91,26 @@ class Keuangan_akun extends CI_Controller {
 		}
 		die($this->parser->parse("mst/keuakun/form_tambah_induk",$data));
 	}
+
+	function induk_update($id=0){
+		$this->authentication->verify('mst','add');
+
+    	$this->form_validation->set_rules('mendukung_transaksi', 'Mendukung Transaksi', 'trim');
+
+	    $data['action']				= "add";
+		$data['alert_form']		    = '';
+		$data['id']					= $id;
+
+		if($this->form_validation->run()== FALSE){
+			die($this->parser->parse("mst/keuakun/form_detail_akun",$data));
+		}elseif($this->keuakun_model->update_entry($id)){
+			die("OK");
+		}else{
+			$data['alert_form'] = 'Save data failed...';
+		}
+		die($this->parser->parse("mst/keuakun/form_detail_akun",$data));
+	}
+
 
 	function induk_detail($id=0){
 

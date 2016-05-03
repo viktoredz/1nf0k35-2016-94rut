@@ -11,8 +11,7 @@ class Keuakun_model extends CI_Model {
     }
 
 
-    function insert_entry()
-    {
+    function insert_entry(){
         $data['uraian']          = $this->input->post('uraian');
         $data['saldo_normal']    = $this->input->post('saldo_normal');
 	
@@ -23,6 +22,18 @@ class Keuakun_model extends CI_Model {
 		}else{
 			return mysql_error();
 		}
+    }
+
+    function update_entry($id){
+        $data['status_pns']         = $this->input->post('status_pns');
+
+        $this->db->where('id_mst_akun',$id);
+
+        if($this->db->update($this->tb, $data)){
+            return true; 
+        }else{
+            return mysql_error();
+        }
     }
 
     function akun_delete(){  
@@ -77,6 +88,14 @@ class Keuakun_model extends CI_Model {
         $this->db->order_by('uraian','asc');
         $query = $this->db->get('mst_keu_akun');     
         return $query->result_array();  
+    }
+
+    function get_parent_akun(){     
+        $this->db->select('*');
+        $this->db->where('id_mst_akun_parent IS NULL');
+        $this->db->order_by('uraian','asc');
+        $query = $this->db->get('mst_keu_akun');     
+        return $query->result();  
     }
 
    function get_data_akun_detail($id){

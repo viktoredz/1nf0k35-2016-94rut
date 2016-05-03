@@ -2,10 +2,6 @@
   $(function() {
     $('#jqxTabs').jqxTabs({ width: '100%', height: '1000'});
 
-    $('#btn-return').click(function(){
-        document.location.href="<?php echo base_url()?>kepegawaian/drh";
-    });
-
      var loadPage = function (url, tabIndex) {
         $.get(url, function (data) {
             $('#content' + tabIndex).html(data);

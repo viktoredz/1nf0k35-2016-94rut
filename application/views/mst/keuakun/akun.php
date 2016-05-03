@@ -19,6 +19,7 @@
           <button id="doExpand" class="btn btn-warning " ><i class="icon fa fa-plus-square-o"></i> &nbsp;Expand</button>  
           <button id="doCollapse" class="btn btn-warning " ><i class="icon fa fa-minus-square-o"></i> &nbsp;Collapse</button> 
           <button id="doInduk" onclick='add_induk()' class="btn btn-success"><i class="icon fa fa-plus-square"></i> &nbsp;Tambah Induk</button> 
+          <button id="doRefresh" class="btn btn-primary" ><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
         </div>
       </div>
     </div>
@@ -43,11 +44,6 @@
 </div>
 
 <script type="text/javascript">
-    $("#btn-kembali").click(function(){
-      $.get('<?php echo base_url()?>mst/keuangan_sts/kembali', function (data) {
-        $('#content1').html(data);
-      });
-    });
 
     function getDemoTheme() {
       var theme = document.body ? $.data(document.body, 'theme') : null
@@ -177,7 +173,7 @@
                 { name: "uraian", type: "string" },
                 { name: "saldo_normal", type: "string" },
                 { name: "saldo_awal", type: "number" },
-                { name: "mendukung_anggaran", type: "number"}
+                { name: "mendukung_transaksi", type: "number"}
             ],
                 hierarchy:
                 {
@@ -258,6 +254,55 @@
                 },
                 pagerButtonsCount: 8,
                 toolbarHeight: 40,
+
+                rendering: function(){
+                    // destroys all buttons.
+                    if ($(".editButtons").length > 0) {
+                        $(".editButtons").jqxButton('destroy');
+                    }
+                    if ($(".cancelButtons").length > 0) {
+                        $(".cancelButtons").jqxButton('destroy');
+                    }
+                },
+                // called when jqxTreeGrid is rendered.
+                rendered: function () {
+                    if ($(".editButtons").length > 0) {
+                        $(".cancelButtons").jqxButton();
+                        $(".editButtons").jqxButton();
+                        
+                        var editClick = function (event) {
+                            var target = $(event.target);
+                            // get button's value.
+                            var value = target.val();
+                            // get clicked row.
+                            var rowKey = event.target.getAttribute('data-row');
+
+                            if (value == "Edit") {
+                                // begin edit.
+                                $("#treeGrid").jqxTreeGrid('beginRowEdit', rowKey);
+                                target.parent().find('.cancelButtons').show();
+                                target.val("Save");
+                            }
+                            else {
+                                // end edit and save changes.
+                                target.parent().find('.cancelButtons').hide();
+                                target.val("Edit");
+                                $("#treeGrid").jqxTreeGrid('endRowEdit', rowKey);
+                            }
+                        }
+
+                        $(".editButtons").on('click', function (event) {
+                            editClick(event);
+                        });
+                 
+                        $(".cancelButtons").click(function (event) {
+                            // end edit and cancel changes.
+                            var rowKey = event.target.getAttribute('data-row');
+                            $("#treeGrid").jqxTreeGrid('endRowEdit', rowKey, true);
+                        });
+                    }
+                },
+
                 renderToolbar: function(toolBar)
                 {
                     var toTheme = function (className) {
@@ -407,87 +452,31 @@
                     });
                 },
 
-                 rendered: function () {
-                    if ($(".editButtons").length > 0) {
-                        $(".cancelButtons").jqxButton();
-                        $(".editButtons").jqxButton();
-                        
-                        var editClick = function (event) {
-                            var target = $(event.target);
-                            // get button's value.
-                            var value = target.val();
-                            // get clicked row.
-                            var rowKey = event.target.getAttribute('data-row');
-
-                            if (value == "Edit") {
-                                // begin edit.
-                                $("#treeGrid").jqxTreeGrid('beginRowEdit', rowKey);
-                                target.parent().find('.cancelButtons').show();
-                                target.val("Save");
-                            }
-                            else {
-                                // end edit and save changes.
-                                target.parent().find('.cancelButtons').hide();
-                                target.val("Edit");
-                                $("#treeGrid").jqxTreeGrid('endRowEdit', rowKey);
-                            }
-                        }
-
-                        $(".editButtons").on('click', function (event) {
-                            editClick(event);
-                        });
-                 
-                        $(".cancelButtons").click(function (event) {
-                            // end edit and cancel changes.
-                            var rowKey = event.target.getAttribute('data-row');
-                            $("#treeGrid").jqxTreeGrid('endRowEdit', rowKey, true);
-                        });
-                    }
-                },
 
               columns: [                             
                 { text: 'Uraian ', datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox',align: 'center', width: '27%' },
-                { text: 'Kode', datafield: 'kode', columntype: 'textbox', filtertype: 'textbox',align: 'center', cellsalign: 'left', width: '15%'},
+                { text: 'Kode Akun', datafield: 'kode', columntype: 'textbox', filtertype: 'textbox',align: 'center', cellsalign: 'left', width: '15%'},
                 { text: 'Saldo Normal', datafield: 'saldo_normal', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '15%', cellsalign: 'center' },
-                // { text: 'Saldo Normal', dataField: 'SaldoNormal', width: "15%", align:'center',columnType: "template",
-                //    createEditor: function (row, cellvalue, editor, cellText, width, height) {
-                //        editor.jqxDropDownList({autoDropDownHeight: true, width: '100%', height: '100%' , source: saldo_norma_source, displayMember: "saldo_normal", valueMember: "saldo_normal"});
-
-                //    },
-                //    initEditor: function (row, cellvalue, editor, celltext, width, height) {
-                //        editor.jqxDropDownList('selectItem', cellvalue);
-                //    },
-                //    getEditorValue: function (row, cellvalue, editor) {
-                //        return editor.val();
-                //    }
-                // },
-
                 { text: 'Saldo Awal', datafield: 'saldo_awal', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '15%', cellsalign: 'center' },
-                // { text: 'Mendukung Transaksi', datafield: 'mendukung_anggaran', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '15%', cellsalign: 'center' },
-                { text: 'Mendukung Transaksi', datafield: 'mendukung_anggaran', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '15%',  cellsrenderer: function (row) {
-                      var rows = $("#treeGrid").jqxTreeGrid('getRows');
-                      var aktif = rows[1].uraian;
-              
-                        // alert(aktif);
-                    
-                  var str = "";
-                  if(aktif=='1'){
-                   str = "<input type='checkbox' checked>";
-                  }else{
-                   str = "<input type='checkbox'>";
-                  }
-                  return "<div style='width:100%;padding-top:2px;text-align:center'>"+str+"</div>";
-                  
-                  }
-                },
-
-                {text: 'Detail', sortable: false, align:'center', editable: false, filterable: false, cellsrenderer: function (row, columnDataField, value) {
-                            // return '&nbsp;<button id="ed' + row + '" onclick="detail(' + row + ');">Edit</button>'
+                { text: 'Mendukung Transaksi', datafield: 'mendukung_transaksi', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '15%', cellsalign: 'center' },
+                // { text: 'Mendukung Transaksi', datafield: 'mendukung_anggaran', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '15%',  cellsrenderer: function (row, column, value) {
+                //         var rows = $("#treeGrid").jqxTreeGrid('getRows');
+                //         var aktif = rows[0].uraian;
+                //         // alert(aktif);
+                //         var str = "";
+                //         if(aktif=='1'){
+                //          str = "<input type='checkbox' checked>";
+                //         }else{
+                //          str = "<input type='checkbox'>";
+                //         }
+                //         return "<div style='width:100%;padding-top:2px;text-align:center'>"+str+"</div>";
+                        
+                //         }
+                //       },
+                {text: 'Detail', sortable: false, align:'center', editable: false, filterable: false, cellsrenderer: function (row, column, value) {
                   return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='detail(" + row + ");'></a></div>";
-                       
-                        },
-                       
-                    }
+                  },
+                }
               ]
             });
         });
@@ -505,9 +494,8 @@
           });
           $("#popup_keuangan_akun_detail").jqxWindow('open');
       }
-
     
-      function add_induk(){
+    function add_induk(){
       $("#popup_keuangan_akun #popup_keuangan_akun_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
         $.get("<?php echo base_url().'mst/keuangan_akun/induk_add' ?>/", function(data) {
           $("#popup_keuangan_akun_content").html(data);

@@ -65,33 +65,26 @@
                 <div class="col-md-4" style="padding: 5px">
                  Urutan
                 </div>
+
                 <div class="col-md-4">
-                  <select  name="induk_kode_rek" type="text" class="form-control">
-                      <?php foreach($kode_rek as $rek) : ?>
-                        <?php
-                        if(set_value('id_mst_akun')=="" && isset($id_mst_akun)){
-                          $id_mst_akun = $id_mst_akun;
-                        }else{
-                          $id_mst_akun = set_value('id_mst_akun');
-                        }
-                        $select = $rek->id_mst_akun == $id_mst_akun ? 'selected' : '' ;
-                        ?>
-                        <option value="<?php echo $rek->id_mst_akun ?>" <?php echo $select ?>><?php echo $rek->kode." - ". $rek->uraian ?></option>
-                      <?php endforeach ?>
+                  <select  name="akun_urutan" type="text" class="form-control">
+                       <option value="sebelum" >Sebelum</option>
+                       <option value="sesudah">Sesudah</option>
                   </select>
                 </div>
-                     <div class="col-md-4">
-                  <select  name="induk_kode_rek" type="text" class="form-control">
-                      <?php foreach($kode_rek as $rek) : ?>
+                
+                <div class="col-md-4">
+                  <select  name="akun_urutan_induk" type="text" class="form-control">
+                      <?php foreach($akun as $a) : ?>
                         <?php
                         if(set_value('id_mst_akun')=="" && isset($id_mst_akun)){
                           $id_mst_akun = $id_mst_akun;
                         }else{
                           $id_mst_akun = set_value('id_mst_akun');
                         }
-                        $select = $rek->id_mst_akun == $id_mst_akun ? 'selected' : '' ;
+                        $select = $a->id_mst_akun == $id_mst_akun ? 'selected' : '' ;
                         ?>
-                        <option value="<?php echo $rek->id_mst_akun ?>" <?php echo $select ?>><?php echo $rek->kode." - ". $rek->uraian ?></option>
+                        <option value="<?php echo $a->id_mst_akun ?>" <?php echo $select ?>><?php echo $a->uraian ?></option>
                       <?php endforeach ?>
                   </select>
                 </div>
