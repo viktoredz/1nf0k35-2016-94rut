@@ -82,9 +82,18 @@ class Keuangan_akun extends CI_Controller {
 		die($this->parser->parse("mst/keuakun/form_tambah_induk",$data));
 	}
 
-	function induk_delete(){
-		$this->authentication->verify('mst','del');
-		$this->keuakun_model->induk_delete();				
+	function induk_detail($id=0){
+
+			$data 						= $this->keuakun_model->get_data_akun_detail($id);
+			$data['notice']				= validation_errors();
+			$data['action']				= "edit";
+			$data['id']					= $id;
+			$data['alert_form'] 		= '';
+			$data['disable']			= "disable";
+			die($this->parser->parse("mst/keuakun/form_detail_akun",$data));
+		
+		$this->keuinstansi_model->update_entry_instansi($id);
+		die($this->parser->parse("mst/keuakun/form_detail_akun",$data));
 	}
 
 	function akun_add(){
@@ -95,7 +104,6 @@ class Keuangan_akun extends CI_Controller {
 		$this->form_validation->set_rules('saldo_awal','Saldo Awal','trim|required');
 		$this->form_validation->set_rules('saldo_normal','Saldo Normal','trim|required');
 
-
 		if($this->form_validation->run()== TRUE){
 			$this->keuakun_model->akun_add();	
 			echo "0";
@@ -104,6 +112,30 @@ class Keuangan_akun extends CI_Controller {
 			echo str_replace("<p>", "", str_replace("</p>", "\n", $err));
 		}	
 	}
+
+	function akun_delete(){
+		$this->authentication->verify('mst','del');
+		$this->keuakun_model->akun_delete();				
+	}
+
+	function akun_update(){
+		$this->authentication->verify('mst','edit');
+		$this->form_validation->set_rules('id_mst_akun_parent','ID Akun Parent','trim|required');
+		$this->form_validation->set_rules('kode','Kode','trim|required');
+		$this->form_validation->set_rules('uraian','Uraian','trim|required');
+		$this->form_validation->set_rules('saldo_awal','Saldo Awal','trim|required');
+		$this->form_validation->set_rules('saldo_normal','Saldo Normal','trim|required');
+		$this->form_validation->set_rules('mendukung_anggaran','Mendukung Transaksi','trim|required');
+
+		if($this->form_validation->run()== TRUE){
+			$this->keuakun_model->akun_update();	
+			echo "0";
+		}else{			
+			$err = validation_errors();
+			echo str_replace("<p>", "", str_replace("</p>", "\n", $err));
+		}	
+	}
+
 
 	function json_akun(){
 		$this->authentication->verify('mst','show');

@@ -33,8 +33,13 @@
 </section>
 
 <div id="popup_keuangan_akun" style="display:none">
-  <div id="popup_title">{title_form}</div>
+  <div id="popup_title">Buat Induk Akun</div>
   <div id="popup_keuangan_akun_content">&nbsp;</div>
+</div>
+
+<div id="popup_keuangan_akun_detail" style="display:none">
+  <div id="popup_title">Detail Akun</div>
+  <div id="popup_keuangan_akun_detail_content">&nbsp;</div>
 </div>
 
 <script type="text/javascript">
@@ -192,7 +197,7 @@
                     var arr = $.map(rowData, function(el) { return el });         
                     if(typeof(arr[1]) === 'object'){
                       var arr2 = $.map(arr[1], function(el) { return el });
-                      if(arr[2] + '' + arr[3] + '' + arr[4] + '' + arr[5]!='') {
+                      if(arr[4] + '' + arr[5] + '' + arr[6] + '' + arr[7]+ '' + arr[8]!='') {
                         $.post( '<?php echo base_url()?>mst/keuangan_akun/akun_add', {id_mst_akun:arr[2],id_mst_akun_parent:arr2[0], uraian:arr[4], kode:arr[5], saldo_normal:arr[6], saldo_awal : arr[7], mendukung_anggaran : arr[8]}, function( data ) {
                             if(data != 0){
                               alert(data);                  
@@ -202,16 +207,16 @@
                         });
                       }
                     }else{      
-                      $.post( '<?php echo base_url()?>mst/keuangan_akun/anggaran_update', 
+                      $.post( '<?php echo base_url()?>mst/keuangan_akun/akun_update', 
                         {
                           row:rowID,
                           id_mst_akun:arr[0] ,
                           id_mst_akun_parent:arr[1], 
-                          kode:arr[3], 
-                          uraian : arr[4], 
-                          saldo_normal : arr[5], 
-                          saldo_awal:arr[7], 
-                          mendukung_transaksi : arr[1]
+                          kode:arr[2], 
+                          uraian : arr[3], 
+                          saldo_normal : arr[4], 
+                          saldo_awal:arr[5], 
+                          mendukung_anggaran : arr[6]
                         },
                         function( data ) {
                           if(data != 0){
@@ -223,12 +228,12 @@
                  deleteRow: function (rowID, commit) {
                     if( Object.prototype.toString.call( rowID ) === '[object Array]' ) {
                       for(var i=0; i< rowID.length; i++){
-                        $.post( '<?php echo base_url()?>mst/keuangan_akun/induk_delete', {id_mst_akun:rowID[i]},function( data ) {
+                        $.post( '<?php echo base_url()?>mst/keuangan_akun/akun_delete', {id_mst_akun:rowID[i]},function( data ) {
                           $("#treeGrid").jqxTreeGrid('updateBoundData');
                         });
                       }
                     }else{
-                      $.post( '<?php echo base_url()?>mst/keuangan_akun/induk_delete', {id_mst_akun:rowID},function( data ) {
+                      $.post( '<?php echo base_url()?>mst/keuangan_akun/akun_delete', {id_mst_akun:rowID},function( data ) {
                         // $("#treeGrid").jqxTreeGrid('updateBoundData');
                       });
                     }
@@ -441,7 +446,7 @@
                 },
 
               columns: [                             
-                { text: 'Uraian ', datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox',align: 'center', width: '30%' },
+                { text: 'Uraian ', datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox',align: 'center', width: '27%' },
                 { text: 'Kode', datafield: 'kode', columntype: 'textbox', filtertype: 'textbox',align: 'center', cellsalign: 'left', width: '15%'},
                 { text: 'Saldo Normal', datafield: 'saldo_normal', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '15%', cellsalign: 'center' },
                 // { text: 'Saldo Normal', dataField: 'SaldoNormal', width: "15%", align:'center',columnType: "template",
@@ -458,15 +463,49 @@
                 // },
 
                 { text: 'Saldo Awal', datafield: 'saldo_awal', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '15%', cellsalign: 'center' },
-                { text: 'Mendukung Transaksi', datafield: 'mendukung_anggaran', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '15%', cellsalign: 'center' },
-                { text: 'Detail', cellsAlign: 'center', align: "center", columnType: 'none',width: '10%', editable: false, sortable: false, dataField: null, cellsRenderer: function (row, column, value) {
-                          // render custom column.
-                    return "<button data-row='" + row + "' class='editButtons'>Edit</button><button style='display: none; margin-left: 5px;' data-row='" + row + "' class='cancelButtons'>Cancel</button>";
+                // { text: 'Mendukung Transaksi', datafield: 'mendukung_anggaran', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '15%', cellsalign: 'center' },
+                { text: 'Mendukung Transaksi', datafield: 'mendukung_anggaran', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '15%',  cellsrenderer: function (row) {
+                      var rows = $("#treeGrid").jqxTreeGrid('getRows');
+                      var aktif = rows[1].uraian;
+              
+                        // alert(aktif);
+                    
+                  var str = "";
+                  if(aktif=='1'){
+                   str = "<input type='checkbox' checked>";
+                  }else{
+                   str = "<input type='checkbox'>";
                   }
-                }
+                  return "<div style='width:100%;padding-top:2px;text-align:center'>"+str+"</div>";
+                  
+                  }
+                },
+
+                {text: 'Detail', sortable: false, align:'center', editable: false, filterable: false, cellsrenderer: function (row, columnDataField, value) {
+                            // return '&nbsp;<button id="ed' + row + '" onclick="detail(' + row + ');">Edit</button>'
+                  return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='detail(" + row + ");'></a></div>";
+                       
+                        },
+                       
+                    }
               ]
             });
         });
+
+    function detail(id){
+        $("#popup_keuangan_akun_detail #popup_keuangan_akun_detail_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
+          $.get("<?php echo base_url().'mst/keuangan_akun/induk_detail' ?>/"+ id, function(data) {
+            $("#popup_keuangan_akun_detail_content").html(data);
+          });
+          $("#popup_keuangan_akun_detail").jqxWindow({
+            theme: theme, resizable: false,
+            width: 600,
+            height: 450,
+            isModal: true, autoOpen: false, modalOpacity: 0.2
+          });
+          $("#popup_keuangan_akun_detail").jqxWindow('open');
+      }
+
     
       function add_induk(){
       $("#popup_keuangan_akun #popup_keuangan_akun_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");

@@ -16,19 +16,21 @@ class Keuakun_model extends CI_Model {
         $data['uraian']          = $this->input->post('uraian');
         $data['saldo_normal']    = $this->input->post('saldo_normal');
 	
-		if($this->db->insert('mst_keu_akun', $data)){
-			return 1;
+		if($this->db->set('saldo_awal',0)){
+          ($this->db->set('mendukung_anggaran',0));
+		  ($this->db->insert($this->tb, $data));
+            return 1;
 		}else{
 			return mysql_error();
 		}
     }
 
-    function induk_delete(){  
+    function akun_delete(){  
         $this->db->where('id_mst_akun', $this->input->post('id_mst_akun'));
-        $this->db->delete('mst_keu_akun');
+        $this->db->delete($this->tb);
                 
         $this->db->where('id_mst_akun_parent', $this->input->post('id_mst_akun'));
-        $this->db->delete('mst_keu_akun');
+        $this->db->delete($this->tb);
     }
 
     function akun_add(){
@@ -42,11 +44,24 @@ class Keuakun_model extends CI_Model {
         );
 
          if($this->db->set('tanggal_dibuat', 'NOW()', FALSE)){
-          ($this->db->insert('mst_keu_akun', $data));
+           ($this->db->insert($this->tb, $data));
             return 1;
         }else{
             return mysql_error();
         }
+    }
+
+    function akun_update(){
+        $data = array(
+           'id_mst_akun_parent' => $this->input->post('id_mst_akun_parent'),
+           'kode'               => $this->input->post('kode') ,
+           'saldo_normal'       => $this->input->post('saldo_normal') ,
+           'saldo_awal'         => $this->input->post('saldo_awal'),
+           'uraian'             => $this->input->post('uraian'),
+           'mendukung_anggaran' => $this->input->post('mendukung_anggaran')
+        );
+        $this->db->where('id_mst_akun', $this->input->post('id_mst_akun'));
+        return $this->db->update($this->tb, $data);             
     }
 
  	function get_data($start=0,$limit=999999,$options=array())
@@ -64,19 +79,11 @@ class Keuakun_model extends CI_Model {
         return $query->result_array();  
     }
 
-    function delete_entry($id)
-	{
-		$this->db->where('code',$id);
-
-		return $this->db->delete('mst_inv_pbf');
-	}
-
-   function get_data_instansi_edit($id){
+   function get_data_akun_detail($id){
         $data = array();
-
         $this->db->select("*");
-        $this->db->where("code",$id);
-        $query = $this->db->get("mst_inv_pbf");
+        $this->db->where("id_mst_akun",$id);
+        $query = $this->db->get('mst_keu_akun');
         if($query->num_rows()>0){
             $data = $query->row_array();
         }
@@ -84,36 +91,6 @@ class Keuakun_model extends CI_Model {
         $query->free_result();
         return $data;
     }
-
-    function update_entry_instansi($id)
-    {
-    	$data['nama']          = $this->input->post('nama');
-        $data['tlp']		   = $this->input->post('tlp');
-        $data['alamat']        = $this->input->post('alamat');
-        $data['kategori']      = $this->input->post('kategori');
-        $data['status']        = $this->input->post('status');
-
-        $this->db->where('code',$id);
-
-        if($this->db->update('mst_inv_pbf', $data)){
-            return true; 
-        }else{
-            return mysql_error();
-        }
-    }
-
-     	function get_data_row($id){
-		$data = array();
-		$options = array('code' => $id);
-		$query = $this->db->get_where('mst_inv_pbf',$options);
-		if ($query->num_rows() > 0){
-			$data = $query->row_array();
-		}
-
-		$query->free_result();    
-		return $data;
-	}
-
 
 }
 

@@ -61,7 +61,7 @@
                 </div>
               </div>
 
-<!--               <div class="row" style="margin: 5px">
+              <div class="row" style="margin: 5px">
                 <div class="col-md-4" style="padding: 5px">
                  Urutan
                 </div>
@@ -95,7 +95,7 @@
                       <?php endforeach ?>
                   </select>
                 </div>
-              </div> -->
+              </div>
 
               <br>
             </div>
