@@ -63,13 +63,20 @@ class Keuangan_akun extends CI_Controller {
 			$txt = $d["id_mst_akun"]." \t ".$d["id_mst_akun_parent"]."\t".$d["kode"]." \t ".$d["uraian"]." \t ".ucwords($d["saldo_normal"])." \t ".$d["saldo_awal"]." \t ".$d["mendukung_transaksi"]." \n";				
 			echo $txt;
 		}
-		
 	}
 
 	function set_puskes(){
 		$this->authentication->verify('mst','edit');
 		$this->session->set_userdata('puskes',$this->input->post('puskes'));		
 		
+	}
+
+	function filter_tahun(){
+		if($_POST) {
+			if($this->input->post('tahun') != '') {
+				$this->session->set_userdata('filter_tahun',$this->input->post('tahun'));
+			}
+		}
 	}
 
 	function induk_add(){
@@ -92,28 +99,64 @@ class Keuangan_akun extends CI_Controller {
 		die($this->parser->parse("mst/keuakun/form_tambah_induk",$data));
 	}
 
-	function induk_update($id=0){
-		$this->authentication->verify('mst','add');
+	function mendukung_target_update($id=0){
+		$this->authentication->verify('mst','edit');
 
-    	$this->form_validation->set_rules('mendukung_transaksi', 'Mendukung Transaksi', 'trim');
+    	$this->form_validation->set_rules('mendukung_target', 'Mendukung Target', 'trim');
 
-	    $data['action']				= "add";
+	    $data['action']				= "edit";
 		$data['alert_form']		    = '';
 		$data['id']					= $id;
 
 		if($this->form_validation->run()== FALSE){
 			die($this->parser->parse("mst/keuakun/form_detail_akun",$data));
-		}elseif($this->keuakun_model->update_entry($id)){
-			die("OK");
+		}elseif($mendukung_target=$this->keuakun_model->mendukung_target_update($id)){
+			die("OK|$mendukung_target");
 		}else{
 			$data['alert_form'] = 'Save data failed...';
 		}
 		die($this->parser->parse("mst/keuakun/form_detail_akun",$data));
 	}
 
+	function mendukung_anggaran_update($id=0){
+		$this->authentication->verify('mst','edit');
+
+    	$this->form_validation->set_rules('mendukung_anggaran', 'Mendukung Anggaran', 'trim');
+
+	    $data['action']				= "edit";
+		$data['alert_form']		    = '';
+		$data['id']					= $id;
+
+		if($this->form_validation->run()== FALSE){
+			die($this->parser->parse("mst/keuakun/form_detail_akun",$data));
+		}elseif($mendukung_anggaran=$this->keuakun_model->mendukung_anggaran_update($id)){
+			die("OK|$mendukung_anggaran");
+		}else{
+			$data['alert_form'] = 'Save data failed...';
+		}
+		die($this->parser->parse("mst/keuakun/form_detail_akun",$data));
+	}
+
+	function mendukung_transaksi_update($id=0){
+		$this->authentication->verify('mst','edit');
+
+    	$this->form_validation->set_rules('mendukung_transaksi', 'Mendukung Transaksi', 'trim');
+
+	    $data['action']				= "edit";
+		$data['alert_form']		    = '';
+		$data['id']					= $id;
+
+		if($this->form_validation->run()== FALSE){
+			die($this->parser->parse("mst/keuakun/form_detail_akun",$data));
+		}elseif($mendukung_transaksi=$this->keuakun_model->mendukung_transaksi_update($id)){
+			die("OK|$mendukung_transaksi");
+		}else{
+			$data['alert_form'] = 'Save data failed...';
+		}
+		die($this->parser->parse("mst/keuakun/form_detail_akun",$data));
+	}
 
 	function induk_detail($id=0){
-
 			$data 						= $this->keuakun_model->get_data_akun_detail($id);
 			$data['notice']				= validation_errors();
 			$data['action']				= "edit";

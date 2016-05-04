@@ -24,13 +24,64 @@ class Keuakun_model extends CI_Model {
 		}
     }
 
-    function update_entry($id){
-        $data['status_pns']         = $this->input->post('status_pns');
-
+    function mendukung_transaksi_update($id){
+        $data['mendukung_transaksi']      = $this->input->post('mendukung_transaksi');
+       
         $this->db->where('id_mst_akun',$id);
 
         if($this->db->update($this->tb, $data)){
-            return true; 
+            $this->db->where('id_mst_akun',$id);
+            $this->db->select('mendukung_transaksi');
+            $variable = $this->db->get('mst_keu_akun');
+            foreach ($variable->result() as $key) {
+                if ($key->mendukung_transaksi=='1') {
+                    return '1';
+                }else{
+                    return '2';    
+                }
+            }
+        }else{
+            return mysql_error();
+        }
+    }
+
+    function mendukung_anggaran_update($id){
+        $data['mendukung_anggaran']       = $this->input->post('mendukung_anggaran');
+       
+        $this->db->where('id_mst_akun',$id);
+
+        if($this->db->update($this->tb, $data)){
+            $this->db->where('id_mst_akun',$id);
+            $this->db->select('mendukung_anggaran');
+            $variable = $this->db->get('mst_keu_akun');
+            foreach ($variable->result() as $key) {
+                if($key->mendukung_anggaran=='1'){
+                    return '1';
+                }else{
+                    return '2';
+                }
+            }
+        }else{
+            return mysql_error();
+        }
+    }
+
+    function mendukung_target_update($id){
+        $data['mendukung_target']         = $this->input->post('mendukung_target');
+       
+        $this->db->where('id_mst_akun',$id);
+
+        if($this->db->update($this->tb, $data)){
+            $this->db->where('id_mst_akun',$id);
+            $this->db->select('mendukung_target');
+            $variable = $this->db->get('mst_keu_akun');
+            foreach ($variable->result() as $key ) {
+               if ($key->mendukung_target=='1') {
+                   return '1';
+               }else{
+                   return '2';
+               }
+            }
         }else{
             return mysql_error();
         }

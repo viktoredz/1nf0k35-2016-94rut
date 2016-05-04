@@ -138,6 +138,12 @@
 
 <script type="text/javascript">
   $(document).ready(function () {
+
+    $("select[name='tahun']").change(function(){
+      $.post("<?php echo base_url().'mst/keuangan_akun/filter_tahun' ?>", 'tahun='+$(this).val(),  function(){
+        $("#treeGrid_target_penerimaan").jqxTreeGrid('updateBoundData','filter');
+        });
+    });
       
       var newRowID = null;
 
