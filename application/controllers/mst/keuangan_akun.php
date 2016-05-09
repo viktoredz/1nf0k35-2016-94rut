@@ -191,25 +191,6 @@ class Keuangan_akun extends CI_Controller {
 		$this->keuakun_model->akun_delete();				
 	}
 
-	function akun_update(){
-		$this->authentication->verify('mst','edit');
-		$this->form_validation->set_rules('id_mst_akun_parent','ID Akun Parent','trim|required');
-		$this->form_validation->set_rules('kode','Kode','trim|required');
-		$this->form_validation->set_rules('uraian','Uraian','trim|required');
-		$this->form_validation->set_rules('saldo_awal','Saldo Awal','trim|required');
-		$this->form_validation->set_rules('saldo_normal','Saldo Normal','trim|required');
-		$this->form_validation->set_rules('mendukung_anggaran','Mendukung Transaksi','trim|required');
-
-		if($this->form_validation->run()== TRUE){
-			$this->keuakun_model->akun_update();	
-			echo "0";
-		}else{			
-			$err = validation_errors();
-			echo str_replace("<p>", "", str_replace("</p>", "\n", $err));
-		}	
-	}
-
-
 	function json_akun(){
 		$this->authentication->verify('mst','show');
 
