@@ -7,6 +7,8 @@ class Keuangan_akun extends CI_Controller {
 
 	}
 
+	var $mst_keu_akun		    = 'mst_keu_akun';
+
 	function index(){
 		$this->authentication->verify('mst','edit');
 		$data['title_group']   = "Keuangan";
@@ -65,10 +67,113 @@ class Keuangan_akun extends CI_Controller {
 		}
 	}
 
+	function api_data_akun_non_aktif(){
+		$this->authentication->verify('mst','edit');		
+		
+		$data['ambildata'] = $this->keuakun_model->get_data_akun_non_aktif();
+		foreach($data['ambildata'] as $d){
+			$txt = $d["id_mst_akun"]." \t ".$d["id_mst_akun_parent"]."\t".$d["kode"]." \t ".$d["uraian"]." \t ".ucwords($d["saldo_normal"])." \t ".$d["saldo_awal"]." \t ".$d["mendukung_transaksi"]." \n";				
+			echo $txt;
+		}
+	}
+
+	function statusakun($id=0){
+
+		$this->db->where('id_mst_akun',$id);
+		$this->db->select('aktif');
+		$query = $this->db->get('mst_keu_akun');
+		if ($query->num_rows() > 0) {
+			foreach ($query->result() as $q) {
+				$status_akun[] = array(
+					'mst_keu_akun' => ($q->aktif==null ? 0:$q->aktif), 
+				);
+			}
+		}else{
+			$status_akun[] = array(
+				'mst_keu_akun' => '0', 
+			);
+		}
+		echo json_encode($status_akun);
+	}
+
+	function non_aktif_akun($id){
+		
+		$this->db->where('id_mst_akun',$id);
+		$this->db->select('aktif');
+
+		$q = $this->db->get('mst_keu_akun');
+
+   		if ( $q->num_rows() > 0 ) {
+   			if($this->db->where('aktif',1)){
+				$pk   = array('id_mst_akun'=>$id);
+   				$data = array('aktif'=>0);
+
+      			$this->db->update('mst_keu_akun',$data,$pk);
+   				die("OK");
+   			}else{
+
+				$pk   = array('id_mst_akun'=>$id);
+   				$data = array('aktif'=>1);
+
+      			$this->db->update('mst_keu_akun',$data,$pk);
+   			}
+
+   		}else{
+   			echo "error";	
+   		}
+
+   		 return $q->result();
+	}
+
+	function have_child($id){
+		$query=$this->obj->db->query("SELECT COUNT(id_mst_akun) AS n FROM ".$this->mst_keu_akun." WHERE id_mst_akun_parent=".$id);			
+		$x=0;
+		foreach($query->result() as $q){
+			$x = $q->n;
+		}
+		if($x > 0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	function get_tree_kelompok($id_mst_akun_parent){
+  		$query = $this->db->query("SELECT id_mst_akun, id_mst_akun_parent,uraian FROM mst_keu_akun WHERE aktif=0");  
+
+			if($id_mst_akun_parent=='IS NULL'){
+				$text=$text."<ul class=\"sidebar-menu\">";
+			}else{				
+				$text=$text."<ul class=\"treeview-menu\">";
+			}
+
+ 			foreach($query->result() as $q){				
+	
+				if($this->have_child($q->id)){	
+
+					$text = $q->uraian." \n";				
+					// $text=$text."<li class=\"treeview\" id=\"menu_".$id_menu."\">
+					// 	<a href=\" ".base_url().$q->module." \">
+					// 		<i class=\" ".$ico." \"></i> <span> ".$q->uraian." </span> <i class=\"fa fa-angle-left pull-right\"></i>
+					// 	</a>";
+					 				
+				}else{
+					
+					$text = $q->uraian." \n";				
+
+					// $text=$text."<li id=\"menu_".$id_menu."\">
+					// 	<a href=\" ".base_url().$q->module." \">
+					// 		<i class=\" ".$ico."\"></i> <span> ".$q->uraian." </span> <i class=\"pull-right\"></i>
+					// 	</a>";
+				}
+
+				$text=$text."</li>";
+			}                          
+    }
+
 	function set_puskes(){
 		$this->authentication->verify('mst','edit');
 		$this->session->set_userdata('puskes',$this->input->post('puskes'));		
-		
 	}
 
 	function filter_tahun(){
@@ -189,6 +294,12 @@ class Keuangan_akun extends CI_Controller {
 	function akun_delete(){
 		$this->authentication->verify('mst','del');
 		$this->keuakun_model->akun_delete();				
+	}
+
+	function json_saldo_normal(){
+		$rows = $this->keuakun_model->json_saldo_normal();
+
+		echo json_encode($rows);
 	}
 
 	function json_akun(){

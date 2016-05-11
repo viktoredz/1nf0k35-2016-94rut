@@ -155,7 +155,7 @@
                 },
                 id: 'id_mst_akun',
 
-                url: '<?php echo base_url()?>mst/keuangan_akun/api_data',
+                url: '<?php echo base_url()?>mst/keuangan_akun/api_data_akun_non_aktif',
 
                  addRow: function (rowID, rowData, position, parentID, commit) {        
                     commit(true);

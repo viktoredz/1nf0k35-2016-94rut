@@ -138,6 +138,25 @@
 
 <script type="text/javascript">
   $(document).ready(function () {
+
+      function status_akun(argument) {
+        $.ajax({
+        url: "<?php echo base_url().'mst/keuangan_akun/statusakun/'?>/"+ id,
+        dataType: "json",
+        success:function(data){ 
+          $.each(data,function(index,elemet){
+            if (elemet.mst_keu_versi_status == '0') {
+                $("[name='aktifkan_status']").show();
+                $("#status").html("Aktifkan");
+            }else{
+                $("[name='aktifkan_status']").show();
+                $("#status").html("Non Aktifkan");
+            }
+          });
+        }
+        });
+        return false;
+      }
       
       var newRowID = null;
       $("#doExpand").click(function(){
@@ -159,10 +178,10 @@
               { name: 'id_mst_akun' },
               { name: 'saldo_normal' }
           ],
-          url: '<?php echo base_url()?>mst/keuangan_sts/json_kode_rekening',
+          url: '<?php echo base_url()?>mst/keuangan_akun/json_saldo_normal',
           async: true
       };
-      var saldo_norma_source = new $.jqx.dataAdapter(source);
+      var saldo_normal_source = new $.jqx.dataAdapter(source);
 
            var source = {
             dataType: "tab",
@@ -254,54 +273,6 @@
                 },
                 pagerButtonsCount: 8,
                 toolbarHeight: 40,
-
-                rendering: function(){
-                    // destroys all buttons.
-                    if ($(".editButtons").length > 0) {
-                        $(".editButtons").jqxButton('destroy');
-                    }
-                    if ($(".cancelButtons").length > 0) {
-                        $(".cancelButtons").jqxButton('destroy');
-                    }
-                },
-                // called when jqxTreeGrid is rendered.
-                rendered: function () {
-                    if ($(".editButtons").length > 0) {
-                        $(".cancelButtons").jqxButton();
-                        $(".editButtons").jqxButton();
-                        
-                        var editClick = function (event) {
-                            var target = $(event.target);
-                            // get button's value.
-                            var value = target.val();
-                            // get clicked row.
-                            var rowKey = event.target.getAttribute('data-row');
-
-                            if (value == "Edit") {
-                                // begin edit.
-                                $("#treeGrid").jqxTreeGrid('beginRowEdit', rowKey);
-                                target.parent().find('.cancelButtons').show();
-                                target.val("Save");
-                            }
-                            else {
-                                // end edit and save changes.
-                                target.parent().find('.cancelButtons').hide();
-                                target.val("Edit");
-                                $("#treeGrid").jqxTreeGrid('endRowEdit', rowKey);
-                            }
-                        }
-
-                        $(".editButtons").on('click', function (event) {
-                            editClick(event);
-                        });
-                 
-                        $(".cancelButtons").click(function (event) {
-                            // end edit and cancel changes.
-                            var rowKey = event.target.getAttribute('data-row');
-                            $("#treeGrid").jqxTreeGrid('endRowEdit', rowKey, true);
-                        });
-                    }
-                },
 
                 renderToolbar: function(toolBar)
                 {
@@ -452,28 +423,36 @@
                     });
                 },
 
-
               columns: [                             
                 { text: 'Uraian ', datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox',align: 'center', width: '27%' },
                 { text: 'Kode Akun', datafield: 'kode', columntype: 'textbox', filtertype: 'textbox',align: 'center', cellsalign: 'left', width: '15%'},
-                { text: 'Saldo Normal', datafield: 'saldo_normal', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '15%', cellsalign: 'center' },
+                { text: 'Saldo Normal', dataField: 'saldo_normal', width: "15%", align:'center',columnType: "template",
+                   createEditor: function (row, cellvalue, editor, cellText, width, height) {
+                       editor.jqxDropDownList({autoDropDownHeight: true, width: '100%', height: '100%' , source: saldo_normal_source, displayMember: "saldo_normal", valueMember: "saldo_normal"});
+                   },
+                   initEditor: function (row, cellvalue, editor, celltext, width, height) {
+                       editor.jqxDropDownList('selectItem', cellvalue);
+                   },
+                   getEditorValue: function (row, cellvalue, editor) {
+                       return editor.val();
+                   }
+                },
                 { text: 'Saldo Awal', datafield: 'saldo_awal', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '15%', cellsalign: 'center' },
-                { text: 'Mendukung Transaksi', datafield: 'mendukung_transaksi', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '15%', cellsalign: 'center' },
-                // { text: 'Mendukung Transaksi', datafield: 'mendukung_anggaran', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '15%',  cellsrenderer: function (row, column, value) {
-                //         var rows = $("#treeGrid").jqxTreeGrid('getRows');
-                //         var aktif = rows[0].uraian;
-                //         // alert(aktif);
-                //         var str = "";
-                //         if(aktif=='1'){
-                //          str = "<input type='checkbox' checked>";
-                //         }else{
-                //          str = "<input type='checkbox'>";
-                //         }
-                //         return "<div style='width:100%;padding-top:2px;text-align:center'>"+str+"</div>";
-                        
-                //         }
-                //       },
-                {text: 'Detail', sortable: false, align:'center', editable: false, filterable: false, cellsrenderer: function (row, column, value) {
+                { text: 'Mendukung Transaksi', datafield: 'mendukung_transaksi', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '15%',  cellsrenderer: function (row) {
+                        var dataRecord = $("#treeGrid").jqxTreeGrid('getRow', row);
+                        var aktif = dataRecord.mendukung_transaksi;
+                        // var uraian = dataRecord.uraian;
+                        // alert(uraian);
+                        var str = "";
+                        if(aktif=='1'){
+                         str = "<input type='checkbox' checked>";
+                        }else{
+                         str = "<input type='checkbox'>";
+                        }
+                        return "<div style='width:100%;padding-top:2px;text-align:center'>"+str+"</div>";
+                        }
+                      },
+                {text: 'Detail', sortable: false, align:'center', width: '13%',editable: false, filterable: false, cellsrenderer: function (row) {
                   return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='detail(" + row + ");'></a></div>";
                   },
                 }
@@ -489,10 +468,11 @@
           $("#popup_keuangan_akun_detail").jqxWindow({
             theme: theme, resizable: false,
             width: 600,
-            height: 450,
+            height: 380,
             isModal: true, autoOpen: false, modalOpacity: 0.2
           });
           $("#popup_keuangan_akun_detail").jqxWindow('open');
+          status_akun();
       }
     
     function add_induk(){

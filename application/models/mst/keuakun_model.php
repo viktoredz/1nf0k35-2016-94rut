@@ -10,7 +10,6 @@ class Keuakun_model extends CI_Model {
 		$this->lang	  = $this->config->item('language');
     }
 
-
     function insert_entry(){
         $data['uraian']          = $this->input->post('uraian');
         $data['saldo_normal']    = $this->input->post('saldo_normal');
@@ -22,6 +21,12 @@ class Keuakun_model extends CI_Model {
 		}else{
 			return mysql_error();
 		}
+    }
+
+    function json_saldo_normal(){
+        $this->db->select("id_mst_akun,saldo_normal",false);
+        $query = $this->db->get('mst_keu_akun');     
+        return $query->result_array();
     }
 
     function mendukung_transaksi_update($id){
@@ -126,6 +131,13 @@ class Keuakun_model extends CI_Model {
         return $this->db->update($this->tb, $data);             
     }
 
+    function non_aktif_akun($id){
+        $data['aktif']         = $this->input->post('aktif');
+       
+        $this->db->where('id_mst_akun', $this->input->post('id_mst_akun'));
+        return $this->db->update($this->tb, $data);     
+    }
+
  	function get_data($start=0,$limit=999999,$options=array())
     {
 		$this->db->order_by('id_mst_akun','asc');
@@ -133,9 +145,16 @@ class Keuakun_model extends CI_Model {
         return $query->result();
     }
 
-    function get_data_akun()
-    {     
+    function get_data_akun(){     
         $this->db->select('*');
+        $this->db->order_by('uraian','asc');
+        $query = $this->db->get('mst_keu_akun');     
+        return $query->result_array();  
+    }
+
+    function get_data_akun_non_aktif(){     
+        $this->db->select('*');
+        $this->db->where('aktif =0');
         $this->db->order_by('uraian','asc');
         $query = $this->db->get('mst_keu_akun');     
         return $query->result_array();  
