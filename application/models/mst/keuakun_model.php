@@ -23,10 +23,17 @@ class Keuakun_model extends CI_Model {
 		}
     }
 
-    function json_saldo_normal(){
-        $this->db->select("id_mst_akun,saldo_normal",false);
-        $query = $this->db->get('mst_keu_akun');     
-        return $query->result_array();
+    function json_saldo_normal($table , $field){
+        $query = "SHOW COLUMNS FROM ".$table." LIKE '$field'";
+         $row = $this->db->query("SHOW COLUMNS FROM ".$table." LIKE '$field'")->row()->Type;  
+         $regex = "/'(.*?)'/";
+            preg_match_all( $regex , $row, $enum_array );
+            $enum_fields = $enum_array[1];
+            foreach ($enum_fields as $key=>$value)
+            {
+                $enums[$value] = $value; 
+            }
+            return $enums;
     }
 
     function mendukung_transaksi_update($id){

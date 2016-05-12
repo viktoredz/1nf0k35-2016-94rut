@@ -104,14 +104,13 @@ class Keuangan_akun extends CI_Controller {
 		$q = $this->db->get('mst_keu_akun');
 
    		if ( $q->num_rows() > 0 ) {
-   			if($this->db->where('aktif',1)){
+   			if($this->db->where('aktif = 1')){
 				$pk   = array('id_mst_akun'=>$id);
    				$data = array('aktif'=>0);
 
       			$this->db->update('mst_keu_akun',$data,$pk);
    				die("OK");
    			}else{
-
 				$pk   = array('id_mst_akun'=>$id);
    				$data = array('aktif'=>1);
 
@@ -121,21 +120,12 @@ class Keuangan_akun extends CI_Controller {
    		}else{
    			echo "error";	
    		}
-
+		echo $q->num_rows(); 
    		 return $q->result();
 	}
 
-	function have_child($id){
+	function have_parent($id){
 		$query=$this->obj->db->query("SELECT COUNT(id_mst_akun) AS n FROM ".$this->mst_keu_akun." WHERE id_mst_akun_parent=".$id);			
-		$x=0;
-		foreach($query->result() as $q){
-			$x = $q->n;
-		}
-		if($x > 0){
-			return true;
-		}else{
-			return false;
-		}
 	}
 
 	function get_tree_kelompok($id_mst_akun_parent){
@@ -149,7 +139,7 @@ class Keuangan_akun extends CI_Controller {
 
  			foreach($query->result() as $q){				
 	
-				if($this->have_child($q->id)){	
+				if($this->have_parent($q->id)){	
 
 					$text = $q->uraian." \n";				
 					// $text=$text."<li class=\"treeview\" id=\"menu_".$id_menu."\">
@@ -297,7 +287,7 @@ class Keuangan_akun extends CI_Controller {
 	}
 
 	function json_saldo_normal(){
-		$rows = $this->keuakun_model->json_saldo_normal();
+		$rows = $this->keuakun_model->json_saldo_normal('mst_keu_akun','saldo_normal');
 
 		echo json_encode($rows);
 	}

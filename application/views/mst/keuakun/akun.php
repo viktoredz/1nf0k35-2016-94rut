@@ -441,8 +441,6 @@
                 { text: 'Mendukung Transaksi', datafield: 'mendukung_transaksi', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '15%',  cellsrenderer: function (row) {
                         var dataRecord = $("#treeGrid").jqxTreeGrid('getRow', row);
                         var aktif = dataRecord.mendukung_transaksi;
-                        // var uraian = dataRecord.uraian;
-                        // alert(uraian);
                         var str = "";
                         if(aktif=='1'){
                          str = "<input type='checkbox' checked>";
@@ -472,7 +470,6 @@
             isModal: true, autoOpen: false, modalOpacity: 0.2
           });
           $("#popup_keuangan_akun_detail").jqxWindow('open');
-          status_akun();
       }
     
     function add_induk(){

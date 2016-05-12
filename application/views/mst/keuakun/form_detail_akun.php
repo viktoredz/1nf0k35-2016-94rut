@@ -21,7 +21,7 @@
       <button type="button" name="btn_keuangan_akun_close" disabled="" class="btn btn-success"><i class='fa fa-search'></i> &nbsp; Lihat Buku Besar</button>
       <button type="button" name="btn_keuangan_akun_close" class="btn btn-primary"><i class='fa fa-close'></i> &nbsp; Tutup</button>
       <button type="button" name="btn_keuangan_akun_save" disabled="" class="btn btn-warning"><i class="icon fa fa-edit"></i> &nbsp; Ubah</button>
-      <!-- <button type="button" name="btn_non_aktif" class="btn btn-danger"><i class='fa fa-close'></i> &nbsp; Non Aktifkan</button> -->
+      <!-- <button type="button" name="aktifkan_status" class="btn btn-danger"><i class='fa fa-close'></i> &nbsp; Non Aktifkan</button> -->
       <button id="status" type="button" class="btn btn-danger" name="aktifkan_status"> </button> 
    
     </div>
@@ -35,7 +35,7 @@
                 <div class="col-md-6" style="padding: 5px">
                   Kode Akun
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-6">
                   <input type="hidden" id="kode" value="<?=$kode?>">
                   <?php
                     if(set_value('kode')=="" && isset($kode)){
@@ -51,7 +51,7 @@
                 <div class="col-md-6" style="padding: 5px">
                   Uraian
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-6">
                   <input type="hidden" id="uraian" value="<?=$uraian?>">
                   <?php
                     if(set_value('uraian')=="" && isset($uraian)){
@@ -67,7 +67,7 @@
                 <div class="col-md-6" style="padding: 5px">
                   Saldo Normal
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-6">
                   <input type="hidden" id="saldo_normal" value="<?=$saldo_normal?>">
                   <?php
                     if(set_value('saldo_normal')=="" && isset($saldo_normal)){
@@ -83,7 +83,7 @@
                 <div class="col-md-6" style="padding: 5px">
                   Keterangan
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-6">
                   <input type="hidden" id="keterangan" value="<?=$keterangan?>">
                   <?php 
                     if(set_value('keterangan')=="" && isset($keterangan)){
@@ -99,7 +99,7 @@
                 <div class="col-md-6" style="padding: 5px">
                 Mendukung Transaksi
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-6">
                   <input type="checkbox" name="akun_mendukung_transaksi" id="akun_mendukung_transaksi" value="1" <?php 
                   if(set_value('mendukung_transaksi')=="" && isset($mendukung_transaksi)){
                     $mendukung_transaksi = $mendukung_transaksi;
@@ -115,7 +115,7 @@
                 <div class="col-md-6" style="padding: 5px">
                  Mendukung Anggaran
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-6">
                   <input type="checkbox" name="akun_mendukung_anggaran" id="akun_mendukung_anggaran" value="1" <?php 
                   if(set_value('mendukung_anggaran')=="" && isset($mendukung_anggaran)){
                     $mendukung_anggaran = $mendukung_anggaran;
@@ -131,7 +131,7 @@
                 <div class="col-md-6" style="padding: 5px">
                   Mendukung Target Penerimaan
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-6">
                   <input type="checkbox" name="akun_mendukung_target" id="akun_mendukung_target" value="1" <?php 
                   if(set_value('mendukung_target')=="" && isset($mendukung_target)){
                     $mendukung_target = $mendukung_target;
@@ -153,6 +153,7 @@
 
   $(document).ready(function () {   
     tabIndex = 1;
+    status_akun();
 
     $("[name='btn_keuangan_akun_close']").click(function(){
         $("#popup_keuangan_akun_detail").jqxWindow('close');
@@ -160,11 +161,11 @@
 
     function status_akun(argument) {
         $.ajax({
-        url: "<?php echo base_url().'mst/keuangan_akun/statusversi/'?>"+$("#versi").val(),
+        url : '<?php echo base_url()."mst/keuangan_akun/statusakun/{id}"   ?>',
         dataType: "json",
         success:function(data){ 
           $.each(data,function(index,elemet){
-            if (elemet.mst_keu_versi_status == '0') {
+            if (elemet.mst_keu_akun == '0') {
                 $("[name='aktifkan_status']").show();
                 $("#status").html("Aktifkan");
             }else{
@@ -196,6 +197,22 @@
         });
         return false;
     });
+
+        $("[name='aktifkan_status']").click(function(){
+        $.ajax({
+            cache : false,
+            contentType : false,
+            processData : false,
+            type : 'POST',
+            url : '<?php echo base_url()."mst/keuangan_akun/non_aktif_akun/{id}"   ?>',
+            success : function(response){
+                 $("[name='aktifkan_status']").show();
+                 $("#status").html("Non Aktifkan");
+            }
+        });
+        return false;
+    });
+ 
 
     $("[name='akun_mendukung_target']").click(function(){
       var data = new FormData();
