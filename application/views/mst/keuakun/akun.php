@@ -171,16 +171,10 @@
           $("#treeGrid").jqxTreeGrid('updateBoundData');
       });
 
-      var source =
-      {
-          datatype: "json",
-          datafields: [
-              { name: 'id_mst_akun' },
-              { name: 'saldo_normal' }
-          ],
-          url: '<?php echo base_url()?>mst/keuangan_akun/json_saldo_normal',
-          async: true
-      };
+        var source = [
+          "Debet",
+          "Kredit"];
+
       var saldo_normal_source = new $.jqx.dataAdapter(source);
 
            var source = {
@@ -213,7 +207,7 @@
                     if(typeof(arr[1]) === 'object'){
                       var arr2 = $.map(arr[1], function(el) { return el });
                       if(arr[4] + '' + arr[5] + '' + arr[6] + '' + arr[7]+ '' + arr[8]!='') {
-                        $.post( '<?php echo base_url()?>mst/keuangan_akun/akun_add', {id_mst_akun:arr[2],id_mst_akun_parent:arr2[0], uraian:arr[4], kode:arr[5], saldo_normal:arr[6], saldo_awal : arr[7], mendukung_anggaran : arr[8]}, function( data ) {
+                        $.post( '<?php echo base_url()?>mst/keuangan_akun/akun_add', {id_mst_akun:arr[2],id_mst_akun_parent:arr2[0], uraian:arr[4], kode:arr[5], saldo_normal:arr[6], saldo_awal : arr[7], mendukung_transaksi : arr[8]}, function( data ) {
                             if(data != 0){
                               alert(data);                  
                             }else{

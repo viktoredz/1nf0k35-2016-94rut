@@ -23,19 +23,6 @@ class Keuakun_model extends CI_Model {
 		}
     }
 
-    function json_saldo_normal($table , $field){
-        $query = "SHOW COLUMNS FROM ".$table." LIKE '$field'";
-         $row = $this->db->query("SHOW COLUMNS FROM ".$table." LIKE '$field'")->row()->Type;  
-         $regex = "/'(.*?)'/";
-            preg_match_all( $regex , $row, $enum_array );
-            $enum_fields = $enum_array[1];
-            foreach ($enum_fields as $key=>$value)
-            {
-                $enums[$value] = $value; 
-            }
-            return $enums;
-    }
-
     function mendukung_transaksi_update($id){
         $data['mendukung_transaksi']      = $this->input->post('mendukung_transaksi');
        
@@ -114,7 +101,10 @@ class Keuakun_model extends CI_Model {
            'saldo_normal'           => $this->input->post('saldo_normal'),
            'saldo_awal'             => $this->input->post('saldo_awal'),
            'uraian'                 => $this->input->post('uraian'),
-           'mendukung_anggaran'     => $this->input->post('mendukung_anggaran')
+           'aktif'                  => 1,
+           'bisa_diedit'            => 1,
+           'buku_besar_umum'        => 1,
+           'mendukung_transaksi'    => $this->input->post('mendukung_transaksi')
         );
 
          if($this->db->set('tanggal_dibuat', 'NOW()', FALSE)){
@@ -127,22 +117,15 @@ class Keuakun_model extends CI_Model {
 
     function akun_update(){
         $data = array(
-           'id_mst_akun_parent' => $this->input->post('id_mst_akun_parent'),
-           'kode'               => $this->input->post('kode') ,
-           'saldo_normal'       => $this->input->post('saldo_normal') ,
-           'saldo_awal'         => $this->input->post('saldo_awal'),
-           'uraian'             => $this->input->post('uraian'),
-           'mendukung_anggaran' => $this->input->post('mendukung_anggaran')
+           'id_mst_akun_parent'  => $this->input->post('id_mst_akun_parent'),
+           'kode'                => $this->input->post('kode') ,
+           'saldo_normal'        => $this->input->post('saldo_normal') ,
+           'saldo_awal'          => $this->input->post('saldo_awal'),
+           'uraian'              => $this->input->post('uraian'),
+           'mendukung_transaksi' => $this->input->post('mendukung_transaksi')
         );
         $this->db->where('id_mst_akun', $this->input->post('id_mst_akun'));
         return $this->db->update($this->tb, $data);             
-    }
-
-    function non_aktif_akun($id){
-        $data['aktif']         = $this->input->post('aktif');
-       
-        $this->db->where('id_mst_akun', $this->input->post('id_mst_akun'));
-        return $this->db->update($this->tb, $data);     
     }
 
  	function get_data($start=0,$limit=999999,$options=array())

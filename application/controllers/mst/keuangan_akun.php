@@ -99,40 +99,36 @@ class Keuangan_akun extends CI_Controller {
 	function non_aktif_akun($id){
 		
 		$this->db->where('id_mst_akun',$id);
+		$this->db->where('aktif',1);
+
 		$this->db->select('aktif');
 
 		$q = $this->db->get('mst_keu_akun');
 
    		if ( $q->num_rows() > 0 ) {
-   			if($this->db->where('aktif = 1')){
 				$pk   = array('id_mst_akun'=>$id);
    				$data = array('aktif'=>0);
 
       			$this->db->update('mst_keu_akun',$data,$pk);
    				die("OK");
-   			}else{
-				$pk   = array('id_mst_akun'=>$id);
+   		}else{
+   				$pk   = array('id_mst_akun'=>$id);
    				$data = array('aktif'=>1);
 
       			$this->db->update('mst_keu_akun',$data,$pk);
-   			}
-
-   		}else{
-   			echo "error";	
    		}
-		echo $q->num_rows(); 
    		 return $q->result();
 	}
 
 	function have_parent($id){
-		$query=$this->obj->db->query("SELECT COUNT(id_mst_akun) AS n FROM ".$this->mst_keu_akun." WHERE id_mst_akun_parent=".$id);			
+		$query=$this->obj->db->query("");			
 	}
 
 	function get_tree_kelompok($id_mst_akun_parent){
   		$query = $this->db->query("SELECT id_mst_akun, id_mst_akun_parent,uraian FROM mst_keu_akun WHERE aktif=0");  
 
 			if($id_mst_akun_parent=='IS NULL'){
-				$text=$text."<ul class=\"sidebar-menu\">";
+				$text=$text."-";
 			}else{				
 				$text=$text."<ul class=\"treeview-menu\">";
 			}
@@ -281,15 +277,26 @@ class Keuangan_akun extends CI_Controller {
 		}	
 	}
 
+	function akun_update(){
+		$this->authentication->verify('mst','edit');
+		$this->form_validation->set_rules('id_mst_akun_parent','ID Akun Parent','trim|required');
+		$this->form_validation->set_rules('kode','Kode','trim|required');
+		$this->form_validation->set_rules('uraian','Uraian','trim|required');
+		$this->form_validation->set_rules('saldo_awal','Saldo Awal','trim|required');
+		$this->form_validation->set_rules('saldo_normal','Saldo Normal','trim|required');
+
+		if($this->form_validation->run()== TRUE){
+			$this->keuakun_model->akun_update();	
+			echo "0";
+		}else{			
+			$err = validation_errors();
+			echo str_replace("<p>", "", str_replace("</p>", "\n", $err));
+		}	
+	}
+
 	function akun_delete(){
 		$this->authentication->verify('mst','del');
 		$this->keuakun_model->akun_delete();				
-	}
-
-	function json_saldo_normal(){
-		$rows = $this->keuakun_model->json_saldo_normal('mst_keu_akun','saldo_normal');
-
-		echo json_encode($rows);
 	}
 
 	function json_akun(){

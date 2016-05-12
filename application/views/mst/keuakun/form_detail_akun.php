@@ -198,22 +198,6 @@
         return false;
     });
 
-        $("[name='aktifkan_status']").click(function(){
-        $.ajax({
-            cache : false,
-            contentType : false,
-            processData : false,
-            type : 'POST',
-            url : '<?php echo base_url()."mst/keuangan_akun/non_aktif_akun/{id}"   ?>',
-            success : function(response){
-                 $("[name='aktifkan_status']").show();
-                 $("#status").html("Non Aktifkan");
-            }
-        });
-        return false;
-    });
- 
-
     $("[name='akun_mendukung_target']").click(function(){
       var data = new FormData();
         data.append('mendukung_target',        $("[name='akun_mendukung_target']:checked").val());
