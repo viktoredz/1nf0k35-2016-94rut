@@ -667,6 +667,7 @@ class Permohonanbarang extends CI_Controller {
         $this->form_validation->set_rules('pilihan_satuan_barang', 'Pilihan Satuan Barang', 'trim|required');
         $this->form_validation->set_rules('rekening', 'Rekening', 'trim');
         $this->form_validation->set_rules('merk_tipe', 'Merek Tipe', 'trim');
+        $this->form_validation->set_rules('jqxinput', 'jqxinput Tipe', 'trim');
 
         $this->form_validation->set_rules('v_kode_barang', 'v_kode_barang', 'trim');
         $this->form_validation->set_rules('code_mst_inv', 'code_mst_inv', 'trim');

@@ -28,6 +28,7 @@
             data.append('jumlah', $('input[name="jumlah"]').val());
             data.append('nama_barang', $('input[name="nama_barang"]').val());
             data.append('code_mst_inv_barang', $('#v_kode_barang').val());
+            data.append('jqxinput', $('#jqxinput').val());
             data.append('harga', $('#harga').val());
             data.append('merk_tipe', $('#merk_tipe').val());
             data.append('rekening', $('#rekening').val());
@@ -151,8 +152,8 @@
           <div class="box-body">
             <div class="form-group">
               <label>Pilih Jenis Barang</label>
-              <input id="jqxinput" class="form-control" autocomplete="off" name="code_mst_inv" type="text" value="<?php 
-                if(set_value('code_mst_inv')=="" && isset($code_mst_inv_barang)){
+              <input id="jqxinput" class="form-control" autocomplete="off" name="jqxinput" type="text" value="<?php 
+                if(set_value('jqxinput')=="" && isset($code_mst_inv_barang)){
                   $s = array();
                   $s[0] = substr($code_mst_inv_barang, 0,2);
                   $s[1] = substr($code_mst_inv_barang, 2,2);
@@ -161,7 +162,7 @@
                   $s[4] = substr($code_mst_inv_barang, 8,2);
                   echo implode(".", $s).' | '.$nama_barang;
                 }else{
-                  echo  set_value('code_mst_inv');
+                  echo  set_value('jqxinput');
                 }
                 ?>" <?php if(isset($disable)){if($disable='disable'){echo "readonly";}} ?>/>
               <input id="v_kode_barang" class="form-control" name="code_mst_inv_barang" type="hidden" value="<?php 
