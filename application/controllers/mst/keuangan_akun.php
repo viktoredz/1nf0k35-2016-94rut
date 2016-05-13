@@ -6,7 +6,6 @@ class Keuangan_akun extends CI_Controller {
 		$this->load->model('mst/keuakun_model');
 
 	}
-
 	var $mst_keu_akun		    = 'mst_keu_akun';
 
 	function index(){
@@ -72,7 +71,7 @@ class Keuangan_akun extends CI_Controller {
 		
 		$data['ambildata'] = $this->keuakun_model->get_data_akun_non_aktif();
 		foreach($data['ambildata'] as $d){
-			$txt = $d["id_mst_akun"]." \t ".$d["id_mst_akun_parent"]."\t".$d["kode"]." \t ".$d["uraian"]." \t ".ucwords($d["saldo_normal"])." \t ".$d["saldo_awal"]." \t ".$d["mendukung_transaksi"]." \n";				
+			$txt = $d["id_mst_akun"]." \t ".$d["id_mst_akun_parent"]."\t".$d["kode"]." \t ".$d["uraian"]." \t ".ucwords($d["saldo_normal"])." \t ".$d["parent"]." \n";				
 			echo $txt;
 		}
 	}
@@ -121,40 +120,47 @@ class Keuangan_akun extends CI_Controller {
 	}
 
 	function have_parent($id){
-		$query=$this->obj->db->query("");			
+		$query=$this->obj->db->query("SELECT COUNT(*)  
+										FROM ".$this->mst_keu_akun." AS a 
+  									INNER JOIN `mst_keu_akun` b ON  a.id_mst_akun_parent = b.id_mst_akun
+  									WHERE a.id_mst_akun=".$id);			
 	}
 
-	function get_tree_kelompok($id_mst_akun_parent){
-  		$query = $this->db->query("SELECT id_mst_akun, id_mst_akun_parent,uraian FROM mst_keu_akun WHERE aktif=0");  
+	function get_tree_akun($id){
+  		$query = $this->db->query("SELECT  a.uraian AS Child, 
+        								GROUP_CONCAT(b.uraian  ORDER BY b.uraian ) AS Parent
+								   FROM ".$this->mst_keu_akun." AS a 
+ 										 INNER JOIN ".$this->mst_keu_akun." b ON  a.id_mst_akun_parent = b.id_mst_akun
+  										 WHERE a.id_mst_akun=".$id."
+								   GROUP BY Child;");  
 
-			if($id_mst_akun_parent=='IS NULL'){
-				$text=$text."-";
+			$text="";
+			if($id==0){
+				$text=$text."<ul class=\"sidebar-menu\">";
 			}else{				
 				$text=$text."<ul class=\"treeview-menu\">";
 			}
 
  			foreach($query->result() as $q){				
-	
+		
 				if($this->have_parent($q->id)){	
-
-					$text = $q->uraian." \n";				
-					// $text=$text."<li class=\"treeview\" id=\"menu_".$id_menu."\">
-					// 	<a href=\" ".base_url().$q->module." \">
-					// 		<i class=\" ".$ico." \"></i> <span> ".$q->uraian." </span> <i class=\"fa fa-angle-left pull-right\"></i>
-					// 	</a>";
+					$text=$text."<li class=\"treeview\" id=\"menu_".$id_menu."\">
+						<a href=\" ".base_url().$q->module." \">
+							<i class=\" ".$ico." \"></i> <span> ".$q->filename." </span> <i class=\"fa fa-angle-left pull-right\"></i>
+						</a>";
+					$text=$text.$this->create_menu($posisi, $q->id);
 					 				
 				}else{
-					
-					$text = $q->uraian." \n";				
-
-					// $text=$text."<li id=\"menu_".$id_menu."\">
-					// 	<a href=\" ".base_url().$q->module." \">
-					// 		<i class=\" ".$ico."\"></i> <span> ".$q->uraian." </span> <i class=\"pull-right\"></i>
-					// 	</a>";
+					$text=$text."<li id=\"menu_".$id_menu."\">
+						<a href=\" ".base_url().$q->module." \">
+							<i class=\" ".$ico."\"></i> <span> ".$q->filename." </span> <i class=\"pull-right\"></i>
+						</a>";
 				}
-
+				
 				$text=$text."</li>";
-			}                          
+			}
+			$text=$text."</ul>";
+			return $text;                         
     }
 
 	function set_puskes(){
@@ -258,6 +264,19 @@ class Keuangan_akun extends CI_Controller {
 		
 		$this->keuinstansi_model->update_entry_instansi($id);
 		die($this->parser->parse("mst/keuakun/form_detail_akun",$data));
+	}
+
+	function akun_non_aktif_detail($id=0){
+			$data 						= $this->keuakun_model->get_data_akun_non_aktif_detail($id);
+			$data['notice']				= validation_errors();
+			$data['action']				= "edit";
+			$data['id']					= $id;
+			$data['alert_form'] 		= '';
+			$data['disable']			= "disable";
+			die($this->parser->parse("mst/keuakun/form_detail_akun_non_aktif",$data));
+		
+		$this->keuinstansi_model->update_entry_instansi($id);
+		die($this->parser->parse("mst/keuakun/form_detail_akun_non_aktif",$data));
 	}
 
 	function akun_add(){

@@ -27,6 +27,12 @@
   </div>
 </section>
 
+<div id="popup_keuangan_akun_non_aktif_detail" style="display:none">
+  <div id="popup_title">Detail Akun Non Aktif</div>
+  <div id="popup_keuangan_akun_non_aktif_detail_content">&nbsp;</div>
+</div>
+
+
 <script type="text/javascript">
 
     function getDemoTheme() {
@@ -146,6 +152,7 @@
                 { name: "uraian", type: "string" },
                 { name: "saldo_normal", type: "string" },
                 { name: "saldo_awal", type: "number" },
+                { name: "parent", type: "string" },
                 { name: "mendukung_transaksi", type: "number"}
             ],
                 hierarchy:
@@ -156,7 +163,7 @@
                 id: 'id_mst_akun',
 
                 url: '<?php echo base_url()?>mst/keuangan_akun/api_data_akun_non_aktif',
-
+                
                  addRow: function (rowID, rowData, position, parentID, commit) {        
                     commit(true);
                     newRowID = rowID;
@@ -293,9 +300,9 @@
                 },
 
               columns: [                             
-                { text: 'Uraian ', datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox',align: 'center', width: '40%' },
+                { text: 'Uraian ', datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox',align: 'center', width: '30%' },
                 { text: 'Kode Akun', datafield: 'kode', columntype: 'textbox', filtertype: 'textbox',align: 'center', cellsalign: 'left', width: '25%'},
-                { text: 'Kelompok', datafield: 'saldo_normal', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '25%', cellsalign: 'center' },
+                { text: 'Kelompok', datafield: 'parent', columntype: 'textbox', filtertype: 'textbox',align: 'center', width: '35%' },
                 {text: 'Detail', width: '10%', sortable: false, align:'center', editable: false, filterable: false, cellsrenderer: function (row, column, value) {
                   return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='detail(" + row + ");'></a></div>";
                   },
@@ -303,6 +310,20 @@
                   ]
             });
         });
+
+    function detail(id){
+        $("#popup_keuangan_akun_non_aktif_detail #popup_keuangan_akun_non_aktif_detail_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
+          $.get("<?php echo base_url().'mst/keuangan_akun/akun_non_aktif_detail' ?>/"+ id, function(data) {
+            $("#popup_keuangan_akun_non_aktif_detail_content").html(data);
+          });
+          $("#popup_keuangan_akun_non_aktif_detail").jqxWindow({
+            theme: theme, resizable: false,
+            width: 600,
+            height: 380,
+            isModal: true, autoOpen: false, modalOpacity: 0.2
+          });
+          $("#popup_keuangan_akun_non_aktif_detail").jqxWindow('open');
+      }
 
 </script>
 
