@@ -504,7 +504,7 @@ class Pengadaanbarang extends CI_Controller {
 		}
 				$dataupdate['jumlah_unit']= $this->pengadaanbarang_model->sum_unit($kode)->num_rows();
 				$dataupdate['nilai_pengadaan']= $this->pengadaanbarang_model->sum_jumlah_item( $kode,'harga');
-				$key['id_pengadaan'] = $kode;
+				$key['id_pengadaan'] = $pengadaan;
         		$this->db->update("inv_pengadaan",$dataupdate,$key);
 				$this->session->set_flashdata('alert', 'Delete data ('.$kode.')');
 	}
