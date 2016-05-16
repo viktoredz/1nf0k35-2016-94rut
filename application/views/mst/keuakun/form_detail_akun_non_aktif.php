@@ -167,12 +167,11 @@
             type : 'POST',
             url : '<?php echo base_url()."mst/keuangan_akun/non_aktif_akun/{id}"   ?>',
             success : function(response){
-              if(response=="OK"){
+              if(response!="OK"){
                   $("[name='aktifkan_status']").show();
-                  $("#status").html("Non Aktifkan");
+                $("#treeGrid_akun_non_aktif").jqxTreeGrid('updateBoundData', 'filter');
               }else{
-                  $("[name='aktifkan_status']").show();
-                  $("#status").html("Aktifkan");
+                $("#treeGrid_akun_non_aktif").jqxTreeGrid('updateBoundData', 'filter');
               }
             }
         });

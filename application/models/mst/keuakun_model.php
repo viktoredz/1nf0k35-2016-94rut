@@ -137,6 +137,7 @@ class Keuakun_model extends CI_Model {
 
     function get_data_akun(){     
         $this->db->select('*');
+        $this->db->where('aktif',1);
         $this->db->order_by('uraian','asc');
         $query = $this->db->get('mst_keu_akun');     
         return $query->result_array();  
@@ -150,17 +151,6 @@ class Keuakun_model extends CI_Model {
         $query = $this->db->get('mst_keu_akun AS a');     
         return $query->result_array();  
     }
-
-    // function get_data_akun_non_aktif(){     
-    //     $query = $this->db->query("SELECT  a.uraian , a.kode,
-    //                                 GROUP_CONCAT(b.uraian  ORDER BY b.uraian ) AS Parent
-    //                               FROM `mst_keu_akun` AS a 
-    //                               INNER JOIN `mst_keu_akun` b ON  a.id_mst_akun_parent = b.id_mst_akun
-    //                               WHERE a.aktif = 0
-    //                               GROUP BY a.uraian");
-     
-    //     return $query->result_array();  
-    // }
 
     function get_parent_akun(){     
         $this->db->select('*');

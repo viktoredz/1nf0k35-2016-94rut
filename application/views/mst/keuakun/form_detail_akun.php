@@ -21,8 +21,7 @@
       <button type="button" name="btn_keuangan_akun_close" disabled="" class="btn btn-success"><i class='fa fa-search'></i> &nbsp; Lihat Buku Besar</button>
       <button type="button" name="btn_keuangan_akun_close" class="btn btn-primary"><i class='fa fa-close'></i> &nbsp; Tutup</button>
       <button type="button" name="btn_keuangan_akun_save" disabled="" class="btn btn-warning"><i class="icon fa fa-edit"></i> &nbsp; Ubah</button>
-      <button type="button" name="aktifkan_status" class="btn btn-danger"><i class='fa fa-close'></i> &nbsp; Non Aktifkan</button>
-      <!-- <button id="status" type="button" class="btn btn-danger" name="non_aktifkan_status"> </button>  -->
+      <button type="button" name="non_aktifkan_status" class="btn btn-danger"><i class='fa fa-close'></i> &nbsp; Non Aktifkan</button>
    
     </div>
   </div>
@@ -188,10 +187,9 @@
             success : function(response){
               if(response=="OK"){
                   $("[name='non_aktifkan_status']").show();
-                  $("#status").html("Non Aktifkan");
+                $("#treeGrid").jqxTreeGrid('updateBoundData', 'filter');
               }else{
-                  $("[name='non_aktifkan_status']").show();
-                  $("#status").html("Aktifkan");
+                $("#treeGrid").jqxTreeGrid('updateBoundData', 'filter');
               }
             }
         });
