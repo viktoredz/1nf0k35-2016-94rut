@@ -64,16 +64,17 @@ class inv_ruangan_model extends CI_Model {
 			AND id_cl_phc = ?
 			AND id_ruangan = ?) as inv ";
 
-		$tgl 		= $this->session->userdata('filter_tanggal');
+		
 		$id_cl_phc 	= $this->session->userdata('filter_code_cl_phc');
 		$id_ruang 	= $this->session->userdata('filter_id_ruang');
-		$query 		= $this->db->query($txt, array($tgl, $id_ruang, $tgl, $tgl, $id_cl_phc,$id_ruang));
+		$tgl 		= $this->tanggalterahir($id_cl_phc);//'2016-05-15';//$this->session->userdata('filter_tanggal');
+		$query 		= $this->db->query($txt, array($tgl['tgl_distribusi'], $id_ruang, $tgl['tgl_distribusi'], $tgl['tgl_distribusi'], $id_cl_phc,$id_ruang));
 		
 		$rows = array();
 		$data = $query->result_array();
 		$kondisi = $this->get_pilihan_kondisi()->result();
 		foreach ($data as $row) {
-			$real_kondisi = $this->get_detail_kondisi($row['id_inventaris_barang'], $tgl);
+			$real_kondisi = $this->get_detail_kondisi($row['id_inventaris_barang'], $tgl['tgl_distribusi']);
 			foreach($kondisi as $k){
 				$row[$k->id] = ($real_kondisi==$k->id ? 1:0);
 			}
@@ -85,7 +86,20 @@ class inv_ruangan_model extends CI_Model {
 
 		return $rows;
 	}
+	function tanggalterahir($pus =''){
+		$this->db->order_by('tgl_distribusi','desc');
+		$this->db->where('id_cl_phc',$pus);
+		$this->db->select('tgl_distribusi');
+		$query = $this->db->get('inv_inventaris_distribusi',1);
+		if ($query->num_rows() > 0) {
+			$data = $query->row_array();
+		}else{
+			$data = 0;
+		}
+		$query->free_result();
+		return $data;
 
+	}
 	function get_data_detail_group($start=0,$limit=9999999, $options=array()){
 		$txt = "SELECT  * FROM (
 			SELECT  * FROM (
