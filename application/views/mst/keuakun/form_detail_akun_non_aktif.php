@@ -18,11 +18,9 @@
       <?php } ?>
     </div>
     <div class="col-sm-12" style="text-align: right">
-      <button type="button" name="btn_keuangan_akun_close" disabled="" class="btn btn-success"><i class='fa fa-search'></i> &nbsp; Lihat Buku Besar</button>
-      <button type="button" name="btn_keuangan_akun_close" class="btn btn-primary"><i class='fa fa-close'></i> &nbsp; Tutup</button>
-      <button type="button" name="btn_keuangan_akun_save" disabled="" class="btn btn-warning"><i class="icon fa fa-edit"></i> &nbsp; Ubah</button>
-      <button type="button" name="non_aktifkan_status" class="btn btn-danger"><i class='fa fa-close'></i> &nbsp; Non Aktifkan</button>
-   
+      <button type="button" name="btn_akun_non_aktif_close" class="btn btn-primary"><i class='fa fa-close'></i> &nbsp; Tutup</button>
+      <button type="button" name="btn_akun_non_aktif_delete" class="btn btn-danger"><i class='fa fa-close'></i> &nbsp; Hapus Akun</button>
+      <button type="button" name="aktifkan_status" class="btn btn-warning"><i class='fa fa-close'></i> &nbsp; Aktifkan</button>
     </div>
   </div>
 
@@ -96,22 +94,6 @@
 
               <div class="row" style="margin: 5px">
                 <div class="col-md-6" style="padding: 5px">
-                Mendukung Transaksi
-                </div>
-                <div class="col-md-6">
-                  <input type="checkbox" name="akun_mendukung_transaksi" id="akun_mendukung_transaksi" value="1" <?php 
-                  if(set_value('mendukung_transaksi')=="" && isset($mendukung_transaksi)){
-                    $mendukung_transaksi = $mendukung_transaksi;
-                  }else{
-                    $mendukung_transaksi = set_value('mendukung_transaksi');
-                  }
-                  if($mendukung_transaksi == 1) echo "checked";
-                  ?>>
-                </div>
-              </div>
-
-              <div class="row" style="margin: 5px">
-                <div class="col-md-6" style="padding: 5px">
                  Mendukung Anggaran
                 </div>
                 <div class="col-md-6">
@@ -154,8 +136,8 @@
     tabIndex = 1;
     status_akun();
 
-    $("[name='btn_keuangan_akun_close']").click(function(){
-        $("#popup_keuangan_akun_detail").jqxWindow('close');
+    $("[name='btn_akun_non_aktif_close']").click(function(){
+        $("#popup_keuangan_akun_non_aktif_detail").jqxWindow('close');
     });
 
     function status_akun(argument) {
@@ -165,10 +147,10 @@
         success:function(data){ 
           $.each(data,function(index,elemet){
             if (elemet.mst_keu_akun == '0') {
-                $("[name='non_aktifkan_status']").show();
+                $("[name='aktifkan_status']").show();
                 $("#status").html("Aktifkan");
             }else{
-                $("[name='non_aktifkan_status']").show();
+                $("[name='aktifkan_status']").show();
                 $("#status").html("Non Aktifkan");
             }
           });
@@ -177,7 +159,7 @@
         return false;
     }
 
-    $("[name='non_aktifkan_status']").click(function(){
+    $("[name='aktifkan_status']").click(function(){
         $.ajax({
             cache : false,
             contentType : false,
@@ -185,11 +167,11 @@
             type : 'POST',
             url : '<?php echo base_url()."mst/keuangan_akun/non_aktif_akun/{id}"   ?>',
             success : function(response){
-              if(response=="OK"){
-                  $("[name='non_aktifkan_status']").show();
-                $("#treeGrid").jqxTreeGrid('updateBoundData', 'filter');
+              if(response!="OK"){
+                  $("[name='aktifkan_status']").show();
+                $("#treeGrid_akun_non_aktif").jqxTreeGrid('updateBoundData', 'filter');
               }else{
-                $("#treeGrid").jqxTreeGrid('updateBoundData', 'filter');
+                $("#treeGrid_akun_non_aktif").jqxTreeGrid('updateBoundData', 'filter');
               }
             }
         });
