@@ -140,25 +140,6 @@
         $("#popup_keuangan_akun_non_aktif_detail").jqxWindow('close');
     });
 
-    function status_akun(argument) {
-        $.ajax({
-        url : '<?php echo base_url()."mst/keuangan_akun/statusakun/{id}"   ?>',
-        dataType: "json",
-        success:function(data){ 
-          $.each(data,function(index,elemet){
-            if (elemet.mst_keu_akun == '0') {
-                $("[name='aktifkan_status']").show();
-                $("#status").html("Aktifkan");
-            }else{
-                $("[name='aktifkan_status']").show();
-                $("#status").html("Non Aktifkan");
-            }
-          });
-        }
-        });
-        return false;
-    }
-
     $("[name='aktifkan_status']").click(function(){
         $.ajax({
             cache : false,

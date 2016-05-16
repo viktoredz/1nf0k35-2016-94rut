@@ -14,8 +14,15 @@ class Keuakun_model extends CI_Model {
         $data['uraian']          = $this->input->post('uraian');
         $data['saldo_normal']    = $this->input->post('saldo_normal');
 	
-		if($this->db->set('saldo_awal',0)){
+		if($this->db->set('aktif',1)){
+          ($this->db->set('saldo_awal',0));
+          ($this->db->set('bisa_diedit',0));
+          ($this->db->set('buku_besar_umum',1));
+          ($this->db->set('mendukung_target',0));
           ($this->db->set('mendukung_anggaran',0));
+          ($this->db->set('mendukung_transaksi',0));
+          ($this->db->set('tanggal_dibuat', 'NOW()', FALSE));
+
 		  ($this->db->insert($this->tb, $data));
             return 1;
 		}else{

@@ -66,6 +66,13 @@ class Keuangan_akun extends CI_Controller {
 		}
 	}
 
+	function have_parent($id){
+		$query=$this->db->query("SELECT COUNT(*) as n FROM ".$this->mst_keu_akun." AS a INNER JOIN mst_keu_akun b ON  a.id_mst_akun_parent = b.id_mst_akun WHERE a.id_mst_akun=".$id);		
+  		foreach($query->result() as $q){
+   			echo $q->n;
+		}						
+	}
+
 	function api_data_akun_non_aktif(){
 		$this->authentication->verify('mst','edit');		
 		
@@ -73,26 +80,10 @@ class Keuangan_akun extends CI_Controller {
 		foreach($data['ambildata'] as $d){
 			$txt = $d["id_mst_akun"]." \t ".$d["id_mst_akun_parent"]."\t".$d["kode"]." \t ".$d["uraian"]." \t ".ucwords($d["saldo_normal"])." \t ".$d["parent"]." \n";				
 			echo $txt;
+ 		
+ 		 $id = $txt = $d["id_mst_akun"];
+    	 $this->have_parent($id);
 		}
-	}
-
-	function statusakun($id=0){
-
-		$this->db->where('id_mst_akun',$id);
-		$this->db->select('aktif');
-		$query = $this->db->get('mst_keu_akun');
-		if ($query->num_rows() > 0) {
-			foreach ($query->result() as $q) {
-				$status_akun[] = array(
-					'mst_keu_akun' => ($q->aktif==null ? 0:$q->aktif), 
-				);
-			}
-		}else{
-			$status_akun[] = array(
-				'mst_keu_akun' => '0', 
-			);
-		}
-		echo json_encode($status_akun);
 	}
 
 	function non_aktif_akun($id){
@@ -118,50 +109,6 @@ class Keuangan_akun extends CI_Controller {
    		}
    		 return $q->result();
 	}
-
-	function have_parent($id){
-		$query=$this->obj->db->query("SELECT COUNT(*)  
-										FROM ".$this->mst_keu_akun." AS a 
-  									INNER JOIN `mst_keu_akun` b ON  a.id_mst_akun_parent = b.id_mst_akun
-  									WHERE a.id_mst_akun=".$id);			
-	}
-
-	function get_tree_akun($id){
-  		$query = $this->db->query("SELECT  a.uraian AS Child, 
-        								GROUP_CONCAT(b.uraian  ORDER BY b.uraian ) AS Parent
-								   FROM ".$this->mst_keu_akun." AS a 
- 										 INNER JOIN ".$this->mst_keu_akun." b ON  a.id_mst_akun_parent = b.id_mst_akun
-  										 WHERE a.id_mst_akun=".$id."
-								   GROUP BY Child;");  
-
-			$text="";
-			if($id==0){
-				$text=$text."<ul class=\"sidebar-menu\">";
-			}else{				
-				$text=$text."<ul class=\"treeview-menu\">";
-			}
-
- 			foreach($query->result() as $q){				
-		
-				if($this->have_parent($q->id)){	
-					$text=$text."<li class=\"treeview\" id=\"menu_".$id_menu."\">
-						<a href=\" ".base_url().$q->module." \">
-							<i class=\" ".$ico." \"></i> <span> ".$q->filename." </span> <i class=\"fa fa-angle-left pull-right\"></i>
-						</a>";
-					$text=$text.$this->create_menu($posisi, $q->id);
-					 				
-				}else{
-					$text=$text."<li id=\"menu_".$id_menu."\">
-						<a href=\" ".base_url().$q->module." \">
-							<i class=\" ".$ico."\"></i> <span> ".$q->filename." </span> <i class=\"pull-right\"></i>
-						</a>";
-				}
-				
-				$text=$text."</li>";
-			}
-			$text=$text."</ul>";
-			return $text;                         
-    }
 
 	function set_puskes(){
 		$this->authentication->verify('mst','edit');
