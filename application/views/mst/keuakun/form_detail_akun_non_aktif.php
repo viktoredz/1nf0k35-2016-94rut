@@ -134,7 +134,6 @@
 
   $(document).ready(function () {   
     tabIndex = 1;
-    status_akun();
 
     $("[name='btn_akun_non_aktif_close']").click(function(){
         $("#popup_keuangan_akun_non_aktif_detail").jqxWindow('close');
@@ -146,12 +145,14 @@
             contentType : false,
             processData : false,
             type : 'POST',
-            url : '<?php echo base_url()."mst/keuangan_akun/non_aktif_akun/{id}"   ?>',
+            url : '<?php echo base_url()."mst/keuangan_akun/aktifkan_akun/{id}"   ?>',
             success : function(response){
               if(response!="OK"){
-                  $("[name='aktifkan_status']").show();
+                $("[name='aktifkan_status']").show();
+                $("#popup_keuangan_akun_non_aktif_detail").jqxWindow('close');
                 $("#treeGrid_akun_non_aktif").jqxTreeGrid('updateBoundData', 'filter');
               }else{
+                $("#popup_keuangan_akun_non_aktif_detail").jqxWindow('close');
                 $("#treeGrid_akun_non_aktif").jqxTreeGrid('updateBoundData', 'filter');
               }
             }

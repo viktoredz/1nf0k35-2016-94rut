@@ -167,8 +167,10 @@
             success : function(response){
               if(response=="OK"){
                   $("[name='non_aktifkan_status']").show();
+                $("#popup_keuangan_akun_detail").jqxWindow('close');
                 $("#treeGrid").jqxTreeGrid('updateBoundData', 'filter');
               }else{
+                $("#popup_keuangan_akun_detail").jqxWindow('close');
                 $("#treeGrid").jqxTreeGrid('updateBoundData', 'filter');
               }
             }

@@ -131,18 +131,6 @@
       
       var newRowID = null;
 
-      var source =
-      {
-          datatype: "json",
-          datafields: [
-              { name: 'id_mst_akun' },
-              { name: 'saldo_normal' }
-          ],
-          url: '<?php echo base_url()?>mst/keuangan_sts/json_kode_rekening',
-          async: true
-      };
-      var saldo_norma_source = new $.jqx.dataAdapter(source);
-
            var source = {
             dataType: "tab",
             dataFields: [
@@ -153,7 +141,7 @@
                 { name: "saldo_normal", type: "string" },
                 { name: "parent", type: "string" }
             ],
-                hierarchy:
+                 hierarchy:
                 {
                      keyDataField: { name: 'id_mst_akun' },
                      parentDataField: { name: 'id_mst_anggaran_parent' }
