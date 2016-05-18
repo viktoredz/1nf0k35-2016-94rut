@@ -250,7 +250,7 @@
           <table width="100%" cellpadding='2' cellspacing='2' border="0">
               <tr>
                   <th rowspan="4" width="30%">
-                    <img src="<?php echo base_url()?>inventory/qrcodes/draw/<?php echo $kd_proc.'/'.$id_barang.'/'.$kode; ?>">
+                    <img src="<?php echo base_url()?>inventory/qrcodes/draw/<?php echo $kd_proc.'/'.$id_barang.'/'.$kode.'/'.$id_distribusi; ?>" ><br><br>
                   </th>
                   <th align="left" width="20%">Kode Lokasi</th>
                   <th align="left" width="2%">:&nbsp;</th>

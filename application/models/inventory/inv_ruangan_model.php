@@ -62,7 +62,7 @@ class inv_ruangan_model extends CI_Model {
 			WHERE
 			tgl_distribusi <= ?
 			AND id_cl_phc = ?
-			AND id_ruangan = ?) as inv ";
+			AND id_ruangan = ?) as inv limit $start,$limit";
 
 		
 		$id_cl_phc 	= $this->session->userdata('filter_code_cl_phc');
@@ -143,7 +143,7 @@ class inv_ruangan_model extends CI_Model {
 			AND id_cl_phc = ?
 			AND id_ruangan = ?
 			group by barang_kembar_proc
-		) as inv";
+		) as inv limit $start,$limit";
 		$tgl = $this->session->userdata('filter_tanggal');
 		$id_cl_phc = $this->session->userdata('filter_code_cl_phc');
 		$id_ruang = $this->session->userdata('filter_id_ruang');
