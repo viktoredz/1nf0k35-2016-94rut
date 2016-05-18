@@ -97,7 +97,7 @@
                  Mendukung Anggaran
                 </div>
                 <div class="col-md-6">
-                  <input type="checkbox" name="akun_mendukung_anggaran" id="akun_mendukung_anggaran" value="1" <?php 
+                  <input type="checkbox" name="akun_mendukung_anggaran" id="akun_mendukung_anggaran" disabled value="1" <?php 
                   if(set_value('mendukung_anggaran')=="" && isset($mendukung_anggaran)){
                     $mendukung_anggaran = $mendukung_anggaran;
                   }else{
@@ -113,7 +113,7 @@
                   Mendukung Target Penerimaan
                 </div>
                 <div class="col-md-6">
-                  <input type="checkbox" name="akun_mendukung_target" id="akun_mendukung_target" value="1" <?php 
+                  <input type="checkbox" name="akun_mendukung_target" id="akun_mendukung_target" disabled value="1" <?php 
                   if(set_value('mendukung_target')=="" && isset($mendukung_target)){
                     $mendukung_target = $mendukung_target;
                   }else{
@@ -129,15 +129,9 @@
           </div>
   </div>
 </form>
-
 <script>
-
   $(document).ready(function () {   
     tabIndex = 1;
-
-    $("[name='btn_akun_non_aktif_close']").click(function(){
-        $("#popup_keuangan_akun_non_aktif_detail").jqxWindow('close');
-    });
 
     $("[name='aktifkan_status']").click(function(){
         $.ajax({
@@ -154,92 +148,6 @@
               }else{
                 $("#popup_keuangan_akun_non_aktif_detail").jqxWindow('close');
                 $("#treeGrid_akun_non_aktif").jqxTreeGrid('updateBoundData', 'filter');
-              }
-            }
-        });
-        return false;
-    });
-
-    $("[name='akun_mendukung_target']").click(function(){
-      var data = new FormData();
-        data.append('mendukung_target',        $("[name='akun_mendukung_target']:checked").val());
-        
-        $.ajax({
-            cache : false,
-            contentType : false,
-            processData : false,
-            type : 'POST',
-            url : '<?php echo base_url()."mst/keuangan_akun/mendukung_target_update/{id}"   ?>',
-            data : data,
-            success : function(response){
-              a = response.split("|");
-              if(a[0]=="OK"){
-                if(a[1]=='1'){
-                  $("#akun_mendukung_target").prop("checked", true);
-                }else{
-                  $("#akun_mendukung_target").prop("checked", false);
-                };
-                $("#treeGrid").jqxTreeGrid('updateBoundData', 'filter');
-              }else{
-                alert("Mendukung target belum berhasil di aktifkan.");
-
-              }
-            }
-        });
-        return false;
-    });
-
-    $("[name='akun_mendukung_anggaran']").click(function(){
-      var data = new FormData();
-        data.append('mendukung_anggaran',        $("[name='akun_mendukung_anggaran']:checked").val());
-        
-        $.ajax({
-            cache : false,
-            contentType : false,
-            processData : false,
-            type : 'POST',
-            url : '<?php echo base_url()."mst/keuangan_akun/mendukung_anggaran_update/{id}"   ?>',
-            data : data,
-            success : function(response){
-              a = response.split("|");
-              if(a[0]=="OK"){
-                if(a[1]=='1'){
-                   $("#akun_mendukung_anggaran").prop("checked", true);
-                }else{
-                   $("#akun_mendukung_anggaran").prop("checked", false);
-                };
-                $("#treeGrid").jqxTreeGrid('updateBoundData', 'filter');
-              }else{
-                alert("Mendukung anggaran belum berhasil di aktifkan.");
-              }
-            }
-        });
-        return false;
-    });
-
-    $("[name='akun_mendukung_transaksi']").click(function(){
-      var data = new FormData();
-        data.append('mendukung_transaksi',        $("[name='akun_mendukung_transaksi']:checked").val());
-        
-        $.ajax({
-            cache : false,
-            contentType : false,
-            processData : false,
-            type : 'POST',
-            url : '<?php echo base_url()."mst/keuangan_akun/mendukung_transaksi_update/{id}"   ?>',
-            data : data,
-            success : function(response){
-               a = response.split("|");
-              if(a[0]=="OK"){
-                if (a[1]=='1') {
-                    $("#akun_mendukung_transaksi").prop("checked", true);
-                }else{
-                    $("#akun_mendukung_transaksi").prop("checked", false);
-                };
-                $("#treeGrid").jqxTreeGrid('updateBoundData', 'filter');
-              }else{
-                alert("Mendukung transaksi belum berhasil di aktifkan.");
-
               }
             }
         });

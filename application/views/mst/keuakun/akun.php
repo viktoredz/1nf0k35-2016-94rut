@@ -414,20 +414,10 @@
                 },
                 { text: 'Saldo Awal', datafield: 'saldo_awal', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '15%', cellsalign: 'center' },
                 { text: 'Mendukung Transaksi', datafield: 'mendukung_transaksi', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '15%', cellsalign: 'center' },
-                // { text: 'Mendukung Transaksi', datafield: 'mendukung_transaksi', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '15%',  cellsrenderer: function (row) {
-                //         var dataRecord = $("#treeGrid").jqxTreeGrid('getRow', row);
-                //         var aktif = dataRecord.mendukung_transaksi;
-                //         var str = "";
-                //         if(aktif=='1'){
-                //          str = "<input type='checkbox' checked>";
-                //         }else{
-                //          str = "<input type='checkbox'>";
-                //         }
-                //         return "<div style='width:100%;padding-top:2px;text-align:center'>"+str+"</div>";
-                //         }
-                //       },
                 {text: 'Detail', sortable: false, align:'center', width: '10%',editable: false, filterable: false, cellsrenderer: function (row, column, value) {
-                  return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='detail(" + row + ");'></a></div>";
+                  if(row){
+                    return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='detail(" + row + ");'></a></div>";
+                  }
                   },
                 }
               ]

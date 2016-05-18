@@ -164,11 +164,8 @@ class Keuakun_model extends CI_Model {
     }
 
     function get_data_akun_non_aktif(){     
-        $this->db->select('a.id_mst_akun,a.id_mst_akun_parent,a.uraian,a.saldo_normal,a.kode,GROUP_CONCAT(b.uraian ORDER BY b.uraian ) AS parent');
-        $this->db->join("mst_keu_akun as b","a.id_mst_akun_parent = b.id_mst_akun");
-        $this->db->where('a.aktif =0');
-        $this->db->group_by('a.uraian'); 
-        $query = $this->db->get('mst_keu_akun AS a');     
+        $this->db->where('aktif','0');
+        $query = $this->db->get('mst_keu_akun');     
         return $query->result_array();  
     }
 
