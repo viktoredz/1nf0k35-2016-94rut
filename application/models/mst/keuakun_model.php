@@ -11,19 +11,19 @@ class Keuakun_model extends CI_Model {
     }
 
     function insert_entry(){
-        $data['uraian']          = $this->input->post('uraian');
-        $data['saldo_normal']    = $this->input->post('saldo_normal');
-	
-		if($this->db->set('aktif',1)){
-          ($this->db->set('saldo_awal',0));
-          ($this->db->set('bisa_diedit',0));
-          ($this->db->set('buku_besar_umum',1));
-          ($this->db->set('mendukung_target',0));
-          ($this->db->set('mendukung_anggaran',0));
-          ($this->db->set('mendukung_transaksi',0));
-          ($this->db->set('tanggal_dibuat', 'NOW()', FALSE));
+        $data['uraian']         = $this->input->post('uraian');
+        $data['saldo_normal']   = $this->input->post('saldo_normal');
 
-		  ($this->db->insert($this->tb, $data));
+        $data['aktif']              = 1;
+        $data['saldo_awal']         = 0;
+        $data['bisa_diedit']        = 0;
+        $data['buku_besar_umum']    = 1;
+        $data['mendukung_target']   = 0;
+        $data['mendukung_anggaran'] = 0;
+        $data['mendukung_transaksi']= 0;
+        $data['tanggal_dibuat']     = date('Y-m-d H:i:s');
+	
+		if($this->db->insert($this->tb, $data)){
             return 1;
 		}else{
 			return mysql_error();

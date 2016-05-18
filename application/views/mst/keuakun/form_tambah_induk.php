@@ -67,7 +67,7 @@
                 </div>
 
                 <div class="col-md-4">
-                  <select  name="akun_urutan" type="text" class="form-control">
+                  <select name="akun_urutan" type="text" class="form-control">
                        <option value="sebelum" >Sebelum</option>
                        <option value="sesudah">Sesudah</option>
                   </select>
@@ -110,15 +110,17 @@
         $('#biodata_notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
         $('#biodata_notice').show();
         
-        data.append('uraian',          $("[name='akun_uraian']").val());
-        data.append('saldo_normal',    $("[name='akun_saldo']").val());
+        data.append('uraian', $("[name='akun_uraian']").val());
+        data.append('saldo_normal', $("[name='akun_saldo']").val());
+        data.append('akun_urutan', $("[name='akun_urutan']").val());
+        data.append('akun_urutan_induk', $("[name='akun_urutan_induk']").val());
         
         $.ajax({
             cache : false,
             contentType : false,
             processData : false,
             type : 'POST',
-            url : '<?php echo base_url()."mst/keuangan_akun/induk_add"   ?>',
+            url : '<?php echo base_url()."mst/keuangan_akun/induk_add" ?>',
             data : data,
             success : function(response){
               if(response=="OK"){

@@ -19,10 +19,8 @@
     </div>
     <div class="col-sm-12" style="text-align: right">
       <button type="button" name="btn_keuangan_akun_close" disabled="" class="btn btn-success"><i class='fa fa-search'></i> &nbsp; Lihat Buku Besar</button>
+      <button type="button" name="non_aktifkan_status" class="btn btn-danger"><i class='fa fa-times-circle-o'></i> &nbsp; Non Aktifkan</button>
       <button type="button" name="btn_keuangan_akun_close" class="btn btn-primary"><i class='fa fa-close'></i> &nbsp; Tutup</button>
-      <button type="button" name="btn_keuangan_akun_save" disabled="" class="btn btn-warning"><i class="icon fa fa-edit"></i> &nbsp; Ubah</button>
-      <button type="button" name="non_aktifkan_status" class="btn btn-danger"><i class='fa fa-close'></i> &nbsp; Non Aktifkan</button>
-   
     </div>
   </div>
 

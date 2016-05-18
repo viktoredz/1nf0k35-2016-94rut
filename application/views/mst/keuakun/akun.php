@@ -400,8 +400,8 @@
 
               columns: [                             
                 { text: 'Uraian ', datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox',align: 'center', width: '37%' },
-                { text: 'Kode Akun', datafield: 'kode', columntype: 'textbox', filtertype: 'textbox',align: 'center', cellsalign: 'left', width: '10%'},
-                { text: 'Saldo Normal', dataField: 'saldo_normal', width: "13%", align:'center',columnType: "template",
+                { text: 'Kode Akun', datafield: 'kode', columntype: 'textbox', filtertype: 'textbox',align: 'center', cellsalign:'center', width: '10%'},
+                { text: 'Saldo Normal', dataField: 'saldo_normal', width: "13%", align:'center', cellsalign:'center',columnType: "template",
                    createEditor: function (row, cellvalue, editor, cellText, width, height) {
                        editor.jqxDropDownList({autoDropDownHeight: true, width: '100%', height: '100%' , source: saldo_normal_source, displayMember: "saldo_normal", valueMember: "saldo_normal"});
                    },

@@ -1,13 +1,14 @@
 <?php
 class Keuangan_akun extends CI_Controller {
 
+	var $mst_keu_akun	= 'mst_keu_akun';
+	var $parent;
+
     public function __construct(){
 		parent::__construct();
 		$this->load->model('mst/keuakun_model');
 
 	}
-	var $mst_keu_akun		    = 'mst_keu_akun';
-	var $parent		    = '';
 
 	function index(){
 		$this->authentication->verify('mst','edit');
@@ -62,7 +63,7 @@ class Keuangan_akun extends CI_Controller {
 		
 		$data['ambildata'] = $this->keuakun_model->get_data_akun();
 		foreach($data['ambildata'] as $d){
-			$txt = $d["id_mst_akun"]." \t ".$d["id_mst_akun_parent"]."\t".$d["kode"]." \t ".$d["uraian"]." \t ".ucwords($d["saldo_normal"])." \t ".$d["saldo_awal"]." \t ".$d["mendukung_transaksi"]." \n";				
+			$txt = $d["id_mst_akun"]." \t ".$d["id_mst_akun_parent"]."\t".$d["kode"]." \t ".$d["uraian"]." \t ".ucwords($d["saldo_normal"])." \t ".$d["saldo_awal"]." \t ".($d["mendukung_transaksi"]==1 ? "<i class='icon fa fa-check-square-o'></i>" : "-")." \n";				
 			echo $txt;
 		}
 	}
@@ -70,7 +71,7 @@ class Keuangan_akun extends CI_Controller {
 	function have_parent($id){
 		$this->db->where("id_mst_akun",$id);		
 		$dt=$this->db->get("mst_keu_akun")->row();		
-		$this->parent.=" > ".$dt->uraian;
+		$this->parent.=" &raquo; ".$dt->uraian;
   		if($dt->id_mst_akun_parent !=0){
    			$this->have_parent($dt->id_mst_akun_parent);
 		}						
