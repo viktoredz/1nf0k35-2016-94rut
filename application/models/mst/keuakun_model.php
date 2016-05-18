@@ -11,11 +11,22 @@ class Keuakun_model extends CI_Model {
     }
 
     function insert_entry(){
+        $akun_urutan        = $this->input->post('akun_urutan');
+        $akun_urutan_induk  = $this->input->post('akun_urutan_induk');
+        $this->db->where('id_mst_akun',$akun_urutan_induk);
+        $dt = $this->db->get($this->tb)->row();
+        if($akun_urutan == "sebelum"){
+            $data['urutan']  = $dt->urutan;
+        }else{
+            $data['urutan']  = $dt->urutan+1;
+        }
+
         $data['uraian']         = $this->input->post('uraian');
         $data['saldo_normal']   = $this->input->post('saldo_normal');
 
         $data['aktif']              = 1;
         $data['saldo_awal']         = 0;
+        $data['bisa_transaksi']     = 0;
         $data['bisa_diedit']        = 0;
         $data['buku_besar_umum']    = 1;
         $data['mendukung_target']   = 0;
@@ -24,6 +35,9 @@ class Keuakun_model extends CI_Model {
         $data['tanggal_dibuat']     = date('Y-m-d H:i:s');
 	
 		if($this->db->insert($this->tb, $data)){
+            $id = mysql_insert_id();
+            $this->db->query("UPDATE mst_keu_akun SET urutan=urutan+1 WHERE isnull(`id_mst_akun_parent`) AND urutan >= ".$data['urutan']." AND `id_mst_akun`<>".$id);
+
             return 1;
 		}else{
 			return mysql_error();
@@ -143,9 +157,8 @@ class Keuakun_model extends CI_Model {
     }
 
     function get_data_akun(){     
-        $this->db->select('*');
         $this->db->where('aktif',1);
-        $this->db->order_by('uraian','asc');
+        $this->db->order_by('urutan','asc');
         $query = $this->db->get('mst_keu_akun');     
         return $query->result_array();  
     }
@@ -160,7 +173,6 @@ class Keuakun_model extends CI_Model {
     }
 
     function get_parent_akun(){     
-        $this->db->select('*');
         $this->db->where('id_mst_akun_parent IS NULL');
         $this->db->order_by('uraian','asc');
         $query = $this->db->get('mst_keu_akun');     
@@ -169,7 +181,6 @@ class Keuakun_model extends CI_Model {
 
    function get_data_akun_detail($id){
         $data = array();
-        $this->db->select("*");
         $this->db->where("id_mst_akun",$id);
         $query = $this->db->get('mst_keu_akun');
         if($query->num_rows()>0){
@@ -182,7 +193,6 @@ class Keuakun_model extends CI_Model {
 
     function get_data_akun_non_aktif_detail($id){
         $data = array();
-        $this->db->select("*");
         $this->db->where("id_mst_akun",$id);
         $this->db->where('aktif',0);
         $query = $this->db->get('mst_keu_akun');

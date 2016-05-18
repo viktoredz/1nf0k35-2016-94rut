@@ -48,15 +48,8 @@
                 </div>
                 <div class="col-md-8">
                   <select name="akun_saldo" type="text" class="form-control">
-                  <?php 
-                  if(set_value('akun_saldo')=="" && isset($saldo_normal)){
-                    $akun_saldo = $saldo_normal;
-                  }else{
-                    $akun_saldo = set_value('akun_saldo');
-                  }
-                  ?>
-                       <option value="Debet" <?php if($akun_saldo=="debet") echo "selected" ?>>Debet</option>
-                       <option value="Kredit" <?php if($akun_saldo=="kredit") echo "selected" ?>>Kredit</option>
+                      <option value="debet">Debet</option>
+                      <option value="kredit">Kredit</option>
                   </select>
                 </div>
               </div>
@@ -68,7 +61,7 @@
 
                 <div class="col-md-4">
                   <select name="akun_urutan" type="text" class="form-control">
-                       <option value="sebelum" >Sebelum</option>
+                       <option value="sebelum">Sebelum</option>
                        <option value="sesudah">Sesudah</option>
                   </select>
                 </div>

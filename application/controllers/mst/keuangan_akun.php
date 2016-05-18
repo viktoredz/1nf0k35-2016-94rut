@@ -341,7 +341,7 @@ class Keuangan_akun extends CI_Controller {
 		$this->form_validation->set_rules('id_mst_akun_parent','ID Akun Parent','trim|required');
 		$this->form_validation->set_rules('kode','Kode','trim|required');
 		$this->form_validation->set_rules('uraian','Uraian','trim|required');
-		$this->form_validation->set_rules('saldo_awal','Saldo Awal','trim|required');
+		$this->form_validation->set_rules('saldo_awal','Saldo Awal','trim');
 		$this->form_validation->set_rules('saldo_normal','Saldo Normal','trim|required');
 
 		if($this->form_validation->run()== TRUE){
