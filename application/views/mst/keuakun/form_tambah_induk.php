@@ -133,6 +133,5 @@
 
         return false;
     });
-
   });
 </script>

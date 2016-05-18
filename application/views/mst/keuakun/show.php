@@ -11,7 +11,7 @@
     loadPage('<?php echo base_url()?>mst/keuangan_akun/keu_akun/1', 1);
     $('#jqxTabs').on('selected', function (event) {
         var pageIndex = event.args.item + 1;
-        loadPage('<?php echo base_url()?>mst/keuangan_akun/keu_akun/'+pageIndex , pageIndex);
+        loadPage('<?php echo base_url()?>mst/keuangan_akun/keu_akun/'+pageIndex,pageIndex);
     });
 
     $("#menu_master_data").addClass("active");

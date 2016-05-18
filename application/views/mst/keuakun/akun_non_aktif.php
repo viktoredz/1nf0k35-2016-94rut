@@ -131,18 +131,6 @@
       
       var newRowID = null;
 
-      var source =
-      {
-          datatype: "json",
-          datafields: [
-              { name: 'id_mst_akun' },
-              { name: 'saldo_normal' }
-          ],
-          url: '<?php echo base_url()?>mst/keuangan_sts/json_kode_rekening',
-          async: true
-      };
-      var saldo_norma_source = new $.jqx.dataAdapter(source);
-
            var source = {
             dataType: "tab",
             dataFields: [
@@ -151,11 +139,9 @@
                 { name: "kode", type: "number" },
                 { name: "uraian", type: "string" },
                 { name: "saldo_normal", type: "string" },
-                { name: "saldo_awal", type: "number" },
-                { name: "parent", type: "string" },
-                { name: "mendukung_transaksi", type: "number"}
+                { name: "parent", type: "string" }
             ],
-                hierarchy:
+                 hierarchy:
                 {
                      keyDataField: { name: 'id_mst_akun' },
                      parentDataField: { name: 'id_mst_anggaran_parent' }
@@ -302,7 +288,7 @@
               columns: [                             
                 { text: 'Uraian ', datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox',align: 'center', width: '30%' },
                 { text: 'Kode Akun', datafield: 'kode', columntype: 'textbox', filtertype: 'textbox',align: 'center', cellsalign: 'left', width: '25%'},
-                { text: 'Kelompok', datafield: 'parent', columntype: 'textbox', filtertype: 'textbox',align: 'center', width: '35%' },
+                { text: 'Kelompok', datafield:'parent', columntype: 'textbox', filtertype: 'textbox',align: 'center', width: '35%' },
                 {text: 'Detail', width: '10%', sortable: false, align:'center', editable: false, filterable: false, cellsrenderer: function (row, column, value) {
                   return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='detail(" + row + ");'></a></div>";
                   },

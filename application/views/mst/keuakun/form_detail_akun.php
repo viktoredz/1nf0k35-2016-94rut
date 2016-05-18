@@ -152,30 +152,10 @@
 
   $(document).ready(function () {   
     tabIndex = 1;
-    status_akun();
 
     $("[name='btn_keuangan_akun_close']").click(function(){
         $("#popup_keuangan_akun_detail").jqxWindow('close');
     });
-
-    function status_akun(argument) {
-        $.ajax({
-        url : '<?php echo base_url()."mst/keuangan_akun/statusakun/{id}"   ?>',
-        dataType: "json",
-        success:function(data){ 
-          $.each(data,function(index,elemet){
-            if (elemet.mst_keu_akun == '0') {
-                $("[name='non_aktifkan_status']").show();
-                $("#status").html("Aktifkan");
-            }else{
-                $("[name='non_aktifkan_status']").show();
-                $("#status").html("Non Aktifkan");
-            }
-          });
-        }
-        });
-        return false;
-    }
 
     $("[name='non_aktifkan_status']").click(function(){
         $.ajax({
@@ -187,8 +167,10 @@
             success : function(response){
               if(response=="OK"){
                   $("[name='non_aktifkan_status']").show();
+                $("#popup_keuangan_akun_detail").jqxWindow('close');
                 $("#treeGrid").jqxTreeGrid('updateBoundData', 'filter');
               }else{
+                $("#popup_keuangan_akun_detail").jqxWindow('close');
                 $("#treeGrid").jqxTreeGrid('updateBoundData', 'filter');
               }
             }

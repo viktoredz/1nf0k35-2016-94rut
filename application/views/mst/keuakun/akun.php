@@ -138,26 +138,7 @@
 
 <script type="text/javascript">
   $(document).ready(function () {
-
-      function status_akun(argument) {
-        $.ajax({
-        url: "<?php echo base_url().'mst/keuangan_akun/statusakun/'?>/"+ id,
-        dataType: "json",
-        success:function(data){ 
-          $.each(data,function(index,elemet){
-            if (elemet.mst_keu_versi_status == '0') {
-                $("[name='aktifkan_status']").show();
-                $("#status").html("Aktifkan");
-            }else{
-                $("[name='aktifkan_status']").show();
-                $("#status").html("Non Aktifkan");
-            }
-          });
-        }
-        });
-        return false;
-      }
-      
+     
       var newRowID = null;
       $("#doExpand").click(function(){
           $("#treeGrid").jqxTreeGrid('expandAll');                    
@@ -418,9 +399,9 @@
                 },
 
               columns: [                             
-                { text: 'Uraian ', datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox',align: 'center', width: '27%' },
-                { text: 'Kode Akun', datafield: 'kode', columntype: 'textbox', filtertype: 'textbox',align: 'center', cellsalign: 'left', width: '15%'},
-                { text: 'Saldo Normal', dataField: 'saldo_normal', width: "15%", align:'center',columnType: "template",
+                { text: 'Uraian ', datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox',align: 'center', width: '37%' },
+                { text: 'Kode Akun', datafield: 'kode', columntype: 'textbox', filtertype: 'textbox',align: 'center', cellsalign: 'left', width: '10%'},
+                { text: 'Saldo Normal', dataField: 'saldo_normal', width: "13%", align:'center',columnType: "template",
                    createEditor: function (row, cellvalue, editor, cellText, width, height) {
                        editor.jqxDropDownList({autoDropDownHeight: true, width: '100%', height: '100%' , source: saldo_normal_source, displayMember: "saldo_normal", valueMember: "saldo_normal"});
                    },
@@ -432,19 +413,20 @@
                    }
                 },
                 { text: 'Saldo Awal', datafield: 'saldo_awal', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '15%', cellsalign: 'center' },
-                { text: 'Mendukung Transaksi', datafield: 'mendukung_transaksi', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '15%',  cellsrenderer: function (row) {
-                        var dataRecord = $("#treeGrid").jqxTreeGrid('getRow', row);
-                        var aktif = dataRecord.mendukung_transaksi;
-                        var str = "";
-                        if(aktif=='1'){
-                         str = "<input type='checkbox' checked>";
-                        }else{
-                         str = "<input type='checkbox'>";
-                        }
-                        return "<div style='width:100%;padding-top:2px;text-align:center'>"+str+"</div>";
-                        }
-                      },
-                {text: 'Detail', sortable: false, align:'center', width: '13%',editable: false, filterable: false, cellsrenderer: function (row) {
+                { text: 'Mendukung Transaksi', datafield: 'mendukung_transaksi', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '15%', cellsalign: 'center' },
+                // { text: 'Mendukung Transaksi', datafield: 'mendukung_transaksi', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '15%',  cellsrenderer: function (row) {
+                //         var dataRecord = $("#treeGrid").jqxTreeGrid('getRow', row);
+                //         var aktif = dataRecord.mendukung_transaksi;
+                //         var str = "";
+                //         if(aktif=='1'){
+                //          str = "<input type='checkbox' checked>";
+                //         }else{
+                //          str = "<input type='checkbox'>";
+                //         }
+                //         return "<div style='width:100%;padding-top:2px;text-align:center'>"+str+"</div>";
+                //         }
+                //       },
+                {text: 'Detail', sortable: false, align:'center', width: '10%',editable: false, filterable: false, cellsrenderer: function (row, column, value) {
                   return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='detail(" + row + ");'></a></div>";
                   },
                 }

@@ -7,6 +7,7 @@ class Keuangan_akun extends CI_Controller {
 
 	}
 	var $mst_keu_akun		    = 'mst_keu_akun';
+	var $parent		    = '';
 
 	function index(){
 		$this->authentication->verify('mst','edit');
@@ -66,37 +67,111 @@ class Keuangan_akun extends CI_Controller {
 		}
 	}
 
+	function have_parent($id){
+		$this->db->where("id_mst_akun",$id);		
+		$dt=$this->db->get("mst_keu_akun")->row();		
+		$this->parent.=" > ".$dt->uraian;
+  		if($dt->id_mst_akun_parent !=0){
+   			$this->have_parent($dt->id_mst_akun_parent);
+		}						
+	}
+
 	function api_data_akun_non_aktif(){
 		$this->authentication->verify('mst','edit');		
 		
 		$data['ambildata'] = $this->keuakun_model->get_data_akun_non_aktif();
 		foreach($data['ambildata'] as $d){
-			$txt = $d["id_mst_akun"]." \t ".$d["id_mst_akun_parent"]."\t".$d["kode"]." \t ".$d["uraian"]." \t ".ucwords($d["saldo_normal"])." \t ".$d["parent"]." \n";				
+	 		 $id = $d["id_mst_akun_parent"];
+	 		 $this->parent = "";
+	    	 $this->have_parent($id);
+			 $txt = $d["id_mst_akun"]." \t ".$d["id_mst_akun_parent"]."\t".$d["kode"]." \t ".$d["uraian"]." \t ".ucwords($d["saldo_normal"])." \t ".$this->parent." \n";				
 			echo $txt;
 		}
 	}
 
-	function statusakun($id=0){
+	// function aktifkan_akun($id){
+		  
+	// 	$this->db->select('COUNT(id_mst_akun) AS n, id_mst_akun_parent, aktif');
+	// 	$this->db->where('id_mst_akun_parent',$id);
+	// 	$this->db->where('aktif',0);
+	// 	$query = $this->db->get('mst_keu_akun');
+
+ //   		if ( $query->num_rows() > 0 ) {
+
+	//    			foreach($query->result() as $q){
+	// 				echo $q->n;
+				
+	// 				$pk   = array(
+	// 						'id_mst_akun'=>$id);
+	// 						// 'id_mst_akun_parent'=> $q->id_mst_akun_parent);
+
+	//    				$data = array(
+	//    						'aktif'=>1);
+	//    						// 'aktif'=>$q->aktif=0);
+
+	//       			$this->db->update('mst_keu_akun',$data,$pk);
+	//    				die("OK");
+	//    			}
+ //   		}else{
+	//    				$pk   = array('id_mst_akun'=>$id);
+	//    				$data = array('aktif'=>1);
+
+	//       			$this->db->update('mst_keu_akun',$data,$pk);
+ //   		}
+ //   		 return $q->result();
+	// }
+
+	function aktifkan_akun($id){
 
 		$this->db->where('id_mst_akun',$id);
+		$this->db->where('aktif',0);
+
 		$this->db->select('aktif');
-		$query = $this->db->get('mst_keu_akun');
-		if ($query->num_rows() > 0) {
-			foreach ($query->result() as $q) {
-				$status_akun[] = array(
-					'mst_keu_akun' => ($q->aktif==null ? 0:$q->aktif), 
-				);
-			}
-		}else{
-			$status_akun[] = array(
-				'mst_keu_akun' => '0', 
-			);
-		}
-		echo json_encode($status_akun);
+
+		$q = $this->db->get('mst_keu_akun');
+
+	   		if ( $q->num_rows() > 0 ) {
+					$pk   = array('id_mst_akun'=>$id);
+	   				$data = array('aktif'=>0);
+
+	      			$this->db->update('mst_keu_akun',$data,$pk);
+
+	   				$this->db->select('id_mst_akun,uraian');
+					$this->db->where('id_mst_akun_parent',$id);
+					$this->db->where('aktif',0);
+					$query = $this->db->get('mst_keu_akun');
+
+					if ( $query->num_rows() > 0 ) {
+
+			   			foreach($query->result() as $q){
+							echo $q->uraian;
+
+							$id    = array('id_mst_akun'=> $q->id_mst_akun);
+			   				$aktif = array('aktif'=>1);
+
+			      			$this->db->update('mst_keu_akun',$aktif,$id);
+
+			      			return $query->result();
+			   			}
+
+	   				}else{
+
+		   				$pk   = array('id_mst_akun'=>$id);
+		   				$data = array('aktif'=>1);
+
+		      			$this->db->update('mst_keu_akun',$data,$pk);
+   					}
+
+	   		}else{
+	   				$pk   = array('id_mst_akun'=>$id);
+	   				$data = array('aktif'=>1);
+
+	      			$this->db->update('mst_keu_akun',$data,$pk);
+	   		}
 	}
 
 	function non_aktif_akun($id){
-		
+
 		$this->db->where('id_mst_akun',$id);
 		$this->db->where('aktif',1);
 
@@ -104,64 +179,45 @@ class Keuangan_akun extends CI_Controller {
 
 		$q = $this->db->get('mst_keu_akun');
 
-   		if ( $q->num_rows() > 0 ) {
-				$pk   = array('id_mst_akun'=>$id);
-   				$data = array('aktif'=>0);
+	   		if ( $q->num_rows() > 0 ) {
+					$pk   = array('id_mst_akun'=>$id);
+	   				$data = array('aktif'=>0);
 
-      			$this->db->update('mst_keu_akun',$data,$pk);
-   				die("OK");
-   		}else{
-   				$pk   = array('id_mst_akun'=>$id);
-   				$data = array('aktif'=>1);
+	      			$this->db->update('mst_keu_akun',$data,$pk);
 
-      			$this->db->update('mst_keu_akun',$data,$pk);
-   		}
-   		 return $q->result();
+	   				$this->db->select('id_mst_akun,uraian');
+					$this->db->where('id_mst_akun_parent',$id);
+					$this->db->where('aktif',1);
+					$query = $this->db->get('mst_keu_akun');
+					$emp = $query->result();
+
+					if ( $query->num_rows() > 0 ) {
+
+			   			foreach($emp as $q){
+							echo $q->uraian;
+
+							$id    = array('id_mst_akun'=> $q->id_mst_akun);
+			   				$aktif = array('aktif'=>0);
+			      			$this->db->update('mst_keu_akun',$aktif,$id);
+
+			      			return $query->result();
+			   			}
+
+	   				}else{
+
+		   				$pk   = array('id_mst_akun'=>$id);
+		   				$data = array('aktif'=>0);
+
+		      			$this->db->update('mst_keu_akun',$data,$pk);
+   					}
+
+	   		}else{
+	   				$pk   = array('id_mst_akun'=>$id);
+	   				$data = array('aktif'=>0);
+
+	      			$this->db->update('mst_keu_akun',$data,$pk);
+	   		}
 	}
-
-	function have_parent($id){
-		$query=$this->obj->db->query("SELECT COUNT(*)  
-										FROM ".$this->mst_keu_akun." AS a 
-  									INNER JOIN `mst_keu_akun` b ON  a.id_mst_akun_parent = b.id_mst_akun
-  									WHERE a.id_mst_akun=".$id);			
-	}
-
-	function get_tree_akun($id){
-  		$query = $this->db->query("SELECT  a.uraian AS Child, 
-        								GROUP_CONCAT(b.uraian  ORDER BY b.uraian ) AS Parent
-								   FROM ".$this->mst_keu_akun." AS a 
- 										 INNER JOIN ".$this->mst_keu_akun." b ON  a.id_mst_akun_parent = b.id_mst_akun
-  										 WHERE a.id_mst_akun=".$id."
-								   GROUP BY Child;");  
-
-			$text="";
-			if($id==0){
-				$text=$text."<ul class=\"sidebar-menu\">";
-			}else{				
-				$text=$text."<ul class=\"treeview-menu\">";
-			}
-
- 			foreach($query->result() as $q){				
-		
-				if($this->have_parent($q->id)){	
-					$text=$text."<li class=\"treeview\" id=\"menu_".$id_menu."\">
-						<a href=\" ".base_url().$q->module." \">
-							<i class=\" ".$ico." \"></i> <span> ".$q->filename." </span> <i class=\"fa fa-angle-left pull-right\"></i>
-						</a>";
-					$text=$text.$this->create_menu($posisi, $q->id);
-					 				
-				}else{
-					$text=$text."<li id=\"menu_".$id_menu."\">
-						<a href=\" ".base_url().$q->module." \">
-							<i class=\" ".$ico."\"></i> <span> ".$q->filename." </span> <i class=\"pull-right\"></i>
-						</a>";
-				}
-				
-				$text=$text."</li>";
-			}
-			$text=$text."</ul>";
-			return $text;                         
-    }
 
 	function set_puskes(){
 		$this->authentication->verify('mst','edit');
