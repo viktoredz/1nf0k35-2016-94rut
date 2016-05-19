@@ -12,10 +12,10 @@
         });
     }
 
-    loadPage('<?php echo base_url()?>mst/keuangan_transaksi/transaksi/1', 1);
+    loadPage('<?php echo base_url()?>mst/keuangan_transaksi/tab/1', 1);
     $('#jqxTabs').on('selected', function (event) {
         var pageIndex = event.args.item + 1;
-        loadPage('<?php echo base_url()?>mst/keuangan_transaksi/transaksi/'+pageIndex , pageIndex);
+        loadPage('<?php echo base_url()?>mst/keuangan_transaksi/tab/'+pageIndex , pageIndex);
     });
 
     $("#menu_master_data").addClass("active");
