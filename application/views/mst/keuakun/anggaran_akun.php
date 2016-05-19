@@ -44,99 +44,6 @@
 </section>
 
 <script type="text/javascript">
-
-    function getDemoTheme() {
-      var theme = document.body ? $.data(document.body, 'theme') : null
-      if (theme == null) {
-        theme = '';
-      } else {
-        return theme;
-      }
-      var themestart = window.location.toString().indexOf('?');
-      if (themestart == -1) {
-        return '';
-      }
-
-      var theme = window.location.toString().substring(1 + themestart);
-      if (theme.indexOf('(') >= 0){
-        theme = theme.substring(1);
-      }
-      if (theme.indexOf(')') >= 0) {
-        theme = theme.substring(0, theme.indexOf(')'));
-      }
-
-      var url = "<?=base_url()?>jqwidgets/styles/jqx." + theme + '.css';
-
-      if (document.createStyleSheet != undefined) {
-        var hasStyle = false;
-        $.each(document.styleSheets, function (index, value) {
-          if (value.href != undefined && value.href.indexOf(theme) != -1) {
-            hasStyle = true;
-            return false;
-          }
-        });
-        if (!hasStyle) {
-          document.createStyleSheet(url);
-        }
-      }
-      else {
-        var hasStyle = false;
-        if (document.styleSheets) {
-          $.each(document.styleSheets, function (index, value) {
-            if (value.href != undefined && value.href.indexOf(theme) != -1) {
-              hasStyle = true;
-              return false;
-            }
-          });
-        }
-        if (!hasStyle) {
-          var link = $('<link rel="stylesheet" href="' + url + '" media="screen" />');
-          link[0].onload = function () {
-            if ($.jqx && $.jqx.ready) {
-              $.jqx.ready();
-            };
-          }
-          $(document).find('head').append(link);
-        }
-      }
-      $.jqx = $.jqx || {};
-      $.jqx.theme = theme;
-      return theme;
-    };
-    var theme = '';
-    try
-    {
-      if (jQuery) {
-        theme = getDemoTheme();
-        if (window.location.toString().indexOf('file://') >= 0) {
-          var loc = window.location.toString();
-          var addMessage = false;
-          if (loc.indexOf('grid') >= 0 || loc.indexOf('chart') >= 0 || loc.indexOf('scheduler') >= 0 || loc.indexOf('tree') >= 0 || loc.indexOf('list') >= 0 || loc.indexOf('combobox') >= 0 || loc.indexOf('php') >= 0 || loc.indexOf('adapter') >= 0 || loc.indexOf('datatable') >= 0 || loc.indexOf('ajax') >= 0) {
-            addMessage = true;
-          }
-
-          if (addMessage) {
-            $(document).ready(function () {
-              setTimeout(function () {
-                $(document.body).prepend($('<div style="font-size: 12px; font-family: Verdana;">Note: To run a sample that includes data binding, you must open it via "http://..." protocol since Ajax makes http requests.</div><br/>'));
-              }
-              , 50);
-            });
-          }
-        }
-      }
-      else {
-        $(document).ready(function () {
-          theme = getDemoTheme();
-        });
-      }
-    }
-    catch (error) {
-      var er = error;
-    }
-</script>
-
-<script type="text/javascript">
   $(document).ready(function () {
 
     $("select[name='tahun']").change(function(){
@@ -255,42 +162,7 @@
                         if (theme == "") return className;
                         return className + " " + className + "-" + theme;
                     }
-                    // appends buttons to the status bar.
-                    var container = $("<div style='overflow: hidden; position: relative; height: 100%; width: 100%;'></div>");
-                    var buttonTemplate = "<div style='float: left; padding: 3px; margin: 2px;'><div style='margin: 4px; width: 16px; height: 16px;'></div></div>";
-                    var addButton = $(buttonTemplate);
-                    var editButton = $(buttonTemplate);
-                    var deleteButton = $(buttonTemplate);
-                    var cancelButton  = $(buttonTemplate);
-                    var updateButton = $(buttonTemplate);                    
-                    
-                    container.append(addButton);
-                    container.append(editButton);
-                    container.append(deleteButton);
-                    container.append(cancelButton);
-                    container.append(updateButton);
 
-                    toolBar.append(container);
-          
-                    addButton.jqxButton({cursor: "pointer", enableDefault: false, disabled: true, height: 25, width: 25 });
-                    addButton.find('div:first').addClass(toTheme('jqx-icon-plus'));
-                    addButton.jqxTooltip({ position: 'bottom', content: "Tambah Cabang"});
-
-                    editButton.jqxButton({ cursor: "pointer", disabled: true, enableDefault: false,  height: 25, width: 25 });
-                    editButton.find('div:first').addClass(toTheme('jqx-icon-edit'));
-                    editButton.jqxTooltip({ position: 'bottom', content: "Edit"});
-
-                    deleteButton.jqxButton({ cursor: "pointer", disabled: true, enableDefault: false,  height: 25, width: 25 });
-                    deleteButton.find('div:first').addClass(toTheme('jqx-icon-delete'));
-                    deleteButton.jqxTooltip({ position: 'bottom', content: "Delete"});
-
-                    updateButton.jqxButton({ cursor: "pointer", disabled: true, enableDefault: false,  height: 25, width: 25 });
-                    updateButton.find('div:first').addClass(toTheme('jqx-icon-save'));
-                    updateButton.jqxTooltip({ position: 'bottom', content: "Save Changes"});
-
-                    cancelButton.jqxButton({ cursor: "pointer", disabled: true, enableDefault: false,  height: 25, width: 25 });
-                    cancelButton.find('div:first').addClass(toTheme('jqx-icon-cancel'));
-                    cancelButton.jqxTooltip({ position: 'bottom', content: "Cancel"});
 
                     var updateButtons = function (action) {
                         switch (action) {
@@ -340,67 +212,11 @@
                         updateButtons('Edit');
                     });
 
-                    addButton.click(function (event) {
-                        if (!addButton.jqxButton('disabled')) {             
-                            $("#treeGrid_anggaran_akun").jqxTreeGrid('expandRow', rowKey);
-                            // add new empty row.
-                            $("#treeGrid_anggaran_akun").jqxTreeGrid('addRow', null, {}, 'first', rowKey);
-                            // select the first row and clear the selection.
-                            $("#treeGrid_anggaran_akun").jqxTreeGrid('clearSelection');
-                            $("#treeGrid_anggaran_akun").jqxTreeGrid('selectRow', newRowID);
-                            // edit the new row.
-                            $("#treeGrid_anggaran_akun").jqxTreeGrid('beginRowEdit', newRowID);
-                            updateButtons('add');
-                        }
-                    });
-
-                    cancelButton.click(function (event) {
-                        if (!cancelButton.jqxButton('disabled')) {
-                            // cancel changes.
-                            $("#treeGrid_anggaran_akun").jqxTreeGrid('endRowEdit', rowKey, true);
-                        }
-                    });
-
-                    updateButton.click(function (event) {
-                        if (!updateButton.jqxButton('disabled')) {
-                            // save changes.
-                            $("#treeGrid_anggaran_akun").jqxTreeGrid('endRowEdit', rowKey, false);
-                        }
-                    });
-
-                    editButton.click(function () {
-                        if (!editButton.jqxButton('disabled')) {
-                            $("#treeGrid_anggaran_akun").jqxTreeGrid('beginRowEdit', rowKey);
-                            updateButtons('edit');
-
-                        }
-                    });
-
-                    deleteButton.click(function () {
-                        if (!deleteButton.jqxButton('disabled')) {
-                            var selection = $("#treeGrid_anggaran_akun").jqxTreeGrid('getSelection');
-                            if (selection.length > 1) {
-                                var keys = new Array();
-                                for (var i = 0; i < selection.length; i++) {
-                                    keys.push($("#treeGrid_anggaran_akun").jqxTreeGrid('getKey', selection[i]));
-                                }
-                                if(confirm('Apakah anda yakin akan menghapus beberapa data sekaligus ? Data yang telah terhapus tidak dapat di kembalikan lagi')){
-                                  $("#treeGrid_anggaran_akun").jqxTreeGrid('deleteRow', keys);
-                                }
-                            }
-                            else {
-                                if(confirm('Apakah anda yakin akan menghapus data ini ? Data yang telah terhapus tidak dapat di kembalikan lagi')){
-                                  $("#treeGrid_anggaran_akun").jqxTreeGrid('deleteRow', rowKey);
-                                }
-                            }
-                            updateButtons('delete');
-                        }
-                    });
                 },
                
               columns: [                             
-                { text: 'Uraian ', datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox',align: 'center', width: '40%' },
-                { text: 'Kode Akun', datafield: 'kode', columntype: 'textbox', filtertype: 'textbox',align: 'center', cellsalign: 'left', width: '25%'},
+                { text: 'Uraian ', datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox',align: 'center', width: '45%' },
+                { text: 'Kode Akun', datafield: 'kode', columntype: 'textbox', filtertype: 'textbox',align: 'center', cellsalign: 'center', width: '20%'},
                 { text: 'Anggaran', datafield: 'saldo_normal', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '35%', cellsalign: 'center' }
               ]
             });

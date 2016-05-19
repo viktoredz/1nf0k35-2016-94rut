@@ -53,7 +53,7 @@
 			{ name: 'nama', type: 'string'},
 			{ name: 'jenis_kelamin', type: 'string'},
 			{ name: 'tgl_lhr', type: 'date'},
-			{ name: 'tmp_lhr', type: 'string'},
+			{ name: 'tmp_lahir', type: 'string'},
 			{ name: 'kode_mst_agama', type: 'string'},
 			{ name: 'kode_mst_nikah', type: 'string'},
 			{ name: 'usia', type: 'string'},
@@ -119,11 +119,11 @@
                  }
                 },
 				{ text: 'NIP', datafield: 'nip_baru', columntype: 'textbox', filtertype: 'textbox', align: 'center' , cellsalign: 'center', width: '20%'},
-				{ text: 'Nama', datafield: 'nama', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '29%' },
+				{ text: 'Nama', datafield: 'nama', columntype: 'textbox', filtertype: 'textbox', align: 'center', width: '29%' },
 				{ text: 'Jenis Kelamin', datafield: 'jenis_kelamin', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '10%' },
 				{ text: 'Usia', datafield: 'usia', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '6%' },
 				{ text: 'Tanggal Lahir', datafield: 'tgl_lhr', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', align: 'center', cellsalign: 'center', width: '10%' },
-				{ text: 'Tempat Lahir', datafield: 'tmp_lhr', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '15%' }
+				{ text: 'Tempat Lahir', datafield: 'tmp_lahir', columntype: 'textbox', filtertype: 'textbox', align: 'center', width: '15%' }
             ]
 		});
 
