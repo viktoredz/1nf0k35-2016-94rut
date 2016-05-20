@@ -62,7 +62,7 @@
               <div class="row" style="margin: 5px">
                 <div class="col-md-12">
                   <?php $i=1; foreach($template as $t) : ?>
-                    <input type="checkbox" name="kategori_trans_template" id="kategori_trans_template<?php echo $i;?>" value="<?php echo $t->id_mst_setting_transaksi_template;?>" 
+                    <input type="checkbox" name="kategori_trans_template" id="kategori_trans_template<?php echo $i;?>" value="1" 
                   <?php 
                   if(set_value('nilai')=="" && isset($nilai)){
                     $nilai = $nilai;
@@ -125,14 +125,14 @@
 
     $("[name='kategori_trans_template']").click(function(){
       var data = new FormData();
-        data.append('nilai',   $("[name='kategori_trans_template']:checked").val());
+        // data.append('nilai',   $("[name='kategori_trans_template']:checked").val());
 
         $.ajax({
             cache : false,
             contentType : false,
             processData : false,
             type : 'POST',
-            url : '<?php echo base_url()."mst/keuangan_transaksi/template_{action}/{id}"?>',
+            url : '<?php echo base_url()."mst/keuangan_transaksi/template_{action}/{id_template}"?>',
             data : data,
             success : function(response){
                 if(response=="OK"){
