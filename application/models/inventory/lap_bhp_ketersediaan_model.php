@@ -22,6 +22,7 @@ class Lap_bhp_ketersediaan_model extends CI_Model {
         $tanggal2 = $this->input->post('filter_tanggal1');
         $data = array();
         $this->db->having("jmlawal_opname > 0");
+        $this->db->where("code_cl_phc",$kodepuskesmas);
         $this->db->group_by('inv_inventaris_habispakai_opname_item.id_mst_inv_barang_habispakai','inv_inventaris_habispakai_opname_item.batch');
        $this->db->select("mst_inv_barang_habispakai.uraian,mst_inv_barang_habispakai.merek_tipe,(IFNULL((SELECT a.
     jml_akhir
