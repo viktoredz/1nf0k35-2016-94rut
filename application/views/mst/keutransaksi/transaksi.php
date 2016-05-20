@@ -17,9 +17,29 @@
           <h3 class="box-title">{title_form}</h3>
       </div>
 
-        <div class="box-footer">
+      <div class="box-body">
+       <div class="row">
+        <div class="col-md-6 pull-left">
           <button type="button" class="btn btn-primary" id="btn-add"><i class='fa fa-plus-square'></i> &nbsp; Tambah Transaksi</button>
-       </div>
+        </div>
+
+        <div class="col-md-4 pull-right">
+          <div class="row">
+            <div class="col-md-8 pull-right">
+             <select name="kategori" id="kategori" class="form-control">
+               <option value="all">All</option>
+                <?php foreach ($kategori as $row ) { ;?>
+                 <?php $select = $row->id_mst_kategori_transaksi == $this->session->userdata('filter_kategori') ? 'selected=selected' : '' ?>
+                 <option value="<?php echo $row->id_mst_kategori_transaksi; ?>"  <?php echo $select ?> ><?php echo $row->nama; ?></option>
+                <?php } ;?>
+                </select>
+             </div> 
+            <div class="col-md-4 pull-right" style="padding-top:8px">Kategori</div>
+          </div>
+        </div>
+        </div>
+      </div>
+
         <div class="box-body">
         <div class="div-grid">
             <div id="jqxgrid_transaksi"></div>
@@ -38,14 +58,24 @@
 
 <script type="text/javascript">
 
+  $(function () { 
+
+    $("select[name='kategori']").change(function(){
+      $.post("<?php echo base_url().'mst/keuangan_transaksi/filter_kategori' ?>", 'kategori='+$(this).val(),  function(){
+        $("#jqxgrid_transaksi").jqxGrid('updatebounddata', 'cells');
+      });
+    });
+
+  });
+
      var source = {
       datatype: "json",
       type  : "POST",
       datafields: [
-      { name: 'id_mst_otomasi_transaksi', type: 'string'},
-      { name: 'id_mst_kategori_transaksi', type: 'string'},
-      { name: 'untuk_jurnal', type: 'string'},
+      { name: 'id_mst_transaksi', type: 'string'},
       { name: 'nama', type: 'string'},
+      { name: 'untuk_jurnal', type: 'string'},
+      { name: 'kategori', type: 'string'},
       { name: 'edit', type: 'number'},
       { name: 'delete', type: 'number'}
         ],
@@ -91,23 +121,22 @@
         { text: 'Detail', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
             var dataRecord = $("#jqxgrid_transaksi").jqxGrid('getrowdata', row);
             if(dataRecord.edit==1){
-            return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='detail(\""+dataRecord.id_mst_kategori_transaksi+"\");'></a></div>";
+            return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='detail(\""+dataRecord.id_mst_transaksi+"\");'></a></div>";
           }else{
             return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_view.gif'></a></div>";
           }
                   }
                 },
-
         { text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
             var dataRecord = $("#jqxgrid_transaksi").jqxGrid('getrowdata', row);
             if(dataRecord.delete==1){
-            return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del(\""+dataRecord.id_mst_kategori_transaksi+"\");'></a></div>";
+            return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del(\""+dataRecord.id_mst_transaksi+"\");'></a></div>";
           }else{
             return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
           }
                   }
                 },
-        { text: 'Kategori', datafield: 'id_mst_kategori_transaksi', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'left', width: '25%' },
+        { text: 'Kategori', datafield: 'kategori', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'left', width: '25%' },
         { text: 'Judul Transaksi', datafield: 'nama', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'left', width: '40%' },
         { text: 'Tersedia Untuk Jurnal', datafield: 'untuk_jurnal', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '25%' }
             ]
@@ -128,17 +157,17 @@
   }
 
   function detail(id){
-      $("#popup_kategori_transaksi #popup_kategori_transaksi_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-        $.get("<?php echo base_url().'mst/keuangan_transaksi/kategori_transaksi_edit' ?>/"+ id, function(data) {
-          $("#popup_kategori_transaksi_content").html(data);
-        });
-        $("#popup_kategori_transaksi").jqxWindow({
-          theme: theme, resizable: false,
-          width: 600,
-          height: 450,
-          isModal: true, autoOpen: false, modalOpacity: 0.2
-        });
-        $("#popup_kategori_transaksi").jqxWindow('open');
+        var transaksi = '';
+      $.ajax({
+          url: "<?php echo base_url().'mst/keuangan_transaksi/transaksi_edit/'?>/" +id,
+          type : 'POST',
+       //   data : 'transaksi=' + transaksi,
+          success : function(data) {
+              $('#content2').html(data);
+          }
+      });
+
+      return false;
     }
 
   function del(id){
@@ -161,9 +190,8 @@
               $('#content2').html(data);
           }
       });
-
       return false;
-
     });
+
 </script>
 

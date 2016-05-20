@@ -22,7 +22,7 @@
        </div>
         <div class="box-body">
         <div class="div-grid">
-            <div id="jqxgrid"></div>
+            <div id="jqxgrid_kategori_transaksi"></div>
       </div>
       </div>
     </div>
@@ -56,10 +56,10 @@
     updaterow: function (rowid, rowdata, commit) {
       },
     filter: function(){
-      $("#jqxgrid").jqxGrid('updatebounddata', 'filter');
+      $("#jqxgrid_kategori_transaksi").jqxGrid('updatebounddata', 'filter');
     },
     sort: function(){
-      $("#jqxgrid").jqxGrid('updatebounddata', 'sort');
+      $("#jqxgrid_kategori_transaksi").jqxGrid('updatebounddata', 'sort');
     },
     root: 'Rows',
         pagesize: 10,
@@ -76,10 +76,10 @@
     });
      
     $('#btn-refresh').click(function () {
-      $("#jqxgrid").jqxGrid('clearfilters');
+      $("#jqxgrid_kategori_transaksi").jqxGrid('clearfilters');
     });
 
-    $("#jqxgrid").jqxGrid(
+    $("#jqxgrid_kategori_transaksi").jqxGrid(
     {   
       width: '100%',
       selectionmode: 'singlerow',
@@ -91,7 +91,7 @@
       },
       columns: [
         { text: 'Detail', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
-            var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
+            var dataRecord = $("#jqxgrid_kategori_transaksi").jqxGrid('getrowdata', row);
             if(dataRecord.edit==1){
             return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='detail(\""+dataRecord.id_mst_kategori_transaksi+"\");'></a></div>";
           }else{
@@ -101,7 +101,7 @@
                 },
 
         { text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
-            var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
+            var dataRecord = $("#jqxgrid_kategori_transaksi").jqxGrid('getrowdata', row);
             if(dataRecord.delete==1){
             return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del(\""+dataRecord.id_mst_kategori_transaksi+"\");'></a></div>";
           }else{
@@ -122,7 +122,7 @@
         $("#popup_kategori_transaksi").jqxWindow({
           theme: theme, resizable: false,
           width: 600,
-          height: 450,
+          height: 240,
           isModal: true, autoOpen: false, modalOpacity: 0.2
         });
         $("#popup_kategori_transaksi").jqxWindow('open');
@@ -136,7 +136,7 @@
         $("#popup_kategori_transaksi").jqxWindow({
           theme: theme, resizable: false,
           width: 600,
-          height: 450,
+          height: 600,
           isModal: true, autoOpen: false, modalOpacity: 0.2
         });
         $("#popup_kategori_transaksi").jqxWindow('open');
@@ -147,7 +147,7 @@
     if(confirms == true){
       $.post("<?php echo base_url().'mst/keuangan_transaksi/delete_kategori_transaksi' ?>/" + id,  function(){
         alert('data berhasil dihapus');
-        $("#jqxgrid").jqxGrid('updatebounddata', 'cells');
+        $("#jqxgrid_kategori_transaksi").jqxGrid('updatebounddata', 'cells');
       });
     }
   }
