@@ -64,12 +64,12 @@
                   <?php $i=1; foreach($template as $t) : ?>
                     <input type="checkbox" name="kategori_trans_template" id="kategori_trans_template<?php echo $i;?>" value="1" 
                   <?php 
-                  if(set_value('nilai')=="" && isset($nilai)){
-                    $nilai = $nilai;
+                  if(set_value('nilai')=="" && isset($t->nilai)){
+                    $t->nilai= $t->nilai;
                   }else{
-                    $nilai = set_value('nilai');
+                    $t->nilai= set_value('nilai');
                   }
-                  if($nilai == 1) echo "checked";
+                  if($t->nilai == 1) echo "checked";
                   ?>> 
                     <?php echo $t->setting_judul ?>
                     </br>
@@ -125,22 +125,26 @@
 
     $("[name='kategori_trans_template']").click(function(){
       var data = new FormData();
-        // data.append('nilai',   $("[name='kategori_trans_template']:checked").val());
-
+        data.append('nilai',        $("[name='kategori_trans_template']:checked").val());
+        
         $.ajax({
             cache : false,
             contentType : false,
             processData : false,
             type : 'POST',
-            url : '<?php echo base_url()."mst/keuangan_transaksi/template_{action}/{id_template}"?>',
+            url : '<?php echo base_url()."mst/keuangan_transaksi/template_update/{id_template}"?>',
             data : data,
             success : function(response){
-                if(response=="OK"){
-                  $("#kategori_trans_template").prop("checked", true);
-                   alert("True");
+               a = response.split("|");
+              if(a[0]=="OK"){
+                if (a[1]=='1') {
+                    $("#kategori_trans_template").prop("checked", true);
                 }else{
-                  $("#kategori_trans_template").prop("checked", false);
-                   alert("False");
+                    $("#kategori_trans_template").prop("checked", false);
+                };
+              }else{
+                alert("Mendukung transaksi belum berhasil di aktifkan.");
+
               }
             }
         });
