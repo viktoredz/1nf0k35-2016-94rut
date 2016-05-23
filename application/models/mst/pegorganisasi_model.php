@@ -105,12 +105,8 @@ class Pegorganisasi_model extends CI_Model {
         }
     }
 
-    function akun_delete(){  
-        $this->db->where('tar_id_struktur_org', $this->input->post('id_mst_akun'));
-        $this->db->delete($this->tb);
-        
-
-        $this->db->where('tar_id_struktur_org_parent',$this->input->post('id_mst_akun'));
+    function akun_delete($id=0){  
+        $this->db->where('tar_id_struktur_org_parent',$id);
         $q = $this->db->get('mst_peg_struktur_org');
         if ($q->num_rows() > 0 ) {
             $child = $q->result_array();
@@ -119,6 +115,11 @@ class Pegorganisasi_model extends CI_Model {
             }
 
         }
+        $this->db->where('tar_id_struktur_org', $id);
+        $this->db->delete($this->tb);
+        
+
+        
     }
 
     function akun_add(){
@@ -178,7 +179,7 @@ class Pegorganisasi_model extends CI_Model {
     }
 
     function get_data_akun(){     
-        $this->db->where('tar_aktif',1);
+        //$this->db->where('tar_aktif',1);
         $this->db->order_by('tar_id_struktur_org','asc');
         $query = $this->db->get('mst_peg_struktur_org');     
         return $query->result_array();  

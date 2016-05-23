@@ -138,6 +138,7 @@
 
 <script type="text/javascript">
   $(document).ready(function () {
+    cekstatus();
      $("#menu_master_data").addClass("active");
       $("#menu_mst_pegorganisasi").addClass("active");
       var newRowID = null;
@@ -178,23 +179,25 @@
                  updateRow: function (rowID, rowData, commit) {
                     commit(true);
                     var arr = $.map(rowData, function(el) { return el });         
-                    alert(arr);
+                 // /   alert(arr);
                     if(typeof(arr[1]) === 'object'){
                       var arr2 = $.map(arr[1], function(el) { return el });
-                       alert(arr2);
+                     //  alert(arr2);
 
                       if(arr[4]!='') {
                        
                         $.post( '<?php echo base_url()?>mst/pegorganisasi/akun_add', {tar_id_struktur_org:arr[2],tar_id_struktur_org_parent:arr2[0], tar_nama_posisi:arr[4], tar_aktif:1}, function( data ) {
                             if(data != 0){
-                              alert(data);                  
+                       //       alert(data);                 
+                       $("#treeGrid").jqxTreeGrid('updateBoundData', 'filter'); 
                             }else{
-                              alert("Data "+arr[4]+" berhasil disimpan");                  
+                              alert("Data "+arr[4]+" berhasil disimpan");       
+                              $("#treeGrid").jqxTreeGrid('updateBoundData', 'filter');           
                             }
                         });
                       }
                     }else{    
-                    alert(rowID);  
+                    //alert(rowID);  
                       $.post( '<?php echo base_url()?>mst/pegorganisasi/akun_update', 
                         {
                           row:rowID,
@@ -206,6 +209,7 @@
                         function( data ) {
                           if(data != 0){
                             alert(data);
+                            $("#treeGrid").jqxTreeGrid('updateBoundData', 'filter');
                           }
                       });
                     }
@@ -213,13 +217,15 @@
                  deleteRow: function (rowID, commit) {
                     if( Object.prototype.toString.call( rowID ) === '[object Array]' ) {
                       for(var i=0; i< rowID.length; i++){
-                        $.post( '<?php echo base_url()?>mst/pegorganisasi/akun_delete', {id_mst_akun:rowID[i]},function( data ) {
+                        $.post( '<?php echo base_url()?>mst/pegorganisasi/akun_delete', {tar_id_struktur_org:rowID[i]},function( data ) {
                           $("#treeGrid").jqxTreeGrid('updateBoundData');
+                          cekstatus();
                         });
                       }
                     }else{
-                      $.post( '<?php echo base_url()?>mst/pegorganisasi/akun_delete', {id_mst_akun:rowID},function( data ) {
-                        // $("#treeGrid").jqxTreeGrid('updateBoundData');
+                      $.post( '<?php echo base_url()?>mst/pegorganisasi/akun_delete', {tar_id_struktur_org:rowID},function( data ) {
+                         $("#treeGrid").jqxTreeGrid('updateBoundData');
+                         cekstatus();
                       });
                     }
                     commit(true);
@@ -433,6 +439,15 @@
         });
         $("#popup_keuangan_akun").jqxWindow('open');
     }
-
+    function cekstatus(){
+      $.get("<?php echo base_url().'mst/pegorganisasi/cekstatustambah' ?>/",function(data){
+       // / alert(data);
+          if (data==1) {
+            $("#doInduk").hide();
+          }else{
+            $("#doInduk").show();
+          }
+      });
+    }
 </script>
 

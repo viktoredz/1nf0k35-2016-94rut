@@ -65,6 +65,7 @@
 
     $("[name='btn_keuangan_akun_close']").click(function(){
         $("#popup_keuangan_akun").jqxWindow('close');
+        cekstatus();
     });
 
     $("[name='btn_keuangan_akun_save']").click(function(){

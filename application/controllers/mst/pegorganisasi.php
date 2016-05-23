@@ -20,62 +20,14 @@ class Pegorganisasi extends CI_Controller {
 		$this->template->show($data,"home");
 	}
 
-	function keu_akun($pageIndex){
-		$data = array();
-
-		switch ($pageIndex) {
-			case 1:
-				$data['title_group']   = "Keuangan";
-				$data['title_form']    = "Daftar Akun";
-				$data['ambildata']     = $this->pegorganisasi_model->get_data();
-
-				die($this->parser->parse("mst/pegorganisasi/akun",$data));
-
-				break;
-			case 2:
-				$data['title_group']   = "Keuangan";
-				$data['title_form']    = "Anggaran Akun";
-				$data['ambildata']     = $this->pegorganisasi_model->get_data();
-
-				die($this->parser->parse("mst/pegorganisasi/anggaran_akun",$data));
-
-				break;
-			case 3:
-				$data['title_group']   = "Keuangan";
-				$data['title_form']    = "Target Penerimaan Akun";
-				$data['ambildata']     = $this->pegorganisasi_model->get_data();
-				die($this->parser->parse("mst/pegorganisasi/target_penerimaan",$data));
-
-				break;
-			default:
-
-				$data['title_group']   = "Keuangan";
-				$data['title_form']    = "Daftar Akun Non Aktif ";
-				$data['ambildata']     = $this->pegorganisasi_model->get_data();
-
-				die($this->parser->parse("mst/pegorganisasi/akun_non_aktif",$data));
-				break;
-		}
-	}
-
 	function api_data(){
 		$this->authentication->verify('mst','edit');		
 		
 		$data['ambildata'] = $this->pegorganisasi_model->get_data_akun();
 		foreach($data['ambildata'] as $d){
-			$txt = $d["tar_id_struktur_org"]." \t ".$d["tar_id_struktur_org_parent"]."\t".$d["tar_nama_posisi"]." \t ".$d["tar_aktif"]." \t ".$d["code_cl_phc"]." \n";				
+			$txt = $d["tar_id_struktur_org"]." \t ".$d["tar_id_struktur_org_parent"]."\t".$d["tar_nama_posisi"]." \t ".($d["tar_aktif"]==1 ? "<i class='icon fa fa-check-square-o'></i>" : "-")." \t ".$d["code_cl_phc"]." \n";				
 			echo $txt;
 		}
-	}
-
-	function have_parent($id){
-		$this->db->where("id_mst_akun",$id);		
-		$dt=$this->db->get("mst_keu_akun")->row();		
-
-		if(!empty($dt->uraian))$this->parent.=" &raquo; ".$dt->uraian;
-  		if(!empty($dt->id_mst_akun_parent) && $dt->id_mst_akun_parent !=0){
-   			$this->have_parent($dt->id_mst_akun_parent);
-		}						
 	}
 
 	function api_data_akun_non_aktif(){
@@ -106,9 +58,20 @@ class Pegorganisasi extends CI_Controller {
 
    		}
 	}
-
-	function non_aktif_akun($id){
-		$data = array('tar_aktif' => 0);
+	function cekstatustambah(){
+		$query = $this->db->get('mst_peg_struktur_org');
+		if ($query->num_rows() > 0) {
+			die('1');
+		}else{
+			die('0');
+		}
+	}
+	function non_aktif_akun($id=0,$status=''){
+		if ($status=='nonaktif') {
+			$data = array('tar_aktif' => 0);
+		}else{
+			$data = array('tar_aktif' => 1);
+		}
 		$this->db->where('tar_id_struktur_org',$id);
 		$this->db->update('mst_peg_struktur_org',$data);
 
@@ -117,7 +80,12 @@ class Pegorganisasi extends CI_Controller {
    		if ($q->num_rows() > 0 ) {
 			$child = $q->result_array();
    			foreach ($child as $dt) {
-   				$this->non_aktif_akun($dt['tar_id_struktur_org']);
+   				if ($status=='nonaktif') {
+					$this->non_aktif_akun($dt['tar_id_struktur_org'],'nonaktif');
+				}else{
+					$this->non_aktif_akun($dt['tar_id_struktur_org'],'aktip');
+				}
+   				
    			}
 
    		}
@@ -156,62 +124,7 @@ class Pegorganisasi extends CI_Controller {
 		die($this->parser->parse("mst/pegorganisasi/form_tambah_induk",$data));
 	}
 
-	function mendukung_target_update($id=0){
-		$this->authentication->verify('mst','edit');
-
-    	$this->form_validation->set_rules('mendukung_target', 'Mendukung Target', 'trim');
-
-	    $data['action']				= "edit";
-		$data['alert_form']		    = '';
-		$data['id']					= $id;
-
-		if($this->form_validation->run()== FALSE){
-			die($this->parser->parse("mst/pegorganisasi/form_detail_akun",$data));
-		}elseif($mendukung_target=$this->pegorganisasi_model->mendukung_target_update($id)){
-			die("OK|$mendukung_target");
-		}else{
-			$data['alert_form'] = 'Save data failed...';
-		}
-		die($this->parser->parse("mst/pegorganisasi/form_detail_akun",$data));
-	}
-
-	function mendukung_anggaran_update($id=0){
-		$this->authentication->verify('mst','edit');
-
-    	$this->form_validation->set_rules('mendukung_anggaran', 'Mendukung Anggaran', 'trim');
-
-	    $data['action']				= "edit";
-		$data['alert_form']		    = '';
-		$data['id']					= $id;
-
-		if($this->form_validation->run()== FALSE){
-			die($this->parser->parse("mst/pegorganisasi/form_detail_akun",$data));
-		}elseif($mendukung_anggaran=$this->pegorganisasi_model->mendukung_anggaran_update($id)){
-			die("OK|$mendukung_anggaran");
-		}else{
-			$data['alert_form'] = 'Save data failed...';
-		}
-		die($this->parser->parse("mst/pegorganisasi/form_detail_akun",$data));
-	}
-
-	function mendukung_transaksi_update($id=0){
-		$this->authentication->verify('mst','edit');
-
-    	$this->form_validation->set_rules('mendukung_transaksi', 'Mendukung Transaksi', 'trim');
-
-	    $data['action']				= "edit";
-		$data['alert_form']		    = '';
-		$data['id']					= $id;
-
-		if($this->form_validation->run()== FALSE){
-			die($this->parser->parse("mst/pegorganisasi/form_detail_akun",$data));
-		}elseif($mendukung_transaksi=$this->pegorganisasi_model->mendukung_transaksi_update($id)){
-			die("OK|$mendukung_transaksi");
-		}else{
-			$data['alert_form'] = 'Save data failed...';
-		}
-		die($this->parser->parse("mst/pegorganisasi/form_detail_akun",$data));
-	}
+	
 
 	function induk_detail($id=0){
 			$data 						= $this->pegorganisasi_model->get_data_akun_detail($id);
@@ -273,65 +186,9 @@ class Pegorganisasi extends CI_Controller {
 
 	function akun_delete(){
 		$this->authentication->verify('mst','del');
-		$this->pegorganisasi_model->akun_delete();				
+		$this->pegorganisasi_model->akun_delete($this->input->post('tar_id_struktur_org'));				
 	}
 
-	function json_akun(){
-		$this->authentication->verify('mst','show');
-
-		if($_POST) {
-			$fil = $this->input->post('filterscount');
-			$ord = $this->input->post('sortdatafield');
-
-			for($i=0;$i<$fil;$i++) {
-				$field = $this->input->post('filterdatafield'.$i);
-				$value = $this->input->post('filtervalue'.$i);
-			}
-
-			if(!empty($ord)) {
-				$this->db->order_by($ord, $this->input->post('sortorder'));
-			}
-		}
-
-		$rows_all = $this->pegorganisasi_model->get_data();
-
-		if($_POST) {
-			$fil = $this->input->post('filterscount');
-			$ord = $this->input->post('sortdatafield');
-
-			for($i=0;$i<$fil;$i++) {
-				$field = $this->input->post('filterdatafield'.$i);
-				$value = $this->input->post('filtervalue'.$i);
-			}
-
-			if(!empty($ord)) {
-				$this->db->order_by($ord, $this->input->post('sortorder'));
-			}
-		}
-
-		$rows = $this->pegorganisasi_model->get_data($this->input->post('recordstartindex'), $this->input->post('pagesize'));
-		$data = array();
-		foreach($rows as $act) {
-			$data[] = array(
-				'id_mst_akun'	  	 => $act->id_mst_akun,
-				'kode'	   			 => $act->kode,
-				'uraian'   			 => $act->uraian,
-				'saldo_normal'   	 => ucwords($act->saldo_normal),
-				'saldo_awal'     	 => $act->saldo_awal,
-				'aktif' 			 => $act->aktif,
-				'mendukung_anggaran' => $act->mendukung_anggaran,
-				'edit'			 	 => 1,
-				'delete'			 => 1
-			);
-		}
-
-		$size = sizeof($rows_all);
-		$json = array(
-			'TotalRows' => (int) $size,
-			'Rows' => $data
-		);
-
-		echo json_encode(array($json));
-	}
+	
 }
 ?>
