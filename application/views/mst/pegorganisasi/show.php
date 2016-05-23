@@ -380,6 +380,7 @@
                     deleteButton.click(function () {
                         if (!deleteButton.jqxButton('disabled')) {
                             var selection = $("#treeGrid").jqxTreeGrid('getSelection');
+                            
                             if (selection.length > 1) {
                                 var keys = new Array();
                                 for (var i = 0; i < selection.length; i++) {

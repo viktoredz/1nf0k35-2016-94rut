@@ -18,7 +18,7 @@
         <div class="col-md-12 pull-left">
           <button id="doExpand" class="btn btn-warning " ><i class="icon fa fa-plus-square-o"></i> &nbsp;Expand</button>  
           <button id="doCollapse" class="btn btn-warning " ><i class="icon fa fa-minus-square-o"></i> &nbsp;Collapse</button> 
-          <button id="doInduk" onclick='add_induk()' class="btn btn-success"><i class="icon fa fa-plus-square"></i> &nbsp;Tambah Induk</button> 
+          <!--<button id="doInduk" onclick='add_induk()' class="btn btn-success"><i class="icon fa fa-plus-square"></i> &nbsp;Tambah Induk</button> -->
           <button id="doRefresh" class="btn btn-primary" ><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
         </div>
       </div>
@@ -237,7 +237,7 @@
                 width: '100%',
                 source: dataAdapter, 
                 pageable: false,
-                editable: true,
+                editable: false,
                 showToolbar: true,
                 altRows: true,
                 ready: function(){
@@ -252,152 +252,11 @@
                         if (theme == "") return className;
                         return className + " " + className + "-" + theme;
                     }
-                    // appends buttons to the status bar.
-                    var container = $("<div style='overflow: hidden; position: relative; height: 100%; width: 100%;'></div>");
-                    var buttonTemplate = "<div style='float: left; padding: 3px; margin: 2px;'><div style='margin: 4px; width: 16px; height: 16px;'></div></div>";
-                    var addButton = $(buttonTemplate);
-                    var editButton = $(buttonTemplate);
-                    var deleteButton = $(buttonTemplate);
-                    var cancelButton  = $(buttonTemplate);
-                    var updateButton = $(buttonTemplate);                    
-                    
-                    container.append(addButton);
-                    container.append(editButton);
-                    container.append(deleteButton);
-                    container.append(cancelButton);
-                    container.append(updateButton);
-
-                    toolBar.append(container);
-          
-                    addButton.jqxButton({cursor: "pointer", enableDefault: false, disabled: true, height: 25, width: 25 });
-                    addButton.find('div:first').addClass(toTheme('jqx-icon-plus'));
-                    addButton.jqxTooltip({ position: 'bottom', content: "Tambah Cabang"});
-
-                    editButton.jqxButton({ cursor: "pointer", disabled: true, enableDefault: false,  height: 25, width: 25 });
-                    editButton.find('div:first').addClass(toTheme('jqx-icon-edit'));
-                    editButton.jqxTooltip({ position: 'bottom', content: "Edit"});
-
-                    deleteButton.jqxButton({ cursor: "pointer", disabled: true, enableDefault: false,  height: 25, width: 25 });
-                    deleteButton.find('div:first').addClass(toTheme('jqx-icon-delete'));
-                    deleteButton.jqxTooltip({ position: 'bottom', content: "Delete"});
-
-                    updateButton.jqxButton({ cursor: "pointer", disabled: true, enableDefault: false,  height: 25, width: 25 });
-                    updateButton.find('div:first').addClass(toTheme('jqx-icon-save'));
-                    updateButton.jqxTooltip({ position: 'bottom', content: "Save Changes"});
-
-                    cancelButton.jqxButton({ cursor: "pointer", disabled: true, enableDefault: false,  height: 25, width: 25 });
-                    cancelButton.find('div:first').addClass(toTheme('jqx-icon-cancel'));
-                    cancelButton.jqxTooltip({ position: 'bottom', content: "Cancel"});
-
-                    var updateButtons = function (action) {
-                        switch (action) {
-                            case "Select":
-                                addButton.jqxButton({ disabled: false });
-                                deleteButton.jqxButton({ disabled: false });
-                                editButton.jqxButton({ disabled: false });
-                                cancelButton.jqxButton({ disabled: true });
-                                updateButton.jqxButton({ disabled: true });
-                                break;
-                            case "Unselect":
-                                addButton.jqxButton({ disabled: true });
-                                deleteButton.jqxButton({ disabled: true });
-                                editButton.jqxButton({ disabled: true });
-                                cancelButton.jqxButton({ disabled: true });
-                                updateButton.jqxButton({ disabled: true });
-                                break;
-                            case "Edit":
-                                addButton.jqxButton({ disabled: true });
-                                deleteButton.jqxButton({ disabled: true });
-                                editButton.jqxButton({ disabled: true });
-                                cancelButton.jqxButton({ disabled: false });
-                                updateButton.jqxButton({ disabled: false });
-                                break;
-                            case "End Edit":
-                                addButton.jqxButton({ disabled: false });
-                                deleteButton.jqxButton({ disabled: false });
-                                editButton.jqxButton({ disabled: false });
-                                cancelButton.jqxButton({ disabled: true });
-                                updateButton.jqxButton({ disabled: true });
-                                break;
-                        }
-                    }
-                    var rowKey = null;
-                    $("#treeGrid").on('rowSelect', function (event) {
-                        var args = event.args;
-                        rowKey = args.key;
-                        updateButtons('Select');
-                    });
-                    $("#treeGrid").on('rowUnselect', function (event) {
-                        updateButtons('Unselect');
-                    });
-                    $("#treeGrid").on('rowEndEdit', function (event) {
-                        updateButtons('End Edit');
-                    });
-                    $("#treeGrid").on('rowBeginEdit', function (event) {
-                        updateButtons('Edit');
-                    });
-
-                    addButton.click(function (event) {
-                        if (!addButton.jqxButton('disabled')) {             
-                            $("#treeGrid").jqxTreeGrid('expandRow', rowKey);
-                            // add new empty row.
-                            $("#treeGrid").jqxTreeGrid('addRow', null, {}, 'first', rowKey);
-                            // select the first row and clear the selection.
-                            $("#treeGrid").jqxTreeGrid('clearSelection');
-                            $("#treeGrid").jqxTreeGrid('selectRow', newRowID);
-                            // edit the new row.
-                            $("#treeGrid").jqxTreeGrid('beginRowEdit', newRowID);
-                            updateButtons('add');
-                        }
-                    });
-
-                    cancelButton.click(function (event) {
-                        if (!cancelButton.jqxButton('disabled')) {
-                            // cancel changes.
-                            $("#treeGrid").jqxTreeGrid('endRowEdit', rowKey, true);
-                        }
-                    });
-
-                    updateButton.click(function (event) {
-                        if (!updateButton.jqxButton('disabled')) {
-                            // save changes.
-                            $("#treeGrid").jqxTreeGrid('endRowEdit', rowKey, false);
-                        }
-                    });
-
-                    editButton.click(function () {
-                        if (!editButton.jqxButton('disabled')) {
-                            $("#treeGrid").jqxTreeGrid('beginRowEdit', rowKey);
-                            updateButtons('edit');
-
-                        }
-                    });
-
-                    deleteButton.click(function () {
-                        if (!deleteButton.jqxButton('disabled')) {
-                            var selection = $("#treeGrid").jqxTreeGrid('getSelection');
-                            if (selection.length > 1) {
-                                var keys = new Array();
-                                for (var i = 0; i < selection.length; i++) {
-                                    keys.push($("#treeGrid").jqxTreeGrid('getKey', selection[i]));
-                                }
-                                if(confirm('Apakah anda yakin akan menghapus beberapa data sekaligus ? Data yang telah terhapus tidak dapat di kembalikan lagi')){
-                                  $("#treeGrid").jqxTreeGrid('deleteRow', keys);
-                                }
-                            }
-                            else {
-                                if(confirm('Apakah anda yakin akan menghapus data ini ? Data yang telah terhapus tidak dapat di kembalikan lagi')){
-                                  $("#treeGrid").jqxTreeGrid('deleteRow', rowKey);
-                                }
-                            }
-                            updateButtons('delete');
-                        }
-                    });
                 },
 
               columns: [                             
-                { text: 'Nama Jabatan ', datafield: 'tar_nama_posisi', columntype: 'textbox', filtertype: 'textbox',align: 'center', width: '37%' },
-                { text: 'Nama Karyawan', datafield: 'nama', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '58%', cellsalign: 'center' },
+                { text: 'Nama Jabatan ', editable: false,datafield: 'tar_nama_posisi', columntype: 'textbox', filtertype: 'textbox',align: 'center', width: '37%' },
+                { text: 'Nama Karyawan', editable: false,datafield: 'nama', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '58%', cellsalign: 'center' },
                 {text: 'Detail', sortable: false, align:'center', width: '5%',editable: false, filterable: false, cellsrenderer: function (row, column, value) {
                   if(row){
                     return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='detail(" + row + ");'></a></div>";
