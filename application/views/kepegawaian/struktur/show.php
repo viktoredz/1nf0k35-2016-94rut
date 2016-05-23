@@ -255,8 +255,8 @@
                 },
 
               columns: [                             
-                { text: 'Nama Jabatan ', editable: false,datafield: 'tar_nama_posisi', columntype: 'textbox', filtertype: 'textbox',align: 'center', width: '37%' },
-                { text: 'Nama Karyawan', editable: false,datafield: 'nama', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '58%', cellsalign: 'center' },
+                { text: 'Nama Posisi ', editable: false,datafield: 'tar_nama_posisi', columntype: 'textbox', filtertype: 'textbox',align: 'center', width: '70%' },
+                { text: 'Jumlah Karyawan', editable: false,datafield: 'nama', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '25%', cellsalign: 'center' },
                 {text: 'Detail', sortable: false, align:'center', width: '5%',editable: false, filterable: false, cellsrenderer: function (row, column, value) {
                   if(row){
                     return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='detail(" + row + ");'></a></div>";

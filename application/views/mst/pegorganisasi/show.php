@@ -401,11 +401,11 @@
                 },
 
               columns: [                             
-                { text: 'Nama Jabatan ', datafield: 'tar_nama_posisi', columntype: 'textbox', filtertype: 'textbox',align: 'center', width: '60%' },
-                { text: 'Aktif', datafield: 'tar_aktif', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '25%', cellsalign: 'center' },
+                { text: 'Nama Posisi ', datafield: 'tar_nama_posisi', columntype: 'textbox', filtertype: 'textbox',align: 'center', width: '70%' },
+                { text: 'Aktif', datafield: 'tar_aktif', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '15%', cellsalign: 'center' },
                 {text: 'Detail', sortable: false, align:'center', width: '15%',editable: false, filterable: false, cellsrenderer: function (row, column, value) {
                   if(row){
-                    return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='detail(" + row + ");'></a></div>";
+                    return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_view.gif' onclick='detail(" + row + ");'></a></div>";
                   }
                   },
                 }
@@ -421,7 +421,7 @@
           $("#popup_keuangan_akun_detail").jqxWindow({
             theme: theme, resizable: false,
             width: 600,
-            height: 380,
+            height: 280,
             isModal: true, autoOpen: false, modalOpacity: 0.2
           });
           $("#popup_keuangan_akun_detail").jqxWindow('open');

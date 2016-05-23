@@ -173,9 +173,9 @@ class Pegorganisasi_model extends CI_Model {
 
  	function get_data($start=0,$limit=999999,$options=array())
     {
-		$this->db->order_by('id_mst_akun','asc');
+		/*$this->db->order_by('id_mst_akun','asc');
         $query = $this->db->get('mst_keu_akun',$limit,$start);
-        return $query->result();
+        return $query->result();*/
     }
 
     function get_data_akun(){     

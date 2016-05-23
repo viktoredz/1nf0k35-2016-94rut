@@ -29,7 +29,7 @@
 
               <div class="row" style="margin: 5px">
                 <div class="col-md-4" style="padding: 5px">
-                  Nama Jabatan
+                  Nama Posisi
                 </div>
                 <div class="col-md-8">
                   <input type="text" class="form-control" name="tar_nama_posisi" placeholder=" Nama Jabatan " value="<?php 
