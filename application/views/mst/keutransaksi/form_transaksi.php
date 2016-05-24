@@ -20,7 +20,7 @@
         <div class="box-footer">
           <button type="button" id="btn-kembali" class="btn btn-primary pull-right"><i class='fa  fa-arrow-circle-o-left'></i> &nbsp;Kembali</button>
           <button type="button" disabled="" name="btn_kategori_transaksi_save" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Simpan</button>
-          <button id="doReset" disabled="" class="btn btn-success" ><i class='fa fa-refresh'></i> &nbsp; Reset</button>
+          <button type="button" name="btn-reset" value="Reset" onclick='clearForm(this.form)' class="btn btn-success" ><i class='fa fa-refresh'></i> &nbsp; Reset</button>
 
        </div>
         <div class="box-body">
@@ -132,6 +132,43 @@
         $('#content2').html(data);
       });
     });
+
+    function clearForm(form_transaksi) {
+   
+    var elements = form_transaksi.elements;
+    form_transaksi.reset();
+
+    for(i=0; i<elements.length; i++) {
+     
+      field_type = elements[i].type.toLowerCase();
+ 
+      switch(field_type) {
+     
+        case "text":
+        case "password":
+        case "textarea":
+        case "hidden":  
+         
+          elements[i].value = "";
+          break;
+           
+        case "radio":
+        case "checkbox":
+          if (elements[i].checked) {
+                elements[i].checked = false;
+          }
+          break;
+
+        case "select-one":
+        case "select-multi":
+                    elements[i].selectedIndex = -1;
+          break;
+
+        default:
+          break;
+      }
+    }
+}
 
 </script>
 

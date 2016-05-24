@@ -18,7 +18,7 @@
       </div>
 
         <div class="box-footer">
-         <button type="button" class="btn btn-primary" onclick='add()'><i class='fa fa-plus-square-o'></i> &nbsp; Tambah Kategori Transaksi</button> 
+         <button type="button" class="btn btn-primary" onclick='add()'><i class='fa fa-plus-square'></i> &nbsp; Tambah Kategori Transaksi</button> 
        </div>
         <div class="box-body">
         <div class="div-grid">
@@ -38,9 +38,6 @@
 
 <script type="text/javascript">
 
-  function detail(id_pegawai){
-      document.location.href="<?php echo base_url()?>kepegawaian/drh/detail/" + id_pegawai;
-  }
      var source = {
       datatype: "json",
       type  : "POST",

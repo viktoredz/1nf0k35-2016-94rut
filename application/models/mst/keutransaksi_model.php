@@ -14,61 +14,18 @@ class Keutransaksi_model extends CI_Model {
         return $query->result();
     }
 
-    function get_data_transaksi($start=0,$limit=999999,$options=array()){
-        $this->db->select("mst_keu_transaksi.*,mst_keu_kategori_transaksi.id_mst_kategori_transaksi,mst_keu_kategori_transaksi.nama as kategori",false);
-        $this->db->join("mst_keu_kategori_transaksi","mst_keu_kategori_transaksi.id_mst_kategori_transaksi=mst_keu_transaksi.id_mst_kategori_transaksi");
-        $query = $this->db->get('mst_keu_transaksi',$limit,$start);
-        return $query->result();
-    }
-
     function get_data_kategori_transaksi_edit($id){
         $this->db->select('*',false);
-        $this->db->join('mst_keu_kategori_transaksi_setting','mst_keu_kategori_transaksi_setting.id_mst_kategori_transaksi=mst_keu_kategori_transaksi.id_mst_kategori_transaksi','left');
-        $this->db->where('mst_keu_kategori_transaksi.id_mst_kategori_transaksi',$id);
-        $query = $this->db->get("mst_keu_kategori_transaksi");
-
-        if($query->num_rows()>0){
-            $data = $query->row_array();
-        }
-
-        $query->free_result();
-        return $data;
-    }
-
-    function get_data_transaksi_edit($id){
-        $this->db->select('*',false);
-        $this->db->join('mst_keu_kategori_transaksi_setting','mst_keu_kategori_transaksi_setting.id_mst_kategori_transaksi=mst_keu_kategori_transaksi.id_mst_kategori_transaksi','left');
-        $this->db->where('mst_keu_kategori_transaksi.id_mst_kategori_transaksi',$id);
-        $query = $this->db->get("mst_keu_kategori_transaksi");
-
-        if($query->num_rows()>0){
-            $data = $query->row_array();
-        }
-
-        $query->free_result();
-        return $data;
-    }
-
-
-    function get_data_transaksi_otomatis($start=0,$limit=999999,$options=array()){
-        $this->db->select("mst_keu_otomasi_transaksi.*,mst_keu_kategori_transaksi.nama as kategori",false);
-        $this->db->join("mst_keu_kategori_transaksi","mst_keu_kategori_transaksi.id_mst_kategori_transaksi=mst_keu_otomasi_transaksi.id_mst_kategori_transaksi");
-        $query = $this->db->get('mst_keu_otomasi_transaksi',$limit,$start);
-        return $query->result();
-    }
-
-
-    function update_kategori_transaksi($id){
-        $data['nama']          = $this->input->post('nama');
-        $data['deskripsi']     = $this->input->post('deskripsi');
-
+        // $this->db->join('mst_keu_kategori_transaksi_setting','mst_keu_kategori_transaksi_setting.id_mst_kategori_transaksi=mst_keu_kategori_transaksi.id_mst_kategori_transaksi','left');
         $this->db->where('id_mst_kategori_transaksi',$id);
+        $query = $this->db->get("mst_keu_kategori_transaksi");
 
-        if($this->db->update('mst_keu_kategori_transaksi', $data)){
-            return true; 
-        }else{
-            return mysql_error();
+        if($query->num_rows()>0){
+            $data = $query->row_array();
         }
+
+        $query->free_result();
+        return $data;
     }
 
     function insert_kategori_transaksi(){
@@ -88,34 +45,38 @@ class Keutransaksi_model extends CI_Model {
         return $this->db->delete('mst_keu_kategori_transaksi');
     }
 
-    function get_data_template(){
-         $this->db->select('*');
-         $query = $this->db->get('mst_keu_setting_transaksi_template');
-        
-         return $query->result();
-    
-    }
+    function update_kategori_transaksi($id){
+        $data['nama']          = $this->input->post('nama');
+        $data['deskripsi']     = $this->input->post('deskripsi');
 
-    function template_update($id){
-        $data['nilai']         = $this->input->post('nilai');
-       
-        $this->db->where('id_mst_kategori_transaksi_setting',$id);
+        $this->db->where('id_mst_kategori_transaksi',$id);
 
-        if($this->db->update('mst_keu_kategori_transaksi_setting', $data)){
-            return true;
+        if($this->db->update('mst_keu_kategori_transaksi', $data)){
+            return true; 
         }else{
             return mysql_error();
         }
     }
 
-    function template_insert(){
-        $data['nilai'] = $this->input->post('nilai');
+    function get_data_transaksi($start=0,$limit=999999,$options=array()){
+        $this->db->select("mst_keu_transaksi.*,mst_keu_kategori_transaksi.id_mst_kategori_transaksi,mst_keu_kategori_transaksi.nama as kategori",false);
+        $this->db->join("mst_keu_kategori_transaksi","mst_keu_kategori_transaksi.id_mst_kategori_transaksi=mst_keu_transaksi.id_mst_kategori_transaksi");
+        $query = $this->db->get('mst_keu_transaksi',$limit,$start);
+        return $query->result();
+    }
 
-        if($this->db->insert('mst_keu_kategori_transaksi_setting', $data)){
-            return 1;
-        }else{
-            return mysql_error();
+    function get_data_transaksi_edit($id){
+        $this->db->select('*',false);
+        $this->db->join('mst_keu_transaksi_setting','mst_keu_transaksi_setting.id_mst_transaksi=mst_keu_transaksi.id_mst_transaksi','left');
+        $this->db->where('mst_keu_transaksi.id_mst_transaksi',$id);
+        $query = $this->db->get("mst_keu_transaksi");
+
+        if($query->num_rows()>0){
+            $data = $query->row_array();
         }
+
+        $query->free_result();
+        return $data;
     }
 
     function transaksi_insert(){
@@ -147,10 +108,114 @@ class Keutransaksi_model extends CI_Model {
         }
     }
 
+    function get_data_transaksi_otomatis($start=0,$limit=999999,$options=array()){
+        $this->db->select("mst_keu_otomasi_transaksi.*,mst_keu_kategori_transaksi.nama as kategori",false);
+        $this->db->join("mst_keu_kategori_transaksi","mst_keu_kategori_transaksi.id_mst_kategori_transaksi=mst_keu_otomasi_transaksi.id_mst_kategori_transaksi");
+        $query = $this->db->get('mst_keu_otomasi_transaksi',$limit,$start);
+        return $query->result();
+    }
 
+    function get_data_transaksi_otomatis_edit($id){
+        $this->db->select('*',false);
+        $this->db->join('mst_keu_otomasi_transaksi_setting','mst_keu_otomasi_transaksi_setting.id_mst_keu_otomasi_transaksi=mst_keu_otomasi_transaksi.id_mst_otomasi_transaksi','left');
+        $this->db->where('mst_keu_otomasi_transaksi.id_mst_otomasi_transaksi',$id);
+        $query = $this->db->get("mst_keu_otomasi_transaksi");
 
+        if($query->num_rows()>0){
+            $data = $query->row_array();
+        }
 
+        $query->free_result();
+        return $data;
+    }
 
+    function get_data_template(){
+         $this->db->select('*',false);
+         $this->db->join('mst_keu_kategori_transaksi_setting','mst_keu_kategori_transaksi_setting.id_mst_setting_transaksi=mst_keu_setting_transaksi_template.id_mst_setting_transaksi_template','left');
+         $this->db->where('mst_keu_otomasi_transaksi.id_mst_otomasi_transaksi',$id);
+         $query = $this->db->get('mst_keu_setting_transaksi_template');
+        
+         return $query->result();
+    
+    }
 
-  
+    function template_update($id){
+        $data['nilai']      = $this->input->post('nilai');
+       
+        $this->db->where('id_mst_kategori_transaksi_setting',$id);
+
+        if($this->db->update('mst_keu_kategori_transaksi_setting', $data)){
+            $this->db->where('id_mst_kategori_transaksi_setting',$id);
+            $this->db->select('nilai');
+            $variable = $this->db->get('mst_keu_kategori_transaksi_setting');
+            foreach ($variable->result() as $key) {
+                if ($key->nilai=='1') {
+                    return '1';
+                }else{
+                    return '2';    
+                }
+            }
+        }else{
+            return mysql_error();
+        }
+    }
+
+    function get_data_syarat_pembayaran($start=0,$limit=999999,$options=array()){
+        $this->db->select("*",false);
+        $this->db->order_by('id_mst_syarat_pembayaran','asc');
+        $query = $this->db->get('mst_keu_syarat_pembayaran',$limit,$start);
+        return $query->result();
+    }
+
+    function get_data_syarat_pembayaran_edit($id){
+        $this->db->select('*',false);
+        $this->db->where('id_mst_syarat_pembayaran',$id);
+        $query = $this->db->get("mst_keu_syarat_pembayaran");
+
+        if($query->num_rows()>0){
+            $data = $query->row_array();
+        }
+
+        $query->free_result();
+        return $data;
+    }
+
+    function insert_syarat_pembayaran(){
+        $data['nama']          = $this->input->post('nama');
+        $data['aktif']         = $this->input->post('aktif');
+        $data['deskripsi']     = $this->input->post('deskripsi');
+    
+        if($this->db->insert('mst_keu_syarat_pembayaran', $data)){
+            return 1;
+        }else{
+            return mysql_error();
+        }
+    }
+
+    function delete_syarat_pembayaran($id){
+        $this->db->where('id_mst_syarat_pembayaran',$id);
+
+        return $this->db->delete('mst_keu_syarat_pembayaran');
+    }
+
+    function update_syarat_pembayaran($id){
+        $data['nama']          = $this->input->post('nama');
+        $data['aktif']         = $this->input->post('aktif');
+        $data['deskripsi']     = $this->input->post('deskripsi');
+
+        $this->db->where('id_mst_syarat_pembayaran',$id);
+
+        if($this->db->update('mst_keu_syarat_pembayaran', $data)){
+            return true; 
+        }else{
+            return mysql_error();
+        }
+    }
+
+    function get_data_puskesmas($start=0,$limit=999999,$options=array()){
+        $this->db->order_by('value','asc');
+        $query = $this->db->get('cl_phc',$limit,$start);
+        return $query->result();
+    }
+
 }
