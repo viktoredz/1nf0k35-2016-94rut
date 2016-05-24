@@ -366,7 +366,6 @@ class Keuangan_transaksi extends CI_Controller {
         $this->form_validation->set_rules('deskripsi', 'Deskripsi', 'trim');
 
 		$data['id_mst_kategori_transaksi']	= "";
-		$data['template']					= $this->keutransaksi_model->get_data_template();
 	    $data['action']						= "add";
 		$data['alert_form']		    		= '';
 

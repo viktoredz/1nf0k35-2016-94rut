@@ -62,7 +62,20 @@
               <div class="row" style="margin: 5px">
                 <div class="col-md-12">
                   <?php $i=1; foreach($template as $t) : ?>
-                    <input type="checkbox" name="kategori_trans_template" id="kategori_trans_template<?php echo $i;?>" value="1" 
+                    <input type="checkbox" name="kategori_trans_template" id="template<?php echo $i;?>" value="1">
+                    <?php echo $t->id_mst_setting_transaksi_template ?>
+                    <?php echo $t->setting_judul ?>
+                    </br>
+                    <?php echo $t->seting_deskripsi ?>
+                    </br></br>
+                  <?php $i++; endforeach ?> 
+                </div>
+              </div>
+
+<!--               <div class="row" style="margin: 5px">
+                <div class="col-md-12">
+                  <?php $i=1; foreach($template as $t) : ?>
+                    <input type="checkbox" name="kategori_trans_template" id="<?php echo $i;?>" value="1" 
                   <?php 
                   if(set_value('nilai')=="" && isset($t->nilai)){
                     $t->nilai= $t->nilai;
@@ -77,7 +90,8 @@
                     </br></br>
                   <?php $i++; endforeach ?> 
                 </div>
-              </div>
+              </div> -->
+
 
               <br>
             </div>
@@ -132,7 +146,7 @@
             contentType : false,
             processData : false,
             type : 'POST',
-            url : '<?php echo base_url()."mst/keuangan_transaksi/template_update/{id_template}"?>',
+            url : '<?php echo base_url()."mst/keuangan_transaksi/template_update/"?>'+$(this).val(),
             data : data,
             success : function(response){
                a = response.split("|");

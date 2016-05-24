@@ -9,9 +9,7 @@
 <section class="content">
 <form action="<?php echo base_url()?>kepegawaian/drh/dodel_multi" method="POST" name="">
   <div class="row">
-    <!-- left column -->
     <div class="col-md-12">
-      <!-- general form elements -->
       <div class="box box-primary">
         <div class="box-header">
           <h3 class="box-title">{title_form}</h3>
@@ -21,7 +19,6 @@
           <button type="button" id="btn-kembali" class="btn btn-primary pull-right"><i class='fa  fa-arrow-circle-o-left'></i> &nbsp;Kembali</button>
           <button type="button" disabled="" name="btn_kategori_transaksi_save" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Simpan</button>
           <button type="button" name="btn-reset" value="Reset" onclick='clearForm(this.form)' class="btn btn-success" ><i class='fa fa-refresh'></i> &nbsp; Reset</button>
-
        </div>
         <div class="box-body">
 
@@ -93,8 +90,109 @@
             <?php endforeach ?>
           </select>
         </div>
+      </div>
+      <br><br>
+      <div class="col-md-12">
+        <div class="pull-right"><label>Jurnal Transaksi</label> <a href="#" class="glyphicon glyphicon-plus"></a></div>
       </div>  
 
+    <div class="col-md-12">
+      <div class="box box-primary">
+        <div class="box-header">
+          <h3 class="box-title">Jurnal Pasangan</h3>
+          <div class="pull-right"><a href="#" onclick="return confirm('Anda yakin ingin menghapus menu ini ?')" class="glyphicon glyphicon-trash"></a></div>
+        </div>
+          <div class="box-body">
+
+          <div class="row" style="margin: 5px">
+            <div class="col-md-3" style="padding: 5px">
+              Debit
+            </div>
+            <div class="col-md-2">
+            <a href="#" class="glyphicon glyphicon-plus"></a>
+            </div>
+          </div>
+
+          <div class="row" style="margin: 5px">
+            <div class="col-md-3" style="padding: 5px">
+              <select  name="transaksi_kategori" type="text" class="form-control">
+                <?php foreach($kategori as $k) : ?>
+                    <?php
+                      if(set_value('id_mst_kategori_transaksi')=="" && isset($id_mst_kategori_transaksi)){
+                        $id_mst_kategori_transaksi = $id_mst_kategori_transaksi;
+                      }else{
+                        $id_mst_kategori_transaksi = set_value('id_mst_kategori_transaksi');
+                      }
+                      $select = $k->id_mst_kategori_transaksi == $id_mst_kategori_transaksi ? 'selected' : '' ;
+                    ?>
+                    <option value="<?php echo $k->id_mst_kategori_transaksi ?>" <?php echo $select ?>><?php echo $k->nama ?></option>
+                <?php endforeach ?>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <a href="#" onclick="return confirm('Anda yakin ingin menghapus menu ini ?')" class="glyphicon glyphicon-trash"></a>
+            </div>
+          </div>
+
+          <div class="row" style="margin: 5px">
+            <div class="col-md-2" style="padding: 5px">
+              Isi Otomatis
+            </div>
+            <div class="col-md-2">
+              <div class="col-md-2">
+                <input type="checkbox" name="keuinstansi_status" value="1" <?php 
+                  if(set_value('status')=="" && isset($status)){
+                  $status = $status;
+                    }else{
+                  $status = set_value('status');
+                    }
+                  if($status == 1) echo "checked";
+                ?>>
+              </div>
+            </div>
+          </div>
+
+          <div class="row" style="margin: 5px">
+            <div class="col-md-1" style="padding: 5px">
+            Nilai
+            </div>
+            <div class="col-md-2">
+              <select  name="transaksi_kategori" type="text" class="form-control">
+                <?php foreach($kategori as $k) : ?>
+                    <?php
+                      if(set_value('id_mst_kategori_transaksi')=="" && isset($id_mst_kategori_transaksi)){
+                        $id_mst_kategori_transaksi = $id_mst_kategori_transaksi;
+                      }else{
+                        $id_mst_kategori_transaksi = set_value('id_mst_kategori_transaksi');
+                      }
+                      $select = $k->id_mst_kategori_transaksi == $id_mst_kategori_transaksi ? 'selected' : '' ;
+                    ?>
+                    <option value="<?php echo $k->id_mst_kategori_transaksi ?>" <?php echo $select ?>><?php echo $k->nama ?></option>
+                <?php endforeach ?>
+              </select>
+            </div>
+          </div>
+
+          <div class="row" style="margin: 5px">
+            <div class="col-md-2" style="padding: 5px">
+              Opsional
+            </div>
+            <div class="col-md-2">
+              <div class="col-md-2">
+                <input type="checkbox" name="keuinstansi_status" value="1" <?php 
+                  if(set_value('status')=="" && isset($status)){
+                    $status = $status;
+                  }else{
+                    $status = set_value('status');
+                  }
+                  if($status == 1) echo "checked";
+                ?>>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
         <label>Pengaturan Transaksi</label>
 
@@ -117,7 +215,6 @@
               <?php $i++; endforeach ?> 
                 </div>
               </div>   
-
         </div>
       </div>
     </div>
