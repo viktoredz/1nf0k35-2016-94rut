@@ -32,16 +32,16 @@
                   Status
                 </div>
                 <div class="col-md-6">
-                  <select  name="nip_nit" type="text" class="form-control" id="nip_nit">
+                  <select  name="statuspns" type="text" class="form-control" id="statuspns">
                     <option value=''>Pilih Status</option>
                       <?php 
-                        if (empty($nip_nit)) {
-                          $nip_nit  = set_value('nip_nit');
+                        if (empty($status)) {
+                          $statuspns  = set_value('statuspns');
                         }else{
-                          $nip_nit = $nip_nit;
+                          $statuspns = $status;
                         }
                       foreach($kode_status as $status):
-                        $select = $status->kode == $nip_nit ? 'selected' : '' ;
+                        $select = $status->kode == $statuspns ? 'selected' : '' ;
                       ?>
                         <option value="<?php echo $status->kode ?>" <?php echo $select ?>><?php echo $status->nama ?></option>
                       <?php endforeach ?>
@@ -50,13 +50,41 @@
                 <div class="col-md-1"  style="padding: 5px" id="showceklispns" name="showceklispns">
                   <input type="checkbox" name="penganggkatan" id="penganggkatan" value="1"
                   <?php 
-                    if (set_value('penganggkatan')=='1') {
+                    if ((set_value('penganggkatan')=='1')||($status_pns=='1')) {
                       echo "checked";
                     }else{
                       echo "";
                     }
                   ?>
                   >
+                </div>
+              </div>
+              <div class="row" style="margin: 5px" id="shownip">
+                <div class="col-md-5" style="padding: 5px">
+                NIP
+                </div>
+                <div class="col-md-7">
+                  <input type="text" class="form-control" name="nip" id="nip" placeholder="NIP" value="<?php 
+                  if(set_value('nip')=="" && isset($nip_nit)){
+                    echo $nip_nit;
+                  }else{
+                    echo  set_value('nip');
+                  }
+                  ?>">
+                </div>
+              </div>
+              <div class="row" style="margin: 5px" id="shownit">
+                <div class="col-md-5" style="padding: 5px">
+                NIT
+                </div>
+                <div class="col-md-7">
+                  <input type="text" class="form-control" name="nit" id="nit" placeholder="NIT" value="<?php 
+                  if(set_value('nit')=="" && isset($nip_nit)){
+                    echo $nip_nit;
+                  }else{
+                    echo  set_value('nit');
+                  }
+                  ?>">
                 </div>
               </div>
               <div class="row" style="margin: 5px" id="showpengadaan">
@@ -116,7 +144,7 @@
 
                     if($tgl_tmt=="") $tgl_tmt = time();
                     echo date("Y-m-d",$tgl_tmt);
-                  ?>" ></div>
+                  ?>"></div>
                 </div>
               </div>
               <div class="row" style="margin: 5px" id="showtat">
@@ -152,7 +180,7 @@
                         $array_pangkat = array_values($kode_pangkat);
                         foreach ($array_pangkat as $vpangkat) {
                           $select = $vpangkat == $jenis_pangkat ? 'selected' : '' ;
-                          echo "<option value=".$vpangkat."$select>" .ucfirst($vpangkat)."</option>";
+                          echo "<option value=".$vpangkat." $select>" .ucfirst($vpangkat)."</option>";
                         }
                       ?>
                   </select>
@@ -176,7 +204,7 @@
                         for($i=1;$i<=12;$i++){
                           $select = $i == $masa_krj_bln ? 'selected' : '' ;
                         ?>
-                        <option value="<?php echo $i; ?>"><?php printf("%02d", $i); ?></option>
+                        <option value="<?php echo $i; ?>" <?php echo $select;?>><?php printf("%02d", $i); ?></option>
                         <?php } $i++ ?>
                       </select> 
                     </div>
@@ -196,7 +224,7 @@
                         for($x=1;$x<=60;$x++){
                           $select = $x == $masa_krj_thn ? 'selected' : '' ;
                         ?>
-                        <option value="<?php echo $x; ?>"><?php printf("%02d", $x); ?></option>
+                        <option value="<?php echo $x; ?>" <?php echo $select;?>><?php printf("%02d", $x); ?></option>
                         <?php } $i++ ?>
                       </select> 
                     </div>
@@ -425,16 +453,18 @@
 <script>
   $(function () { 
     showhide();
-  $("#nip_nit").change(function(){
+  $("#statuspns").change(function(){
     showhide();
     $('#penganggkatan').prop('checked', false);
-    //alert($("#nip_nit").val());
+    //alert($("#statuspns").val());
   }); 
   cekceklis();
   function cekceklis(){
-    if ($('#nip_nit').val()=='PNS') {
+    if ($('#statuspns').val()=='PNS') {
         if ($('#penganggkatan').prop("checked") == true){
-          $("#showpengadaan").hide();
+            $("#showpengadaan").hide();
+            $("#shownit").hide();
+            $("#shownip").show();
             $("#showgolongan").show();
             $("#showtmt").show();
             $("#showtat").hide();
@@ -447,6 +477,8 @@
             $("#showdokter").show();
         }else if($('#penganggkatan').prop("checked") == false){
             $("#showpengadaan").hide();
+            $("#shownit").hide();
+            $("#shownip").show();
             $("#showgolongan").show();
             $("#showtmt").show();
             $("#showtat").hide();
@@ -465,6 +497,8 @@
            $("#showpengadaan").hide();
             $("#showgolongan").show();
             $("#showtmt").show();
+            $("#shownit").hide();
+            $("#shownip").show();
             $("#showtat").hide();
             $("#showkepangkatan").hide();
             $("#showmasakerjagolongan").show();
@@ -478,6 +512,8 @@
            $("#showpengadaan").hide();
             $("#showgolongan").show();
             $("#showtmt").show();
+            $("#shownit").hide();
+            $("#shownip").show();
             $("#showtat").hide();
             $("#showkepangkatan").show();
             $("#showmasakerjagolongan").show();
@@ -490,11 +526,13 @@
   });
 
   function showhide(){
-    if ($("#nip_nit").val()=='CPNS') {
+    if ($("#statuspns").val()=='CPNS') {
           $("#showpengadaan").show();
           $("#showceklispns").hide();
           $("#showgolongan").show();
           $("#showtmt").show();
+          $("#shownit").show();
+          $("#shownip").hide();
           $("#showtat").hide();
           $("#showkepangkatan").hide();
           $("#showmasakerjagolongan").show();
@@ -504,11 +542,13 @@
           $("#showspmt").show();
           $("#showdokter").hide();
 
-      }else if ($("#nip_nit").val()=='PNS') {
+      }else if ($("#statuspns").val()=='PNS') {
         $("#showceklispns").show();
           $("#showpengadaan").hide();
           $("#showgolongan").show();
           $("#showtmt").show();
+          $("#shownit").hide();
+          $("#shownip").show();
           $("#showtat").hide();
           $("#showkepangkatan").show();
           $("#showmasakerjagolongan").show();
@@ -518,10 +558,72 @@
           $("#showspmt").hide();
           $("#showdokter").hide();
           
-      }else if ($("#nip_nit").val()=='HONORER') {
+      }else if ($("#statuspns").val()=='HONORER') {
         $("#showceklispns").hide();
           $("#showpengadaan").show();
           $("#showgolongan").show();
+          $("#showtmt").show();
+          $("#shownit").show();
+          $("#shownip").hide()
+          $("#showtat").show();
+          $("#showkepangkatan").hide();
+          $("#showmasakerjagolongan").hide();
+          $("#showpersetujuanbkn").show();
+          $("#showkeputusan").show();
+          $("#showsttpl").hide();
+          $("#showspmt").show();
+          $("#showdokter").hide();
+      }else if ($("#statuspns").val()=='KAT2') {
+        $("#showceklispns").hide();
+          $("#showpengadaan").show();
+          $("#showgolongan").show();
+          $("#showtmt").show();
+          $("#showtat").show();
+          $("#shownit").show();
+          $("#shownip").hide()
+          $("#showkepangkatan").hide();
+          $("#showmasakerjagolongan").hide();
+          $("#showpersetujuanbkn").show();
+          $("#showkeputusan").show();
+          $("#showsttpl").hide();
+          $("#showspmt").show();
+          $("#showdokter").hide();
+      }else if ($("#statuspns").val()=='NRPTT') {
+        $("#showceklispns").hide();
+          $("#showpengadaan").show();
+          $("#showgolongan").show();
+          $("#showtmt").show();
+          $("#showtat").show();
+          $("#shownit").show();
+          $("#shownip").hide()
+          $("#showkepangkatan").hide();
+          $("#showmasakerjagolongan").hide();
+          $("#showpersetujuanbkn").show();
+          $("#showkeputusan").show();
+          $("#showsttpl").hide();
+          $("#showspmt").show();
+          $("#showdokter").hide();
+      }else if ($("#statuspns").val()=='PTT') {
+        $("#showceklispns").hide();
+          $("#showpengadaan").show();
+          $("#showgolongan").show();
+          $("#showtmt").show();
+          $("#shownit").show();
+          $("#shownip").hide()
+          $("#showtat").show();
+          $("#showkepangkatan").hide();
+          $("#showmasakerjagolongan").hide();
+          $("#showpersetujuanbkn").show();
+          $("#showkeputusan").show();
+          $("#showsttpl").hide();
+          $("#showspmt").show();
+          $("#showdokter").hide();
+      }else if ($("#statuspns").val()=='PTTPONED') {
+        $("#showceklispns").hide();
+          $("#showpengadaan").show();
+          $("#showgolongan").show();
+          $("#shownit").show();
+          $("#shownip").hide()
           $("#showtmt").show();
           $("#showtat").show();
           $("#showkepangkatan").hide();
@@ -531,63 +633,13 @@
           $("#showsttpl").hide();
           $("#showspmt").show();
           $("#showdokter").hide();
-      }else if ($("#nip_nit").val()=='KAT2') {
+      }else if($("#statuspns").val()=='SUKWAN') {
         $("#showceklispns").hide();
           $("#showpengadaan").show();
           $("#showgolongan").show();
           $("#showtmt").show();
-          $("#showtat").show();
-          $("#showkepangkatan").hide();
-          $("#showmasakerjagolongan").hide();
-          $("#showpersetujuanbkn").show();
-          $("#showkeputusan").show();
-          $("#showsttpl").hide();
-          $("#showspmt").show();
-          $("#showdokter").hide();
-      }else if ($("#nip_nit").val()=='NRPTT') {
-        $("#showceklispns").hide();
-          $("#showpengadaan").show();
-          $("#showgolongan").show();
-          $("#showtmt").show();
-          $("#showtat").show();
-          $("#showkepangkatan").hide();
-          $("#showmasakerjagolongan").hide();
-          $("#showpersetujuanbkn").show();
-          $("#showkeputusan").show();
-          $("#showsttpl").hide();
-          $("#showspmt").show();
-          $("#showdokter").hide();
-      }else if ($("#nip_nit").val()=='PTT') {
-        $("#showceklispns").hide();
-          $("#showpengadaan").show();
-          $("#showgolongan").show();
-          $("#showtmt").show();
-          $("#showtat").show();
-          $("#showkepangkatan").hide();
-          $("#showmasakerjagolongan").hide();
-          $("#showpersetujuanbkn").show();
-          $("#showkeputusan").show();
-          $("#showsttpl").hide();
-          $("#showspmt").show();
-          $("#showdokter").hide();
-      }else if ($("#nip_nit").val()=='PTTPONED') {
-        $("#showceklispns").hide();
-          $("#showpengadaan").show();
-          $("#showgolongan").show();
-          $("#showtmt").show();
-          $("#showtat").show();
-          $("#showkepangkatan").hide();
-          $("#showmasakerjagolongan").hide();
-          $("#showpersetujuanbkn").show();
-          $("#showkeputusan").show();
-          $("#showsttpl").hide();
-          $("#showspmt").show();
-          $("#showdokter").hide();
-      }else if($("#nip_nit").val()=='SUKWAN') {
-        $("#showceklispns").hide();
-          $("#showpengadaan").show();
-          $("#showgolongan").show();
-          $("#showtmt").show();
+          $("#shownit").show();
+          $("#shownip").hide()
           $("#showtat").show();
           $("#showkepangkatan").hide();
           $("#showmasakerjagolongan").hide();
@@ -601,6 +653,8 @@
           $("#showpengadaan").hide();
           $("#showgolongan").show();
           $("#showtmt").show();
+          $("#shownit").show();
+          $("#shownip").hide()
           $("#showtat").hide();
           $("#showkepangkatan").hide();
           $("#showmasakerjagolongan").show();
@@ -626,13 +680,13 @@
     });
 
     $("[name='btn_cpns_formal_save']").click(function(){
-      if ($("#nip_nit").val()=='') {
+      if ($("#statuspns").val()=='') {
         alert('Silahkan pilih status terlebih dahulu');
       }else{
         var data = new FormData();
         $('#biodata_notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
         $('#biodata_notice').show();
-        data.append('nip_nit', $("#nip_nit").val());
+        data.append('statuspns', $("#statuspns").val());
         data.append('id_mst_peg_golruang', $("#id_mst_peg_golruang").val());
         data.append('tmt', $("#tmt").val());
         data.append('bkn_tgl', $("#bkn_tgl").val());
@@ -641,13 +695,14 @@
         data.append('sk_nomor', $("#sk_nomor").val());
         data.append('sk_pejabat', $("#sk_pejabat").val());
 
-        if ($("#nip_nit").val()=='CPNS') {
+        if ($("#statuspns").val()=='CPNS') {
           data.append('jenis_pengadaan', $("#jenis_pengadaan").val());
           data.append('masa_krj_bln', $("#masa_krj_bln").val());
           data.append('masa_krj_thn', $("#masa_krj_thn").val());
           data.append('spmt_tgl', $("#spmt_tgl").val());
           data.append('spmt_nomor', $("#spmt_nomor").val());
-      }else if ($("#nip_nit").val()=='PNS') {
+          data.append('nit', $("#nit").val());
+      }else if ($("#statuspns").val()=='PNS') {
           if($("#penganggkatan").prop("checked") == true){
             data.append('sttpl_tgl', $("#sttpl_tgl").val());
             data.append('penganggkatan', 1);
@@ -658,56 +713,66 @@
               data.append('jenis_pangkat', $("#jenis_pangkat").val());
               data.append('penganggkatan', 0);
           } 
-
+          data.append('nip', $("#nip").val());
           data.append('masa_krj_bln', $("#masa_krj_bln").val());
           data.append('masa_krj_thn', $("#masa_krj_thn").val());
-      }else if ($("#nip_nit").val()=='HONORER') {
+      }else if ($("#statuspns").val()=='HONORER') {
         data.append('jenis_pengadaan', $("#jenis_pengadaan").val());
         data.append('tat', $("#tat").val());
         data.append('spmt_tgl', $("#spmt_tgl").val());
         data.append('spmt_nomor', $("#spmt_nomor").val())
-        
-      }else if ($("#nip_nit").val()=='KAT2') {
+        data.append('nit', $("#nit").val());
+      }else if ($("#statuspns").val()=='KAT2') {
         data.append('jenis_pengadaan', $("#jenis_pengadaan").val());
         data.append('tat', $("#tat").val());
         data.append('spmt_tgl', $("#spmt_tgl").val());
         data.append('spmt_nomor', $("#spmt_nomor").val());
-      }else if ($("#nip_nit").val()=='NRPTT') {
+        data.append('nit', $("#nit").val());
+      }else if ($("#statuspns").val()=='NRPTT') {
         data.append('jenis_pengadaan', $("#jenis_pengadaan").val());
         data.append('tat', $("#tat").val());
         data.append('spmt_tgl', $("#spmt_tgl").val());
         data.append('spmt_nomor', $("#spmt_nomor").val());
-      }else if ($("#nip_nit").val()=='PTT') {
+        data.append('nit', $("#nit").val());
+      }else if ($("#statuspns").val()=='PTT') {
         data.append('jenis_pengadaan', $("#jenis_pengadaan").val());
         data.append('tat', $("#tat").val());
         data.append('spmt_tgl', $("#spmt_tgl").val());
         data.append('spmt_nomor', $("#spmt_nomor").val());
-      }else if ($("#nip_nit").val()=='PTTPONED') {
+        data.append('nit', $("#nit").val());
+      }else if ($("#statuspns").val()=='PTTPONED') {
         data.append('jenis_pengadaan', $("#jenis_pengadaan").val());
         data.append('tat', $("#tat").val());
         data.append('spmt_tgl', $("#spmt_tgl").val());
         data.append('spmt_nomor', $("#spmt_nomor").val());
-      }else if($("#nip_nit").val()=='SUKWAN') {
+        data.append('nit', $("#nit").val());
+      }else if($("#statuspns").val()=='SUKWAN') {
         data.append('jenis_pengadaan', $("#jenis_pengadaan").val());
         data.append('tat', $("#tat").val());
         data.append('sk_tgl', $("#sk_tgl").val());
         data.append('sk_nomor', $("#sk_nomor").val());
+        data.append('nit', $("#nit").val());
       }else{
           data.append('masa_krj_bln', $("#masa_krj_bln").val());
           data.append('masa_krj_thn', $("#masa_krj_thn").val());
+          data.append('nit', $("#nit").val());
       }
-      var halaman = $("#nip_nit").val();
+      var halaman = $("#statuspns").val();
         $.ajax({
             cache : false,
             contentType : false,
             processData : false,
             type : 'POST',
-            url : '<?php echo base_url()."kepegawaian/drh_pangkat/add/$id"   ?>',
+            url : '<?php echo base_url()."kepegawaian/drh_pangkat/$action/$id/$tmt"   ?>',
             data : data,
             success : function(response){
-              if(response=="OK"){
+              res = response.split(' | ');
+              if(res[0]=="OK"){
                 alert("Data pendidikan berhasil disimpan.");
-                $("#jqxgridPendidikan").jqxGrid('updatebounddata', 'filter');
+                var peserta = "<?php echo $id; ?>";
+                    $.get("<?php echo base_url().'kepegawaian/drh/biodata'?>/"+'4'+'/'+peserta,function(data){
+                        $('#content4').html(data);
+                    });
               }else{
                 $('#content4').html(response);
               }
@@ -717,6 +782,5 @@
         }
         return false;
     });
-    
   });
 </script>

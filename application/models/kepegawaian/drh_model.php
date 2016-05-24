@@ -13,9 +13,18 @@ class Drh_model extends CI_Model {
 		$this->lang	  = $this->config->item('language');
     }
 
-    public function getItem($t_alamat,$data)
+    public function getItem($id=0,$tmt=0)
     {
-        return $this->db->get_where($t_alamat, $data);
+        $ttm = explode("-", $tmt);
+        $tgl = $ttm[2].'-'.$ttm[1].'-'.$ttm[0];
+        $this->db->where('id_pegawai',$id);
+        $this->db->where('tmt',$tgl);
+        $query = $this->db->get('pegawai_pangkat');
+        if ($query->num_rows() > 0){
+            $data = $query->row_array();
+        }
+        $query->free_result();    
+        return $data;
     }
 
     function get_data($start=0,$limit=999999,$options=array())
@@ -610,26 +619,57 @@ class Drh_model extends CI_Model {
         }
     }
 
-    function update_entry_pendidikan_formal($id,$id_jurusan)
+    function update_entry_pns_formal($id,$tmt)
     {
-        $data['id_pegawai']         = $id;
-        //$data['id_mst_peg_jurusan'] = $this->input->post('id_mst_peg_jurusan');
-        $data['sekolah_nama']       = $this->input->post('sekolah_nama');
-        $data['sekolah_lokasi']     = $this->input->post('sekolah_lokasi');
-        $data['ijazah_no']          = $this->input->post('ijazah_no');
-        $data['ijazah_tgl']         = date("Y-m-d",strtotime($this->input->post('ijazah_tgl')));
-        $data['gelar_depan']        = $this->input->post('gelar_depan');
-        $data['gelar_belakang']     = $this->input->post('gelar_belakang');
-        $data['status_pendidikan_cpns'] = $this->input->post('status_pendidikan_cpns');
-
+        $ttm = explode("-", $tmt);
+        $tgl = $ttm[2].'-'.$ttm[1].'-'.$ttm[0];
         $this->db->where('id_pegawai',$id);
-        $this->db->where('id_mst_peg_jurusan',$id_jurusan);
-
-        if($this->db->update('pegawai_pendidikan', $data)){
-            return true; 
-        }else{
-            return mysql_error();
+        $this->db->where('tmt',$tmt);
+        $data['id_mst_peg_golruang']= $this->input->post('id_mst_peg_golruang');
+        $data['bkn_tgl']            = date("Y-m-d",strtotime($this->input->post('bkn_tgl')));
+        $data['bkn_nomor']          = $this->input->post('bkn_nomor');//date("Y-m-d",strtotime($this->input->post('ijazah_tgl')));
+        $data['sk_tgl']             = date("Y-m-d",strtotime($this->input->post('sk_tgl')));
+        $data['sk_nomor']           = $this->input->post('sk_nomor');
+        $data['sk_pejabat']         = $this->input->post('sk_pejabat');
+        $data['status']                = $this->input->post('statuspns');
+        if ($this->input->post('nit')!='') {
+            $nip_nit = $this->input->post('nit');
+        }else if ($this->input->post('nip')!='') {
+            $nip_nit = $this->input->post('nip');
         }
+        $data['nip_nit']            = $nip_nit;
+        if ($this->input->post('statuspns')=='CPNS') {
+            $data['jenis_pengadaan']            = $this->input->post('jenis_pengadaan');
+            $data['masa_krj_bln']               = $this->input->post('masa_krj_bln');
+            $data['masa_krj_thn']               = $this->input->post('masa_krj_thn');
+            $data['spmt_tgl']                   = date("Y-m-d",strtotime($this->input->post('spmt_tgl')));
+            $data['spmt_nomor']                 = $this->input->post('spmt_nomor');
+
+        }else if ($this->input->post('statuspns')=='PNS') {
+            $data['masa_krj_bln']               = $this->input->post('masa_krj_bln');
+            $data['masa_krj_thn']               = $this->input->post('masa_krj_thn');
+            $data['status_pns']               = $this->input->post('penganggkatan');
+            if($this->input->post('penganggkatan') == '1'){
+                $data['sttpl_tgl']               = date("Y-m-d",strtotime($this->input->post('sttpl_tgl')));
+                $data['sttpl_nomor']             = $this->input->post('sttpl_nomor');
+                $data['dokter_nomor']            = $this->input->post('dokter_nomor');
+                $data['dokter_tgl']              = date("Y-m-d",strtotime($this->input->post('dokter_tgl')));
+            }else{
+                $data['jenis_pangkat']             = $this->input->post('jenis_pangkat');
+            }
+        }else {
+            $data['jenis_pengadaan']            = $this->input->post('jenis_pengadaan');
+            $data['tat']                        = date("Y-m-d",strtotime($this->input->post('tat')));
+            $data['masa_krj_thn']               = $this->input->post('masa_krj_thn');
+            $data['masa_krj_bln']               = $this->input->post('masa_krj_bln');
+            $data['spmt_tgl']                   = date("Y-m-d",strtotime($this->input->post('spmt_tgl')));
+            $data['spmt_nomor']                 = $this->input->post('spmt_nomor');
+        }
+            if($this->db->update('pegawai_pangkat', $data)){
+                return $data['status']; 
+            }else{
+                return mysql_error();
+            }
     }
     function get_data_pendidikan_formal($id,$start=0,$limit=999999,$options=array())
     {
@@ -643,33 +683,59 @@ class Drh_model extends CI_Model {
     function get_data_pangkat_cpns($id,$start=0,$limit=999999,$options=array())
     {
         $this->db->select("*",false);
+        $query = $this->db->where('id_pegawai',$id);
         $query = $this->db->get('pegawai_pangkat',$limit,$start);
         return $query->result();
     }
-    function insert_entry_pendidikan_formal($id)
+    function insert_entry_cpns_formal($id)
     {
         $data['id_pegawai']         = $id;
-        $data['id_mst_peg_jurusan'] = $this->input->post('id_jurusan');
-        $data['sekolah_nama']       = $this->input->post('sekolah_nama');
-        $data['sekolah_lokasi']     = $this->input->post('sekolah_lokasi');
-        $data['ijazah_no']          = $this->input->post('ijazah_no');
-        $data['ijazah_tgl']         = date("Y-m-d",strtotime($this->input->post('ijazah_tgl')));
-        $data['gelar_depan']        = $this->input->post('gelar_depan');
-        $data['gelar_belakang']     = $this->input->post('gelar_belakang');
-        $data['status_pendidikan_cpns'] = $this->input->post('status_pendidikan_cpns');
+        $data['id_mst_peg_golruang']= $this->input->post('id_mst_peg_golruang');
+        $data['tmt']                = date("Y-m-d",strtotime($this->input->post('tmt')));
+        $data['bkn_tgl']            = date("Y-m-d",strtotime($this->input->post('bkn_tgl')));
+        $data['bkn_nomor']          = $this->input->post('bkn_nomor');//date("Y-m-d",strtotime($this->input->post('ijazah_tgl')));
+        $data['sk_tgl']             = date("Y-m-d",strtotime($this->input->post('sk_tgl')));
+        $data['sk_nomor']           = $this->input->post('sk_nomor');
+        $data['sk_pejabat']         = $this->input->post('sk_pejabat');
+        $data['status']                = $this->input->post('statuspns');
+        if ($this->input->post('nit')!='') {
+            $nip_nit = $this->input->post('nit');
+        }else if ($this->input->post('nip')!='') {
+            $nip_nit = $this->input->post('nip');
+        }
+        $data['nip_nit']            = $nip_nit;
+        if ($this->input->post('statuspns')=='CPNS') {
+            $data['jenis_pengadaan']            = $this->input->post('jenis_pengadaan');
+            $data['masa_krj_bln']               = $this->input->post('masa_krj_bln');
+            $data['masa_krj_thn']               = $this->input->post('masa_krj_thn');
+            $data['spmt_tgl']                   = date("Y-m-d",strtotime($this->input->post('spmt_tgl')));
+            $data['spmt_nomor']                 = $this->input->post('spmt_nomor');
 
-        $this->db->where('id_pegawai',$id);
-        $this->db->where('id_mst_peg_jurusan', $data['id_mst_peg_jurusan']);
-        $urut = $this->db->get('pegawai_pendidikan')->row();
-        if(!empty($urut->urut)){
-            return false;
-        }else{
-            if($this->db->insert('pegawai_pendidikan', $data)){
-                return true; 
+        }else if ($this->input->post('statuspns')=='PNS') {
+            $data['masa_krj_bln']               = $this->input->post('masa_krj_bln');
+            $data['masa_krj_thn']               = $this->input->post('masa_krj_thn');
+            $data['status_pns']               = $this->input->post('penganggkatan');
+            if($this->input->post('penganggkatan') == '1'){
+                $data['sttpl_tgl']               = date("Y-m-d",strtotime($this->input->post('sttpl_tgl')));
+                $data['sttpl_nomor']             = $this->input->post('sttpl_nomor');
+                $data['dokter_nomor']            = $this->input->post('dokter_nomor');
+                $data['dokter_tgl']              = date("Y-m-d",strtotime($this->input->post('dokter_tgl')));
+            }else{
+                $data['jenis_pangkat']             = $this->input->post('jenis_pangkat');
+            }
+        }else {
+            $data['jenis_pengadaan']            = $this->input->post('jenis_pengadaan');
+            $data['tat']                        = date("Y-m-d",strtotime($this->input->post('tat')));
+            $data['masa_krj_thn']               = $this->input->post('masa_krj_thn');
+            $data['masa_krj_bln']               = $this->input->post('masa_krj_bln');
+            $data['spmt_tgl']                   = date("Y-m-d",strtotime($this->input->post('spmt_tgl')));
+            $data['spmt_nomor']                 = $this->input->post('spmt_nomor');
+        }
+            if($this->db->insert('pegawai_pangkat', $data)){
+                return $data['status']; 
             }else{
                 return mysql_error();
             }
-        }
     }
 
     function get_data_pendidikan_fungsional($id,$start=0,$limit=999999,$options=array())
@@ -833,12 +899,15 @@ class Drh_model extends CI_Model {
         return $this->db->delete('pegawai_pendidikan');
     }
 
-    function delete_entry_pendidikan_struktural($id,$id_diklat)
+    function delete_entry_pns_formal($id,$tmt)
     {
+        
+        $ttm = explode("-", $tmt);
+        $tgl = $ttm[2].'-'.$ttm[1].'-'.$ttm[0];
         $this->db->where('id_pegawai',$id);
-        $this->db->where('mst_peg_id_diklat',$id_diklat);
+        $this->db->where('tmt',$tgl);
 
-        return $this->db->delete('pegawai_diklat');
+        return $this->db->delete('pegawai_pangkat');
     }
 
     function delete_entry_pendidikan_fungsional($id,$id_diklat)

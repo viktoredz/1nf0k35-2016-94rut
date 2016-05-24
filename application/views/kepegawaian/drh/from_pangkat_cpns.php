@@ -42,6 +42,8 @@
       { name: 'sttpl_nomor', type: 'string'},
       { name: 'dokter_tgl', type: 'string'},
       { name: 'dokter_nomor', type: 'string'},
+      { name: 'spmt_nomor', type: 'string'},
+      { name: 'spmt_tgl', type: 'date'},
       { name: 'edit', type: 'number'},
       { name: 'delete', type: 'number'}
         ],
@@ -87,7 +89,7 @@
         { text: 'Detail', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
             var dataRecord = $("#jqxgridCpnsHonor").jqxGrid('getrowdata', row);
             if(dataRecord.edit==1){
-            return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='detail_cpns (\""+dataRecord.id_pegawai+"\",\""+dataRecord.id_mst_peg_jurusan+"\");'></a></div>";
+            return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='detail_cpns (\""+dataRecord.id_pegawai+"\",\""+dataRecord.tmt+"\");'></a></div>";
           }else{
             return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_view.gif'></a></div>";
           }
@@ -96,24 +98,24 @@
         { text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
             var dataRecord = $("#jqxgridCpnsHonor").jqxGrid('getrowdata', row);
             if(dataRecord.delete==1){
-            return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del_cpns (\""+dataRecord.id_pegawai+"\",\""+dataRecord.id_mst_peg_jurusan+"\");'></a></div>";
+            return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del_cpns (\""+dataRecord.id_pegawai+"\",\""+dataRecord.tmt+"\");'></a></div>";
           }else{
             return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
           }
                  }
                 },
         { text: 'Gol Ruang', datafield: 'id_mst_peg_golruang', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '9%' },
-        { text: 'TMT', datafield: 'tmt', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '10%' },
-        { text: 'BLN', datafield: 'tmtbulan',columngroup: 'masakerja', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center',width: '7%' },
-        { text: 'THN', datafield: 'tmttahun',columngroup: 'masakerja', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center',width: '8%' },
+        { text: 'TMT', datafield: 'tmt', columntype: 'textbox', filtertype: 'textbox', cellsformat: 'dd-MM-yyyy', align: 'center', cellsalign: 'center', width: '10%' },
+        { text: 'BLN', datafield: 'masa_krj_bln',columngroup: 'masakerja', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center',width: '7%' },
+        { text: 'THN', datafield: 'masa_krj_thn',columngroup: 'masakerja', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center',width: '8%' },
         { text: 'Jenis Pengadaan', datafield: 'jenis_pengadaan', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '12%' },
         { text: 'No. BKN', datafield: 'bkn_nomor',columngroup: 'keputusanbkn', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '10%' },
-        { text: 'TGL. BKN', datafield: 'bkn_tgl',columngroup: 'keputusanbkn', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '10%' },
+        { text: 'TGL. BKN', datafield: 'bkn_tgl',columngroup: 'keputusanbkn', cellsformat: 'dd-MM-yyyy', columntype: 'date', filtertype: 'date', align: 'center', cellsalign: 'center', width: '10%' },
         { text: 'Pejabat', datafield: 'sk_pejabat', columngroup: 'suratkeputusan',columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '15%' },
         { text: 'Nomor', datafield: 'sk_nomor',columngroup: 'suratkeputusan', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '10%' },
-        { text: 'Tanggal', datafield: 'sk_tgl', columngroup: 'suratkeputusan',columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '10%' },
+        { text: 'Tanggal', datafield: 'sk_tgl',cellsformat: 'dd-MM-yyyy', columngroup: 'suratkeputusan',columntype: 'date', filtertype: 'date', align: 'center', cellsalign: 'center', width: '10%' },
         { text: 'Nomor', datafield: 'spmt_nomor', columngroup: 'spmt',columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '10%' },
-        { text: 'Tanggal', datafield: 'spmt_tgl', columngroup: 'spmt',columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '10%' },
+        { text: 'Tanggal', datafield: 'spmt_tgl',cellsformat: 'dd-MM-yyyy', columngroup: 'spmt',columntype: 'date', filtertype: 'date', align: 'center', cellsalign: 'center', width: '10%' },
             ],
          columngroups: 
         [
@@ -124,24 +126,17 @@
         ]
     });
 
-  function detail_cpns(id,id_jurusan){
+  function detail_cpns(id,tmt){
       $("#popup_pangkat_cpns #popup_pangkat_cpns_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-      $.get("<?php echo base_url().'kepegawaian/drh_pangkat/biodata_pangkat_cpns_edit' ?>/" + id +"/"+id_jurusan,  function(data) {
-        $("#popup_pangkat_cpns_content").html(data);
+      $.get("<?php echo base_url().'kepegawaian/drh_pangkat/edit' ?>/" + id +"/"+tmt,  function(data) {
+        $('#content4').html(data);
       });
-      $("#popup_pangkat_cpns").jqxWindow({
-        theme: theme, resizable: false,
-        width: 600,
-        height: 500,
-        isModal: true, autoOpen: false, modalOpacity: 0.2
-      });
-      $("#popup_pangkat_cpns").jqxWindow('open');
   }
 
-  function del_cpns(id,id_jurusan){
+  function del_cpns(id,tmt){
     var confirms = confirm("Hapus Data ?");
     if(confirms == true){
-      $.post("<?php echo base_url().'kepegawaian/drh_pangkat/biodata_pangkat_cpns_del' ?>/" + id +"/"+id_jurusan,   function(){
+      $.post("<?php echo base_url().'kepegawaian/drh_pangkat/biodata_pangkat_cpns_del' ?>/" + id +"/"+tmt,   function(){
         alert('data berhasil dihapus');
 
         $("#jqxgridCpnsHonor").jqxGrid('updatebounddata', 'cells');
