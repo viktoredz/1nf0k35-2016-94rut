@@ -83,7 +83,12 @@ class Drh_model extends CI_Model {
         $query = $this->db->get();
         return $query->result();
     }
-
+    function kode_tabel($table=''){
+        $this->db->select('*');
+        $this->db->from("$table");
+        $query = $this->db->get();
+        return $query->result();
+    }
     function get_tingkat_pendidikan(){
         $this->db->select('*');
         $this->db->from('mst_peg_tingkatpendidikan');
@@ -635,7 +640,12 @@ class Drh_model extends CI_Model {
         $query = $this->db->get('pegawai_pendidikan',$limit,$start);
         return $query->result();
     }
-
+    function get_data_pangkat_cpns($id,$start=0,$limit=999999,$options=array())
+    {
+        $this->db->select("*",false);
+        $query = $this->db->get('pegawai_pangkat',$limit,$start);
+        return $query->result();
+    }
     function insert_entry_pendidikan_formal($id)
     {
         $data['id_pegawai']         = $id;

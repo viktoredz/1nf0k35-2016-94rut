@@ -8,7 +8,7 @@ class Drh_pangkat extends CI_Controller {
 	}
 
 //CRUD Pendidikan
-	function json_pendidikan_formal($id){
+	function json_pangkat_cpns($id){
 		$this->authentication->verify('kepegawaian','show');
 
 		if($_POST) {
@@ -36,7 +36,7 @@ class Drh_pangkat extends CI_Controller {
 			}
 		}
 
-		$rows_all = $this->drh_model->get_data_pendidikan_formal($id);
+		$rows_all = $this->drh_model->get_data_pangkat_cpns($id);
 
 		if($_POST) {
 			$fil = $this->input->post('filterscount');
@@ -64,18 +64,30 @@ class Drh_pangkat extends CI_Controller {
 			}
 		}
 
-		$rows = $this->drh_model->get_data_pendidikan_formal($id,$this->input->post('recordstartindex'), $this->input->post('pagesize'));
+		$rows = $this->drh_model->get_data_pangkat_cpns($id,$this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();
 		foreach($rows as $act) {
 			$data[] = array(
-				'id_pegawai'	=> $act->id_pegawai,
-				'id_mst_peg_jurusan' => $act->id_mst_peg_jurusan,
-				'sekolah_nama'	=> $act->sekolah_nama,
-				'sekolah_lokasi'=> $act->sekolah_lokasi,
-				'ijazah_tgl'	=> $act->ijazah_tgl,
-				'nama_jurusan'	=> $act->nama_jurusan,
-				'deskripsi'		=> $act->deskripsi,
-				'cpns'			=> $act->cpns,
+				'id_pegawai'		=> $act->id_pegawai,
+				'nip_nit' 			=> $act->nip_nit,
+				'tmt'				=> $act->tmt,
+				'id_mst_peg_golruang'=> $act->id_mst_peg_golruang,
+				'lokasi'			=> $act->lokasi,
+				'is_pnsbaru'		=> $act->is_pnsbaru,
+				'status'			=> $act->status,
+				'jenis_pengadaan'	=> $act->jenis_pengadaan,
+				'jenis_pangkat'		=> $act->jenis_pangkat,
+				'masa_krj_bln'		=> $act->masa_krj_bln,
+				'masa_krj_thn'		=> $act->masa_krj_thn,
+				'bkn_tgl'			=> $act->bkn_tgl,
+				'bkn_nomor'			=> $act->bkn_nomor,
+				'sk_pejabat'		=> $act->sk_pejabat,
+				'sk_tgl'			=> $act->sk_tgl,
+				'sk_nomor'			=> $act->sk_nomor,
+				'sttpl_tgl'			=> $act->sttpl_tgl,
+				'sttpl_nomor'		=> $act->sttpl_nomor,
+				'dokter_tgl'		=> $act->dokter_tgl,
+				'dokter_nomor'		=> $act->dokter_nomor,
 				'edit'		=> 1,
 				'delete'	=> 1
 			);
@@ -90,7 +102,7 @@ class Drh_pangkat extends CI_Controller {
 		echo json_encode(array($json));
 	}
 
-	function json_pendidikan_fungsional($id){
+	function json_pangkat_pns($id){
 		$this->authentication->verify('kepegawaian','show');
 
 		if($_POST) {
@@ -101,15 +113,13 @@ class Drh_pangkat extends CI_Controller {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
 
-				if($field == 'tgl_diklat') {
+				if($field == 'ijazah_tgl') {
 					$value = date("Y-m-d",strtotime($value));
 					$this->db->where($field,$value);
 				}
-				elseif($field == 'nama_diklat') {
-					$this->db->like('pegawai_diklat.'.$field,$value);
-				}
-				elseif($field == 'jenis_diklat') {
-					$this->db->like('mst_peg_diklat.nama_diklat',$value);
+				elseif($field == 'cpns') {
+					$value = $value == 'Ya' ? 1 : 0;
+					$this->db->where('pegawai_pendidikan.status_pendidikan_cpns',$value);
 				}else{
 					$this->db->like($field,$value);
 				}
@@ -120,7 +130,7 @@ class Drh_pangkat extends CI_Controller {
 			}
 		}
 
-		$rows_all = $this->drh_model->get_data_pendidikan_fungsional($id);
+		$rows_all = $this->drh_model->get_data_pangkat_cpns($id);
 
 		if($_POST) {
 			$fil = $this->input->post('filterscount');
@@ -130,15 +140,13 @@ class Drh_pangkat extends CI_Controller {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
 
-				if($field == 'tgl_diklat') {
+				if($field == 'ijazah_tgl') {
 					$value = date("Y-m-d",strtotime($value));
 					$this->db->where($field,$value);
 				}
-				elseif($field == 'nama_diklat') {
-					$this->db->like('pegawai_diklat.'.$field,$value);
-				}
-				elseif($field == 'jenis_diklat') {
-					$this->db->like('mst_peg_diklat.nama_diklat',$value);
+				elseif($field == 'cpns') {
+					$value = $value == 'Ya' ? 1 : 0;
+					$this->db->where('pegawai_pendidikan.status_pendidikan_cpns',$value);
 				}else{
 					$this->db->like($field,$value);
 				}
@@ -150,20 +158,30 @@ class Drh_pangkat extends CI_Controller {
 			}
 		}
 
-		$rows = $this->drh_model->get_data_pendidikan_fungsional($id,$this->input->post('recordstartindex'), $this->input->post('pagesize'));
+		$rows = $this->drh_model->get_data_pangkat_cpns($id,$this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();
 		foreach($rows as $act) {
 			$data[] = array(
 				'id_pegawai'		=> $act->id_pegawai,
-				'mst_peg_id_diklat' => $act->mst_peg_id_diklat,
-				'jenis_diklat' 		=> $act->jenis_diklat,
-				'tipe'				=> ucwords($act->tipe),
-				'nama_diklat'		=> $act->nama_diklat,
-				'tgl_diklat'		=> $act->tgl_diklat,
-				'nomor_sertifikat'	=> $act->nomor_sertifikat,
-				'lama_diklat'		=> $act->lama_diklat,
-				'instansi'			=> $act->instansi,
-				'penyelenggara'		=> $act->penyelenggara,
+				'nip_nit' 			=> $act->nip_nit,
+				'tmt'				=> $act->tmt,
+				'id_mst_peg_golruang'=> $act->id_mst_peg_golruang,
+				'lokasi'			=> $act->lokasi,
+				'is_pnsbaru'		=> $act->is_pnsbaru,
+				'status'			=> $act->status,
+				'jenis_pengadaan'	=> $act->jenis_pengadaan,
+				'jenis_pangkat'		=> $act->jenis_pangkat,
+				'masa_krj_bln'		=> $act->masa_krj_bln,
+				'masa_krj_thn'		=> $act->masa_krj_thn,
+				'bkn_tgl'			=> $act->bkn_tgl,
+				'bkn_nomor'			=> $act->bkn_nomor,
+				'sk_pejabat'		=> $act->sk_pejabat,
+				'sk_tgl'			=> $act->sk_tgl,
+				'sk_nomor'			=> $act->sk_nomor,
+				'sttpl_tgl'			=> $act->sttpl_tgl,
+				'sttpl_nomor'		=> $act->sttpl_nomor,
+				'dokter_tgl'		=> $act->dokter_tgl,
+				'dokter_nomor'		=> $act->dokter_nomor,
 				'edit'		=> 1,
 				'delete'	=> 1
 			);
@@ -178,7 +196,7 @@ class Drh_pangkat extends CI_Controller {
 		echo json_encode(array($json));
 	}
 
-	function json_pendidikan_struktural($id){
+	function json_pangkat_setelahpns($id){
 		$this->authentication->verify('kepegawaian','show');
 
 		if($_POST) {
@@ -189,15 +207,13 @@ class Drh_pangkat extends CI_Controller {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
 
-				if($field == 'tgl_diklat') {
+				if($field == 'ijazah_tgl') {
 					$value = date("Y-m-d",strtotime($value));
 					$this->db->where($field,$value);
 				}
-				elseif($field == 'nama_diklat') {
-					$this->db->like('pegawai_diklat.'.$field,$value);
-				}
-				elseif($field == 'jenis_diklat') {
-					$this->db->like('mst_peg_diklat.nama_diklat',$value);
+				elseif($field == 'cpns') {
+					$value = $value == 'Ya' ? 1 : 0;
+					$this->db->where('pegawai_pendidikan.status_pendidikan_cpns',$value);
 				}else{
 					$this->db->like($field,$value);
 				}
@@ -208,7 +224,7 @@ class Drh_pangkat extends CI_Controller {
 			}
 		}
 
-		$rows_all = $this->drh_model->get_data_pendidikan_struktural($id);
+		$rows_all = $this->drh_model->get_data_pangkat_cpns($id);
 
 		if($_POST) {
 			$fil = $this->input->post('filterscount');
@@ -218,15 +234,13 @@ class Drh_pangkat extends CI_Controller {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
 
-				if($field == 'tgl_diklat') {
+				if($field == 'ijazah_tgl') {
 					$value = date("Y-m-d",strtotime($value));
 					$this->db->where($field,$value);
 				}
-				elseif($field == 'nama_diklat') {
-					$this->db->like('pegawai_diklat.'.$field,$value);
-				}
-				elseif($field == 'jenis_diklat') {
-					$this->db->like('mst_peg_diklat.nama_diklat',$value);
+				elseif($field == 'cpns') {
+					$value = $value == 'Ya' ? 1 : 0;
+					$this->db->where('pegawai_pendidikan.status_pendidikan_cpns',$value);
 				}else{
 					$this->db->like($field,$value);
 				}
@@ -238,17 +252,30 @@ class Drh_pangkat extends CI_Controller {
 			}
 		}
 
-		$rows = $this->drh_model->get_data_pendidikan_struktural($id,$this->input->post('recordstartindex'), $this->input->post('pagesize'));
+		$rows = $this->drh_model->get_data_pangkat_cpns($id,$this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();
 		foreach($rows as $act) {
 			$data[] = array(
 				'id_pegawai'		=> $act->id_pegawai,
-				'mst_peg_id_diklat' => $act->mst_peg_id_diklat,
-				'jenis_diklat' 		=> $act->jenis_diklat,
-				'tipe'				=> $act->tipe,
-				'nama_diklat'		=> $act->nama_diklat,
-				'tgl_diklat'		=> $act->tgl_diklat,
-				'nomor_sertifikat'	=> $act->nomor_sertifikat,
+				'nip_nit' 			=> $act->nip_nit,
+				'tmt'				=> $act->tmt,
+				'id_mst_peg_golruang'=> $act->id_mst_peg_golruang,
+				'lokasi'			=> $act->lokasi,
+				'is_pnsbaru'		=> $act->is_pnsbaru,
+				'status'			=> $act->status,
+				'jenis_pengadaan'	=> $act->jenis_pengadaan,
+				'jenis_pangkat'		=> $act->jenis_pangkat,
+				'masa_krj_bln'		=> $act->masa_krj_bln,
+				'masa_krj_thn'		=> $act->masa_krj_thn,
+				'bkn_tgl'			=> $act->bkn_tgl,
+				'bkn_nomor'			=> $act->bkn_nomor,
+				'sk_pejabat'		=> $act->sk_pejabat,
+				'sk_tgl'			=> $act->sk_tgl,
+				'sk_nomor'			=> $act->sk_nomor,
+				'sttpl_tgl'			=> $act->sttpl_tgl,
+				'sttpl_nomor'		=> $act->sttpl_nomor,
+				'dokter_tgl'		=> $act->dokter_tgl,
+				'dokter_nomor'		=> $act->dokter_nomor,
 				'edit'		=> 1,
 				'delete'	=> 1
 			);
@@ -269,37 +296,74 @@ class Drh_pangkat extends CI_Controller {
 
 		switch ($pageIndex) {
 			case 1:
-				die($this->parser->parse("kepegawaian/drh/form_pendidikan_formal",$data));
+				die($this->parser->parse("kepegawaian/drh/from_pangkat_cpns",$data));
 				break;
 			case 2:
-				die($this->parser->parse("kepegawaian/drh/form_pendidikan_struktural",$data));
+				die($this->parser->parse("kepegawaian/drh/from_pangkat_pns",$data));
 				break;
 			default:
-				die($this->parser->parse("kepegawaian/drh/form_pendidikan_fungsional",$data));
+				die($this->parser->parse("kepegawaian/drh/form_pangkat_setelahpns",$data));
 				break;
 		}
 
 	}
-
+	function pilihan_enums($table , $field){
+	$query = "SHOW COLUMNS FROM ".$table." LIKE '$field'";
+	 $row = $this->db->query("SHOW COLUMNS FROM ".$table." LIKE '$field'")->row()->Type;  
+	 $regex = "/'(.*?)'/";
+	        preg_match_all( $regex , $row, $enum_array );
+	        $enum_fields = $enum_array[1];
+	        foreach ($enum_fields as $key=>$value)
+	        {
+	            $enums[$value] = $value; 
+	        }
+	        return $enums;
+	}
 	function add($id){
-        $this->form_validation->set_rules('sekolah_nama', 'Nama', 'trim|required');
-        $this->form_validation->set_rules('id_jurusan', 'Program Studi', 'trim|required');
-        $this->form_validation->set_rules('id_tingkat', 'Tingkat Pendidikan', 'trim|required');
-        $this->form_validation->set_rules('id_rumpun', 'Rumpun Pendidikan', 'trim|required');
-        $this->form_validation->set_rules('ijazah_tgl', '', 'trim');
-        $this->form_validation->set_rules('ijazah_no', '', 'trim');
-        $this->form_validation->set_rules('sekolah_lokasi', '', 'trim');
-        $this->form_validation->set_rules('gelar_depan', '', 'trim');
-        $this->form_validation->set_rules('gelar_belakang', '', 'trim');
-        $this->form_validation->set_rules('status_pendidikan_cpns', '', 'trim');
 
+        $this->form_validation->set_rules('nip_nit', 'Status', 'trim|required');
+        $this->form_validation->set_rules('id_mst_peg_golruang', 'Golongan Ruang', 'trim|required');
+        $this->form_validation->set_rules('tmt', 'Terhitung Mulai Tanggal', 'trim|required');
+        $this->form_validation->set_rules('bkn_tgl', 'Tanggal BKN', 'trim|required');
+        $this->form_validation->set_rules('bkn_nomor', 'Nomor BKN', 'trim|required');
+        $this->form_validation->set_rules('sk_tgl', 'SK Tanggal', 'trim|required');
+        $this->form_validation->set_rules('sk_nomor', 'SK Nomor', 'trim|required');
+        $this->form_validation->set_rules('sk_pejabat', 'SK Pejabat', 'trim|required');
+        if ($this->input->post('nip_nit')=='CPNS') {
+        	$this->form_validation->set_rules('jenis_pengadaan', 'Jenis Pengadaan', 'trim|required');
+        	$this->form_validation->set_rules('masa_krj_bln', 'Masa Kerja Golongan Bulan ', 'trim|required');
+        	$this->form_validation->set_rules('masa_krj_thn', 'Masa Kerja Golongan Tahun', 'trim|required');
+			$this->form_validation->set_rules('spmt_tgl', 'Tanggal SPMT', 'trim|required');
+			$this->form_validation->set_rules('spmt_nomor', 'Nomor SPMT', 'trim|required');
+        }else if ($this->input->post('nip_nit')=='PNS') {
+        	$this->form_validation->set_rules('masa_krj_bln', 'Masa Kerja Golongan Bulan ', 'trim|required');
+        	$this->form_validation->set_rules('masa_krj_thn', 'Masa Kerja Golongan Tahun', 'trim|required');
+        	$this->form_validation->set_rules('penganggkatan', 'cek', 'trim');	
+        	if($this->input->post('penganggkatan') == '1'){
+        		$this->form_validation->set_rules('sttpl_tgl', 'Tanggal STTPL', 'trim|required');
+        		$this->form_validation->set_rules('sttpl_nomor', 'Nomor STTPL', 'trim|required');
+        		$this->form_validation->set_rules('dokter_tgl', 'Tanggal Keterangan Dokter', 'trim|required');
+        		$this->form_validation->set_rules('dokter_nomor', 'Nomor Keterangan Dokter', 'trim|required');
+        	}else{
+        		$this->form_validation->set_rules('jenis_pangkat', 'Jenis Pangkat', 'trim|required');
+        	}
+        }else {
+        	$this->form_validation->set_rules('jenis_pengadaan', 'Jenis Pengadaan', 'trim|required');
+        	$this->form_validation->set_rules('tat', 'Terhitung Akhir Tanggal', 'trim|required');
+        	$this->form_validation->set_rules('spmt_tgl', 'SPMT Tanggal', 'trim|required');
+        	$this->form_validation->set_rules('spmt_nomor', 'SPMT Nomor', 'trim|required');
+        }
 		$data['id']				= $id;
 	    $data['action']			= "add";
 		$data['alert_form'] 	= '';
-		$data['kode_rumpun'] 	= $this->drh_model->get_kode_rumpun();
+		$data['kode_status'] 	= $this->drh_model->kode_tabel('mst_peg_status');
+		$data['kode_pns'] 		= $this->drh_model->kode_tabel('mst_peg_golruang');
+		$data['kode_pengadaan']	= $this->pilihan_enums('pegawai_pangkat','jenis_pengadaan');
+		$data['kode_pangkat']	= $this->pilihan_enums('pegawai_pangkat','jenis_pangkat');
+		
 
 		if($this->form_validation->run()== FALSE){
-			die($this->parser->parse("kepegawaian/drh/form_pendidikan_formal_form",$data));
+			die($this->parser->parse("kepegawaian/drh/form_pangkat_form",$data));
 		}elseif($this->drh_model->insert_entry_pendidikan_formal($id)){
 			die("OK");
 		}else{

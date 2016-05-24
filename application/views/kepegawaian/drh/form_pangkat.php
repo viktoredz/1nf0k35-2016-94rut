@@ -3,7 +3,7 @@
         $('#jqxTabsPangkat').jqxTabs({ width: '100%', height: '500'});
         $('#btn-skpangkat-tambah').click(function(){
             $.get('<?php echo base_url()?>kepegawaian/drh_pangkat/add/{id}', function (data) {
-                $('#content4').html('data');
+                $('#content4').html(data);
             });
         });
 
@@ -37,7 +37,7 @@
                       <i class="icon fa fa-plus" style="font-size: 18px"></i>
                   </div>
                   <div style="margin-left: 10px; vertical-align: middle; text-align: center; float: left;">
-                      Non PNS / Honorer</div>
+                      CPNS/ Honorer</div>
               </div>
             </li>
             <li style="margin-left: 15px;">
@@ -46,7 +46,7 @@
                       <i class="icon fa fa-plus" style="font-size: 18px"></i>
                   </div>
                   <div style="margin-left: 10px; vertical-align: middle; text-align: center; float: left;">
-                      Calon Pegawai Negeri Sipil / CPNS</div>
+                      Pengangkatan Pegawai Negeri Sipil/PNS</div>
               </div>
             </li>
             <li style="margin-left: 15px;">
@@ -55,7 +55,7 @@
                       <i class="icon fa fa-plus" style="font-size: 18px"></i>
                   </div>
                   <div style="margin-left: 10px; vertical-align: middle; text-align: center; float: left;">
-                      Pegawai Negeri Sipil / PNS</div>
+                      Riwayat Kepangkatan Setelah PNS</div>
               </div>
             </li>
         </ul>
