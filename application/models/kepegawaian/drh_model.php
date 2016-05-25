@@ -731,14 +731,14 @@ class Drh_model extends CI_Model {
         }else if ($this->input->post('statuspns')=='PNS') {
             $data['masa_krj_bln']               = $this->input->post('masa_krj_bln');
             $data['masa_krj_thn']               = $this->input->post('masa_krj_thn');
-            $data['status_pns']               = $this->input->post('penganggkatan');
+            $data['status_pns']                 = $this->input->post('penganggkatan');
             if($this->input->post('penganggkatan') == '1'){
                 $data['sttpl_tgl']               = date("Y-m-d",strtotime($this->input->post('sttpl_tgl')));
                 $data['sttpl_nomor']             = $this->input->post('sttpl_nomor');
                 $data['dokter_nomor']            = $this->input->post('dokter_nomor');
                 $data['dokter_tgl']              = date("Y-m-d",strtotime($this->input->post('dokter_tgl')));
             }else{
-                $data['jenis_pangkat']             = $this->input->post('jenis_pangkat');
+                $data['jenis_pangkat']           = $this->input->post('jenis_pangkat');
             }
         }else {
             $data['jenis_pengadaan']            = $this->input->post('jenis_pengadaan');
