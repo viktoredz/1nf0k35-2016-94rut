@@ -20,7 +20,7 @@
     </div>
     <div class="col-sm-12" style="text-align: right">
       <button type="button" name="btn_cpns_formal_save" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Simpan</button>
-      <button type="button" name="btn_cpns_formal_close" class="btn btn-primary"><i class='fa fa-close'></i> &nbsp; Tutup</button>
+      <button type="button" name="btn_cpns_formal_close" class="btn btn-primary"><i class='fa fa-close'></i> &nbsp; Kembali</button>
     </div>
   </div>
 
@@ -130,7 +130,7 @@
                       foreach($kode_pns as $kodepns) : 
                         $select = $kodepns->id_golongan == $id_mst_peg_golruang ? 'selected' : '' ;
                       ?>
-                        <option value="<?php echo $kodepns->id_golongan ?>" <?php echo $select ?>><?php echo $kodepns->ruang ?></option>
+                        <option value="<?php echo $kodepns->id_golongan ?>" <?php echo $select ?>><?php echo $kodepns->id_golongan.' - '.$kodepns->ruang ?></option>
                       <?php endforeach ?>
                   </select>
                 </div>
