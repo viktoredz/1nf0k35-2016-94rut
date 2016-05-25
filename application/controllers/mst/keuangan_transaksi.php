@@ -414,13 +414,13 @@ class Keuangan_transaksi extends CI_Controller {
 
 
 		if($this->form_validation->run()== FALSE){
-			die($this->parser->parse("mst/keutransaksi/form_transaksi",$data));
+			die($this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data));
 		}elseif($this->keutransaksi_model->transaksi_template_update($id)){
 			die("OK");
 		}else{
 			$data['alert_form'] = 'Save data failed...';
 		}
-		die($this->parser->parse("mst/keutransaksi/form_transaksi",$data));
+		die($this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data));
 	}
 
 	function transaksi_otomatis_template_update($id=0){
@@ -436,13 +436,13 @@ class Keuangan_transaksi extends CI_Controller {
 
 
 		if($this->form_validation->run()== FALSE){
-			die($this->parser->parse("mst/keutransaksi/form_transaksi",$data));
+			die($this->parser->parse("mst/keutransaksi/form_transaksi_otomatis_edit",$data));
 		}elseif($this->keutransaksi_model->transaksi_otomatis_template_update($id)){
 			die("OK");
 		}else{
 			$data['alert_form'] = 'Save data failed...';
 		}
-		die($this->parser->parse("mst/keutransaksi/form_transaksi",$data));
+		die($this->parser->parse("mst/keutransaksi/form_transaksi_otomatis_edit",$data));
 	}
 
 	function transaksi_add(){
