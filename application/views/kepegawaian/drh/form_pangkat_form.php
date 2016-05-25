@@ -462,6 +462,22 @@
     $('#penganggkatan').prop('checked', false);
     //alert($("#statuspns").val());
   }); 
+  $("#tmt").change(function(data){
+    var date = new Date();
+    var day = date.getDate();
+    var month = date.getMonth()+1;
+    var yy = date.getFullYear();
+    var tmb = $("#tmt").val().split('-');
+    var thn = parseInt(tmb[2]) - parseInt(yy);
+    var bln = parseInt(tmb[1]) - parseInt(month);
+    //alert(tmb[1] +'  '+month);
+    //alert(thn+'--'+bln);
+    var hasilbln = parseInt($("#masa_krj_bln").val())+parseInt(bln);
+    var hasilthn = parseInt($("#masa_krj_thn").val())+parseInt(thn);
+      $("#masa_krj_thn").val(hasilthn);
+      $("#masa_krj_bln").val(hasilbln);
+      //alert(hasilbln+'--'+hasilthn);
+  });
   cekceklis();
   function cekceklis(){
     if ($('#statuspns').val()=='PNS') {
