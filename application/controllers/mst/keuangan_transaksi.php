@@ -382,7 +382,8 @@ class Keuangan_transaksi extends CI_Controller {
 	function template_update($id=0){
 		$this->authentication->verify('mst','edit');
 
-    	$this->form_validation->set_rules('nilai', 'Template', 'trim');
+    	$this->form_validation->set_rules('template', 'Template', 'trim');
+    	$this->form_validation->set_rules('kategori', 'Kategori', 'trim');
 
 	    $data['action']				= "edit";
 		$data['alert_form']		    = '';
@@ -392,8 +393,8 @@ class Keuangan_transaksi extends CI_Controller {
 
 		if($this->form_validation->run()== FALSE){
 			die($this->parser->parse("mst/keutransaksi/form_kategori_transaksi_edit",$data));
-		}elseif($nilai=$this->keutransaksi_model->template_update($id)){
-			die("OK|$nilai");
+		}elseif($this->keutransaksi_model->template_update($id)){
+			die("OK");
 		}else{
 			$data['alert_form'] = 'Save data failed...';
 		}
