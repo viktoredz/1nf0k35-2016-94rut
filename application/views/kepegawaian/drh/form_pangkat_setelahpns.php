@@ -32,15 +32,15 @@
       { name: 'jenis_pangkat', type: 'string'},
       { name: 'masa_krj_bln', type: 'string'},
       { name: 'masa_krj_thn', type: 'string'},
-      { name: 'bkn_tgl', type: 'string'},
+      { name: 'bkn_tgl', type: 'date'},
       { name: 'bkn_nomor', type: 'string'},
       { name: 'sk_pejabat', type: 'string'},
       { name: 'sk_pejabat', type: 'string'},
-      { name: 'sk_tgl', type: 'string'},
+      { name: 'sk_tgl', type: 'date'},
       { name: 'sk_nomor', type: 'string'},
-      { name: 'sttpl_tgl', type: 'string'},
+      { name: 'sttpl_tgl', type: 'date'},
       { name: 'sttpl_nomor', type: 'string'},
-      { name: 'dokter_tgl', type: 'string'},
+      { name: 'dokter_tgl', type: 'date'},
       { name: 'dokter_nomor', type: 'string'},
       { name: 'edit', type: 'number'},
       { name: 'delete', type: 'number'}
@@ -84,7 +84,7 @@
         return obj.data;    
       },
       columns: [
-        { text: 'Detail', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
+        { text: 'Edit', align: 'center', filtertype: 'none', sortable: false, width: '4%', cellsrenderer: function (row) {
             var dataRecord = $("#jqxgridStlPns").jqxGrid('getrowdata', row);
             if(dataRecord.edit==1){
             return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='detail_setelahpns (\""+dataRecord.id_pegawai+"\",\""+dataRecord.tmt+"\");'></a></div>";
@@ -93,7 +93,7 @@
           }
                  }
                 },
-        { text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
+        { text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '4%', cellsrenderer: function (row) {
             var dataRecord = $("#jqxgridStlPns").jqxGrid('getrowdata', row);
             if(dataRecord.delete==1){
             return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del_setelahpns (\""+dataRecord.id_pegawai+"\",\""+dataRecord.tmt+"\");'></a></div>";
@@ -103,15 +103,15 @@
                  }
                 },
         { text: 'Gol Ruang', datafield: 'id_mst_peg_golruang', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '9%' },
-        { text: 'TMT', datafield: 'tmt', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsformat: 'dd-MM-yyyy', cellsalign: 'center', width: '10%' },
+        { text: 'TMT', datafield: 'tmt', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsformat: 'dd-MM-yyyy', cellsalign: 'center', width: '8%' },
         { text: 'Jenis Kepangkatan',datafield: 'jenis_pangkat', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '10%' },
-        { text: 'BLN', datafield: 'masa_krj_bln',columngroup: 'masakerja', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center',width: '7%' },
-        { text: 'THN', datafield: 'masa_krj_thn',columngroup: 'masakerja', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center',width: '8%' },
-        { text: 'No. BKN', datafield: 'bkn_nomor',columngroup: 'keputusanbkn', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '10%' },
-        { text: 'TGL. BKN', datafield: 'bkn_tgl',columngroup: 'keputusanbkn',cellsformat: 'dd-MM-yyyy', columntype: 'date', filtertype: 'date', align: 'center', cellsalign: 'center', width: '10%' },
+        { text: 'Bulan', datafield: 'masa_krj_bln',columngroup: 'masakerja', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center',width: '7%' },
+        { text: 'Tahun', datafield: 'masa_krj_thn',columngroup: 'masakerja', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center',width: '7%' },
+        { text: 'Nomor', datafield: 'bkn_nomor',columngroup: 'keputusanbkn', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '10%' },
+        { text: 'Tanggal', datafield: 'bkn_tgl',columngroup: 'keputusanbkn',cellsformat: 'dd-MM-yyyy', columntype: 'date', filtertype: 'date', align: 'center', cellsalign: 'center', width: '8%' },
         { text: 'Pejabat', datafield: 'sk_pejabat', columngroup: 'suratkeputusan',columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '15%' },
         { text: 'Nomor', datafield: 'sk_nomor',columngroup: 'suratkeputusan', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '10%' },
-        { text: 'Tanggal', datafield: 'sk_tgl',cellsformat: 'dd-MM-yyyy', columngroup: 'suratkeputusan',columntype: 'date', filtertype: 'date', align: 'center', cellsalign: 'center', width: '10%' },
+        { text: 'Tanggal', datafield: 'sk_tgl',cellsformat: 'dd-MM-yyyy', columngroup: 'suratkeputusan',columntype: 'date', filtertype: 'date', align: 'center', cellsalign: 'center', width: '8%' },
             ],
          columngroups: 
         [
