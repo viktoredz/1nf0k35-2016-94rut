@@ -59,23 +59,10 @@
               <br>
               <label>Pengaturan Transaksi Untuk Kategori Ini</label>
 
-<!--               <div class="row" style="margin: 5px">
-                <div class="col-md-12">
-                  <?php $i=1; foreach($template as $t) : ?>
-                    <input type="checkbox" name="kategori_trans_template" id="template<?php echo $i;?>" value="<?php echo $i;?>">
-                    <?php echo $t->id_mst_setting_transaksi_template ?>
-                    <?php echo $t->setting_judul ?>
-                    </br>
-                    <?php echo $t->seting_deskripsi ?>
-                    </br></br>
-                  <?php $i++; endforeach ?> 
-                </div>
-              </div> -->
-
               <div class="row" style="margin: 5px">
                 <div class="col-md-12">
                   <?php $i=1; foreach($template as $t) : ?>
-                    <input type="checkbox" name="kategori_trans_template" id="<?php echo $i;?>" value="1" 
+                    <input type="checkbox" name="kategori_trans_template" id="template<?php echo $i;?>" value="<?php echo $i;?>">
                   <?php 
                   if(set_value('nilai')=="" && isset($t->nilai)){
                     $t->nilai= $t->nilai;
@@ -83,7 +70,7 @@
                     $t->nilai= set_value('nilai');
                   }
                   if($t->nilai == 1) echo "checked";
-                  ?>> 
+                  ?> 
                     <?php echo $t->setting_judul ?>
                     </br>
                     <?php echo $t->seting_deskripsi ?>
@@ -91,7 +78,6 @@
                   <?php $i++; endforeach ?> 
                 </div>
               </div>
-
 
               <br>
             </div>
@@ -107,7 +93,6 @@
         $("#popup_kategori_transaksi").jqxWindow('close');
     });
 
-  
     $("[name='btn_kategori_transaksi_save']").click(function(){
         var data = new FormData();
         $('#biodata_notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
@@ -139,9 +124,9 @@
 
     $("[name='kategori_trans_template']").click(function(){
       var data = new FormData();
-      alert($("[name='kategori_trans_template']:checked").val());
+      // alert($("[name='kategori_trans_template']:checked").val());
 
-        data.append('template',        $("[name='kategori_trans_template']:checked").val());
+        data.append('template',     $("[name='kategori_trans_template']:checked").val());
         data.append('kategori',     "<?php echo $id;?>");
         
         $.ajax({
@@ -149,7 +134,7 @@
             contentType : false,
             processData : false,
             type : 'POST',
-            url : '<?php echo base_url()."mst/keuangan_transaksi/template_update/"?>'+$(this).val(),
+            url : '<?php echo base_url()."mst/keuangan_transaksi/kategori_trans_template_update/"?>'+$(this).val(),
             data : data,
             success : function(response){
               // a = response.split("|");
@@ -160,7 +145,7 @@
                     $("#kategori_trans_template").prop("checked", false);
                 // };
               // }else{
-                alert("Mendukung transaksi belum berhasil di aktifkan.");
+                // alert("Mendukung transaksi belum berhasil di aktifkan.");
 
               }
               //ceklist();

@@ -23,20 +23,6 @@
           <button type="button" class="btn btn-primary" id="btn-add"><i class='fa fa-plus-square'></i> &nbsp; Tambah Transaksi</button>
         </div>
 
-        <div class="col-md-4 pull-right">
-          <div class="row">
-            <div class="col-md-8 pull-right">
-             <select name="kategori" id="kategori" class="form-control">
-               <option value="all">All</option>
-                <?php foreach ($kategori as $row ) { ;?>
-                 <?php $select = $row->id_mst_kategori_transaksi == $this->session->userdata('filter_kategori') ? 'selected=selected' : '' ?>
-                 <option value="<?php echo $row->id_mst_kategori_transaksi; ?>"  <?php echo $select ?> ><?php echo $row->nama; ?></option>
-                <?php } ;?>
-                </select>
-             </div> 
-            <div class="col-md-4 pull-right" style="padding-top:8px">Kategori</div>
-          </div>
-        </div>
         </div>
       </div>
 
@@ -142,38 +128,21 @@
             ]
     });
 
-  function add(){
-      $("#popup_kategori_transaksi #popup_kategori_transaksi_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-        $.get("<?php echo base_url().'mst/keuangan_transaksi/kategori_transaksi_add' ?>/", function(data) {
-          $("#popup_kategori_transaksi_content").html(data);
-        });
-        $("#popup_kategori_transaksi").jqxWindow({
-          theme: theme, resizable: false,
-          width: 600,
-          height: 450,
-          isModal: true, autoOpen: false, modalOpacity: 0.2
-        });
-        $("#popup_kategori_transaksi").jqxWindow('open');
-  }
-
   function detail(id){
-        var transaksi = '';
       $.ajax({
           url: "<?php echo base_url().'mst/keuangan_transaksi/transaksi_edit/'?>/" +id,
           type : 'POST',
-       //   data : 'transaksi=' + transaksi,
           success : function(data) {
               $('#content2').html(data);
           }
       });
-
       return false;
     }
 
   function del(id){
     var confirms = confirm("Hapus Data ?");
     if(confirms == true){
-      $.post("<?php echo base_url().'mst/keuangan_transaksi/delete_kategori_transaksi' ?>/" + id,  function(){
+      $.post("<?php echo base_url().'mst/keuangan_transaksi/delete_transaksi' ?>/" + id,  function(){
         alert('data berhasil dihapus');
         $("#jqxgrid_transaksi").jqxGrid('updatebounddata', 'cells');
       });
@@ -181,11 +150,9 @@
   }
 
   $('#btn-add').click(function(){
-    var transaksi = '';
       $.ajax({
           url : '<?php echo site_url('mst/keuangan_transaksi/transaksi_add/') ?>',
           type : 'POST',
-       //   data : 'transaksi=' + transaksi,
           success : function(data) {
               $('#content2').html(data);
           }
