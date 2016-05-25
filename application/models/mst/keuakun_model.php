@@ -107,12 +107,16 @@ class Keuakun_model extends CI_Model {
         }
     }
 
-    function akun_delete(){  
-        $this->db->where('id_mst_akun', $this->input->post('id_mst_akun'));
-        $this->db->delete($this->tb);
-                
-        $this->db->where('id_mst_akun_parent', $this->input->post('id_mst_akun'));
-        $this->db->delete($this->tb);
+    function akun_delete($id = 0){
+        $this->db->where('id_mst_akun_parent', $id);
+        $child = $this->db->get($this->tb)->row();
+        if(empty($child->id_mst_akun)){
+            $this->db->where('id_mst_akun', $id);
+            return $this->db->delete($this->tb);
+        }else{
+            return false;
+        }
+
     }
 
     function akun_add(){

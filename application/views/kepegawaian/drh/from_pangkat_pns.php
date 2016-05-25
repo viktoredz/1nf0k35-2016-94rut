@@ -14,7 +14,7 @@
 </div>
 
 <div id="popup_pangkat_pns" style="display:none">
-  <div id="popup_title">Data Pendidikan Formal</div>
+  <div id="popup_title">Data PNS</div>
   <div id="popup_pangkat_pns_content">&nbsp;</div>
 </div>
 <script type="text/javascript">
@@ -138,7 +138,7 @@
     var confirms = confirm("Hapus Data ?");
     if(confirms == true){
       $.post("<?php echo base_url().'kepegawaian/drh_pangkat/biodata_pangkat_pns_del' ?>/" + id +"/"+tmt,   function(){
-        alert('data berhasil dihapus');
+        alert('Data berhasil dihapus');
 
         $("#jqxgridPnsHonor").jqxGrid('updatebounddata', 'cells');
       });

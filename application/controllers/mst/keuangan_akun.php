@@ -275,7 +275,13 @@ class Keuangan_akun extends CI_Controller {
 
 	function akun_delete(){
 		$this->authentication->verify('mst','del');
-		$this->keuakun_model->akun_delete();				
+
+		$id = $this->input->post('id_mst_akun');
+		if($this->keuakun_model->akun_delete($id)){
+			echo "OK";
+		}else{
+			echo "ERROR";
+		}
 	}
 
 	function json_akun(){

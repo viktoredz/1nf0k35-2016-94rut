@@ -212,9 +212,9 @@
             },
 
           columns: [                             
-            { text: 'Uraian ', datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox',align: 'center', width: '30%' },
-            { text: 'Kode Akun', datafield: 'kode', columntype: 'textbox', filtertype: 'textbox',align: 'center', cellsalign: 'left', width: '25%'},
-            { text: 'Kelompok', datafield:'parent', columntype: 'textbox', filtertype: 'textbox',align: 'center', width: '35%' },
+            { text: 'Uraian ', datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox',align: 'center', width: '37%' },
+            { text: 'Kode Akun', datafield: 'kode', columntype: 'textbox', filtertype: 'textbox',align: 'center', cellsalign:'center', width: '10%'},
+            { text: 'Kelompok', datafield:'parent', columntype: 'textbox', filtertype: 'textbox',align: 'center', width: '43%' },
             {text: 'Detail', width: '10%', sortable: false, align:'center', editable: false, filterable: false, cellsrenderer: function (row, column, value) {
               if(row){
                 return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='detail(" + row + ");'></a></div>";

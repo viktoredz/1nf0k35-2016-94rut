@@ -197,27 +197,7 @@
                 </div>
                 <div class="col-md-9">
                   <div class="row">
-                    <div class="col-md-3">
-                      <select  name="masa_krj_bln" id="masa_krj_bln" type="text" class="form-control">
-                        <option value=''>-</option>
-                        <?php 
-                        if (empty($masa_krj_bln)) {
-                          $masa_krj_bln  = set_value('masa_krj_bln');
-                        }else{
-                          $masa_krj_bln = $masa_krj_bln;
-                        } 
-                        for($i=1;$i<=12;$i++){
-                          $select = $i == $masa_krj_bln ? 'selected' : '' ;
-                        ?>
-                        <option value="<?php echo $i; ?>" <?php echo $select;?>><?php printf("%02d", $i); ?></option>
-                        <?php } $i++ ?>
-                      </select> 
-                    </div>
-                    <div class="col-md-3" style="padding: 5px">
-                      Bulan
-                    </div>
-                    
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                       <select  name="masa_krj_thn" type="text" class="form-control" id="masa_krj_thn">
                         <option value=''>-</option>
                         <?php 
@@ -233,8 +213,28 @@
                         <?php } $i++ ?>
                       </select> 
                     </div>
-                    <div class="col-md-3"  style="padding: 5px">
+                    <div class="col-md-2"  style="padding: 5px">
                       Tahun
+                    </div>
+
+                    <div class="col-md-2">
+                      <select  name="masa_krj_bln" id="masa_krj_bln" type="text" class="form-control">
+                        <option value=''>-</option>
+                        <?php 
+                        if (empty($masa_krj_bln)) {
+                          $masa_krj_bln  = set_value('masa_krj_bln');
+                        }else{
+                          $masa_krj_bln = $masa_krj_bln;
+                        } 
+                        for($i=1;$i<=12;$i++){
+                          $select = $i == $masa_krj_bln ? 'selected' : '' ;
+                        ?>
+                        <option value="<?php echo $i; ?>" <?php echo $select;?>><?php printf("%02d", $i); ?></option>
+                        <?php } $i++ ?>
+                      </select> 
+                    </div>
+                    <div class="col-md-2" style="padding: 5px">
+                      Bulan
                     </div>
                   </div>
                 </div>
@@ -791,7 +791,7 @@
             success : function(response){
               res = response.split(' | ');
               if(res[0]=="OK"){
-                alert("Data pendidikan berhasil disimpan.");
+                alert("Data pangkat berhasil disimpan.");
                 var peserta = "<?php echo $id; ?>";
                     $.get("<?php echo base_url().'kepegawaian/drh/biodata'?>/"+'4'+'/'+peserta,function(data){
                         $('#content4').html(data);

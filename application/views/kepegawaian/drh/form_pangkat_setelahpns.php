@@ -132,7 +132,7 @@
     var confirms = confirm("Hapus Data ?");
     if(confirms == true){
       $.post("<?php echo base_url().'kepegawaian/drh_pangkat/biodata_pangkat_setelahpns_del' ?>/" + id +"/"+tmt,   function(){
-        alert('data berhasil dihapus');
+        alert('Data berhasil dihapus');
 
         $("#jqxgridStlPns").jqxGrid('updatebounddata', 'cells');
       });

@@ -75,8 +75,8 @@ class Drh_pangkat extends CI_Controller {
 				'lokasi'			=> $act->lokasi,
 				'is_pnsbaru'		=> $act->is_pnsbaru,
 				'status'			=> $act->status,
-				'jenis_pengadaan'	=> $act->jenis_pengadaan,
-				'jenis_pangkat'		=> $act->jenis_pangkat,
+				'jenis_pengadaan'	=> ucwords($act->jenis_pengadaan),
+				'jenis_pangkat'		=> ucwords($act->jenis_pangkat),
 				'masa_krj_bln'		=> $act->masa_krj_bln,
 				'masa_krj_thn'		=> $act->masa_krj_thn,
 				'bkn_tgl'			=> $act->bkn_tgl,
@@ -173,8 +173,8 @@ class Drh_pangkat extends CI_Controller {
 				'lokasi'			=> $act->lokasi,
 				'is_pnsbaru'		=> $act->is_pnsbaru,
 				'status'			=> $act->status,
-				'jenis_pengadaan'	=> $act->jenis_pengadaan,
-				'jenis_pangkat'		=> $act->jenis_pangkat,
+				'jenis_pengadaan'	=> ucwords($act->jenis_pengadaan),
+				'jenis_pangkat'		=> ucwords($act->jenis_pangkat),
 				'masa_krj_bln'		=> $act->masa_krj_bln,
 				'masa_krj_thn'		=> $act->masa_krj_thn,
 				'bkn_tgl'			=> $act->bkn_tgl,
@@ -271,8 +271,8 @@ class Drh_pangkat extends CI_Controller {
 				'lokasi'			=> $act->lokasi,
 				'is_pnsbaru'		=> $act->is_pnsbaru,
 				'status'			=> $act->status,
-				'jenis_pengadaan'	=> $act->jenis_pengadaan,
-				'jenis_pangkat'		=> $act->jenis_pangkat,
+				'jenis_pengadaan'	=> ucwords($act->jenis_pengadaan),
+				'jenis_pangkat'		=> ucwords($act->jenis_pangkat),
 				'masa_krj_bln'		=> $act->masa_krj_bln,
 				'masa_krj_thn'		=> $act->masa_krj_thn,
 				'bkn_tgl'			=> $act->bkn_tgl,
@@ -424,23 +424,21 @@ class Drh_pangkat extends CI_Controller {
         	$this->form_validation->set_rules('spmt_tgl', 'SPMT Tanggal', 'trim|required');
         	$this->form_validation->set_rules('spmt_nomor', 'SPMT Nomor', 'trim|required');
         }
+		$wak = date("d-m-Y",strtotime($tmt));
+		$data = $this->drh_model->getItem($id,$wak);
         $data['id']				= $id;
 	    $data['action']			= "edit";
 		$data['alert_form'] 	= '';
+
+		$this->db->order_by('no_urut','asc');
 		$data['kode_status'] 	= $this->drh_model->kode_tabel('mst_peg_status');
 		$data['kode_pns'] 		= $this->drh_model->kode_tabel('mst_peg_golruang');
 		$data['kode_pengadaan']	= $this->pilihan_enums('pegawai_pangkat','jenis_pengadaan');
 		$data['kode_pangkat']	= $this->pilihan_enums('pegawai_pangkat','jenis_pangkat');
-		$wak = date("d-m-Y",strtotime($tmt));
-		$data = $this->drh_model->getItem($id,$wak);
 		if($this->form_validation->run()== FALSE){
 			$data['id']				= $id;
 		    $data['action']			= "edit";
 			$data['alert_form'] 	= '';
-			$data['kode_status'] 	= $this->drh_model->kode_tabel('mst_peg_status');
-			$data['kode_pns'] 		= $this->drh_model->kode_tabel('mst_peg_golruang');
-			$data['kode_pengadaan']	= $this->pilihan_enums('pegawai_pangkat','jenis_pengadaan');
-			$data['kode_pangkat']	= $this->pilihan_enums('pegawai_pangkat','jenis_pangkat');
 			die($this->parser->parse("kepegawaian/drh/form_pangkat_form",$data));
 		}else if($st=$this->drh_model->update_entry_pns_formal($id,$tmt)){
 			die("OK | $st");

@@ -219,12 +219,18 @@
                     if( Object.prototype.toString.call( rowID ) === '[object Array]' ) {
                       for(var i=0; i< rowID.length; i++){
                         $.post( '<?php echo base_url()?>mst/keuangan_akun/akun_delete', {id_mst_akun:rowID[i]},function( data ) {
-                          $("#treeGrid").jqxTreeGrid('updateBoundData');
+                          if(data=="ERROR"){
+                            alert("Data tidak dapat dihapus.");
+                            $("#treeGrid").jqxTreeGrid('updateBoundData');
+                          }
                         });
                       }
                     }else{
                       $.post( '<?php echo base_url()?>mst/keuangan_akun/akun_delete', {id_mst_akun:rowID},function( data ) {
-                        // $("#treeGrid").jqxTreeGrid('updateBoundData');
+                          if(data=="ERROR"){
+                            alert("Data tidak dapat dihapus.");
+                            $("#treeGrid").jqxTreeGrid('updateBoundData');
+                          }
                       });
                     }
                     commit(true);

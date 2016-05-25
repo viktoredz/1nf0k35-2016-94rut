@@ -16,7 +16,6 @@
     <div class="box-body">
       <div class="row">
         <div class="col-md-12 pull-left">
-          <button id="doInduk" onclick='add_induk()' class="btn btn-success"><i class="icon fa fa-edit"></i> &nbsp;Ubah Target</button> 
             <div class="col-md-3 pull-right">
               <div class="row">
                 <div class="col-md-4" style="padding-top:5px;"><label> Periode </label> </div>
@@ -122,20 +121,6 @@
                           }
                       });
                     }
-                 },
-                 deleteRow: function (rowID, commit) {
-                    if( Object.prototype.toString.call( rowID ) === '[object Array]' ) {
-                      for(var i=0; i< rowID.length; i++){
-                        $.post( '<?php echo base_url()?>mst/keuangan_akun/akun_delete', {id_mst_akun:rowID[i]},function( data ) {
-                          $("#treeGrid_target_penerimaan").jqxTreeGrid('updateBoundData');
-                        });
-                      }
-                    }else{
-                      $.post( '<?php echo base_url()?>mst/keuangan_akun/akun_delete', {id_mst_akun:rowID},function( data ) {
-                        // $("#treeGrid").jqxTreeGrid('updateBoundData');
-                      });
-                    }
-                    commit(true);
                  }
              };
             var dataAdapter = new $.jqx.dataAdapter(source, {
@@ -159,9 +144,9 @@
 
                
               columns: [                             
-                { text: 'Uraian ', datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox',align: 'center', width: '45%' },
-                { text: 'Kode Akun', datafield: 'kode', columntype: 'textbox', filtertype: 'textbox',align: 'center', cellsalign: 'center', width: '20%'},
-                { text: 'Target Penerimaan', datafield: 'saldo_normal', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '35%', cellsalign: 'center' }
+                { text: 'Uraian ', datafield: 'uraian', columntype: 'textbox', filtertype: 'textbox',align: 'center', width: '37%' },
+                { text: 'Kode Akun', datafield: 'kode', columntype: 'textbox', filtertype: 'textbox',align: 'center', cellsalign:'center', width: '10%'},
+                { text: 'Target Penerimaan', datafield: 'saldo_normal', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '53%', cellsalign: 'center' }
               ]
             });
         });
