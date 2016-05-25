@@ -59,10 +59,10 @@
               <br>
               <label>Pengaturan Transaksi Untuk Kategori Ini</label>
 
-              <div class="row" style="margin: 5px">
+<!--               <div class="row" style="margin: 5px">
                 <div class="col-md-12">
                   <?php $i=1; foreach($template as $t) : ?>
-                    <input type="checkbox" name="kategori_trans_template" id="template<?php echo $i;?>" value="1">
+                    <input type="checkbox" name="kategori_trans_template" id="template<?php echo $i;?>" value="<?php echo $i;?>">
                     <?php echo $t->id_mst_setting_transaksi_template ?>
                     <?php echo $t->setting_judul ?>
                     </br>
@@ -70,9 +70,9 @@
                     </br></br>
                   <?php $i++; endforeach ?> 
                 </div>
-              </div>
+              </div> -->
 
-<!--               <div class="row" style="margin: 5px">
+              <div class="row" style="margin: 5px">
                 <div class="col-md-12">
                   <?php $i=1; foreach($template as $t) : ?>
                     <input type="checkbox" name="kategori_trans_template" id="<?php echo $i;?>" value="1" 
@@ -90,7 +90,7 @@
                     </br></br>
                   <?php $i++; endforeach ?> 
                 </div>
-              </div> -->
+              </div>
 
 
               <br>
@@ -139,7 +139,10 @@
 
     $("[name='kategori_trans_template']").click(function(){
       var data = new FormData();
-        data.append('nilai',        $("[name='kategori_trans_template']:checked").val());
+      alert($("[name='kategori_trans_template']:checked").val());
+
+        data.append('template',        $("[name='kategori_trans_template']:checked").val());
+        data.append('kategori',     "<?php echo $id;?>");
         
         $.ajax({
             cache : false,
@@ -149,17 +152,18 @@
             url : '<?php echo base_url()."mst/keuangan_transaksi/template_update/"?>'+$(this).val(),
             data : data,
             success : function(response){
-               a = response.split("|");
-              if(a[0]=="OK"){
-                if (a[1]=='1') {
+              // a = response.split("|");
+              if(response=="OK"){
+              // if (a[1]=='1') {
                     $("#kategori_trans_template").prop("checked", true);
                 }else{
                     $("#kategori_trans_template").prop("checked", false);
-                };
-              }else{
+                // };
+              // }else{
                 alert("Mendukung transaksi belum berhasil di aktifkan.");
 
               }
+              //ceklist();
             }
         });
         return false;

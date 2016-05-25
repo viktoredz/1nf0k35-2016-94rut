@@ -138,72 +138,18 @@ class Keutransaksi_model extends CI_Model {
     
     }
 
-    // function get_data_template($id){
-    //      $this->db->select('*',false);
-    //      $this->db->join('mst_keu_kategori_transaksi_setting','mst_keu_kategori_transaksi_setting.id_mst_setting_transaksi=mst_keu_setting_transaksi_template.id_mst_setting_transaksi_template','left');
-    //      $this->db->where('mst_keu_kategori_transaksi_setting.id_mst_kategori_transaksi',$id);
-    //      $query = $this->db->get('mst_keu_setting_transaksi_template');
-        
-    //      return $query->result();
-    
-    // }
-
     function template_update($id){
-        $data['nilai']      = $this->input->post('nilai');
-       
-        $this->db->where('id_mst_kategori_transaksi_setting',$id);
+        $data['id_mst_setting_transaksi']       = $this->input->post('template');
+        $data['id_mst_kategori_transaksi']      = $this->input->post('kategori');
 
-        if($this->db->update('mst_keu_kategori_transaksi_setting', $data)){
-            $this->db->where('id_mst_kategori_transaksi_setting',$id);
-            $this->db->select('nilai');
-            $variable = $this->db->get('mst_keu_kategori_transaksi_setting');
-            foreach ($variable->result() as $key) {
-                if ($key->nilai=='1') {
-                    return '1';
-                }else{
-                    return '2';    
-                }
-            }
+        $query = $this->db->get_where('mst_keu_kategori_transaksi_setting',$data);
+        if ($query->num_rows() > 0) {
+            $dataupdata['nilai'] = 0;
+            $this->db->update('mst_keu_kategori_transaksi_setting', $dataupdata,$data);
         }else{
-            return mysql_error();
+            $data['nilai'] = 1;
+            $this->db->insert('mst_keu_kategori_transaksi_setting', $data);
         }
-    }
-
-    function aktifkan_status($id) {
-
-        $kodepusk = 'P'.$this->session->userdata('puskesmas');
-
-        $this->db->where('id_mst_setting_transaksi',$id);
-        $this->db->select('nilai');
-
-        $q = $this->db->get('mst_keu_kategori_transaksi_setting');
-
-        if ( $q->num_rows() > 0 ) {
-            if($q->nilai > 0){
-            
-            $pk   = array('id_mst_setting_transaksi'=>$kodepusk);
-            $data = array('nilai'=>'0');
-
-            $this->db->update('mst_keu_kategori_transaksi_setting',$data,$pk);
-            
-            }else{
-
-            $pk   = array('id_mst_setting_transaksi'=>$kodepusk);
-            $data = array('nilai'=>'1');
-
-            $this->db->update('mst_keu_kategori_transaksi_setting',$data,$pk);
-
-            }
-        
-        } else {
-            $data = array(
-                'id_mst_setting_transaksi'=>$id,
-                // 'id_mst_kategori_transaksi'=>,
-                'nilai'=>'1');
-            $this->db->insert('mst_keu_kategori_transaksi_setting',$data);
-        }
-
-         return $q->result();
     }
 
     function get_data_syarat_pembayaran($start=0,$limit=999999,$options=array()){
