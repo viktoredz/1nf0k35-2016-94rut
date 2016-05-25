@@ -379,7 +379,7 @@ class Keuangan_transaksi extends CI_Controller {
 		die($this->parser->parse("mst/keutransaksi/form_kategori_transaksi_add",$data));
 	}
 
-	function template_update($id=0){
+	function kategori_trans_template_update($id=0){
 		$this->authentication->verify('mst','edit');
 
     	$this->form_validation->set_rules('template', 'Template', 'trim');
@@ -393,7 +393,7 @@ class Keuangan_transaksi extends CI_Controller {
 
 		if($this->form_validation->run()== FALSE){
 			die($this->parser->parse("mst/keutransaksi/form_kategori_transaksi_edit",$data));
-		}elseif($this->keutransaksi_model->template_update($id)){
+		}elseif($this->keutransaksi_model->kategori_trans_template_update($id)){
 			die("OK");
 		}else{
 			$data['alert_form'] = 'Save data failed...';
@@ -401,30 +401,84 @@ class Keuangan_transaksi extends CI_Controller {
 		die($this->parser->parse("mst/keutransaksi/form_kategori_transaksi_edit",$data));
 	}
 
+	function transaksi_template_update($id=0){
+		$this->authentication->verify('mst','edit');
+
+    	$this->form_validation->set_rules('template', 'Template', 'trim');
+    	$this->form_validation->set_rules('kategori', 'Kategori', 'trim');
+
+	    $data['action']				= "edit";
+		$data['alert_form']		    = '';
+		$data['id']					= $id;
+		$data['template']			= $this->keutransaksi_model->get_data_template();
+
+
+		if($this->form_validation->run()== FALSE){
+			die($this->parser->parse("mst/keutransaksi/form_transaksi",$data));
+		}elseif($this->keutransaksi_model->transaksi_template_update($id)){
+			die("OK");
+		}else{
+			$data['alert_form'] = 'Save data failed...';
+		}
+		die($this->parser->parse("mst/keutransaksi/form_transaksi",$data));
+	}
+
+	function transaksi_otomatis_template_update($id=0){
+		$this->authentication->verify('mst','edit');
+
+    	$this->form_validation->set_rules('template', 'Template', 'trim');
+    	$this->form_validation->set_rules('kategori', 'Kategori', 'trim');
+
+	    $data['action']				= "edit";
+		$data['alert_form']		    = '';
+		$data['id']					= $id;
+		$data['template']			= $this->keutransaksi_model->get_data_template();
+
+
+		if($this->form_validation->run()== FALSE){
+			die($this->parser->parse("mst/keutransaksi/form_transaksi",$data));
+		}elseif($this->keutransaksi_model->transaksi_otomatis_template_update($id)){
+			die("OK");
+		}else{
+			$data['alert_form'] = 'Save data failed...';
+		}
+		die($this->parser->parse("mst/keutransaksi/form_transaksi",$data));
+	}
+
 	function transaksi_add(){
 		$this->authentication->verify('mst','add');
 
     	$this->form_validation->set_rules('nama', 'Nama', 'trim|required');
-        $this->form_validation->set_rules('deskripsi', 'Deskripsi', 'trim');;
+        $this->form_validation->set_rules('deskripsi', 'Deskripsi', 'trim');
+        $this->form_validation->set_rules('untuk_jurnal', 'Jurnal', 'trim');
+        $this->form_validation->set_rules('id_mst_kategori_transaksi', 'Kategori', 'trim');
+
 
 		if($this->form_validation->run()== FALSE){
 			$data['title_group'] 		= "Keuangan";
 			$data['title_form']			= "Transaksi Baru / Ubah Transaksi";
 			$data['action']				= "add";
-			$data['template']			= $this->keutransaksi_model->get_data_template();
 			$data['kategori']			= $this->keutransaksi_model->get_data_kategori_transaksi();
 			$data['id_mst_transaksi']	= "";
 			
-			die($this->parser->parse("mst/keutransaksi/form_transaksi",$data,true));
+			die($this->parser->parse("mst/keutransaksi/form_transaksi_add",$data,true));
 		}elseif($this->keutransaksi_model->transaksi_insert()){
-			$this->session->set_flashdata('alert', 'Save data successful...');
-			redirect(base_url().'mst/keutransaksi/form_transaksi/'.$id);
+			die("OK");
 		}else{
-			$this->session->set_flashdata('alert_form', 'Save data failed...');
-			redirect(base_url()."mst/keutransaksi/form_transaksi");
+			$data['alert_form'] = 'Save data failed...';
 		}
+		die($this->parser->parse("mst/keutransaksi/form_transaksi_add",$data));
 
-		$this->template->show($data,"home");
+	}
+
+	function delete_transaksi($id=0){
+		$this->authentication->verify('mst','del');
+
+		if($this->keutransaksi_model->delete_transaksi($id)){
+			$this->session->set_flashdata('alert', 'Delete data ('.$id.')');
+		}else{
+			$this->session->set_flashdata('alert', 'Delete data error');
+		}
 	}
 
 	function transaksi_edit($id=0){
@@ -445,13 +499,13 @@ class Keuangan_transaksi extends CI_Controller {
 			$data['template']			= $this->keutransaksi_model->get_data_template();
 			$data['kategori']			= $this->keutransaksi_model->get_data_kategori_transaksi();
 			
-			die($this->parser->parse("mst/keutransaksi/form_transaksi",$data,true));
+			die($this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data,true));
 		}elseif($this->keutransaksi_model->transaksi_update($id)){
 			$this->session->set_flashdata('alert', 'Save data successful...');
-			redirect(base_url().'mst/keutransaksi/form_transaksi/'.$id);
+			redirect(base_url().'mst/keutransaksi/form_transaksi_edit/'.$id);
 		}else{
 			$this->session->set_flashdata('alert_form', 'Save data failed...');
-			redirect(base_url()."mst/keutransaksi/form_transaksi");
+			redirect(base_url()."mst/keutransaksi/form_transaksi_edit");
 		}
 
 		$this->template->show($data,"home");
@@ -469,26 +523,35 @@ class Keuangan_transaksi extends CI_Controller {
 		$this->authentication->verify('mst','add');
 
     	$this->form_validation->set_rules('nama', 'Nama', 'trim|required');
-        $this->form_validation->set_rules('deskripsi', 'Deskripsi', 'trim');;
+        $this->form_validation->set_rules('deskripsi', 'Deskripsi', 'trim');
+        $this->form_validation->set_rules('untuk_jurnal', 'Jurnal', 'trim');
+        $this->form_validation->set_rules('id_mst_kategori_transaksi', 'Kategori', 'trim');
 
 		if($this->form_validation->run()== FALSE){
 			$data['title_group'] 				= "Keuangan";
 			$data['title_form']					= "Transaksi Baru / Ubah Transaksi Otomatis";
 			$data['action']						= "add";
-			$data['template']					= $this->keutransaksi_model->get_data_template();
 			$data['kategori']					= $this->keutransaksi_model->get_data_kategori_transaksi();
 			$data['id_mst_otomasi_transaksi']	= "";
 			
-			die($this->parser->parse("mst/keutransaksi/form_transaksi_otomatis",$data,true));
-		}elseif($this->keutransaksi_model->transaksi_insert()){
-			$this->session->set_flashdata('alert', 'Save data successful...');
-			redirect(base_url().'mst/keutransaksi/form_transaksi_otomatis/'.$id);
+			die($this->parser->parse("mst/keutransaksi/form_transaksi_otomatis_add",$data,true));
+		}elseif($this->keutransaksi_model->transaksi_otomatis_insert()){
+			die("OK");
 		}else{
-			$this->session->set_flashdata('alert_form', 'Save data failed...');
-			redirect(base_url()."mst/keutransaksi/form_transaksi_otomatis");
+			$data['alert_form'] = 'Save data failed...';
 		}
+		die($this->parser->parse("mst/keutransaksi/form_transaksi_otomatis_add",$data));
 
-		$this->template->show($data,"home");
+	}
+
+	function delete_transaksi_otomatis($id=0){
+		$this->authentication->verify('mst','del');
+
+		if($this->keutransaksi_model->delete_transaksi_otomatis($id)){
+			$this->session->set_flashdata('alert', 'Delete data ('.$id.')');
+		}else{
+			$this->session->set_flashdata('alert', 'Delete data error');
+		}
 	}
 
 	function transaksi_otomatis_edit($id=0){
@@ -508,16 +571,13 @@ class Keuangan_transaksi extends CI_Controller {
 			$data['template']			= $this->keutransaksi_model->get_data_template();
 			$data['kategori']			= $this->keutransaksi_model->get_data_kategori_transaksi();
 			
-			die($this->parser->parse("mst/keutransaksi/form_transaksi_otomatis",$data,true));
-		}elseif($this->keutransaksi_model->transaksi_update($id)){
-			$this->session->set_flashdata('alert', 'Save data successful...');
-			redirect(base_url().'mst/keutransaksi/form_transaksi_otomatis/'.$id);
+			die($this->parser->parse("mst/keutransaksi/form_transaksi_otomatis_edit",$data,true));
+		}elseif($this->keutransaksi_model->transaksi_otomatis_update($id)){
+			die("OK");
 		}else{
-			$this->session->set_flashdata('alert_form', 'Save data failed...');
-			redirect(base_url()."mst/keutransaksi/form_transaksi_otomatis");
+			$data['alert_form'] = 'Save data failed...';
 		}
-
-		$this->template->show($data,"home");
+		die($this->parser->parse("mst/keutransaksi/form_transaksi_otomatis_edit",$data));
 	}
 
 	function transaksi_otomatis_kembali(){
