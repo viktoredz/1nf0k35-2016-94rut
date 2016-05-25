@@ -327,7 +327,7 @@ class Drh_pangkat extends CI_Controller {
 	        }
 	        return $enums;
 	}
-	function add($id){
+	function add($id,$tmt=''){
 
         $this->form_validation->set_rules('id_mst_peg_golruang', 'Golongan Ruang', 'trim|required');
         $this->form_validation->set_rules('tmt', 'Terhitung Mulai Tanggal', 'trim|required');
@@ -367,6 +367,7 @@ class Drh_pangkat extends CI_Controller {
 		$data['id']				= $id;
 	    $data['action']			= "add";
 		$data['alert_form'] 	= '';
+		$data['tmt'] 			= '';
 		$data['kode_status'] 	= $this->drh_model->kode_tabel('mst_peg_status');
 		$data['kode_pns'] 		= $this->drh_model->kode_tabel('mst_peg_golruang');
 		$data['kode_pengadaan']	= $this->pilihan_enums('pegawai_pangkat','jenis_pengadaan');

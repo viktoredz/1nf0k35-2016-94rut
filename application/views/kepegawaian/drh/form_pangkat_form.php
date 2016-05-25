@@ -50,8 +50,10 @@
                 <div class="col-md-1"  style="padding: 5px" id="showceklispns" name="showceklispns">
                   <input type="checkbox" name="penganggkatan" id="penganggkatan" value="1"
                   <?php 
-                    if ((set_value('penganggkatan')=='1')||($status_pns=='1')) {
-                      echo "checked";
+                    if ((set_value('penganggkatan')!="")||(isset($status_pns))) {
+                      if ((set_value('penganggkatan')=='1')||($status_pns=='1')) {
+                        echo "checked";
+                      }
                     }else{
                       echo "";
                     }
