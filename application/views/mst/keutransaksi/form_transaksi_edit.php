@@ -313,7 +313,7 @@
           <div class="row" style="margin: 5px">
             <div class="col-md-12">
               <?php $i=1; foreach($template as $t) : ?>
-                  <input type="checkbox" name="kategori_trans_template" id="template<?php echo $i;?>" value="<?php echo $i;?>">
+                  <input type="checkbox" name="transaksi_template" id="template<?php echo $i;?>" value="<?php echo $i;?>">
               <?php 
                 if(set_value('nilai')=="" && isset($t->nilai)){
                   $t->nilai= $t->nilai;
@@ -346,7 +346,7 @@
 
     $("[name='transaksi_template']").click(function(){
       var data = new FormData();
-      alert($("[name='transaksi_template']:checked").val());
+      // alert($("[name='transaksi_template']:checked").val());
 
         data.append('template',     $("[name='transaksi_template']:checked").val());
         data.append('kategori',     "<?php echo $id;?>");

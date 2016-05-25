@@ -177,8 +177,18 @@ class Keutransaksi_model extends CI_Model {
 
         $query = $this->db->get_where('mst_keu_kategori_transaksi_setting',$data);
         if ($query->num_rows() > 0) {
-            $dataupdata['nilai'] = 0;
-            $this->db->update('mst_keu_kategori_transaksi_setting', $dataupdata,$data);
+            foreach ($query->result() as $row){
+                if ($row->nilai == 1) {
+                    
+                    $dataupdata['nilai'] = 0;
+                    $this->db->update('mst_keu_kategori_transaksi_setting', $dataupdata,$data);
+                }else{
+                   
+                   $dataupdata['nilai'] = 1;
+                   $this->db->update('mst_keu_kategori_transaksi_setting', $dataupdata,$data); 
+                }
+            }
+
         }else{
             $data['nilai'] = 1;
             $this->db->insert('mst_keu_kategori_transaksi_setting', $data);
@@ -191,8 +201,19 @@ class Keutransaksi_model extends CI_Model {
 
         $query = $this->db->get_where('mst_keu_transaksi_setting',$data);
         if ($query->num_rows() > 0) {
-            $dataupdata['nilai'] = 0;
-            $this->db->update('mst_keu_transaksi_setting', $dataupdata,$data);
+            foreach ($query->result() as $row) {
+                if ($row->nilai == 1) {
+                    
+                    $dataupdata['nilai'] = 0;
+                    $this->db->update('mst_keu_transaksi_setting', $dataupdata,$data);
+                } else {
+
+                    $dataupdata['nilai'] = 1;
+                    $this->db->update('mst_keu_transaksi_setting', $dataupdata,$data);
+                }
+                
+            }
+
         }else{
             $data['nilai'] = 1;
             $this->db->insert('mst_keu_transaksi_setting', $data);
@@ -205,8 +226,19 @@ class Keutransaksi_model extends CI_Model {
 
         $query = $this->db->get_where('mst_keu_otomasi_transaksi_setting',$data);
         if ($query->num_rows() > 0) {
-            $dataupdata['nilai'] = 0;
-            $this->db->update('mst_keu_otomasi_transaksi_setting', $dataupdata,$data);
+            foreach ($query->result() as $row) {
+                if ($row->nilai == 1) {
+
+                    $dataupdata['nilai'] = 0;
+                    $this->db->update('mst_keu_otomasi_transaksi_setting', $dataupdata,$data);
+                } else {
+
+                    $dataupdata['nilai'] = 1;
+                    $this->db->update('mst_keu_otomasi_transaksi_setting', $dataupdata,$data);
+                }
+                
+            }
+
         }else{
             $data['nilai'] = 1;
             $this->db->insert('mst_keu_otomasi_transaksi_setting', $data);
