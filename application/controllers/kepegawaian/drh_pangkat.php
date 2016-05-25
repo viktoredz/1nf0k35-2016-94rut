@@ -368,12 +368,15 @@ class Drh_pangkat extends CI_Controller {
 	    $data['action']			= "add";
 		$data['alert_form'] 	= '';
 		$data['tmt'] 			= '';
+		$this->db->order_by('no_urut','asc');
 		$data['kode_status'] 	= $this->drh_model->kode_tabel('mst_peg_status');
 		$data['kode_pns'] 		= $this->drh_model->kode_tabel('mst_peg_golruang');
 		$data['kode_pengadaan']	= $this->pilihan_enums('pegawai_pangkat','jenis_pengadaan');
 		$data['kode_pangkat']	= $this->pilihan_enums('pegawai_pangkat','jenis_pangkat');
-		
-
+		$data['masakerjaterakhir'] = $this->drh_model->masakerjaterakhir($id);
+		$tambahdata = date("Y") - date("Y",strtotime($data['masakerjaterakhir']['tmt']));
+		$data ['masa_krj_bln'] = $data['masakerjaterakhir']['masa_krj_bln'];
+		$data ['masa_krj_thn'] = $data['masakerjaterakhir']['masa_krj_thn'];
 		if($this->form_validation->run()== FALSE){
 			die($this->parser->parse("kepegawaian/drh/form_pangkat_form",$data));
 		}elseif($st = $this->drh_model->insert_entry_cpns_formal($id)){

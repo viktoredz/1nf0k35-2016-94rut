@@ -45,7 +45,24 @@ class Drh_model extends CI_Model {
         $query = $this->db->get('pegawai_alamat',$limit,$start);
         return $query->result();
     }
+    function masakerjaterakhir($id = 0){
+        $data = array();
+        $options = array('id_pegawai'=>$id);
+        $this->db->select('masa_krj_bln,masa_krj_thn,tmt');
+        $this->db->order_by('tmt','desc');
+        $this->db->limit(1);
+        $query = $this->db->get_where('pegawai_pangkat',$options);
+        if ($query->num_rows() > 0){
+            $data = $query->row_array();
+        }else{
+            $data['masa_krj_bln'] ='';
+            $data['masa_krj_thn'] ='';
+            $data['tmt'] ='';
+        }
 
+        $query->free_result();    
+        return $data;
+    }
     function get_data_alamat_id($id,$urut=0)
     {
 		$data = array();
@@ -62,7 +79,7 @@ class Drh_model extends CI_Model {
  	function get_data_row($id){
 		$data = array();
 		$options = array('id_pegawai' => $id);
-        $this->db->select("pegawai.*,DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgl_lhr)), '%Y')+0 AS usia",false);
+        $this->db->select("pegawai.*,DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgl_lhr)), '%Y')+0 AS usia,(SELECT nip_nit FROM pegawai_pangkat WHERE id_pegawai = pegawai.id_pegawai ORDER BY tmt DESC LIMIT 1) AS nip",false);
 		$query = $this->db->get_where($this->tabel,$options);
 		if ($query->num_rows() > 0){
 			$data = $query->row_array();

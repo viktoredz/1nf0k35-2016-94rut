@@ -28,10 +28,10 @@
           <div class="col-md-12">
             <div class="box box-primary">
               <div class="row" style="margin: 5px" id="showstatus">
-                <div class="col-md-5" style="padding: 5px">
+                <div class="col-md-3" style="padding: 5px">
                   Status
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-9">
                   <select  name="statuspns" type="text" class="form-control" id="statuspns">
                     <option value=''>Pilih Status</option>
                       <?php 
@@ -47,7 +47,10 @@
                       <?php endforeach ?>
                   </select>
                 </div>
-                <div class="col-md-1"  style="padding: 5px" id="showceklispns" name="showceklispns">
+              </div>
+              <div class="row" style="margin: 5px" id="showceklispns" name="showceklispns">
+              <div class="col-md-3"   ></div>
+                <div class="col-md-9"   id="showceklispns" name="showceklispns">
                   <input type="checkbox" name="penganggkatan" id="penganggkatan" value="1"
                   <?php 
                     if ((set_value('penganggkatan')!="")||(isset($status_pns))) {
@@ -58,14 +61,14 @@
                       echo "";
                     }
                   ?>
-                  >
+                  > Ceklist Jika Pengangkatan PNS
                 </div>
               </div>
               <div class="row" style="margin: 5px" id="shownip">
-                <div class="col-md-5" style="padding: 5px">
+                <div class="col-md-3" style="padding: 5px">
                 NIP
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-9">
                   <input type="text" class="form-control" name="nip" id="nip" placeholder="NIP" value="<?php 
                   if(set_value('nip')=="" && isset($nip_nit)){
                     echo $nip_nit;
@@ -76,10 +79,10 @@
                 </div>
               </div>
               <div class="row" style="margin: 5px" id="shownit">
-                <div class="col-md-5" style="padding: 5px">
+                <div class="col-md-3" style="padding: 5px">
                 NIT
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-9">
                   <input type="text" class="form-control" name="nit" id="nit" placeholder="NIT" value="<?php 
                   if(set_value('nit')=="" && isset($nip_nit)){
                     echo $nip_nit;
@@ -90,10 +93,10 @@
                 </div>
               </div>
               <div class="row" style="margin: 5px" id="showpengadaan">
-                <div class="col-md-5" style="padding: 5px">
+                <div class="col-md-3" style="padding: 5px">
                   Jenis Pengadaan
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-9">
                   <select  name="jenis_pengadaan" type="text" class="form-control" id="jenis_pengadaan">
                     <option value=''>Pilih Jenis Pengadaan</option>
                       <?php  
@@ -112,10 +115,10 @@
                 </div>
               </div>
               <div class="row" style="margin: 5px" id="showgolongan">
-                <div class="col-md-5" style="padding: 5px">
+                <div class="col-md-3" style="padding: 5px">
                   Golongan Ruang
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-9">
                   <select  name="id_mst_peg_golruang" type="text" class="form-control" id="id_mst_peg_golruang">
                     <option value=''>Pilih CPNS/NONCPNS</option>
                       <?php 
@@ -133,10 +136,10 @@
                 </div>
               </div>
               <div class="row" style="margin: 5px" id="showtmt">
-                <div class="col-md-5" style="padding: 5px">
+                <div class="col-md-3" style="padding: 5px">
                   Terhitung Mulai Tanggal
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-9">
                   <div id='tmt' name="tmt" value="<?php
                     if(set_value('tmt')=="" && isset($tmt)){
                       $tgl_tmt = strtotime($tmt);
@@ -150,10 +153,10 @@
                 </div>
               </div>
               <div class="row" style="margin: 5px" id="showtat">
-                <div class="col-md-5" style="padding: 5px">
+                <div class="col-md-3" style="padding: 5px">
                   Terhitung Akhir Tanggal
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-9">
                   <div id='tat' name="tat" value="<?php
                     if(set_value('tat')=="" && isset($tat)){
                       $tgl_tat = strtotime($tat);
@@ -167,10 +170,10 @@
                 </div>
               </div>
               <div class="row" style="margin: 5px" id="showkepangkatan">
-                <div class="col-md-5" style="padding: 5px">
+                <div class="col-md-3" style="padding: 5px">
                   Jenis Kepangkatan
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-9">
                   <select  name="jenis_pangkat" type="text" class="form-control" id="jenis_pangkat">
                     <option value=''>Pilih Jenis Kepangkatan</option>
                       <?php 
@@ -189,10 +192,10 @@
                 </div>
               </div>
               <div class="row" style="margin: 5px" id="showmasakerjagolongan">
-                <div class="col-md-5" style="padding: 5px">
+                <div class="col-md-3" style="padding: 5px">
                   Masa Kerja Golongan
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-9">
                   <div class="row">
                     <div class="col-md-3">
                       <select  name="masa_krj_bln" id="masa_krj_bln" type="text" class="form-control">
@@ -238,13 +241,15 @@
               </div>
               <div  id="showpersetujuanbkn">
               <div class="row" style="margin: 5px">
-                <div class="col-md-3" style="padding: 5px">
+                <div class="col-md-12" style="padding: 5px">
                   Persetujuan Kepala BKN
                 </div>
-                <div class="col-md-2" style="padding: 5px">
+              </div>
+              <div class="row" style="margin: 5px">
+                <div class="col-md-3" style="padding: 5px 5px 5px 30px">
                   Tanggal
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-9">
                   <div id='bkn_tgl' name="bkn_tgl" value="<?php
                     if(set_value('bkn_tgl')=="" && isset($bkn_tgl)){
                       $tgl_bkn = strtotime($bkn_tgl);
@@ -258,12 +263,10 @@
                 </div>
               </div>
               <div class="row" style="margin: 5px">
-                <div class="col-md-3" style="padding: 5px">
-                </div>
-                <div class="col-md-2" style="padding: 5px">
+                <div class="col-md-3" style="padding: 5px 5px 5px 30px">
                   Nomor
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-9">
                   <input type="text" class="form-control" name="bkn_nomor" id="bkn_nomor" placeholder="Nomor BKN" value="<?php 
                   if(set_value('bkn_nomor')=="" && isset($bkn_nomor)){
                     echo $bkn_nomor;
@@ -276,13 +279,15 @@
               </div>
               <div id="showkeputusan">
               <div class="row" style="margin: 5px">
-                <div class="col-md-3" style="padding: 5px">
+                <div class="col-md-12" style="padding: 5px">
                   Surat Keputusan
                 </div>
-                <div class="col-md-2" style="padding: 5px">
+              </div>
+              <div class="row" style="margin: 5px">
+                <div class="col-md-3" style="padding: 5px 5px 5px 30px">
                   Tanggal
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-9">
                   <div id='sk_tgl' name="sk_tgl" value="<?php
                     if(set_value('sk_tgl')=="" && isset($sk_tgl)){
                       $tgl_sk = strtotime($sk_tgl);
@@ -296,12 +301,10 @@
                 </div>
               </div>
               <div class="row" style="margin: 5px">
-                <div class="col-md-3" style="padding: 5px">
-                </div>
-                <div class="col-md-2" style="padding: 5px">
+                <div class="col-md-3" style="padding: 5px 5px 5px 30px">
                   Nomor
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-9">
                   <input type="text" class="form-control" name="sk_nomor" id="sk_nomor" placeholder="Nomor SK" value="<?php 
                   if(set_value('sk_nomor')=="" && isset($sk_nomor)){
                     echo $sk_nomor;
@@ -312,12 +315,10 @@
                 </div>
               </div>
               <div class="row" style="margin: 5px">
-                <div class="col-md-3" style="padding: 5px">
-                </div>
-                <div class="col-md-2" style="padding: 5px">
+                <div class="col-md-3" style="padding: 5px 5px 5px 30px">
                   Pejabat
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-9">
                   <input type="text" class="form-control" name="sk_pejabat" id="sk_pejabat" placeholder="SK Penjabat" value="<?php 
                   if(set_value('sk_pejabat')=="" && isset($sk_pejabat)){
                     echo $sk_pejabat;
@@ -330,13 +331,15 @@
               </div>
               <div id="showsttpl">
               <div class="row" style="margin: 5px">
-                <div class="col-md-3" style="padding: 5px">
+                <div class="col-md-12" style="padding: 5px">
                   STTPL
                 </div>
-                <div class="col-md-2" style="padding: 5px">
+              </div>
+              <div class="row" style="margin: 5px">
+                <div class="col-md-3" style="padding: 5px 5px 5px 30px">
                   Tanggal
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-9">
                   <div id='sttpl_tgl' name="sttpl_tgl" value="<?php
                     if(set_value('sttpl_tgl')=="" && isset($sttpl_tgl)){
                       $tgl_sttpl = strtotime($sttpl_tgl);
@@ -350,12 +353,10 @@
                 </div>
               </div>
               <div class="row" style="margin: 5px">
-                <div class="col-md-3" style="padding: 5px">
-                </div>
-                <div class="col-md-2" style="padding: 5px">
+                <div class="col-md-3" style="padding: 5px 5px 5px 30px">
                   Nomor
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-9">
                   <input type="text" class="form-control" name="sttpl_nomor" id="sttpl_nomor" placeholder="Nomor STTPL" value="<?php 
                   if(set_value('sttpl_nomor')=="" && isset($sttpl_nomor)){
                     echo $sttpl_nomor;
@@ -368,13 +369,15 @@
               </div>
               <div id="showspmt">
               <div class="row" style="margin: 5px">
-                <div class="col-md-3" style="padding: 5px">
+                <div class="col-md-12" style="padding: 5px">
                   SPMT
                 </div>
-                <div class="col-md-2" style="padding: 5px">
+              </div>
+              <div class="row" style="margin: 5px">
+                <div class="col-md-3" style="padding: 5px 5px 5px 30px">
                   Tanggal
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-9">
                   <div id='spmt_tgl' name="spmt_tgl" value="<?php
                     if(set_value('spmt_tgl')=="" && isset($spmt_tgl)){
                       $tgl_spmt = strtotime($spmt_tgl);
@@ -388,12 +391,10 @@
                 </div>
               </div>
               <div class="row" style="margin: 5px">
-                <div class="col-md-3" style="padding: 5px">
-                </div>
-                <div class="col-md-2" style="padding: 5px">
+                <div class="col-md-3" style="padding: 5px 5px 5px 30px">
                   Nomor
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-9">
                   <input type="text" class="form-control" name="spmt_nomor" id="spmt_nomor" placeholder="Nomor SPMT" value="<?php 
                   if(set_value('spmt_nomor')=="" && isset($spmt_nomor)){
                     echo $spmt_nomor;
@@ -406,13 +407,15 @@
               </div>
               <div id="showdokter">
               <div class="row" style="margin: 5px">
-                <div class="col-md-3" style="padding: 5px">
+                <div class="col-md-12" style="padding: 5px">
                   Keterangan Dokter
                 </div>
-                <div class="col-md-2" style="padding: 5px">
+              </div>
+              <div class="row" style="margin: 5px">
+                <div class="col-md-3" style="padding: 5px 5px 5px 30px">
                   Tanggal
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-9">
                   <div id='dokter_tgl' name="dokter_tgl" value="<?php
                     if(set_value('dokter_tgl')=="" && isset($dokter_tgl)){
                       $tgl_dokter = strtotime($dokter_tgl);
@@ -426,12 +429,10 @@
                 </div>
               </div>
               <div class="row" style="margin: 5px">
-                <div class="col-md-3" style="padding: 5px">
-                </div>
-                <div class="col-md-2" style="padding: 5px">
+                <div class="col-md-3" style="padding: 5px 5px 5px 30px">
                   Nomor
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-9">
                   <input type="text" class="form-control" name="dokter_nomor" id="dokter_nomor" placeholder="Nomor BKN" value="<?php 
                   if(set_value('dokter_nomor')=="" && isset($dokter_nomor)){
                     echo $dokter_nomor;
@@ -454,6 +455,7 @@
 
 <script>
   $(function () { 
+    ambil_nip();
     showhide();
   $("#statuspns").change(function(){
     showhide();
@@ -678,7 +680,10 @@
 
 
     $("[name='btn_cpns_formal_close']").click(function(){
-        $("#popup_cpns_formal").jqxWindow('close');
+        var peserta = "<?php echo $id; ?>";
+        $.get("<?php echo base_url().'kepegawaian/drh/biodata'?>/"+'4'+'/'+peserta,function(data){
+            $('#content4').html(data);
+        });
     });
 
     $("[name='btn_cpns_formal_save']").click(function(){
@@ -778,6 +783,7 @@
               }else{
                 $('#content4').html(response);
               }
+              ambil_nip();
             }
         });
         return false;
@@ -785,4 +791,20 @@
         return false;
     });
   });
+
+    function ambil_nip()
+    {
+      $.ajax({
+      url: "<?php echo base_url().'kepegawaian/drh/nipterakhir/'.$id ?>",
+      dataType: "json",
+      success:function(data)
+      { 
+        $.each(data,function(index,elemet){
+          $("#nipterakhir").html(elemet.nip);
+        });
+      }
+      });
+
+      return false;
+    }
 </script>

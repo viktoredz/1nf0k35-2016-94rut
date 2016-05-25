@@ -82,7 +82,7 @@
                 <label>NIP : </label>
               </div>
               <div class="col-md-8 col-xs-6">
-                  {nip}
+                  <div id="nipterakhir"></div>
               </div>
             </div>
 
@@ -197,5 +197,21 @@
   $(function () { 
     $("#menu_kepegawaian_drh").addClass("active");
     $("#menu_kepegawaian").addClass("active");
+    ambil_nip();
+    function ambil_nip()
+    {
+      $.ajax({
+      url: "<?php echo base_url().'kepegawaian/drh/nipterakhir/'.$id ?>",
+      dataType: "json",
+      success:function(data)
+      { 
+        $.each(data,function(index,elemet){
+          $("#nipterakhir").html(elemet.nip);
+        });
+      }
+      });
+
+      return false;
+    }
   });
 </script>

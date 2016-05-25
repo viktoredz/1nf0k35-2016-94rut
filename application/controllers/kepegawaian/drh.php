@@ -135,14 +135,25 @@ class Drh extends CI_Controller {
 			}
 
 	}
-
+	function nipterakhir($id=0){
+		$this->db->order_by('tmt','desc');
+		$this->db->where('id_pegawai',$id);
+		$this->db->select('nip_nit');
+		$query = $this->db->get('pegawai_pangkat',1);
+		foreach ($query->result() as $q) {
+			$nipterakhir[] = array(
+				'nip' => $q->nip_nit,  
+			);
+			echo json_encode($nipterakhir);
+		}
+	}
 	function detail($id=0)
 	{
 		$this->authentication->verify('kepegawaian','add');
 
 		$data = $this->drh_model->get_data_row($id); 
 		$data['id']=$id;
-		$data['nip']="1111 2222 3333 4444";
+		//$data['nip']="1111 2222 3333 4444";
 		$data['title_group'] = "Kepegawaian";
 		$data['title_form']="Ubah Data Pegawai";
 
