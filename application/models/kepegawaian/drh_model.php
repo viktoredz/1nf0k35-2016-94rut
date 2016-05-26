@@ -29,8 +29,9 @@ class Drh_model extends CI_Model {
 
     function get_data($start=0,$limit=999999,$options=array())
     {
-        $this->db->select("pangkat.nip_nit, pangkat.tmt,pegawai.*,DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgl_lhr)), '%Y')+0 AS usia",false);
-        $this->db->join('(SELECT  id_pegawai, nip_nit, tmt FROM pegawai_pangkat WHERE tmt IN (SELECT  MAX(tmt) FROM pegawai_pangkat GROUP BY id_pegawai)) AS pangkat','pangkat.id_pegawai = pegawai.id_pegawai','left');
+        $this->db->select("pegawai.id_pegawai, pangkat.nip_nit, pangkat.tmt, aa,pegawai.*,DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgl_lhr)), '%Y')+0 AS usia",false);
+        $this->db->join('(SELECT id_pegawai, nip_nit, tmt, CONCAT(tmt, id_pegawai) AS aa FROM pegawai_pangkat WHERE CONCAT(tmt, id_pegawai) IN (SELECT 
+                CONCAT(MAX(tmt), id_pegawai) FROM pegawai_pangkat GROUP BY id_pegawai)) AS pangkat','pangkat.id_pegawai = pegawai.id_pegawai','left');
 		$this->db->order_by('id_pegawai','asc');
         $query = $this->db->get('pegawai',$limit,$start);
         return $query->result();
