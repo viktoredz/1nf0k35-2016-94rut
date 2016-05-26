@@ -28,6 +28,14 @@ class Keutransaksi_model extends CI_Model {
         return $data;
     }
 
+    function get_data_kategori_transaksi_template($id){
+
+        $this->db->select('id_mst_setting_transaksi, nilai');
+        $this->db->where('id_mst_kategori_transaksi',$id);
+        $query = $this->db->get('mst_keu_kategori_transaksi_setting');
+        return $query->result();
+    }
+
     function insert_kategori_transaksi(){
         $data['nama']          = $this->input->post('nama');
         $data['deskripsi']     = $this->input->post('deskripsi');
@@ -59,8 +67,8 @@ class Keutransaksi_model extends CI_Model {
     }
 
     function get_data_transaksi($start=0,$limit=999999,$options=array()){
-        $this->db->select("mst_keu_transaksi.*,mst_keu_kategori_transaksi.id_mst_kategori_transaksi,mst_keu_kategori_transaksi.nama as kategori",false);
-        $this->db->join("mst_keu_kategori_transaksi","mst_keu_kategori_transaksi.id_mst_kategori_transaksi=mst_keu_transaksi.id_mst_kategori_transaksi");
+        $this->db->select('mst_keu_transaksi.*,mst_keu_kategori_transaksi.nama as kategori');
+        $this->db->join('mst_keu_kategori_transaksi','mst_keu_kategori_transaksi.id_mst_kategori_transaksi=mst_keu_transaksi.id_mst_kategori_transaksi','left');
         $query = $this->db->get('mst_keu_transaksi',$limit,$start);
         return $query->result();
     }
@@ -169,6 +177,16 @@ class Keutransaksi_model extends CI_Model {
         $query = $this->db->get('mst_keu_setting_transaksi_template');
         
          return $query->result();
+    }
+
+    function get_data_template_kat_trans($id){
+        $this->db->select("mst_keu_setting_transaksi_template.*,mst_keu_kategori_transaksi_setting.id_mst_setting_transaksi,mst_keu_kategori_transaksi_setting.nilai");
+        $this->db->join("mst_keu_setting_transaksi_template","mst_keu_setting_transaksi_template.id_mst_setting_transaksi_template=mst_keu_kategori_transaksi_setting.id_mst_setting_transaksi",'left');
+        $this->db->where('mst_keu_kategori_transaksi_setting.id_mst_kategori_transaksi',$id);
+        $this->db->order_by('mst_keu_setting_transaksi_template.id_mst_setting_transaksi_template','asc');
+        
+        $query = $this->db->get('mst_keu_kategori_transaksi_setting');
+        return $query->result();
     }
 
     function kategori_trans_template_update($id){

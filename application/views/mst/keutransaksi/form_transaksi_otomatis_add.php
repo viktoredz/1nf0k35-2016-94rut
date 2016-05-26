@@ -66,10 +66,10 @@
                   $transaksi_otomatis_jurnal = set_value('transaksi_otomatis_jurnal');
                 }
               ?>
-              <option value="Semua" <?php if($transaksi_otomatis_jurnal=="semua") echo "selected" ?>>Semua</option>
-              <option value="Jurnal Umum" <?php if($transaksi_otomatis_jurnal=="jurnal_umum") echo "selected" ?>>Jurnal Umum</option>
-              <option value="Jurnal Penyesuaian" <?php if($transaksi_otomatis_jurnal=="jurnal_penyesuaian") echo "selected" ?>>Jurnal Penyesuaian</option>
-              <option value="Jurnal Penutup" <?php if($transaksi_otomatis_jurnal=="jurnal_penutup") echo "selected" ?>>Jurnal Penutup</option>
+              <option value="semua" <?php if($transaksi_otomatis_jurnal=="semua") echo "selected" ?>>Semua</option>
+              <option value="jurnal_umum" <?php if($transaksi_otomatis_jurnal=="jurnal_umum") echo "selected" ?>>Jurnal Umum</option>
+              <option value="jurnal_penyesuaian" <?php if($transaksi_otomatis_jurnal=="jurnal_penyesuaian") echo "selected" ?>>Jurnal Penyesuaian</option>
+              <option value="jurnal_penutup" <?php if($transaksi_otomatis_jurnal=="jurnal_penutup") echo "selected" ?>>Jurnal Penutup</option>
               </select>
           </div>
       </div>

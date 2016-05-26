@@ -85,7 +85,7 @@
             contentType : false,
             processData : false,
             type : 'POST',
-            url : '<?php echo base_url()."mst/keuangan_transaksi/kategori_transaksi_{action}/{id}"   ?>',
+            url : '<?php echo base_url()."mst/keuangan_transaksi/kategori_transaksi_add/"   ?>',
             data : data,
             success : function(response){
               if(response=="OK"){

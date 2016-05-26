@@ -62,7 +62,7 @@
               <div class="row" style="margin: 5px">
                 <div class="col-md-12">
                   <?php $i=1; foreach($template as $t) : ?>
-                    <input type="checkbox" name="kategori_trans_template" id="template<?php echo $i;?>" value="<?php echo $i;?>">
+                    <input type="checkbox" name="kategori_trans_template" id="template<?php echo $i;?>" value="<?php echo $i;?>"
                   <?php 
                   if(set_value('nilai')=="" && isset($t->nilai)){
                     $t->nilai= $t->nilai;
@@ -70,7 +70,7 @@
                     $t->nilai= set_value('nilai');
                   }
                   if($t->nilai == 1) echo "checked";
-                  ?> 
+                  ?>> 
                     <?php echo $t->setting_judul ?>
                     </br>
                     <?php echo $t->seting_deskripsi ?>
@@ -146,9 +146,7 @@
                 // };
               // }else{
                 // alert("Mendukung transaksi belum berhasil di aktifkan.");
-
               }
-              //ceklist();
             }
         });
         return false;
