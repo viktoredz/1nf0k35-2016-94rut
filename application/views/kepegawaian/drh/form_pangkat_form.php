@@ -114,6 +114,20 @@
                   </select>
                 </div>
               </div>
+              
+              <div class="row" style="margin: 5px" id="showgolongan">
+                <div class="col-md-3" style="padding: 5px">
+                  Puskesmas
+                </div>
+                <div class="col-md-9">
+                  <select  name="codepus" id="codepus" class="form-control">
+                      <?php foreach($datapuskesmas as $pus) : ?>
+                        <?php $select = $pus->code == $code_cl_phc ? 'selected' : '' ?>
+                        <option value="<?php echo $pus->code ?>" <?php echo $select ?>><?php echo $pus->value ?></option>
+                      <?php endforeach ?>
+                  </select>
+                </div>
+              </div>
               <div class="row" style="margin: 5px" id="showgolongan">
                 <div class="col-md-3" style="padding: 5px">
                   Golongan Ruang
@@ -717,6 +731,7 @@
         data.append('sk_tgl', $("#sk_tgl").val());
         data.append('sk_nomor', $("#sk_nomor").val());
         data.append('sk_pejabat', $("#sk_pejabat").val());
+        data.append('codepus', $("#codepus").val());
 
         if ($("#statuspns").val()=='CPNS') {
           data.append('jenis_pengadaan', $("#jenis_pengadaan").val());

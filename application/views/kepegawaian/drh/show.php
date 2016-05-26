@@ -18,8 +18,22 @@
 	    </div>
 
 	      <div class="box-footer">
-		 	<button type="button" class="btn btn-primary" onclick="document.location.href='<?php echo base_url()?>kepegawaian/drh/add'"><i class='fa fa-plus-square-o'></i> &nbsp; Tambah</button>
-		 	<button type="button" class="btn btn-success" id="btn-refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
+	      	<div class="col-md-8">
+			 	<button type="button" class="btn btn-primary" onclick="document.location.href='<?php echo base_url()?>kepegawaian/drh/add'"><i class='fa fa-plus-square-o'></i> &nbsp; Tambah</button>
+			 	<button type="button" class="btn btn-success" id="btn-refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
+			 </div>
+		     <div class="col-md-4">
+		     	<div class="row">
+			     	<div class="col-md-4" style="padding-top:5px;"><label> Puskesmas </label> </div>
+			     	<div class="col-md-8">
+			     		<select name="code_cl_phc" id="code_cl_phc" class="form-control">
+							<?php foreach ($datapuskesmas as $row ) { ;?>
+								<option value="<?php echo $row->code; ?>" onchange="" ><?php echo $row->value; ?></option>
+							<?php	} ;?>
+				     	</select>
+				     </div>	
+		     	</div>
+			  </div>
 	     </div>
         <div class="box-body">
 		    <div class="div-grid">
@@ -50,6 +64,7 @@
 			{ name: 'nip_lama', type: 'string'},
 			{ name: 'nip_baru', type: 'string'},
 			{ name: 'nik', type: 'string'},
+			{ name: 'nipterakhir', type: 'string'},
 			{ name: 'nama', type: 'string'},
 			{ name: 'jenis_kelamin', type: 'string'},
 			{ name: 'tgl_lhr', type: 'date'},
@@ -118,7 +133,7 @@
 					}
                  }
                 },
-				{ text: 'NIP', datafield: 'nip_baru', columntype: 'textbox', filtertype: 'textbox', align: 'center' , cellsalign: 'center', width: '20%'},
+				{ text: 'NIP', datafield: 'nipterakhir', columntype: 'textbox', filtertype: 'textbox', align: 'center' , cellsalign: 'center', width: '20%'},
 				{ text: 'Nama', datafield: 'nama', columntype: 'textbox', filtertype: 'textbox', align: 'center', width: '29%' },
 				{ text: 'Jenis Kelamin', datafield: 'jenis_kelamin', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '10%' },
 				{ text: 'Usia', datafield: 'usia', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '6%' },
@@ -141,6 +156,11 @@
 			});
 		}
 	}
+	$("#code_cl_phc").change(function(){
+		$.post("<?php echo base_url().'kepegawaian/drh/filter' ?>", 'code_cl_phc='+$(this).val(),  function(){
+			$("#jqxgrid").jqxGrid('updatebounddata', 'cells');
+		});
+    });
 </script>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >

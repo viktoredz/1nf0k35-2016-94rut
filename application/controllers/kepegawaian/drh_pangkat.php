@@ -5,6 +5,7 @@ class Drh_pangkat extends CI_Controller {
 		parent::__construct();
 		$this->load->model('kepegawaian/drh_model');
 		$this->load->model('mst/puskesmas_model');
+		$this->load->model('inventory/inv_ruangan_model');
 	}
 
 //CRUD Pendidikan
@@ -334,6 +335,7 @@ class Drh_pangkat extends CI_Controller {
         $this->form_validation->set_rules('sk_nomor', 'SK Nomor', 'trim|required');
         $this->form_validation->set_rules('sk_pejabat', 'SK Pejabat', 'trim|required');
         $this->form_validation->set_rules('statuspns', 'Status', 'trim|required');
+        $this->form_validation->set_rules('codepus', 'Kode Puskesmas', 'trim|required');
         if ($this->input->post('statuspns')=='CPNS') {
         	$this->form_validation->set_rules('jenis_pengadaan', 'Jenis Pengadaan', 'trim|required');
         	$this->form_validation->set_rules('masa_krj_bln', 'Masa Kerja Golongan Bulan ', 'trim|required');
@@ -365,6 +367,15 @@ class Drh_pangkat extends CI_Controller {
 	    $data['action']			= "add";
 		$data['alert_form'] 	= '';
 		$data['tmt'] 			= '';
+
+		$kodepuskesmas = $this->session->userdata('puskesmas');
+		if(strlen($kodepuskesmas) == 4){
+			$this->db->like('code','P'.substr($kodepuskesmas, 0,4));
+		}else {
+			$this->db->where('code','P'.$kodepuskesmas);
+		}
+
+		$data['datapuskesmas'] 	= $this->inv_ruangan_model->get_data_puskesmas();
 		$this->db->order_by('no_urut','asc');
 		$data['kode_status'] 	= $this->drh_model->kode_tabel('mst_peg_status');
 		$data['kode_pns'] 		= $this->drh_model->kode_tabel('mst_peg_golruang');
@@ -394,6 +405,7 @@ class Drh_pangkat extends CI_Controller {
         $this->form_validation->set_rules('sk_nomor', 'SK Nomor', 'trim|required');
         $this->form_validation->set_rules('sk_pejabat', 'SK Pejabat', 'trim|required');
         $this->form_validation->set_rules('statuspns', 'Status', 'trim|required');
+        $this->form_validation->set_rules('codepus', 'Kode Puskesmas', 'trim|required');
         if ($this->input->post('statuspns')=='CPNS') {
         	$this->form_validation->set_rules('jenis_pengadaan', 'Jenis Pengadaan', 'trim|required');
         	$this->form_validation->set_rules('masa_krj_bln', 'Masa Kerja Golongan Bulan ', 'trim|required');
@@ -421,6 +433,14 @@ class Drh_pangkat extends CI_Controller {
         	$this->form_validation->set_rules('spmt_tgl', 'SPMT Tanggal', 'trim|required');
         	$this->form_validation->set_rules('spmt_nomor', 'SPMT Nomor', 'trim|required');
         }
+        $kodepuskesmas = $this->session->userdata('puskesmas');
+		if(strlen($kodepuskesmas) == 4){
+			$this->db->like('code','P'.substr($kodepuskesmas, 0,4));
+		}else {
+			$this->db->where('code','P'.$kodepuskesmas);
+		}
+
+		$data['datapuskesmas'] 	= $this->inv_ruangan_model->get_data_puskesmas();
 		$wak = date("d-m-Y",strtotime($tmt));
 		$data = $this->drh_model->getItem($id,$wak);
         $data['id']				= $id;
@@ -436,6 +456,14 @@ class Drh_pangkat extends CI_Controller {
 			$data['id']				= $id;
 		    $data['action']			= "edit";
 			$data['alert_form'] 	= '';
+			$kodepuskesmas = $this->session->userdata('puskesmas');
+			if(strlen($kodepuskesmas) == 4){
+				$this->db->like('code','P'.substr($kodepuskesmas, 0,4));
+			}else {
+				$this->db->where('code','P'.$kodepuskesmas);
+			}
+
+			$data['datapuskesmas'] 	= $this->inv_ruangan_model->get_data_puskesmas();
 			die($this->parser->parse("kepegawaian/drh/form_pangkat_form",$data));
 		}else if($st=$this->drh_model->update_entry_pns_formal($id,$tmt)){
 			die("OK | $st");

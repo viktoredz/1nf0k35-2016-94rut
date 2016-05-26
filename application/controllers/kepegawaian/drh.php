@@ -5,18 +5,32 @@ class Drh extends CI_Controller {
 		parent::__construct();
 		$this->load->model('kepegawaian/drh_model');
 		$this->load->model('mst/puskesmas_model');
+		$this->load->model('inventory/inv_ruangan_model');
 	}
 
 	function index(){
 		$this->authentication->verify('kepegawaian','edit');
 		$data['title_group'] = "Master Data";
 		$data['title_form'] = "Daftar Riwayat Hidup";
+		$kodepuskesmas = $this->session->userdata('puskesmas');
+		if(strlen($kodepuskesmas) == 4){
+			$this->db->like('code','P'.substr($kodepuskesmas, 0,4));
+		}else {
+			$this->db->where('code','P'.$kodepuskesmas);
+		}
 
+		$data['datapuskesmas'] 	= $this->inv_ruangan_model->get_data_puskesmas();
 		$data['content'] = $this->parser->parse("kepegawaian/drh/show",$data,true);
 
 		$this->template->show($data,"home");
 	}
-
+	function filter(){
+		if($_POST) {
+			if($this->input->post('code_cl_phc') != '') {
+				$this->session->set_userdata('filter_code_cl_phc',$this->input->post('code_cl_phc'));
+			}
+		}
+	}
 	function json(){
 		$this->authentication->verify('kepegawaian','show');
 
@@ -40,7 +54,9 @@ class Drh extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
-
+		if ($this->session->userdata('filter_code_cl_phc')!='') {
+			$this->db->where('code_cl_phc',$this->session->userdata('filter_code_cl_phc'));
+		}
 		$rows_all = $this->drh_model->get_data();
 
 		if($_POST) {
@@ -64,7 +80,9 @@ class Drh extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
-
+		if ($this->session->userdata('filter_code_cl_phc')!='') {
+			$this->db->where('code_cl_phc',$this->session->userdata('filter_code_cl_phc'));
+		}
 		$rows = $this->drh_model->get_data($this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();
 		foreach($rows as $act) {
@@ -73,6 +91,7 @@ class Drh extends CI_Controller {
 				'nip_lama'		=> $act->nip_lama,
 				'nip_baru'		=> $act->nip_baru,
 				'nik'			=> $act->nik,
+				'nipterakhir'	=> $act->nipterakhir,
 				'nama'			=> $act->gelar_depan.' '.$act->nama.' '.$act->gelar_belakang,
 				'jenis_kelamin'	=> $act->jenis_kelamin,
 				'tgl_lhr'		=> $act->tgl_lhr,
@@ -114,6 +133,7 @@ class Drh extends CI_Controller {
         $this->form_validation->set_rules('kartu_pegawai', 'Kartu Pegawai', 'trim');
         $this->form_validation->set_rules('goldar', 'Golongan Darah', 'trim');
         $this->form_validation->set_rules('kode_mst_nikah', 'Status Nikah', 'trim');
+        $this->form_validation->set_rules('codepus', 'Puskesmas', 'trim');
 
 			if($this->form_validation->run()== FALSE){
 				$data['title_group'] = "Kepegawaian";
@@ -122,6 +142,15 @@ class Drh extends CI_Controller {
 				$data['kode']="";
 				$data['kode_ag'] = $this->drh_model->get_kode_agama('kode_ag');
 				$data['kode_nk'] = $this->drh_model->get_kode_nikah('kode_nk');
+
+				$kodepuskesmas = $this->session->userdata('puskesmas');
+				if(strlen($kodepuskesmas) == 4){
+					$this->db->like('code','P'.substr($kodepuskesmas, 0,4));
+				}else {
+					$this->db->where('code','P'.$kodepuskesmas);
+				}
+
+				$data['datapuskesmas'] 	= $this->inv_ruangan_model->get_data_puskesmas();
 
 				$data['form_tambahan'] = "";
 				$data['content'] = $this->parser->parse("kepegawaian/drh/form",$data,true);
@@ -307,7 +336,14 @@ class Drh extends CI_Controller {
 		$data['kode_ag'] = $this->drh_model->get_kode_agama('kode_ag');
 		$data['kode_nk'] = $this->drh_model->get_kode_nikah('kode_nk');
 		$data['alert_form'] = '';
+		$kodepuskesmas = $this->session->userdata('puskesmas');
+		if(strlen($kodepuskesmas) == 4){
+			$this->db->like('code','P'.substr($kodepuskesmas, 0,4));
+		}else {
+			$this->db->where('code','P'.$kodepuskesmas);
+		}
 
+		$data['datapuskesmas'] 	= $this->inv_ruangan_model->get_data_puskesmas();
 		if($this->form_validation->run() == FALSE){
 			die($this->parser->parse("kepegawaian/drh/form_biodata",$data));
 		}elseif($this->drh_model->update_entry($id)){
@@ -315,6 +351,14 @@ class Drh extends CI_Controller {
 			$data['id']=$id;
 			$data['kode_ag'] = $this->drh_model->get_kode_agama('kode_ag');
 			$data['kode_nk'] = $this->drh_model->get_kode_nikah('kode_nk');
+			$kodepuskesmas = $this->session->userdata('puskesmas');
+			if(strlen($kodepuskesmas) == 4){
+				$this->db->like('code','P'.substr($kodepuskesmas, 0,4));
+			}else {
+				$this->db->where('code','P'.$kodepuskesmas);
+			}
+
+			$data['datapuskesmas'] 	= $this->inv_ruangan_model->get_data_puskesmas();
 			$data['alert_form'] = 'Save data successful...';
 		}else{
 			$data['alert_form'] = 'Save data failed...';

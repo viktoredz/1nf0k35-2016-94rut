@@ -173,6 +173,20 @@
                   ?>">
                 </div>
               </div>
+              
+              <div class="row" style="margin: 5px">
+                <div class="col-md-4" style="padding: 5px">
+                  Puskesmas
+                </div>
+                <div class="col-md-8">
+                  <select  name="codepus" id="codepus" class="form-control">
+                      <?php foreach($datapuskesmas as $pus) : ?>
+                        <?php $select = $pus->code == $code_cl_phc ? 'selected' : '' ?>
+                        <option value="<?php echo $pus->code ?>" <?php echo $select ?>><?php echo $pus->value ?></option>
+                      <?php endforeach ?>
+                  </select>
+                </div>
+              </div>
 
               <div class="row" style="margin: 5px">
                 <div class="col-md-4" style="padding: 5px">
@@ -192,7 +206,6 @@
                   </select>
                 </div>
               </div>
-
               <div class="row" style="margin: 5px">
                 <div class="col-md-4" style="padding: 5px">
                   Nomor NPWP
