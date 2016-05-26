@@ -2,7 +2,7 @@
   $(function() {
         $('#jqxTabsJabatan').jqxTabs({ width: '100%', height: '500'});
         $('#btn-skjabatan-tambah').click(function(){
-            $.get('<?php echo base_url()?>kepegawaian/drh_jabatann/add/{id}', function (data) {
+            $.get('<?php echo base_url()?>kepegawaian/drh_jabatan/add/{id}', function (data) {
                 $('#content5').html(data);
             });
         });
@@ -13,10 +13,10 @@
             });
         }
 
-        loadPage('<?php echo base_url()?>kepegawaian/drh/biodata_jabatann/1/{id}', 1);
+        loadPage('<?php echo base_url()?>kepegawaian/drh_jabatan/biodata_jabatan/1/{id}', 1);
         $('#jqxTabsJabatan').on('selected', function (event) {
             var pageIndex = event.args.item + 1;
-            loadPage('<?php echo base_url()?>kepegawaian/drh/biodata_jabatann/'+pageIndex+'/{id}', pageIndex);
+            loadPage('<?php echo base_url()?>kepegawaian/drh_jabatan/biodata_jabatan/'+pageIndex+'/{id}', pageIndex);
         });
 
   });

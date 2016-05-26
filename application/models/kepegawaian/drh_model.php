@@ -570,7 +570,7 @@ class Drh_model extends CI_Model {
             return mysql_error();
         }
     }
-
+    
     function update_entry_pasangan($id,$urut)
     {
         $data['id_mst_peg_keluarga']= $this->input->post('id_mst_peg_keluarga');
@@ -804,6 +804,15 @@ class Drh_model extends CI_Model {
         $query = $this->db->get('pegawai_diklat',$limit,$start);
         return $query->result();
     }
+    function get_data_jabatan($id,$start=0,$limit=999999,$options=array())
+    {
+        $this->db->select("*",false);
+        $this->db->order_by('tmt','desc');
+        $this->db->where('id_pegawai',$id);
+        $query = $this->db->get('pegawai_jabatan',$limit,$start);
+        return $query->result();
+    }
+
 
     function insert_entry_pendidikan_struktural($id)
     {
