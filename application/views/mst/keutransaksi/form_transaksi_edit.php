@@ -7,7 +7,7 @@
 <?php } ?>
 
 <section class="content">
-<form action="<?php echo base_url()?>kepegawaian/drh/dodel_multi" method="POST" name="">
+<form action="<?php echo base_url()?>kepegawaian/drh/dodel_multi" id="form_transaksi" name="form_transaksi" method="POST" >
   <div class="row">
     <div class="col-md-12">
       <div class="box box-primary">
@@ -17,7 +17,7 @@
 
         <div class="box-footer">
           <button type="button" id="btn-kembali" class="btn btn-primary pull-right"><i class='fa  fa-arrow-circle-o-left'></i> &nbsp;Kembali</button>
-          <button type="button" disabled="" name="btn_kategori_transaksi_save" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Simpan</button>
+          <button type="button" name="btn_transaksi_save" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Simpan</button>
           <button type="button" name="btn-reset" value="Reset" onclick='clearForm(this.form)' class="btn btn-success" ><i class='fa fa-refresh'></i> &nbsp; Reset</button>
        </div>
         <div class="box-body">
@@ -125,7 +125,7 @@
           <div class="col-md-6">
             <div class="row">
               <div class="col-md-8" style="padding-top:5px;">
-                <select  name="transaksi_kategori" type="text" class="form-control">
+                <select  name="" type="text" class="form-control">
                   <?php foreach($kategori as $k) : ?>
                     <?php
                       if(set_value('id_mst_kategori_transaksi')=="" && isset($id_mst_kategori_transaksi)){
@@ -149,7 +149,7 @@
           <div class="col-md-6">
             <div class="row">
               <div class="col-md-8" style="padding-top:5px;">
-                <select  name="transaksi_kategori" type="text" class="form-control">
+                <select  name="" type="text" class="form-control">
                   <?php foreach($kategori as $k) : ?>
                     <?php
                       if(set_value('id_mst_kategori_transaksi')=="" && isset($id_mst_kategori_transaksi)){
@@ -188,7 +188,7 @@
           <div class="col-md-6">
             <div class="row">
               <div class="col-md-8" style="padding-top:5px;">
-                <select  name="transaksi_kategori" type="text" class="form-control">
+                <select  name="" type="text" class="form-control">
                   <?php foreach($kategori as $k) : ?>
                     <?php
                       if(set_value('id_mst_kategori_transaksi')=="" && isset($id_mst_kategori_transaksi)){
@@ -228,7 +228,7 @@
             <div class="row">
               <div class="col-md-2" style="padding-top:15px;"><label>Nama</label></div>
               <div class="col-md-6" style="padding-top:5px;">
-                <select  name="transaksi_kategori" type="text" class="form-control">
+                <select  name="" type="text" class="form-control">
                   <?php foreach($kategori as $k) : ?>
                     <?php
                       if(set_value('id_mst_kategori_transaksi')=="" && isset($id_mst_kategori_transaksi)){
@@ -243,7 +243,7 @@
                 </select>
               </div>
               <div class="col-md-2">
-                <input type="text" class="form-control" name="transaksi_nama" value="">  
+                <input type="text" class="form-control" name="" value="">  
               </div> 
               <div class="col-md-2"><label>%</label></div>
 
@@ -254,7 +254,7 @@
             <div class="row">
               <div class="col-md-3" style="padding-top:5px;"><label> Nilai </label> </div>
               <div class="col-md-5">
-                <select  name="transaksi_kategori" type="text" class="form-control">
+                <select  name="" type="text" class="form-control">
                   <?php foreach($kategori as $k) : ?>
                       <?php
                         if(set_value('id_mst_kategori_transaksi')=="" && isset($id_mst_kategori_transaksi)){
@@ -342,6 +342,35 @@
       $.get('<?php echo base_url()?>mst/keuangan_transaksi/transaksi_kembali', function (data) {
         $('#content2').html(data);
       });
+    });
+
+    $("[name='btn_transaksi_save']").click(function(){
+        var data = new FormData();
+        $('#biodata_notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
+        $('#biodata_notice').show();
+
+        data.append('nama',                      $("[name='transaksi_nama']").val());
+        data.append('deskripsi',                 $("[name='transaksi_deskripsi']").val());
+        data.append('untuk_jurnal',              $("[name='transaksi_jurnal']").val());
+        data.append('id_mst_kategori_transaksi', $("[name='transaksi_kategori']").val());
+              
+        $.ajax({
+            cache : false,
+            contentType : false,
+            processData : false,
+            type : 'POST',
+            url : '<?php echo base_url()."mst/keuangan_transaksi/transaksi_{action}/{id}"   ?>',
+            data : data,
+            success : function(response){
+              if(response=="OK"){
+                alert("Data berhasil disimpan.");
+              }else{
+                alert("Isi kolom yang kosong.");
+              }
+            }
+        });
+
+        return false;
     });
 
     $("[name='transaksi_template']").click(function(){

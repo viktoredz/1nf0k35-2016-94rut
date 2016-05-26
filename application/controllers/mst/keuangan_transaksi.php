@@ -156,6 +156,9 @@ class Keuangan_transaksi extends CI_Controller {
 				if($field == 'tgl_lhr') {
 					$value = date("Y-m-d",strtotime($value));
 					$this->db->where($field,$value);
+				}else if($field == 'kategori') {
+					$value = date("Y-m-d",strtotime($value));
+					$this->db->where('mst_keu_kategori_transaksi.nama',$value);
 				}else{
 					$this->db->like($field,$value);
 				}
@@ -179,6 +182,9 @@ class Keuangan_transaksi extends CI_Controller {
 				if($field == 'tgl_lhr') {
 					$value = date("Y-m-d",strtotime($value));
 					$this->db->where($field,$value);
+				}else if($field == 'kategori') {
+					$value = date("Y-m-d",strtotime($value));
+					$this->db->where('mst_keu_kategori_transaksi.nama',$value);
 				}else{
 					$this->db->like($field,$value);
 				}
@@ -384,8 +390,8 @@ class Keuangan_transaksi extends CI_Controller {
 		if($this->form_validation->run()== FALSE){
 
 			$data 						= $this->keutransaksi_model->get_data_kategori_transaksi_edit($id);
-			$data['template']			= $this->keutransaksi_model->get_data_template();
-			// $data['template']			= $this->keutransaksi_model->get_data_template_kat_trans($id);
+			// $data['template']			= $this->keutransaksi_model->get_data_template();
+			$data['template']			= $this->keutransaksi_model->get_data_template_kat_trans($id);
 			$data['notice']				= validation_errors();
 			$data['action']				= "edit";
 			$data['id']					= $id;
@@ -489,10 +495,10 @@ class Keuangan_transaksi extends CI_Controller {
 	function transaksi_add(){
 		$this->authentication->verify('mst','add');
 
-    	$this->form_validation->set_rules('nama', 'Nama', 'trim|required');
+    	$this->form_validation->set_rules('nama', 'Nama', 'required|trim');
         $this->form_validation->set_rules('deskripsi', 'Deskripsi', 'trim');
-        $this->form_validation->set_rules('untuk_jurnal', 'Jurnal', 'trim');
-        $this->form_validation->set_rules('id_mst_kategori_transaksi', 'Kategori', 'trim');
+        $this->form_validation->set_rules('untuk_jurnal', 'Jurnal', 'required|trim');
+        $this->form_validation->set_rules('id_mst_kategori_transaksi', 'Kategori', 'required|trim');
 
 
 		if($this->form_validation->run()== FALSE){
@@ -501,6 +507,8 @@ class Keuangan_transaksi extends CI_Controller {
 			$data['action']				= "add";
 			$data['kategori']			= $this->keutransaksi_model->get_data_kategori_transaksi();
 			$data['id_mst_transaksi']	= "";
+			$data['alert_form']		    = '';
+
 			
 			die($this->parser->parse("mst/keutransaksi/form_transaksi_add",$data,true));
 		}elseif($this->keutransaksi_model->transaksi_insert()){
@@ -543,14 +551,12 @@ class Keuangan_transaksi extends CI_Controller {
 			
 			die($this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data,true));
 		}elseif($this->keutransaksi_model->transaksi_update($id)){
-			$this->session->set_flashdata('alert', 'Save data successful...');
-			redirect(base_url().'mst/keutransaksi/form_transaksi_edit/'.$id);
+			die("OK");
 		}else{
-			$this->session->set_flashdata('alert_form', 'Save data failed...');
-			redirect(base_url()."mst/keutransaksi/form_transaksi_edit");
+			$data['alert_form'] = 'Save data failed...';
 		}
+		die($this->parser->parse("mst/keutransaksi/form_transaksi_add",$data));
 
-		$this->template->show($data,"home");
 	}
 
 	function transaksi_kembali(){

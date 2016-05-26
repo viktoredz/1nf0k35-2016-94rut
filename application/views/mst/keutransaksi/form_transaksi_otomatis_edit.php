@@ -17,7 +17,7 @@
 
         <div class="box-footer">
           <button type="button" id="btn-kembali" class="btn btn-primary pull-right"><i class='fa  fa-arrow-circle-o-left'></i> &nbsp;Kembali</button>
-          <button type="button" disabled="" name="btn_kategori_transaksi_save" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Simpan</button>
+          <button type="button" name="btn_kategori_transaksi_save" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Simpan</button>
           <button type="button" name="btn-reset" value="Reset" onclick='clearForm(this.form)' class="btn btn-success" ><i class='fa fa-refresh'></i> &nbsp; Reset</button>
        </div>
         <div class="box-body">
@@ -365,6 +365,35 @@
               }
             }
         });
+        return false;
+    });
+
+    $("[name='btn_kategori_transaksi_save']").click(function(){
+        var data = new FormData();
+        $('#biodata_notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
+        $('#biodata_notice').show();
+
+        data.append('nama',                      $("[name='transaksi_otomatis_nama']").val());
+        data.append('deskripsi',                 $("[name='transaksi_otomatis_deskripsi']").val());
+        data.append('untuk_jurnal',              $("[name='transaksi_otomatis_jurnal']").val());
+        data.append('id_mst_kategori_transaksi', $("[name='transaksi_otomatis_kategori']").val());
+              
+        $.ajax({
+            cache : false,
+            contentType : false,
+            processData : false,
+            type : 'POST',
+            url : '<?php echo base_url()."mst/keuangan_transaksi/transaksi_otomatis_{action}/{id}"   ?>',
+            data : data,
+        success : function(response){
+              if(response=="OK"){
+                alert("Data berhasil disimpan.");
+              }else{
+                alert("Isi kolom yang kosong.");
+              }
+            }
+        });
+
         return false;
     });
 

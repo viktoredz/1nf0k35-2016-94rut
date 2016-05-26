@@ -7,7 +7,7 @@
 <?php } ?>
 
 <section class="content">
-<form action="<?php echo base_url()?>kepegawaian/drh/dodel_multi" method="POST" name="">
+<form action="<?php echo base_url()?>kepegawaian/drh/dodel_multi" method="POST" name="form_transaksi_otomatis" id="form_transaksi_otomatis">
   <div class="row">
     <!-- left column -->
     <div class="col-md-12">
@@ -127,13 +127,12 @@
             type : 'POST',
             url : '<?php echo base_url()."mst/keuangan_transaksi/transaksi_otomatis_add/"   ?>',
             data : data,
-            success : function(response){
+        success : function(response){
               if(response=="OK"){
-                $("#popup_kategori_transaksi").jqxWindow('close');
                 alert("Data berhasil disimpan.");
-                $("#jqxgrid_kategori_transaksi").jqxGrid('updatebounddata', 'filter');
+                $("#form_transaksi_otomatis")[0].reset();
               }else{
-                $('#popup_kategori_transaksi_content').html(response);
+                alert("Isi kolom yang kosong.");
               }
             }
         });

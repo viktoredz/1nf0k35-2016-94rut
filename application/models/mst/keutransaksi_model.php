@@ -103,6 +103,7 @@ class Keutransaksi_model extends CI_Model {
     }
 
     function delete_transaksi($id){
+
         $this->db->where('id_mst_transaksi',$id);
 
         return $this->db->delete('mst_keu_transaksi');
@@ -110,6 +111,11 @@ class Keutransaksi_model extends CI_Model {
 
     function transaksi_update($id){
        
+        $data['nama']                               = $this->input->post('nama');
+        $data['deskripsi']                          = $this->input->post('deskripsi');
+        $data['untuk_jurnal']                       = $this->input->post('untuk_jurnal');
+        $data['id_mst_kategori_transaksi']          = $this->input->post('id_mst_kategori_transaksi');
+        
         $this->db->where('id_mst_transaksi',$id);
 
         if($this->db->update('mst_keu_transaksi', $data)){
@@ -161,6 +167,11 @@ class Keutransaksi_model extends CI_Model {
     }
 
     function transaksi_otomatis_update($id){
+
+        $data['nama']                               = $this->input->post('nama');
+        $data['deskripsi']                          = $this->input->post('deskripsi');
+        $data['untuk_jurnal']                       = $this->input->post('untuk_jurnal');
+        $data['id_mst_kategori_transaksi']          = $this->input->post('id_mst_kategori_transaksi');
        
         $this->db->where('id_mst_otomasi_transaksi',$id);
 
