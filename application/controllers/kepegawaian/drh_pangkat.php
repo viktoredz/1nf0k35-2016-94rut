@@ -132,7 +132,7 @@ class Drh_pangkat extends CI_Controller {
 			}
 		}
 		$this->db->where('status','PNS');
-		$this->db->where('status_pns ','1');
+		$this->db->where('is_pengangkatan ','1');
 		$rows_all = $this->drh_model->get_data_pangkat_cpns($id);
 
 		if($_POST) {
@@ -161,7 +161,7 @@ class Drh_pangkat extends CI_Controller {
 			}
 		}
 		$this->db->where('status','PNS');
-		$this->db->where('status_pns','1');
+		$this->db->where('is_pengangkatan','1');
 		$rows = $this->drh_model->get_data_pangkat_cpns($id,$this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();
 		foreach($rows as $act) {
@@ -229,7 +229,7 @@ class Drh_pangkat extends CI_Controller {
 			}
 		}
 		$this->db->where('status','PNS');
-		$this->db->where('status_pns !=','1');
+		$this->db->where('is_pengangkatan !=','1');
 		$rows_all = $this->drh_model->get_data_pangkat_cpns($id);
 
 		if($_POST) {
@@ -258,7 +258,7 @@ class Drh_pangkat extends CI_Controller {
 			}
 		}
 		$this->db->where('status','PNS');
-		$this->db->where('status_pns !=','1');
+		$this->db->where('is_pengangkatan !=','1');
 		$rows = $this->drh_model->get_data_pangkat_cpns($id,$this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();
 		foreach($rows as $act) {

@@ -91,7 +91,7 @@ class Drh extends CI_Controller {
 				'nip_lama'		=> $act->nip_lama,
 				'nip_baru'		=> $act->nip_baru,
 				'nik'			=> $act->nik,
-				'nipterakhir'	=> $act->nipterakhir,
+				'nip_nit'		=> $act->nip_nit,
 				'nama'			=> $act->gelar_depan.' '.$act->nama.' '.$act->gelar_belakang,
 				'jenis_kelamin'	=> $act->jenis_kelamin,
 				'tgl_lhr'		=> $act->tgl_lhr,

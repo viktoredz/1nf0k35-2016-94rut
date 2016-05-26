@@ -53,8 +53,8 @@
                 <div class="col-md-9"   id="showceklispns" name="showceklispns">
                   <input type="checkbox" name="penganggkatan" id="penganggkatan" value="1"
                   <?php 
-                    if ((set_value('penganggkatan')!="")||(isset($status_pns))) {
-                      if (set_value('penganggkatan')=='1' || (isset($status_pns) && $status_pns=='1')) {
+                    if ((set_value('penganggkatan')!="")||(isset($is_pengangkatan))) {
+                      if (set_value('penganggkatan')=='1' || (isset($is_pengangkatan) && $is_pengangkatan=='1')) {
                         echo "checked";
                       }
                     }else{

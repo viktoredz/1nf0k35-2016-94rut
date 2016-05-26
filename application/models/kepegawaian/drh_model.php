@@ -29,7 +29,8 @@ class Drh_model extends CI_Model {
 
     function get_data($start=0,$limit=999999,$options=array())
     {
-        $this->db->select("pegawai.*,DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgl_lhr)), '%Y')+0 AS usia,(select nip_nit from pegawai_pangkat where id_pegawai = pegawai.id_pegawai order by tmt desc limit 1) as nipterakhir",false);
+        $this->db->select("pangkat.nip_nit, pangkat.tmt,pegawai.*,DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgl_lhr)), '%Y')+0 AS usia",false);
+        $this->db->join('(SELECT  id_pegawai, nip_nit, tmt FROM pegawai_pangkat WHERE tmt IN (SELECT  MAX(tmt) FROM pegawai_pangkat GROUP BY id_pegawai)) AS pangkat','pangkat.id_pegawai = pegawai.id_pegawai','left');
 		$this->db->order_by('id_pegawai','asc');
         $query = $this->db->get('pegawai',$limit,$start);
         return $query->result();
@@ -666,7 +667,7 @@ class Drh_model extends CI_Model {
         }else if ($this->input->post('statuspns')=='PNS') {
             $data['masa_krj_bln']               = $this->input->post('masa_krj_bln');
             $data['masa_krj_thn']               = $this->input->post('masa_krj_thn');
-            $data['status_pns']               = $this->input->post('penganggkatan');
+            $data['is_pengangkatan']               = $this->input->post('penganggkatan');
             if($this->input->post('penganggkatan') == '1'){
                 $data['sttpl_tgl']               = date("Y-m-d",strtotime($this->input->post('sttpl_tgl')));
                 $data['sttpl_nomor']             = $this->input->post('sttpl_nomor');
@@ -733,7 +734,7 @@ class Drh_model extends CI_Model {
         }else if ($this->input->post('statuspns')=='PNS') {
             $data['masa_krj_bln']               = $this->input->post('masa_krj_bln');
             $data['masa_krj_thn']               = $this->input->post('masa_krj_thn');
-            $data['status_pns']                 = $this->input->post('penganggkatan');
+            $data['is_pengangkatan']                 = $this->input->post('penganggkatan');
             if($this->input->post('penganggkatan') == '1'){
                 $data['sttpl_tgl']               = date("Y-m-d",strtotime($this->input->post('sttpl_tgl')));
                 $data['sttpl_nomor']             = $this->input->post('sttpl_nomor');

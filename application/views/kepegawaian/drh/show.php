@@ -64,7 +64,7 @@
 			{ name: 'nip_lama', type: 'string'},
 			{ name: 'nip_baru', type: 'string'},
 			{ name: 'nik', type: 'string'},
-			{ name: 'nipterakhir', type: 'string'},
+			{ name: 'nip_nit', type: 'string'},
 			{ name: 'nama', type: 'string'},
 			{ name: 'jenis_kelamin', type: 'string'},
 			{ name: 'tgl_lhr', type: 'date'},
@@ -133,7 +133,7 @@
 					}
                  }
                 },
-				{ text: 'NIP', datafield: 'nipterakhir', columntype: 'textbox', filtertype: 'textbox', align: 'center' , cellsalign: 'center', width: '20%'},
+				{ text: 'NIP', datafield: 'nip_nit', columntype: 'textbox', filtertype: 'textbox', align: 'center' , cellsalign: 'center', width: '20%'},
 				{ text: 'Nama', datafield: 'nama', columntype: 'textbox', filtertype: 'textbox', align: 'center', width: '29%' },
 				{ text: 'Jenis Kelamin', datafield: 'jenis_kelamin', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '10%' },
 				{ text: 'Usia', datafield: 'usia', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '6%' },
