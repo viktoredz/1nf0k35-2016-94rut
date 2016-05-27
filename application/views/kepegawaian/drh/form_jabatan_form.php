@@ -279,7 +279,7 @@
                   Unit Organisasi
                 </div>
                 <div class="col-md-9">
-                  <input type="text" class="form-control" name="unor" id="unor" placeholder="SK Penjabat" value="<?php 
+                  <input type="text" class="form-control" name="unor" id="unor" placeholder="Unit Organisasi" value="<?php 
                   if(set_value('unor')=="" && isset($unor)){
                     echo $unor;
                   }else{
@@ -293,7 +293,7 @@
                   Prosedur Awal
                 </div>
                 <div class="col-md-9">
-                  <input type="text" class="form-control" name="prosedur" id="prosedur" placeholder="SK Penjabat" value="<?php 
+                  <input type="text" class="form-control" name="prosedur" id="prosedur" placeholder="Prosedur Awal" value="<?php 
                   if(set_value('prosedur')=="" && isset($prosedur)){
                     echo $prosedur;
                   }else{
@@ -464,7 +464,7 @@
             success : function(response){
               res = response.split(' | ');
               if(res[0]=="OK"){
-                alert("Data pangkat berhasil disimpan.");
+                alert("Data Jabatan berhasil disimpan.");
                 var peserta = "<?php echo $id; ?>";
                     $.get("<?php echo base_url().'kepegawaian/drh/biodata'?>/"+'5'+'/'+peserta,function(data){
                         $('#content5').html(data);
