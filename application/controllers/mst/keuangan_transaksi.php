@@ -153,12 +153,15 @@ class Keuangan_transaksi extends CI_Controller {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
 
-				if($field == 'tgl_lhr') {
+				if($field == 'tgl_diklat') {
 					$value = date("Y-m-d",strtotime($value));
 					$this->db->where($field,$value);
-				}else if($field == 'kategori') {
-					$value = date("Y-m-d",strtotime($value));
-					$this->db->where('mst_keu_kategori_transaksi.nama',$value);
+				}
+				elseif($field == 'nama') {
+					$this->db->like('mst_keu_transaksi.'.$field,$value);
+				}
+				elseif($field == 'kategori') {
+					$this->db->like('mst_keu_kategori_transaksi.nama',$value);
 				}else{
 					$this->db->like($field,$value);
 				}
@@ -179,12 +182,15 @@ class Keuangan_transaksi extends CI_Controller {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
 
-				if($field == 'tgl_lhr') {
+				if($field == 'tgl_diklat') {
 					$value = date("Y-m-d",strtotime($value));
 					$this->db->where($field,$value);
-				}else if($field == 'kategori') {
-					$value = date("Y-m-d",strtotime($value));
-					$this->db->where('mst_keu_kategori_transaksi.nama',$value);
+				}
+				elseif($field == 'nama') {
+					$this->db->like('mst_keu_transaksi.'.$field,$value);
+				}
+				elseif($field == 'kategori') {
+					$this->db->like('mst_keu_kategori_transaksi.nama',$value);
 				}else{
 					$this->db->like($field,$value);
 				}
@@ -229,9 +235,15 @@ class Keuangan_transaksi extends CI_Controller {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
 
-				if($field == 'tgl_lhr') {
+				if($field == 'tgl_diklat') {
 					$value = date("Y-m-d",strtotime($value));
 					$this->db->where($field,$value);
+				}
+				elseif($field == 'nama') {
+					$this->db->like('mst_keu_otomasi_transaksi.'.$field,$value);
+				}
+				elseif($field == 'kategori') {
+					$this->db->like('mst_keu_otomasi_transaksi.nama',$value);
 				}else{
 					$this->db->like($field,$value);
 				}
@@ -252,9 +264,15 @@ class Keuangan_transaksi extends CI_Controller {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
 
-				if($field == 'tgl_lhr') {
+				if($field == 'tgl_diklat') {
 					$value = date("Y-m-d",strtotime($value));
 					$this->db->where($field,$value);
+				}
+				elseif($field == 'nama') {
+					$this->db->like('mst_keu_otomasi_transaksi.'.$field,$value);
+				}
+				elseif($field == 'kategori') {
+					$this->db->like('mst_keu_kategori_transaksi.nama',$value);
 				}else{
 					$this->db->like($field,$value);
 				}
@@ -390,8 +408,8 @@ class Keuangan_transaksi extends CI_Controller {
 		if($this->form_validation->run()== FALSE){
 
 			$data 						= $this->keutransaksi_model->get_data_kategori_transaksi_edit($id);
-			// $data['template']			= $this->keutransaksi_model->get_data_template();
-			$data['template']			= $this->keutransaksi_model->get_data_template_kat_trans($id);
+			$data['template']			= $this->keutransaksi_model->get_data_template();
+			// $data['template']			= $this->keutransaksi_model->get_data_template_kat_trans($id);
 			$data['notice']				= validation_errors();
 			$data['action']				= "edit";
 			$data['id']					= $id;
