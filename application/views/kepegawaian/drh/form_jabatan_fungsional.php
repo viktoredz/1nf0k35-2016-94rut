@@ -17,23 +17,27 @@
   <div id="popup_title">Data Jabatan Fungsional</div>
   <div id="popup_jabatan_fungsional_content">&nbsp;</div>
 </div>
-
 <script type="text/javascript">
      var sourcejabatanfunsional = {
       datatype: "json",
       type  : "POST",
       datafields: [
       { name: 'id_pegawai', type: 'string'},
-      { name: 'mst_peg_id_diklat', type: 'number'},
-      { name: 'jenis_diklat', type: 'string'},
-      { name: 'tipe', type: 'string'},
-      { name: 'nama_diklat', type: 'string'},
-      { name: 'tgl_diklat', type: 'date'},
-      { name: 'nomor_sertifikat', type: 'string'},
-      { name: 'lama_diklat', type: 'number'},
-      { name: 'tipe', type: 'string'},
-      { name: 'instansi', type: 'string'},
-      { name: 'penyelenggara', type: 'string'},
+      { name: 'nip_nit', type: 'number'},
+      { name: 'tmt', type: 'string'},
+      { name: 'jenis', type: 'string'},
+      { name: 'unor', type: 'string'},
+      { name: 'id_mst_peg_struktural', type: 'string'},
+      { name: 'id_mst_peg_fungsional', type: 'string'},
+      { name: 'sk_jb_tgl', type: 'date'},
+      { name: 'sk_jb_nomor', type: 'string'},
+      { name: 'sk_status', type: 'string'},
+      { name: 'tgl_pelantikan', type: 'date'},
+      { name: 'sk_jb_pejabat', type: 'string'},
+      { name: 'tar_nama_struktural', type: 'string'},
+      { name: 'tar_nama_fungsional', type: 'string'},
+      { name: 'code_cl_phc', type: 'string'},
+      { name: 'prosedur', type: 'string'},
       { name: 'edit', type: 'number'},
       { name: 'delete', type: 'number'}
         ],
@@ -79,7 +83,7 @@
         { text: 'Detail', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
             var dataRecord = $("#jqxgridJabatanFungsional").jqxGrid('getrowdata', row);
             if(dataRecord.edit==1){
-            return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='detail_jabatanfungsional (\""+dataRecord.id_pegawai+"\",\""+dataRecord.mst_peg_id_diklat+"\");'></a></div>";
+            return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='detail_jabatanfungsional (\""+dataRecord.id_pegawai+"\",\""+dataRecord.tmt+"\");'></a></div>";
           }else{
             return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_view.gif'></a></div>";
           }
@@ -88,18 +92,18 @@
         { text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
             var dataRecord = $("#jqxgridJabatanFungsional").jqxGrid('getrowdata', row);
             if(dataRecord.delete==1){
-            return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del_jabatanfungsional (\""+dataRecord.id_pegawai+"\",\""+dataRecord.mst_peg_id_diklat+"\");'></a></div>";
+            return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del_jabatanfungsional (\""+dataRecord.id_pegawai+"\",\""+dataRecord.tmt+"\");'></a></div>";
           }else{
             return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
           }
                  }
                 },
-        { text: 'Nama Jabatan', datafield: 'nomor_sertifikat', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center',width: '20%' },
-        { text: 'TMT Jabatan', datafield: 'tgl_dikslat', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', align: 'center', cellsalign: 'center', width: '10%' },
-        { text: 'TMT Pelantikan', datafield: 'tgl_dsiklat', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', align: 'center', cellsalign: 'center', width: '10%' },
-        { text: 'Pejabat', datafield: 'nama_diklat',columngroup: 'suratkeputusan', columntype: 'textbox', filtertype: 'textbox', align: 'center' , cellsalign: 'center', width: '20%' },
-        { text: 'Nomor', datafield: 'jenis_diklat',columngroup: 'suratkeputusan', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '20%' },
-        { text: 'TMT Jabatan', datafield: 'tgl_diklat',columngroup: 'suratkeputusan', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', align: 'center', cellsalign: 'center', width: '10%' },
+        { text: 'Nama Jabatan', datafield: 'tar_nama_fungsional', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center',width: '20%' },
+        { text: 'TMT Jabatan', datafield: 'tmt', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '10%' },
+        { text: 'TMT Pelantikan', datafield: 'tgl_pelantikan', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', align: 'center', cellsalign: 'center', width: '10%' },
+        { text: 'Pejabat', datafield: 'sk_jb_pejabat',columngroup: 'suratkeputusan', columntype: 'textbox', filtertype: 'textbox', align: 'center' , cellsalign: 'center', width: '20%' },
+        { text: 'Nomor', datafield: 'sk_jb_nomor',columngroup: 'suratkeputusan', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '20%' },
+        { text: 'TMT Jabatan', datafield: 'sk_jb_tgl',columngroup: 'suratkeputusan', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', align: 'center', cellsalign: 'center', width: '10%' },
         
             ],
          columngroups: 
@@ -108,24 +112,16 @@
         ]
     });
 
-  function detail_jabatanfungsional(id,id_diklat){
-      $("#popup_jabatan_fungsional #popup_jabatan_fungsional_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-      $.get("<?php echo base_url().'kepegawaian/drh_jabatan/biodata_jabatan_fungsional_edit' ?>/" + id +"/"+id_diklat,  function(data) {
-        $("#popup_jabatan_fungsional_content").html(data);
+  function detail_jabatanfungsional(id,tmt){
+      $.get("<?php echo base_url().'kepegawaian/drh_jabatan/edit' ?>/" + id +"/"+tmt,  function(data) {
+        $("#content5").html(data);
       });
-      $("#popup_jabatan_fungsional").jqxWindow({
-        theme: theme, resizable: false,
-        width: 600,
-        height: 500,
-        isModal: true, autoOpen: false, modalOpacity: 0.2
-      });
-      $("#popup_jabatan_fungsional").jqxWindow('open');
   }
 
-  function del_jabatanfungsional(id,id_diklat){
+  function del_jabatanfungsional(id,tmt){
     var confirms = confirm("Hapus Data ?");
     if(confirms == true){
-      $.post("<?php echo base_url().'kepegawaian/drh_jabatan/biodata_jabatan_fungsional_del' ?>/" + id +"/"+id_diklat,   function(){
+      $.post("<?php echo base_url().'kepegawaian/drh_jabatan/biodata_jabatan_del' ?>/" + id +"/"+tmt,   function(){
         alert('data berhasil dihapus');
 
         $("#jqxgridJabatanFungsional").jqxGrid('updatebounddata', 'cells');

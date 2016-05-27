@@ -331,7 +331,7 @@ class Drh extends CI_Controller {
         $this->form_validation->set_rules('kode_mst_nikah', 'Status Nikah', 'trim');
 
 		$data = $this->drh_model->get_data_row($id); 
-
+		$data['action']='add';
 		$data['id']=$id;
 		$data['kode_ag'] = $this->drh_model->get_kode_agama('kode_ag');
 		$data['kode_nk'] = $this->drh_model->get_kode_nikah('kode_nk');
@@ -349,6 +349,7 @@ class Drh extends CI_Controller {
 		}elseif($this->drh_model->update_entry($id)){
 			$data = $this->drh_model->get_data_row($id); 
 			$data['id']=$id;
+			$data['action']='add';
 			$data['kode_ag'] = $this->drh_model->get_kode_agama('kode_ag');
 			$data['kode_nk'] = $this->drh_model->get_kode_nikah('kode_nk');
 			$kodepuskesmas = $this->session->userdata('puskesmas');

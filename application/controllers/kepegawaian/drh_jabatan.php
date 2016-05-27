@@ -73,14 +73,18 @@ class Drh_jabatan extends CI_Controller {
 			$data[] = array(
 				'id_pegawai'		=> $act->id_pegawai,
 				'nip_nit' 			=> $act->nip_nit,
-				'tmt' 				=> $act->tmt,
+				'tmt' 				=> date("d-m-Y",strtotime($act->tmt)),
+				'tar_nama_fungsional' => $act->tar_nama_fungsional,
+				'tar_nama_struktural' => $act->tar_nama_struktural,
 				'jenis'				=> ucwords($act->jenis),
 				'unor'				=> $act->unor,
 				'id_mst_peg_struktural'		=> $act->id_mst_peg_struktural,
 				'id_mst_peg_fungsional'		=> $act->id_mst_peg_fungsional,
 				'sk_jb_tgl'			=> $act->sk_jb_tgl,
-				'sk_jb_nomor'		=> $act->sk_jb_nomor,
+				'tgl_pelantikan'	=> $act->tgl_pelantikan,
+				'sk_jb_nomor'		=> ucwords($act->sk_jb_nomor),
 				'sk_status'			=> $act->sk_status,
+				'sk_jb_pejabat'			=> ucwords($act->sk_jb_pejabat),
 				'prosedur'			=> $act->prosedur,
 				'code_cl_phc'		=> $act->code_cl_phc,
 				'edit'		=> 1,
@@ -151,13 +155,18 @@ class Drh_jabatan extends CI_Controller {
 			$data[] = array(
 				'id_pegawai'		=> $act->id_pegawai,
 				'nip_nit' 			=> $act->nip_nit,
-				'tmt' 				=> $act->tmt,
+				'tmt' 				=> date("d-m-Y",strtotime($act->tmt)),
 				'jenis'				=> ucwords($act->jenis),
 				'unor'				=> $act->unor,
+				'tar_nama_fungsional' => $act->tar_nama_fungsional,
+				'tar_nama_struktural' => $act->tar_nama_struktural,
 				'id_mst_peg_struktural'		=> $act->id_mst_peg_struktural,
 				'id_mst_peg_fungsional'		=> $act->id_mst_peg_fungsional,
 				'sk_jb_tgl'			=> $act->sk_jb_tgl,
-				'sk_jb_nomor'		=> $act->sk_jb_nomor,
+				'sk_jb_nomor'		=> ucwords($act->sk_jb_nomor),
+				'tgl_pelantikan'	=> $act->tgl_pelantikan,
+				'sk_jb_pejabat'		=> ucwords($act->sk_jb_pejabat),
+				'tar_eselon'		=> $act->tar_eselon,
 				'sk_status'			=> $act->sk_status,
 				'prosedur'			=> $act->prosedur,
 				'code_cl_phc'		=> $act->code_cl_phc,
@@ -195,10 +204,10 @@ class Drh_jabatan extends CI_Controller {
 
 	
 
-	function biodata_jabatan_struktural_del($id="",$id_diklat=0){
+	function biodata_jabatan_del($id="",$tmt=0){
 		$this->authentication->verify('kepegawaian','del');
 
-		if($this->drh_model->delete_entry_jabatan_struktural($id,$id_diklat)){
+		if($this->drh_model->delete_entry_jabatan($id,$tmt)){
 			die ("OK");
 		} else {
 			die ("Error");
@@ -252,49 +261,41 @@ class Drh_jabatan extends CI_Controller {
 
 		die($this->parser->parse("kepegawaian/drh/form_jabatan_struktural_form",$data));
 	}
-
+	
 	function add($id,$tmt=''){
 
-        $this->form_validation->set_rules('id_mst_peg_golruang', 'Golongan Ruang', 'trim|required');
+        $this->form_validation->set_rules('nip', 'NIP', 'trim|required');
         $this->form_validation->set_rules('tmt', 'Terhitung Mulai Tanggal', 'trim|required');
-        $this->form_validation->set_rules('bkn_tgl', 'Tanggal BKN', 'trim|required');
-        $this->form_validation->set_rules('bkn_nomor', 'Nomor BKN', 'trim|required');
-        $this->form_validation->set_rules('sk_tgl', 'SK Tanggal', 'trim|required');
-        $this->form_validation->set_rules('sk_nomor', 'SK Nomor', 'trim|required');
-        $this->form_validation->set_rules('sk_pejabat', 'SK Pejabat', 'trim|required');
-        $this->form_validation->set_rules('statuspns', 'Status', 'trim|required');
-        $this->form_validation->set_rules('codepus', 'Kode Puskesmas', 'trim|required');
-        if ($this->input->post('statuspns')=='CPNS') {
-        	$this->form_validation->set_rules('jenis_pengadaan', 'Jenis Pengadaan', 'trim|required');
-        	$this->form_validation->set_rules('masa_krj_bln', 'Masa Kerja Golongan Bulan ', 'trim|required');
-        	$this->form_validation->set_rules('masa_krj_thn', 'Masa Kerja Golongan Tahun', 'trim|required');
-			$this->form_validation->set_rules('spmt_tgl', 'Tanggal SPMT', 'trim|required');
-			$this->form_validation->set_rules('spmt_nomor', 'Nomor SPMT', 'trim|required');
-			$this->form_validation->set_rules('nit', 'NIT', 'trim|required');
-        }else if ($this->input->post('statuspns')=='PNS') {
-        	$this->form_validation->set_rules('masa_krj_bln', 'Masa Kerja Golongan Bulan ', 'trim|required');
-        	$this->form_validation->set_rules('masa_krj_thn', 'Masa Kerja Golongan Tahun', 'trim|required');
-        	$this->form_validation->set_rules('penganggkatan', 'cek', 'trim');	
-        	$this->form_validation->set_rules('nip', 'NIP', 'trim|required');
-        	if($this->input->post('penganggkatan') == '1'){
-        		$this->form_validation->set_rules('sttpl_tgl', 'Tanggal STTPL', 'trim|required');
-        		$this->form_validation->set_rules('sttpl_nomor', 'Nomor STTPL', 'trim|required');
-        		$this->form_validation->set_rules('dokter_tgl', 'Tanggal Keterangan Dokter', 'trim|required');
-        		$this->form_validation->set_rules('dokter_nomor', 'Nomor Keterangan Dokter', 'trim|required');
-        	}else{
-        		$this->form_validation->set_rules('jenis_pangkat', 'Jenis Pangkat', 'trim|required');
-        	}
-        }else {
-        	$this->form_validation->set_rules('nit', 'NIT', 'trim|required');
-        	$this->form_validation->set_rules('jenis_pengadaan', 'Jenis Pengadaan', 'trim|required');
-        	$this->form_validation->set_rules('tat', 'Terhitung Akhir Tanggal', 'trim|required');
-        	$this->form_validation->set_rules('spmt_tgl', 'SPMT Tanggal', 'trim|required');
-        	$this->form_validation->set_rules('spmt_nomor', 'SPMT Nomor', 'trim|required');
-        }
+        $this->form_validation->set_rules('jenis', 'Status', 'trim|required');
+        $this->form_validation->set_rules('unor', 'Unit Organisasi', 'trim|required');
+        $this->form_validation->set_rules('tgl_pelantikan', 'Tanggal Pelantikan', 'trim|required');
+        $this->form_validation->set_rules('sk_jb_tgl', 'Tanggal Surat Keputusan', 'trim|required');
+        $this->form_validation->set_rules('sk_jb_nomor', 'Nomor Surat Keputusan', 'trim|required');
+        $this->form_validation->set_rules('sk_jb_pejabat', 'Nama Pejabat', 'trim|required');
+        $this->form_validation->set_rules('sk_status', 'SK Status', 'trim|required');
+        $this->form_validation->set_rules('prosedur', 'Prosedur Awal', 'trim|required');
+        $this->form_validation->set_rules('codepus', 'Puskesmas', 'trim|required');
+        if ($this->input->post('jenis')=='STRUKTURAL') {
+        	$this->form_validation->set_rules('id_mst_peg_struktural', 'Jabatan Struktural', 'trim|required');
+        }else if ($this->input->post('jenis')=='FUNGSIONAL_TERTENTU') {
+        	$this->form_validation->set_rules('id_mst_peg_fungsional_tertentu', 'Jabatan Fungsional', 'trim|required');
+        }else{
+        	$this->form_validation->set_rules('id_mst_peg_fungsional_umum', 'Jabatan Fungsional', 'trim|required');
+        } 
+        
+        $data = $this->drh_model->get_data_row($id); 
 		$data['id']				= $id;
 	    $data['action']			= "add";
 		$data['alert_form'] 	= '';
 		$data['tmt'] 			= '';
+		$data['statusjenis']	= $this->pilihan_enums('pegawai_jabatan','jenis');
+		$data['statusjenissk']	= $this->pilihan_enums('pegawai_jabatan','sk_status');
+		$data['mst_peg_struktural']			= $this->drh_model->get_datawhere('all','all','mst_peg_struktural');
+		$data['mst_peg_fungsional_umum']	= $this->drh_model->get_datawhere('FUNGSIONAL_UMUM','tar_jenis','mst_peg_fungsional');
+		$data['mst_peg_fungsional_tertentu']= $this->drh_model->get_datawhere('FUNGSIONAL_TERTENTU','tar_jenis','mst_peg_fungsional');
+		$data['mst_peg_rumpunpendidikan']			= $this->drh_model->get_datawhere('all','all','mst_peg_rumpunpendidikan');
+		$data['mst_peg_tingkatpendidikan']			= $this->drh_model->get_datawhere('all','all','mst_peg_tingkatpendidikan');
+
 
 		$kodepuskesmas = $this->session->userdata('puskesmas');
 		if(strlen($kodepuskesmas) == 4){
@@ -304,18 +305,33 @@ class Drh_jabatan extends CI_Controller {
 		}
 
 		$data['datapuskesmas'] 	= $this->inv_ruangan_model->get_data_puskesmas();
-		$this->db->order_by('no_urut','asc');
-		$data['kode_status'] 	= $this->drh_model->kode_tabel('mst_peg_status');
-		$data['kode_pns'] 		= $this->drh_model->kode_tabel('mst_peg_golruang');
-		$data['kode_pengadaan']	= $this->pilihan_enums('pegawai_pangkat','jenis_pengadaan');
-		$data['kode_pangkat']	= $this->pilihan_enums('pegawai_pangkat','jenis_pangkat');
-		$data['masakerjaterakhir'] = $this->drh_model->masakerjaterakhir($id);
-		$tambahdata = date("Y") - date("Y",strtotime($data['masakerjaterakhir']['tmt']));
-		$data ['masa_krj_bln'] = $data['masakerjaterakhir']['masa_krj_bln'];
-		$data ['masa_krj_thn'] = $data['masakerjaterakhir']['masa_krj_thn'];
+		
+		
 		if($this->form_validation->run()== FALSE){
+			$data = $this->drh_model->get_data_row($id); 
+			$data['statusjenis']	= $this->pilihan_enums('pegawai_jabatan','jenis');
+			$data['statusjenissk']	= $this->pilihan_enums('pegawai_jabatan','sk_status');
+			$data['mst_peg_struktural']			= $this->drh_model->get_datawhere('all','all','mst_peg_struktural');
+			$data['mst_peg_rumpunpendidikan']			= $this->drh_model->get_datawhere('all','all','mst_peg_rumpunpendidikan');
+			$data['mst_peg_fungsional_umum']	= $this->drh_model->get_datawhere('FUNGSIONAL_UMUM','tar_jenis','mst_peg_fungsional');
+			$data['mst_peg_fungsional_tertentu']= $this->drh_model->get_datawhere('FUNGSIONAL_TERTENTU','tar_jenis','mst_peg_fungsional');
+			$data['mst_peg_tingkatpendidikan']			= $this->drh_model->get_datawhere('all','all','mst_peg_tingkatpendidikan');
+			$data['id']				= $id;
+		    $data['action']			= "add";
+			$data['alert_form'] 	= '';
+			$data['tmt'] 			= '';
+
+			$kodepuskesmas = $this->session->userdata('puskesmas');
+			if(strlen($kodepuskesmas) == 4){
+				$this->db->like('code','P'.substr($kodepuskesmas, 0,4));
+			}else {
+				$this->db->where('code','P'.$kodepuskesmas);
+			}
+
+			$data['datapuskesmas'] 	= $this->inv_ruangan_model->get_data_puskesmas();
+			$data['alert_form'] 	= '';
 			die($this->parser->parse("kepegawaian/drh/form_jabatan_form",$data));
-		}elseif($st = $this->drh_model->insert_entry_cpns_formal($id)){
+		}elseif($st = $this->drh_model->insert_entry_jabatan_formal($id)){
 			die("OK | $st");
 		}else{
 			$data['alert_form'] = 'Save data failed...';
@@ -323,18 +339,7 @@ class Drh_jabatan extends CI_Controller {
 
 		die($this->parser->parse("kepegawaian/drh/form_jabatan_form",$data));
 	}
-	function pilihan_enums($table , $field){
-	$query = "SHOW COLUMNS FROM ".$table." LIKE '$field'";
-	 $row = $this->db->query("SHOW COLUMNS FROM ".$table." LIKE '$field'")->row()->Type;  
-	 $regex = "/'(.*?)'/";
-	        preg_match_all( $regex , $row, $enum_array );
-	        $enum_fields = $enum_array[1];
-	        foreach ($enum_fields as $key=>$value)
-	        {
-	            $enums[$value] = $value; 
-	        }
-	        return $enums;
-	}
+	
 	function biodata_jabatan_fungsional_add($id){
         $this->form_validation->set_rules('nama_diklat', 'Nama Diklat Struktural', 'trim|required');
         $this->form_validation->set_rules('mst_peg_id_diklat', 'Jenis Diklat', 'trim|required');
@@ -359,7 +364,95 @@ class Drh_jabatan extends CI_Controller {
 
 		die($this->parser->parse("kepegawaian/drh/form_jabatan_fungsional_form",$data));
 	}
+	function edit($id='',$tmt=''){
 
+        $this->form_validation->set_rules('nip', 'NIP', 'trim|required');
+        $this->form_validation->set_rules('tmt', 'Terhitung Mulai Tanggal', 'trim|required');
+        $this->form_validation->set_rules('jenis', 'Status', 'trim|required');
+        $this->form_validation->set_rules('unor', 'Unit Organisasi', 'trim|required');
+        $this->form_validation->set_rules('tgl_pelantikan', 'Tanggal Pelantikan', 'trim|required');
+        $this->form_validation->set_rules('sk_jb_tgl', 'Tanggal Surat Keputusan', 'trim|required');
+        $this->form_validation->set_rules('sk_jb_nomor', 'Nomor Surat Keputusan', 'trim|required');
+        $this->form_validation->set_rules('sk_jb_pejabat', 'Nama Pejabat', 'trim|required');
+        $this->form_validation->set_rules('sk_status', 'SK Status', 'trim|required');
+        $this->form_validation->set_rules('prosedur', 'Prosedur Awal', 'trim|required');
+        $this->form_validation->set_rules('codepus', 'Puskesmas', 'trim|required');
+        if ($this->input->post('jenis')=='STRUKTURAL') {
+        	$this->form_validation->set_rules('id_mst_peg_struktural', 'Jabatan Struktural', 'trim|required');
+        }else if ($this->input->post('jenis')=='FUNGSIONAL_TERTENTU') {
+        	$this->form_validation->set_rules('id_mst_peg_fungsional_tertentu', 'Jabatan Fungsional', 'trim|required');
+        }else{
+        	$this->form_validation->set_rules('id_mst_peg_fungsional_umum', 'Jabatan Fungsional', 'trim|required');
+        } 
+        
+        $data = $this->drh_model->get_data_row($id); 
+		$data['id']				= $id;
+	    $data['action']			= "edit";
+		$data['alert_form'] 	= '';
+		$data['tmt'] 			= $tmt;
+		$data['statusjenis']	= $this->pilihan_enums('pegawai_jabatan','jenis');
+		$data['statusjenissk']	= $this->pilihan_enums('pegawai_jabatan','sk_status');
+		$data['mst_peg_struktural']			= $this->drh_model->get_datawhere('all','all','mst_peg_struktural');
+		$data['mst_peg_fungsional_umum']	= $this->drh_model->get_datawhere('FUNGSIONAL_UMUM','tar_jenis','mst_peg_fungsional');
+		$data['mst_peg_fungsional_tertentu']= $this->drh_model->get_datawhere('FUNGSIONAL_TERTENTU','tar_jenis','mst_peg_fungsional');
+		$data['mst_peg_rumpunpendidikan']			= $this->drh_model->get_datawhere('all','all','mst_peg_rumpunpendidikan');
+		$data['mst_peg_tingkatpendidikan']			= $this->drh_model->get_datawhere('all','all','mst_peg_tingkatpendidikan');
+
+
+		$kodepuskesmas = $this->session->userdata('puskesmas');
+		if(strlen($kodepuskesmas) == 4){
+			$this->db->like('code','P'.substr($kodepuskesmas, 0,4));
+		}else {
+			$this->db->where('code','P'.$kodepuskesmas);
+		}
+
+		$data['datapuskesmas'] 	= $this->inv_ruangan_model->get_data_puskesmas();
+		
+		
+		if($this->form_validation->run()== FALSE){
+			$data = $this->drh_model->get_data_row_edit($id,$tmt); 
+			$data['statusjenis']	= $this->pilihan_enums('pegawai_jabatan','jenis');
+			$data['statusjenissk']	= $this->pilihan_enums('pegawai_jabatan','sk_status');
+			$data['mst_peg_struktural']			= $this->drh_model->get_datawhere('all','all','mst_peg_struktural');
+			$data['mst_peg_rumpunpendidikan']			= $this->drh_model->get_datawhere('all','all','mst_peg_rumpunpendidikan');
+			$data['mst_peg_fungsional_umum']	= $this->drh_model->get_datawhere('FUNGSIONAL_UMUM','tar_jenis','mst_peg_fungsional');
+			$data['mst_peg_fungsional_tertentu']= $this->drh_model->get_datawhere('FUNGSIONAL_TERTENTU','tar_jenis','mst_peg_fungsional');
+			$data['mst_peg_tingkatpendidikan']			= $this->drh_model->get_datawhere('all','all','mst_peg_tingkatpendidikan');
+			$data['id']				= $id;
+		    $data['action']			= "edit";
+			$data['alert_form'] 	= '';
+			$data['tmt'] 			= $tmt;
+
+			$kodepuskesmas = $this->session->userdata('puskesmas');
+			if(strlen($kodepuskesmas) == 4){
+				$this->db->like('code','P'.substr($kodepuskesmas, 0,4));
+			}else {
+				$this->db->where('code','P'.$kodepuskesmas);
+			}
+
+			$data['datapuskesmas'] 	= $this->inv_ruangan_model->get_data_puskesmas();
+			$data['alert_form'] 	= '';
+			die($this->parser->parse("kepegawaian/drh/form_jabatan_form",$data));
+		}elseif($st = $this->drh_model->update_entry_jabatan_formal($id,$tmt)){
+			die("OK | $st");
+		}else{
+			$data['alert_form'] = 'Save data failed...';
+		}
+
+		die($this->parser->parse("kepegawaian/drh/form_jabatan_form",$data));
+	}
+	function pilihan_enums($table , $field){
+	$query = "SHOW COLUMNS FROM ".$table." LIKE '$field'";
+	 $row = $this->db->query("SHOW COLUMNS FROM ".$table." LIKE '$field'")->row()->Type;  
+	 $regex = "/'(.*?)'/";
+	        preg_match_all( $regex , $row, $enum_array );
+	        $enum_fields = $enum_array[1];
+	        foreach ($enum_fields as $key=>$value)
+	        {
+	            $enums[$value] = $value; 
+	        }
+	        return $enums;
+	}
 	function biodata_jabatan_fungsional_edit($id="",$id_diklat=0){
         $this->form_validation->set_rules('nama_diklat', 'Nama Diklat Struktural', 'trim|required');
         $this->form_validation->set_rules('mst_peg_id_diklat', 'Jenis Diklat', 'trim|required');

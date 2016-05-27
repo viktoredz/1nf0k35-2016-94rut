@@ -65,6 +65,7 @@ class Drh_model extends CI_Model {
         $query->free_result();    
         return $data;
     }
+
     function get_data_alamat_id($id,$urut=0)
     {
 		$data = array();
@@ -77,7 +78,15 @@ class Drh_model extends CI_Model {
 		$query->free_result();    
 		return $data;
     }
-
+    function get_datawhere ($code,$condition,$table){
+        $this->db->select("*");
+        if (($condition=='all') && ($code=='all')) {
+            # code...
+        }else{
+            $this->db->where($condition,$code);
+        }
+        return $this->db->get($table)->result();
+    }
  	function get_data_row($id){
 		$data = array();
 		$options = array('id_pegawai' => $id);
@@ -90,7 +99,22 @@ class Drh_model extends CI_Model {
 		$query->free_result();    
 		return $data;
 	}
+    function get_data_row_edit($id='0',$tmt='0'){
+        $ttm = explode("-", $tmt);
+        $tgl = $ttm[2].'-'.$ttm[1].'-'.$ttm[0];
+        $data = array();
+        $options = array('pegawai_jabatan.id_pegawai' => $id);
+        $options = array('pegawai_jabatan.tmt' => $tgl);
+        $this->db->select("pegawai_jabatan.*,pegawai.*,DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgl_lhr)), '%Y')+0 AS usia,(SELECT nip_nit FROM pegawai_pangkat WHERE id_pegawai = pegawai.id_pegawai ORDER BY tmt DESC LIMIT 1) AS nip",false);
+        $this->db->join('pegawai_jabatan','pegawai_jabatan.id_pegawai = pegawai.id_pegawai','left');
+        $query = $this->db->get_where($this->tabel,$options);
+        if ($query->num_rows() > 0){
+            $data = $query->row_array();
+        }
 
+        $query->free_result();    
+        return $data;
+    }
     function get_kode_diklat($tipe=""){
         if($tipe=="struktural"){
             $this->db->where('jenis','struktural');
@@ -758,7 +782,70 @@ class Drh_model extends CI_Model {
                 return mysql_error();
             }
     }
-
+    function insert_entry_jabatan_formal($id)
+    {
+        $data['id_pegawai']         = $id;
+        $data['nip_nit']            = $this->input->post('nip');
+        $data['tmt']                = date("Y-m-d",strtotime($this->input->post('tmt')));
+        $data['jenis']              = $this->input->post('jenis');
+        $data['unor']               = $this->input->post('unor');
+        $data['tgl_pelantikan']     = date("Y-m-d",strtotime($this->input->post('tgl_pelantikan')));
+        $data['sk_jb_tgl']          = date("Y-m-d",strtotime($this->input->post('sk_jb_tgl')));
+        $data['sk_jb_nomor']        = $this->input->post('sk_jb_nomor');
+        $data['sk_jb_pejabat']        = $this->input->post('sk_jb_pejabat');
+        $data['sk_status']          = $this->input->post('sk_status');
+        $data['prosedur']           = $this->input->post('prosedur');
+        $data['code_cl_phc']        = $this->input->post('codepus');
+        if ($this->input->post('jenis')=='STRUKTURAL') {
+            $data['id_mst_peg_struktural']        = $this->input->post('id_mst_peg_struktural');
+            $data['id_mst_peg_fungsional']        = '-';
+            $this->form_validation->set_rules('', 'Jabatan Struktural', 'trim|required');
+        }else if ($this->input->post('jenis')=='FUNGSIONAL_TERTENTU') {
+            $data['id_mst_peg_struktural']        = '-';
+            $data['id_mst_peg_fungsional']        = $this->input->post('id_mst_peg_fungsional_tertentu');
+        }else{
+            $data['id_mst_peg_struktural']        = '-';
+            $data['id_mst_peg_fungsional']        = $this->input->post('id_mst_peg_fungsional_umum');
+        } 
+            if($this->db->insert('pegawai_jabatan', $data)){
+                return $data['jenis']; 
+            }else{
+                return mysql_error();
+            }
+    }
+    function update_entry_jabatan_formal($id=0,$tmt=0)
+    {
+        $ttm = explode("-", $tmt);
+        $tgl = $ttm[2].'-'.$ttm[1].'-'.$ttm[0];
+        $data['nip_nit']            = $this->input->post('nip');
+        $data['jenis']              = $this->input->post('jenis');
+        $data['unor']               = $this->input->post('unor');
+        $data['tgl_pelantikan']     = date("Y-m-d",strtotime($this->input->post('tgl_pelantikan')));
+        $data['sk_jb_tgl']          = date("Y-m-d",strtotime($this->input->post('sk_jb_tgl')));
+        $data['sk_jb_nomor']        = $this->input->post('sk_jb_nomor');
+        $data['sk_jb_pejabat']        = $this->input->post('sk_jb_pejabat');
+        $data['sk_status']          = $this->input->post('sk_status');
+        $data['prosedur']           = $this->input->post('prosedur');
+        $data['code_cl_phc']        = $this->input->post('codepus');
+        if ($this->input->post('jenis')=='STRUKTURAL') {
+            $data['id_mst_peg_struktural']        = $this->input->post('id_mst_peg_struktural');
+            $data['id_mst_peg_fungsional']        = '-';
+            $this->form_validation->set_rules('', 'Jabatan Struktural', 'trim|required');
+        }else if ($this->input->post('jenis')=='FUNGSIONAL_TERTENTU') {
+            $data['id_mst_peg_struktural']        = '-';
+            $data['id_mst_peg_fungsional']        = $this->input->post('id_mst_peg_fungsional_tertentu');
+        }else{
+            $data['id_mst_peg_struktural']        = '-';
+            $data['id_mst_peg_fungsional']        = $this->input->post('id_mst_peg_fungsional_umum');
+        } 
+        $this->db->where('id_pegawai',$id);
+        $this->db->where('tmt',$tgl);
+            if($this->db->update('pegawai_jabatan', $data)){
+                return $data['jenis']; 
+            }else{
+                return mysql_error();
+            }
+    }
     function get_data_pendidikan_fungsional($id,$start=0,$limit=999999,$options=array())
     {
         $this->db->select("pegawai_diklat.*,mst_peg_diklat.nama_diklat as jenis_diklat,mst_peg_diklat.jenis",false);
@@ -806,9 +893,11 @@ class Drh_model extends CI_Model {
     }
     function get_data_jabatan($id,$start=0,$limit=999999,$options=array())
     {
-        $this->db->select("*",false);
+        $this->db->select("*,mst_peg_struktural.tar_nama_struktural,mst_peg_fungsional.tar_nama_fungsional,mst_peg_struktural.tar_eselon",false);
         $this->db->order_by('tmt','desc');
         $this->db->where('id_pegawai',$id);
+        $this->db->join('mst_peg_struktural','mst_peg_struktural.tar_id_struktural=pegawai_jabatan.id_mst_peg_struktural','left');
+        $this->db->join('mst_peg_fungsional','mst_peg_fungsional.tar_id_fungsional=pegawai_jabatan.id_mst_peg_fungsional','left');
         $query = $this->db->get('pegawai_jabatan',$limit,$start);
         return $query->result();
     }
@@ -938,6 +1027,16 @@ class Drh_model extends CI_Model {
         $this->db->where('tmt',$tgl);
 
         return $this->db->delete('pegawai_pangkat');
+    }
+    function delete_entry_jabatan($id,$tmt)
+    {
+        
+        $ttm = explode("-", $tmt);
+        $tgl = $ttm[2].'-'.$ttm[1].'-'.$ttm[0];
+        $this->db->where('id_pegawai',$id);
+        $this->db->where('tmt',$tgl);
+
+        return $this->db->delete('pegawai_jabatan');
     }
 
     function delete_entry_pendidikan_fungsional($id,$id_diklat)
