@@ -1,13 +1,21 @@
-<?php if($this->session->flashdata('alert')!=""){ ?>
-<div class="alert alert-success alert-dismissable">
-  <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-  <h4>  <i class="icon fa fa-check"></i> Information!</h4>
-  <?php echo $this->session->flashdata('alert')?>
-</div>
-<?php } ?>
+      <?php if(validation_errors()!=""){ ?>
+      <div class="alert alert-warning alert-dismissable">
+        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+        <h4>  <i class="icon fa fa-check"></i> Information!</h4>
+        <?php echo validation_errors()?>
+      </div>
+      <?php } ?>
+
+      <?php if($alert_form!=""){ ?>
+      <div class="alert alert-success alert-dismissable">
+        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+        <h4>  <i class="icon fa fa-check"></i> Information!</h4>
+        <?php echo $alert_form?>
+      </div>
+      <?php } ?>
 
 <section class="content">
-<form action="<?php echo base_url()?>kepegawaian/drh/dodel_multi" method="POST" name="">
+<form action="<?php echo base_url()?>kepegawaian/drh/dodel_multi" id="form_transaksi" name="form_transaksi" method="POST" >
   <div class="row">
     <div class="col-md-12">
       <div class="box box-primary">
@@ -63,10 +71,10 @@
                     $transaksi_jurnal = set_value('transaksi_jurnal');
                   }
                 ?>
-                  <option value="Semua"              <?php if($transaksi_jurnal=="semua")              echo "selected" ?>>Semua</option>
-                  <option value="Jurnal Umum"        <?php if($transaksi_jurnal=="jurnal_umum")        echo "selected" ?>>Jurnal Umum</option>
-                  <option value="Jurnal Penyesuaian" <?php if($transaksi_jurnal=="jurnal_penyesuaian") echo "selected" ?>>Jurnal Penyesuaian</option>
-                  <option value="Jurnal Penutup"     <?php if($transaksi_jurnal=="jurnal_penutup")     echo "selected" ?>>Jurnal Penutup</option>
+                  <option value="jurnal_penutup" <?php if($transaksi_jurnal=="jurnal_penutup") echo "selected" ?>>Jurnal Penutup</option>
+                  <option value="jurnal_penyesuaian" <?php if($transaksi_jurnal=="jurnal_penyesuaian") echo "selected" ?>>Jurnal Penyesuaian</option>
+                  <option value="jurnal_umum" <?php if($transaksi_jurnal=="jurnal_umum") echo "selected" ?>>Jurnal Umum</option>
+                  <option value="semua" <?php if($transaksi_jurnal=="semua") echo "selected" ?>>Semua</option>
                   
               </select>
             </div>
@@ -107,36 +115,6 @@
       });
     });
 
-    $("[name='btn_transaksi_save']").click(function(){
-        var data = new FormData();
-        $('#biodata_notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
-        $('#biodata_notice').show();
-
-        data.append('nama',                      $("[name='transaksi_nama']").val());
-        data.append('deskripsi',                 $("[name='transaksi_deskripsi']").val());
-        data.append('untuk_jurnal',              $("[name='transaksi_jurnal']").val());
-        data.append('id_mst_kategori_transaksi', $("[name='transaksi_kategori']").val());
-              
-        $.ajax({
-            cache : false,
-            contentType : false,
-            processData : false,
-            type : 'POST',
-            url : '<?php echo base_url()."mst/keuangan_transaksi/transaksi_{action}/{id}"   ?>',
-            data : data,
-            success : function(response){
-              if(response=="OK"){
-                alert("Data berhasil disimpan.");
-                clearForm(form_transaksi);
-              }else{
-                alert("Error.");
-              }
-            }
-        });
-
-        return false;
-    });
-
     function clearForm(form_transaksi) {
    
     var elements = form_transaksi.elements;
@@ -173,6 +151,38 @@
       }
     }
 }
+
+    $("[name='btn_transaksi_save']").click(function(){
+        var data = new FormData();
+        $('#biodata_notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
+        $('#biodata_notice').show();
+
+        data.append('nama',                      $("[name='transaksi_nama']").val());
+        data.append('deskripsi',                 $("[name='transaksi_deskripsi']").val());
+        data.append('untuk_jurnal',              $("[name='transaksi_jurnal']").val());
+        data.append('id_mst_kategori_transaksi', $("[name='transaksi_kategori']").val());
+              
+        $.ajax({
+            cache : false,
+            contentType : false,
+            processData : false,
+            type : 'POST',
+            url : '<?php echo base_url()."mst/keuangan_transaksi/transaksi_add/"   ?>',
+            data : data,
+            success : function(response){
+              if(response=="OK"){
+                alert("Data berhasil disimpan.");
+                $("#form_transaksi")[0].reset();
+              }else{
+                alert("Isi kolom yang kosong.");
+              }
+            }
+        });
+
+        return false;
+    });
+
+
 
 </script>
 

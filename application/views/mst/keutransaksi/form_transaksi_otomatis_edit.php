@@ -17,7 +17,7 @@
 
         <div class="box-footer">
           <button type="button" id="btn-kembali" class="btn btn-primary pull-right"><i class='fa  fa-arrow-circle-o-left'></i> &nbsp;Kembali</button>
-          <button type="button" disabled="" name="btn_kategori_transaksi_save" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Simpan</button>
+          <button type="button" name="btn_kategori_transaksi_save" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Simpan</button>
           <button type="button" name="btn-reset" value="Reset" onclick='clearForm(this.form)' class="btn btn-success" ><i class='fa fa-refresh'></i> &nbsp; Reset</button>
        </div>
         <div class="box-body">
@@ -63,10 +63,10 @@
                   $transaksi_otomatis_jurnal = set_value('transaksi_otomatis_jurnal');
                 }
               ?>
-              <option value="Semua" <?php if($transaksi_otomatis_jurnal=="semua") echo "selected" ?>>Semua</option>
-              <option value="Jurnal Umum" <?php if($transaksi_otomatis_jurnal=="jurnal_umum") echo "selected" ?>>Jurnal Umum</option>
-              <option value="Jurnal Penyesuaian" <?php if($transaksi_otomatis_jurnal=="jurnal_penyesuaian") echo "selected" ?>>Jurnal Penyesuaian</option>
-              <option value="Jurnal Penutup" <?php if($transaksi_otomatis_jurnal=="jurnal_penutup") echo "selected" ?>>Jurnal Penutup</option>
+              <option value="semua" <?php if($transaksi_otomatis_jurnal=="semua") echo "selected" ?>>Semua</option>
+              <option value="jurnal_umum" <?php if($transaksi_otomatis_jurnal=="jurnal_umum") echo "selected" ?>>Jurnal Umum</option>
+              <option value="jurnal_penyesuaian" <?php if($transaksi_otomatis_jurnal=="jurnal_penyesuaian") echo "selected" ?>>Jurnal Penyesuaian</option>
+              <option value="jurnal_penutup" <?php if($transaksi_otomatis_jurnal=="jurnal_penutup") echo "selected" ?>>Jurnal Penutup</option>
               </select>
           </div>
       </div>
@@ -309,11 +309,10 @@
 
         <label>Pengaturan Transaksi</label>
 
-
           <div class="row" style="margin: 5px">
             <div class="col-md-12">
               <?php $i=1; foreach($template as $t) : ?>
-                  <input type="checkbox" name="transaksi_otomatis_template" id="template<?php echo $i;?>" value="<?php echo $i;?>">
+                  <input type="checkbox" name="transaksi_otomatis_template" id="template<?php echo $i;?>" value="<?php echo $i;?>"
               <?php 
                 if(set_value('nilai')=="" && isset($t->nilai)){
                   $t->nilai= $t->nilai;
@@ -321,7 +320,7 @@
                   $t->nilai= set_value('nilai');
                 }
                 if($t->nilai == 1) echo "checked";
-              ?>
+              ?>>
                 <?php echo $t->setting_judul ?>
                   </br>
                 <?php echo $t->seting_deskripsi ?>
@@ -359,20 +358,42 @@
             url : '<?php echo base_url()."mst/keuangan_transaksi/transaksi_otomatis_template_update/"?>'+$(this).val(),
             data : data,
             success : function(response){
-              // a = response.split("|");
               if(response=="OK"){
-              // if (a[1]=='1') {
                     $("#transaksi_otomatis_template").prop("checked", true);
                 }else{
                     $("#transaksi_otomatis_template").prop("checked", false);
-                // };
-              // }else{
-                // alert("Mendukung transaksi belum berhasil di aktifkan.");
-
               }
-              //ceklist();
             }
         });
+        return false;
+    });
+
+    $("[name='btn_kategori_transaksi_save']").click(function(){
+        var data = new FormData();
+        $('#biodata_notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
+        $('#biodata_notice').show();
+
+        data.append('nama',                      $("[name='transaksi_otomatis_nama']").val());
+        data.append('deskripsi',                 $("[name='transaksi_otomatis_deskripsi']").val());
+        data.append('untuk_jurnal',              $("[name='transaksi_otomatis_jurnal']").val());
+        data.append('id_mst_kategori_transaksi', $("[name='transaksi_otomatis_kategori']").val());
+              
+        $.ajax({
+            cache : false,
+            contentType : false,
+            processData : false,
+            type : 'POST',
+            url : '<?php echo base_url()."mst/keuangan_transaksi/transaksi_otomatis_{action}/{id}"   ?>',
+            data : data,
+        success : function(response){
+              if(response=="OK"){
+                alert("Data berhasil disimpan.");
+              }else{
+                alert("Isi kolom yang kosong.");
+              }
+            }
+        });
+
         return false;
     });
 
