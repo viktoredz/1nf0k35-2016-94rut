@@ -177,6 +177,8 @@
                 $("#popup_keluarga_penghargaan").jqxWindow('close');
                 alert("Data Penghargaan berhasil disimpan.");
                 $("#jqxgridPenghargaan").jqxGrid('updatebounddata', 'filter');
+              }else if(response=="NOTOK"){
+                alert("Data Sudah pernah disimpan");
               }else{
                 $('#popup_keluarga_penghargaan_content').html(response);
               }

@@ -101,8 +101,12 @@ class Drh_penghargaan extends CI_Controller {
 
 		if($this->form_validation->run()== FALSE){
 			die($this->parser->parse("kepegawaian/drh/form_penghargaan_form",$data));
-		}elseif($this->drh_model->insert_entry_penghargaan($id,$id_mst_peg_penghargaan)){
-			die("OK");
+		}elseif($res = $this->drh_model->insert_entry_penghargaan($id,$id_mst_peg_penghargaan)){
+			if ($res == 'false') {
+				die("NOTOK");
+			}else{
+				die("OK");
+			}
 		}else{
 			$data['alert_form'] = 'Save data failed...';
 		}

@@ -525,11 +525,19 @@ class Drh_model extends CI_Model {
         $data['sk_tgl']                 = date("Y-m-d",strtotime($this->input->post('sk_tgl')));
         $data['sk_no']                  = $this->input->post('sk_no');
         $data['sk_pejabat']             = $this->input->post('sk_pejabat');
-        if($this->db->insert('pegawai_penghargaan', $data)){
-            return true; 
+        $this->db->where('id_pegawai',$id);
+        $this->db->where('id_mst_peg_penghargaan',$this->input->post('id_mst_peg_penghargaan'));
+        $query = $this->db->get('pegawai_penghargaan');
+        if ($query->num_rows() > 0) {
+            return 'false';
         }else{
-            return mysql_error();
+            if($this->db->insert('pegawai_penghargaan', $data)){
+                return 'true'; 
+            }else{
+                return mysql_error();
+            }    
         }
+        
     }
     function update_entry_penghargaan($id,$penghargaan){
         $data['tingkat']                = $this->input->post('tingkat');

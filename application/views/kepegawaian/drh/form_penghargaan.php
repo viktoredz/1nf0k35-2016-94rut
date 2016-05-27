@@ -90,7 +90,7 @@
           }
                  }
                 },
-        { text: 'Nama Bintang/STYA Lencana Penghargaan', datafield: 'nama_penghargaan', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center',width: '24%' },
+        { text: 'Nama Bintang / STYA Lencana Penghargaan', datafield: 'nama_penghargaan', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center',width: '24%' },
         { text: 'Tingkat', datafield: 'tingkat', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '15%' },
         { text: 'Pejabat',columngroup: 'suratkeputusan', datafield: 'sk_pejabat', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '15%' },
         { text: 'Nomor', columngroup: 'suratkeputusan',datafield: 'sk_no', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '15%' },
