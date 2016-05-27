@@ -37,6 +37,8 @@ class Drh_model extends CI_Model {
         return $query->result();
     }
 
+    
+
     function get_data_alamat($start=0,$limit=999999,$options=array())
     {
     	$this->db->select('*');
@@ -108,6 +110,18 @@ class Drh_model extends CI_Model {
         $this->db->select("pegawai_jabatan.*,pegawai.*,DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgl_lhr)), '%Y')+0 AS usia,(SELECT nip_nit FROM pegawai_pangkat WHERE id_pegawai = pegawai.id_pegawai ORDER BY tmt DESC LIMIT 1) AS nip",false);
         $this->db->join('pegawai_jabatan','pegawai_jabatan.id_pegawai = pegawai.id_pegawai','left');
         $query = $this->db->get_where($this->tabel,$options);
+        if ($query->num_rows() > 0){
+            $data = $query->row_array();
+        }
+
+        $query->free_result();    
+        return $data;
+    }
+    function get_data_penghargan_edit ($id='0',$penghargaan='0'){
+        $data = array();
+        $options = array('pegawai_penghargaan.id_pegawai' => $id);
+        $options = array('pegawai_penghargaan.id_mst_peg_penghargaan' => $penghargaan);
+        $query = $this->db->get_where('pegawai_penghargaan',$options);
         if ($query->num_rows() > 0){
             $data = $query->row_array();
         }
@@ -299,7 +313,13 @@ class Drh_model extends CI_Model {
 
         return $this->db->delete($this->t_alamat);
     }
+    function delete_entry_penghargaan($id,$penghargaan)
+    {
+        $this->db->where('id_pegawai',$id);
+        $this->db->where('id_mst_peg_penghargaan',$penghargaan);
 
+        return $this->db->delete('pegawai_penghargaan');
+    }
 	function delete_entry($id)
 	{
 		$this->db->where('id_pegawai',$id);
@@ -341,7 +361,15 @@ class Drh_model extends CI_Model {
         $query = $this->db->get('pegawai_keluarga',$limit,$start);
         return $query->result();
     }
-
+    function get_data_pengahargaan($id=0,$start=0,$limit=999999,$options=array())
+    {
+        $this->db->select("*,mst_peg_penghargaan.nama_penghargaan",false);
+        $this->db->where('pegawai_penghargaan.id_pegawai',$id);
+        $this->db->order_by('sk_tgl','desc');
+        $this->db->join('mst_peg_penghargaan','mst_peg_penghargaan.id_penghargaan=pegawai_penghargaan.id_mst_peg_penghargaan');
+        $query = $this->db->get('pegawai_penghargaan',$limit,$start);
+        return $query->result();
+    }
 
     function get_data_pasangan($id,$start=0,$limit=999999,$options=array())
     {
@@ -489,7 +517,34 @@ class Drh_model extends CI_Model {
             return mysql_error();
         }
     }
-
+    function insert_entry_penghargaan($id,$penghargaan){
+        $data['id_pegawai']             = $id;
+        $data['id_mst_peg_penghargaan'] = $this->input->post('id_mst_peg_penghargaan');
+        $data['tingkat']                = $this->input->post('tingkat');
+        $data['instansi']               = $this->input->post('instansi');
+        $data['sk_tgl']                 = date("Y-m-d",strtotime($this->input->post('sk_tgl')));
+        $data['sk_no']                  = $this->input->post('sk_no');
+        $data['sk_pejabat']             = $this->input->post('sk_pejabat');
+        if($this->db->insert('pegawai_penghargaan', $data)){
+            return true; 
+        }else{
+            return mysql_error();
+        }
+    }
+    function update_entry_penghargaan($id,$penghargaan){
+        $data['tingkat']                = $this->input->post('tingkat');
+        $data['instansi']               = $this->input->post('instansi');
+        $data['sk_tgl']                 = date("Y-m-d",strtotime($this->input->post('sk_tgl')));
+        $data['sk_no']                  = $this->input->post('sk_no');
+        $data['sk_pejabat']             = $this->input->post('sk_pejabat');
+        $this->db->where('id_pegawai',$id);
+        $this->db->where('id_mst_peg_penghargaan',$penghargaan);
+        if($this->db->update('pegawai_penghargaan', $data)){
+            return true; 
+        }else{
+            return mysql_error();
+        }
+    }
     function insert_entry_anak($id)
     {
         $data['id_pegawai']                   = $id;
