@@ -296,8 +296,8 @@ class Keutransaksi_model extends CI_Model {
 
     function insert_syarat_pembayaran(){
         $data['nama']          = $this->input->post('nama');
-        $data['aktif']         = $this->input->post('aktif');
         $data['deskripsi']     = $this->input->post('deskripsi');
+        $data['aktif']         = $this->input->post('aktif');
     
         if($this->db->insert('mst_keu_syarat_pembayaran', $data)){
             return 1;

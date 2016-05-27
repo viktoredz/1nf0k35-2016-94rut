@@ -111,13 +111,12 @@
           }
                   }
                 },
-        { text: 'Nama', datafield: 'nama', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'left', width: '25%' },
-        { text: 'Deskripsi', datafield: 'deskripsi', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'left', width: '40%' },
-        { text: 'Aktif', datafield: 'aktif', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '25%', cellsrenderer: function (row) {
+        { text: 'Nama', datafield: 'nama', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'left', width: '20%' },
+        { text: 'Deskripsi', datafield: 'deskripsi', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'left', width: '62%' },
+        { text: 'Aktif', datafield: 'aktif', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '8%', cellsrenderer: function (row) {
           var dataRecord = $("#jqxgrid_syarat_pembayaran").jqxGrid('getrowdata',row);
           var aktif = dataRecord.aktif;
           var str   = "";
-
           if(aktif=='1'){
             str="<input type='checkbox' checked>";
           }else{

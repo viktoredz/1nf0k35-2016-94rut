@@ -45,7 +45,7 @@
               <div class="row" style="margin: 5px">
                 <div class="col-md-4" style="padding: 5px">Deskripsi</div>
                 <div class="col-md-8">
-                <textarea class="form-control" name="syarat_deskripsi" placeholder="Deskripsi Syarat Pembayaran"><?php 
+                <textarea class="form-control" name="syarat_desk" placeholder="Deskripsi Syarat Pembayaran"><?php 
                     if(set_value('deskripsi')=="" && isset($deskripsi)){
                       echo $deskripsi;
                     }else{
@@ -92,8 +92,8 @@
         $('#biodata_notice').show();
 
         data.append('nama',          $("[name='syarat_nama']").val());
+        data.append('deskripsi',     $("[name='syarat_desk']").val());
         data.append('aktif',         $("[name='syarat_aktif']:checked").val());
-        data.append('deskripsi',     $("[name='syarat_deskripsi']").val());
               
         $.ajax({
             cache : false,

@@ -691,8 +691,8 @@ class Keuangan_transaksi extends CI_Controller {
 		$this->authentication->verify('mst','add');
     	
     	$this->form_validation->set_rules('nama', 'Nama', 'trim|required');
+        $this->form_validation->set_rules('deskripsi', 'Deskripsi','trim|required');
         $this->form_validation->set_rules('aktif', 'Aktif', 'trim');
-        $this->form_validation->set_rules('deskripsi', 'Deskripsi', 'trim');
 
 		$data['id_mst_syarat_pembayaran']	= "";
 	    $data['action']						= "add";

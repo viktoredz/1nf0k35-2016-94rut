@@ -242,10 +242,10 @@
                   <?php endforeach ?>
                 </select>
               </div>
-              <div class="col-md-2">
+              <div class="col-md-2" style="padding-top:6px;">
                 <input type="text" class="form-control" name="" value="">  
               </div> 
-              <div class="col-md-2"><label>%</label></div>
+              <div class="col-md-2" style="padding-top:12px;"><label>%</label></div>
 
             </div>
           </div>
