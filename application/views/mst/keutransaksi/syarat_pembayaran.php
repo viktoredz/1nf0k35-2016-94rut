@@ -19,7 +19,7 @@
 
       <div class="box-body">
        <div class="row">
-        <div class="col-md-3 pull-right">
+        <div class="col-md-3 pull-left">
           <button type="button" class="btn btn-primary" onclick='add()'><i class='fa fa-plus-square'></i> &nbsp; Tambah Syarat Pembayaran</button>
         </div>
         </div>

@@ -118,14 +118,12 @@
               }
             }
         });
-
         return false;
     });
 
     $("[name='kategori_trans_template']").click(function(){
       var data = new FormData();
       // alert($("[name='kategori_trans_template']:checked").val());
-
         data.append('template',     $("[name='kategori_trans_template']:checked").val());
         data.append('kategori',     "<?php echo $id;?>");
         
