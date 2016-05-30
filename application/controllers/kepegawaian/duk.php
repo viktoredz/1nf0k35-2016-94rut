@@ -75,7 +75,7 @@ class Duk extends CI_Controller {
 		}
 		
 
-		$rows_all = $this->duk_model->get_data();
+		$rows_all = $this->duk_model->get_data('export');
 
 
 		if($_POST) {
@@ -111,7 +111,7 @@ class Duk extends CI_Controller {
 		if ($this->session->userdata('puskesmas')!='') {
 			$this->db->where('pegawai.code_cl_phc','P'.$this->session->userdata('puskesmas'));
 		}
-		$rows = $this->duk_model->get_data();
+		$rows = $this->duk_model->get_data('export');
 		$data_tabel = array();
 		$no=1;
 		foreach($rows as $act) {
@@ -187,7 +187,7 @@ class Duk extends CI_Controller {
 		
 	}
 	
-	function json(){
+	function json($grid=''){
 		$this->authentication->verify('kepegawaian','show');
 
 
@@ -225,7 +225,7 @@ class Duk extends CI_Controller {
 		}
 		
 
-		$rows_all = $this->duk_model->get_data();
+		$rows_all = $this->duk_model->get_data($grid);
 
 		$no=1;
 		if($_POST) {
@@ -261,7 +261,7 @@ class Duk extends CI_Controller {
 		if ($this->session->userdata('puskesmas')!='') {
 			$this->db->where('pegawai.code_cl_phc','P'.$this->session->userdata('puskesmas'));
 		}
-		$rows = $this->duk_model->get_data($this->input->post('recordstartindex'), $this->input->post('pagesize'));
+		$rows = $this->duk_model->get_data($grid,$this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();
 		$no = $this->input->post('recordstartindex')+1;
 		foreach($rows as $act) {
