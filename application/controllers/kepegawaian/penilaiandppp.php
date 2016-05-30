@@ -8,6 +8,7 @@ class Penilaiandppp extends CI_Controller {
 		require_once(APPPATH.'third_party/tbs_plugin_opentbs_1.8.0/tbs_plugin_opentbs.php');
 
 		$this->load->model('kepegawaian/drh_model');
+		$this->load->model('kepegawaian/penilaiandppp_model');
 		$this->load->model('inventory/inv_ruangan_model');
 	}
 	
@@ -48,9 +49,18 @@ class Penilaiandppp extends CI_Controller {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
 
-				if($field == 'tanggal_permohonan') {
+				if($field == 'tgl_lhr') {
 					$value = date("Y-m-d",strtotime($value));
 					$this->db->where($field,$value);
+				}elseif($field == 'tgl_diklat') {
+					$value = date("Y-m-d",strtotime($value));
+				}elseif($field == 'namapendidikan') {
+					$field = "pendidikan.nama_jurusan";
+				}elseif($field == 'tahunijazah') {
+					$field = "DATE_FORMAT(pendidikan.ijazah_tgl, '%Y')";
+				}elseif($field == 'tmt_pangkat') {
+					$value = date("Y-m-d",strtotime($value));
+					$field = "pangkat.tmt";
 				}elseif($field != 'year') {
 					$this->db->like($field,$value);
 				}
@@ -60,12 +70,13 @@ class Penilaiandppp extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
-
 		if ($this->session->userdata('puskesmas')!='') {
-			$this->db->where('inv_permohonan_barang.code_cl_phc','P'.$this->session->userdata('puskesmas'));
+			$this->db->where('pegawai.code_cl_phc','P'.$this->session->userdata('puskesmas'));
 		}
-		$rows_all = $this->penilaiandppp_model->get_data();
 		
+
+		$rows_all = $this->penilaiandppp_model->get_data();
+
 
 		if($_POST) {
 			$fil = $this->input->post('filterscount');
@@ -75,9 +86,18 @@ class Penilaiandppp extends CI_Controller {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
 
-				if($field == 'tanggal_permohonan') {
+				if($field == 'tgl_lhr') {
 					$value = date("Y-m-d",strtotime($value));
 					$this->db->where($field,$value);
+				}elseif($field == 'tmt_pangkat') {
+					$value = date("Y-m-d",strtotime($value));
+					$field = "pangkat.tmt";
+				}elseif($field == 'namapendidikan') {
+					$field = "pendidikan.nama_jurusan";
+				}elseif($field == 'tahunijazah') {
+					$field = "DATE_FORMAT(pendidikan.ijazah_tgl, '%Y')";
+				}elseif($field == 'tgl_diklat') {
+					$value = date("Y-m-d",strtotime($value));
 				}elseif($field != 'year') {
 					$this->db->like($field,$value);
 				}
@@ -87,26 +107,60 @@ class Penilaiandppp extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
+		
 		if ($this->session->userdata('puskesmas')!='') {
-			$this->db->where('inv_permohonan_barang.code_cl_phc','P'.$this->session->userdata('puskesmas'));
+			$this->db->where('pegawai.code_cl_phc','P'.$this->session->userdata('puskesmas'));
 		}
 		$rows = $this->penilaiandppp_model->get_data();
-		$data = array();
-		$no=1;
-		
 		$data_tabel = array();
+		$no=1;
 		foreach($rows as $act) {
-			
 			$data_tabel[] = array(
-				'no'		=> $no++,								
-				'tgl'		=> date("d-m-Y",strtotime($act->tanggal_permohonan)),				
-				'ruangan'	=> $act->nama_ruangan,
-				'jumlah'	=> $act->jumlah_unit,
-				'totalharga'=> number_format($act->totalharga),
-				'keterangan'=> $act->keterangan,
-				'status'	=> $act->value				
+				'no' 					=> $no++,
+				'id_pegawai' 			=> $act->id_pegawai,
+				'nik'					=> $act->nik,
+				'gelar_depan'			=> $act->gelar_depan,
+				'gelar_belakang'		=> $act->gelar_belakang,
+				'nama'					=> $act->gelar_depan.' '.$act->nama.' '.$act->gelar_belakang,
+				'jenis_kelamin'			=> ($act->jenis_kelamin =='L' ? 'Laki-laki' : 'Perempuan'),
+				'tgl_lhr'				=> $act->tgl_lhr,
+				'tmpt_lahir'			=> $act->tmp_lahir.', '.date("d-m-Y",strtotime($act->tgl_lhr)),
+				'alamat'				=> $act->alamat	,
+				'code_cl_phc'			=> $act->code_cl_phc,
+				'nip_nit'				=> $act->nip_nit,
+				'sekolah_nama'			=> $act->sekolah_nama,
+				'deskripsi'				=> $act->deskripsi,
+				'tmp_lahir'				=> $act->tmp_lahir,
+				'tmt_pangkat'			=> $act->tmt_pangkat !='' ? date("d-m-Y",strtotime($act->tmt_pangkat)) : '-',
+				'pangkatterakhir'		=> $act->pangkatterakhir,
+				'id_mst_peg_golruang'	=> $act->id_mst_peg_golruang,
+				'jabatanterakhirstuktural'=> $act->jabatanterakhirstuktural,
+				'jabatanterakhirfungsional'	=> $act->jabatanterakhirfungsional,
+				'catatanmutasi'			=> $act->catatanmutasi,
+				'keterangan'			=> $act->keterangan,
+				'namajabatan'			=> $act->namajabatan,
+				'tar_eselon'			=> $act->tar_eselon,
+				'tmtstruktural'			=> $act->tmtstruktural,
+				'tmtfungsional'			=> $act->tmtfungsional,
+				'tmtjabatan'			=> $act->tmtjabatan,
+				'masa_krj_bln'			=> $act->masa_krj_bln,
+				'masa_krj_thn'			=> $act->masa_krj_thn,
+				'diklatterakhir'		=> $act->diklatterakhir,
+				'nama_diklat'			=> $act->nama_diklat,
+				'tgl_diklat'			=> $act->tgl_diklat !='' ? date("d-m-Y",strtotime($act->tgl_diklat)) : '-',
+				'lama_diklat'			=> $act->lama_diklat,
+				'nama_jurusan'			=> $act->nama_jurusan,
+				'ijazah_tgl'			=> $act->ijazah_tgl,
+				'namapendidikan'		=> $act->namapendidikan,
+				'tahunijazah'			=> $act->tahunijazah,
+				'bulanusia'				=> $act->bulanusia,
+				'tahunumur'				=> $act->tahunumur,
+				'detail'	=> 1,
+				'edit'		=> 1,
+				'delete'	=> 1
 			);
 		}
+
 
 		$puskes = $this->input->post('puskes'); 
 		if(empty($puskes) or $puskes == 'Pilih Puskesmas'){
@@ -114,7 +168,9 @@ class Penilaiandppp extends CI_Controller {
 		}else{
 			$nama = $this->input->post('puskes');
 		}
-		$data_puskesmas[] = array('nama_puskesmas' => $nama);
+		$tanggal = date('d-m-Y');
+
+		$data_puskesmas[] = array('nama_puskesmas' => $nama,'tanggal' => $tanggal);
 		
 		$dir = getcwd().'/';
 		$template = $dir.'public/files/template/kepegawaian/penilaiandppp.xlsx';		
@@ -123,7 +179,7 @@ class Penilaiandppp extends CI_Controller {
 		$TBS->MergeBlock('b', $data_puskesmas);
 		
 		$code = uniqid();
-		$output_file_name = 'public/files/hasil/hasil_export_'.$code.'.xlsx';
+		$output_file_name = 'public/files/hasil/hasil_exportdppp_'.$code.'.xlsx';
 		$output = $dir.$output_file_name;
 		$TBS->Show(OPENTBS_FILE, $output); // Also merges all [onshow] automatic fields.
 		
@@ -143,11 +199,18 @@ class Penilaiandppp extends CI_Controller {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
 
-				if($field == 'tanggal_permohonan') {
+				if($field == 'tgl_lhr') {
 					$value = date("Y-m-d",strtotime($value));
 					$this->db->where($field,$value);
-				}elseif($field == 'keterangan') {
-					$this->db->like('inv_permohonan_barang.'.$field,$value);
+				}elseif($field == 'tgl_diklat') {
+					$value = date("Y-m-d",strtotime($value));
+				}elseif($field == 'namapendidikan') {
+					$field = "pendidikan.nama_jurusan";
+				}elseif($field == 'tahunijazah') {
+					$field = "DATE_FORMAT(pendidikan.ijazah_tgl, '%Y')";
+				}elseif($field == 'tmt_pangkat') {
+					$value = date("Y-m-d",strtotime($value));
+					$field = "pangkat.tmt";
 				}elseif($field != 'year') {
 					$this->db->like($field,$value);
 				}
@@ -158,17 +221,9 @@ class Penilaiandppp extends CI_Controller {
 			}
 		}
 		if ($this->session->userdata('puskesmas')!='') {
-			$this->db->where('inv_permohonan_barang.code_cl_phc','P'.$this->session->userdata('puskesmas'));
+			$this->db->where('pegawai.code_cl_phc','P'.$this->session->userdata('puskesmas'));
 		}
-		/*$kodepuskesmas = $this->session->userdata('puskesmas');
-		if(substr($kodepuskesmas, -2)=="01"){
-			if($this->session->userdata('filter_code_cl_phc') != '') {
-				$this->db->where('inv_permohonan_barang.code_cl_phc',$this->session->userdata('filter_code_cl_phc'));
-			}
-		}else {
-				$this->db->where('inv_permohonan_barang.code_cl_phc',"P".$this->session->userdata('puskesmas'));
-		}*/
-
+		
 
 		$rows_all = $this->penilaiandppp_model->get_data();
 
@@ -181,11 +236,18 @@ class Penilaiandppp extends CI_Controller {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
 
-				if($field == 'tanggal_permohonan') {
+				if($field == 'tgl_lhr') {
 					$value = date("Y-m-d",strtotime($value));
 					$this->db->where($field,$value);
-				}elseif($field == 'keterangan') {
-					$this->db->like('inv_permohonan_barang.'.$field,$value);
+				}elseif($field == 'tmt_pangkat') {
+					$value = date("Y-m-d",strtotime($value));
+					$field = "pangkat.tmt";
+				}elseif($field == 'namapendidikan') {
+					$field = "pendidikan.nama_jurusan";
+				}elseif($field == 'tahunijazah') {
+					$field = "DATE_FORMAT(pendidikan.ijazah_tgl, '%Y')";
+				}elseif($field == 'tgl_diklat') {
+					$value = date("Y-m-d",strtotime($value));
 				}elseif($field != 'year') {
 					$this->db->like($field,$value);
 				}
@@ -195,31 +257,52 @@ class Penilaiandppp extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
-		/*$kodepuskesmas = $this->session->userdata('puskesmas');
-		if(substr($kodepuskesmas, -2)=="01"){
-			if($this->session->userdata('filter_code_cl_phc') != '') {
-				$this->db->where('inv_permohonan_barang.code_cl_phc',$this->session->userdata('filter_code_cl_phc'));
-			}
-		}else {
-			$this->db->where('inv_permohonan_barang.code_cl_phc',"P".$this->session->userdata('puskesmas'));
-		}*/
+		
 		if ($this->session->userdata('puskesmas')!='') {
-			$this->db->where('inv_permohonan_barang.code_cl_phc','P'.$this->session->userdata('puskesmas'));
+			$this->db->where('pegawai.code_cl_phc','P'.$this->session->userdata('puskesmas'));
 		}
 		$rows = $this->penilaiandppp_model->get_data($this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();
 		$no=1;
 		foreach($rows as $act) {
 			$data[] = array(
-				'no'					=> $no++,
-				'code_cl_phc' 			=> $act->code_cl_phc,
-				'id_inv_permohonan_barang' => $act->id_inv_permohonan_barang,
-				'tanggal_permohonan'	=> $act->tanggal_permohonan,
-				'jumlah_unit'			=> $act->jumlah_unit,
-				'nama_ruangan'			=> $act->nama_ruangan,
+				'id_pegawai' 			=> $act->id_pegawai,
+				'nik'					=> $act->nik,
+				'gelar_depan'			=> $act->gelar_depan,
+				'gelar_belakang'		=> $act->gelar_belakang,
+				'nama'					=> $act->gelar_depan.' '.$act->nama.' '.$act->gelar_belakang,
+				'jenis_kelamin'			=> ($act->jenis_kelamin =='L' ? 'Laki-laki' : 'Perempuan'),
+				'tgl_lhr'				=> $act->tgl_lhr,
+				'alamat'				=> $act->alamat	,
+				'code_cl_phc'			=> $act->code_cl_phc,
+				'nip_nit'				=> $act->nip_nit,
+				'sekolah_nama'			=> $act->sekolah_nama,
+				'deskripsi'				=> $act->deskripsi,
+				'tmp_lahir'				=> $act->tmp_lahir,
+				'tmt_pangkat'			=> $act->tmt_pangkat,
+				'pangkatterakhir'		=> $act->pangkatterakhir,
+				'id_mst_peg_golruang'	=> $act->id_mst_peg_golruang,
+				'jabatanterakhirstuktural'=> $act->jabatanterakhirstuktural,
+				'jabatanterakhirfungsional'	=> $act->jabatanterakhirfungsional,
+				'catatanmutasi'			=> $act->catatanmutasi,
 				'keterangan'			=> $act->keterangan,
-				'totalharga'			=> number_format($act->totalharga),
-				'value'					=> $act->value,
+				'namajabatan'			=> $act->namajabatan,
+				'tar_eselon'			=> $act->tar_eselon,
+				'tmtstruktural'			=> $act->tmtstruktural,
+				'tmtfungsional'			=> $act->tmtfungsional,
+				'tmtjabatan'			=> $act->tmtjabatan,
+				'masa_krj_bln'			=> $act->masa_krj_bln,
+				'masa_krj_thn'			=> $act->masa_krj_thn,
+				'diklatterakhir'		=> $act->diklatterakhir,
+				'nama_diklat'			=> $act->nama_diklat,
+				'tgl_diklat'			=> $act->tgl_diklat,
+				'lama_diklat'			=> $act->lama_diklat,
+				'nama_jurusan'			=> $act->nama_jurusan,
+				'ijazah_tgl'			=> $act->ijazah_tgl,
+				'namapendidikan'		=> $act->namapendidikan,
+				'tahunijazah'			=> $act->tahunijazah,
+				'bulanusia'				=> $act->bulanusia,
+				'tahunumur'				=> $act->tahunumur,
 				'detail'	=> 1,
 				'edit'		=> 1,
 				'delete'	=> 1

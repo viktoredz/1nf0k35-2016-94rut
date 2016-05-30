@@ -19,7 +19,7 @@
 
       	<div class="box-footer">
 	      <div class="col-md-8">
-		 	<button type="button" class="btn btn-primary" onclick="document.location.href='<?php echo base_url()?>kepegawaian/penilaiandppp/add'"><i class='fa fa-plus-square-o'></i> &nbsp; Tambah</button>
+		 	<!-- <button type="button" class="btn btn-primary" onclick="document.location.href='<?php echo base_url()?>kepegawaian/penilaiandppp/add'"><i class='fa fa-plus-square-o'></i> &nbsp; Tambah</button> -->
 		 	<button type="button" class="btn btn-warning" id="btn-refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
 		 	<button type="button" class="btn btn-success" id="btn-export"><i class='fa fa-file-excel-o'></i> &nbsp; Export</button>
 	     </div>
@@ -52,21 +52,46 @@
 	    $("#menu_kepegawaian").addClass("active");
 	    $("#menu_kepegawaian_penilaiandppp").addClass("active");
 	});
-
 	   var source = {
 			datatype: "json",
 			type	: "POST",
 			datafields: [
-			{ name: 'no', type: 'number'},
+			{ name: 'id_pegawai', type: 'string'},
+			{ name: 'nik', type: 'string'},
+			{ name: 'gelar_depan', type: 'string'},
+			{ name: 'gelar_belakang', type: 'string'},
+			{ name: 'nama', type: 'string'},
+			{ name: 'jenis_kelamin', type: 'string'},
+			{ name: 'tmp_lahir', type: 'string'},
+			{ name: 'tgl_lhr', type: 'date'},
+			{ name: 'alamat', type: 'string'},
 			{ name: 'code_cl_phc', type: 'string'},
-			{ name: 'id_inv_permohonan_barang', type: 'string'},
-			{ name: 'tanggal_permohonan', type: 'date'},
-			{ name: 'jumlah_unit', type: 'string'},
-			{ name: 'nama_ruangan', type: 'string'},
-			{ name: 'keterangan', type: 'text'},
-			{ name: 'value', type: 'string'},
-			{ name: 'totalharga', type: 'double'},
-			{ name: 'pilihan_status_pengadaan', type: 'number'},
+			{ name: 'nip_nit', type: 'string'},
+			{ name: 'tmt_pangkat', type: 'date'},
+			{ name: 'pangkatterakhir', type: 'string'},
+			{ name: 'id_mst_peg_golruang', type: 'string'},
+			{ name: 'jabatanterakhirstuktural', type: 'string'},
+			{ name: 'jabatanterakhirfungsional', type: 'string'},
+			{ name: 'catatanmutasi', type: 'string'},
+			{ name: 'keterangan', type: 'string'},
+			{ name: 'namajabatan', type: 'string'},
+			{ name: 'tar_eselon', type: 'string'},
+			{ name: 'tmtstruktural', type: 'date'},
+			{ name: 'tmtfungsional', type: 'date'},
+			{ name: 'tmtjabatan', type: 'string'},
+			{ name: 'masa_krj_bln', type: 'string'},
+			{ name: 'masa_krj_thn', type: 'string'},
+			{ name: 'diklatterakhir', type: 'string'},
+			{ name: 'nama_diklat', type: 'string'},
+			{ name: 'tgl_diklat', type: 'date'},
+			{ name: 'lama_diklat', type: 'string'},
+			{ name: 'nama_jurusan', type: 'string'},
+			{ name: 'tahunijazah', type: 'string'},
+			{ name: 'ijazah_tgl', type: 'date'},
+			{ name: 'namapendidikan', type: 'string'},
+			{ name: 'deskripsi', type: 'string'},
+			{ name: 'bulanusia', type: 'string'},
+			{ name: 'tahunumur', type: 'string'},
 			{ name: 'detail', type: 'number'},
 			{ name: 'edit', type: 'number'},
 			{ name: 'delete', type: 'number'}
@@ -111,28 +136,28 @@
 				return obj.data;    
 			},
 			columns: [
-				{ text: 'Nama', align: 'center',editable:false ,cellsalign: 'center',datafield: 'nama', columntype: 'textbox', filtertype: 'textbox', width: '20%' },
-				{ text: 'Tempat Lahir', align: 'center', cellsalign: 'center', editable:false ,datafield: 'tempatlahir', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
-				{ text: 'Tanggal Lahir', align: 'center', cellsalign: 'center', editable:false ,datafield: 'tgllahir', columntype: 'date', filtertype: 'date', width: '8%' },
-				{ text: 'NIP', align: 'center', cellsalign: 'center', editable:false , datafield: 'nip', columntype: 'textbox', filtertype: 'textbox',  width: '12%' },
-				{ text: 'Gol',columngroup: 'pangkat',   align: 'center', cellsalign: 'center', editable:false ,datafield: 'golongan', columntype: 'textbox', filtertype: 'textbox', width: '5%' },
+				{ text: 'Nama', align: 'center',editable:false ,cellsalign: 'left',datafield: 'nama', columntype: 'textbox', filtertype: 'textbox', width: '20%' },
+				{ text: 'Tempat Lahir', align: 'center', cellsalign: 'left', editable:false ,datafield: 'tmp_lahir', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
+				{ text: 'Tanggal Lahir', align: 'center', cellsalign: 'center', editable:false ,datafield: 'tgl_lhr',cellsformat: 'dd-MM-yyyy', columntype: 'date', filtertype: 'date', width: '8%' },
+				{ text: 'NIP', align: 'center', cellsalign: 'left', editable:false , datafield: 'nip_nit', columntype: 'textbox', filtertype: 'textbox',  width: '12%' },
+				{ text: 'Gol',columngroup: 'pangkat',   align: 'left', cellsalign: 'center', editable:false ,datafield: 'id_mst_peg_golruang', columntype: 'textbox', filtertype: 'textbox', width: '5%' },
 				
-				{ text: 'TMT',align: 'center', columngroup: 'pangkat',editable:false ,datafield: 'tmt', columntype: 'date', filtertype: 'date',cellsformat: 'dd-MM-yyyy', width: '8%'},
-				{ text: 'Nama',columngroup: 'jabata',  cellsalign: 'center',align: 'center', editable:false ,datafield: 'jabatan', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
-				{ text: 'Eselon',columngroup: 'jabata',  align: 'center', cellsalign: 'center', editable:false ,datafield: 'eselon', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
-				{ text: 'Tanggal', columngroup: 'jabata', align: 'center', cellsalign: 'center', editable:false ,datafield: 'tgljabata', columntype: 'date', filtertype: 'date',cellsformat: 'dd-MM-yyyy', width: '8%' },
-				{ text: 'Bulan',columngroup: 'masakerja',  editable:false ,datafield: 'blnmk', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
-				{ text: 'Tahun', columngroup: 'masakerja', editable:false ,datafield: 'tahunmk', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
-				{ text: 'Nama', columngroup: 'diklat',  align: 'center',  cellsalign: 'center', editable:false ,datafield: 'struk', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
-				{ text: 'Tgl. Diklat',  columngroup: 'diklat',align: 'center', cellsalign: 'center', editable:false ,datafield: 'tgldikat', columntype: 'date', filtertype: 'date', width: '8%',cellsformat: 'dd-MM-yyyy', },
-				{ text: 'Jml Jam', align: 'center',  columngroup: 'diklat',cellsalign: 'center', editable:false ,datafield: 'jmljam', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
-				{ text: 'Nama',columngroup: 'pendidikan', align: 'center',  editable:false ,datafield: 'jurusan', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
-				{ text: 'Tahun Lulus',columngroup: 'pendidikan' ,align: 'center', cellsalign: 'center', editable:false ,datafield: 'tahunlulus', columntype: 'textbox', filtertype: 'textbox', width: '8%' },
-				{ text: 'Tingkat Ijazah',columngroup: 'pendidikan', align: 'center', cellsalign: 'center', editable:false ,datafield: 'ijazah', columntype: 'textbox', filtertype: 'textbox', width: '8%' },
-				{ text: 'Tahun',columngroup: 'usia', align: 'center', cellsalign: 'center', editable:false ,datafield: 'tahunusia', columntype: 'textbox', filtertype: 'textbox', width: '8%' },
-				{ text: 'Bulan',columngroup: 'usia', align: 'center', cellsalign: 'center', editable:false ,datafield: 'bulanusia', columntype: 'textbox', filtertype: 'textbox', width: '8%' },
-				{ text: 'Catatan Mutasi Pegawai', align: 'center', cellsalign: 'center', editable:false ,datafield: 'catatan', columntype: 'textbox', filtertype: 'textbox', width: '8%' },
-				{ text: 'Keterangan',align: 'center', cellsalign: 'center', editable:false ,datafield: 'keterangan', columntype: 'textbox', filtertype: 'textbox', width: '8%' },
+				{ text: 'TMT',align: 'center', columngroup: 'pangkat',editable:false ,datafield: 'tmt_pangkat', columntype: 'date', filtertype: 'date',cellsformat: 'dd-MM-yyyy', width: '8%'},
+				{ text: 'Nama',columngroup: 'jabata',  cellsalign: 'left',align: 'center', editable:false ,datafield: 'namajabatan', columntype: 'textbox', filtertype: 'none', width: '10%' },
+				{ text: 'Eselon',columngroup: 'jabata',  align: 'left', cellsalign: 'center', editable:false ,datafield: 'tar_eselon', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
+				{ text: 'Tanggal', columngroup: 'jabata', align: 'center', cellsalign: 'center', editable:false ,datafield: 'tmtjabatan', columntype: 'textboxe', filtertype: 'none', width: '16%' },
+				{ text: 'Bulan',columngroup: 'masakerja',  editable:false ,datafield: 'masa_krj_bln', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
+				{ text: 'Tahun', columngroup: 'masakerja', editable:false ,datafield: 'masa_krj_thn', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
+				{ text: 'Nama', columngroup: 'diklat',  align: 'center',  cellsalign: 'center', editable:false ,datafield: 'nama_diklat', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
+				{ text: 'Tgl. Diklat',  columngroup: 'diklat',align: 'center', cellsalign: 'center', editable:false ,datafield: 'tgl_diklat', columntype: 'date', filtertype: 'date', width: '8%',cellsformat: 'dd-MM-yyyy', },
+				{ text: 'Jml Jam', align: 'center',  columngroup: 'diklat',cellsalign: 'center', editable:false ,datafield: 'lama_diklat', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
+				{ text: 'Nama',columngroup: 'pendidikan', align: 'center',  editable:false ,datafield: 'namapendidikan', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
+				{ text: 'Tahun Lulus',columngroup: 'pendidikan' ,align: 'center', cellsalign: 'center', editable:false ,datafield: 'tahunijazah', columntype: 'textbox', filtertype: 'textbox', width: '8%' },
+				{ text: 'Tingkat Ijazah',columngroup: 'pendidikan', align: 'center', cellsalign: 'center', editable:false ,datafield: 'deskripsi', columntype: 'textbox', filtertype: 'textbox', width: '8%' },
+				{ text: 'Tahun',columngroup: 'usia', align: 'center', cellsalign: 'center', editable:false ,datafield: 'tahunumur', columntype: 'textbox', filtertype: 'none', width: '8%' },
+				{ text: 'Bulan',columngroup: 'usia', align: 'center', cellsalign: 'center', editable:false ,datafield: 'bulanusia', columntype: 'textbox', filtertype: 'none', width: '8%' },
+				{ text: 'Catatan Mutasi Pegawai', align: 'center', cellsalign: 'center', editable:false ,datafield: 'catatanmutasi', columntype: 'textbox', filtertype: 'none', width: '8%' },
+				{ text: 'Keterangan',align: 'center', cellsalign: 'center', editable:false ,datafield: 'keterangan', columntype: 'textbox', filtertype: 'none', width: '8%' },
 				
             ],
 			columngroups: 
@@ -177,42 +202,43 @@
 	$("#btn-export").click(function(){
 		
 		var post = "";
-		var filter = $("#jqxgrid").jqxGrid('getfilterinformation');
-		for(i=0; i < filter.length; i++){
-			var fltr 	= filter[i];
-			var value	= fltr.filter.getfilters()[0].value;
-			var condition	= fltr.filter.getfilters()[0].condition;
-			var filteroperation	= fltr.filter.getfilters()[0].operation;
-			var filterdatafield	= fltr.filtercolumn;
-			if(filterdatafield=="tgl"){
-				var d = new Date(value);
-				var day = d.getDate();
-				var month = d.getMonth();
-				var year = d.getYear();
-				value = year+'-'+month+'-'+day;
+		// var filter = $("#jqxgrid").jqxGrid('getfilterinformation');
+		// for(i=0; i < filter.length; i++){
+		// 	var fltr 	= filter[i];
+		// 	var value	= fltr.filter.getfilters()[0].value;
+		// 	var condition	= fltr.filter.getfilters()[0].condition;
+		// 	var filteroperation	= fltr.filter.getfilters()[0].operation;
+		// 	var filterdatafield	= fltr.filtercolumn;
+		// 	if(filterdatafield=="tgl"){
+		// 		var d = new Date(value);
+		// 		var day = d.getDate();
+		// 		var month = d.getMonth();
+		// 		var year = d.getYear();
+		// 		value = year+'-'+month+'-'+day;
 				
-			}
-			post = post+'&filtervalue'+i+'='+value;
-			post = post+'&filtercondition'+i+'='+condition;
-			post = post+'&filteroperation'+i+'='+filteroperation;
-			post = post+'&filterdatafield'+i+'='+filterdatafield;
-			post = post+'&'+filterdatafield+'operator=and';
-		}
-		post = post+'&filterscount='+i;
+		// 	}
+		// 	post = post+'&filtervalue'+i+'='+value;
+		// 	post = post+'&filtercondition'+i+'='+condition;
+		// 	post = post+'&filteroperation'+i+'='+filteroperation;
+		// 	post = post+'&filterdatafield'+i+'='+filterdatafield;
+		// 	post = post+'&'+filterdatafield+'operator=and';
+		// }
+		// post = post+'&filterscount='+i;
 		
-		var sortdatafield = $("#jqxgrid").jqxGrid('getsortcolumn');
-		if(sortdatafield != "" && sortdatafield != null){
-			post = post + '&sortdatafield='+sortdatafield;
-		}
-		if(sortdatafield != null){
-			var sortorder = $("#jqxgrid").jqxGrid('getsortinformation').sortdirection.ascending ? "asc" : ($("#jqxgrid").jqxGrid('getsortinformation').sortdirection.descending ? "desc" : "");
-			post = post+'&sortorder='+sortorder;
+		// var sortdatafield = $("#jqxgrid").jqxGrid('getsortcolumn');
+		// if(sortdatafield != "" && sortdatafield != null){
+		// 	post = post + '&sortdatafield='+sortdatafield;
+		// }
+		// if(sortdatafield != null){
+		// 	var sortorder = $("#jqxgrid").jqxGrid('getsortinformation').sortdirection.ascending ? "asc" : ($("#jqxgrid").jqxGrid('getsortinformation').sortdirection.descending ? "desc" : "");
+		// 	post = post+'&sortorder='+sortorder;
 			
-		}
+		// }
 		post = post+'&puskes='+$("#puskesmas option:selected").text();
 		
-		$.post("<?php echo base_url()?>kepegawaian/penilaiandppp/permohonan_export",post,function(response	){
+		$.post("<?php echo base_url()?>kepegawaian/penilaiandppp/permohonan_export",post,function(response){
 			window.location.href=response;
+			// alert(response);
 		});
 	});
 </script>
