@@ -1,18 +1,18 @@
-      <?php if(validation_errors()!=""){ ?>
-      <div class="alert alert-warning alert-dismissable">
-        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-        <h4>  <i class="icon fa fa-check"></i> Information!</h4>
-        <?php echo validation_errors()?>
-      </div>
-      <?php } ?>
+<?php if(validation_errors()!=""){ ?>
+<div class="alert alert-warning alert-dismissable">
+  <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+  <h4>  <i class="icon fa fa-check"></i> Information!</h4>
+  <?php echo validation_errors()?>
+</div>
+<?php } ?>
 
-      <?php if($alert_form!=""){ ?>
-      <div class="alert alert-success alert-dismissable">
-        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-        <h4>  <i class="icon fa fa-check"></i> Information!</h4>
-        <?php echo $alert_form?>
-      </div>
-      <?php } ?>
+<?php if($alert_form!=""){ ?>
+<div class="alert alert-success alert-dismissable">
+  <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+  <h4>  <i class="icon fa fa-check"></i> Information!</h4>
+  <?php echo $alert_form?>
+</div>
+<?php } ?>
 
 <section class="content">
 <form action="<?php echo base_url()?>kepegawaian/drh/dodel_multi" id="form_transaksi" name="form_transaksi" method="POST" >
