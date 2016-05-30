@@ -125,12 +125,15 @@
 		$('#btn-refresh').click(function () {
 			$("#jqxgrid").jqxGrid('clearfilters');
 		});
-		var textrenderer = function (row, datafield, value) {
-	        return '<span style="vertical-align: middle;">' + value + '</span>';
-	    }
-	    var columnrenderer = function (valussse) {
-            return '<div style="text-align: center; margin: 50px;">' + valussse + '</div>';       
-        }
+		 var cellsrenderer = function (row, column, value) {
+                return '<div style="text-align: center; margin-top: 5px;">' + value + '</div>';
+            }
+            var columnrenderer = function (value) {
+                return '<div style="text-align: center; margin-top: 5px;">' + value + '</div>';
+            }
+        var cellsrenderernama = function (row, column, value) {
+                return '<div style=" margin-top: 5px; padding-left:5px;">' + value + '</div>';
+            }
 		$("#jqxgrid").jqxGrid(
 		{		
 			width: '100%',
@@ -151,9 +154,9 @@
 				{ text: 'Gol',columngroup: 'pangkat',   align: 'left', cellsalign: 'center', editable:false ,datafield: 'id_mst_peg_golruang', columntype: 'textbox', filtertype: 'textbox', width: '5%' },
 				
 				{ text: 'TMT',align: 'center', columngroup: 'pangkat',editable:false ,datafield: 'tmt_pangkat', columntype: 'date', filtertype: 'date',cellsformat: 'dd-MM-yyyy', width: '8%'},
-				{ text: 'Nama',columngroup: 'jabata',  cellsalign: 'left',align: 'center', editable:false ,datafield: 'namajabatan', columntype: 'textbox', filtertype: 'none', width: '25%',cellsrenderer: textrenderer  },
+				{ text: 'Nama',columngroup: 'jabata',  cellsalign: 'left',align: 'center', editable:false ,datafield: 'namajabatan', columntype: 'textbox', filtertype: 'none', width: '25%', cellsrenderer: cellsrenderernama  },
 				{ text: 'Eselon',columngroup: 'jabata',  align: 'left', cellsalign: 'center', editable:false ,datafield: 'tar_eselon', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
-				{ text: 'Tanggal', columngroup: 'jabata', align: 'center', cellsalign: 'center', editable:false ,datafield: 'tmtjabatan', columntype: 'textboxe', filtertype: 'none', width: '16%'},
+				{ text: 'Tanggal', columngroup: 'jabata', align: 'center', cellsalign: 'center', editable:false ,datafield: 'tmtjabatan', columntype: 'textboxe', filtertype: 'none', width: '16%',renderer: columnrenderer, cellsrenderer: cellsrenderer},
 				{ text: 'Bulan',columngroup: 'masakerja',align: 'center', cellsalign: 'center', editable:false ,datafield: 'masa_krj_bln', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
 				{ text: 'Tahun', columngroup: 'masakerja',align: 'center',cellsalign: 'center', editable:false ,datafield: 'masa_krj_thn', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
 				{ text: 'Nama', columngroup: 'diklat',  align: 'center',  cellsalign: 'left', editable:false ,datafield: 'nama_diklat', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
