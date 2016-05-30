@@ -56,6 +56,7 @@
 			datatype: "json",
 			type	: "POST",
 			datafields: [
+			{ name: 'no', type: 'number'},
 			{ name: 'id_pegawai', type: 'string'},
 			{ name: 'nik', type: 'string'},
 			{ name: 'gelar_depan', type: 'string'},
@@ -128,7 +129,7 @@
 		$("#jqxgrid").jqxGrid(
 		{		
 			width: '100%',
-			rowsheight: 50,
+			rowsheight: 45,
 			selectionmode: 'singlerow',
 			source: dataadapter, theme: theme,columnsresize: true,showtoolbar: false, pagesizeoptions: ['10', '25', '50', '100', '200'],
 			showfilterrow: true, filterable: true, sortable: false,  autoheight: true, pageable: true, virtualmode: true, editable: true,
@@ -137,6 +138,7 @@
 				return obj.data;    
 			},
 			columns: [
+				{ text: 'No', align: 'center',editable:false ,cellsalign: 'left',datafield: 'no', columntype: 'textbox', filtertype: 'none', width: '3%' },
 				{ text: 'Nama', align: 'center',editable:false ,cellsalign: 'left',datafield: 'nama', columntype: 'textbox', filtertype: 'textbox', width: '20%' },
 				{ text: 'Tempat Lahir', align: 'center', cellsalign: 'left', editable:false ,datafield: 'tmp_lahir', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
 				{ text: 'Tanggal Lahir', align: 'center', cellsalign: 'center', editable:false ,datafield: 'tgl_lhr',cellsformat: 'dd-MM-yyyy', columntype: 'date', filtertype: 'date', width: '8%' },

@@ -227,7 +227,7 @@ class Duk extends CI_Controller {
 
 		$rows_all = $this->duk_model->get_data();
 
-
+		$no=1;
 		if($_POST) {
 			$fil = $this->input->post('filterscount');
 			$ord = $this->input->post('sortdatafield');
@@ -263,9 +263,10 @@ class Duk extends CI_Controller {
 		}
 		$rows = $this->duk_model->get_data($this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();
-		$no=1;
+		$no = $this->input->post('recordstartindex')+1;
 		foreach($rows as $act) {
 			$data[] = array(
+				'no' 					=> $no++,
 				'id_pegawai' 			=> $act->id_pegawai,
 				'nik'					=> $act->nik,
 				'gelar_depan'			=> $act->gelar_depan,
