@@ -15,7 +15,7 @@ class Duk extends CI_Controller {
 	function index(){
 		$this->authentication->verify('kepegawaian','edit');
 		$data['title_group'] = "Kepegawaian";
-		$data['title_form'] = "Penilaian DP3";
+		$data['title_form'] = "Penilaian DUK";
 		
 
 		$kodepuskesmas = $this->session->userdata('puskesmas');
