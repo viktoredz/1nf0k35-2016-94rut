@@ -1,11 +1,3 @@
-<?php if($this->session->flashdata('alert')!=""){ ?>
-<div class="alert alert-success alert-dismissable">
-  <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-  <h4>  <i class="icon fa fa-check"></i> Information!</h4>
-  <?php echo $this->session->flashdata('alert')?>
-</div>
-<?php } ?>
-
 <section class="content">
   <div class="row">
     <div class="col-md-12">
@@ -15,11 +7,22 @@
       </div>
     <div class="box-body">
       <div class="row">
-        <div class="col-md-12 pull-left">
+        <div class="col-xs-12 col-md-7 pull-left">
           <button id="doExpand" class="btn btn-warning " ><i class="icon fa fa-plus-square-o"></i> &nbsp;Expand</button>  
           <button id="doCollapse" class="btn btn-warning " ><i class="icon fa fa-minus-square-o"></i> &nbsp;Collapse</button> 
-          <!--<button id="doInduk" onclick='add_induk()' class="btn btn-success"><i class="icon fa fa-plus-square"></i> &nbsp;Tambah Induk</button> -->
           <button id="doRefresh" class="btn btn-primary" ><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
+        </div>
+        <div class="col-xs-12 col-md-5">
+          <div class="row">
+            <div class="col-xs-4" style="padding-top:5px;"><label> Puskesmas </label> </div>
+            <div class="col-xs-8">
+              <select name="code_cl_phc" id="code_cl_phc" class="form-control">
+              <?php foreach ($datapuskesmas as $row ) { ;?>
+                <option value="<?php echo $row->code; ?>" onchange="" ><?php echo $row->value; ?></option>
+              <?php } ;?>
+              </select>
+             </div> 
+          </div>
         </div>
       </div>
     </div>
@@ -33,13 +36,8 @@
   </div>
 </section>
 
-<div id="popup_keuangan_akun" style="display:none">
-  <div id="popup_title">Buat Induk Akun</div>
-  <div id="popup_keuangan_akun_content">&nbsp;</div>
-</div>
-
 <div id="popup_keuangan_akun_detail" style="display:none">
-  <div id="popup_title">Detail Akun</div>
+  <div id="popup_title">Detail Posisi</div>
   <div id="popup_keuangan_akun_detail_content">&nbsp;</div>
 </div>
 
@@ -281,19 +279,5 @@
           $("#popup_keuangan_akun_detail").jqxWindow('open');
       }
     
-    function add_induk(){
-      $("#popup_keuangan_akun #popup_keuangan_akun_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-        $.get("<?php echo base_url().'kepegawaian/struktur/induk_add' ?>/", function(data) {
-          $("#popup_keuangan_akun_content").html(data);
-        });
-        $("#popup_keuangan_akun").jqxWindow({
-          theme: theme, resizable: false,
-          width: 600,
-          height: 280,
-          isModal: true, autoOpen: false, modalOpacity: 0.2
-        });
-        $("#popup_keuangan_akun").jqxWindow('open');
-    }
-
 </script>
 

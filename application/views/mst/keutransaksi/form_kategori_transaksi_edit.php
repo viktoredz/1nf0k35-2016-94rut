@@ -61,15 +61,11 @@
 
               <div class="row" style="margin: 5px">
                 <div class="col-md-12">
-                  <?php $i=1; foreach($template as $t) : ?>
-                    <input type="checkbox" name="kategori_trans_template" id="template<?php echo $i;?>" value="<?php echo $i;?>"
+                  <?php
+                   $i=1; foreach($template as $t) : ?>
+                    <input type="checkbox" name="kategori_trans_template" id="template<?php echo $t->id_mst_setting_transaksi_template;?>" value="<?php echo $t->id_mst_setting_transaksi_template;?>"
                   <?php 
-                  if(set_value('nilai')=="" && isset($t->nilai)){
-                    $t->nilai= $t->nilai;
-                  }else{
-                    $t->nilai= set_value('nilai');
-                  }
-                  if($t->nilai == 1) echo "checked";
+                  if(!empty($t->id_mst_kategori_transaksi)){ echo "checked";}
                   ?>> 
                     <?php echo $t->setting_judul ?>
                     </br>
@@ -123,31 +119,23 @@
 
     $("[name='kategori_trans_template']").click(function(){
       var data = new FormData();
-      // alert($("[name='kategori_trans_template']:checked").val());
-        data.append('template',     $("[name='kategori_trans_template']:checked").val());
-        data.append('kategori',     "<?php echo $id;?>");
+        data.append('template',     $(this).val());
         
         $.ajax({
             cache : false,
             contentType : false,
             processData : false,
             type : 'POST',
-            url : '<?php echo base_url()."mst/keuangan_transaksi/kategori_trans_template_update/"?>'+$(this).val(),
+            url : '<?php echo base_url()."mst/keuangan_transaksi/kategori_trans_template_update/".$id?>',
             data : data,
             success : function(response){
-              // a = response.split("|");
               if(response=="OK"){
-              // if (a[1]=='1') {
-                    $("#kategori_trans_template").prop("checked", true);
-                }else{
-                    $("#kategori_trans_template").prop("checked", false);
-                // };
-              // }else{
-                // alert("Mendukung transaksi belum berhasil di aktifkan.");
+                $("#kategori_trans_template").prop("checked", true);
+              }else{
+                $("#kategori_trans_template").prop("checked", false);
               }
             }
         });
-        return false;
     });
 
   });

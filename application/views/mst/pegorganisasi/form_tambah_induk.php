@@ -48,8 +48,8 @@
 
                 <div class="col-md-4">
                   <select name="tar_status" type="text" class="form-control">
-                       <option value="1">Aktip</option>
-                       <option value="0">Non Aktip</option>
+                       <option value="1">Aktif</option>
+                       <option value="0">Tidak Aktif</option>
                   </select>
                 </div>
               <br>
@@ -87,6 +87,7 @@
               if(response=="OK"){
                 $("#popup_keuangan_akun").jqxWindow('close');
                 alert("Data berhasil disimpan.");
+                cekstatus();
                 $("#treeGrid").jqxTreeGrid('updateBoundData', 'filter');
               }else{
                 $('#popup_keuangan_akun_content').html(response);

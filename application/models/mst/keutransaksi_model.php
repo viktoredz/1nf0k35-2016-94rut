@@ -182,8 +182,9 @@ class Keutransaksi_model extends CI_Model {
         }
     }
 
-    function get_data_template(){
-        $this->db->select('*',false);
+    function get_data_template($id_mst_kategori_transaksi=0){
+        $this->db->select('mst_keu_setting_transaksi_template.*,mst_keu_kategori_transaksi_setting.id_mst_kategori_transaksi',false);
+        $this->db->join("mst_keu_kategori_transaksi_setting","mst_keu_kategori_transaksi_setting.id_mst_kategori_transaksi=".$id_mst_kategori_transaksi." AND mst_keu_kategori_transaksi_setting.id_mst_setting_transaksi=mst_keu_setting_transaksi_template.id_mst_setting_transaksi_template","LEFT");
         $this->db->order_by('id_mst_setting_transaksi_template','asc');
         $query = $this->db->get('mst_keu_setting_transaksi_template');
         
@@ -201,25 +202,13 @@ class Keutransaksi_model extends CI_Model {
     }
 
     function kategori_trans_template_update($id){
-        $data['id_mst_setting_transaksi']       = $this->input->post('template');
-        $data['id_mst_kategori_transaksi']      = $this->input->post('kategori');
+        $data['id_mst_kategori_transaksi']   = $id;
+        $data['id_mst_setting_transaksi']    = $this->input->post('template');
 
         $query = $this->db->get_where('mst_keu_kategori_transaksi_setting',$data);
         if ($query->num_rows() > 0) {
-            foreach ($query->result() as $row){
-                if ($row->nilai == 1) {
-                    
-                    $dataupdata['nilai'] = 0;
-                    $this->db->update('mst_keu_kategori_transaksi_setting', $dataupdata,$data);
-                }else{
-                   
-                   $dataupdata['nilai'] = 1;
-                   $this->db->update('mst_keu_kategori_transaksi_setting', $dataupdata,$data); 
-                }
-            }
-
+            $this->db->delete('mst_keu_kategori_transaksi_setting', $data);
         }else{
-            $data['nilai'] = 1;
             $this->db->insert('mst_keu_kategori_transaksi_setting', $data);
         }
     }

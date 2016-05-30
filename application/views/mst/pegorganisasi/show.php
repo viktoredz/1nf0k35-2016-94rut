@@ -12,14 +12,26 @@
       <div class="box box-primary">
         <div class="box-header">
            <h3 class="box-title">{title_form}</h3> 
-      </div>
+        </div>
     <div class="box-body">
       <div class="row">
-        <div class="col-md-12 pull-left">
+        <div class="col-xs-12 col-md-7 pull-left">
           <button id="doExpand" class="btn btn-warning " ><i class="icon fa fa-plus-square-o"></i> &nbsp;Expand</button>  
           <button id="doCollapse" class="btn btn-warning " ><i class="icon fa fa-minus-square-o"></i> &nbsp;Collapse</button> 
           <button id="doInduk" onclick='add_induk()' class="btn btn-success"><i class="icon fa fa-plus-square"></i> &nbsp;Tambah Induk</button> 
           <button id="doRefresh" class="btn btn-primary" ><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
+        </div>
+        <div class="col-xs-12 col-md-5">
+          <div class="row">
+            <div class="col-xs-4" style="padding-top:5px;"><label> Puskesmas </label> </div>
+            <div class="col-xs-8">
+              <select name="code_cl_phc" id="code_cl_phc" class="form-control">
+              <?php foreach ($datapuskesmas as $row ) { ;?>
+                <option value="<?php echo $row->code; ?>" onchange="" ><?php echo $row->value; ?></option>
+              <?php } ;?>
+              </select>
+             </div> 
+          </div>
         </div>
       </div>
     </div>
@@ -34,12 +46,12 @@
 </section>
 
 <div id="popup_keuangan_akun" style="display:none">
-  <div id="popup_title">Buat Induk Akun</div>
+  <div id="popup_title">Buat Posisi</div>
   <div id="popup_keuangan_akun_content">&nbsp;</div>
 </div>
 
 <div id="popup_keuangan_akun_detail" style="display:none">
-  <div id="popup_title">Detail Akun</div>
+  <div id="popup_title">Detail Posisi</div>
   <div id="popup_keuangan_akun_detail_content">&nbsp;</div>
 </div>
 
@@ -138,9 +150,10 @@
 
 <script type="text/javascript">
   $(document).ready(function () {
-    cekstatus();
-     $("#menu_master_data").addClass("active");
+      $("#menu_master_data").addClass("active");
       $("#menu_mst_pegorganisasi").addClass("active");
+
+      cekstatus();
       var newRowID = null;
       $("#doExpand").click(function(){
           $("#treeGrid").jqxTreeGrid('expandAll');                    
@@ -440,9 +453,9 @@
         });
         $("#popup_keuangan_akun").jqxWindow('open');
     }
+
     function cekstatus(){
       $.get("<?php echo base_url().'mst/pegorganisasi/cekstatustambah' ?>/",function(data){
-       // / alert(data);
           if (data==1) {
             $("#doInduk").hide();
           }else{

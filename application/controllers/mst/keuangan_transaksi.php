@@ -408,7 +408,7 @@ class Keuangan_transaksi extends CI_Controller {
 		if($this->form_validation->run()== FALSE){
 
 			$data 						= $this->keutransaksi_model->get_data_kategori_transaksi_edit($id);
-			$data['template']			= $this->keutransaksi_model->get_data_template();
+			$data['template']			= $this->keutransaksi_model->get_data_template($id);
 			// $data['template']			= $this->keutransaksi_model->get_data_template_kat_trans($id);
 			$data['notice']				= validation_errors();
 			$data['action']				= "edit";
@@ -453,7 +453,7 @@ class Keuangan_transaksi extends CI_Controller {
 	    $data['action']				= "edit";
 		$data['alert_form']		    = '';
 		$data['id']					= $id;
-		$data['template']			= $this->keutransaksi_model->get_data_template();
+		$data['template']			= $this->keutransaksi_model->get_data_template($id);
 
 
 		if($this->form_validation->run()== FALSE){

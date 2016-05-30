@@ -7,14 +7,21 @@ class Pegorganisasi extends CI_Controller {
     public function __construct(){
 		parent::__construct();
 		$this->load->model('mst/pegorganisasi_model');
-
+		$this->load->model('morganisasi_model');
 	}
 
 	function index(){
 		$this->authentication->verify('mst','edit');
-		$data['title_group']   = "Keuangan";
-		$data['title_form']    = "Master Data Keuangan";
-		$data['ambildata'] 	   = $this->pegorganisasi_model->get_data();
+		$data['title_group']   = "Parameter ";
+		$data['title_form']    = "Master Data - Struktur Organisasi";
+		$kodepuskesmas = $this->session->userdata('puskesmas');
+		if(strlen($kodepuskesmas) == 4){
+			$this->db->like('code','P'.substr($kodepuskesmas, 0,4));
+		}else {
+			$this->db->where('code','P'.$kodepuskesmas);
+		}
+
+		$data['datapuskesmas'] = $this->morganisasi_model->get_data_puskesmas();
 		$data['content']       = $this->parser->parse("mst/pegorganisasi/show",$data,true);		
 		
 		$this->template->show($data,"home");
@@ -23,7 +30,8 @@ class Pegorganisasi extends CI_Controller {
 	function api_data(){
 		$this->authentication->verify('mst','edit');		
 		
-		$data['ambildata'] = $this->pegorganisasi_model->get_data_akun();
+		$kodepuskesmas = 'P'.$this->session->userdata('puskesmas');
+		$data['ambildata'] = $this->pegorganisasi_model->get_data_akun($kodepuskesmas);
 		foreach($data['ambildata'] as $d){
 			$txt = $d["tar_id_struktur_org"]." \t ".$d["tar_id_struktur_org_parent"]."\t".$d["tar_nama_posisi"]." \t ".($d["tar_aktif"]==1 ? "<i class='icon fa fa-check-square-o'></i>" : "-")." \t ".$d["code_cl_phc"]." \n";				
 			echo $txt;
@@ -59,6 +67,8 @@ class Pegorganisasi extends CI_Controller {
    		}
 	}
 	function cekstatustambah(){
+		$kodepuskesmas = 'P'.$this->session->userdata('puskesmas');
+        $this->db->where('code_cl_phc',$kodepuskesmas);
 		$query = $this->db->get('mst_peg_struktur_org');
 		if ($query->num_rows() > 0) {
 			die('1');

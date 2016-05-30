@@ -90,8 +90,8 @@
             success : function(response){
               if(response=="OK"){
                 $("#popup_kategori_transaksi").jqxWindow('close');
-                alert("Data berhasil disimpan.");
                 $("#jqxgrid_kategori_transaksi").jqxGrid('updatebounddata', 'filter');
+                alert("Data berhasil disimpan.");
               }else{
                 $('#popup_kategori_transaksi_content').html(response);
               }

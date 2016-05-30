@@ -189,11 +189,13 @@ class Struktur_model extends CI_Model {
         return $query->result();
     }
 
-    function get_data_akun(){     
-        $this->db->where('tar_aktif',1);
+    function get_data_akun($kodepuskesmas=""){     
+        $this->db->where('mst_peg_struktur_org.code_cl_phc',$kodepuskesmas);
+        $this->db->where('mst_peg_struktur_org.tar_aktif',1);
         $this->db->order_by('tar_id_struktur_org','asc');
-        $this->db->select('mst_peg_struktur_org.*,pegawai_struktur.nama,pegawai_struktur.nip',false);
-        $query = $this->db->join('pegawai_struktur','pegawai_struktur.tar_id_struktur_org = mst_peg_struktur_org.tar_id_struktur_org','left'); 
+        $this->db->select('mst_peg_struktur_org.*,pegawai.nama,pegawai.nik',false);
+        $this->db->join('pegawai_struktur','pegawai_struktur.tar_id_struktur_org = mst_peg_struktur_org.tar_id_struktur_org','left'); 
+        $this->db->join('pegawai','pegawai.id_pegawai = pegawai_struktur.id_pegawai','left'); 
         $query = $this->db->get('mst_peg_struktur_org');     
         return $query->result_array();  
     }

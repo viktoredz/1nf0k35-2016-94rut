@@ -10,7 +10,7 @@ class Drh extends CI_Controller {
 
 	function index(){
 		$this->authentication->verify('kepegawaian','edit');
-		$data['title_group'] = "Master Data";
+		$data['title_group'] = "Kepegawaian";
 		$data['title_form'] = "Daftar Riwayat Hidup";
 		$kodepuskesmas = $this->session->userdata('puskesmas');
 		if(strlen($kodepuskesmas) == 4){

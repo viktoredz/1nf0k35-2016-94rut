@@ -1,32 +1,22 @@
-<?php if($this->session->flashdata('alert')!=""){ ?>
-<div class="alert alert-success alert-dismissable">
-  <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-  <h4>  <i class="icon fa fa-check"></i> Information!</h4>
-  <?php echo $this->session->flashdata('alert')?>
-</div>
-<?php } ?>
-
 <section class="content">
 <form action="<?php echo base_url()?>kepegawaian/drh/dodel_multi" method="POST" name="">
   <div class="row">
-    <!-- left column -->
     <div class="col-md-12">
-      <!-- general form elements -->
       <div class="box box-primary">
-        <div class="box-header">
+        <div class="box-header pull-left">
           <h3 class="box-title">{title_form}</h3>
-      </div>
-
-        <div class="box-footer">
-         <button type="button" class="btn btn-primary" onclick='add()'><i class='fa fa-plus-square'></i> &nbsp; Tambah Kategori Transaksi</button> 
-       </div>
+        </div>
+        <div class="box-footer pull-right">
+         <button type="button" class="btn btn-primary" id="jqxgrid_kategori_transaksi_refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button> 
+         <button type="button" class="btn btn-success" onclick='add()'><i class='fa fa-plus-square'></i> &nbsp; Tambah Kategori Transaksi</button> 
+        </div>
         <div class="box-body">
-        <div class="div-grid">
+          <div class="div-grid">
             <div id="jqxgrid_kategori_transaksi"></div>
-      </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
   </div>
 </form>
 </section>
@@ -72,7 +62,7 @@
       }
     });
      
-    $('#btn-refresh').click(function () {
+    $('#jqxgrid_kategori_transaksi_refresh').click(function () {
       $("#jqxgrid_kategori_transaksi").jqxGrid('clearfilters');
     });
 
@@ -106,8 +96,8 @@
           }
                   }
                 },
-        { text: 'Nama Kategori', datafield: 'nama', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '40%' },
-        { text: 'Deskripsi', datafield: 'deskripsi', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '50%' }
+        { text: 'Nama Kategori', datafield: 'nama', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '30%' },
+        { text: 'Deskripsi', datafield: 'deskripsi', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '60%' }
             ]
     });
 
@@ -143,8 +133,8 @@
     var confirms = confirm("Hapus Data ?");
     if(confirms == true){
       $.post("<?php echo base_url().'mst/keuangan_transaksi/delete_kategori_transaksi' ?>/" + id,  function(){
-        alert('data berhasil dihapus');
         $("#jqxgrid_kategori_transaksi").jqxGrid('updatebounddata', 'cells');
+        alert('Data berhasil dihapus');
       });
     }
   }

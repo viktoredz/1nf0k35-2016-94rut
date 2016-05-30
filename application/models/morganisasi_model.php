@@ -15,6 +15,13 @@ class Morganisasi_model extends CI_Model {
 		return $data;
     }
     
+    function get_data_puskesmas($start=0,$limit=999999,$options=array())
+    {
+    	$this->db->order_by('value','asc');
+        $query = $this->db->get('cl_phc',$limit,$start);
+        return $query->result();
+    }
+
     function get_data_kk(){
 		$data = $this->db->get('data_keluarga')->result_array();
 
@@ -129,7 +136,6 @@ class Morganisasi_model extends CI_Model {
         $data['last_login']=0;
         $data['last_active']=0;
         $data['datereg']=time();	
-
 		
 		$this->db->select('*');
 		$this->db->from('app_users_list');
