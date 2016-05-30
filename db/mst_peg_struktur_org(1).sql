@@ -1,42 +1,14 @@
--- phpMyAdmin SQL Dump
--- version 4.4.14
--- http://www.phpmyadmin.net
---
--- Host: 127.0.0.1
--- Generation Time: 23 Mei 2016 pada 06.55
--- Versi Server: 5.6.26
--- PHP Version: 5.6.12
+DROP TABLE `mst_peg_struktur_org`;
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Database: `epus_prog_3205`
---
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `mst_peg_struktur_org`
---
-
-CREATE TABLE IF NOT EXISTS `mst_peg_struktur_org` (
-  `tar_id_struktur_org` int(11) NOT NULL,
+CREATE TABLE `mst_peg_struktur_org` (
+  `tar_id_struktur_org` int(11) NOT NULL AUTO_INCREMENT,
   `tar_id_struktur_org_parent` int(11) DEFAULT '0',
   `tar_nama_posisi` varchar(100) NOT NULL,
   `tar_aktif` int(2) DEFAULT '1',
-  `code_cl_phc` varchar(20) NOT NULL
+  `code_cl_phc` varchar(20) NOT NULL,
+  PRIMARY KEY (`tar_id_struktur_org`,`code_cl_phc`)
 ) ENGINE=MyISAM AUTO_INCREMENT=51 DEFAULT CHARSET=latin1;
 
---
--- Dumping data untuk tabel `mst_peg_struktur_org`
---
 
 INSERT INTO `mst_peg_struktur_org` (`tar_id_struktur_org`, `tar_id_struktur_org_parent`, `tar_nama_posisi`, `tar_aktif`, `code_cl_phc`) VALUES
 (1, 0, 'Kepala Puskesmas', 1, 'P3205181203'),
@@ -90,25 +62,3 @@ INSERT INTO `mst_peg_struktur_org` (`tar_id_struktur_org`, `tar_id_struktur_org_
 (49, 1, 'Entomologi', 1, 'P3205181203'),
 (50, 1, 'Perawat Gigi', 1, 'P3205181203');
 
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `mst_peg_struktur_org`
---
-ALTER TABLE `mst_peg_struktur_org`
-  ADD PRIMARY KEY (`tar_id_struktur_org`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `mst_peg_struktur_org`
---
-ALTER TABLE `mst_peg_struktur_org`
-  MODIFY `tar_id_struktur_org` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=51;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
