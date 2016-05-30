@@ -129,10 +129,10 @@
 		$("#jqxgrid").jqxGrid(
 		{		
 			width: '100%',
-			rowsheight: 45,
+			// rowsheight: 60,
 			selectionmode: 'singlerow',
 			source: dataadapter, theme: theme,columnsresize: true,showtoolbar: false, pagesizeoptions: ['10', '25', '50', '100', '200'],
-			showfilterrow: true, filterable: true, sortable: false,  autoheight: true, pageable: true, virtualmode: true, editable: true,
+			showfilterrow: true, filterable: true, sortable: false, autorowheight:true, autoheight: true, pageable: true, virtualmode: true, editable: true,
 			rendergridrows: function(obj)
 			{
 				return obj.data;    
@@ -142,7 +142,7 @@
 				{ text: 'Nama', align: 'center',editable:false ,cellsalign: 'left',datafield: 'nama', columntype: 'textbox', filtertype: 'textbox', width: '20%' },
 				{ text: 'Tempat Lahir', align: 'center', cellsalign: 'left', editable:false ,datafield: 'tmp_lahir', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
 				{ text: 'Tanggal Lahir', align: 'center', cellsalign: 'center', editable:false ,datafield: 'tgl_lhr',cellsformat: 'dd-MM-yyyy', columntype: 'date', filtertype: 'date', width: '8%' },
-				{ text: 'NIP', align: 'center', cellsalign: 'left', editable:false , datafield: 'nip_nit', columntype: 'textbox', filtertype: 'textbox',  width: '12%' },
+				{ text: 'NIP', align: 'center', cellsalign: 'left', editable:false , datafield: 'nip_nit', columntype: 'textbox', filtertype: 'textbox',  width: '15%' },
 				{ text: 'Gol',columngroup: 'pangkat',   align: 'left', cellsalign: 'center', editable:false ,datafield: 'id_mst_peg_golruang', columntype: 'textbox', filtertype: 'textbox', width: '5%' },
 				
 				{ text: 'TMT',align: 'center', columngroup: 'pangkat',editable:false ,datafield: 'tmt_pangkat', columntype: 'date', filtertype: 'date',cellsformat: 'dd-MM-yyyy', width: '8%'},
