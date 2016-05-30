@@ -128,9 +128,10 @@
 		$("#jqxgrid").jqxGrid(
 		{		
 			width: '100%',
+			rowsheight: 50,
 			selectionmode: 'singlerow',
 			source: dataadapter, theme: theme,columnsresize: true,showtoolbar: false, pagesizeoptions: ['10', '25', '50', '100', '200'],
-			showfilterrow: true, filterable: true, sortable: true, autoheight: true, pageable: true, virtualmode: true, editable: true,
+			showfilterrow: true, filterable: true, sortable: false,  autoheight: true, pageable: true, virtualmode: true, editable: true,
 			rendergridrows: function(obj)
 			{
 				return obj.data;    
@@ -143,12 +144,12 @@
 				{ text: 'Gol',columngroup: 'pangkat',   align: 'left', cellsalign: 'center', editable:false ,datafield: 'id_mst_peg_golruang', columntype: 'textbox', filtertype: 'textbox', width: '5%' },
 				
 				{ text: 'TMT',align: 'center', columngroup: 'pangkat',editable:false ,datafield: 'tmt_pangkat', columntype: 'date', filtertype: 'date',cellsformat: 'dd-MM-yyyy', width: '8%'},
-				{ text: 'Nama',columngroup: 'jabata',  cellsalign: 'left',align: 'center', editable:false ,datafield: 'namajabatan', columntype: 'textbox', filtertype: 'none', width: '10%' },
+				{ text: 'Nama',columngroup: 'jabata',  cellsalign: 'left',align: 'center', editable:false ,datafield: 'namajabatan', columntype: 'textbox', filtertype: 'none', width: '25%' },
 				{ text: 'Eselon',columngroup: 'jabata',  align: 'left', cellsalign: 'center', editable:false ,datafield: 'tar_eselon', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
 				{ text: 'Tanggal', columngroup: 'jabata', align: 'center', cellsalign: 'center', editable:false ,datafield: 'tmtjabatan', columntype: 'textboxe', filtertype: 'none', width: '16%' },
-				{ text: 'Bulan',columngroup: 'masakerja',  editable:false ,datafield: 'masa_krj_bln', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
-				{ text: 'Tahun', columngroup: 'masakerja', editable:false ,datafield: 'masa_krj_thn', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
-				{ text: 'Nama', columngroup: 'diklat',  align: 'center',  cellsalign: 'center', editable:false ,datafield: 'nama_diklat', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
+				{ text: 'Bulan',columngroup: 'masakerja',align: 'center', cellsalign: 'center', editable:false ,datafield: 'masa_krj_bln', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
+				{ text: 'Tahun', columngroup: 'masakerja',align: 'center',cellsalign: 'center', editable:false ,datafield: 'masa_krj_thn', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
+				{ text: 'Nama', columngroup: 'diklat',  align: 'center',  cellsalign: 'left', editable:false ,datafield: 'nama_diklat', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
 				{ text: 'Tgl. Diklat',  columngroup: 'diklat',align: 'center', cellsalign: 'center', editable:false ,datafield: 'tgl_diklat', columntype: 'date', filtertype: 'date', width: '8%',cellsformat: 'dd-MM-yyyy', },
 				{ text: 'Jml Jam', align: 'center',  columngroup: 'diklat',cellsalign: 'center', editable:false ,datafield: 'lama_diklat', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
 				{ text: 'Nama',columngroup: 'pendidikan', align: 'center',  editable:false ,datafield: 'namapendidikan', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
