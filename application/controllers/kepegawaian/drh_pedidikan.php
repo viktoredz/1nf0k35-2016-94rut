@@ -64,7 +64,7 @@ class Drh_pedidikan extends CI_Controller {
 			}
 		}
 
-		$rows = $this->drh_model->get_data_pendidikan_formal();
+		$rows = $this->drh_model->get_data_pendidikan_formal($id,$this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();
 		foreach($rows as $act) {
 			$data[] = array(
@@ -120,7 +120,7 @@ class Drh_pedidikan extends CI_Controller {
 			}
 		}
 
-		$rows_all = $this->drh_model->get_data_pendidikan_fungsional();
+		$rows_all = $this->drh_model->get_data_pendidikan_fungsional($id);
 
 		if($_POST) {
 			$fil = $this->input->post('filterscount');
@@ -150,7 +150,7 @@ class Drh_pedidikan extends CI_Controller {
 			}
 		}
 
-		$rows = $this->drh_model->get_data_pendidikan_fungsional($this->input->post('recordstartindex'), $this->input->post('pagesize'));
+		$rows = $this->drh_model->get_data_pendidikan_fungsional($id,$this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();
 		foreach($rows as $act) {
 			$data[] = array(
