@@ -289,20 +289,16 @@
 
           <div class="row" style="margin: 5px">
             <div class="col-md-12">
-              <?php $i=1; foreach($template as $t) : ?>
-                  <input type="checkbox" name="transaksi_otomatis_template" id="template<?php echo $i;?>" value="<?php echo $i;?>"
+              <?php
+               $i=1; foreach($template as $t) : ?>
+                <input type="checkbox" name="transaksi_otomatis_template" id="template<?php echo $t->id_mst_setting_transaksi_template;?>" value="<?php echo $t->id_mst_setting_transaksi_template;?>"
               <?php 
-                if(set_value('nilai')=="" && isset($t->nilai)){
-                  $t->nilai= $t->nilai;
-                }else{
-                  $t->nilai= set_value('nilai');
-                }
-                if($t->nilai == 1) echo "checked";
-              ?>>
+              if(!empty($t->id_mst_keu_otomasi_transaksi)){ echo "checked";}
+              ?>> 
                 <?php echo $t->setting_judul ?>
-                  </br>
+                </br>
                 <?php echo $t->seting_deskripsi ?>
-                  </br></br>
+                </br></br>
               <?php $i++; endforeach ?> 
             </div>
           </div>
@@ -323,27 +319,23 @@
 
     $("[name='transaksi_otomatis_template']").click(function(){
       var data = new FormData();
-      // alert($("[name='transaksi_otomatis_template']:checked").val());
-
-        data.append('template',     $("[name='transaksi_otomatis_template']:checked").val());
-        data.append('kategori',     "<?php echo $id;?>");
+        data.append('template',     $(this).val());
         
         $.ajax({
             cache : false,
             contentType : false,
             processData : false,
             type : 'POST',
-            url : '<?php echo base_url()."mst/keuangan_transaksi/transaksi_otomatis_template_update/"?>'+$(this).val(),
+            url : '<?php echo base_url()."mst/keuangan_transaksi/transaksi_otomatis_template_update/".$id?>',
             data : data,
             success : function(response){
               if(response=="OK"){
-                    $("#transaksi_otomatis_template").prop("checked", true);
-                }else{
-                    $("#transaksi_otomatis_template").prop("checked", false);
+                $("#transaksi_otomatis_template").prop("checked", true);
+              }else{
+                $("#transaksi_otomatis_template").prop("checked", false);
               }
             }
         });
-        return false;
     });
 
     $("[name='btn_kategori_transaksi_save']").click(function(){
