@@ -201,6 +201,15 @@ class Keutransaksi_model extends CI_Model {
          return $query->result();
     }
 
+    function get_data_template_trans_otomatis($id_mst_keu_otomasi_transaksi=0){
+        $this->db->select('mst_keu_setting_transaksi_template.*,mst_keu_otomasi_transaksi_setting.id_mst_keu_otomasi_transaksi',false);
+        $this->db->join("mst_keu_otomasi_transaksi_setting","mst_keu_otomasi_transaksi_setting.id_mst_keu_otomasi_transaksi=".$id_mst_keu_otomasi_transaksi." AND mst_keu_otomasi_transaksi_setting.id_mst_setting_transaksi=mst_keu_setting_transaksi_template.id_mst_setting_transaksi_template","LEFT");
+        $this->db->order_by('id_mst_setting_transaksi_template','asc');
+        $query = $this->db->get('mst_keu_setting_transaksi_template');
+        
+         return $query->result();
+    }
+
     function get_data_akun(){
         $this->db->select('*',false);
         $this->db->order_by('id_mst_akun','asc');
@@ -235,26 +244,13 @@ class Keutransaksi_model extends CI_Model {
     }
 
     function transaksi_otomatis_template_update($id){
+        $data['id_mst_keu_otomasi_transaksi'] = $id;
         $data['id_mst_setting_transaksi']     = $this->input->post('template');
-        $data['id_mst_keu_otomasi_transaksi'] = $this->input->post('kategori');
 
         $query = $this->db->get_where('mst_keu_otomasi_transaksi_setting',$data);
         if ($query->num_rows() > 0) {
-            foreach ($query->result() as $row) {
-                if ($row->nilai == 1) {
-
-                    $dataupdata['nilai'] = 0;
-                    $this->db->update('mst_keu_otomasi_transaksi_setting', $dataupdata,$data);
-                } else {
-
-                    $dataupdata['nilai'] = 1;
-                    $this->db->update('mst_keu_otomasi_transaksi_setting', $dataupdata,$data);
-                }
-                
-            }
-
+            $this->db->delete('mst_keu_otomasi_transaksi_setting', $data);
         }else{
-            $data['nilai'] = 1;
             $this->db->insert('mst_keu_otomasi_transaksi_setting', $data);
         }
     }

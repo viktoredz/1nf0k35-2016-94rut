@@ -408,7 +408,7 @@ class Keuangan_transaksi extends CI_Controller {
 		if($this->form_validation->run()== FALSE){
 
 			$data 						= $this->keutransaksi_model->get_data_kategori_transaksi_edit($id);
-			$data['template']			= $this->keutransaksi_model->get_data_template($id);
+			$data['template']			= $this->keutransaksi_model->get_data_template_kat_trans($id);
 			$data['notice']				= validation_errors();
 			$data['action']				= "edit";
 			$data['id']					= $id;
@@ -452,7 +452,7 @@ class Keuangan_transaksi extends CI_Controller {
 	    $data['action']				= "edit";
 		$data['alert_form']		    = '';
 		$data['id']					= $id;
-		$data['template']			= $this->keutransaksi_model->get_data_template($id);
+		$data['template']			= $this->keutransaksi_model->get_data_template_kat_trans($id);
 
 
 		if($this->form_validation->run()== FALSE){
@@ -474,7 +474,7 @@ class Keuangan_transaksi extends CI_Controller {
 	    $data['action']				= "edit";
 		$data['alert_form']		    = '';
 		$data['id']					= $id;
-		$data['template']			= $this->keutransaksi_model->get_data_template($id);
+		$data['template']			= $this->keutransaksi_model->get_data_template_trans($id);
 
 
 		if($this->form_validation->run()== FALSE){
@@ -496,7 +496,7 @@ class Keuangan_transaksi extends CI_Controller {
 	    $data['action']				= "edit";
 		$data['alert_form']		    = '';
 		$data['id']					= $id;
-		$data['template']			= $this->keutransaksi_model->get_data_template();
+		$data['template']			= $this->keutransaksi_model->get_data_template_trans_otomatis($id);
 
 
 		if($this->form_validation->run()== FALSE){
@@ -562,7 +562,7 @@ class Keuangan_transaksi extends CI_Controller {
 			$data['title_group'] 		= "Keuangan";
 			$data['title_form']			= "Transaksi Baru / Ubah Transaksi";
 			$data['action']				= "edit";
-			$data['template']			= $this->keutransaksi_model->get_data_template($id);
+			$data['template']			= $this->keutransaksi_model->get_data_template_trans($id);
 			$data['kategori']			= $this->keutransaksi_model->get_data_kategori_transaksi();
 			$data['akun']				= $this->keutransaksi_model->get_data_akun();
 
@@ -633,7 +633,7 @@ class Keuangan_transaksi extends CI_Controller {
 			$data['title_group'] 		= "Keuangan";
 			$data['title_form']			= "Transaksi Baru / Ubah Transaksi Otomatis";
 			$data['action']				= "edit";
-			$data['template']			= $this->keutransaksi_model->get_data_template();
+			$data['template']			= $this->keutransaksi_model->get_data_template_trans_otomatis($id);
 			$data['kategori']			= $this->keutransaksi_model->get_data_kategori_transaksi();
 			
 			die($this->parser->parse("mst/keutransaksi/form_transaksi_otomatis_edit",$data,true));

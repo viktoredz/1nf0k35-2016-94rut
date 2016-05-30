@@ -88,7 +88,7 @@
 			
 			<br><br>
 			<div class="col-md-12">
-				<div class="pull-right"><label>Jurnal Transaksi</label> <a href="#" class="glyphicon glyphicon-plus"></a></div>
+				<div class="pull-right"><label>Jurnal Transaksi</label> <a href="#" class="glyphicon glyphicon-plus" onclick="add_jurnal_trans()"></a></div>
 			</div>  
 
 
@@ -100,11 +100,11 @@
           </div>
           <div class="box-body">
             <div class="row">
-              <div class="col-sm-6">
+              <div id="Debit" class="col-sm-6">
                 <div class="row">
                   <div class="col-md-7" style="padding-top:5px;"><label> Debit </label> </div>
                   <div class="col-md-1">
-                    <a href="#" class="glyphicon glyphicon-plus"></a>
+                    <a class="glyphicon glyphicon-plus" onclick="add_debit"></a>
                   </div> 
                 </div>
 
@@ -453,9 +453,127 @@
       });
     });
 
+//     var debt = 1;
+// function add_debit() {
+//     debt++;
+//     var objTo = document.getElementById('Debit')
+//     var divtest = document.createElement("div");
+//     // divtest.innerHTML = '<div class="label">Room ' + room +':</div>
+//     // <div class="content">
+//     // <span>Width: <input type="text" style="width:48px;" name="width[]" value="" /><small>(ft)</small>
+//     // X</span><span>Length: <input type="text" style="width:48px;" namae="length[]" value="" /><small>(ft)</small></span>
+//     // </div>';
+
+//     divtest.innerHTML = '<div class="col-sm-6">
+//                 <div class="row">
+//                   <div class="col-md-7" style="padding-top:5px;"><label> Debit </label> </div>
+//                   <div class="col-md-1">
+//                     <a href="#" class="glyphicon glyphicon-plus"></a>
+//                   </div> 
+//                 </div>
+
+//                 <div class="row">
+//                   <div class="col-md-12">
+//                     <div class="row">
+//                       <div class="col-md-8" style="padding-top:5px;">
+//                         <select  name="" type="text" class="form-control">
+//                           <?php foreach($kategori as $k) : ?>
+//                             <?php
+//                               if(set_value('id_mst_kategori_transaksi')=="" && isset($id_mst_kategori_transaksi)){
+//                                 $id_mst_kategori_transaksi = $id_mst_kategori_transaksi;
+//                               }else{
+//                                 $id_mst_kategori_transaksi = set_value('id_mst_kategori_transaksi');
+//                               }
+//                               $select = $k->id_mst_kategori_transaksi == $id_mst_kategori_transaksi ? 'selected' : '' ;
+//                             ?>
+//                             <option value="<?php echo $k->id_mst_kategori_transaksi ?>" <?php echo $select ?>><?php echo $k->nama ?></option>
+//                           <?php endforeach ?>
+//                         </select>
+//                       </div>
+//                       <div class="col-md-1">
+//                           <a href="#" data-toggle="collapse" data-target="#debit" class="glyphicon glyphicon-chevron-down"></a>
+//                           <!-- <button data-toggle="collapse" data-target="#kredit1"><i class="glyphicon glyphicon-chevron-down"></i></button> -->
+//                       </div>
+//                       <div class="col-md-2">
+//                         <a href="#" onclick="return confirm('Anda yakin ingin menghapus menu ini ?')" class="glyphicon glyphicon-trash"></a>
+//                       </div> 
+//                   </div>
+//                 </div>
+//               </div>
+
+//               <div class="collapse" id="debit">
+
+//                 <div class="row">
+//                   <div class="col-md-7">
+//                     <div class="row">
+//                       <div class="col-md-1">
+//                         <input type="checkbox" name="keuinstansi_status" value="1" <?php 
+//                           if(set_value('status')=="" && isset($status)){
+//                             $status = $status;
+//                           }else{
+//                             $status = set_value('status');
+//                           }
+//                           if($status == 1) echo "checked";
+//                         ?>>
+//                       </div> 
+//                       <div class="col-md-6" style="padding-top:5px;"><label> Isi Otomatis </label> </div>
+//                     </div>
+//                   </div>
+//                 </div>
+
+//                 <div class="row">
+//                 <div class="col-sm-1"></div>
+//                   <div class="col-sm-10">
+//                     <div class="row">
+//                       <div class="col-md-2" style="padding-top:5px;"><label> Nilai </label> </div>
+//                       <div class="col-md-7">
+//                         <select  name="" type="text" class="form-control">
+//                           <?php foreach($kategori as $k) : ?>
+//                               <?php
+//                                 if(set_value('id_mst_kategori_transaksi')=="" && isset($id_mst_kategori_transaksi)){
+//                                   $id_mst_kategori_transaksi = $id_mst_kategori_transaksi;
+//                                 }else{
+//                                   $id_mst_kategori_transaksi = set_value('id_mst_kategori_transaksi');
+//                                 }
+//                                 $select = $k->id_mst_kategori_transaksi == $id_mst_kategori_transaksi ? 'selected' : '' ;
+//                               ?>
+//                               <option value="<?php echo $k->id_mst_kategori_transaksi ?>" <?php echo $select ?>><?php echo $k->nama ?></option>
+//                           <?php endforeach ?>
+//                         </select>
+//                       </div> 
+//                       <div class="col-md-2">
+//                         <input type="text" class="form-control" name="transaksi_nama">
+//                       </div>
+//                       <div class="col-md-1" style="padding-top:5px;"><label>%</label> </div>
+//                     </div>
+//                   </div>
+//                 </div>
+
+//                 <div class="row">
+//                   <div class="col-md-7">
+//                     <div class="row">
+//                       <div class="col-md-1">
+//                         <input type="checkbox" name="keuinstansi_status" value="1" <?php 
+//                           if(set_value('status')=="" && isset($status)){
+//                           $status = $status;
+//                             }else{
+//                           $status = set_value('status');
+//                             }
+//                           if($status == 1) echo "checked";
+//                         ?>>
+//                       </div> 
+//                       <div class="col-md-3" style="padding-top:5px;"><label> Opsional </label> </div>
+//                     </div>
+//                   </div>
+//                 </div>
+//               </div>
+//             </div>';
+    
+//     objTo.appendChild(divtest)
+// }
+
 
     $('.parentDiv').click(function() {
-
       var toggle_sign = $(this).find(".toggle_sign");
       if ($(toggle_sign).hasClass("glyphicon-chevron-down")) {
         $(toggle_sign).removeClass("glyphicon-chevron-down").addClass("glyphicon-chevron-up");
@@ -463,7 +581,6 @@
         $(toggle_sign).addClass("glyphicon-chevron-down").removeClass("glyphicon-chevron-up");
       }
     });
-
 
     $("[name='btn_transaksi_save']").click(function(){
         var data = new FormData();
