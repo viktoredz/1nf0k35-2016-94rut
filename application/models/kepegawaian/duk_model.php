@@ -1,5 +1,5 @@
 <?php
-class Penilaiandppp_model extends CI_Model {
+class Duk_model extends CI_Model {
 
     var $tabel    = 'inv_permohonan_barang';
 	var $lang	  = '';

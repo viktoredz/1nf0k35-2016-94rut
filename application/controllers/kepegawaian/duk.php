@@ -1,5 +1,5 @@
 <?php
-class Penilaiandppp extends CI_Controller {
+class Duk extends CI_Controller {
 
     public function __construct(){
 		parent::__construct();
@@ -8,7 +8,7 @@ class Penilaiandppp extends CI_Controller {
 		require_once(APPPATH.'third_party/tbs_plugin_opentbs_1.8.0/tbs_plugin_opentbs.php');
 
 		$this->load->model('kepegawaian/drh_model');
-		$this->load->model('kepegawaian/penilaiandppp_model');
+		$this->load->model('kepegawaian/duk_model');
 		$this->load->model('inventory/inv_ruangan_model');
 	}
 	
@@ -28,7 +28,7 @@ class Penilaiandppp extends CI_Controller {
 		$data['datapuskesmas'] 	= $this->inv_ruangan_model->get_data_puskesmas();
 		// $data['dataformat'] = array('struktur' =>'Struktur' , 'fungsional' =>'Fungsional','normatif' =>'Normatif');
 		// $data['dataunitkerja'] = $this->drh_model->get_datawhere('all','all','');
-		$data['content'] = $this->parser->parse("kepegawaian/penilaiandppp/show",$data,true);
+		$data['content'] = $this->parser->parse("kepegawaian/duk/show",$data,true);
 
 
 		$this->template->show($data,"home");
@@ -75,7 +75,7 @@ class Penilaiandppp extends CI_Controller {
 		}
 		
 
-		$rows_all = $this->penilaiandppp_model->get_data();
+		$rows_all = $this->duk_model->get_data();
 
 
 		if($_POST) {
@@ -111,7 +111,7 @@ class Penilaiandppp extends CI_Controller {
 		if ($this->session->userdata('puskesmas')!='') {
 			$this->db->where('pegawai.code_cl_phc','P'.$this->session->userdata('puskesmas'));
 		}
-		$rows = $this->penilaiandppp_model->get_data();
+		$rows = $this->duk_model->get_data();
 		$data_tabel = array();
 		$no=1;
 		foreach($rows as $act) {
@@ -173,7 +173,7 @@ class Penilaiandppp extends CI_Controller {
 		$data_puskesmas[] = array('nama_puskesmas' => $nama,'tanggal' => $tanggal);
 		
 		$dir = getcwd().'/';
-		$template = $dir.'public/files/template/kepegawaian/penilaiandppp.xlsx';		
+		$template = $dir.'public/files/template/kepegawaian/duk.xlsx';		
 		$TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8);
 		$TBS->MergeBlock('a', $data_tabel);
 		$TBS->MergeBlock('b', $data_puskesmas);
@@ -225,7 +225,7 @@ class Penilaiandppp extends CI_Controller {
 		}
 		
 
-		$rows_all = $this->penilaiandppp_model->get_data();
+		$rows_all = $this->duk_model->get_data();
 
 
 		if($_POST) {
@@ -261,7 +261,7 @@ class Penilaiandppp extends CI_Controller {
 		if ($this->session->userdata('puskesmas')!='') {
 			$this->db->where('pegawai.code_cl_phc','P'.$this->session->userdata('puskesmas'));
 		}
-		$rows = $this->penilaiandppp_model->get_data($this->input->post('recordstartindex'), $this->input->post('pagesize'));
+		$rows = $this->duk_model->get_data($this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();
 		$no=1;
 		foreach($rows as $act) {

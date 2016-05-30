@@ -7,7 +7,7 @@
 <?php } ?>
 
 <section class="content">
-<form action="<?php echo base_url()?>kepegawaian/penilaiandppp/dodel_multi" method="POST" name="">
+<form action="<?php echo base_url()?>kepegawaian/duk/dodel_multi" method="POST" name="">
   <div class="row">
     <!-- left column -->
     <div class="col-md-12">
@@ -19,7 +19,7 @@
 
       	<div class="box-footer">
 	      <div class="col-md-8">
-		 	<!-- <button type="button" class="btn btn-primary" onclick="document.location.href='<?php echo base_url()?>kepegawaian/penilaiandppp/add'"><i class='fa fa-plus-square-o'></i> &nbsp; Tambah</button> -->
+		 	<!-- <button type="button" class="btn btn-primary" onclick="document.location.href='<?php echo base_url()?>kepegawaian/duk/add'"><i class='fa fa-plus-square-o'></i> &nbsp; Tambah</button> -->
 		 	<button type="button" class="btn btn-warning" id="btn-refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
 		 	<button type="button" class="btn btn-success" id="btn-export"><i class='fa fa-file-excel-o'></i> &nbsp; Export</button>
 	     </div>
@@ -50,7 +50,7 @@
 <script type="text/javascript">
 	$(function () {	
 	    $("#menu_kepegawaian").addClass("active");
-	    $("#menu_kepegawaian_penilaiandppp").addClass("active");
+	    $("#menu_kepegawaian_duk").addClass("active");
 	});
 	   var source = {
 			datatype: "json",
@@ -96,7 +96,7 @@
 			{ name: 'edit', type: 'number'},
 			{ name: 'delete', type: 'number'}
         ],
-		url: "<?php echo site_url('kepegawaian/penilaiandppp/json'); ?>",
+		url: "<?php echo site_url('kepegawaian/duk/json'); ?>",
 		cache: false,
 		updateRow: function (rowID, rowData, commit) {
         
@@ -172,21 +172,21 @@
 		});
 
 	function detail(id,code_cl_phc){
-		document.location.href="<?php echo base_url().'kepegawaian/penilaiandppp/detail';?>/" + id + "/" + code_cl_phc;
+		document.location.href="<?php echo base_url().'kepegawaian/duk/detail';?>/" + id + "/" + code_cl_phc;
 	}
 
 	function edit(id,code_cl_phc){
-		document.location.href="<?php echo base_url().'kepegawaian/penilaiandppp/edit';?>/" + id + "/" + code_cl_phc;
+		document.location.href="<?php echo base_url().'kepegawaian/duk/edit';?>/" + id + "/" + code_cl_phc;
 	}
 
 	function view(id,code_cl_phc){
-		document.location.href="<?php echo base_url().'kepegawaian/penilaiandppp/view';?>/" + id + "/" + code_cl_phc;
+		document.location.href="<?php echo base_url().'kepegawaian/duk/view';?>/" + id + "/" + code_cl_phc;
 	}
 
 	function del(id,code_cl_phc){
 		var confirms = confirm("Hapus Data ?");
 		if(confirms == true){
-			$.post("<?php echo base_url().'kepegawaian/penilaiandppp/dodel' ?>/" + id + "/" + code_cl_phc,  function(){
+			$.post("<?php echo base_url().'kepegawaian/duk/dodel' ?>/" + id + "/" + code_cl_phc,  function(){
 				alert('data berhasil dihapus');
 
 				$("#jqxgrid").jqxGrid('updatebounddata', 'cells');
@@ -194,7 +194,7 @@
 		}
 	}
 	$("select[name='code_cl_phc']").change(function(){
-		$.post("<?php echo base_url().'kepegawaian/penilaiandppp/filter' ?>", 'code_cl_phc='+$(this).val(),  function(){
+		$.post("<?php echo base_url().'kepegawaian/duk/filter' ?>", 'code_cl_phc='+$(this).val(),  function(){
 			$("#jqxgrid").jqxGrid('updatebounddata', 'cells');
 		});
     });
@@ -236,7 +236,7 @@
 		// }
 		post = post+'&puskes='+$("#puskesmas option:selected").text();
 		
-		$.post("<?php echo base_url()?>kepegawaian/penilaiandppp/permohonan_export",post,function(response){
+		$.post("<?php echo base_url()?>kepegawaian/duk/permohonan_export",post,function(response){
 			window.location.href=response;
 			// alert(response);
 		});
