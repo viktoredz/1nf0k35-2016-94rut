@@ -5,7 +5,10 @@
 	<?php echo $this->session->flashdata('alert')?>
 </div>
 <?php } ?>
-
+<div id="popup_barang" style="display:none">
+	<div id="popup_title">Data Login Pegawai</div>
+	<div id="popup_content">&nbsp;</div>
+</div>
 <section class="content">
 <form action="<?php echo base_url()?>kepegawaian/stuktur_kepegawaian/dodel_multi" method="POST" name="">
   <div class="row">
@@ -51,6 +54,9 @@
 	    $("#menu_kepegawaian").addClass("active");
 	    $("#menu_kepegawaian_stuktur_kepegawaian").addClass("active");
 	});
+	function close_popup(){
+		$("#popup_barang").jqxWindow('close');
+	}
 		var sourcejabatan =
 	      {
 	          datatype: "json",
@@ -147,7 +153,7 @@
 				{ text: 'Detail', align: 'center', filtertype: 'none', sortable: false, width: '4%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
 				    if(dataRecord.detail==1){
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_view.gif' onclick='edit(\""+dataRecord.id_inv_permohonan_barang+"\",\""+dataRecord.code_cl_phc+"\");'></a></div>";
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_view.gif' onclick='detail(\""+dataRecord.id_pegawai+"\",\""+dataRecord.code_cl_phc+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}
@@ -184,29 +190,18 @@
             ]
 		});
 
-	function detail(id,code_cl_phc){
-		document.location.href="<?php echo base_url().'kepegawaian/stuktur_kepegawaian/detail';?>/" + id + "/" + code_cl_phc;
-	}
-	function simpan(kode){
-
-	}
-	function edit(id,code_cl_phc){
-		document.location.href="<?php echo base_url().'kepegawaian/stuktur_kepegawaian/edit';?>/" + id + "/" + code_cl_phc;
-	}
-
-	function view(id,code_cl_phc){
-		document.location.href="<?php echo base_url().'kepegawaian/stuktur_kepegawaian/view';?>/" + id + "/" + code_cl_phc;
-	}
-
-	function del(id,code_cl_phc){
-		var confirms = confirm("Hapus Data ?");
-		if(confirms == true){
-			$.post("<?php echo base_url().'kepegawaian/stuktur_kepegawaian/dodel' ?>/" + id + "/" + code_cl_phc,  function(){
-				alert('data berhasil dihapus');
-
-				$("#jqxgrid").jqxGrid('updatebounddata', 'cells');
-			});
-		}
+	function detail(id_pegawai,code_cl_phc){
+		$("#popup_barang #popup_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
+		$.get("<?php echo base_url().'kepegawaian/stuktur_kepegawaian/add/'; ?>" + id_pegawai+'/'+code_cl_phc, function(data) {
+			$("#popup_content").html(data);
+		});
+		$("#popup_barang").jqxWindow({
+			theme: theme, resizable: false,
+			width: 300,
+			height: 300,
+			isModal: true, autoOpen: false, modalOpacity: 0.2
+		});
+		$("#popup_barang").jqxWindow('open');
 	}
 	$("select[name='code_cl_phc']").change(function(){
 		$.post("<?php echo base_url().'kepegawaian/stuktur_kepegawaian/filter' ?>", 'code_cl_phc='+$(this).val(),  function(){
@@ -251,7 +246,7 @@
 		}
 		post = post+'&puskes='+$("#puskesmas option:selected").text();
 		
-		$.post("<?php echo base_url()?>kepegawaian/stuktur_kepegawaian/permohonan_export",post,function(response	){
+		$.post("<?php echo base_url()?>inventory/pengadaanbarang/pengadaan_export",post,function(response	){
 			window.location.href=response;
 		});
 	});

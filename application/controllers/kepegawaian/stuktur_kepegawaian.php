@@ -254,38 +254,41 @@ class stuktur_kepegawaian extends CI_Controller {
 	
 	
 
-	function add(){
-		$this->authentication->verify('kepegawaian','add');
-
-		$this->form_validation->set_rules('id_inv_permohonan_barang', 'Kode Lokasi', 'trim|required');
-        $this->form_validation->set_rules('tgl', 'Tanggal Permohonan', 'trim|required');
-        $this->form_validation->set_rules('keterangan', 'Keterangan', 'trim');
-        $this->form_validation->set_rules('codepus', 'Puskesmas', 'trim|required');
+	function add($id_pegawai=0,$code_cl_phc=0){
+		$data['action']			= "add";
+		$data['kode']			= $id_pegawai;
+		$data['code_cl_phc']	= $code_cl_phc;
+		$data['id_inv_permohonan_barang_item']=0;
+        $this->form_validation->set_rules('username', 'Username', 'trim|required');
+        $this->form_validation->set_rules('password', 'Password', 'trim|required');
 
 		if($this->form_validation->run()== FALSE){
-			$data['title_group'] = "kepegawaian";
-			$data['title_form']="Tambah Permohonan Barang";
-			$data['action']="add";
-			$data['kode']="";
-
-			$kodepuskesmas = $this->session->userdata('puskesmas');
-			if(strlen($kodepuskesmas) == 4){
-				$this->db->like('code','P'.substr($kodepuskesmas, 0,4));
-			}else {
-				$this->db->where('code','P'.$kodepuskesmas);
-			}
-			$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
-		
-			$data['content'] = $this->parser->parse("kepegawaian/stuktur_kepegawaian/form",$data,true);
-		}elseif($id = $this->stuktur_kepegawaian_model->insert_entry()){
-			$this->session->set_flashdata('alert', 'Save data successful...');
-			redirect(base_url().'kepegawaian/stuktur_kepegawaian/edit/'. $id.'/'.$this->input->post('codepus'));
+			
+			$data					= $this->stuktur_kepegawaian_model->get_datapegawai($id_pegawai,$code_cl_phc);
+			$data['kode']			= $id_pegawai;
+			$data['code_cl_phc']	= $code_cl_phc;
+			$data['action']			= "add";
+			$data['notice']			= validation_errors();
+			die($this->parser->parse('kepegawaian/stuktur_kepegawaian/barang_form', $data));
 		}else{
-			$this->session->set_flashdata('alert_form', 'Save data failed...');
-			redirect(base_url()."kepegawaian/stuktur_kepegawaian/add");
-		}
+			$code_cl = substr($code_cl_phc, 1,11);
+			$values = array(
+				'username' => $this->input->post('username'),
+				'password' => $this->encrypt->sha1($this->input->post('password').$this->config->item('encryption_key')),
+				'code' => $code_cl,
+				'level' => 'kepegawaian',
+				'status_active' => 1,
+				'status_aproved' => 1,
+				'id_pegawai' => $id_pegawai,
 
-		$this->template->show($data,"home");
+			);
+			if($this->db->insert('app_users_list', $values)){
+
+				die("OK|");
+			}else{
+				die("Error|Proses data gagal");
+			}
+		}
 	}
 
 	function edit($kode=0,$code_cl_phc=""){

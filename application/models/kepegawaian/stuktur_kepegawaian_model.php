@@ -58,14 +58,12 @@ class Stuktur_kepegawaian_model extends CI_Model {
     }
     
 
- 	function get_data_row($code_cl_phc,$kode){
+ 	function get_datapegawai($kode,$code_cl_phc){
+ 		$code_cl_phc = substr($code_cl_phc, 1,11);
 		$data = array();
-		$this->db->where("inv_permohonan_barang.code_cl_phc",$code_cl_phc);
-		$this->db->where("inv_permohonan_barang.id_inv_permohonan_barang",$kode);
-		$this->db->select("inv_permohonan_barang.*,cl_phc.value,mst_inv_ruangan.nama_ruangan");
-		$this->db->join('cl_phc', "inv_permohonan_barang.code_cl_phc = cl_phc.code");
-		$this->db->join('mst_inv_ruangan', "inv_permohonan_barang.id_mst_inv_ruangan = mst_inv_ruangan.id_mst_inv_ruangan",'left');
-		$query = $this->db->get("inv_permohonan_barang");
+		$this->db->where("code",$code_cl_phc);
+		$this->db->where("id_pegawai",$kode);
+		$query = $this->db->get("app_users_list");
 		if ($query->num_rows() > 0){
 			$data = $query->row_array();
 		}
