@@ -164,9 +164,9 @@
 				{ text: 'Nama', datafield: 'nama', columntype: 'textbox', editable:false, filtertype: 'textbox', align: 'center', width: '29%' },
 				{ text: 'Golongan', align: 'center', cellsalign: 'center', editable:false ,datafield: 'id_mst_peg_golruang', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
 				{
-	                text: '<b><i class="fa fa-pencil-square-o"></i> Jabatan </b>', align: 'center', cellsalign: 'center', datafield: 'tar_nama_posisi', width: '27%', columntype: 'dropdownlist',
+	                text: '<b><i class="fa fa-pencil-square-o"></i> Jabatan </b>', align: 'center', cellsalign: 'center', datafield: 'tar_nama_posisi', width: '31%', columntype: 'dropdownlist',
 	                createEditor: function (row, cellvalue, editor, cellText, width, height) {
-                       editor.jqxDropDownList({autoDropDownHeight: true,source: kode_jabatan_source, displayMember: "tar_nama_posisi", valueMember: "tar_nama_posisi",selectedIndex: "tar_id_struktur_org"});
+                       editor.jqxDropDownList({autoDropDownHeight: true,source: kode_jabatan_source, displayMember: "tar_nama_posisi", valueMember: "tar_id_struktur_org"});
 
                    },
                    initEditor: function (row, cellvalue, editor, celltext, width, height) {
@@ -174,16 +174,21 @@
                    },
                    getEditorValue: function (row, cellvalue, editor) {
                        editor.val();
-                       var datagrid = $("#jqxgrid").jqxGrid('getrowdata', row);
-                       $.post( '<?php echo base_url()?>kepegawaian/stuktur_kepegawaian/updatestatus', {namajabatan:editor.val(),code_cl_phc:datagrid.code_cl_phc,id_pegawai:datagrid.id_pegawai}, function( data ) {
-				            if(data != 0){
-				              //alert(data);            
-				              $("#jqxgrid").jqxGrid('updatebounddata', 'cells');      
-				            }else{
-				             // alert("Data berhasil disimpan"); 
-				              $("#jqxgrid").jqxGrid('updatebounddata', 'cells');                 
-				            }
-				        });
+                       // /alert(parseInt(editor.val()));
+                       	if(editor.val() % 1 === 0){
+                       		var datagrid = $("#jqxgrid").jqxGrid('getrowdata', row);
+	                       $.post( '<?php echo base_url()?>kepegawaian/stuktur_kepegawaian/updatestatus', {id_jabatan:editor.val(),code_cl_phc:datagrid.code_cl_phc,id_pegawai:datagrid.id_pegawai}, function( data ) {
+					            if(data != 0){
+					              //alert(data);            
+					              $("#jqxgrid").jqxGrid('updatebounddata', 'cells');      
+					            }else{
+					             // alert("Data berhasil disimpan"); 
+					              $("#jqxgrid").jqxGrid('updatebounddata', 'cells');                 
+					            }
+					        });
+                       	}else{
+	                       $("#jqxgrid").jqxGrid('updatebounddata', 'cells');                 
+                   		}
                    },
 
                 },

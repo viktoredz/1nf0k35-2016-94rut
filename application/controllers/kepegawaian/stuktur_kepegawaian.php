@@ -14,7 +14,7 @@ class stuktur_kepegawaian extends CI_Controller {
 		$this->load->model('mst/invbarang_model');
 	}
 	function json_kode_jabatan(){
-		$rows = $this->stuktur_kepegawaian_model->get_data_status();
+		$rows = $this->stuktur_kepegawaian_model->get_data_status(0);
 
 		echo json_encode($rows);
 	}
