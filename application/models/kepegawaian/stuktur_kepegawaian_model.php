@@ -8,11 +8,43 @@ class Stuktur_kepegawaian_model extends CI_Model {
         parent::__construct();
 		$this->lang	  = $this->config->item('language');
     }
-    
-    function get_data_status()
+    function child($idparent=0){
+    	$kodepuskes = 'P'.$this->session->userdata('puskesmas');
+		$this->db->select("tar_id_struktur_org,tar_nama_posisi",false);
+        $this->db->where('code_cl_phc', $kodepuskes);
+        $this->db->where('tar_id_struktur_org_parent', $dt['tar_id_struktur_org']);
+        $data = $this->db->get('mst_peg_struktur_org')->result_array();  
+        // if ($query->num_rows() > 0 ) {
+        //     $child = $query->result_array();
+        //     foreach ($child as $dt) {
+        //     	$data = '';
+        //     }
+
+        // } 
+        return $data;
+    }
+    function get_data_status($idparent=0)
     {	
-		$query = $this->db->get('mst_peg_struktur_org');	
-		return $query->result_array();	
+    	$data = array();
+    	$kodepuskes = 'P'.$this->session->userdata('puskesmas');
+		$this->db->select("tar_id_struktur_org,tar_nama_posisi",false);
+        $this->db->where('code_cl_phc', $kodepuskes);
+        //$this->db->where('tar_id_struktur_org_parent', $idparent);
+        $query = $this->db->get('mst_peg_struktur_org');   
+         
+
+        //if ($query->num_rows() > 0 ) {
+            $data = $query->result_array();
+    //         foreach ($data as $dt) {
+    //         	$kodepuskes = 'P'.$this->session->userdata('puskesmas');
+				// $this->db->select("tar_id_struktur_org,tar_nama_posisi",false);
+		  //       $this->db->where('code_cl_phc', $kodepuskes);
+		  //       $this->db->where('tar_id_struktur_org_parent', $dt['tar_id_struktur_org']);
+		  //       $data = $this->db->get('mst_peg_struktur_org')->result_array();   
+    //         }
+
+    //     } 
+        return $data;
     }
     function get_data($start=0,$limit=999999,$options=array())
     {	$puskesmas_ = 'P'.$this->session->userdata('puskesmas');
@@ -98,17 +130,40 @@ class Stuktur_kepegawaian_model extends CI_Model {
 			return mysql_error();
 		}
     }
-    
+    function getdatawhere($table='',$data=''){
+    	
+    	$query = $this->db->get_where($table,$data);
+    	if ($query->num_rows() > 0){
+			$data = $query->row_array();
+		}
+
+		$query->free_result();    
+		return $data;
+    }
     function update_status()
     {	
-    	$status= $this->input->post('pilihan_status_pengadaan');
-    	$data['pilihan_status_pengadaan']	= $this->tampil_id($status);
-    	$id = $this->input->post('inv_permohonan_barang');
-		if($this->db->update($this->tabel, $data,array('id_inv_permohonan_barang'=> $id,'code_cl_phc'=>'P'.$this->session->userdata('puskesmas')))){
-			return true;
-		}else{
-			return mysql_error();
-		}
+    	
+    	$status= $this->input->post('namajabatan');
+    	if ($status!='') {
+	    	$id= $this->input->post('id_pegawai');
+	    	$code_cl_phc= $this->input->post('code_cl_phc');
+	    	$data	= $this->getdatawhere('mst_peg_struktur_org',array('tar_nama_posisi' => $status));
+	    	$querydata = $this->db->get_where('pegawai_struktur',array('id_pegawai' => $id,'code_cl_phc' => $code_cl_phc ));
+	    	if ($querydata->num_rows() > 0) {
+	    		if($this->db->update('pegawai_struktur', array('tar_id_struktur_org'=> $data['tar_id_struktur_org']),array('id_pegawai'=> $id,'code_cl_phc'=>$code_cl_phc))){
+					return true;
+				}else{
+					return mysql_error();
+				}	
+	    	}else{
+	    		if($this->db->insert('pegawai_struktur',array('tar_id_struktur_org'=> $data['tar_id_struktur_org'],'id_pegawai'=> $id,'code_cl_phc'=>$code_cl_phc))){
+					return true;
+				}else{
+					return mysql_error();
+				}
+	    	}
+	    }
+		
     }
     
 	function delete_entry($kode,$code_cl_phc)
