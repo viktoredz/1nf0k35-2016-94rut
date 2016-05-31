@@ -1,20 +1,11 @@
-<?php if($this->session->flashdata('alert')!=""){ ?>
-<div class="alert alert-success alert-dismissable">
-	<button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-	<h4>	<i class="icon fa fa-check"></i> Information!</h4>
-	<?php echo $this->session->flashdata('alert')?>
-</div>
-<?php } ?>
-<div id="popup_barang" style="display:none">
+<div id="popup_pegawai" style="display:none">
 	<div id="popup_title">Data Login Pegawai</div>
 	<div id="popup_content">&nbsp;</div>
 </div>
 <section class="content">
 <form action="<?php echo base_url()?>kepegawaian/stuktur_kepegawaian/dodel_multi" method="POST" name="">
   <div class="row">
-    <!-- left column -->
     <div class="col-md-12">
-      <!-- general form elements -->
       <div class="box box-primary">
         <div class="box-header">
           <h3 class="box-title">{title_form}</h3>
@@ -55,7 +46,7 @@
 	    $("#menu_kepegawaian_stuktur_kepegawaian").addClass("active");
 	});
 	function close_popup(){
-		$("#popup_barang").jqxWindow('close');
+		$("#popup_pegawai").jqxWindow('close');
 	}
 		var sourcejabatan =
 	      {
@@ -161,10 +152,10 @@
                 },
 				
 				{ text: 'NIP', datafield: 'nip_nit', columntype: 'textbox', editable:false, filtertype: 'textbox', align: 'center' , cellsalign: 'center', width: '20%'},
-				{ text: 'Nama', datafield: 'nama', columntype: 'textbox', editable:false, filtertype: 'textbox', align: 'center', width: '29%' },
-				{ text: 'Golongan', align: 'center', cellsalign: 'center', editable:false ,datafield: 'id_mst_peg_golruang', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
+				{ text: 'Nama', datafield: 'nama', columntype: 'textbox', editable:false, filtertype: 'textbox', align: 'center', width: '25%' },
+				{ text: 'Golongan', align: 'center', cellsalign: 'center', editable:false ,datafield: 'id_mst_peg_golruang', columntype: 'textbox', filtertype: 'textbox', width: '8%' },
 				{
-	                text: '<b><i class="fa fa-pencil-square-o"></i> Jabatan </b>', align: 'center', cellsalign: 'center', datafield: 'tar_nama_posisi', width: '31%', columntype: 'dropdownlist',
+	                text: '<b><i class="fa fa-pencil-square-o"></i> Jabatan </b>', align: 'center', datafield: 'tar_nama_posisi', width: '32%', columntype: 'dropdownlist',
 	                createEditor: function (row, cellvalue, editor, cellText, width, height) {
                        editor.jqxDropDownList({autoDropDownHeight: true,source: kode_jabatan_source, displayMember: "tar_nama_posisi", valueMember: "tar_id_struktur_org"});
 
@@ -192,21 +183,22 @@
                    },
 
                 },
+				{ text: 'Username', align: 'center', cellsalign: 'center', editable:false ,columntype: 'textbox', filtertype: 'textbox', width: '11%' },
             ]
 		});
 
 	function detail(id_pegawai,code_cl_phc){
-		$("#popup_barang #popup_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
+		$("#popup_pegawai #popup_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
 		$.get("<?php echo base_url().'kepegawaian/stuktur_kepegawaian/add/'; ?>" + id_pegawai+'/'+code_cl_phc, function(data) {
 			$("#popup_content").html(data);
 		});
-		$("#popup_barang").jqxWindow({
+		$("#popup_pegawai").jqxWindow({
 			theme: theme, resizable: false,
-			width: 300,
-			height: 300,
+			width: 450,
+			height: 350,
 			isModal: true, autoOpen: false, modalOpacity: 0.2
 		});
-		$("#popup_barang").jqxWindow('open');
+		$("#popup_pegawai").jqxWindow('open');
 	}
 	$("select[name='code_cl_phc']").change(function(){
 		$.post("<?php echo base_url().'kepegawaian/stuktur_kepegawaian/filter' ?>", 'code_cl_phc='+$(this).val(),  function(){

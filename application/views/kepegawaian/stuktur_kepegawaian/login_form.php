@@ -7,10 +7,6 @@ if(isset($disable)){if($disable='disable'){?>
 </script>
 <?php }} ?>
 <script type="text/javascript">
-
-
-  
-
     $(function(){
       $('#btn-close').click(function(){
         close_popup();
@@ -99,6 +95,17 @@ if(isset($disable)){if($disable='disable'){?>
                   echo $password;
                 }else{
                   echo  set_value('password');
+                }
+                ?>">
+            
+            </div>
+            <div class="form-group">
+              <label>Confirm Password</label>
+              <input type="password" class="form-control" id="password2" name="password2"  placeholder="Confirm Password" value="<?php
+              if(set_value('password2')=="" && isset($password2)){
+                  echo $password2;
+                }else{
+                  echo  set_value('password2');
                 }
                 ?>">
             

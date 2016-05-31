@@ -20,9 +20,9 @@ class stuktur_kepegawaian extends CI_Controller {
 	}
 	function index(){
 		$this->authentication->verify('kepegawaian','edit');
-		$data['title_group'] = "kepegawaian";
-		$data['title_form'] = "Daftar Permohonan Barang";
-		$data['statusjabatan'] = $this->stuktur_kepegawaian_model->get_data_status();
+		$data['title_group'] 	= "Kepegawaian";
+		$data['title_form'] 	= "Struktur Kepegawaian";
+		$data['statusjabatan'] 	= $this->stuktur_kepegawaian_model->get_data_status();
 
 		$kodepuskesmas = $this->session->userdata('puskesmas');
 		if(strlen($kodepuskesmas) == 4){
@@ -250,9 +250,6 @@ class stuktur_kepegawaian extends CI_Controller {
 			}
 		}
 	}
-	
-	
-	
 
 	function add($id_pegawai=0,$code_cl_phc=0){
 		$data['action']			= "add";
@@ -269,21 +266,29 @@ class stuktur_kepegawaian extends CI_Controller {
 			$data['code_cl_phc']	= $code_cl_phc;
 			$data['action']			= "add";
 			$data['notice']			= validation_errors();
-			die($this->parser->parse('kepegawaian/stuktur_kepegawaian/barang_form', $data));
+			die($this->parser->parse('kepegawaian/stuktur_kepegawaian/login_form', $data));
 		}else{
 			$code_cl = substr($code_cl_phc, 1,11);
 			$values = array(
-				'username' => $this->input->post('username'),
-				'password' => $this->encrypt->sha1($this->input->post('password').$this->config->item('encryption_key')),
-				'code' => $code_cl,
-				'level' => 'kepegawaian',
-				'status_active' => 1,
-				'status_aproved' => 1,
-				'id_pegawai' => $id_pegawai,
+				'username' 	=> $this->input->post('username'),
+				'password' 	=> $this->encrypt->sha1($this->input->post('password').$this->config->item('encryption_key')),
+				'code' 		=> $code_cl,
+				'level' 	=> 'pegawai',
+				'status_active' 	=> 1,
+				'status_aproved' 	=> 1,
+				'id_pegawai' 		=> $id_pegawai,
 
 			);
 			if($this->db->insert('app_users_list', $values)){
-
+				$profile = array(
+					'username' 	=> $this->input->post('username'),
+					'code' 		=> $code_cl,
+					'nama' 		=> $this->input->post('username'),
+					'phone_number' 	=> '',
+					'email' 		=> '',
+					'status' 		=> 1
+				);
+				$this->db->insert('app_users_profile', $profile);
 				die("OK|");
 			}else{
 				die("Error|Proses data gagal");
