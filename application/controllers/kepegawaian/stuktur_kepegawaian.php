@@ -228,6 +228,7 @@ class stuktur_kepegawaian extends CI_Controller {
 				'id_mst_peg_golruang'	=> $act->id_mst_peg_golruang,
 				'tar_nama_posisi'		=> $act->tar_nama_posisi,
 				'code_cl_phc'			=> $act->code_cl_phc,
+				'username'				=> $act->username,
 				'id_pegawai'			=> $act->id_pegawai,
 				'detail'	=> 1,
 			);

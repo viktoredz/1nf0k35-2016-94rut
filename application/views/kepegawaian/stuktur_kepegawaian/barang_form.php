@@ -54,7 +54,7 @@ if(isset($disable)){if($disable='disable'){?>
 
         
     });
-    $("#cekpassword").change(function(){
+    $("#cekpassword ").change(function(){
         if ($("#cekpassword").val() != $("#password").val()) {
           alert("Maaf, data harus sama dengan password");
           $("#cekpassword").val('');
