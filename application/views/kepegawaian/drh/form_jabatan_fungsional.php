@@ -100,7 +100,7 @@
                 },
         { text: 'Nama Jabatan', datafield: 'tar_nama_fungsional', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center',width: '20%' },
         { text: 'TMT', datafield: 'tmt', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '10%' },
-        { text: 'Tanggal Pelantikan', datafield: 'tgl_pelantikan', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', align: 'center', cellsalign: 'center', width: '10%' },
+        { text: 'Tanggal<br>Pelantikan', datafield: 'tgl_pelantikan', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', align: 'center', cellsalign: 'center', width: '10%' },
         { text: 'Pejabat', datafield: 'sk_jb_pejabat',columngroup: 'suratkeputusan', columntype: 'textbox', filtertype: 'textbox', align: 'center' , cellsalign: 'center', width: '20%' },
         { text: 'Nomor', datafield: 'sk_jb_nomor',columngroup: 'suratkeputusan', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '20%' },
         { text: 'Tanggal', datafield: 'sk_jb_tgl',columngroup: 'suratkeputusan', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', align: 'center', cellsalign: 'center', width: '10%' },
