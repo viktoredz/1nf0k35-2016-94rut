@@ -28,8 +28,8 @@ class Sts extends CI_Controller {
 	function api_data_sts_general(){
 		$this->authentication->verify('keuangan','add');		
 		
-		if(!empty($this->session->userdata('puskes')) and  $this->session->userdata('puskes') != '0'){
-			$data['ambildata'] = $this->sts_model->get_data_keu_sts_general($this->session->userdata('puskes'));
+		if(!empty($this->session->userdata('puskesmas')) and  $this->session->userdata('puskesmas') != '0'){
+			$data['ambildata'] = $this->sts_model->get_data_keu_sts_general($this->session->userdata('puskesmas'));
 			foreach($data['ambildata'] as $d){
 				$txt = $this->convert_tgl($d["tgl"])." \t ".$d["nomor"]." \t ".$d["total"]." \t ".$d["status"]." \t <a href=\"".base_url()."keuangan/sts/detail/".$d['tgl']."\"><img border=0 src='".base_url()."media/images/16_edit.gif'></a>  \t".($d['status'] == "buka" ? "  <a onclick=\"doDeleteSts('".$d['tgl']."')\" href=\"#\" ><img border=0 src='".base_url()."media/images/16_del.gif'></a>" : "<img border=0 src='".base_url()."media/images/16_lock.gif'>").  "\n ";				
 				echo $txt;
@@ -41,7 +41,7 @@ class Sts extends CI_Controller {
 		$this->authentication->verify('keuangan','add');		
 		
 		
-		if(!empty($this->session->userdata('puskes')) and  $this->session->userdata('puskes') != '0'){
+		if(!empty($this->session->userdata('puskesmas')) and  $this->session->userdata('puskesmas') != '0'){
 			$data['ambildata'] = $this->sts_model->get_data_puskesmas_isi_sts($id);
 			
 			foreach($data['ambildata'] as $d){
@@ -162,6 +162,7 @@ class Sts extends CI_Controller {
 	 		$data[] = array(
 				'id_sts'   => $act->id_sts,
 				'tgl'	   => date("d-m-Y",strtotime($act->tgl)),
+				'ttd_penerima_nama'	=> $act->ttd_penerima_nama,
 				'nomor'	   => $act->nomor,
 				'total'    => $act->total,
 				'status'   => ucwords($act->status),
@@ -193,12 +194,12 @@ class Sts extends CI_Controller {
 		$this->authentication->verify('keuangan','add');
 
 	    $this->form_validation->set_rules('id_sts', 'ID STS', 'trim|required');
-		$this->form_validation->set_rules('nomor','Nomor','trim|required');
-		$this->form_validation->set_rules('tgl','Tanggal','trim|required');
+		$this->form_validation->set_rules('nomor','Nomor','trim|required|callback_sts_nomor');
+		$this->form_validation->set_rules('tgl','Tanggal','trim|required|callback_sts_tgl');
 
 		$data['id_sts']	   			    = "";
+		$data['alert_form']		   	    = "";
 	    $data['action']					= "add";
-		$data['alert_form']		   	    = '';
 		$data['nomor'] 					= $this->generate_nomor(date("Y-m-d H:i:s"));		
 
 		if($this->form_validation->run()== FALSE){
@@ -211,6 +212,24 @@ class Sts extends CI_Controller {
 			redirect(base_url()."keuangan/sts/add_sts");
 		}
 		die($this->parser->parse("keuangan/form_tambah_sts",$data));
+	}
+
+	function sts_tgl(){
+		if(!$this->sts_model->cek_sts_tgl()){
+			$this->form_validation->set_message('sts_tgl', 'Tanggal STS sudah terdaftar');
+			return false;
+		}else{
+			return true;
+		}
+	}
+
+	function sts_nomor(){
+		if(!$this->sts_model->cek_sts_nomor()){
+			$this->form_validation->set_message('sts_nomor', 'Nomor STS sudah digunakan');
+			return false;
+		}else{
+			return true;
+		}
 	}
 
 	public function kodeSts($id=0){
@@ -234,7 +253,7 @@ class Sts extends CI_Controller {
 		
 		$this->db->select('nomor');
 		$this->db->where("year(tgl) = ('".date("Y",strtotime($date))."')");
-		$this->db->where('code_pl_phc',$this->session->userdata('puskes'));
+		$this->db->where('code_cl_phc',$this->session->userdata('puskesmas'));
 		$this->db->order_by('tgl','desc');
 		$this->db->limit('1');
 		$query = $this->db->get('keu_sts');
@@ -277,8 +296,8 @@ class Sts extends CI_Controller {
 		$data['data_puskesmas']	= $this->sts_model->get_data_puskesmas();
 		$data['title_group'] = "Detail Surat Tanda Setoran";
 		$data['title_form'] = "Detail Surat Tanda Setoran";
-		$data['data_sts'] = $this->sts_model->get_data_sts($id, $this->session->userdata('puskes'));
-		$data['data_sts_total'] = $this->sts_model->get_data_sts_total($id, $this->session->userdata('puskes'));
+		$data['data_sts'] = $this->sts_model->get_data_sts($id, $this->session->userdata('puskesmas'));
+		$data['data_sts_total'] = $this->sts_model->get_data_sts_total($id, $this->session->userdata('puskesmas'));
 		$data['nomor'] = $this->generate_nomor(date("Y-m-d H:i:s"));		
 		$data['id'] = $id;
 		$data['content'] = $this->parser->parse("keuangan/detail_sts",$data,true);		
@@ -290,7 +309,7 @@ class Sts extends CI_Controller {
 		$this->db->select('tgl');
 		$this->db->order_by('tgl','desc');
 		$this->db->limit('1');
-		$this->db->where('code_pl_phc',$this->session->userdata('puskes'));
+		$this->db->where('code_cl_phc',$this->session->userdata('puskesmas'));
 		$query = $this->db->get('keu_sts');
 		
 		$datetime = new DateTime('tomorrow');
@@ -374,33 +393,11 @@ class Sts extends CI_Controller {
 	function detail_sts_export(){
 		$this->authentication->verify('keuangan','show');
 
+		$data = array();
 		$id 	= $this->input->post('id');
 
 		$TBS = new clsTinyButStrong;		
 		$TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN);
-
-		if($_POST) {
-			$fil = $this->input->post('filterscount');
-			$ord = $this->input->post('sortdatafield');
-
-			for($i=0;$i<$fil;$i++) {
-				$field = $this->input->post('filterdatafield'.$i);
-				$value = $this->input->post('filtervalue'.$i);
-
-				if($field == 'tgl') {
-					$value = date("Y-m-d",strtotime($value));
-					$this->db->where($field,$value);
-				}elseif($field != 'year') {
-					$this->db->like($field,$value);
-				}
-			}
-
-			if(!empty($ord)) {
-				$this->db->order_by($ord, $this->input->post('sortorder'));
-			}
-		}
-		
-		$data = array();
 
 		$activity = $this->sts_model->get_data_for_export('keu_sts', array('keu_sts.id_sts'=>$id))->result();
 		foreach($activity as $act) {
@@ -414,7 +411,7 @@ class Sts extends CI_Controller {
 		}
 
 		$data_puskesmas						= $this->sts_model->get_data_row($id);
-		$nama_puskesmas						= $this->sts_model->get_data_nama($data_puskesmas['code_pl_phc']);
+		$nama_puskesmas						= $this->sts_model->get_data_nama($data_puskesmas['code_cl_phc']);
 		$data_puskesmas['puskesmas']		= $nama_puskesmas['value'];
 		$data_puskesmas['tgl']				= date("d-m-Y",strtotime($data_puskesmas['tgl']));
 		$data_puskesmas['nomor']			= $data_puskesmas['nomor'];
@@ -426,7 +423,7 @@ class Sts extends CI_Controller {
 		$TBS->ResetVarRef(false);
 		$TBS->VarRef =  &$data_puskesmas;	
 		$dir = getcwd().'/';
-	    $template = $dir.'public/files/template/keuangan_sts_detail.xlsx';
+	    $template = $dir.'public/files/template/keuangan/sts_detail.xlsx';
 		$TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8);
 		
 		$TBS->MergeBlock('a', $data);
