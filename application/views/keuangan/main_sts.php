@@ -85,6 +85,7 @@
             datafields: [
             { name: 'id_sts', type: 'string'},
             { name: 'tgl', type: 'date'},
+            { name: 'ttd_penerima_nama', type: 'string'},
             { name: 'nomor', type: 'string'},
             { name: 'total', type: 'string'},
             { name: 'status',type: 'string'},   
@@ -149,10 +150,11 @@
                     }
                  }
                 },
-                { text: 'Tanggal', align: 'center', cellsalign: 'center', datafield: 'tgl', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '20%' },
-                { text: 'Nomor STS', datafield: 'nomor', columntype: 'textbox', filtertype: 'textbox',align: 'center', cellsalign: 'center', width: '21%',cellsalign: 'center'},
-                { text: 'Total Uang', datafield: 'total', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '29%',cellsalign: 'center' },
-                { text: 'Status', datafield: 'status', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '20%' }
+                { text: 'Tanggal', align: 'center', cellsalign: 'center', datafield: 'tgl', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '12%' },
+                { text: 'Nomor STS', datafield: 'nomor', columntype: 'textbox', filtertype: 'textbox',align: 'center', cellsalign: 'center', width: '16%',cellsalign: 'center'},
+                { text: 'Petugas Penerima', datafield: 'ttd_penerima_nama', columntype: 'textbox', filtertype: 'textbox',align: 'center', width: '25%'},
+                { text: 'Total Uang', datafield: 'total', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '23%',cellsalign: 'center' },
+                { text: 'Status', datafield: 'status', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '14%' }
             ]
         });
 

@@ -16,17 +16,16 @@
 </div>
 <?php } ?>
 
-<form method="post" action="<?=base_url()?>keuangan/sts/update_ttd">
+<form method="post" action="<?php echo base_url()?>keuangan/sts/update_ttd">
 <section class="content">
   <div class="row">
     <div class="col-md-12">
       <div class="box box-primary">
-		<?php foreach($data_sts as $ds) { ?>
             <div class="box-header">
               <h4>
               	<div class="row">
               		<div class="col-md-6">Data Penanggung Jawab </div>
-              		<?php if($ds['status']!='draft') echo "<div  class='col-md-6 pull-right' style='color:red;text-align:right'> [STS TUTUP BUKU]</div>"  ?>
+              		<?php if($data_sts['status']!='draft') echo "<div  class='col-md-6 pull-right' style='color:red;text-align:right'> [STS TUTUP BUKU]</div>"  ?>
               	</div>
               </h4>
             </div><!-- /.box-header -->
@@ -38,7 +37,7 @@
 						<b>Nomor STS </b>
 					</td>
 					<td>
-						<?php echo $ds['nomor']?>
+						<?php echo $data_sts['nomor']?>
 					</td>
 					<td>
 					</td>
@@ -50,7 +49,7 @@
 						<b>Tanggal</b>
 					</td>
 					<td>
-						<?php echo date("d-m-Y",strtotime($ds['tgl'])); ?>
+						<?php echo date("d-m-Y",strtotime($data_sts['tgl'])); ?>
 					</td>
 					<td>
 					</td>
@@ -62,34 +61,34 @@
 						<b>Puskesmas</b>
 					</td>
 					<td>
-						<?php echo $ds['code_pl_phc']?> - <?=$ds['value']?>
+						<?php echo $data_sts['code_cl_phc']?> - <?php echo $data_sts['value']?>
 					</td>
 					<td>
 					</td>
 					<td></td>
                 </tr>
-				<input type="hidden" name="id_sts" value="<?=$ds['id_sts']?>" >
-				<input type="hidden" name="puskes" value="<?=$ds['code_pl_phc']?>" >
+				<input type="hidden" name="id_sts" value="<?php echo $data_sts['id_sts']?>" >
+				<input type="hidden" name="puskes" value="<?php echo $data_sts['code_cl_phc']?>" >
                 
                 <tr>
 					<th></th>
 					<th>Pimpinan</th>
-					<td><input <?php echo $ds['status']!='draft' ? "readonly" : "" ?> type="text" name="ttd_pimpinan_nama" value="<?=$ds['ttd_pimpinan_nama']?>" class="form-control" id="pimpinan_nama" placeholder="Nama Pimpinan"></td>
-					<td><input <?php echo $ds['status']!='draft' ? "readonly" : "" ?> type="text" name="ttd_pimpinan_nip" value="<?=$ds['ttd_pimpinan_nip']?>" class="form-control" id="pimpinan_nip" placeholder="NIP Pimpinan"></td>
+					<td><input <?php echo $data_sts['status']!='draft' ? "readonly" : "" ?> type="text" name="ttd_pimpinan_nama" value="<?php echo $data_sts['ttd_pimpinan_nama']?>" class="form-control" id="pimpinan_nama" placeholder="Nama Pimpinan"></td>
+					<td><input <?php echo $data_sts['status']!='draft' ? "readonly" : "" ?> type="text" name="ttd_pimpinan_nip" value="<?php echo $data_sts['ttd_pimpinan_nip']?>" class="form-control" id="pimpinan_nip" placeholder="NIP Pimpinan"></td>
 					<th></th>
                 </tr>
                 <tr>
 					<th></th>
 					<th>Penerima</th>
-					<td><input <?php echo $ds['status']!='draft' ? "readonly" : "" ?> type="text" name="ttd_penerima_nama" value="<?=$ds['ttd_penerima_nama']?>" class="form-control" id="penerima_nama" placeholder="Nama Penerima"></td>
-					<td><input <?php echo $ds['status']!='draft' ? "readonly" : "" ?> type="text" name="ttd_penerima_nip" value="<?=$ds['ttd_penerima_nip']?>" class="form-control" id="penerima_nip" placeholder="NIP Penerima"></td>
+					<td><input <?php echo $data_sts['status']!='draft' ? "readonly" : "" ?> type="text" name="ttd_penerima_nama" value="<?php echo $data_sts['ttd_penerima_nama']?>" class="form-control" id="penerima_nama" placeholder="Nama Penerima"></td>
+					<td><input <?php echo $data_sts['status']!='draft' ? "readonly" : "" ?> type="text" name="ttd_penerima_nip" value="<?php echo $data_sts['ttd_penerima_nip']?>" class="form-control" id="penerima_nip" placeholder="NIP Penerima"></td>
 					<th></th>
                 </tr>
                 <tr>
 					<th></th>
 					<th>Penyetor</th>
-					<td><input <?php echo $ds['status']!='draft' ? "readonly" : "" ?> type="text" name="ttd_penyetor_nama" value="<?=$ds['ttd_penyetor_nama']?>" class="form-control" id="penyetor_nama" placeholder="Nama Penyetor"></td>
-					<td><input <?php echo $ds['status']!='draft' ? "readonly" : "" ?> type="text" name="ttd_penyetor_nip" value="<?=$ds['ttd_penyetor_nip']?>" class="form-control" id="penyetor_nip" placeholder="NIP Penyetor"></td>
+					<td><input <?php echo $data_sts['status']!='draft' ? "readonly" : "" ?> type="text" name="ttd_penyetor_nama" value="<?php echo $data_sts['ttd_penyetor_nama']?>" class="form-control" id="penyetor_nama" placeholder="Nama Penyetor"></td>
+					<td><input <?php echo $data_sts['status']!='draft' ? "readonly" : "" ?> type="text" name="ttd_penyetor_nip" value="<?php echo $data_sts['ttd_penyetor_nip']?>" class="form-control" id="penyetor_nip" placeholder="NIP Penyetor"></td>
 					<th></th>
                 </tr>
 				<tr>
@@ -100,7 +99,6 @@
 					<td></td>
 					<td><b>Terbilang</b></td><td id="terbilangTotal" colspan="3"></td>
 				</tr>
-				<?php } ?>
               </table>
             </div><!-- /.box-body -->
       	</div><!-- /.box -->
@@ -115,7 +113,7 @@
 				?>
 					<div class="alert alert-warning alert-dismissible" role="alert">
 					  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					  <strong>Ups!</strong> <?=$this->session->flashdata('notif_content')?>
+					  <strong>Ups!</strong> <?php echo $this->session->flashdata('notif_content')?>
 					</div>
 				<?php	
 					}elseif($this->session->flashdata('notif_type') == 'saved'){
@@ -139,27 +137,28 @@
 					<p id="doExpand" class="btn btn-warning"><i class="icon fa fa-plus-square-o"></i> &nbsp;Expand All</p>	
 					<p id="doCollapse" onclick="" class="btn btn-warning"><i class="icon fa fa-minus-square-o"></i> &nbsp;Collapse All</p>	
 				</div>
-				<?php if($ds['status']=='disetor'){ ?>
+				<?php if($data_sts['status']=='disetor'){ ?>
 					<div class="col-md-6 pull-right" style="text-align:right">
-						<input type="hidden" name="id" value="<?=$ds['id_sts']?>" >
+						<input type="hidden" name="id" value="<?php echo $data_sts['id_sts']?>" >
 						<?php 
-							if($ds['tgl'] == date("Y-m-d")){											
+							if($data_sts['tgl'] == date("Y-m-d")){											
 						?>
-							<input type="button" onclick="reopen('<?=$ds['id_sts']?>','<?=$ds['code_pl_phc']?>')" class="btn btn-success" name="openlagi" value="Buka STS" >
+							<input type="button" onclick="reopen('<?php echo $data_sts['id_sts']?>','<?php echo $data_sts['code_cl_phc']?>')" class="btn btn-success" name="openlagi" value="Buka STS" >
 						<?php
 							}
 						?>
-						<a href="<?=base_url()?>keuangan/sts/general" class="btn btn-primary" >Kembali</a>					
+						<a href="<?php echo base_url()?>keuangan/sts/general" class="btn btn-primary" >Kembali</a>					
+		   	            <button type="button" id="btn-export" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Export</button>
 					</div>
 				<?php } else { ?>
 				<div>
 					<div class="col-md-8 pull-right" style="text-align:right">
-						<input type="hidden" name="tgl" value="<?=$ds['tgl']?>" >
-						<input type="hidden" name="puskes" value="<?=$ds['code_pl_phc']?>" >
+						<input type="hidden" name="tgl" value="<?php echo $data_sts['tgl']?>" >
+						<input type="hidden" name="puskes" value="<?php echo $data_sts['code_cl_phc']?>" >
 		   	            <button type="button" id="btn-export" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Export</button>
 						<input type="submit" name="save" class="btn btn-success" value="Simpan Sementara" >								
 						<input type="submit" name="delete" class="btn btn-danger" onclick="return confirm('apakah Anda yakin telah selesai mengisi form STS ? form yang telah ditutup tidak dapat diedit kembali')" value="Simpan & Tutup STS">
-						<a href="<?=base_url()?>keuangan/sts/general" name="save" class="btn btn-primary" value="" ><i class='fa  fa-arrow-circle-o-left'></i> &nbsp;Kembali</a>						
+						<a href="<?php echo base_url()?>keuangan/sts/general" name="save" class="btn btn-primary" value="" ><i class='fa  fa-arrow-circle-o-left'></i> &nbsp;Kembali</a>						
 					</div>
 					</form>
 				</div>
@@ -201,7 +200,7 @@
 			theme = theme.substring(0, theme.indexOf(')'));
 		}
 
-		var url = "<?=base_url()?>jqwidgets/styles/jqx." + theme + '.css';
+		var url = "<?php echo base_url()?>jqwidgets/styles/jqx." + theme + '.css';
 
 		if (document.createStyleSheet != undefined) {
 			var hasStyle = false;
@@ -330,7 +329,7 @@
 				var arr = $.map(rowData, function(el) { return el });
 				//0,6
 				//update volume data
-				$.post( '<?php echo base_url()?>keuangan/sts/update_volume', {id_sts:'<?=$id?>',id_mst_anggaran: arr[0], tarif:arr[5], vol:arr[6]},function( data ) {
+				$.post( '<?php echo base_url()?>keuangan/sts/update_volume', {id_sts:'<?php echo $id?>',id_mst_anggaran: arr[0], tarif:arr[5], vol:arr[6]},function( data ) {
 					$("#terbilangTotal").html(terbilang(data.split('.')[0]));
 					$("#angkaTotal").html(formatMoney(data, "Rp"));	
 					//$("#treeGrid").jqxTreeGrid('updateBoundData');
@@ -352,7 +351,7 @@
             width: '100%',				
             source: dataAdapter, 
             //pageable: true,
-            editable: <?php echo $ds['status']!='draft' ? "false" : "true" ?>,                
+            editable: <?php echo $data_sts['status']!='draft' ? "false" : "true" ?>,                
             altRows: true,
             ready: function()
             {
@@ -363,16 +362,16 @@
             columns: [				                                 
               { text: 'Kode Anggaran', editable:false, dataField: "KodeAnggaran", align: 'center', width: '25%',cellsalign: 'left' },
               { text: 'Uraian', editable:false, dataField: "Uraian", align: 'center', width: '43%',cellsalign: 'left' },
-			  { text: 'Volume', dataField: "Volume",cellClassName: "min", editable:<?php echo $ds['status']!='draft' ? "false" : "true" ?>, align: 'center', cellsFormat: "f", width: '8%',cellsalign: 'center' },
+			  { text: 'Volume', dataField: "Volume",cellClassName: "min", editable:<?php echo $data_sts['status']!='draft' ? "false" : "true" ?>, align: 'center', cellsFormat: "f", width: '8%',cellsalign: 'center' },
 			  { text: 'Tarif', dataField: "Tarif", editable:false, align: 'center', cellsFormat: "f", width: '12%',cellsalign: 'center' },                                    
 			  { text: 'Sub Total', dataField: "Subtotal", editable:false, align: 'center', cellsFormat: "f", width: '12%',cellsalign: 'center' }      
             ]
         });
     });
 	
-	function reopen(id_sts, code_pl_phc){
+	function reopen(id_sts, code_cl_phc){
 		
-		$.post( '<?php echo base_url()?>keuangan/sts/reopen', {id_sts:id_sts, code_pl_phc:code_pl_phc},function( data ) {
+		$.post( '<?php echo base_url()?>keuangan/sts/reopen', {id_sts:id_sts, code_cl_phc:code_cl_phc},function( data ) {
 				location.reload();
 			});
 	}
@@ -467,41 +466,7 @@
 		}
 
 		$("#btn-export").click(function(){
-
-			var post 		= "";
-			// var filter 		= $("#treeGrid").jqxTreeGrid('getfilterinformation');
-			// for(i=0; i < filter.length; i++){
-			// 	var fltr 	= filter[i];
-			// 	var value	= fltr.filter.getfilters()[0].value;
-			// 	var condition		= fltr.filter.getfilters()[0].condition;
-			// 	var filteroperation	= fltr.filter.getfilters()[0].operation;
-			// 	var filterdatafield	= fltr.filtercolumn;
-			// 	if(filterdatafield=="tgl"){
-			// 		var d 		= new Date(value);
-			// 		var day 	= d.getDate();
-			// 		var month 	= d.getMonth();
-			// 		var year 	= d.getYear();
-			// 		value 		= year+'-'+month+'-'+day;
-			// 	}
-			// 	post = post+'&filtervalue'+i+'='+value;
-			// 	post = post+'&filtercondition'+i+'='+condition;
-			// 	post = post+'&filteroperation'+i+'='+filteroperation;
-			// 	post = post+'&filterdatafield'+i+'='+filterdatafield;
-			// 	post = post+'&'+filterdatafield+'operator=and';
-			// }
-			// post = post+'&filterscount='+i;
-			
-			// var sortdatafield = $("#treeGrid").jqxTreeGrid('getsortcolumn');
-			// if(sortdatafield != "" && sortdatafield != null){
-			// 	post = post + '&sortdatafield='+sortdatafield;
-			// }
-			// if(sortdatafield != null){
-			// 	var sortorder = $("#treeGrid").jqxTreeGrid('getsortinformation').sortdirection.ascending ? "asc" : ($("#treeGrid").jqxTreeGrid('getsortinformation').sortdirection.descending ? "desc" : "");
-			// 	post = post+'&sortorder='+sortorder;
-				
-			// }
-			// post = post+'&puskes='+$("#puskesmas option:selected").text();
-			
+			var post 		= 'id={id}';
 			$.post("<?php echo base_url()?>keuangan/sts/detail_sts_export",post,function(response	){
 				window.location.href=response;
 			});

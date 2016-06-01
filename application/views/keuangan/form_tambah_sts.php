@@ -1,8 +1,8 @@
-<?php if($this->session->flashdata('alert_form')!=""){ ?>
+<?php if(validation_errors()!=""){ ?>
 <div class="alert alert-danger alert-dismissable">
   <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
   <h4>  <i class="icon fa fa-check"></i> Information!</h4>
-  <?php echo $this->session->flashdata('alert_form')?>
+  <?php echo validation_errors()?>
 </div>
 <?php } ?>
 
