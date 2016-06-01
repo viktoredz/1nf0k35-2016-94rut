@@ -116,7 +116,31 @@ class Pegorganisasi_model extends CI_Model {
         $query->free_result();
         return $data;
     }
+    function get_data_skp($id,$start=0,$limit=999999,$options=array())
+    {
+        $this->db->select("*");
+        $this->db->where('id_mst_peg_struktur_org',$id);
+        $query = $this->db->get('mst_peg_struktur_skp',$limit,$start);
+        return $query->result();
+    }
+    function delete_skp($id_org=0,$id_skp=0,$code_cl_phc=""){
+        $this->db->where('id_mst_peg_struktur_org',$id_org);
+        $this->db->where('id_mst_peg_struktur_skp',$id_skp);
+        $this->db->where('code_cl_phc',$code_cl_phc);
+        $this->db->delete('mst_peg_struktur_skp');
+    }
 
+    function get_data_row_skp($id_org=0,$id_skp=0,$code_cl_phc=""){
+        $this->db->where('id_mst_peg_struktur_org',$id_org);
+        $this->db->where('id_mst_peg_struktur_skp',$id_skp);
+        $this->db->where('code_cl_phc',$code_cl_phc);
+        $query = $this->db->get('mst_peg_struktur_skp');   
+        if ($query->num_rows() > 0){
+            $data = $query->row_array();
+        }
 
+        $query->free_result();    
+        return $data;
+    }
 }
 

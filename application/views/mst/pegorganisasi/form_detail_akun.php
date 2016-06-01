@@ -84,12 +84,14 @@
 
         <div class="box-footer" style="float:right">
           <button type="button" class="btn btn-primary  btn-sm" id="btn-tambah-skp"><i class='fa fa-plus-square-o'></i> &nbsp; Tambah</button>
-          <button type="button" class="btn btn-warning  btn-sm" id="btn-refresh-skp"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
+          <button type="button" class="btn btn-success  btn-sm" id="btn-refresh-skp"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
+          <button type="button" class="btn btn-danger  btn-sm" id="btn-back-skp"><i class='glyphicon glyphicon-arrow-left'></i> &nbsp; Kembali</button>
         </div>
 
         <div class="box-body">
             <div class="div-grid">
                   <div id="jqxgridSKP"></div>
+                  <div id="tambahSKP"></div>
             </div>
         </div>
     </div>
@@ -97,26 +99,25 @@
 </div>
 
 <script>
-
   $(document).ready(function () {   
     var sourceskp = {
       datatype: "json",
       type  : "POST",
       datafields: [
-      { name: 'id_pengadaan', type: 'string'},
-      { name: 'tgl_pengadaan', type: 'date'},
-      { name: 'nomor_kontrak', type: 'string'},
-      { name: 'pilihan_status_pengadaan', type: 'string'},
-      { name: 'value', type: 'string'},
-      { name: 'jumlah_unit', type: 'double'},
-      { name: 'total_harga', type: 'double'},
-      { name: 'nilai_pengadaan', type: 'double'},
-      { name: 'keterangan', type: 'text'},
-      { name: 'detail', type: 'number'},
+      { name: 'id_mst_peg_struktur_org', type: 'string'},
+      { name: 'tugas', type: 'string'},
+      { name: 'id_mst_peg_struktur_skp', type: 'string'},
+      { name: 'ak', type: 'string'},
+      { name: 'kuant', type: 'string'},
+      { name: 'output', type: 'string'},
+      { name: 'target', type: 'string'},
+      { name: 'waktu', type: 'string'},
+      { name: 'biaya', type: 'string'},
+      { name: 'code_cl_phc', type: 'string'},
       { name: 'edit', type: 'number'},
       { name: 'delete', type: 'number'}
         ],
-    url: "<?php echo site_url('inventory/pengadaanbarang/json'); ?>",
+    url: "<?php echo site_url('mst/pegorganisasi/json_skp/{tar_id_struktur_org}'); ?>",
     cache: false,
       updateRow: function (rowID, rowData, commit) {
              
@@ -160,7 +161,7 @@
         { text: 'Edit', align: 'center', filtertype: 'none', sortable: false, width: '6%', cellsrenderer: function (row) {
             var dataRecord = $("#jqxgridSKP").jqxGrid('getrowdata', row);
             if(dataRecord.edit==1){
-            return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='edit(\""+dataRecord.id_pengadaan+"\");'></a></div>";
+            return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='edit_skp(\""+dataRecord.id_mst_peg_struktur_org+"\",\""+dataRecord.id_mst_peg_struktur_skp+"\",\""+dataRecord.code_cl_phc+"\");'></a></div>";
           }else{
             return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
           }
@@ -169,7 +170,7 @@
         { text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '6%', cellsrenderer: function (row) {
             var dataRecord = $("#jqxgridSKP").jqxGrid('getrowdata', row);
             if(dataRecord.delete==1){
-            return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del(\""+dataRecord.id_pengadaan+"\",\""+dataRecord.jumlah_unit+"\");'></a></div>";
+            return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del_skp(\""+dataRecord.id_mst_peg_struktur_org+"\",\""+dataRecord.id_mst_peg_struktur_skp+"\",\""+dataRecord.code_cl_phc+"\");'></a></div>";
           }else{
             return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
           }
@@ -178,7 +179,7 @@
         { text: 'Tugas', editable:false ,datafield: 'tugas', columntype: 'textbox', filtertype: 'textbox', width: '36%' },
         { text: 'Target',editable:false , align: 'center', cellsalign: 'center', datafield: 'target', columntype: 'textbox', filtertype: 'textbox',  width: '15%' },
         { text: 'Waktu', editable:false ,align: 'center', cellsalign: 'center', datafield: 'waktu', columntype: 'textbox', filtertype: 'textbox', width: '15%' },
-        { text: 'Biaya', editable:false ,align: 'center', cellsalign: 'right', datafield: 'jumlah_unit', columntype: 'textbox', filtertype: 'textbox', width: '25%' }
+        { text: 'Biaya', editable:false ,align: 'center', cellsalign: 'right', datafield: 'biaya', columntype: 'textbox', filtertype: 'textbox', width: '22%' }
             ]
     });
     tabIndex = 1;
@@ -186,7 +187,7 @@
         $("#popup_keuangan_akun_detail").jqxWindow('close');
         cekstatus();
     });
-
+    
     $("[name='non_aktifkan_status']").click(function(){
         $.ajax({
             cache : false,
@@ -227,12 +228,46 @@
         });
         return false;
     });
-
+    $("#btn-back-skp").hide();
+    $("#tambahSKP").hide();
    $("#btn-tambah-skp").click(function(){
-      $.get('<?php echo base_url()."mst/pegorganisasi/add_skp/"?>',function(data){
-          $("#jqxgridSKP").html(data);;
+      $.get('<?php echo base_url()."mst/pegorganisasi/add_skp/$tar_id_struktur_org/0/$code_cl_phc"?>',function(data){
+          $("#btn-tambah-skp").hide();
+          $("#btn-refresh-skp").hide();
+          $("#jqxgridSKP").hide();
+          $("#btn-back-skp").show();
+          $("#tambahSKP").show();
+          $("#tambahSKP").html(data);
+
       });
    });
-
+   $("#btn-back-skp").click(function(){
+          $("#btn-tambah-skp").show();
+          $("#btn-refresh-skp").show();
+          $("#btn-back-skp").hide();
+          $("#tambahSKP").hide();
+          $("#jqxgridSKP").show();
+   });
   });
+    function del_skp(id_org,id_skp,code_cl_phc){
+      var confirms = confirm("Hapus Data ?");
+      if(confirms == true){
+        $.post("<?php echo base_url().'mst/pegorganisasi/dodel_skp' ?>/" + id_org+ "/" + id_skp + "/" + code_cl_phc,  function(){
+          alert('data berhasil dihapus');
+
+          $("#jqxgridSKP").jqxGrid('updatebounddata', 'cells');
+        });
+      }
+    }
+    function edit_skp(id_org,id_skp,code_cl_phc){
+      $.get('<?php echo base_url()."mst/pegorganisasi/edit_skp"?>/'+ id_org+ "/" + id_skp + "/" + code_cl_phc,function(data){
+          $("#btn-tambah-skp").hide();
+          $("#btn-refresh-skp").hide();
+          $("#jqxgridSKP").hide();
+          $("#btn-back-skp").show();
+          $("#tambahSKP").show();
+          $("#tambahSKP").html(data);
+
+      });
+    }
 </script>

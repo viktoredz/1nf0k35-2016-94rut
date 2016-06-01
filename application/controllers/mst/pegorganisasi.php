@@ -198,64 +198,168 @@ class Pegorganisasi extends CI_Controller {
 		$this->authentication->verify('mst','del');
 		$this->pegorganisasi_model->akun_delete($this->input->post('tar_id_struktur_org'));				
 	}
-	function add_skp($id_pegorganisasi=0,$code_cl_phc=0){
+	function add_skp($id_pegorganisasi=0,$id_skp=0,$code_cl_phc=0){
 		$data['action']			= "add";
 		$data['kode']			= $id_pegorganisasi;
 		$data['code_cl_phc']	= $code_cl_phc;
-		$data['id_inv_permohonan_barang_item']=0;
-        $this->form_validation->set_rules('username', 'Username', 'trim|required');
-        $this->form_validation->set_rules('password', 'Password', 'trim|required');
-        $this->form_validation->set_rules('cekpassword', 'Konfirmasi Password', 'trim|required');
-        $pas1=$this->input->post('password');
-        $pas2=$this->input->post('cekpassword');
+		$data['id_skp']			= $id_skp;
+
+        $this->form_validation->set_rules('tugas', 'Tugas', 'trim|required');
+        $this->form_validation->set_rules('output', 'Output', 'trim|required');
+        $this->form_validation->set_rules('target', 'Target', 'trim|required');
+        $this->form_validation->set_rules('waktu', 'Waktu', 'trim|required');
+        $this->form_validation->set_rules('biaya', 'Biaya', 'trim|required');
 		if($this->form_validation->run()== FALSE){
 			
-			$data					= $this->pegorganisasi_model->get_data_akun();
+			// $data					= $this->pegorganisasi_model->get_data_akun();
 			$data['kode']			= $id_pegorganisasi;
 			$data['code_cl_phc']	= $code_cl_phc;
+			$data['id_skp']			= $id_skp;
 			$data['action']			= "add";
 			$data['notice']			= validation_errors();
 			die($this->parser->parse('mst/pegorganisasi/form_skp', $data));
-		}else if($pas1 != $pas2){
-			die("Error|Maaf, Password tidak sama dengan Konfirmasi Password");
 		}else{
 			
-			$this->db->where('username',$this->input->post('username'));
-			$query = $this->db->get('app_users_list');
-
-			if ($query->num_rows() > 0) {
-				die("Error|Maaf, Username telah tersedia. Silahkan ganti username Anda !");
+			$code_cl = substr($code_cl_phc, 0,12);
+			$values = array(
+				'id_mst_peg_struktur_org' => $id_pegorganisasi,
+				'id_mst_peg_struktur_skp' => $this->urut($id_pegorganisasi),
+				'tugas' => $this->input->post('tugas'),
+				'ak' => '0',
+				'kuant' => '1',
+				'output' => $this->input->post('output'),
+				'target' => $this->input->post('target'),
+				'waktu' => $this->input->post('waktu'),
+				'biaya' => $this->input->post('biaya'),
+				'code_cl_phc' => $code_cl,
+			);
+			
+			if($this->db->insert('mst_peg_struktur_skp', $values)){
+				die("OK|");
 			}else{
-				$code_cl = substr($code_cl_phc, 1,11);
-				$values = array(
-					'username' => $this->input->post('username'),
-					'password' => $this->encrypt->sha1($this->input->post('password').$this->config->item('encryption_key')),
-					'code' => $code_cl,
-					'level' => 'kepegawaian',
-					'status_active' => 1,
-					'status_aproved' => 1,
-					'id_pegawai' => $id_pegawai,
-
-				);
-				if($this->db->insert('app_users_list', $values)){
-					$profile = array(
-                      'username'     	=> $this->input->post('username'),
-                      'code'         	=> $code_cl,
-                      'nama'         	=> $this->input->post('username'),
-                      'phone_number'    => '',
-                      'email'         	=> '',
-                      'status'         	=> 1
-                 );
-                 $this->db->insert('app_users_profile', $profile);
-
-					die("OK|");
-				}else{
-					die("Error|Proses data gagal");
-				}	
-			}
+				die("Error|Proses data gagal");
+			}	
 			
 		}
 	}
-	
+	function edit_skp($id_pegorganisasi=0,$id_skp=0,$code_cl_phc=0){
+		$data['action']			= "add";
+		$data['kode']			= $id_pegorganisasi;
+		$data['code_cl_phc']	= $code_cl_phc;
+		$data['id_skp']			= $id_skp;
+
+        $this->form_validation->set_rules('tugas', 'Tugas', 'trim|required');
+        $this->form_validation->set_rules('output', 'Output', 'trim|required');
+        $this->form_validation->set_rules('target', 'Target', 'trim|required');
+        $this->form_validation->set_rules('waktu', 'Waktu', 'trim|required');
+        $this->form_validation->set_rules('biaya', 'Biaya', 'trim|required');
+        $data					= $this->pegorganisasi_model->get_data_row_skp($id_pegorganisasi,$id_skp,$code_cl_phc);
+		if($this->form_validation->run()== FALSE){
+			
+			$data					= $this->pegorganisasi_model->get_data_row_skp($id_pegorganisasi,$id_skp,$code_cl_phc);
+			$data['kode']			= $id_pegorganisasi;
+			$data['code_cl_phc']	= $code_cl_phc;
+			$data['id_skp']			= $id_skp;
+			$data['action']			= "edit";
+			$data['notice']			= validation_errors();
+			die($this->parser->parse('mst/pegorganisasi/form_skp', $data));
+		}else{
+			
+			$code_cl = substr($code_cl_phc, 0,12);
+			$values = array(
+				'tugas' => $this->input->post('tugas'),
+				'ak' => '0',
+				'kuant' => '1',
+				'output' => $this->input->post('output'),
+				'target' => $this->input->post('target'),
+				'waktu' => $this->input->post('waktu'),
+				'biaya' => $this->input->post('biaya'),
+			);
+			$keyup = array(
+			'id_mst_peg_struktur_org' => $id_pegorganisasi,
+			'id_mst_peg_struktur_skp' => $id_skp,
+			'code_cl_phc' => $code_cl
+			);
+			if($this->db->update('mst_peg_struktur_skp', $values,$keyup)){
+				die("OK|");
+			}else{
+				die("Error|Proses data gagal");
+			}	
+			
+		}
+	}
+	function urut($kode){
+		$this->db->select("max(id_mst_peg_struktur_skp) as max");
+		$query = $this->db->get_where('mst_peg_struktur_skp',array('id_mst_peg_struktur_org'=>$kode));
+		if ($query->num_rows() > 0) {
+			foreach ($query->result() as $key) {
+				$data = $key->max+1;
+			}
+		}else{
+			$data = 1;
+		}
+		return $data;
+	}
+	function json_skp($id=""){
+		$this->authentication->verify('kepegawaian','show');
+
+
+		$data	  	= array();
+		$filter 	= array();
+		$filterLike = array();
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'date_received' || $field == 'date_accepted') {
+					$value = date("Y-m-d",strtotime($value));
+
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		$rows = $this->pegorganisasi_model->get_data_skp($id,$this->input->post('recordstartindex'), $this->input->post('pagesize'));
+		$data = array();
+		foreach($rows as $act) {
+			$data[] = array(
+				'id_mst_peg_struktur_org'			=> $act->id_mst_peg_struktur_org,
+				'tugas'								=> $act->tugas,
+				'id_mst_peg_struktur_skp'			=> $act->id_mst_peg_struktur_skp,
+				'ak'								=> $act->ak,
+				'kuant'								=> $act->kuant,
+				'output'							=> $act->output,
+				'target'							=> $act->target,
+				'waktu'								=> $act->waktu,
+				'biaya'								=> $act->biaya,
+				'code_cl_phc'						=> $act->code_cl_phc,
+				'edit'		=> 1,
+				'delete'	=> 1
+			);
+		}
+
+		$size = sizeof($data);
+		$json = array(
+			'TotalRows' => (int) $size,
+			'Rows' => $data
+		);
+
+		echo json_encode(array($json));
+	}
+	function dodel_skp($id_org=0,$id_skp=0,$code_cl_phc=""){
+		$this->authentication->verify('kepegawaian','del');
+
+		$this->pegorganisasi_model->delete_skp($id_org,$id_skp,$code_cl_phc);
+	}
 }
 ?>
