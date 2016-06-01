@@ -7,6 +7,10 @@ if(isset($disable)){if($disable='disable'){?>
 </script>
 <?php }} ?>
 <script type="text/javascript">
+
+
+  
+
     $(function(){
       $('#btn-close').click(function(){
         close_popup();
@@ -50,12 +54,12 @@ if(isset($disable)){if($disable='disable'){?>
 
         
     });
-    $("#cekpassword").change(function(){
-        if ($("#cekpassword").val() != $("#password").val()) {
-          alert("Maaf, data harus sama dengan password");
-          $("#cekpassword").val('');
-        }
-    });
+    // $("#cekpassword ").change(function(){
+    //     if ($("#cekpassword").val() != $("#password").val()) {
+    //       alert("Maaf, data harus sama dengan password");
+    //       $("#cekpassword").val('');
+    //     }
+    // });
 </script>
 
 <div style="padding:15px">
@@ -108,19 +112,11 @@ if(isset($disable)){if($disable='disable'){?>
             </div>
             <div class="form-group">
               <label>Confirm Password</label>
-<<<<<<< HEAD:application/views/kepegawaian/stuktur_kepegawaian/barang_form.php
               <input type="password" class="form-control" id="cekpassword" name="cekpassword"  placeholder="Confirm Password" value="<?php
               if(set_value('cekpassword')=="" && isset($cekpassword)){
                   echo $cekpassword;
                 }else{
                   echo  set_value('cekpassword');
-=======
-              <input type="password" class="form-control" id="password2" name="password2"  placeholder="Confirm Password" value="<?php
-              if(set_value('password2')=="" && isset($password2)){
-                  echo $password2;
-                }else{
-                  echo  set_value('password2');
->>>>>>> 91127e735cce2f9ef03154f1701090065665f1a3:application/views/kepegawaian/stuktur_kepegawaian/login_form.php
                 }
                 ?>">
             

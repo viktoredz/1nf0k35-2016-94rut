@@ -5,7 +5,7 @@
 	<?php echo $this->session->flashdata('alert')?>
 </div>
 <?php } ?>
-<div id="popup_barang" style="display:none">
+<div id="popup_pegawai" style="display:none">
 	<div id="popup_title">Data Login Pegawai</div>
 	<div id="popup_content">&nbsp;</div>
 </div>
@@ -55,7 +55,7 @@
 	    $("#menu_kepegawaian_stuktur_kepegawaian").addClass("active");
 	});
 	function close_popup(){
-		$("#popup_barang").jqxWindow('close');
+		$("#popup_pegawai").jqxWindow('close');
 	}
 		var sourcejabatan =
 	      {
@@ -79,6 +79,7 @@
 			{ name: 'username', type: 'string'},
 			{ name: 'nama', type: 'string'},
 			{ name: 'id_mst_peg_golruang', type: 'string'},
+			{ name: 'ruang', type: 'string'},
 			{ name: 'tar_nama_posisi', type: 'string'},
 			{ name: 'detail', type: 'number'},
         ],
@@ -87,33 +88,7 @@
 		updateRow: function (rowID, rowData, commit) {
             commit(true);
 
-            // var arr = $.map(rowData, function(el) { return el });   
-            // alert(arr) ;
-            // if(typeof(arr[1]) === 'object'){
-            //   var arr2 = $.map(arr[1], function(el) { return el });
-            //   if(arr[4] + '' + arr[5] + '' + arr[6] + '' + arr[7]!='') {
-            //     $.post( '<?php echo base_url()?>kepegawaian/stuktur_kepegawaian/update', {code_cl_phc:arr[2],id_pegawai:arr2[0], namajabatan:arr[7], kode_anggaran:arr[4], uraian : arr[5], tarif : arr[6], id_mst_anggaran_versi : arr[0]}, function( data ) {
-            //         if(data != 0){
-            //           alert(data);                  
-            //         }else{
-            //           alert("Data "+arr[5]+" berhasil disimpan");                  
-            //         }
-            //     });
-            //   }
-            // }else{      
-            //   $.post( '<?php echo base_url()?>kepegawaian/stuktur_kepegawaian/jabatan_update', 
-            //     {
-            //       row:rowID,
-            //       code_cl_phc:arr[0] ,
-            //       id_pegawai:arr[1], 
-            //       namajabatan:arr[3], 
-            //     },
-            //     function( data ) {
-            //       if(data != 0){
-            //         alert(data);
-            //       }
-            //   });
-            // }
+         
          },
 		filter: function(){
 			$("#jqxgrid").jqxGrid('updatebounddata', 'filter');
@@ -162,11 +137,12 @@
                 },
 				
 				{ text: 'NIP', datafield: 'nip_nit', columntype: 'textbox', editable:false, filtertype: 'textbox', align: 'center' , cellsalign: 'center', width: '13%'},
-				{ text: 'Nama', datafield: 'nama', columntype: 'textbox', editable:false, filtertype: 'textbox', align: 'center', width: '26%' },
-				{ text: 'Username', datafield: 'username', columntype: 'textbox', editable:false, filtertype: 'textbox', align: 'center', width: '12%' },
-				{ text: 'Golongan', align: 'center', cellsalign: 'center', editable:false ,datafield: 'id_mst_peg_golruang', columntype: 'textbox', filtertype: 'textbox', width: '14%' },
+				{ text: 'Nama', datafield: 'nama', columntype: 'textbox', editable:false, filtertype: 'textbox', align: 'center', width: '25%' },
+				{ text: 'Username', datafield: 'username', columntype: 'textbox', editable:false, filtertype: 'textbox', align: 'center', width: '8%' },
+				{ text: 'Golongan', align: 'center', cellsalign: 'center', editable:false ,datafield: 'id_mst_peg_golruang', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
+				{ text: 'Nama Golongan', align: 'center', cellsalign: 'center', editable:false ,datafield: 'ruang', columntype: 'textbox', filtertype: 'textbox', width: '15%' },
 				{
-	                text: '<b><i class="fa fa-pencil-square-o"></i> Jabatan </b>', align: 'center', cellsalign: 'center', datafield: 'tar_nama_posisi', width: '31%', columntype: 'dropdownlist',
+	                text: '<b><i class="fa fa-pencil-square-o"></i> Jabatan </b>', align: 'center', datafield: 'tar_nama_posisi', width: '28%', columntype: 'dropdownlist',
 	                createEditor: function (row, cellvalue, editor, cellText, width, height) {
                        editor.jqxDropDownList({autoDropDownHeight: true,source: kode_jabatan_source, displayMember: "tar_nama_posisi", valueMember: "tar_id_struktur_org"});
 
@@ -198,17 +174,17 @@
 		});
 
 	function detail(id_pegawai,code_cl_phc){
-		$("#popup_barang #popup_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
+		$("#popup_pegawai #popup_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
 		$.get("<?php echo base_url().'kepegawaian/stuktur_kepegawaian/add/'; ?>" + id_pegawai+'/'+code_cl_phc, function(data) {
 			$("#popup_content").html(data);
 		});
-		$("#popup_barang").jqxWindow({
+		$("#popup_pegawai").jqxWindow({
 			theme: theme, resizable: false,
 			width: 370,
 			height: 370,
 			isModal: true, autoOpen: false, modalOpacity: 0.2
 		});
-		$("#popup_barang").jqxWindow('open');
+		$("#popup_pegawai").jqxWindow('open');
 	}
 	$("select[name='code_cl_phc']").change(function(){
 		$.post("<?php echo base_url().'kepegawaian/stuktur_kepegawaian/filter' ?>", 'code_cl_phc='+$(this).val(),  function(){

@@ -20,8 +20,8 @@ class stuktur_kepegawaian extends CI_Controller {
 	}
 	function index(){
 		$this->authentication->verify('kepegawaian','edit');
-		$data['title_group'] = "kepegawaian";
-		$data['title_form'] = "Daftar Permohonan Barang";
+		$data['title_group'] = "Kepegawaian";
+		$data['title_form'] = "Struktur Kepegawaian";
 		$data['statusjabatan'] = $this->stuktur_kepegawaian_model->get_data_status();
 
 		$kodepuskesmas = $this->session->userdata('puskesmas');
@@ -228,6 +228,7 @@ class stuktur_kepegawaian extends CI_Controller {
 				'id_mst_peg_golruang'	=> $act->id_mst_peg_golruang,
 				'tar_nama_posisi'		=> $act->tar_nama_posisi,
 				'code_cl_phc'			=> $act->code_cl_phc,
+				'ruang'					=> ucwords(strtolower($act->ruang)),
 				'username'				=> $act->username,
 				'id_pegawai'			=> $act->id_pegawai,
 				'detail'	=> 1,
@@ -262,8 +263,9 @@ class stuktur_kepegawaian extends CI_Controller {
 		$data['id_inv_permohonan_barang_item']=0;
         $this->form_validation->set_rules('username', 'Username', 'trim|required');
         $this->form_validation->set_rules('password', 'Password', 'trim|required');
-        $this->form_validation->set_rules('cekpassword', 'Password', 'trim|required');
-
+        $this->form_validation->set_rules('cekpassword', 'Konfirmasi Password', 'trim|required');
+        $pas1=$this->input->post('password');
+        $pas2=$this->input->post('cekpassword');
 		if($this->form_validation->run()== FALSE){
 			
 			$data					= $this->stuktur_kepegawaian_model->get_datapegawai($id_pegawai,$code_cl_phc);
@@ -271,7 +273,9 @@ class stuktur_kepegawaian extends CI_Controller {
 			$data['code_cl_phc']	= $code_cl_phc;
 			$data['action']			= "add";
 			$data['notice']			= validation_errors();
-			die($this->parser->parse('kepegawaian/stuktur_kepegawaian/barang_form', $data));
+			die($this->parser->parse('kepegawaian/stuktur_kepegawaian/login_form', $data));
+		}else if($pas1 != $pas2){
+			die("Error|Maaf, Password tidak sama dengan Konfirmasi Password");
 		}else{
 			
 			$this->db->where('username',$this->input->post('username'));
@@ -292,6 +296,15 @@ class stuktur_kepegawaian extends CI_Controller {
 
 				);
 				if($this->db->insert('app_users_list', $values)){
+					$profile = array(
+                      'username'     	=> $this->input->post('username'),
+                      'code'         	=> $code_cl,
+                      'nama'         	=> $this->input->post('username'),
+                      'phone_number'    => '',
+                      'email'         	=> '',
+                      'status'         	=> 1
+                 );
+                 $this->db->insert('app_users_profile', $profile);
 
 					die("OK|");
 				}else{
