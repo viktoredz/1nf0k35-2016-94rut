@@ -10,7 +10,7 @@
 	<div id="popup_content">&nbsp;</div>
 </div>
 <section class="content">
-<form action="<?php echo base_url()?>kepegawaian/stuktur_kepegawaian/dodel_multi" method="POST" name="">
+<form action="<?php echo base_url()?>kepegawaian/penilaiandppp/dodel_multi" method="POST" name="">
   <div class="row">
     <!-- left column -->
     <div class="col-md-12">
@@ -21,22 +21,36 @@
 	    </div>
 
       	<div class="box-footer">
-	      <div class="col-md-8">
-		 	<button type="button" class="btn btn-warning" id="btn-refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
-		 	<button type="button" class="btn btn-success" id="btn-export"><i class='fa fa-file-excel-o'></i> &nbsp; Export</button>
-	     </div>
-	     <div class="col-md-4">
-	     	<div class="row">
-		     	<div class="col-md-4" style="padding-top:5px;"><label> Puskesmas </label> </div>
-		     	<div class="col-md-8">
-		     		<select name="code_cl_phc" id="puskesmas" class="form-control">
-						<?php foreach ($datapuskesmas as $row ) { ;?>
-							<option value="<?php echo $row->code; ?>" onchange="" ><?php echo $row->value; ?></option>
-						<?php	} ;?>
-			     	</select>
-			     </div>	
-	     	</div>
-		  </div>
+		      <div class="col-md-5">
+			 	<button type="button" class="btn btn-warning" id="btn-refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
+			 	<button type="button" class="btn btn-success" id="btn-export"><i class='fa fa-file-excel-o'></i> &nbsp; Export</button>
+		     </div>
+		     <div class="col-md-3">
+		     	<div class="row">
+			     	<div class="col-md-4" style="padding-top:5px;"><label> Tahun </label> </div>
+			     	<div class="col-md-8">
+			     		<select name="code_cl_phc" id="puskesmas" class="form-control">
+							<?php for($i=date("Y")-8;$i<=date("Y")+8; $i++ ) { ;
+								$select = $i == date("Y") ? 'selected=selected' : '';
+							?>
+								<option value="<?php echo $i; ?>" <?php echo $select; ?>><?php echo $i; ?></option>
+							<?php	} ;?>
+				     	</select>
+				     </div>	
+		     	</div>
+			  </div>
+			  <div class="col-md-4">
+		     	<div class="row">
+			     	<div class="col-md-4" style="padding-top:5px;"><label> Puskesmas </label> </div>
+			     	<div class="col-md-8">
+			     		<select name="code_cl_phc" id="puskesmas" class="form-control">
+							<?php foreach ($datapuskesmas as $row ) { ;?>
+								<option value="<?php echo $row->code; ?>" onchange="" ><?php echo $row->value; ?></option>
+							<?php	} ;?>
+				     	</select>
+				     </div>	
+		     	</div>
+			  </div>
 		</div>
         <div class="box-body">
 		    <div class="div-grid">
@@ -52,7 +66,7 @@
 <script type="text/javascript">
 	$(function () {	
 	    $("#menu_kepegawaian").addClass("active");
-	    $("#menu_kepegawaian_stuktur_kepegawaian").addClass("active");
+	    $("#menu_kepegawaian_penilaiandppp").addClass("active");
 	});
 	function close_popup(){
 		$("#popup_pegawai").jqxWindow('close');
@@ -64,7 +78,7 @@
 	              { name: 'tar_id_struktur_org' , type: 'string'},
 	              { name: 'tar_nama_posisi' , type: 'string'}
 	          ],
-	          url: '<?php echo base_url()?>kepegawaian/stuktur_kepegawaian/json_kode_jabatan',
+	          url: '<?php echo base_url()?>kepegawaian/penilaiandppp/json_kode_jabatan',
 	          async: true
 	      };
 		var kode_jabatan_source = new $.jqx.dataAdapter(sourcejabatan);
@@ -76,14 +90,14 @@
 			{ name: 'code_cl_phc', type: 'string'},
 			{ name: 'nip_nit', type: 'string'},
 			{ name: 'id_pegawai', type: 'string'},
-			{ name: 'username', type: 'string'},
+			{ name: 'nilai', type: 'string'},
 			{ name: 'nama', type: 'string'},
 			{ name: 'id_mst_peg_golruang', type: 'string'},
 			{ name: 'ruang', type: 'string'},
 			{ name: 'tar_nama_posisi', type: 'string'},
 			{ name: 'detail', type: 'number'},
         ],
-		url: "<?php echo site_url('kepegawaian/stuktur_kepegawaian/json'); ?>",
+		url: "<?php echo site_url('kepegawaian/penilaiandppp/json'); ?>",
 		cache: false,
 		updateRow: function (rowID, rowData, commit) {
             commit(true);
@@ -138,56 +152,18 @@
 				
 				{ text: 'NIP', datafield: 'nip_nit', columntype: 'textbox', editable:false, filtertype: 'textbox', align: 'center' , cellsalign: 'center', width: '13%'},
 				{ text: 'Nama', datafield: 'nama', columntype: 'textbox', editable:false, filtertype: 'textbox', align: 'center', width: '25%' },
-				{ text: 'Username', datafield: 'username', columntype: 'textbox', editable:false, filtertype: 'textbox', align: 'center', width: '8%' },
 				{ text: 'Golongan', align: 'center', cellsalign: 'center', editable:false ,datafield: 'id_mst_peg_golruang', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
-				{ text: 'Pangkat', align: 'center', cellsalign: 'center', editable:false ,datafield: 'ruang', columntype: 'textbox', filtertype: 'textbox', width: '15%' },
-				{
-	                text: '<b><i class="fa fa-pencil-square-o"></i> Jabatan </b>', align: 'center', datafield: 'tar_nama_posisi', width: '28%', columntype: 'dropdownlist',
-	                createEditor: function (row, cellvalue, editor, cellText, width, height) {
-                       editor.jqxDropDownList({autoDropDownHeight: true,source: kode_jabatan_source, displayMember: "tar_nama_posisi", valueMember: "tar_id_struktur_org"});
-
-                   },
-                   initEditor: function (row, cellvalue, editor, celltext, width, height) {
-                       editor.jqxDropDownList('selectItem', cellvalue);
-                   },
-                   getEditorValue: function (row, cellvalue, editor) {
-                       editor.val();
-                       // /alert(parseInt(editor.val()));
-                       	if(editor.val() % 1 === 0){
-                       		var datagrid = $("#jqxgrid").jqxGrid('getrowdata', row);
-	                       $.post( '<?php echo base_url()?>kepegawaian/stuktur_kepegawaian/updatestatus', {id_jabatan:editor.val(),code_cl_phc:datagrid.code_cl_phc,id_pegawai:datagrid.id_pegawai}, function( data ) {
-					            if(data != 0){
-					              //alert(data);            
-					              $("#jqxgrid").jqxGrid('updatebounddata', 'cells');      
-					            }else{
-					             // alert("Data berhasil disimpan"); 
-					              $("#jqxgrid").jqxGrid('updatebounddata', 'cells');                 
-					            }
-					        });
-                       	}else{
-	                       $("#jqxgrid").jqxGrid('updatebounddata', 'cells');                 
-                   		}
-                   },
-
-                },
+				{ text: 'Nama Golongan', align: 'center', cellsalign: 'center', editable:false ,datafield: 'ruang', columntype: 'textbox', filtertype: 'textbox', width: '15%' },
+				{text: 'Jabatan', align: 'center', datafield: 'tar_nama_posisi',editable:false , width: '28%', columntype: 'textbox'},
+                { text: 'Nilai', datafield: 'nilai', columntype: 'textbox', editable:false, filtertype: 'textbox', align: 'center', width: '8%' },
             ]
 		});
 
 	function detail(id_pegawai,code_cl_phc){
-		$("#popup_pegawai #popup_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-		$.get("<?php echo base_url().'kepegawaian/stuktur_kepegawaian/add/'; ?>" + id_pegawai+'/'+code_cl_phc, function(data) {
-			$("#popup_content").html(data);
-		});
-		$("#popup_pegawai").jqxWindow({
-			theme: theme, resizable: false,
-			width: 370,
-			height: 370,
-			isModal: true, autoOpen: false, modalOpacity: 0.2
-		});
-		$("#popup_pegawai").jqxWindow('open');
+		document.location.href="<?php echo base_url().'kepegawaian/penilaiandppp/edit';?>/" + id_pegawai+'/'+code_cl_phc;
 	}
 	$("select[name='code_cl_phc']").change(function(){
-		$.post("<?php echo base_url().'kepegawaian/stuktur_kepegawaian/filter' ?>", 'code_cl_phc='+$(this).val(),  function(){
+		$.post("<?php echo base_url().'kepegawaian/penilaiandppp/filter' ?>", 'code_cl_phc='+$(this).val(),  function(){
 			$("#jqxgrid").jqxGrid('updatebounddata', 'cells');
 		});
     });
