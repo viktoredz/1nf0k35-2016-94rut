@@ -369,23 +369,24 @@
     //  // }
     // }
 
-    function add_kredit() {
-      $("#Kredit").append(document.getElementById('kredit').innerHTML);
-    }
+    // function add_kredit() {
+    //   $("#Kredit").append(document.getElementById('kredit').innerHTML);
+    // }
 
     function delete_debit() {
         $("#debt").fadeOut();
         // $("#Debit").remove();
     }
-
+    
     var i = 1;
-    function add_debit() {
+    function add_kredit() {
           //menentukan target append
-        var Debit = document.getElementById('Debit');
+        var Kredit = document.getElementById('Kredit');
         
           //membuat element
         var row = document.createElement('div');
         row.setAttribute('class','row');
+
         var jenis = document.createElement('div');
         jenis.setAttribute('class','col-md-8');
         jenis.setAttribute('style','padding-top:5px');
@@ -395,15 +396,18 @@
 
         var collapse = document.createElement('div');
         collapse.setAttribute('class','col-md-1');
-        
 
         var aksi = document.createElement('div');
         aksi.setAttribute('class','col-md-1');
 
+        var aksi_collapse = document.createElement('div');
+        aksi_collapse.setAttribute('class','col-md-1');
+
           //meng append element
-        Debit.appendChild(row);
+        Kredit.appendChild(row);
         row.appendChild(jenis);
         row.appendChild(aksi);
+        row.appendChild(aksi_collapse);
 
           //membuat element input
         var jenis_input = document.createElement('select');
@@ -423,7 +427,7 @@
           //meng append element input
         jenis.appendChild(jenis_input);
         aksi.appendChild(hapus);
-        aksi.appendChild(collapse);
+        aksi_collapse.appendChild(collapse);
 
 
         hapus.innerHTML = '<a href="#" class="glyphicon glyphicon-trash"></a>';
@@ -441,6 +445,183 @@
         i++;
     }
 
+    var i = 1;
+    function add_debit() {
+          //menentukan target append
+        var Debit = document.getElementById('Debit');
+        
+          //membuat element
+        var row = document.createElement('div');
+        row.setAttribute('class','row');
+
+        var row2 = document.createElement('div');
+        row2.setAttribute('class','row');
+
+        var row3 = document.createElement('div');
+        row3.setAttribute('class','row');
+
+        var row4 = document.createElement('div');
+        row4.setAttribute('class','row');
+
+        var jenis = document.createElement('div');
+        jenis.setAttribute('class','col-md-8');
+        jenis.setAttribute('style','padding-top:5px');
+
+        var aksi = document.createElement('div');
+        aksi.setAttribute('class','col-md-1');
+
+        var aksi_collapse = document.createElement('div');
+        aksi_collapse.setAttribute('class','col-md-1');
+
+        var hapus = document.createElement('div');
+        hapus.setAttribute('class','col-md-1');
+
+        var collapse = document.createElement('div');
+        collapse.setAttribute('class','parentDiv');
+
+        var ck1 = document.createElement('div');
+        ck1.setAttribute('class','col-md-1');
+
+        var label_ck1 = document.createElement('div');
+        label_ck1.setAttribute('class','col-md-6');
+        label_ck1.setAttribute('style','padding-top:5px');
+
+        var empty = document.createElement('div');
+        empty.setAttribute('class','col-sm-1');
+
+        var content_nilai = document.createElement('div');
+        content_nilai.setAttribute('class','col-sm-10');
+
+        var row_content_nilai = document.createElement('div');
+        row_content_nilai.setAttribute('class','row');
+
+        var label_n = document.createElement('div');
+        label_n.setAttribute('class','col-sm-2');
+        label_n.setAttribute('style','padding-top:13px');
+
+        var cmb_box_n = document.createElement('div');
+        cmb_box_n.setAttribute('class','col-sm-7');
+        cmb_box_n.setAttribute('style','padding-top:5px');
+
+        var input_n = document.createElement('div');
+        input_n.setAttribute('class','col-md-2');
+        input_n.setAttribute('style','padding-top:5px');
+
+        var label_n_2 = document.createElement('div');
+        label_n_2.setAttribute('class','col-sm-1');
+        label_n_2.setAttribute('style','padding-top:7px');
+
+        var ck2 = document.createElement('div');
+        ck2.setAttribute('class','col-md-1');
+
+        var label_ck2 = document.createElement('div');
+        label_ck2.setAttribute('class','col-md-6');
+        label_ck2.setAttribute('style','padding-top:5px');
+
+
+          //meng append element
+        Debit.appendChild(row);
+        Debit.appendChild(row2);
+        Debit.appendChild(row3);
+        Debit.appendChild(row4);
+
+        row.appendChild(jenis);
+        row.appendChild(aksi_collapse);
+        row.appendChild(aksi);
+
+        row2.appendChild(ck1);
+        row2.appendChild(label_ck1);
+
+        row3.appendChild(empty);
+        row3.appendChild(content_nilai);
+        content_nilai.appendChild(row_content_nilai);
+        row_content_nilai.appendChild(label_n);
+        row_content_nilai.appendChild(cmb_box_n);
+        row_content_nilai.appendChild(input_n);
+        row_content_nilai.appendChild(label_n_2);
+
+        row4.appendChild(ck2);
+        row4.appendChild(label_ck2);
+
+          //membuat element input
+        var jenis_input = document.createElement('select');
+        var options = ["1", "2", "3", "4", "5"];
+        for(var i = 0; i < options.length; i++) {
+            var opt = options[i];
+            var el = document.createElement("option");
+            el.textContent = opt;
+            el.value = opt;
+            jenis_input.appendChild(el);
+        }
+        jenis_input.setAttribute('name', 'jenis_input[' + i + ']');
+        jenis_input.setAttribute('class', 'form-control');
+
+        var isi_otomatis = document.createElement('input');
+        isi_otomatis.setAttribute('type','checkbox');
+
+        var label_isi_otomatis = document.createElement('label');
+        label_isi_otomatis.innerHTML = "Isi Otomatis";
+
+        var label_nilai = document.createElement('label');
+        label_nilai.innerHTML = "Nilai";
+
+        var label_persen = document.createElement('label');
+        label_persen.innerHTML = "%";
+
+        var cmb_box_nilai = document.createElement('select');
+        var options = ["1", "2", "3", "4", "5"];
+        for(var i = 0; i < options.length; i++) {
+            var opt = options[i];
+            var el = document.createElement("option");
+            el.textContent = opt;
+            el.value = opt;
+            jenis_input.appendChild(el);
+        }
+        cmb_box_nilai.setAttribute('name', 'cmb_bx_nilai');
+        cmb_box_nilai.setAttribute('class', 'form-control');
+
+        var input_nilai = document.createElement('input');
+        input_nilai.setAttribute('class','form-control');
+        input_nilai.setAttribute('type','text');
+        input_nilai.setAttribute('name','nilai');
+
+        var opsional = document.createElement('input');
+        opsional.setAttribute('type','checkbox');
+
+        var label_opsional = document.createElement('label');
+        label_opsional.innerHTML = "Opsional";
+
+
+          //meng append element input
+        jenis.appendChild(jenis_input);
+        aksi_collapse.appendChild(collapse);
+        aksi.appendChild(hapus);
+        ck1.appendChild(isi_otomatis);
+        label_ck1.appendChild(label_isi_otomatis);
+        label_n.appendChild(label_nilai);
+        label_n_2.appendChild(label_persen);
+        cmb_box_n.appendChild(cmb_box_nilai);
+        input_n.appendChild(input_nilai);
+        ck2.appendChild(opsional);
+        label_ck2.appendChild(label_opsional);
+
+        hapus.innerHTML = '<a href="#" class="glyphicon glyphicon-trash"></a>';
+        collapse.innerHTML = '<a href="#" data-toggle="collapse" data-target="#kredit1" class="toggle_sign glyphicon glyphicon-chevron-down"></a>';
+
+          //membuat aksi delete element
+        hapus.onclick = function () {
+            row.parentNode.removeChild(row);
+            row2.parentNode.removeChild(row2);
+            row3.parentNode.removeChild(row3);
+            row4.parentNode.removeChild(row4);
+        };
+
+        collapse.onclick = function () {
+            row.parentNode.collapse(row);
+        };
+
+        i++;
+    }
 
 
     $('.parentDiv').click(function() {
