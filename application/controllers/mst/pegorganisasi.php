@@ -198,7 +198,64 @@ class Pegorganisasi extends CI_Controller {
 		$this->authentication->verify('mst','del');
 		$this->pegorganisasi_model->akun_delete($this->input->post('tar_id_struktur_org'));				
 	}
+	function add_skp($id_pegorganisasi=0,$code_cl_phc=0){
+		$data['action']			= "add";
+		$data['kode']			= $id_pegorganisasi;
+		$data['code_cl_phc']	= $code_cl_phc;
+		$data['id_inv_permohonan_barang_item']=0;
+        $this->form_validation->set_rules('username', 'Username', 'trim|required');
+        $this->form_validation->set_rules('password', 'Password', 'trim|required');
+        $this->form_validation->set_rules('cekpassword', 'Konfirmasi Password', 'trim|required');
+        $pas1=$this->input->post('password');
+        $pas2=$this->input->post('cekpassword');
+		if($this->form_validation->run()== FALSE){
+			
+			$data					= $this->pegorganisasi_model->get_data_akun();
+			$data['kode']			= $id_pegorganisasi;
+			$data['code_cl_phc']	= $code_cl_phc;
+			$data['action']			= "add";
+			$data['notice']			= validation_errors();
+			die($this->parser->parse('mst/pegorganisasi/form_skp', $data));
+		}else if($pas1 != $pas2){
+			die("Error|Maaf, Password tidak sama dengan Konfirmasi Password");
+		}else{
+			
+			$this->db->where('username',$this->input->post('username'));
+			$query = $this->db->get('app_users_list');
 
+			if ($query->num_rows() > 0) {
+				die("Error|Maaf, Username telah tersedia. Silahkan ganti username Anda !");
+			}else{
+				$code_cl = substr($code_cl_phc, 1,11);
+				$values = array(
+					'username' => $this->input->post('username'),
+					'password' => $this->encrypt->sha1($this->input->post('password').$this->config->item('encryption_key')),
+					'code' => $code_cl,
+					'level' => 'kepegawaian',
+					'status_active' => 1,
+					'status_aproved' => 1,
+					'id_pegawai' => $id_pegawai,
+
+				);
+				if($this->db->insert('app_users_list', $values)){
+					$profile = array(
+                      'username'     	=> $this->input->post('username'),
+                      'code'         	=> $code_cl,
+                      'nama'         	=> $this->input->post('username'),
+                      'phone_number'    => '',
+                      'email'         	=> '',
+                      'status'         	=> 1
+                 );
+                 $this->db->insert('app_users_profile', $profile);
+
+					die("OK|");
+				}else{
+					die("Error|Proses data gagal");
+				}	
+			}
+			
+		}
+	}
 	
 }
 ?>

@@ -36,21 +36,6 @@
           <div class="col-md-12">
             <div class="box box-primary">
 
-             <!-- <div class="row" style="margin: 5px">
-                <div class="col-md-6" style="padding: 5px">
-                  Kode Akun
-                </div>
-                <div class="col-md-6">
-                  <input type="hidden" id="tar_id_struktur_org" value="<?php $tar_id_struktur_org;?>">
-                  <?php /*
-                    if(set_value('tar_id_struktur_org')=="" && isset($tar_id_struktur_org)){
-                      echo $tar_id_struktur_org;
-                    }else{
-                      echo('-');
-                    }*/
-                  ?>
-                </div>
-              </div>-->
 
               <div class="row" style="margin: 5px">
                 <div class="col-md-6" style="padding: 5px">
@@ -90,10 +75,112 @@
           </div>
   </div>
 </form>
+<div class="row" style="margin: 5px">
+  <div class="col-md-12">
+    <div class="box box-success">
+        <div class="box-header">
+          <h3 class="box-title">Pegawai Stuktur SKP</h3>
+        </div>
+
+        <div class="box-footer" style="float:right">
+          <button type="button" class="btn btn-primary  btn-sm" id="btn-tambah-skp"><i class='fa fa-plus-square-o'></i> &nbsp; Tambah</button>
+          <button type="button" class="btn btn-warning  btn-sm" id="btn-refresh-skp"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
+        </div>
+
+        <div class="box-body">
+            <div class="div-grid">
+                  <div id="jqxgridSKP"></div>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
 
 <script>
 
   $(document).ready(function () {   
+    var sourceskp = {
+      datatype: "json",
+      type  : "POST",
+      datafields: [
+      { name: 'id_pengadaan', type: 'string'},
+      { name: 'tgl_pengadaan', type: 'date'},
+      { name: 'nomor_kontrak', type: 'string'},
+      { name: 'pilihan_status_pengadaan', type: 'string'},
+      { name: 'value', type: 'string'},
+      { name: 'jumlah_unit', type: 'double'},
+      { name: 'total_harga', type: 'double'},
+      { name: 'nilai_pengadaan', type: 'double'},
+      { name: 'keterangan', type: 'text'},
+      { name: 'detail', type: 'number'},
+      { name: 'edit', type: 'number'},
+      { name: 'delete', type: 'number'}
+        ],
+    url: "<?php echo site_url('inventory/pengadaanbarang/json'); ?>",
+    cache: false,
+      updateRow: function (rowID, rowData, commit) {
+             
+         },
+    filter: function(){
+      $("#jqxgridSKP").jqxGrid('updatebounddata', 'filter');
+    },
+    sort: function(){
+      $("#jqxgridSKP").jqxGrid('updatebounddata', 'sort');
+    },
+    root: 'Rows',
+        pagesize: 10,
+        beforeprocessing: function(data){   
+      if (data != null){
+        sourceskp.totalrecords = data[0].TotalRows;          
+      }
+    }
+    };    
+    var dataadapterskp = new $.jqx.dataAdapter(sourceskp, {
+      loadError: function(xhr, status, error){
+        alert(error);
+      }
+    });
+     
+    $('#btn-refresh-skp').click(function () {
+      $("#jqxgridSKP").jqxGrid('clearfilters');
+    });
+
+    $("#jqxgridSKP").jqxGrid(
+    {   
+      width: '100%',
+      selectionmode: 'singlerow',
+      source: dataadapterskp, theme: theme,columnsresize: true,showtoolbar: false, pagesizeoptions: ['10', '25', '50', '100', '200'],
+      showfilterrow: true, filterable: true, sortable: true, autoheight: true, pageable: true, virtualmode: true, editable: true,
+      rendergridrows: function(obj)
+      {
+        return obj.data;    
+      },
+      columns: [
+       
+        { text: 'Edit', align: 'center', filtertype: 'none', sortable: false, width: '6%', cellsrenderer: function (row) {
+            var dataRecord = $("#jqxgridSKP").jqxGrid('getrowdata', row);
+            if(dataRecord.edit==1){
+            return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='edit(\""+dataRecord.id_pengadaan+"\");'></a></div>";
+          }else{
+            return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
+          }
+                 }
+                },
+        { text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '6%', cellsrenderer: function (row) {
+            var dataRecord = $("#jqxgridSKP").jqxGrid('getrowdata', row);
+            if(dataRecord.delete==1){
+            return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del(\""+dataRecord.id_pengadaan+"\",\""+dataRecord.jumlah_unit+"\");'></a></div>";
+          }else{
+            return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
+          }
+                 }
+                },
+        { text: 'Tugas', editable:false ,datafield: 'tugas', columntype: 'textbox', filtertype: 'textbox', width: '36%' },
+        { text: 'Target',editable:false , align: 'center', cellsalign: 'center', datafield: 'target', columntype: 'textbox', filtertype: 'textbox',  width: '15%' },
+        { text: 'Waktu', editable:false ,align: 'center', cellsalign: 'center', datafield: 'waktu', columntype: 'textbox', filtertype: 'textbox', width: '15%' },
+        { text: 'Biaya', editable:false ,align: 'center', cellsalign: 'right', datafield: 'jumlah_unit', columntype: 'textbox', filtertype: 'textbox', width: '25%' }
+            ]
+    });
     tabIndex = 1;
     $("[name='btn_keuangan_akun_close']").click(function(){
         $("#popup_keuangan_akun_detail").jqxWindow('close');
@@ -141,91 +228,11 @@
         return false;
     });
 
-    $("[name='akun_mendukung_target']").click(function(){
-      var data = new FormData();
-        data.append('mendukung_target',        $("[name='akun_mendukung_target']:checked").val());
-        
-        $.ajax({
-            cache : false,
-            contentType : false,
-            processData : false,
-            type : 'POST',
-            url : '<?php echo base_url()."mst/pegorganisasi/mendukung_target_update/{id}"   ?>',
-            data : data,
-            success : function(response){
-              a = response.split("|");
-              if(a[0]=="OK"){
-                if(a[1]=='1'){
-                  $("#akun_mendukung_target").prop("checked", true);
-                }else{
-                  $("#akun_mendukung_target").prop("checked", false);
-                };
-                $("#treeGrid").jqxTreeGrid('updateBoundData', 'filter');
-              }else{
-                alert("Mendukung target belum berhasil di aktifkan.");
-
-              }
-            }
-        });
-        return false;
-    });
-
-    $("[name='akun_mendukung_anggaran']").click(function(){
-      var data = new FormData();
-        data.append('mendukung_anggaran',        $("[name='akun_mendukung_anggaran']:checked").val());
-        
-        $.ajax({
-            cache : false,
-            contentType : false,
-            processData : false,
-            type : 'POST',
-            url : '<?php echo base_url()."mst/pegorganisasi/mendukung_anggaran_update/{id}"   ?>',
-            data : data,
-            success : function(response){
-              a = response.split("|");
-              if(a[0]=="OK"){
-                if(a[1]=='1'){
-                   $("#akun_mendukung_anggaran").prop("checked", true);
-                }else{
-                   $("#akun_mendukung_anggaran").prop("checked", false);
-                };
-                $("#treeGrid").jqxTreeGrid('updateBoundData', 'filter');
-              }else{
-                alert("Mendukung anggaran belum berhasil di aktifkan.");
-              }
-            }
-        });
-        return false;
-    });
-
-    $("[name='akun_mendukung_transaksi']").click(function(){
-      var data = new FormData();
-        data.append('mendukung_transaksi',        $("[name='akun_mendukung_transaksi']:checked").val());
-        
-        $.ajax({
-            cache : false,
-            contentType : false,
-            processData : false,
-            type : 'POST',
-            url : '<?php echo base_url()."mst/pegorganisasi/mendukung_transaksi_update/{id}"   ?>',
-            data : data,
-            success : function(response){
-               a = response.split("|");
-              if(a[0]=="OK"){
-                if (a[1]=='1') {
-                    $("#akun_mendukung_transaksi").prop("checked", true);
-                }else{
-                    $("#akun_mendukung_transaksi").prop("checked", false);
-                };
-                $("#treeGrid").jqxTreeGrid('updateBoundData', 'filter');
-              }else{
-                alert("Mendukung transaksi belum berhasil di aktifkan.");
-
-              }
-            }
-        });
-        return false;
-    });
+   $("#btn-tambah-skp").click(function(){
+      $.get('<?php echo base_url()."mst/pegorganisasi/add_skp/"?>',function(data){
+          $("#jqxgridSKP").html(data);;
+      });
+   });
 
   });
 </script>

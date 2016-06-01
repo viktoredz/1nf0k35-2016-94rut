@@ -433,8 +433,8 @@
           });
           $("#popup_keuangan_akun_detail").jqxWindow({
             theme: theme, resizable: false,
-            width: 600,
-            height: 280,
+            width: 900,
+            height: 700,
             isModal: true, autoOpen: false, modalOpacity: 0.2
           });
           $("#popup_keuangan_akun_detail").jqxWindow('open');
