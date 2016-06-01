@@ -214,7 +214,7 @@ class Invbaranghabispakai extends CI_Controller {
 	function index(){
 		$this->authentication->verify('mst','edit');
 		$data['title_group'] 	= "Master";
-		$data['title_form'] 	= "Barang Habis Pakai";
+		$data['title_form'] 	= "Bahan Habis Pakai";
 
 		$this->db->like('code','p'.substr($this->session->userdata('puskesmas'),0,7));
 		if($this->session->userdata('filter_jenisbarang')!=''){
@@ -234,7 +234,7 @@ class Invbaranghabispakai extends CI_Controller {
 		$data = $this->invbaranghabispakai_model->get_data_row($kode); 
 
 		$data['title_group'] = "Master";
-		$data['title_form']="Detail Jenis Barang Habis Pakai";
+		$data['title_form']="Detail Jenis Bahan Habis Pakai";
 		$data['kode']= $kode;
 
 		$data['jenisbarang'] = $this->invbaranghabispakai_model->get_data();
@@ -297,7 +297,7 @@ class Invbaranghabispakai extends CI_Controller {
 			$data = $this->invbaranghabispakai_model->get_data_row($kode); 
 
 			$data['title_group'] = "Master";
-			$data['title_form']="Ubah Master Jenis Barang Habis Pakai";
+			$data['title_form']="Ubah Master Jenis Bahan Habis Pakai";
 			$data['action']="edit";
 			$data['kode']= $kode;
 
