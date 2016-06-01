@@ -261,6 +261,7 @@ class stuktur_kepegawaian extends CI_Controller {
 		$data['id_inv_permohonan_barang_item']=0;
         $this->form_validation->set_rules('username', 'Username', 'trim|required');
         $this->form_validation->set_rules('password', 'Password', 'trim|required');
+        $this->form_validation->set_rules('cekpassword', 'Password', 'trim|required');
 
 		if($this->form_validation->run()== FALSE){
 			
@@ -271,23 +272,32 @@ class stuktur_kepegawaian extends CI_Controller {
 			$data['notice']			= validation_errors();
 			die($this->parser->parse('kepegawaian/stuktur_kepegawaian/barang_form', $data));
 		}else{
-			$code_cl = substr($code_cl_phc, 1,11);
-			$values = array(
-				'username' => $this->input->post('username'),
-				'password' => $this->encrypt->sha1($this->input->post('password').$this->config->item('encryption_key')),
-				'code' => $code_cl,
-				'level' => 'kepegawaian',
-				'status_active' => 1,
-				'status_aproved' => 1,
-				'id_pegawai' => $id_pegawai,
+			
+			$this->db->where('username',$this->input->post('username'));
+			$query = $this->db->get('app_users_list');
 
-			);
-			if($this->db->insert('app_users_list', $values)){
-
-				die("OK|");
+			if ($query->num_rows() > 0) {
+				die("Error|Maaf, Username telah tersedia. Silahkan ganti username Anda !");
 			}else{
-				die("Error|Proses data gagal");
+				$code_cl = substr($code_cl_phc, 1,11);
+				$values = array(
+					'username' => $this->input->post('username'),
+					'password' => $this->encrypt->sha1($this->input->post('password').$this->config->item('encryption_key')),
+					'code' => $code_cl,
+					'level' => 'kepegawaian',
+					'status_active' => 1,
+					'status_aproved' => 1,
+					'id_pegawai' => $id_pegawai,
+
+				);
+				if($this->db->insert('app_users_list', $values)){
+
+					die("OK|");
+				}else{
+					die("Error|Proses data gagal");
+				}	
 			}
+			
 		}
 	}
 

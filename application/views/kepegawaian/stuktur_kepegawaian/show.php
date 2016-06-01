@@ -202,8 +202,8 @@
 		});
 		$("#popup_barang").jqxWindow({
 			theme: theme, resizable: false,
-			width: 300,
-			height: 300,
+			width: 370,
+			height: 370,
 			isModal: true, autoOpen: false, modalOpacity: 0.2
 		});
 		$("#popup_barang").jqxWindow('open');

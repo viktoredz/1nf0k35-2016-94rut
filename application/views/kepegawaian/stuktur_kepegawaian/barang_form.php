@@ -21,6 +21,7 @@ if(isset($disable)){if($disable='disable'){?>
             $('#notice').show();
             data.append('username', $('#username').val());
             data.append('password', $('#password').val());
+            data.append('cekpassword', $('#cekpassword').val());
             $.ajax({
                 cache : false,
                 contentType : false,
@@ -52,6 +53,12 @@ if(isset($disable)){if($disable='disable'){?>
         });
 
         
+    });
+    $("#cekpassword").change(function(){
+        if ($("#cekpassword").val() != $("#password").val()) {
+          alert("Maaf, data harus sama dengan password");
+          $("#cekpassword").val('');
+        }
     });
 </script>
 
@@ -99,6 +106,17 @@ if(isset($disable)){if($disable='disable'){?>
                   echo $password;
                 }else{
                   echo  set_value('password');
+                }
+                ?>">
+            
+            </div>
+            <div class="form-group">
+              <label>Confirm Password</label>
+              <input type="password" class="form-control" id="cekpassword" name="cekpassword"  placeholder="Confirm Password" value="<?php
+              if(set_value('cekpassword')=="" && isset($cekpassword)){
+                  echo $cekpassword;
+                }else{
+                  echo  set_value('cekpassword');
                 }
                 ?>">
             
