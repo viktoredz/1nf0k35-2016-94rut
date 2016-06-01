@@ -90,12 +90,12 @@
           }
                  }
                 },
-        { text: 'Nama Bintang / STYA Lencana Penghargaan', datafield: 'nama_penghargaan', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center',width: '24%' },
-        { text: 'Tingkat', datafield: 'tingkat', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '15%' },
+        { text: 'Nama Bintang / <br>Satyalancana Penghargaan', datafield: 'nama_penghargaan', columntype: 'textbox', filtertype: 'textbox', align: 'center', width: '27%' },
+        { text: 'Tingkat', datafield: 'tingkat', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '12%' },
         { text: 'Pejabat',columngroup: 'suratkeputusan', datafield: 'sk_pejabat', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '15%' },
         { text: 'Nomor', columngroup: 'suratkeputusan',datafield: 'sk_no', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '15%' },
         { text: 'Tanggal', columngroup: 'suratkeputusan',datafield: 'sk_tgl', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', align: 'center', cellsalign: 'center', width: '8%' },
-        { text: 'Nama Negara/Instansi yang Memberi', datafield: 'instansi', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '15%' }
+        { text: 'Nama Negara / <br>Instansi yang Memberi', datafield: 'instansi', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '15%' }
             ],
         columngroups: 
         [

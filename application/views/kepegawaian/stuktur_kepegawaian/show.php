@@ -76,6 +76,7 @@
 			{ name: 'code_cl_phc', type: 'string'},
 			{ name: 'nip_nit', type: 'string'},
 			{ name: 'id_pegawai', type: 'string'},
+			{ name: 'username', type: 'string'},
 			{ name: 'nama', type: 'string'},
 			{ name: 'id_mst_peg_golruang', type: 'string'},
 			{ name: 'tar_nama_posisi', type: 'string'},
@@ -160,9 +161,10 @@
                  }
                 },
 				
-				{ text: 'NIP', datafield: 'nip_nit', columntype: 'textbox', editable:false, filtertype: 'textbox', align: 'center' , cellsalign: 'center', width: '20%'},
-				{ text: 'Nama', datafield: 'nama', columntype: 'textbox', editable:false, filtertype: 'textbox', align: 'center', width: '29%' },
-				{ text: 'Golongan', align: 'center', cellsalign: 'center', editable:false ,datafield: 'id_mst_peg_golruang', columntype: 'textbox', filtertype: 'textbox', width: '16%' },
+				{ text: 'NIP', datafield: 'nip_nit', columntype: 'textbox', editable:false, filtertype: 'textbox', align: 'center' , cellsalign: 'center', width: '13%'},
+				{ text: 'Nama', datafield: 'nama', columntype: 'textbox', editable:false, filtertype: 'textbox', align: 'center', width: '26%' },
+				{ text: 'Username', datafield: 'username', columntype: 'textbox', editable:false, filtertype: 'textbox', align: 'center', width: '12%' },
+				{ text: 'Golongan', align: 'center', cellsalign: 'center', editable:false ,datafield: 'id_mst_peg_golruang', columntype: 'textbox', filtertype: 'textbox', width: '14%' },
 				{
 	                text: '<b><i class="fa fa-pencil-square-o"></i> Jabatan </b>', align: 'center', cellsalign: 'center', datafield: 'tar_nama_posisi', width: '31%', columntype: 'dropdownlist',
 	                createEditor: function (row, cellvalue, editor, cellText, width, height) {
@@ -202,8 +204,8 @@
 		});
 		$("#popup_barang").jqxWindow({
 			theme: theme, resizable: false,
-			width: 300,
-			height: 300,
+			width: 370,
+			height: 370,
 			isModal: true, autoOpen: false, modalOpacity: 0.2
 		});
 		$("#popup_barang").jqxWindow('open');

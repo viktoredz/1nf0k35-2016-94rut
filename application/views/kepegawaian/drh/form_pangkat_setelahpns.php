@@ -104,7 +104,7 @@
                 },
         { text: 'Gol Ruang', datafield: 'id_mst_peg_golruang', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '9%' },
         { text: 'TMT', datafield: 'tmt', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsformat: 'dd-MM-yyyy', cellsalign: 'center', width: '8%' },
-        { text: 'Jenis Kepangkatan',datafield: 'jenis_pangkat', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '10%' },
+        { text: 'Jenis<br>Kepangkatan',datafield: 'jenis_pangkat', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '10%' },
         { text: 'Bulan', datafield: 'masa_krj_bln',columngroup: 'masakerja', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center',width: '7%' },
         { text: 'Tahun', datafield: 'masa_krj_thn',columngroup: 'masakerja', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center',width: '7%' },
         { text: 'Nomor', datafield: 'bkn_nomor',columngroup: 'keputusanbkn', columntype: 'textbox', filtertype: 'textbox', align: 'center', cellsalign: 'center', width: '10%' },
