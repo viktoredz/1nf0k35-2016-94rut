@@ -247,45 +247,7 @@ class Penilaiandppp extends CI_Controller {
 	}
 	
 	
-	function add($id_pegawai=0,$tahun=""){
-		$this->authentication->verify('kepegawaian','add');
-
-		$this->form_validation->set_rules('kode_inventaris_', 'Kode Inventaris', 'trim|required');
-        $this->form_validation->set_rules('tgl', 'Tanggal Perngadaan', 'trim|required');
-        $this->form_validation->set_rules('status', 'Status Pengadaan', 'trim|required');
-        $this->form_validation->set_rules('nomor_kontrak', 'Nomor Kontrak', 'trim|required');
-        $this->form_validation->set_rules('keterangan', 'Nomor Kontrak', 'trim');
-        $this->form_validation->set_rules('nomor_kwitansi', 'Nomor Kontrak', 'trim');
-
-		if($this->form_validation->run()== FALSE){
-			$data['title_group'] = "kepegawaian";
-			$data['title_form']="Tambah Pengadaan Barang";
-			$data['action']="add";
-			$data['kode']="";
-
-			$kodepuskesmas = $this->session->userdata('puskesmas');
-			if(strlen($kodepuskesmas) == 4){
-				$this->db->like('code','P'.substr($kodepuskesmas, 0,4));
-			}else {
-				$this->db->where('code','P'.$kodepuskesmas);
-			}
-
-			$data['kodepuskesmas'] = $this->puskesmas_model->get_data();
-
-			
-		
-			$data['content'] = $this->parser->parse("kepegawaian/penilaiandppp/form",$data,true);
-		}elseif($id = $this->pengadaanbarang_model->insert_entry()){
-			$this->session->set_flashdata('alert', 'Save data successful...');
-			redirect(base_url().'kepegawaian/penilaiandppp/');
-			// redirect(base_url().'kepegawaian/penilaiandppp/edit/'.$id);
-		}else{
-			$this->session->set_flashdata('alert_form', 'Save data failed...');
-			redirect(base_url()."kepegawaian/penilaiandppp/add");
-		}
-
-		$this->template->show($data,"home");
-	}
+	
 
 
 	function edit($id_pegawai=0,$code_cl_phc=""){
@@ -298,17 +260,22 @@ class Penilaiandppp extends CI_Controller {
 			$data['action']			= "edit";
 			$data['kode']			= $id_pegawai;
 			$data['code_cl_phc']	= $code_cl_phc;
+			$data['tahun']	= '0';
+			$data['id_mst_peg_struktur_skp']	= '0';
 
 			$data['penilaian']	  	= $this->parser->parse('kepegawaian/penilaiandppp/penilaian', $data, TRUE);
 			$data['content'] 	= $this->parser->parse("kepegawaian/penilaiandppp/detail",$data,true);
 
 			$this->template->show($data,"home");
 	}
-	function add_dppp($id_pegorganisasi=0,$id_dppp=0,$code_cl_phc=0){
-		$data['action']			= "add";
-		$data['kode']			= $id_pegorganisasi;
-		$data['code_cl_phc']	= $code_cl_phc;
-		$data['id_dppp']			= $id_dppp;
+
+	function add_dppp($id_pegawai=0,$tahun=0,$id_mst_peg_struktur_org=0,$id_mst_peg_struktur_skp=0){
+		$data['action']				= "add";
+		$data['id_pegawai']			= $id_pegawai;
+		$data['tahun']				= $tahun;
+		$data['id_mst_peg_struktur_org']			= $id_mst_peg_struktur_org;
+		$data['id_mst_peg_struktur_skp']			= $id_mst_peg_struktur_skp;
+		$data										= $this->penilaiandppp_model->getusername($id_pegawai);
 
         $this->form_validation->set_rules('tugas', 'Tugas', 'trim|required');
         $this->form_validation->set_rules('output', 'Output', 'trim|required');
@@ -316,12 +283,11 @@ class Penilaiandppp extends CI_Controller {
         $this->form_validation->set_rules('waktu', 'Waktu', 'trim|required');
         $this->form_validation->set_rules('biaya', 'Biaya', 'trim|required');
 		if($this->form_validation->run()== FALSE){
-			
-			// $data					= $this->pegorganisasi_model->get_data_akun();
-			$data['kode']			= $id_pegorganisasi;
-			$data['code_cl_phc']	= $code_cl_phc;
-			$data['id_dppp']			= $id_dppp;
-			$data['action']			= "add";
+			$data['action']				= "add";
+			$data['id_pegawai']			= $id_pegawai;
+			$data['tahun']				= $tahun;
+			$data['id_mst_peg_struktur_org']			= $id_mst_peg_struktur_org;
+			$data['id_mst_peg_struktur_skp']			= $id_mst_peg_struktur_skp;
 			$data['notice']			= validation_errors();
 			die($this->parser->parse('kepegawaian/penilaiandppp/form', $data));
 		}else{
@@ -348,25 +314,27 @@ class Penilaiandppp extends CI_Controller {
 			
 		}
 	}
-	function edit_dppp($id_pegorganisasi=0,$id_dppp=0,$code_cl_phc=0){
-		$data['action']			= "add";
-		$data['kode']			= $id_pegorganisasi;
-		$data['code_cl_phc']	= $code_cl_phc;
-		$data['id_dppp']			= $id_dppp;
+	function edit_dppp($id_pegawai=0,$tahun=0,$id_mst_peg_struktur_org=0,$id_mst_peg_struktur_skp=0){
+		$data['action']				= "edit";
+		$data['id_pegawai']			= $id_pegawai;
+		$data['tahun']				= $tahun;
+		$data['id_mst_peg_struktur_org']			= $id_mst_peg_struktur_org;
+		$data['id_mst_peg_struktur_skp']			= $id_mst_peg_struktur_skp;
 
         $this->form_validation->set_rules('tugas', 'Tugas', 'trim|required');
         $this->form_validation->set_rules('output', 'Output', 'trim|required');
         $this->form_validation->set_rules('target', 'Target', 'trim|required');
         $this->form_validation->set_rules('waktu', 'Waktu', 'trim|required');
         $this->form_validation->set_rules('biaya', 'Biaya', 'trim|required');
-        $data					= $this->pegorganisasi_model->get_data_row_dppp($id_pegorganisasi,$id_dppp,$code_cl_phc);
+        $data					= $this->penilaiandppp_model->get_data_row_dppp($id_pegorganisasi,$id_dppp,$code_cl_phc);
 		if($this->form_validation->run()== FALSE){
 			
-			$data					= $this->pegorganisasi_model->get_data_row_dppp($id_pegorganisasi,$id_dppp,$code_cl_phc);
-			$data['kode']			= $id_pegorganisasi;
-			$data['code_cl_phc']	= $code_cl_phc;
-			$data['id_dppp']			= $id_dppp;
-			$data['action']			= "edit";
+			$data					= $this->penilaiandppp_model->get_data_row_dppp($id_pegorganisasi,$id_dppp,$code_cl_phc);
+			$data['action']				= "edit";
+			$data['id_pegawai']			= $id_pegawai;
+			$data['tahun']				= $tahun;
+			$data['id_mst_peg_struktur_org']			= $id_mst_peg_struktur_org;
+			$data['id_mst_peg_struktur_skp']			= $id_mst_peg_struktur_skp;
 			$data['notice']			= validation_errors();
 			die($this->parser->parse('kepegawaian/penilaiandppp/form_dppp', $data));
 		}else{
@@ -495,7 +463,7 @@ class Penilaiandppp extends CI_Controller {
 	function dodel_dppp($id_org=0,$id_dppp=0,$code_cl_phc=""){
 		$this->authentication->verify('kepegawaian','del');
 
-		$this->pegorganisasi_model->delete_dppp($id_org,$id_dppp,$code_cl_phc);
+		$this->penilaiandppp_model->delete_dppp($id_org,$id_dppp,$code_cl_phc);
 	}
 	function nipterakhirpegawai($id=0){
 		$this->db->order_by('tmt','desc');
@@ -543,6 +511,64 @@ class Penilaiandppp extends CI_Controller {
 		}
 	}
 
-	
+	function json_skp($id=""){
+		$this->authentication->verify('kepegawaian','show');
+
+
+		$data	  	= array();
+		$filter 	= array();
+		$filterLike = array();
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'date_received' || $field == 'date_accepted') {
+					$value = date("Y-m-d",strtotime($value));
+
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		$rows = $this->penilaiandppp_model->get_data_skp($id,$this->input->post('recordstartindex'), $this->input->post('pagesize'));
+		$data = array();
+		$no=1;
+		foreach($rows as $act) {
+			$data[] = array(
+				'no'								=> $no++,
+				'id_mst_peg_struktur_org'			=> $act->id_mst_peg_struktur_org,
+				'tugas'								=> $act->tugas,
+				'id_mst_peg_struktur_skp'			=> $act->id_mst_peg_struktur_skp,
+				'ak'								=> $act->ak,
+				'kuant'								=> $act->kuant,
+				'output'							=> $act->output,
+				'target'							=> $act->kuant.'  '.$act->output,
+				'kuant_output'						=> $act->target,
+				'waktu'								=> $act->waktu,
+				'biaya'								=> $act->biaya,
+				'code_cl_phc'						=> $act->code_cl_phc,
+				'edit'		=> 1,
+				'delete'	=> 1
+			);
+		}
+
+		$size = sizeof($data);
+		$json = array(
+			'TotalRows' => (int) $size,
+			'Rows' => $data
+		);
+
+		echo json_encode(array($json));
+	}
 	
 }

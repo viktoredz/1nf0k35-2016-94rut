@@ -39,14 +39,28 @@ class Penilaiandppp_model extends CI_Model {
 		$query =$this->db->get('pegawai',$limit,$start);
         return $query->result();
     }
-
+    function get_data_skp($id,$start=0,$limit=999999,$options=array())
+    {
+        $this->db->select("*");
+        $this->db->where('id_mst_peg_struktur_org',$id);
+        $query = $this->db->get('mst_peg_struktur_skp',$limit,$start);
+        return $query->result();
+    }
+    function getusername($id=0){
+    	$this->db->select('app_users_list.username,pegawai_struktur.tar_id_struktur_org,(SELECT tar_id_struktur_org_parent FROM mst_peg_struktur_org WHERE tar_id_struktur_org = pegawai_struktur.tar_id_struktur_org) AS parent');
+    	$this->db->join('pegawai_struktur','app_users_list.id_pegawai = pegawai_struktur.id_pegawai AND app_users_list.code = SUBSTR(pegawai_struktur.code_cl_phc,2,11)','left');
+    	$this->db->where("app_users_list.id_pegawai",$id);
+    	$query = $this->db->get('app_users_list');
+    	return $query->row_array();
+    }
  	function get_datapegawai($kode,$code_cl_phc){
  		$code_cl_phc = substr($code_cl_phc, 0,12);
 		$data = array();
-		$this->db->select("pegawai.*,pegawai_struktur.tar_id_struktur_org, TIMESTAMPDIFF(YEAR, tgl_lhr, CURDATE()) AS usia");
+		$this->db->select("app_users_list.username,pegawai.*,pegawai_struktur.tar_id_struktur_org as id_mst_peg_struktur_org, TIMESTAMPDIFF(YEAR, tgl_lhr, CURDATE()) AS usia");
 		$this->db->where("pegawai.code_cl_phc",$code_cl_phc);
 		$this->db->where("pegawai.id_pegawai",$kode);
-		$query = $this->db->join("pegawai_struktur","pegawai_struktur.id_pegawai=pegawai.id_pegawai and pegawai.code_cl_phc=pegawai_struktur.code_cl_phc",'left');
+		$this->db->join("pegawai_struktur","pegawai_struktur.id_pegawai=pegawai.id_pegawai and pegawai.code_cl_phc=pegawai_struktur.code_cl_phc",'left');
+		$this->db->join("app_users_list","app_users_list.id_pegawai=pegawai.id_pegawai",'left');
 		$query = $this->db->get("pegawai");
 		if ($query->num_rows() > 0){
 			$data = $query->row_array();

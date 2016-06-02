@@ -114,8 +114,7 @@
 	}
   
 	function add_dppp(){
-		
-		$.get("<?php echo base_url().'kepegawaian/penilaiandppp/add_dppp/'.$tar_id_struktur_org.'/0/'.$code_cl_phc; ?>" , function(data) {
+		$.get("<?php echo base_url().'kepegawaian/penilaiandppp/add_dppp/'.$id_pegawai.'/'.$tahun.'/'.$id_mst_peg_struktur_org.'/'.$id_mst_peg_struktur_skp; ?>" , function(data) {
       $("#tambahjqxgrid").show();
 			$("#tambahjqxgrid").html(data);
       $("#jqxgrid").hide();

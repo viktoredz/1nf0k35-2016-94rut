@@ -122,7 +122,9 @@
     <div class="box-body">
       <div class="div-grid">
           <div id="jqxTabs">
-            <?php echo $penilaian;?>
+            <div class="box-body">
+              <?php echo $penilaian;?>
+            </div>
           </div>
       </div>
     </div>

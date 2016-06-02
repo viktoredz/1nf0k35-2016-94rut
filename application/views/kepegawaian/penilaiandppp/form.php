@@ -12,11 +12,36 @@
   <h4>  <i class="icon fa fa-check"></i> Information!</h4>
   <?php echo $this->session->flashdata('alert_form')?>
 </div>
-<?php } ?>
+<?php } 
+$userdataname = $this->session->userdata('username');
+if ($username == $userdataname) {
+  $funshowhidden = 'disabled=disabled';
+  $showhidetgl = ',disabled: true';
+  $gridshowedit = ', editable:false';
+  $showtanggapan = '';
+  $showtanggapantgl = '';
+}else{
+  $funshowhidden='';
+  $showhidetgl = '';
+  $gridshowedit = '';
+  $showtanggapan = 'disabled=disabled';
+  $showtanggapantgl = ',disabled: true';
+}
+
+?>
+<form action="<?php echo base_url()?>kepegawaian/penilaiandppp/add" method="post">
+      
 <div class="row">
-  <form action="<?php echo base_url()?>kepegawaian/penilaiandppp/add" method="post">
-  <div class="col-md-6">
-    <div class="box box-primary">
+  <div class="col-md-12">
+  <div class="box-footer" style="float:right">
+    <button type="submit" class="btn btn-primary"><i class='fa fa-save'></i> &nbsp; Simpan & Lanjutkan</button>
+    <!-- <button type="button" id="btn_back_dppp" class="btn btn-warning"><i class='fa fa-reply'></i> &nbsp; Kembali</button> -->
+  </div>
+  </div>
+</div>
+<div class="row">  
+  <div class="col-md-5">
+    <div class="box box-danger">
       <div class="box-body">
         <div class="form-group">
           <label>Tanggal dibuat</label>
@@ -26,11 +51,9 @@
               }else{
                 date("Y-m-d",strtotime(set_value('tgl_dibuat')));
               }
-            ?>"></div>
+            ?>" ></div>
         </div>
-    <?php
-      if ($action!='add') {
-    ?>
+   
         <div class="form-group">
           <label>Tanggal diterima Atasan</label>
           <div id='tgl_diterima_atasan' name="tgl_diterima_atasan" value="<?php
@@ -41,29 +64,31 @@
               }
             ?>"></div>
         </div>
-    <?php
-      }
-    ?>
-        <div class="form-group">
-          <label>Pegawai</label>
-          <input type="text" class="form-control" name="namapegawai" id="namapegawai" placeholder="Nama Pegawai" value="<?php 
-            if(set_value('namapegawai')=="" && isset($namapegawai)){
-                echo $namapegawai;
+        
+        <input type="hidden" class="form-control" name="id_pegawai" id="id_pegawai" placeholder="ID Pegawai" value="<?php 
+        if(set_value('id_pegawai')=="" && isset($id_pegawai)){
+            echo $id_pegawai;
+          }else{
+            echo  set_value('id_pegawai');
+          }
+        ?>">
+        <input type="hidden" class="form-control" name="id_pegawai_penilai" id="id_pegawai_penilai" placeholder="ID Penilai" value="<?php 
+            if(set_value('id_pegawai_penilai')=="" && isset($id_pegawai_penilai)){
+                echo $id_pegawai_penilai;
               }else{
-                echo  set_value('namapegawai');
+                echo  set_value('id_pegawai_penilai');
               }
             ?>">
-            <input type="hidden" class="form-control" name="id_pegawai" id="id_pegawai" placeholder="ID Pegawai" value="<?php 
-            if(set_value('id_pegawai')=="" && isset($id_pegawai)){
-                echo $id_pegawai;
+        <input type="hidden" class="form-control" name="id_pegawai_penilai_atasan" id="id_pegawai_penilai_atasan" placeholder="ID Penilai Atasan" value="<?php 
+            if(set_value('id_pegawai_penilai_atasan')=="" && isset($id_pegawai_penilai_atasan)){
+                echo $id_pegawai_penilai_atasan;
               }else{
-                echo  set_value('id_pegawai');
+                echo  set_value('id_pegawai_penilai_atasan');
               }
             ?>">
-        </div>
         <div class="form-group">
           <label>Tahun</label>
-            <select name="tahun" id="tahun" class="form-control">
+            <select <?php echo $funshowhidden;?> name="tahun" id="tahun" class="form-control">
               <?php 
                 if ($tahun!='') {
                   $tahun = $tahun;# code...
@@ -78,43 +103,6 @@
             </select>
         </div>
         <div class="form-group">
-          <label>Penilai</label>
-          <input type="text" class="form-control" name="namapenilai" id="namapenilai" placeholder="Nama Pegawai" value="<?php 
-            if(set_value('namapenilai')=="" && isset($namapenilai)){
-                echo $namapenilai;
-              }else{
-                echo  set_value('namapenilai');
-              }
-            ?>">
-            <input type="hidden" class="form-control" name="id_pegawai_penilai" id="id_pegawai_penilai" placeholder="ID Penilai" value="<?php 
-            if(set_value('id_pegawai_penilai')=="" && isset($id_pegawai_penilai)){
-                echo $id_pegawai_penilai;
-              }else{
-                echo  set_value('id_pegawai_penilai');
-              }
-            ?>">
-        </div>
-        <div class="form-group">
-          <label>Atasan Penilai</label>
-          <input type="text" class="form-control" name="namapenilaiatasan" id="namapenilaiatasan" placeholder="Nama Pegawai" value="<?php 
-            if(set_value('namapenilaiatasan')=="" && isset($namapenilaiatasan)){
-                echo $namapenilaiatasan;
-              }else{
-                echo  set_value('namapenilaiatasan');
-              }
-            ?>">
-            <input type="hidden" class="form-control" name="id_pegawai_penilai_atasan" id="id_pegawai_penilai_atasan" placeholder="ID Penilai Atasan" value="<?php 
-            if(set_value('id_pegawai_penilai_atasan')=="" && isset($id_pegawai_penilai_atasan)){
-                echo $id_pegawai_penilai_atasan;
-              }else{
-                echo  set_value('id_pegawai_penilai_atasan');
-              }
-            ?>">
-        </div>
-    <?php
-      if ($action!='add') {
-    ?>
-        <div class="form-group">
           <label>Tanggal Keberantan</label>
           <div id='keberatan_tgl' name="keberatan_tgl" value="<?php
               if(set_value('keberatan_tgl')=="" && isset($keberatan_tgl)){
@@ -127,7 +115,7 @@
 
         <div class="form-group">
           <label>Keberatan</label>
-          <textarea class="form-control" name="keberatan" id="keberatan" placeholder="Keberatan"><?php 
+          <textarea <?php echo $funshowhidden;?> class="form-control" name="keberatan" id="keberatan" placeholder="Keberatan"><?php 
               if(set_value('keberatan')=="" && isset($keberatan)){
                 echo $keberatan;
               }else{
@@ -148,7 +136,7 @@
 
         <div class="form-group">
           <label>Tanggapan</label>
-          <textarea class="form-control" name="tanggapan" id="tanggapan" placeholder="Tanggapan"><?php 
+          <textarea <?php echo $showtanggapan;?> class="form-control" name="tanggapan" id="tanggapan" placeholder="Tanggapan"><?php 
               if(set_value('tanggapan')=="" && isset($tanggapan)){
                 echo $tanggapan;
               }else{
@@ -169,7 +157,7 @@
 
         <div class="form-group">
           <label>Keputusan</label>
-          <textarea class="form-control" name="keputusan" id="keputusan" placeholder="Keputusan"><?php 
+          <textarea <?php echo $funshowhidden;?> class="form-control" name="keputusan" id="keputusan" placeholder="Keputusan"><?php 
               if(set_value('keputusan')=="" && isset($keputusan)){
                 echo $keputusan;
               }else{
@@ -179,7 +167,7 @@
         </div>  
         <div class="form-group">
           <label>Rekomendasi</label>
-          <textarea class="form-control" name="rekomendasi" id="rekomendasi" placeholder="Rekomendasi"><?php 
+          <textarea <?php echo $funshowhidden;?> class="form-control" name="rekomendasi" id="rekomendasi" placeholder="Rekomendasi"><?php 
               if(set_value('rekomendasi')=="" && isset($rekomendasi)){
                 echo $rekomendasi;
               }else{
@@ -188,7 +176,7 @@
               ?></textarea>
         </div>
         <div class="form-group">
-          <label>Tanggal Keputusan</label>
+          <label>Tanggal Diterima</label>
           <div id='tgl_diterima' name="tgl_diterima" value="<?php
               if(set_value('tgl_diterima')=="" && isset($tgl_diterima)){
                 date("Y-m-d",strtotime($tgl_diterima));
@@ -197,9 +185,6 @@
               }
             ?>"></div>
         </div>
-    <?php
-      }
-    ?>    
         
         
         
@@ -208,119 +193,312 @@
     </div>
   </div><!-- /.form-box -->
 
-  <div class="col-md-6">
+  <div class="col-md-7">
     <div class="box box-warning">
       <div class="box-body">
-        <div class="form-group">
-          <label>SKP</label>
-          <input type="number" class="form-control" name="skp" id="skp" placeholder="SKP" value="<?php 
-            if(set_value('skp')=="" && isset($skp)){
-                echo $skp;
-              }else{
-                echo  set_value('skp');
-              }
-            ?>">
+        <div class="row" style="padding:5px">
+          <div class="col-md-3">
+              <label>SKP</label>
+          </div>
+          <div class="col-md-5">
+            <input <?php echo $funshowhidden;?> type="number" class="form-control" name="skp" id="skp" placeholder="SKP" value="<?php 
+              if(set_value('skp')=="" && isset($skp)){
+                  echo $skp;
+                }else{
+                  echo  set_value('skp');
+                }
+              ?>">
+          </div>
+          <div class="col-md-4">
+            <input <?php echo $funshowhidden;?> type="text" class="form-control" name="nilaiskp" id="nilaiskp" placeholder="Nilai SKP" value="<?php 
+              if(set_value('nilaiskp')=="" && isset($nilaiskp)){
+                  echo $nilaiskp;
+                }else{
+                  echo  set_value('nilaiskp');
+                }
+              ?>">
+          </div>
         </div>
-        <div class="form-group">
-          <label>SKP</label>
-          <input type="number" class="form-control" name="pelayanan" id="pelayanan" placeholder="Pelayanan" value="<?php 
+        <div class="row" style="padding:5px">
+          <div class="col-md-3">
+              <label>Pelayanan</label>
+          </div>
+          <div class="col-md-5">
+            <input <?php echo $funshowhidden;?> type="number" class="form-control" name="pelayanan" id="pelayanan" placeholder="Pelayanan" value="<?php 
             if(set_value('pelayanan')=="" && isset($pelayanan)){
                 echo $pelayanan;
               }else{
                 echo  set_value('pelayanan');
               }
             ?>">
+          </div>
+          <div class="col-md-4">
+            <input <?php echo $funshowhidden;?> type="text" class="form-control" name="nilaipelayanan" id="nilaipelayanan" placeholder="Nilai Pelayanan" value="<?php 
+              if(set_value('nilaipelayanan')=="" && isset($nilaipelayanan)){
+                  echo $nilaipelayanan;
+                }else{
+                  echo  set_value('nilaipelayanan');
+                }
+              ?>">
+          </div>
         </div>
-        <div class="form-group">
-          <label>Integritas</label>
-          <input type="number" class="form-control" name="integritas" id="integritas" placeholder="Integritas" value="<?php 
+        
+        <div class="row" style="padding:5px">
+          <div class="col-md-3">
+              <label>Integritas</label>
+          </div>
+          <div class="col-md-5">
+            <input <?php echo $funshowhidden;?> type="number" class="form-control" name="integritas" id="integritas" placeholder="Integritas" value="<?php 
             if(set_value('integritas')=="" && isset($integritas)){
                 echo $integritas;
               }else{
                 echo  set_value('integritas');
               }
             ?>">
+          </div>
+          <div class="col-md-4">
+            <input <?php echo $funshowhidden;?> type="text" class="form-control" name="nilaiintegritas" id="nilaiintegritas" placeholder="Nilai Integritas" value="<?php 
+              if(set_value('nilaiintegritas')=="" && isset($nilaiintegritas)){
+                  echo $nilaiintegritas;
+                }else{
+                  echo  set_value('nilaiintegritas');
+                }
+              ?>">
+          </div>
         </div>
-        <div class="form-group">
-          <label>Komitmen</label>
-          <input type="number" class="form-control" name="komitmen" id="komitmen" placeholder="Komitmen" value="<?php 
+          
+        <div class="row" style="padding:5px">
+          <div class="col-md-3">
+              <label>Komitmen</label>
+          </div>
+          <div class="col-md-5">
+            <input <?php echo $funshowhidden;?> type="number" class="form-control" name="komitmen" id="komitmen" placeholder="Komitmen" value="<?php 
             if(set_value('komitmen')=="" && isset($komitmen)){
                 echo $komitmen;
               }else{
                 echo  set_value('komitmen');
               }
             ?>">
+          </div>
+          <div class="col-md-4">
+            <input <?php echo $funshowhidden;?> type="text" class="form-control" name="nilaikomitmen" id="nilaikomitmen" placeholder="Nilai Komitmen" value="<?php 
+              if(set_value('nilaikomitmen')=="" && isset($nilaikomitmen)){
+                  echo $nilaikomitmen;
+                }else{
+                  echo  set_value('nilaikomitmen');
+                }
+              ?>">
+          </div>
         </div>
-        <div class="form-group">
-          <label>Disiplin</label>
-          <input type="number" class="form-control" name="disiplin" id="disiplin" placeholder="Disiplin" value="<?php 
+        <div class="row" style="padding:5px">
+          <div class="col-md-3">
+              <label>Disiplin</label>
+          </div>
+          <div class="col-md-5">
+            <input  <?php echo $funshowhidden;?> type="number" class="form-control" name="disiplin" id="disiplin" placeholder="Disiplin" value="<?php 
             if(set_value('disiplin')=="" && isset($disiplin)){
                 echo $disiplin;
               }else{
                 echo  set_value('disiplin');
               }
             ?>">
+          </div>
+          <div class="col-md-4">
+            <input <?php echo $funshowhidden;?> type="text" class="form-control" name="nilaidisiplin" id="nilaidisiplin" placeholder="Nilai Disiplin" value="<?php 
+              if(set_value('nilaidisiplin')=="" && isset($nilaidisiplin)){
+                  echo $nilaidisiplin;
+                }else{
+                  echo  set_value('nilaidisiplin');
+                }
+              ?>">
+          </div>
         </div>
-        <div class="form-group">
-          <label>Kerjasama</label>
-          <input type="number" class="form-control" name="kerjasama" id="kerjasama" placeholder="Kerjasama" value="<?php 
+
+        <div class="row" style="padding:5px">
+          <div class="col-md-3">
+              <label>Kerjasama</label>
+          </div>
+          <div class="col-md-5">
+            <input <?php echo $funshowhidden;?> type="number" class="form-control" name="kerjasama" id="kerjasama" placeholder="Kerjasama" value="<?php 
             if(set_value('kerjasama')=="" && isset($kerjasama)){
                 echo $kerjasama;
               }else{
                 echo  set_value('kerjasama');
               }
             ?>">
+          </div>
+          <div class="col-md-4">
+            <input <?php echo $funshowhidden;?> type="text" class="form-control" name="nilaikerjasama" id="nilaikerjasama" placeholder="Nilai Kerjasama" value="<?php 
+              if(set_value('nilaikerjasama')=="" && isset($nilaikerjasama)){
+                  echo $nilaikerjasama;
+                }else{
+                  echo  set_value('nilaikerjasama');
+                }
+              ?>">
+          </div>
         </div>
-        <div class="form-group">
-          <label>Kepemimpinan</label>
-          <input type="number" class="form-control" name="kepemimpinan" id="kepemimpinan" placeholder="Kepemimpinan" value="<?php 
+
+        <div class="row" style="padding:5px">
+          <div class="col-md-3">
+              <label>Kepemimpinan</label>
+          </div>
+          <div class="col-md-5">
+            <input <?php echo $funshowhidden;?> type="number" class="form-control" name="kepemimpinan" id="kepemimpinan" placeholder="Kepemimpinan" value="<?php 
             if(set_value('kepemimpinan')=="" && isset($kepemimpinan)){
                 echo $kepemimpinan;
               }else{
                 echo  set_value('kepemimpinan');
               }
             ?>">
+          </div>
+          <div class="col-md-4">
+            <input <?php echo $funshowhidden;?> type="text" class="form-control" name="nilaikepemimpinan" id="nilaikepemimpinan" placeholder="Nilai Kepemimpinan" value="<?php 
+              if(set_value('nilaikepemimpinan')=="" && isset($nilaikepemimpinan)){
+                  echo $nilaikepemimpinan;
+                }else{
+                  echo  set_value('nilaikepemimpinan');
+                }
+              ?>">
+          </div>
         </div>
-        <div class="form-group">
-          <label>Jumlah</label>
-          <input type="number" class="form-control" name="jumlah" id="jumlah" placeholder="Jumlah" value="<?php 
+
+        <div class="row" style="padding:5px">
+          <div class="col-md-3">
+              <label>Jumlah</label>
+          </div>
+          <div class="col-md-5">
+            <input <?php echo $funshowhidden;?> type="number" class="form-control" name="jumlah" id="jumlah" placeholder="Jumlah" value="<?php 
             if(set_value('jumlah')=="" && isset($jumlah)){
                 echo $jumlah;
               }else{
                 echo  set_value('jumlah');
               }
             ?>">
+          </div>
+          <div class="col-md-4">
+            <input type="text" class="form-control" name="nilaijumlah" id="nilaijumlah" placeholder="Nilai Jumlah" value="<?php 
+              if(set_value('nilaijumlah')=="" && isset($nilaijumlah)){
+                  echo $nilaijumlah;
+                }else{
+                  echo  set_value('nilaijumlah');
+                }
+              ?>">
+          </div>
         </div>
-        <div class="form-group">
-          <label>Rata - rata</label>
-          <input type="number" class="form-control" name="ratarata" id="ratarata" placeholder="Rata - rata" value="<?php 
+
+        <div class="row" style="padding:5px">
+          <div class="col-md-3">
+              <label>Rata - rata</label>
+          </div>
+          <div class="col-md-5">
+            <input <?php echo $funshowhidden;?> type="number" class="form-control" name="ratarata" id="ratarata" placeholder="Rata - rata" value="<?php 
             if(set_value('ratarata')=="" && isset($ratarata)){
                 echo $ratarata;
               }else{
                 echo  set_value('ratarata');
               }
             ?>">
+          </div>
+          <div class="col-md-4">
+            <input <?php echo $funshowhidden;?> type="text" class="form-control" name="ratarata" id="ratarata" placeholder="Nilai Rata - rata" value="<?php 
+              if(set_value('ratarata')=="" && isset($ratarata)){
+                  echo $ratarata;
+                }else{
+                  echo  set_value('ratarata');
+                }
+              ?>">
+          </div>
         </div>
-        <div class="form-group">
-          <label>Nilai Prestasi</label>
-          <input type="number" class="form-control" name="nilai_prestasi" id="nilai_prestasi" placeholder="Nilai Prestasi" value="<?php 
+
+        <div class="row" style="padding:5px">
+          <div class="col-md-3">
+              <label>Nilai Prestasi</label>
+          </div>
+          <div class="col-md-5">
+            <input <?php echo $funshowhidden;?> type="number" class="form-control" name="nilai_prestasi" id="nilai_prestasi" placeholder="Nilai Prestasi" value="<?php 
             if(set_value('nilai_prestasi')=="" && isset($nilai_prestasi)){
                 echo $nilai_prestasi;
               }else{
                 echo  set_value('nilai_prestasi');
               }
             ?>">
+          </div>
+          <div class="col-md-4">
+            <input <?php echo $funshowhidden;?> type="text" class="form-control" name="nilai_prestasi" id="nilai_prestasi" placeholder="Nilai Prestasi" value="<?php 
+              if(set_value('nilai_prestasi')=="" && isset($nilai_prestasi)){
+                  echo $nilai_prestasi;
+                }else{
+                  echo  set_value('nilai_prestasi');
+                }
+              ?>">
+          </div>
         </div>
+        
+
       </div>
-      <div class="box-footer">
-        <button type="submit" class="btn btn-primary"><i class='fa fa-save'></i> &nbsp; Simpan & Lanjutkan</button>
-        <button type="button" id="btn-kembali" class="btn btn-warning"><i class='fa fa-reply'></i> &nbsp; Kembali</button>
+      
       </div>
-      </div>
-    </form>        
+          
 
   </div><!-- /.form-box -->
 </div><!-- /.register-box -->
+<div class="row">
+  <div class="col-md-12">
+    <div class="box box-success">
+      <div class="box-body">
+          <!-- <table border="1">
+            <tr>
+              <th rowspan="2" width="3%"  align="center">No</th>
+              <th rowspan="2" width="15%" align="center">Kegiatan Tugas Jabatan</th>
+              <th rowspan="2" width="3%"  align="center">AK</th>
+              <th colspan="4" width="30%" align="center">Target</th>
+              <th rowspan="2" width="3%"  align="center">AK</th>
+              <th colspan="4" width="30%" align="center">Realisasi</th>
+              <th rowspan="2" width="8%"  align="center">Perhitungan</th>
+              <th rowspan="2" width="8%"  align="center">Nilai Pencapaian SKP</th>
+            </tr>
+            <tr>
+              <th width="7%">Kuant/ Output</th>
+              <th width="7%">Kual/Mutu</th>
+              <th width="7%">Waktu (Bulan)</th>
+              <th width="9%">Biaya</th>
+              <th width="7%">Kuant/ Output</th>
+              <th width="7%">Kual/Mutu</th>
+              <th width="7%">Waktu (Bulan)</th>
+              <th width="9%">Biaya</th>
+            </tr>
+            <tr>
+              <th rowspan="2" width="3%"  align="center">1</th>
+              <th rowspan="2" width="15%" align="center">2</th>
+              <th rowspan="2" width="3%"  align="center">3</th>
+              <th width="7%">4</th>
+              <th width="7%">5</th>
+              <th width="7%">6</th>
+              <th width="9%">7</th>
+              <th rowspan="2" width="3%"  align="center">8</th>
+              <th width="7%">9</th>
+              <th width="7%">10</th>
+              <th width="7%">11</th>
+              <th width="9%">12</th>
+              <th rowspan="2" width="8%"  align="center">13</th>
+              <th rowspan="2" width="8%"  align="center">14</th>
+            </tr>
+            <?php 
+
+            ?>
+          </table> -->
+          <div id='jqxWidget'>
+              <div id="jqxgridPenilaianSKP"></div>
+              <div style="font-size: 12px; font-family: Verdana, Geneva, 'DejaVu Sans', sans-serif; margin-top: 30px;">
+                  <div id="cellbegineditevent"></div>
+                  <div style="margin-top: 10px;" id="cellendeditevent"></div>
+             </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+</form>  
 
 <script type="text/javascript">
 $(function(){
@@ -331,24 +509,148 @@ $(function(){
     $('#btn-kembali').click(function(){
         window.location.href="<?php echo base_url()?>kepegawaian/penilaiandppp";
     });
-  <?php
-  if ($action!='add') {
-  ?>
-    $("#keberatan_tgl").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme});
-    $("#tanggapan_tgl").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme});
-    $("#keputusan_tgl").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme});
-    $("#tgl_diterima").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme});
-    $("#tgl_diterima_atasan").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme});
-  <?php 
-    }else{
-  ?>
-    $("#tgl_dibuat").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme});
-  <?php
-    }
-  ?>
+    $("#keberatan_tgl").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme <?php echo $showhidetgl;?>});
+    $("#tanggapan_tgl").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme <?php echo $showtanggapantgl;?>});
+    $("#keputusan_tgl").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme <?php echo $showhidetgl;?>});
+    $("#tgl_diterima").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme <?php echo $showhidetgl;?>});
+    $("#tgl_diterima_atasan").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme <?php echo $showhidetgl;?>});
+    $("#tgl_dibuat").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme <?php echo $showhidetgl;?>});
     
 
 
   });
-  
+    $(document).ready(function () {
+            // prepare the data
+      var sourceskp = {
+          datatype: "json",
+          type  : "POST",
+          datafields: [
+          { name: 'id_mst_peg_struktur_org', type: 'string'},
+          { name: 'tugas', type: 'string'},
+          { name: 'id_mst_peg_struktur_skp', type: 'string'},
+          { name: 'ak', type: 'string'},
+          { name: 'no', type: 'number'},
+          { name: 'kuant', type: 'string'},
+          { name: 'output', type: 'string'},
+          { name: 'kuant_output', type: 'string'},
+          { name: 'target', type: 'string'},
+          { name: 'waktu', type: 'string'},
+          { name: 'biaya', type: 'string'},
+          { name: 'code_cl_phc', type: 'string'},
+          { name: 'ak_nilai', type: 'string'},
+          { name: 'kuant_nilai', type: 'string'},
+          { name: 'target_nilai', type: 'string'},
+          { name: 'waktu_nilai', type: 'string'},
+          { name: 'biaya_nilai', type: 'string'},
+          { name: 'perhitungan_nilai', type: 'string'},
+          { name: 'pencapaian_nilai', type: 'string'},
+          { name: 'id_pegawai', type: 'string'},
+          { name: 'tahun', type: 'string'},
+          { name: 'edit', type: 'number'},
+          { name: 'delete', type: 'number'}
+            ],
+        url: "<?php echo site_url('kepegawaian/penilaiandppp/json_skp/{id_mst_peg_struktur_org}'); ?>",
+        cache: false,
+          updateRow: function (rowID, rowData, commit) {
+                  commit(true);
+             },
+        filter: function(){
+          $("#jqxgridPenilaianSKP").jqxGrid('updatebounddata', 'filter');
+        },
+        sort: function(){
+          $("#jqxgridPenilaianSKP").jqxGrid('updatebounddata', 'sort');
+        },
+        updateRow: function (rowID, rowData, commit) {
+            commit(true);
+            var arr = $.map(rowData, function(el) { return el });         
+            alert(arr);
+            if(typeof(arr[1]) === 'object'){
+              var arr2 = $.map(arr[1], function(el) { return el });
+              if(arr[4] + '' + arr[5] + '' + arr[6] + '' + arr[7]+ '' + arr[8]!='') {
+                $.post( '<?php echo base_url()?>mst/keuangan_akun/akun_add', {id_mst_akun:arr[2],id_mst_akun_parent:arr2[0], uraian:arr[4], kode:arr[5], saldo_normal:arr[6], saldo_awal : arr[7], mendukung_transaksi : arr[8]}, function( data ) {
+                    if(data != 0){
+                      alert(data);                  
+                    }else{
+                      alert("Data "+arr[4]+" berhasil disimpan");                  
+                    }
+                });
+              }
+            }else{      
+              $.post( '<?php echo base_url()?>kepegawaian/penilaiandppp/edit_dpp', 
+                {
+                  row:rowID,
+                  id_pegawai:arr[0] ,
+                  tahun:arr[1], 
+                  id_mst_peg_struktur_org:arr[2], 
+                  id_mst_peg_struktur_skp : arr[3], 
+                  ak : arr[4], 
+                  kuant:arr[5], 
+                  target : arr[6],
+                  waktu : arr[6],
+                  biaya : arr[6]
+                },
+                function( data ) {
+                  if(data != 0){
+                    alert(data);
+                  }
+              });
+            }
+         },
+        root: 'Rows',
+            pagesize: 30,
+            beforeprocessing: function(data){   
+          if (data != null){
+            sourceskp.totalrecords = data[0].TotalRows;          
+          }
+        }
+        };    
+
+        var dataadapterskp = new $.jqx.dataAdapter(sourceskp, {
+          loadError: function(xhr, status, error){
+            alert(error);
+          }
+        });
+         
+        $('#btn-refresh-skp').click(function () {
+          $("#jqxgridPenilaianSKP").jqxGrid('clearfilters');
+        });
+
+        $("#jqxgridPenilaianSKP").jqxGrid(
+        {   
+          width: '100%',
+          
+          source: dataadapterskp, theme: theme,columnsresize: true,showtoolbar: false, pagesizeoptions: ['10', '25', '50', '100', '200'],
+          showfilterrow: true, filterable: true, sortable: true, autoheight: true, pageable: true, virtualmode: true, editable: true,
+          enabletooltips: true,
+          selectionmode: 'singlerow',
+          editmode: 'selectedrow',
+          rendergridrows: function(obj)
+          {
+            return obj.data;    
+          },
+          columns: [
+            { text: 'No', editable:false ,datafield: 'no', columntype: 'textbox', filtertype: 'none', width: '3%' },
+            { text: 'Kegiatan Tugas Jabatan',editable:false , align: 'center',  datafield: 'tugas', columntype: 'textbox', filtertype: 'textbox',  width: '15%' },
+            { text: 'AK', editable:false ,align: 'center', cellsalign: 'center', datafield: 'ak', columntype: 'textbox', filtertype: 'textbox', width: '3%' },
+            { text: 'Kuant/ Output',columngroup: 'target', cellsalign: 'center',editable:false ,align: 'center', datafield: 'kuant_output', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
+            { text: 'Kual/Mutu',columngroup: 'target', editable:false ,align: 'center', datafield: 'target', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
+            { text: 'Waktu (Bulan)',columngroup: 'target', editable:false ,align: 'center', cellsalign: 'right', datafield: 'waktu', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
+            { text: 'Biaya',columngroup: 'target', editable:false ,align: 'center', cellsalign: 'right', datafield: 'biaya', columntype: 'textbox', filtertype: 'textbox', width: '9%' },
+            { text: 'AK',align: 'center'<?php echo $gridshowedit; ?>, cellsalign: 'center', datafield: 'ak_nilai', columntype: 'textbox', filtertype: 'textbox', width: '3%' },
+            { text: 'Kuant/ Output' <?php echo $gridshowedit; ?>,columngroup: 'realisasi',align: 'center',cellsalign: 'center', datafield: 'kuant_output_nilai', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
+            { text: 'Kual/Mutu' <?php echo $gridshowedit; ?>,columngroup: 'realisasi',align: 'center',  datafield: 'target_nilai', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
+            { text: 'Waktu (Bulan)' <?php echo $gridshowedit; ?>,columngroup: 'realisasi',align: 'center', cellsalign: 'right', datafield: 'waktu_nilai', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
+            { text: 'Biaya' <?php echo $gridshowedit; ?>,columngroup: 'realisasi',align: 'center', cellsalign: 'right', datafield: 'biaya_nilai', columntype: 'textbox', filtertype: 'textbox', width: '9%' },
+            { text: 'Perhitungan' <?php echo $gridshowedit; ?>,align: 'center', cellsalign: 'right', datafield: 'perhitungan_nilai', columntype: 'textbox', filtertype: 'none', width: '8%' },
+            { text: 'Nilai Pencapaian SKP' <?php echo $gridshowedit; ?>,align: 'center', cellsalign: 'right', datafield: 'pencapaian_nilai', columntype: 'textbox', filtertype: 'none', width: '8%' },
+            ],
+
+            columngroups: 
+            [
+              { text: 'Target', align: 'center', name: 'target' },
+              { text: 'Realisasi', align: 'center', name: 'realisasi' }
+            ]
+        });
+        });
 </script>
+             
