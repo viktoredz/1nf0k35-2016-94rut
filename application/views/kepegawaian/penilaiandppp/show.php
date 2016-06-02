@@ -22,6 +22,7 @@
 
       	<div class="box-footer">
 		      <div class="col-md-5">
+		      	<!-- <button type="button" class="btn btn-primary" id="btn-add"><i class='glyphicon glyphicon-plus'></i> &nbsp; Tambah</button> -->
 			 	<button type="button" class="btn btn-warning" id="btn-refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
 			 	<button type="button" class="btn btn-success" id="btn-export"><i class='fa fa-file-excel-o'></i> &nbsp; Export</button>
 		     </div>
@@ -162,6 +163,9 @@
 	function detail(id_pegawai,code_cl_phc){
 		document.location.href="<?php echo base_url().'kepegawaian/penilaiandppp/edit';?>/" + id_pegawai+'/'+code_cl_phc;
 	}
+	// $("#btn-add").click(function(){
+	// 	document.location.href="<?php echo base_url().'kepegawaian/penilaiandppp/add';?>/" ;
+	// });
 	$("select[name='code_cl_phc']").change(function(){
 		$.post("<?php echo base_url().'kepegawaian/penilaiandppp/filter' ?>", 'code_cl_phc='+$(this).val(),  function(){
 			$("#jqxgrid").jqxGrid('updatebounddata', 'cells');

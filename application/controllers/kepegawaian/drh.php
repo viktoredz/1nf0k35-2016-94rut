@@ -167,11 +167,13 @@ class Drh extends CI_Controller {
 	function nipterakhir($id=0){
 		$this->db->order_by('tmt','desc');
 		$this->db->where('id_pegawai',$id);
-		$this->db->select('nip_nit');
+		$this->db->select('nip_nit,id_mst_peg_golruang,ruang');
+		$this->db->join('mst_peg_golruang','mst_peg_golruang.id_golongan = pegawai_pangkat.id_mst_peg_golruang','left');
 		$query = $this->db->get('pegawai_pangkat',1);
 		foreach ($query->result() as $q) {
 			$nipterakhir[] = array(
 				'nip' => $q->nip_nit,  
+				'pangkat' => $q->id_mst_peg_golruang.' - '.$q->ruang,  
 			);
 			echo json_encode($nipterakhir);
 		}

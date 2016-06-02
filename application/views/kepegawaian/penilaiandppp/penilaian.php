@@ -59,7 +59,7 @@
       },
       columns: [
        
-        { text: 'Edit', align: 'center', filtertype: 'none', sortable: false, width: '6%', cellsrenderer: function (row) {
+        { text: 'Edit', align: 'center', filtertype: 'none', sortable: false, width: '4%', cellsrenderer: function (row) {
             var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
             if(dataRecord.edit==1){
             return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='edit_skp(\""+dataRecord.id_mst_peg_struktur_org+"\",\""+dataRecord.id_mst_peg_struktur_skp+"\",\""+dataRecord.code_cl_phc+"\");'></a></div>";
@@ -68,7 +68,7 @@
           }
                  }
                 },
-        { text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '6%', cellsrenderer: function (row) {
+        { text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '4%', cellsrenderer: function (row) {
             var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
             if(dataRecord.delete==1){
             return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del_skp(\""+dataRecord.id_mst_peg_struktur_org+"\",\""+dataRecord.id_mst_peg_struktur_skp+"\",\""+dataRecord.code_cl_phc+"\");'></a></div>";
@@ -77,10 +77,16 @@
           }
                  }
                 },
-        { text: 'Tugas', editable:false ,datafield: 'tugas', columntype: 'textbox', filtertype: 'textbox', width: '36%' },
-        { text: 'Target',editable:false , align: 'center', cellsalign: 'center', datafield: 'target', columntype: 'textbox', filtertype: 'textbox',  width: '15%' },
-        { text: 'Waktu', editable:false ,align: 'center', cellsalign: 'center', datafield: 'waktu', columntype: 'textbox', filtertype: 'textbox', width: '15%' },
-        { text: 'Biaya', editable:false ,align: 'center', cellsalign: 'right', datafield: 'biaya', columntype: 'textbox', filtertype: 'textbox', width: '22%' }
+        { text: 'Tanggal dibuat', editable:false ,align: 'center', cellsalign: 'right', datafield: 'tgl_dibuat', columntype: 'date', filtertype: 'date', width: '9%' },
+        { text: 'Penilai', editable:false ,datafield: 'namapenilai', columntype: 'textbox', filtertype: 'textbox', width: '15%' },
+        { text: 'Atasan Penilai',editable:false , align: 'center', cellsalign: 'center', datafield: 'namaatasan', columntype: 'textbox', filtertype: 'textbox',  width: '15%' },
+        { text: 'Jumlah', editable:false ,align: 'center', cellsalign: 'center', datafield: 'jumlah', columntype: 'textbox', filtertype: 'textbox', width: '8%' },
+        { text: 'Rata-rata', editable:false ,align: 'center', cellsalign: 'right', datafield: 'ratarata', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
+        { text: 'Nilai Prestasi', editable:false ,align: 'center', cellsalign: 'right', datafield: 'nilai_prestasi', columntype: 'textbox', filtertype: 'textbox', width: '8%' },
+        { text: 'Keberatan', editable:false ,align: 'center', cellsalign: 'right', datafield: 'keberatan', columntype: 'textbox', filtertype: 'none', width: '7%' },
+        { text: 'Tanggapan', editable:false ,align: 'center', cellsalign: 'right', datafield: 'tanggapan', columntype: 'textbox', filtertype: 'none', width: '7%' },
+        { text: 'Keputusan', editable:false ,align: 'center', cellsalign: 'right', datafield: 'keputusan', columntype: 'textbox', filtertype: 'none', width: '7%' },
+        { text: 'Rekomendasi', editable:false ,align: 'center', cellsalign: 'right', datafield: 'rekomendasi', columntype: 'textbox', filtertype: 'none', width: '9%' }
             ]
     });
 		$('#clearfilteringbutton').click(function () {
@@ -90,29 +96,32 @@
  		$('#refreshdatabutton').click(function () {
 			$("#jqxgrid").jqxGrid('updatebounddata', 'cells');
 		});
-
+    $("#tambahjqxgrid").hide();
+    $("#btn_back_dppp").hide();
  		$('#btn_add_dppp').click(function () {
 			add_dppp();
 		});
-
+    $("#btn_back_dppp").click(function(){
+        $("#jqxgrid").show();
+        $("#tambahjqxgrid").hide();
+        $("#btn_back_dppp").hide();
+        $("#btn_add_dppp").show();
+    });
 	});
 	function close_popup(){
 		$("#popup_dppp").jqxWindow('close');
 		ambil_total();
 	}
-
+  
 	function add_dppp(){
-		$("#popup_dppp #popup_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
+		
 		$.get("<?php echo base_url().'kepegawaian/penilaiandppp/add_dppp/'.$tar_id_struktur_org.'/0/'.$code_cl_phc; ?>" , function(data) {
-			$("#popup_content").html(data);
+      $("#tambahjqxgrid").show();
+			$("#tambahjqxgrid").html(data);
+      $("#jqxgrid").hide();
+      $("#btn_back_dppp").show();
+      $("#btn_add_dppp").hide();
 		});
-		$("#popup_dppp").jqxWindow({
-			theme: theme, resizable: false,
-			width: 700,
-			height: 700,
-			isModal: true, autoOpen: false, modalOpacity: 0.2
-		});
-		$("#popup_dppp").jqxWindow('open');
 	}
 
 	function edit_dppp(kode,code_cl_phc,id_inv_permohonan_dppp_item){
@@ -139,7 +148,7 @@
 			});
 		}
 	}
-
+  
 </script>
 
 <div id="popup_dppp" style="display:none">
@@ -149,9 +158,15 @@
 
 <div>
 	<div style="width:100%;">
+  <div class="row">
 		<div style="padding:5px" class="pull-right">
 			<button class="btn btn-success" id='btn_add_dppp' type='button'><i class='fa fa-plus-square'></i> Tambah Dppp</button>
+      <button class="btn btn-warning" id='btn_back_dppp' type='button'><i class='glyphicon glyphicon-arrow-left'></i> Kembali</button>
 		</div>
+  </div>
+      <div class="row">
         <div id="jqxgrid"></div>
+        <div id="tambahjqxgrid"></div>
+      </div>
 	</div>
 </div>

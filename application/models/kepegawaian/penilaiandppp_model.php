@@ -15,6 +15,18 @@ class Penilaiandppp_model extends CI_Model {
         $query = $this->db->get('mst_peg_struktur_skp',$limit,$start);
         return $query->result();
     }
+    function get_data_detail($start=0,$limit=999999,$options=array())
+    {	$puskesmas_ = 'P'.$this->session->userdata('puskesmas');
+    	$this->db->select("mst_peg_golruang.ruang, mst_peg_struktur_org.*, pangkat.nip_nit,mst_peg_struktur_org.tar_nama_posisi, pangkat.id_mst_peg_golruang");
+    	$this->db->join("pegawai",'pegawai_dp3.id_pegawai = pegawai.id_pegawai','left');
+    	$this->db->join("(SELECT  id_pegawai, nip_nit, tmt,id_mst_peg_golruang, masa_krj_bln, masa_krj_thn, CONCAT(tmt, id_pegawai) AS pangkatterakhir FROM
+        pegawai_pangkat WHERE CONCAT(tmt, id_pegawai) IN (SELECT  CONCAT(MAX(tmt), id_pegawai) FROM pegawai_pangkat GROUP BY id_pegawai)) pangkat",'pangkat.id_pegawai = pegawai.id_pegawai','left');
+        $this->db->join("pegawai_struktur",'pegawai_struktur.id_pegawai = pegawai.id_pegawai','left');
+        $this->db->join("mst_peg_golruang",'mst_peg_golruang.id_golongan = pangkat.id_mst_peg_golruang','left');
+        $this->db->join("mst_peg_struktur_org",'mst_peg_struktur_org.tar_id_struktur_org = pegawai_struktur.tar_id_struktur_org','left');
+		$query =$this->db->get('pegawai_dp3',$limit,$start);
+        return $query->result();
+    }
     function get_data($start=0,$limit=999999,$options=array())
     {	$puskesmas_ = 'P'.$this->session->userdata('puskesmas');
     	$this->db->select("mst_peg_golruang.ruang, app_users_list.username,pegawai.*, pangkat.nip_nit,mst_peg_struktur_org.tar_nama_posisi, pangkat.id_mst_peg_golruang");
@@ -27,7 +39,6 @@ class Penilaiandppp_model extends CI_Model {
 		$query =$this->db->get('pegawai',$limit,$start);
         return $query->result();
     }
-    
 
  	function get_datapegawai($kode,$code_cl_phc){
  		$code_cl_phc = substr($code_cl_phc, 0,12);

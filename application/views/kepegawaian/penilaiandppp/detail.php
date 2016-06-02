@@ -16,13 +16,13 @@
         </div>
 
         <div class="row">
-          <div class="col-sm-12 col-md-2" style="text-align:  center">
+          <div class="col-sm-12 col-md-1" style="text-align:  center">
               <img src="<?php echo base_url()?>kepegawaian/drh/getphoto/{id}" id='linkimages' style='border:1px solid #ECECEC' height='100'>
           </div>
           <div class="col-sm-12 col-md-4" style="padding-top: 10px">
             <div class="row">
               <div class="col-md-4 col-xs-6" style="text-align: right;">
-                <label>Nama : </label>
+                <label>Pegawai : </label>
               </div>
               <div class="col-md-8 col-xs-6">
                   {gelar_depan} {nama} {gelar_belakang}
@@ -37,17 +37,80 @@
                   <div id="nipterakhir"></div>
               </div>
             </div>
+            <div class="row">
+              <div class="col-md-4 col-xs-6" style="text-align: right;">
+                <label>Pankat : </label>
+              </div>
+              <div class="col-md-8 col-xs-6">
+                  <div id="pangkatterakhir"></div>
+              </div>
+            </div>
 
             <div class="row">
               <div class="col-md-4 col-xs-6" style="text-align: right;">
-                <label>Usia : </label>
+                <label>Jabatan : </label>
               </div>
               <div class="col-md-8 col-xs-6">
-                  {usia} Tahun
+                  <div id="jabtanterakhir"></div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 col-xs-6" style="text-align: right;">
+                <label>Unit Kerja : </label>
+              </div>
+              <div class="col-md-8 col-xs-6">
+                  <div id="unitkerjaterakhir"></div>
               </div>
             </div>
           </div>
-          <div class="col-sm-12 col-md-6" style="text-align: right">
+          <div class="col-sm-12 col-md-1" style="text-align:  center">
+              <img src="<?php echo base_url()?>kepegawaian/drh/getphoto/{id}" id='linkimages' style='border:1px solid #ECECEC' height='100'>
+          </div>
+          <div class="col-sm-12 col-md-4" style="padding-top: 10px">
+            <div class="row">
+              <div class="col-md-4 col-xs-6" style="text-align: right;">
+                <label>Penilai : </label>
+              </div>
+              <div class="col-md-8 col-xs-6">
+                  <div id="namapenilaiterakhir"></div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4 col-xs-6" style="text-align: right;">
+                <label>NIP : </label>
+              </div>
+              <div class="col-md-8 col-xs-6">
+                  <div id="nippenilaiterakhir"></div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 col-xs-6" style="text-align: right;">
+                <label>Pankat : </label>
+              </div>
+              <div class="col-md-8 col-xs-6">
+                  <div id="pangkatpenilaiterakhir"></div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4 col-xs-6" style="text-align: right;">
+                <label>Jabatan : </label>
+              </div>
+              <div class="col-md-8 col-xs-6">
+                  <div id="jabatanpenilaiterakhir"></div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 col-xs-6" style="text-align: right;">
+                <label>Unit Kerja : </label>
+              </div>
+              <div class="col-md-8 col-xs-6">
+                  <div id="unitkerjapenilaiterakhir"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-1" style="text-align: right">
             <button type="button" class="btn btn-success" id="btn-return"><i class='fa fa-arrow-circle-o-left'></i> &nbsp; Kembali</button>
           </div>
         </div>
@@ -67,7 +130,8 @@
 </section>
 <script type="text/javascript">
 $(function(){
-    ambil_nip();
+    ambil_nip_pegawai();
+    ambil_nip_penilai();
     $('#btn-kembali').click(function(){
         window.location.href="<?php echo base_url()?>inventory/permohonanbarang";
     });
@@ -110,15 +174,38 @@ $(function(){
 
       return false;
     }
-    function ambil_nip()
+    function ambil_nip_pegawai()
     {
       $.ajax({
-      url: "<?php echo base_url().'kepegawaian/drh/nipterakhir/'.$kode ?>",
+      url: "<?php echo base_url().'kepegawaian/penilaiandppp/nipterakhirpegawai/'.$kode ?>",
       dataType: "json",
       success:function(data)
       { 
         $.each(data,function(index,elemet){
           $("#nipterakhir").html(elemet.nip);
+          $("#pangkatterakhir").html(elemet.pangkat);
+          $("#jabatanterakhir").html(elemet.jabatan);
+          $("#unitkerjaterakhir").html(elemet.uk);
+        });
+      }
+      });
+
+      return false;
+    }
+    function ambil_nip_penilai()
+    {
+      var kode = "<?php echo $this->session->userdata('username'); ?>";
+      $.ajax({
+      url: "<?php echo base_url().'kepegawaian/penilaiandppp/nipterakhirpenilai' ?>/"+kode,
+      dataType: "json",
+      success:function(data)
+      { 
+        $.each(data,function(index,elemet){
+          $("#namapenilaiterakhir").html(elemet.namaterakhir);
+          $("#nippenilaiterakhir").html(elemet.nipterakhir);
+          $("#pangkatpenilaiterakhir").html(elemet.pangkatterakhir);
+          $("#jabatanpenilaiterakhir").html(elemet.pangkatjabatanterakhir);
+          $("#unitkerjapenilaiterakhir").html(elemet.ukterakhir);
         });
       }
       });
