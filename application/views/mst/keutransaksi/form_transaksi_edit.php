@@ -114,19 +114,20 @@
                       <div class="col-md-12">
                         <div class="row">
                           <div class="col-md-8" style="padding-top:5px;">
-                            <select  name="" type="text" class="form-control">
-                              <?php foreach($kategori as $k) : ?>
+                           <select  name="debit_akun" id="debit_akun" type="text" class="form-control">
+                              <?php foreach($akun as $a) : ?>
                                 <?php
-                                  if(set_value('id_mst_kategori_transaksi')=="" && isset($id_mst_kategori_transaksi)){
-                                    $id_mst_kategori_transaksi = $id_mst_kategori_transaksi;
+                                  if(set_value('id_mst_akun')=="" && isset($id_mst_akun)){
+                                    $id_mst_akun = $id_mst_akun;
                                   }else{
-                                    $id_mst_kategori_transaksi = set_value('id_mst_kategori_transaksi');
+                                    $id_mst_akun = set_value('id_mst_akun');
                                   }
-                                  $select = $k->id_mst_kategori_transaksi == $id_mst_kategori_transaksi ? 'selected' : '' ;
+                                    $select = $a->id_mst_akun == $id_mst_akun ? 'selected' : '' ;
                                 ?>
-                                <option value="<?php echo $k->id_mst_kategori_transaksi ?>" <?php echo $select ?>><?php echo $k->nama ?></option>
-                              <?php endforeach ?>
+                                <option value="<?php echo $a->id_mst_akun ?>" <?php echo $select ?>><?php echo $a->uraian ?></option>
+                                <?php endforeach ?>
                             </select>
+                            <p id="demo"></p>
                           </div>
                           <div class="col-md-1">
                             <div class="parentDiv">
@@ -146,7 +147,7 @@
                       <div class="col-md-7">
                         <div class="row">
                           <div class="col-md-1">
-                            <input type="checkbox" name="keuinstansi_status" value="1" <?php 
+                            <input type="checkbox" name="debit_isi_otomatis" value="1" <?php 
                               if(set_value('status')=="" && isset($status)){
                                 $status = $status;
                               }else{
@@ -166,7 +167,7 @@
                         <div class="row">
                           <div class="col-md-2" style="padding-top:5px;"><label> Nilai </label> </div>
                           <div class="col-md-7">
-                            <select  name="" type="text" class="form-control">
+                            <select  name="debit_cmbx_nilai" type="text" class="form-control">
                               <?php foreach($kategori as $k) : ?>
                                   <?php
                                     if(set_value('id_mst_kategori_transaksi')=="" && isset($id_mst_kategori_transaksi)){
@@ -181,14 +182,15 @@
                             </select>
                           </div> 
                           <div class="col-md-2">
-                            <input type="text" class="form-control" name="debit_value" value="<?php 
+                            <input type="text" class="form-control" id="debit_value_nilai" name="debit_value_nilai" value="<?php 
                               if(set_value('value')=="" && isset($value)){
                                 echo $value;
                               }else{
                                 echo  set_value('value');
                               }
                               ?>">
-                          </div>
+                           </div>
+                           <p id="d_value_nilai"></p>
                           <div class="col-md-1" style="padding-top:5px;"><label>%</label> </div>
                         </div>
                       </div>
@@ -198,7 +200,7 @@
                       <div class="col-md-7">
                         <div class="row">
                           <div class="col-md-1">
-                            <input type="checkbox" name="keuinstansi_status" value="1" <?php 
+                            <input type="checkbox" name="debit_opsional" value="1" <?php 
                               if(set_value('status')=="" && isset($status)){
                               $status = $status;
                                 }else{
@@ -229,7 +231,7 @@
                       <div class="row">
                         <div class="col-md-1" style="padding-top:5px;"><label> 1 </label> </div>
                         <div class="col-md-8" style="padding-top:5px;">
-                          <select  name="" type="text" class="form-control">
+                          <select  name="kredit_akun" type="text" class="form-control">
                             <?php foreach($akun as $a) : ?>
                               <?php
                                 if(set_value('id_mst_akun')=="" && isset($id_mst_akun)){
@@ -262,7 +264,7 @@
                       <div class="col-sm-7">
                         <div class="row">
                           <div class="col-md-1">
-                            <input type="checkbox" name="keuinstansi_status" value="1" <?php 
+                            <input type="checkbox" name="kredit_isi_otomatis" value="1" <?php 
                               if(set_value('status')=="" && isset($status)){
                                 $status = $status;
                               }else{
@@ -283,7 +285,7 @@
                         <div class="row">
                           <div class="col-md-2" style="padding-top:5px;"><label> Nilai </label> </div>
                           <div class="col-md-7">
-                            <select  name="" type="text" class="form-control">
+                            <select  name="kredit_cmbx_nilai" type="text" class="form-control">
                               <?php foreach($kategori as $k) : ?>
                                   <?php
                                     if(set_value('id_mst_kategori_transaksi')=="" && isset($id_mst_kategori_transaksi)){
@@ -298,7 +300,13 @@
                             </select>
                           </div> 
                           <div class="col-md-2">
-                              <input type="text" class="form-control" name="transaksi_nama">
+                              <input type="text" class="form-control" name="kredit_value_nilai" value="<?php 
+                              if(set_value('value')=="" && isset($value)){
+                                echo $value;
+                              }else{
+                                echo  set_value('value');
+                              }
+                              ?>">
                           </div>
                           <div class="col-md-1" style="padding-top:5px;"><label>%</label> </div>
                         </div>
@@ -310,7 +318,7 @@
                       <div class="col-sm-7">
                         <div class="row">
                           <div class="col-md-1">
-                            <input type="checkbox" name="keuinstansi_status" value="1" <?php 
+                            <input type="checkbox" name="kredit_opsional" value="1" <?php 
                               if(set_value('status')=="" && isset($status)){
                               $status = $status;
                                 }else{
@@ -332,7 +340,7 @@
       </div>
     </div>
   </div>
-  
+  <?php echo CI_VERSION; ?> 
   <label>Pengaturan Transaksi</label>
 
         <div class="row" style="margin: 5px">
@@ -364,34 +372,36 @@
       });
     });
 
-    // function jurnal_transaksi() {
-    //   $("#jurnal_transaksi").append(document.getElementById('jt').innerHTML);
-    // }
+    $("select[name='debit_akun']").change(function(){
+        var id_mst_akun_debit = $(this).val();
+        alert(id_mst_akun_debit);
 
-    // function add_debit() {
-    //   $("#Debit").append(document.getElementById('debt').innerHTML);
-    //  //  for(var i =1; i<= 4; i++){
-    //  //   $('#Debit').append(document.getElementById('debt').innerHTML)
-    //  // }
-    // }
+        var data = new FormData();
+          $('#biodata_notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
+          $('#biodata_notice').show();
 
-    // function add_kredit() {
-    //   $("#Kredit").append(document.getElementById('kredit').innerHTML);
-    // }
+        data.append('id_mst_akun', id_mst_akun_debit);
+        
+        $.ajax({
+           type: 'POST',
+           url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_edit/{id}" ?>',
+           data : 'id_mst_akun='+id_mst_akun_debit,
+           success: function (response) {
+            if(response=="OK"){
+                alert("Success.");
+            }else{
+                alert("Failed.");
+            }
+           }
+        });
+    });
 
-    // function jurnal_transaksi(id) {
-    //   $.ajax({
-    //       type : 'POST',
-    //       url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_add/{id}" ?>',
-    //       success : function(response){
-    //         if(response=="OK"){
-    //           alert("Success.");
-    //         }else{
-    //           alert("Failed.");
-    //         }
-    //       }
-    //   });
-    // }
+    $("[name='debit_value_nilai']").change(function(){
+      
+      var x = document.getElementById("debit_value_nilai").value;
+      document.getElementById("d_value_nilai").innerHTML = "Text: " + x;
+    
+    });
 
     $("[name='jurnal_transaksi']").click(function(){
         var data = new FormData();
@@ -682,7 +692,7 @@
                   col_mdk_2.appendChild(add_kredit);
 
                   Kredit.appendChild(kredit);
-        
+
               }else{
                 alert("Failed.");
               }

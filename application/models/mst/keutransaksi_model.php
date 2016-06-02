@@ -89,28 +89,48 @@ class Keutransaksi_model extends CI_Model {
 
     function jurnal_transaksi_add(){
 
-        for($i=1; $i<10; $i++){
-        
+        // for($i=1; $i<10; $i++){
         $data = array(
            array(
-              'value' => $this->input->post('value'),
-              'type'  => 'debit',
-              'group' => $i
-
+              'type'         => 'debit'
            ),
            array(
-              'value' => $this->input->post('value'),
-              'type'  => 'kredit',
-              'group' => $i
-
+              'type'         => 'kredit'
+              // 'group' => $i
            )
         );  
-
-        }
-
+        // }
 
         if($this->db->insert_batch('mst_keu_transaksi_item',$data)){
             return 1;
+        }else{
+            return mysql_error();
+        }
+    }
+
+    function jurnal_transaksi_update($id){
+       
+        $data = array(
+           array(
+              'id_mst_transaksi'   => $this->input->post('id_mst_transaksi'),
+              'id_mst_akun'        => $this->input->post('id_mst_akun'),
+              'value'              => $this->input->post('value')
+           ),
+           array(
+              'id_mst_transaksi'   => $this->input->post('id_mst_transaksi'),
+              'id_mst_akun'        => $this->input->post('id_mst_akun'),
+              'value'              => $this->input->post('value')
+           )
+        );
+
+        // $data['id_mst_transaksi']        = $this->input->post('id_mst_transaksi');
+        // $data['id_mst_akun']             = $this->input->post('id_mst_akun');
+        // $data['value']                   = $this->input->post('value');
+        
+        $this->db->where('id_mst_transaksi_item',$id);
+
+        if($this->db->update_batch('mst_keu_transaksi_item', $data,'id_mst_transaksi_item')){
+            return true;
         }else{
             return mysql_error();
         }
