@@ -88,7 +88,7 @@
       
       <br><br>
       <div class="col-md-12">
-        <div class="pull-right"><label>Jurnal Transaksi</label> <a class="glyphicon glyphicon-plus" onclick="jurnal_transaksi()"></a></div>
+        <div class="pull-right"><label>Jurnal Transaksi</label> <a class="glyphicon glyphicon-plus"name="jurnal_transaksi"></a></div>
       </div>  
 
 
@@ -181,7 +181,13 @@
                             </select>
                           </div> 
                           <div class="col-md-2">
-                            <input type="text" class="form-control" name="transaksi_nama">
+                            <input type="text" class="form-control" name="debit_value" value="<?php 
+                              if(set_value('value')=="" && isset($value)){
+                                echo $value;
+                              }else{
+                                echo  set_value('value');
+                              }
+                              ?>">
                           </div>
                           <div class="col-md-1" style="padding-top:5px;"><label>%</label> </div>
                         </div>
@@ -373,261 +379,323 @@
     //   $("#Kredit").append(document.getElementById('kredit').innerHTML);
     // }
 
-    function jurnal_transaksi() {
-          //menentukan target append
-       var jurnal_transaksi = document.getElementById('jt');
-          
-          //membuat element
-        var row_parent = document.createElement('div');
-        row_parent.setAttribute('class','box box-primary');
+    // function jurnal_transaksi(id) {
+    //   $.ajax({
+    //       type : 'POST',
+    //       url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_add/{id}" ?>',
+    //       success : function(response){
+    //         if(response=="OK"){
+    //           alert("Success.");
+    //         }else{
+    //           alert("Failed.");
+    //         }
+    //       }
+    //   });
+    // }
 
-        var box_header = document.createElement('div');
-        box_header.setAttribute('class','box-header');
+    $("[name='jurnal_transaksi']").click(function(){
+        var data = new FormData();
+        $('#biodata_notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
+        $('#biodata_notice').show();
 
-        var box_body = document.createElement('div');
-        box_body.setAttribute('class','box-body');
+        data.append('value',          $("[name='debit_value']").val());
+              
+        $.ajax({
+            cache : false,
+            contentType : false,
+            processData : false,
+            type : 'POST',
+            url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_add/{id}" ?>',
+            data : data,
+            success : function(response){
+              if(response=="OK"){
+                alert("Success.");
 
-        var row_collapse = document.createElement('div');
-        row_collapse.setAttribute('id','debit2');
-        row_collapse.setAttribute('class','collapse');
+                    //menentukan target append
+                 var jurnal_transaksi = document.getElementById('jt');
+                    
+                    //membuat element
+                  var row_parent = document.createElement('div');
+                  row_parent.setAttribute('class','box box-primary');
 
-        var judul = document.createElement('h3');
-        judul.setAttribute('class','box-title');
-        judul.innerHTML = "Jurnal Pasangan";
+                  var box_header = document.createElement('div');
+                  box_header.setAttribute('class','box-header');
 
-        var Debit = document.createElement('div');
-        Debit.setAttribute('id','Debit');
-        Debit.setAttribute('class','col-sm-6');
+                  var box_body = document.createElement('div');
+                  box_body.setAttribute('class','box-body');
 
-        var row_d_1 = document.createElement('div');
-        row_d_1.setAttribute('class','row');
+                  var row_collapse = document.createElement('div');
+                  row_collapse.setAttribute('id','debit2');
+                  row_collapse.setAttribute('class','collapse');
 
-        var row_lbl_debit = document.createElement('div');
-        row_lbl_debit.setAttribute('class','col-md-7');
-        row_lbl_debit.setAttribute('style','padding-top:5px');
+                  var judul = document.createElement('h3');
+                  judul.setAttribute('class','box-title');
+                  judul.innerHTML = "Jurnal Pasangan";
 
-        var lbl_debit = document.createElement('label');
-        lbl_debit.innerHTML ='Debit';
+                  var Debit = document.createElement('div');
+                  Debit.setAttribute('id','Debit');
+                  Debit.setAttribute('class','col-sm-6');
 
-        var add_debit = document.createElement('div');
-        add_debit.setAttribute('class','col-md-1');
-        add_debit.innerHTML = '<a class="glyphicon glyphicon-plus" onclick="add_debit(Debit)"></a>';
+                  var row_d_1 = document.createElement('div');
+                  row_d_1.setAttribute('class','row');
 
-        var debt = document.createElement('div');
-        debt.setAttribute('id','debt');
+                  var row_lbl_debit = document.createElement('div');
+                  row_lbl_debit.setAttribute('class','col-md-7');
+                  row_lbl_debit.setAttribute('style','padding-top:5px');
 
-        var row_d_2 = document.createElement('div');
-        row_d_2.setAttribute('class','row');
+                  var lbl_debit = document.createElement('label');
+                  lbl_debit.innerHTML ='Debit';
 
-        var col_md = document.createElement('div');
-        col_md.setAttribute('class','col-md-12');
+                  var add_debit = document.createElement('div');
+                  add_debit.setAttribute('class','col-md-1');
+                  add_debit.innerHTML = '<a class="glyphicon glyphicon-plus" onclick="add_debit(Debit)"></a>';
 
-        var row_d_6 = document.createElement('div');
-        row_d_6.setAttribute('class','row');
+                  var debt = document.createElement('div');
+                  debt.setAttribute('id','debt');
 
-        var col_md_2 = document.createElement('div');
-        col_md_2.setAttribute('class','col-md-8');
-        col_md_2.setAttribute('style','padding-top:5px');
+                  var row_d_2 = document.createElement('div');
+                  row_d_2.setAttribute('class','row');
 
-        var cmb_box_debit = document.createElement('select');
-        var options = ["1", "2", "3", "4", "5"];
-        for(var i = 0; i < options.length; i++) {
-            var opt = options[i];
-            var el = document.createElement("option");
-            el.textContent = opt;
-            el.value = opt;
-            cmb_box_debit.appendChild(el);
-        }
-        cmb_box_debit.setAttribute('name', 'cmb_box_debit');
-        cmb_box_debit.setAttribute('class', 'form-control');
+                  var col_md = document.createElement('div');
+                  col_md.setAttribute('class','col-md-12');
 
-        var col_md_3 = document.createElement('div');
-        col_md_3.setAttribute('class','col-md-1');
+                  var row_d_6 = document.createElement('div');
+                  row_d_6.setAttribute('class','row');
 
-        var parentDiv = document.createElement('div');
-        parentDiv.setAttribute('class','parentDiv');
-        parentDiv.innerHTML = '<a href="#" data-toggle="collapse" data-target="#debit2" class="toggle_sign glyphicon glyphicon-chevron-down"></a>';
+                  var col_md_2 = document.createElement('div');
+                  col_md_2.setAttribute('class','col-md-8');
+                  col_md_2.setAttribute('style','padding-top:5px');
 
-        var debit = document.createElement('div');
-        debit.setAttribute('id','debit2');
-        debit.setAttribute('class','collapse');
+                  var cmb_box_debit = document.createElement('select');
+                  var options = ["1", "2", "3", "4", "5"];
+                  for(var i = 0; i < options.length; i++) {
+                      var opt = options[i];
+                      var el = document.createElement("option");
+                      el.textContent = opt;
+                      el.value = opt;
+                      cmb_box_debit.appendChild(el);
+                  }
+                  cmb_box_debit.setAttribute('name', 'cmb_box_debit');
+                  cmb_box_debit.setAttribute('class', 'form-control');
 
-        var row_d_3 = document.createElement('div');
-        row_d_3.setAttribute('class','row');
+                  var col_md_3 = document.createElement('div');
+                  col_md_3.setAttribute('class','col-md-1');
 
-        var col_md_4 = document.createElement('div');
-        col_md_4.setAttribute('class','col-md-7');
+                  var parentDiv = document.createElement('div');
+                  parentDiv.setAttribute('class','parentDiv');
+                  parentDiv.innerHTML = '<a href="#" data-toggle="collapse" data-target="#debit2" class="toggle_sign glyphicon glyphicon-chevron-down"></a>';
 
-        var row_d_7 = document.createElement('div');
-        row_d_7.setAttribute('class','row');
+                  var debit = document.createElement('div');
+                  debit.setAttribute('id','debit2');
+                  debit.setAttribute('class','collapse');
 
-        var col_md_5 = document.createElement('div');
-        col_md_5.setAttribute('class','col-md-1');
+                  var row_d_3 = document.createElement('div');
+                  row_d_3.setAttribute('class','row');
+
+                  var col_md_4 = document.createElement('div');
+                  col_md_4.setAttribute('class','col-md-7');
+
+                  var row_d_7 = document.createElement('div');
+                  row_d_7.setAttribute('class','row');
+
+                  var col_md_5 = document.createElement('div');
+                  col_md_5.setAttribute('class','col-md-1');
+                  
+                  var cbx_isi_otomatis = document.createElement('input');
+                  cbx_isi_otomatis.setAttribute('type','checkbox');
+
+                  var col_md_6 = document.createElement('div');
+                  col_md_6.setAttribute('class','col-md-6');
+                  
+                  var lbl_isi_otomatis = document.createElement('label');
+                  lbl_isi_otomatis.innerHTML ='Isi Otomatis';
+
+                  var row_d_4 = document.createElement('div');
+                  row_d_4.setAttribute('class','row');
+
+                  var col_md_7 = document.createElement('div');
+                  col_md_7.setAttribute('class','col-sm-1');
+                  
+                  var col_md_8 = document.createElement('div');
+                  col_md_8.setAttribute('class','col-sm-10');
+
+                  var row_d_8 = document.createElement('div');
+                  row_d_8.setAttribute('class','row');
+
+                  var col_md_9 = document.createElement('div');
+                  col_md_9.setAttribute('class','col-md-2');
+                  col_md_9.setAttribute('style','padding-top:5px');
+
+                  var lbl_nilai = document.createElement('label');
+                  lbl_nilai.innerHTML="Nilai";
+
+                  var col_md_10 = document.createElement('div');
+                  col_md_10.setAttribute('class','col-md-7');
+
+                  var cmb_box_nilai = document.createElement('select');
+                   var options = ["1", "2", "3", "4", "5"];
+                  for(var i = 0; i < options.length; i++) {
+                      var opt = options[i];
+                      var el = document.createElement("option");
+                      el.textContent = opt;
+                      el.value = opt;
+                      cmb_box_debit.appendChild(el);
+                  }
+                  cmb_box_nilai.setAttribute('name', 'cmb_box_nilai');
+                  cmb_box_nilai.setAttribute('class', 'form-control');
+
+                  var col_md_11 = document.createElement('div');
+                  col_md_11.setAttribute('class','col-md-2');
+
+                  var txt_nilai =document.createElement('input');
+                  txt_nilai.setAttribute('class','form-control');
+                  txt_nilai.setAttribute('name','txt_nilai');
+
+                  var col_md_12 = document.createElement('div');
+                  col_md_12.setAttribute('class','col-md-1');
+                  col_md_12.setAttribute('style','padding-top:5px');
+
+                  var lbl_persen = document.createElement('label');
+                  lbl_persen.innerHTML = "%";
+
+                  var row_d_5 = document.createElement('div');
+                  row_d_5.setAttribute('class','row');
+
+                  var col_md_13 = document.createElement('div');
+                  col_md_13.setAttribute('class','col-md-7');
+
+                  var row_d_9 = document.createElement('div');
+                  row_d_9.setAttribute('class','row');
+
+                  var col_md_14 = document.createElement('div');
+                  col_md_14.setAttribute('class','col-md-1');
+
+                  var cbx_opsional = document.createElement('input');
+                  cbx_opsional.setAttribute('type','checkbox');
+
+                  var col_md_15 = document.createElement('div');
+                  col_md_15.setAttribute('class','col-md-3');
+                  col_md_15.setAttribute('style','padding-top:5px');
+
+                  var lbl_opsional = document.createElement('label');
+                  lbl_opsional.innerHTML = "Opsional";
+
+
+                  var Kredit = document.createElement('div');
+                  Kredit.setAttribute('id','Kredit');
+                  Kredit.setAttribute('class','col-sm-6');
+
+                  var row_k_1 = document.createElement('div');
+                  row_k_1.setAttribute('class','row');
+
+                  var col_mdk_1 = document.createElement('div');
+                  col_mdk_1.setAttribute('class','col-md-8');
+                  col_mdk_1.setAttribute('style','padding-top:5px');
+
+                  var lbl_kredit = document.createElement('label');
+                  lbl_kredit.innerHTML = "Kredit";
+
+                  var col_mdk_2 = document.createElement('div');
+                  col_mdk_2.setAttribute('class','col-md-2');
+
+                  var add_kredit = document.createElement('div');
+                  add_kredit.innerHTML = '<a class="glyphicon glyphicon-plus" onclick="add_kredit()"></a>';
+
+                  var kredit = document.createElement('div');
+                  kredit.setAttribute('id','kredit');
+
+
+                  var row = document.createElement('div');
+                  row.setAttribute('class','row');
+
+                    //meng append element
+                  jurnal_transaksi.appendChild(row_parent);
+                  row_parent.appendChild(box_header);
+                  row_parent.appendChild(box_body);
+
+                  box_header.appendChild(judul);
+                  box_body.appendChild(row);
+
+                  row.appendChild(Debit);
+                  Debit.appendChild(row_d_1);
+                  row_d_1.appendChild(row_lbl_debit);
+                  row_lbl_debit.appendChild(lbl_debit);
+                  row_d_1.appendChild(add_debit);
+
+                  Debit.appendChild(debt);
+                  
+                  debt.appendChild(row_d_2);
+                  row_d_2.appendChild(col_md);
+
+                  col_md.appendChild(row_d_6);
+                  row_d_6.appendChild(col_md_2);
+                  
+                  col_md_2.appendChild(cmb_box_debit);
+
+                  row_d_6.appendChild(col_md_3);
+                  col_md_3.appendChild(parentDiv);
+
+                  debt.appendChild(debit);
+                  debit.appendChild(row_d_3);
+                  row_d_3.appendChild(col_md_4);
+
+                  col_md_4.appendChild(row_d_7);
+                  row_d_7.appendChild(col_md_5);
+                  col_md_5.appendChild(cbx_isi_otomatis);
+                  row_d_7.appendChild(col_md_6);
+                  col_md_6.appendChild(lbl_isi_otomatis);
+
+                  debit.appendChild(row_d_4);
+                  row_d_4.appendChild(col_md_7);
+                  row_d_4.appendChild(col_md_8);
+                  col_md_8.appendChild(row_d_8);
+
+                  row_d_8.appendChild(col_md_9);
+                  col_md_9.appendChild(lbl_nilai);
+
+                  row_d_8.appendChild(col_md_10);
+                  col_md_10.appendChild(cmb_box_nilai);
+
+                  row_d_8.appendChild(col_md_11);
+                  col_md_11.appendChild(txt_nilai);
+
+                  row_d_8.appendChild(col_md_12);
+                  col_md_12.appendChild(lbl_persen);
+
+                  debit.appendChild(row_d_5);
+                  row_d_5.appendChild(col_md_13);
+                  col_md_13.appendChild(row_d_9);
+
+                  row_d_9.appendChild(col_md_14);
+                  col_md_14.appendChild(cbx_opsional);
+
+                  row_d_9.appendChild(col_md_15);
+                  col_md_15.appendChild(lbl_opsional);
+
+                  row.appendChild(Kredit);
+                  Kredit.appendChild(row_k_1);
+
+                  row_k_1.appendChild(col_mdk_1);
+                  col_mdk_1.appendChild(lbl_kredit);
+
+                  row_k_1.appendChild(col_mdk_2);
+                  col_mdk_2.appendChild(add_kredit);
+
+                  Kredit.appendChild(kredit);
         
-        var cbx_isi_otomatis = document.createElement('input');
-        cbx_isi_otomatis.setAttribute('type','checkbox');
+              }else{
+                alert("Failed.");
+              }
+            }
+        });
 
-        var col_md_6 = document.createElement('div');
-        col_md_6.setAttribute('class','col-md-6');
-        
-        var lbl_isi_otomatis = document.createElement('label');
-        lbl_isi_otomatis.innerHTML ='Isi Otomatis';
-
-        var row_d_4 = document.createElement('div');
-        row_d_4.setAttribute('class','row');
-
-        var col_md_7 = document.createElement('div');
-        col_md_7.setAttribute('class','col-sm-1');
-        
-        var col_md_8 = document.createElement('div');
-        col_md_8.setAttribute('class','col-sm-10');
-
-        var row_d_8 = document.createElement('div');
-        row_d_8.setAttribute('class','row');
-
-        var col_md_9 = document.createElement('div');
-        col_md_9.setAttribute('class','col-md-2');
-        col_md_9.setAttribute('style','padding-top:5px');
-
-        var lbl_nilai = document.createElement('label');
-        lbl_nilai.innerHTML="Nilai";
-
-        var col_md_10 = document.createElement('div');
-        col_md_10.setAttribute('class','col-md-7');
-
-        var cmb_box_nilai = document.createElement('select');
-         var options = ["1", "2", "3", "4", "5"];
-        for(var i = 0; i < options.length; i++) {
-            var opt = options[i];
-            var el = document.createElement("option");
-            el.textContent = opt;
-            el.value = opt;
-            cmb_box_debit.appendChild(el);
-        }
-        cmb_box_nilai.setAttribute('name', 'cmb_box_nilai');
-        cmb_box_nilai.setAttribute('class', 'form-control');
-
-        var col_md_11 = document.createElement('div');
-        col_md_11.setAttribute('class','col-md-2');
-
-        var txt_nilai =document.createElement('input');
-        txt_nilai.setAttribute('class','form-control');
-        txt_nilai.setAttribute('name','txt_nilai');
-
-        var col_md_12 = document.createElement('div');
-        col_md_12.setAttribute('class','col-md-1');
-        col_md_12.setAttribute('style','padding-top:5px');
-
-        var lbl_persen = document.createElement('label');
-        lbl_persen.innerHTML = "%";
-
-        var row_d_5 = document.createElement('div');
-        row_d_5.setAttribute('class','row');
-
-        var col_md_13 = document.createElement('div');
-        col_md_13.setAttribute('class','col-md-7');
-
-        var row_d_9 = document.createElement('div');
-        row_d_9.setAttribute('class','row');
-
-        var col_md_14 = document.createElement('div');
-        col_md_14.setAttribute('class','col-md-1');
-
-        var cbx_opsional = document.createElement('input');
-        cbx_opsional.setAttribute('type','checkbox');
-
-        var col_md_15 = document.createElement('div');
-        col_md_15.setAttribute('class','col-md-3');
-        col_md_15.setAttribute('style','padding-top:5px');
-
-        var lbl_opsional = document.createElement('label');
-        lbl_opsional.innerHTML = "Opsional";
+        return false;
 
 
-        var Kredit = document.createElement('div');
-        Kredit.setAttribute('id','Kredit');
-        Kredit.setAttribute('class','class="col-sm-6');
 
-        var row_k_1 = document.createElement('div');
-        row_k_1.setAttribute('class','row');
+    });
 
-        var kredit = document.createElement('div');
-        kredit.setAttribute('id','kredit');
-
-
-        var row = document.createElement('div');
-        row.setAttribute('class','row');
-
-          //meng append element
-        jurnal_transaksi.appendChild(row_parent);
-        row_parent.appendChild(box_header);
-        row_parent.appendChild(box_body);
-
-        box_header.appendChild(judul);
-        box_body.appendChild(row);
-
-        row.appendChild(Debit);
-        Debit.appendChild(row_d_1);
-        row_d_1.appendChild(row_lbl_debit);
-        row_lbl_debit.appendChild(lbl_debit);
-        row_d_1.appendChild(add_debit);
-
-        Debit.appendChild(debt);
-        
-        debt.appendChild(row_d_2);
-        row_d_2.appendChild(col_md);
-
-        col_md.appendChild(row_d_6);
-        row_d_6.appendChild(col_md_2);
-        
-        col_md_2.appendChild(cmb_box_debit);
-
-        row_d_6.appendChild(col_md_3);
-        col_md_3.appendChild(parentDiv);
-
-        debt.appendChild(debit);
-        debit.appendChild(row_d_3);
-        row_d_3.appendChild(col_md_4);
-
-        col_md_4.appendChild(row_d_7);
-        row_d_7.appendChild(col_md_5);
-        col_md_5.appendChild(cbx_isi_otomatis);
-        row_d_7.appendChild(col_md_6);
-        col_md_6.appendChild(lbl_isi_otomatis);
-
-        debit.appendChild(row_d_4);
-        row_d_4.appendChild(col_md_7);
-        row_d_4.appendChild(col_md_8);
-        col_md_8.appendChild(row_d_8);
-
-        row_d_8.appendChild(col_md_9);
-        col_md_9.appendChild(lbl_nilai);
-
-        row_d_8.appendChild(col_md_10);
-        col_md_10.appendChild(cmb_box_nilai);
-
-        row_d_8.appendChild(col_md_11);
-        col_md_11.appendChild(txt_nilai);
-
-        row_d_8.appendChild(col_md_12);
-        col_md_12.appendChild(lbl_persen);
-
-        debit.appendChild(row_d_5);
-        row_d_5.appendChild(col_md_13);
-        col_md_13.appendChild(row_d_9);
-
-        row_d_9.appendChild(col_md_14);
-        col_md_14.appendChild(cbx_opsional);
-
-        row_d_9.appendChild(col_md_15);
-        col_md_15.appendChild(lbl_opsional);
-
-        row.appendChild(Kredit);
-        Kredit.appendChild(row_k_1);
-        Kredit.appendChild(kredit);
-
-
-    }
+    // }
 
      var counter = 1;
     function add_kredit() {
@@ -1040,7 +1108,7 @@
             contentType : false,
             processData : false,
             type : 'POST',
-            url : '<?php echo base_url()."mst/keuangan_transaksi/transaksi_{action}/{id}"   ?>',
+            url : '<?php echo base_url()."mst/keuangan_transaksi/transaksi_{action}/{id}"?>',
             data : data,
             success : function(response){
               if(response=="OK"){
@@ -1050,30 +1118,9 @@
               }
             }
         });
-
         return false;
     });
 
-    $("[name='transaksi_template']").click(function(){
-      var data = new FormData();
-        data.append('template',     $(this).val());
-        
-        $.ajax({
-            cache : false,
-            contentType : false,
-            processData : false,
-            type : 'POST',
-            url : '<?php echo base_url()."mst/keuangan_transaksi/transaksi_template_update/".$id?>',
-            data : data,
-            success : function(response){
-              if(response=="OK"){
-                $("#transaksi_template").prop("checked", true);
-              }else{
-                $("#transaksi_template").prop("checked", false);
-              }
-            }
-        });
-    });
 
 
     function clearForm(form_transaksi) {

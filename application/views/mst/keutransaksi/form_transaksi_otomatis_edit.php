@@ -93,7 +93,7 @@
       </div> 
       <br><br>
       <div class="col-md-12">
-        <div class="pull-right"><label>Jurnal Transaksi</label> <a href="#" class="glyphicon glyphicon-plus"></a></div>
+        <div class="pull-right"><label>Daftar Transaksi</label> <a onclick="add_transaksi_otomatis" class="glyphicon glyphicon-plus"></a></div>
       </div>  
 
     <div class="col-md-12">

@@ -87,6 +87,35 @@ class Keutransaksi_model extends CI_Model {
         return $data;
     }
 
+    function jurnal_transaksi_add(){
+
+        for($i=1; $i<10; $i++){
+        
+        $data = array(
+           array(
+              'value' => $this->input->post('value'),
+              'type'  => 'debit',
+              'group' => $i
+
+           ),
+           array(
+              'value' => $this->input->post('value'),
+              'type'  => 'kredit',
+              'group' => $i
+
+           )
+        );  
+
+        }
+
+
+        if($this->db->insert_batch('mst_keu_transaksi_item',$data)){
+            return 1;
+        }else{
+            return mysql_error();
+        }
+    }
+
     function transaksi_insert(){
 
         $data['nama']                               = $this->input->post('nama');
@@ -159,6 +188,8 @@ class Keutransaksi_model extends CI_Model {
             return mysql_error();
         }
     }
+    
+
 
     function delete_transaksi_otomatis($id){
         $this->db->where('id_mst_otomasi_transaksi',$id);
