@@ -262,6 +262,7 @@ class Penilaiandppp extends CI_Controller {
 			$data['code_cl_phc']	= $code_cl_phc;
 			$data['tahun']	= '0';
 			$data['id_mst_peg_struktur_skp']	= '0';
+			$data['idlogin']							= $this->penilaiandppp_model->idlogin();
 
 			$data['penilaian']	  	= $this->parser->parse('kepegawaian/penilaiandppp/penilaian', $data, TRUE);
 			$data['content'] 	= $this->parser->parse("kepegawaian/penilaiandppp/detail",$data,true);
@@ -275,38 +276,109 @@ class Penilaiandppp extends CI_Controller {
 		$data['tahun']				= $tahun;
 		$data['id_mst_peg_struktur_org']			= $id_mst_peg_struktur_org;
 		$data['id_mst_peg_struktur_skp']			= $id_mst_peg_struktur_skp;
+		$data['idlogin']							= $this->penilaiandppp_model->idlogin();
 		$data										= $this->penilaiandppp_model->getusername($id_pegawai);
 
-        $this->form_validation->set_rules('tugas', 'Tugas', 'trim|required');
-        $this->form_validation->set_rules('output', 'Output', 'trim|required');
-        $this->form_validation->set_rules('target', 'Target', 'trim|required');
-        $this->form_validation->set_rules('waktu', 'Waktu', 'trim|required');
-        $this->form_validation->set_rules('biaya', 'Biaya', 'trim|required');
+        $this->form_validation->set_rules('tgl_dibuat', 'Tanggal dibuat', 'trim|required');
+        $this->form_validation->set_rules('tgl_diterima_atasan', 'tanggal diterima Atasan', 'trim|required');
+        $this->form_validation->set_rules('id_pegawai', 'id Pegawai', 'trim|required');
+        $this->form_validation->set_rules('id_pegawai_penilai', 'id_penilai', 'trim|required');
+        $this->form_validation->set_rules('id_pegawai_penilai_atasan', 'id_penilai_atasan', 'trim|required');
+        $this->form_validation->set_rules('tahun', 'Tahun', 'trim|required');
+        $this->form_validation->set_rules('tanggapan_tgl', 'Tanggal Tanggapan', 'trim|required');
+        $this->form_validation->set_rules('tanggapan', 'Tanggapan', 'trim|required');
+        $this->form_validation->set_rules('username', 'username', 'trim');
+        $userdataname = $this->session->userdata('username');
+        $username = $this->input->post('username');
+		if ($username == $userdataname) {
+        	$this->form_validation->set_rules('keberatan_tgl', 'Tanggal Keberatan', 'trim|required');
+        	$this->form_validation->set_rules('keberatan', 'Keberatan', 'trim|required');
+    	}
+        $this->form_validation->set_rules('keputusan_tgl', 'Tanggal Keputusan', 'trim|required');
+        $this->form_validation->set_rules('keputusan', 'Keputusan', 'trim|required');
+        $this->form_validation->set_rules('rekomendasi', 'Rekomendasi', 'trim|required');
+        $this->form_validation->set_rules('tgl_diterima', 'Tanggal di Terima', 'trim|required');
+        $this->form_validation->set_rules('pelayanan', 'Pelayanan', 'trim|required');
+        $this->form_validation->set_rules('skp', 'SKP', 'trim|required');
+        $this->form_validation->set_rules('integritas', 'integritas', 'trim|required');
+        $this->form_validation->set_rules('komitmen', 'Komitmen', 'trim|required');
+        $this->form_validation->set_rules('disiplin', 'Disiplin', 'trim|required');
+        $this->form_validation->set_rules('kerjasama', 'Kerjasama', 'trim|required');
+        $this->form_validation->set_rules('kepemimpinan', 'Kepemimpinan', 'trim|required');
+        $this->form_validation->set_rules('jumlah', 'Jumlah', 'trim|required');
+        $this->form_validation->set_rules('ratarata', 'Rata-rata', 'trim|required');
+        $this->form_validation->set_rules('nilai_prestasi', 'Nilai Prestasi', 'trim|required');
+        $this->form_validation->set_rules('nilai_skp', 'Nilai SKP', 'trim');
+        $this->form_validation->set_rules('nilai_pelayanan', 'Nilai Pelayanan', 'trim');
+        $this->form_validation->set_rules('nilai_integritas', 'Nilai Integritas', 'trim');
+        $this->form_validation->set_rules('nilai_komitmen', 'Nilai Komitmen', 'trim');
+        $this->form_validation->set_rules('nilai_disiplin', 'Nilai Disiplin', 'trim');
+        $this->form_validation->set_rules('nilai_kerjasama', 'Nilai Kerjasama', 'trim');
+        $this->form_validation->set_rules('nilai_kepemimpinan', 'Kilai Kepemimpinan', 'trim');
+        $this->form_validation->set_rules('nilai_jumlah', 'Nilai Jumlah', 'trim');
+        $this->form_validation->set_rules('nilai_ratarata', 'Nilai Rata-rata', 'trim');
+        $this->form_validation->set_rules('nilai_nilai_prestasi', 'Nilai Prestasi', 'trim');
+        
 		if($this->form_validation->run()== FALSE){
+
 			$data['action']				= "add";
 			$data['id_pegawai']			= $id_pegawai;
 			$data['tahun']				= $tahun;
 			$data['id_mst_peg_struktur_org']			= $id_mst_peg_struktur_org;
 			$data['id_mst_peg_struktur_skp']			= $id_mst_peg_struktur_skp;
-			$data['notice']			= validation_errors();
+			$data['idlogin']							= $this->penilaiandppp_model->idlogin();
+			$data['notice']							= validation_errors();
 			die($this->parser->parse('kepegawaian/penilaiandppp/form', $data));
 		}else{
+			$tanggapan_t = explode("-", $this->input->post('tanggapan_tgl'));
+			$tanggapan_tgl = $tanggapan_t[2].'-'.$keberatan_t[1].'-'.$tanggapan_t[0];
+			$tgl_di = explode("-", $this->input->post('tgl_dibuat'));
+			$tgl_dibuat = $tgl_di[2].'-'.$tgl_di[1].'-'.$tgl_di[0];
+			$tgl_dite = explode("-", $this->input->post('tgl_diterima_atasan'));
+			$tgl_diterima_atasan = $tgl_dite[2].'-'.$tgl_dite[1].'-'.$tgl_dite[0];
+			$keputu = explode("-", $this->input->post('keputusan_tgl'));
+			$keputusan_tgl = $keputu[2].'-'.$keputu[1].'-'.$keputu[0];
+			$tgl_diterim = explode("-", $this->input->post('tgl_diterima'));
+			$tgl_diterima = $tgl_diterim[2].'-'.$tgl_diterim[1].'-'.$tgl_diterim[0];
 			
-			$code_cl = substr($code_cl_phc, 0,12);
 			$values = array(
-				'id_mst_peg_struktur_org' => $id_pegorganisasi,
-				'id_mst_peg_struktur_skp' => $this->urut($id_pegorganisasi),
-				'tugas' => $this->input->post('tugas'),
-				'ak' => '0',
-				'kuant' => '1',
-				'output' => $this->input->post('output'),
-				'target' => $this->input->post('target'),
-				'waktu' => $this->input->post('waktu'),
-				'biaya' => $this->input->post('biaya'),
-				'code_cl_phc' => $code_cl,
+				'id_pegawai' 			=> $id_pegawai,
+				'tgl_dibuat' 			=> $tgl_dibuat,
+				'tgl_diterima_atasan' 	=> $tgl_diterima_atasan,
+				'id_pegawai_penilai' 	=> $this->input->post('id_pegawai_penilai'),
+				'id_pegawai_penilai_atasan' 					=> $this->input->post('id_pegawai_penilai_atasan'),
+				'tahun' 				=> $this->input->post('tahun'),
+				'tanggapan' 			=> $this->input->post('tanggapan'),
+				'tanggapan_tgl' 		=> $this->input->post('tanggapan_tgl'),
+				'keputusan_tgl' 		=> $keputusan_tgl,
+				'keputusan' 			=> $this->input->post('keputusan'),
+				'rekomendasi' 			=> $this->input->post('rekomendasi'),
+				'skp' 					=> $this->input->post('skp'),
+				'integritas' 			=> $this->input->post('integritas'),
+				'komitmen' 				=> $this->input->post('komitmen'),
+				'pelayanan' 			=> $this->input->post('pelayanan'),
+				'disiplin' 				=> $this->input->post('disiplin'),
+				'kerjasama' 			=> $this->input->post('kerjasama'),
+				'kepemimpinan' 			=> $this->input->post('kepemimpinan'),
+				'jumlah' 				=> $this->input->post('jumlah'),
+				'ratarata' 				=> $this->input->post('ratarata'),
+				'nilai_prestasi' 		=> $this->input->post('nilai_prestasi')
 			);
+			$userdataname = $this->session->userdata('username');
+        	$username = $this->input->post('username');
+        	$keberatan_t = explode("-", $this->input->post('keberatan_tgl'));
+			$keberatan_tgl = $keberatan_t[2].'-'.$keberatan_t[1].'-'.$keberatan_t[0];
+			if ($username == $userdataname) {
+				$valuestanggapan = array(
+						'keberatan_tgl' 		=> $keberatan_tgl,
+						'keberatan' 			=> $this->input->post('keberatan')
+					);
+				$datainsert = array_merge($values,$valuestanggapan);
+			}else{
+				$datainsert = $values;
+			}
 			
-			if($this->db->insert('mst_peg_struktur_skp', $values)){
+			if($this->db->insert('pegawai_dp3', $values)){
 				die("OK|");
 			}else{
 				die("Error|Proses data gagal");
@@ -489,7 +561,8 @@ class Penilaiandppp extends CI_Controller {
 	function nipterakhirpenilai($id=0){
 		$this->db->order_by('tmt','desc');
 		$this->db->where('pegawai_pangkat.id_pegawai',$id);
-		$this->db->select("pegawai.nama,pegawai.gelar_depan,pegawai.gelar_belakang,cl_district.value,nip_nit,id_mst_peg_golruang,ruang,IF(jabatanstruktural.sk_status = 'pengangkatan' AND jabatanfungsional.sk_status = 'pengangkatan', CONCAT(jabatanstruktural.tar_nama_struktural,'-', jabatanfungsional.tar_nama_fungsional),(IF(jabatanstruktural.sk_status = 'pengangkatan', jabatanstruktural.tar_nama_struktural, (IF(jabatanfungsional.sk_status = 'pengangkatan', jabatanfungsional.tar_nama_fungsional, '-'))))) AS namajabatan");
+		$this->db->select("pegawai.nama,pegawai.gelar_depan,pegawai.gelar_belakang,cl_district.value,nip_nit,id_mst_peg_golruang,ruang,IF(jabatanstruktural.sk_status = 'pengangkatan' AND jabatanfungsional.sk_status = 'pengangkatan', CONCAT(jabatanstruktural.tar_nama_struktural,'-', jabatanfungsional.tar_nama_fungsional),(IF(jabatanstruktural.sk_status = 'pengangkatan', jabatanstruktural.tar_nama_struktural, (IF(jabatanfungsional.sk_status = 'pengangkatan', jabatanfungsional.tar_nama_fungsional, '-'))))) AS namajabatan,ifnull((select id_pegawai from pegawai_struktur where tar_id_struktur_org = (select tar_id_struktur_org_parent from mst_peg_struktur_org where tar_id_struktur_org = (SELECT 
+            tar_id_struktur_org FROM pegawai_struktur WHERE id_pegawai = pegawai_pangkat.id_pegawai))),$id) AS id_atasanpenilai");
 		$this->db->join('mst_peg_golruang','mst_peg_golruang.id_golongan = pegawai_pangkat.id_mst_peg_golruang','left');
 		$this->db->join('pegawai','pegawai.id_pegawai = pegawai_pangkat.id_pegawai','left');
 		$this->db->join('cl_district','cl_district.code = substr(pegawai_pangkat.code_cl_phc,2,4)','left');
@@ -506,6 +579,7 @@ class Penilaiandppp extends CI_Controller {
 				'pangkatterakhir' => $q->id_mst_peg_golruang.' - '.$q->ruang,  
 				'jabatanterakhir' => $q->namajabatan,  
 				'ukterakhir' => 'Dinas Kesehatan '.$q->value,    
+				'id_atasanpenilai' => $q->id_atasanpenilai,  
 			);
 			echo json_encode($nipterakhir);
 		}
@@ -570,5 +644,24 @@ class Penilaiandppp extends CI_Controller {
 
 		echo json_encode(array($json));
 	}
-	
+	function updatenilaiskp(){
+		$this->authentication->verify('kepegawaian','edit');
+		$this->form_validation->set_rules('id_pegawai','Realisasi ID Pegawait','trim|required');
+		$this->form_validation->set_rules('tahun','Realisasi tahun','trim|required');
+		$this->form_validation->set_rules('id_mst_peg_struktur_org','Realisasi id_mst_peg_struktur_org','trim|required');
+		$this->form_validation->set_rules('id_mst_peg_struktur_skp',' Realisasi id_mst_peg_struktur_skp ','trim|required');
+		$this->form_validation->set_rules('ak','ak','Realisasi trim|required');
+		$this->form_validation->set_rules('kuant','Realisasi kuant','trim|required');
+		$this->form_validation->set_rules('target','Realisasi target','trim|required');
+		$this->form_validation->set_rules('waktu','Realisasi waktu','trim|required');
+		$this->form_validation->set_rules('biaya','Realisasi biaya','trim|required');
+
+		if($this->form_validation->run()== TRUE){
+			$this->penilaiandppp_model->dppp_update();	
+			echo "0";
+		}else{			
+			$err = validation_errors();
+			echo str_replace("<p>", "", str_replace("</p>", "\n", $err));
+		}	
+	}
 }

@@ -39,12 +39,60 @@ class Penilaiandppp_model extends CI_Model {
 		$query =$this->db->get('pegawai',$limit,$start);
         return $query->result();
     }
+    function dppp_update (){
+    	
+		$biaya = $this->input->post('biaya');
+		$waktu = $this->input->post('waktu');
+		$target = $this->input->post('target');
+		$kuant = $this->input->post('kuant');
+		$ak = $this->input->post('ak');
+		$id_mst_peg_struktur_skp = $this->input->post('id_mst_peg_struktur_skp');
+		$id_mst_peg_struktur_org = $this->input->post('id_mst_peg_struktur_org');
+		$tahun = $this->input->post('tahun');
+		$id_pegawai = $this->input->post('id_pegawai');
+
+
+    	$this->db->where('id_mst_peg_struktur_org',$id_mst_peg_struktur_org);
+    	$this->db->where('id_mst_peg_struktur_org',$id_mst_peg_struktur_org);
+    	$this->db->where('id_mst_peg_struktur_org',$id_mst_peg_struktur_org);
+    	$query = $this->db->get('pegawai_skp_nilai');
+    	if ($query->num_rows() >0) {
+    		$this->db->where('id_mst_peg_struktur_org',$id_mst_peg_struktur_org);
+    	$this->db->where('id_mst_peg_struktur_org',$id_mst_peg_struktur_org);
+    	$this->db->where('id_mst_peg_struktur_org',$id_mst_peg_struktur_org);
+    		$value = array(
+    				'' => 
+    			);
+    		$this->db->insert('pegawai_skp_nilai',$value);
+    	}else{
+
+    	}
+    }
     function get_data_skp($id,$start=0,$limit=999999,$options=array())
     {
         $this->db->select("*");
         $this->db->where('id_mst_peg_struktur_org',$id);
         $query = $this->db->get('mst_peg_struktur_skp',$limit,$start);
         return $query->result();
+    }
+    function idlogin(){
+    	$id_login = $this->session->userdata('username');
+    	$this->db->where('username',$id_login);
+    	$this->db->select('app_users_list.id_pegawai AS idlogin');
+    	$this->db->join('pegawai_struktur','app_users_list.id_pegawai = pegawai_struktur.id_pegawai AND app_users_list.code = SUBSTR(pegawai_struktur.code_cl_phc,2,11)','left');
+    	$query = $this->db->get('app_users_list',1);
+    	if ($query->num_rows() >0) {
+    		foreach ($query->result() as $key) {
+    			if ($key->idlogin==null) {
+    				$data = 'puskesmas';
+    			}else{
+    				$data = $key->idlogin;
+    			}
+    		}
+    	}else{
+    		$data = '';
+    	}
+    	return $data;
     }
     function getusername($id=0){
     	$this->db->select('app_users_list.username,pegawai_struktur.tar_id_struktur_org,(SELECT tar_id_struktur_org_parent FROM mst_peg_struktur_org WHERE tar_id_struktur_org = pegawai_struktur.tar_id_struktur_org) AS parent');

@@ -1,4 +1,4 @@
-<?php if(validation_errors()!=""){ ?>
+<?php if($notice!=""){ ?>
 <div class="alert alert-warning alert-dismissable">
   <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
   <h4>  <i class="icon fa fa-check"></i> Information!</h4>
@@ -13,6 +13,12 @@
   <?php echo $this->session->flashdata('alert_form')?>
 </div>
 <?php } 
+
+if (set_value('username')=='' && isset($username)) {
+  $username = $username;
+}else{
+  $username = set_value('username');
+}
 $userdataname = $this->session->userdata('username');
 if ($username == $userdataname) {
   $funshowhidden = 'disabled=disabled';
@@ -29,7 +35,106 @@ if ($username == $userdataname) {
 }
 
 ?>
-<form action="<?php echo base_url()?>kepegawaian/penilaiandppp/add" method="post">
+<script type="text/javascript">
+    function ambil_nip_penilai()
+    {
+      var kode = "<?php echo $idlogin; ?>";
+      $.ajax({
+      url: "<?php echo base_url().'kepegawaian/penilaiandppp/nipterakhirpenilai' ?>/"+kode,
+      dataType: "json",
+      success:function(data)
+      { 
+        $.each(data,function(index,elemet){
+          $("#namapenilaiterakhir").html(elemet.namaterakhir);
+          $("#nippenilaiterakhir").html(elemet.nipterakhir);
+          $("#id_pegawai_penilai").val(elemet.nipterakhir);
+          $("#id_pegawai_penilai_atasan").val(elemet.id_atasanpenilai);
+          $("#pangkatpenilaiterakhir").html(elemet.pangkatterakhir);
+          $("#jabatanpenilaiterakhir").html(elemet.pangkatjabatanterakhir);
+          $("#unitkerjapenilaiterakhir").html(elemet.ukterakhir);
+        });
+      }
+      });
+
+      return false;
+    }
+    $(function(){
+      ambil_nip_penilai();
+        $('#form-ss-penilaidpp').submit(function(){
+            var data = new FormData();
+            $('#notice-content-pegawai').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
+            $('#notice-pegawai').show();
+            data.append('tgl_dibuat', $('#tgl_dibuat').val());
+            data.append('tgl_diterima_atasan', $('#tgl_diterima_atasan').val());
+            data.append('id_pegawai', $('#id_pegawai').val());
+            data.append('id_pegawai_penilai', $('#id_pegawai_penilai').val());
+            data.append('id_pegawai_penilai_atasan', $('#id_pegawai_penilai_atasan').val());
+            data.append('tahun', $('#tahun').val());
+            data.append('tanggapan_tgl', $('#tanggapan_tgl').val());
+            data.append('tanggapan', $('#tanggapan').val());
+            data.append('username', $('#username').val());
+            if ($('#username').val()!="<?php echo $userdataname; ?>") {
+                data.append('keberatan_tgl', $('#keberatan_tgl').val());
+                data.append('keberatan', $('#keberatan').val());
+            }
+            data.append('keputusan_tgl', $('#keputusan_tgl').val());
+            data.append('keputusan', $('#keputusan').val());
+            data.append('rekomendasi', $('#rekomendasi').val());
+            data.append('skp', $('#skp').val());
+            data.append('pelayanan', $('#pelayanan').val());
+            data.append('integritas', $('#integritas').val());
+            data.append('komitmen', $('#komitmen').val());
+            data.append('disiplin', $('#disiplin').val());
+            data.append('kerjasama', $('#kerjasama').val());
+            data.append('kepemimpinan', $('#kepemimpinan').val());
+            data.append('jumlah', $('#jumlah').val());
+            data.append('ratarata', $('#ratarata').val());
+            data.append('nilai_prestasi', $('#nilai_prestasi').val());
+            data.append('tgl_diterima', $('#tgl_diterima').val());
+            data.append('nilai_nilai_skp', $('#nilai_skp').val());
+            data.append('nilai_pelayanan', $('#nilai_pelayanan').val());
+            data.append('nilai_integritas', $('#inilai_ntegritas').val());
+            data.append('nilai_komitmen', $('#nilai_komitmen').val());
+            data.append('nilai_disiplin', $('#nilai_disiplin').val());
+            data.append('nilai_kerjasama', $('#knilai_erjasama').val());
+            data.append('nilai_kepemimpinan', $('#knilai_epemimpinan').val());
+            data.append('nilai_jumlah', $('#nilai_jumlah').val());
+            data.append('nilai_ratarata', $('#nilai_ratarata').val());
+            data.append('nilai_nilai_prestasi', $('#nilai_nilai_prestasi').val());
+            $.ajax({
+                cache : false,
+                contentType : false,
+                processData : false,
+                type : 'POST',
+                url : '<?php echo base_url()."kepegawaian/penilaiandppp/".$action."_dppp/".$id_pegawai."/".$tahun."/".$id_mst_peg_struktur_org."/".$id_mst_peg_struktur_skp ?>',
+                data : data,
+                success : function(response){
+                  var res  = response.split("|");
+                  if(res[0]=="OK"){
+                      $("#tambahjqxgrid").hide();
+                      $("#btn_back_dppp").hide();
+                      $("#btn_add_dppp").show();
+                      $("#jqxgrid").show();
+                      $("#jqxgrid").jqxGrid('updatebounddata', 'cells');
+                  }
+                  else if(res[0]=="Error"){
+                      $('#notice-pegawai').hide();
+                      $('#notice-content-pegawai').html('<div class="alert">'+res[1]+'</div>');
+                      $('#notice-pegawai').show();
+                  }
+                  else{
+                      $('#tambahjqxgrid').html(response);
+                  }
+              }
+            });
+
+            return false;
+        });
+
+        
+    });
+</script>
+ <?php echo form_open(current_url(), 'id="form-ss-penilaidpp"') ?>
       
 <div class="row">
   <div class="col-md-12">
@@ -65,33 +170,47 @@ if ($username == $userdataname) {
             ?>"></div>
         </div>
         
-        <input type="hidden" class="form-control" name="id_pegawai" id="id_pegawai" placeholder="ID Pegawai" value="<?php 
+        <input type="text" class="form-control" name="id_pegawai" id="id_pegawai" placeholder="ID Pegawai" value="<?php 
         if(set_value('id_pegawai')=="" && isset($id_pegawai)){
             echo $id_pegawai;
           }else{
             echo  set_value('id_pegawai');
           }
         ?>">
-        <input type="hidden" class="form-control" name="id_pegawai_penilai" id="id_pegawai_penilai" placeholder="ID Penilai" value="<?php 
+        <input type="text" class="form-control" name="id_pegawai_penilai" id="id_pegawai_penilai" placeholder="ID Penilai" value="<?php 
             if(set_value('id_pegawai_penilai')=="" && isset($id_pegawai_penilai)){
                 echo $id_pegawai_penilai;
               }else{
                 echo  set_value('id_pegawai_penilai');
               }
             ?>">
-        <input type="hidden" class="form-control" name="id_pegawai_penilai_atasan" id="id_pegawai_penilai_atasan" placeholder="ID Penilai Atasan" value="<?php 
+        <input type="text" class="form-control" name="id_pegawai_penilai_atasan" id="id_pegawai_penilai_atasan" placeholder="ID Penilai Atasan" value="<?php 
             if(set_value('id_pegawai_penilai_atasan')=="" && isset($id_pegawai_penilai_atasan)){
                 echo $id_pegawai_penilai_atasan;
               }else{
                 echo  set_value('id_pegawai_penilai_atasan');
               }
             ?>">
+          <input type="text" class="form-control" name="username" id="username" placeholder="username" value="<?php 
+          if(set_value('username')=="" && isset($username)){
+              echo $username;
+            }else{
+              echo  set_value('username');
+            }
+          ?>">
+          <input type="text" class="form-control" name="username" id="idlogin" placeholder="idlogin" value="<?php 
+          if(set_value('idlogin')=="" && isset($idlogin)){
+              echo $idlogin;
+            }else{
+              echo  set_value('idlogin');
+            }
+          ?>">
         <div class="form-group">
           <label>Tahun</label>
             <select <?php echo $funshowhidden;?> name="tahun" id="tahun" class="form-control">
               <?php 
-                if ($tahun!='') {
-                  $tahun = $tahun;# code...
+                if (($tahun!='')&&($tahun!='0')) {
+                  $tahun = $tahun;
                 }else{
                   $tahun = date("Y");
                 }
@@ -115,7 +234,7 @@ if ($username == $userdataname) {
 
         <div class="form-group">
           <label>Keberatan</label>
-          <textarea <?php echo $funshowhidden;?> class="form-control" name="keberatan" id="keberatan" placeholder="Keberatan"><?php 
+          <textarea <?php echo $showtanggapan;?> class="form-control" name="keberatan" id="keberatan" placeholder="Keberatan"><?php 
               if(set_value('keberatan')=="" && isset($keberatan)){
                 echo $keberatan;
               }else{
@@ -136,7 +255,7 @@ if ($username == $userdataname) {
 
         <div class="form-group">
           <label>Tanggapan</label>
-          <textarea <?php echo $showtanggapan;?> class="form-control" name="tanggapan" id="tanggapan" placeholder="Tanggapan"><?php 
+          <textarea <?php echo $funshowhidden;?> class="form-control" name="tanggapan" id="tanggapan" placeholder="Tanggapan"><?php 
               if(set_value('tanggapan')=="" && isset($tanggapan)){
                 echo $tanggapan;
               }else{
@@ -400,11 +519,11 @@ if ($username == $userdataname) {
             ?>">
           </div>
           <div class="col-md-4">
-            <input <?php echo $funshowhidden;?> type="text" class="form-control" name="ratarata" id="ratarata" placeholder="Nilai Rata - rata" value="<?php 
-              if(set_value('ratarata')=="" && isset($ratarata)){
-                  echo $ratarata;
+            <input <?php echo $funshowhidden;?> type="text" class="form-control" name="nilairatarata" id="nilairatarata" placeholder="Nilai Rata - rata" value="<?php 
+              if(set_value('nilairatarata')=="" && isset($nilairatarata)){
+                  echo $nilairatarata;
                 }else{
-                  echo  set_value('ratarata');
+                  echo  set_value('nilairatarata');
                 }
               ?>">
           </div>
@@ -424,11 +543,11 @@ if ($username == $userdataname) {
             ?>">
           </div>
           <div class="col-md-4">
-            <input <?php echo $funshowhidden;?> type="text" class="form-control" name="nilai_prestasi" id="nilai_prestasi" placeholder="Nilai Prestasi" value="<?php 
-              if(set_value('nilai_prestasi')=="" && isset($nilai_prestasi)){
-                  echo $nilai_prestasi;
+            <input <?php echo $funshowhidden;?> type="text" class="form-control" name="nilai_nilai_prestasi" id="nilai_nilai_prestasi" placeholder="Nilai Prestasi" value="<?php 
+              if(set_value('nilai_nilai_prestasi')=="" && isset($nilai_nilai_prestasi)){
+                  echo $nilai_nilai_prestasi;
                 }else{
-                  echo  set_value('nilai_prestasi');
+                  echo  set_value('nilai_nilai_prestasi');
                 }
               ?>">
           </div>
@@ -509,8 +628,8 @@ $(function(){
     $('#btn-kembali').click(function(){
         window.location.href="<?php echo base_url()?>kepegawaian/penilaiandppp";
     });
-    $("#keberatan_tgl").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme <?php echo $showhidetgl;?>});
-    $("#tanggapan_tgl").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme <?php echo $showtanggapantgl;?>});
+    $("#keberatan_tgl").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme <?php echo $showtanggapantgl;?>});
+    $("#tanggapan_tgl").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme <?php echo $showhidetgl;?>});
     $("#keputusan_tgl").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme <?php echo $showhidetgl;?>});
     $("#tgl_diterima").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme <?php echo $showhidetgl;?>});
     $("#tgl_diterima_atasan").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme <?php echo $showhidetgl;?>});
@@ -563,7 +682,7 @@ $(function(){
         updateRow: function (rowID, rowData, commit) {
             commit(true);
             var arr = $.map(rowData, function(el) { return el });         
-            alert(arr);
+            
             if(typeof(arr[1]) === 'object'){
               var arr2 = $.map(arr[1], function(el) { return el });
               if(arr[4] + '' + arr[5] + '' + arr[6] + '' + arr[7]+ '' + arr[8]!='') {
@@ -575,19 +694,19 @@ $(function(){
                     }
                 });
               }
-            }else{      
-              $.post( '<?php echo base_url()?>kepegawaian/penilaiandppp/edit_dpp', 
+            }else{    
+              $.post( '<?php echo base_url()?>kepegawaian/penilaiandppp/updatenilaiskp', 
                 {
                   row:rowID,
-                  id_pegawai:arr[0] ,
-                  tahun:arr[1], 
-                  id_mst_peg_struktur_org:arr[2], 
-                  id_mst_peg_struktur_skp : arr[3], 
-                  ak : arr[4], 
-                  kuant:arr[5], 
-                  target : arr[6],
-                  waktu : arr[6],
-                  biaya : arr[6]
+                  id_pegawai:"<?php echo $id_pegawai?>",
+                  tahun:$('#tahun').val(), 
+                  id_mst_peg_struktur_org: "<?php echo $id_mst_peg_struktur_org?>", 
+                  id_mst_peg_struktur_skp : arr[2], 
+                  ak : arr[12], 
+                  kuant:arr[13], 
+                  target : arr[13],
+                  waktu : arr[14],
+                  biaya : arr[15]
                 },
                 function( data ) {
                   if(data != 0){

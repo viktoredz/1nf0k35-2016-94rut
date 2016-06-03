@@ -196,7 +196,7 @@ $(function(){
     }
     function ambil_nip_penilai()
     {
-      var kode = "<?php echo $this->session->userdata('username'); ?>";
+      var kode = "<?php echo $idlogin ?>";
       $.ajax({
       url: "<?php echo base_url().'kepegawaian/penilaiandppp/nipterakhirpenilai' ?>/"+kode,
       dataType: "json",
