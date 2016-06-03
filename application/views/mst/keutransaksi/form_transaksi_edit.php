@@ -105,7 +105,7 @@
                   <div class="row">
                     <div class="col-md-7" style="padding-top:5px;"><label> Debit </label> </div>
                     <div class="col-md-1">
-                      <a class="glyphicon glyphicon-plus" onclick="add_debit('Debit');"></a>
+                      <a class="glyphicon glyphicon-plus" name="add_debit"></a>
                     </div> 
                   </div>
 
@@ -340,7 +340,7 @@
       </div>
     </div>
   </div>
-  <?php echo CI_VERSION; ?> 
+  
   <label>Pengaturan Transaksi</label>
 
         <div class="row" style="margin: 5px">
@@ -402,6 +402,49 @@
       document.getElementById("d_value_nilai").innerHTML = "Text: " + x;
     
     });
+
+    var form_debit = '<div id="debt">\
+          <div class="row">\
+            <div class="col-md-12">\
+              <div class="row">\
+                <div class="col-md-8" style="padding-top:5px;">\
+                 <select  name="debit_akun" id="debit_akun" class="form-control"\ type="text">\
+                    <?php foreach($akun as $a) : ?>\
+                      <?php
+                        if(set_value('id_mst_akun')=="" && isset($id_mst_akun)){
+                          $id_mst_akun = $id_mst_akun;
+                        }else{
+                          $id_mst_akun = set_value('id_mst_akun');
+                        }
+                          $select = $a->id_mst_akun == $id_mst_akun ? 'selected' : '' ;
+                      ?>\
+                      <option value="<?php echo $a->id_mst_akun ?>"\
+                      <?php echo $select ?>><?php echo $a->uraian ?>\
+                      </option>\
+                      <?php endforeach ?>\
+                  </select>\
+                  <p id="demo">\
+                  </p>\
+                </div>\
+                <div class="col-md-1">\
+                  <div class="parentDiv">\
+                    <a data-toggle="collapse" data-target="#debit" class="toggle_sign glyphicon glyphicon-chevron-down">\
+                    </a>\
+                  </div>\
+                </div>\
+                <div class="col-md-2">\
+                  <a href="#" class="glyphicon glyphicon-trash">\
+                  </a>\
+                </div>\
+          </div>\
+        </div>\
+      </div>';
+
+
+  $("[name='add_debit']").click(function() {
+          $('#Debit').append(form_debit);
+      });
+
 
     $("[name='jurnal_transaksi']").click(function(){
         var data = new FormData();
@@ -493,7 +536,7 @@
 
                   var parentDiv = document.createElement('div');
                   parentDiv.setAttribute('class','parentDiv');
-                  parentDiv.innerHTML = '<a href="#" data-toggle="collapse" data-target="#debit2" class="toggle_sign glyphicon glyphicon-chevron-down"></a>';
+                  parentDiv.innerHTML = '<a data-toggle="collapse" data-target="#debit2" class="toggle_sign glyphicon glyphicon-chevron-down"></a>';
 
                   var debit = document.createElement('div');
                   debit.setAttribute('id','debit2');
@@ -897,8 +940,8 @@
         label_ck2.appendChild(label_opsional);
         empty2.appendChild(label_no);
 
-        hapus.innerHTML = '<a href="#" class="glyphicon glyphicon-trash"></a>';
-        collapse.innerHTML = '<a href="#" data-toggle="collapse" data-target="#kredit_collapse" class="toggle_sign glyphicon glyphicon-chevron-down"></a>';
+        hapus.innerHTML = '<a class="glyphicon glyphicon-trash"></a>';
+        collapse.innerHTML = '<a data-toggle="collapse" data-target="#kredit_collapse" class="toggle_sign glyphicon glyphicon-chevron-down"></a>';
 
           //membuat aksi delete element
         hapus.onclick = function () {
@@ -911,188 +954,187 @@
         i++;
     }
 
-    function add_debit() {
-          //menentukan target append
-        var Debit = document.getElementById('Debit');
+    // function add_debit() {
+    //       //menentukan target append
+    //     var Debit = document.getElementById('Debit');
         
-          //membuat element
-        var row_parent = document.createElement('div');
-        row_parent.setAttribute('id','debt2');
+    //       //membuat element
+    //     var row_parent = document.createElement('div');
+    //     row_parent.setAttribute('id','debt2');
 
-        var row_collapse = document.createElement('div');
-        row_collapse.setAttribute('id','debit2');
-        row_collapse.setAttribute('class','collapse');
+    //     var row_collapse = document.createElement('div');
+    //     row_collapse.setAttribute('id','debit2');
+    //     row_collapse.setAttribute('class','collapse');
 
-        var row = document.createElement('div');
-        row.setAttribute('class','row');
+    //     var row = document.createElement('div');
+    //     row.setAttribute('class','row');
 
-        var row2 = document.createElement('div');
-        row2.setAttribute('class','row');
+    //     var row2 = document.createElement('div');
+    //     row2.setAttribute('class','row');
 
-        var row3 = document.createElement('div');
-        row3.setAttribute('class','row');
+    //     var row3 = document.createElement('div');
+    //     row3.setAttribute('class','row');
 
-        var row4 = document.createElement('div');
-        row4.setAttribute('class','row');
+    //     var row4 = document.createElement('div');
+    //     row4.setAttribute('class','row');
 
-        var jenis = document.createElement('div');
-        jenis.setAttribute('class','col-md-8');
-        jenis.setAttribute('style','padding-top:5px');
+    //     var jenis = document.createElement('div');
+    //     jenis.setAttribute('class','col-md-8');
+    //     jenis.setAttribute('style','padding-top:5px');
 
-        var aksi = document.createElement('div');
-        aksi.setAttribute('class','col-md-1');
+    //     var aksi = document.createElement('div');
+    //     aksi.setAttribute('class','col-md-1');
 
-        var aksi_collapse = document.createElement('div');
-        aksi_collapse.setAttribute('class','col-md-1');
+    //     var aksi_collapse = document.createElement('div');
+    //     aksi_collapse.setAttribute('class','col-md-1');
 
-        var hapus = document.createElement('div');
-        hapus.setAttribute('class','col-md-1');
+    //     var hapus = document.createElement('div');
+    //     hapus.setAttribute('class','col-md-1');
 
-        var collapse = document.createElement('div');
-        collapse.setAttribute('class','parentDiv');
+    //     var collapse = document.createElement('div');
+    //     collapse.setAttribute('class','parentDiv');
 
-        var ck1 = document.createElement('div');
-        ck1.setAttribute('class','col-md-1');
+    //     var ck1 = document.createElement('div');
+    //     ck1.setAttribute('class','col-md-1');
 
-        var label_ck1 = document.createElement('div');
-        label_ck1.setAttribute('class','col-md-6');
-        label_ck1.setAttribute('style','padding-top:5px');
+    //     var label_ck1 = document.createElement('div');
+    //     label_ck1.setAttribute('class','col-md-6');
+    //     label_ck1.setAttribute('style','padding-top:5px');
 
-        var empty = document.createElement('div');
-        empty.setAttribute('class','col-sm-1');
+    //     var empty = document.createElement('div');
+    //     empty.setAttribute('class','col-sm-1');
 
-        var content_nilai = document.createElement('div');
-        content_nilai.setAttribute('class','col-sm-10');
+    //     var content_nilai = document.createElement('div');
+    //     content_nilai.setAttribute('class','col-sm-10');
 
-        var row_content_nilai = document.createElement('div');
-        row_content_nilai.setAttribute('class','row');
+    //     var row_content_nilai = document.createElement('div');
+    //     row_content_nilai.setAttribute('class','row');
 
-        var label_n = document.createElement('div');
-        label_n.setAttribute('class','col-sm-2');
-        label_n.setAttribute('style','padding-top:13px');
+    //     var label_n = document.createElement('div');
+    //     label_n.setAttribute('class','col-sm-2');
+    //     label_n.setAttribute('style','padding-top:13px');
 
-        var cmb_box_n = document.createElement('div');
-        cmb_box_n.setAttribute('class','col-sm-7');
-        cmb_box_n.setAttribute('style','padding-top:5px');
+    //     var cmb_box_n = document.createElement('div');
+    //     cmb_box_n.setAttribute('class','col-sm-7');
+    //     cmb_box_n.setAttribute('style','padding-top:5px');
 
-        var input_n = document.createElement('div');
-        input_n.setAttribute('class','col-md-2');
-        input_n.setAttribute('style','padding-top:5px');
+    //     var input_n = document.createElement('div');
+    //     input_n.setAttribute('class','col-md-2');
+    //     input_n.setAttribute('style','padding-top:5px');
 
-        var label_n_2 = document.createElement('div');
-        label_n_2.setAttribute('class','col-sm-1');
-        label_n_2.setAttribute('style','padding-top:7px');
+    //     var label_n_2 = document.createElement('div');
+    //     label_n_2.setAttribute('class','col-sm-1');
+    //     label_n_2.setAttribute('style','padding-top:7px');
 
-        var ck2 = document.createElement('div');
-        ck2.setAttribute('class','col-md-1');
+    //     var ck2 = document.createElement('div');
+    //     ck2.setAttribute('class','col-md-1');
 
-        var label_ck2 = document.createElement('div');
-        label_ck2.setAttribute('class','col-md-6');
-        label_ck2.setAttribute('style','padding-top:5px');
-
-
-          //meng append element
-        Debit.appendChild(row_parent);
-        row_parent.appendChild(row);
-        row_parent.appendChild(row_collapse);
-        row_collapse.appendChild(row2);
-        row_collapse.appendChild(row3);
-        row_collapse.appendChild(row4);
-
-        row.appendChild(jenis);
-        row.appendChild(aksi_collapse);
-        row.appendChild(aksi);
-
-        row2.appendChild(ck1);
-        row2.appendChild(label_ck1);
-
-        row3.appendChild(empty);
-        row3.appendChild(content_nilai);
-        content_nilai.appendChild(row_content_nilai);
-        row_content_nilai.appendChild(label_n);
-        row_content_nilai.appendChild(cmb_box_n);
-        row_content_nilai.appendChild(input_n);
-        row_content_nilai.appendChild(label_n_2);
-
-        row4.appendChild(ck2);
-        row4.appendChild(label_ck2);
-
-          //membuat element input
-        var jenis_input = document.createElement('select');
-        var options = ["1", "2", "3", "4", "5"];
-        for(var i = 0; i < options.length; i++) {
-            var opt = options[i];
-            var el = document.createElement("option");
-            el.textContent = opt;
-            el.value = opt;
-            jenis_input.appendChild(el);
-        }
-        jenis_input.setAttribute('name', 'jenis_input[' + i + ']');
-        jenis_input.setAttribute('class', 'form-control');
-
-        var isi_otomatis = document.createElement('input');
-        isi_otomatis.setAttribute('type','checkbox');
-
-        var label_isi_otomatis = document.createElement('label');
-        label_isi_otomatis.innerHTML = "Isi Otomatis";
-
-        var label_nilai = document.createElement('label');
-        label_nilai.innerHTML = "Nilai";
-
-        var label_persen = document.createElement('label');
-        label_persen.innerHTML = "%";
-
-        var cmb_box_nilai = document.createElement('select');
-        var options = ["1", "2", "3", "4", "5"];
-        for(var i = 0; i < options.length; i++) {
-            var opt = options[i];
-            var el = document.createElement("option");
-            el.textContent = opt;
-            el.value = opt;
-            jenis_input.appendChild(el);
-        }
-        cmb_box_nilai.setAttribute('name', 'cmb_bx_nilai');
-        cmb_box_nilai.setAttribute('class', 'form-control');
-
-        var input_nilai = document.createElement('input');
-        input_nilai.setAttribute('class','form-control');
-        input_nilai.setAttribute('type','text');
-        input_nilai.setAttribute('name','nilai');
-
-        var opsional = document.createElement('input');
-        opsional.setAttribute('type','checkbox');
-
-        var label_opsional = document.createElement('label');
-        label_opsional.innerHTML = "Opsional";
+    //     var label_ck2 = document.createElement('div');
+    //     label_ck2.setAttribute('class','col-md-6');
+    //     label_ck2.setAttribute('style','padding-top:5px');
 
 
-          //meng append element input
-        jenis.appendChild(jenis_input);
-        aksi_collapse.appendChild(collapse);
-        aksi.appendChild(hapus);
-        ck1.appendChild(isi_otomatis);
-        label_ck1.appendChild(label_isi_otomatis);
-        label_n.appendChild(label_nilai);
-        label_n_2.appendChild(label_persen);
-        cmb_box_n.appendChild(cmb_box_nilai);
-        input_n.appendChild(input_nilai);
-        ck2.appendChild(opsional);
-        label_ck2.appendChild(label_opsional);
+    //       //meng append element
+    //     Debit.appendChild(row_parent);
+    //     row_parent.appendChild(row);
+    //     row_parent.appendChild(row_collapse);
+    //     row_collapse.appendChild(row2);
+    //     row_collapse.appendChild(row3);
+    //     row_collapse.appendChild(row4);
 
-        hapus.innerHTML = '<a href="#" class="glyphicon glyphicon-trash"></a>';
-        collapse.innerHTML = '<a href="#" data-toggle="collapse" data-target="#debit2" class="toggle_sign glyphicon glyphicon-chevron-down"></a>';
+    //     row.appendChild(jenis);
+    //     row.appendChild(aksi_collapse);
+    //     row.appendChild(aksi);
 
-          //membuat aksi delete element
-        hapus.onclick = function () {
-            row.parentNode.removeChild(row);
-            row2.parentNode.removeChild(row2);
-            row3.parentNode.removeChild(row3);
-            row4.parentNode.removeChild(row4);
-        };
+    //     row2.appendChild(ck1);
+    //     row2.appendChild(label_ck1);
 
-        i++;
-    }
+    //     row3.appendChild(empty);
+    //     row3.appendChild(content_nilai);
+    //     content_nilai.appendChild(row_content_nilai);
+    //     row_content_nilai.appendChild(label_n);
+    //     row_content_nilai.appendChild(cmb_box_n);
+    //     row_content_nilai.appendChild(input_n);
+    //     row_content_nilai.appendChild(label_n_2);
 
+    //     row4.appendChild(ck2);
+    //     row4.appendChild(label_ck2);
+
+    //       //membuat element input
+    //     var jenis_input = document.createElement('select');
+    //     var options = ["1", "2", "3", "4", "5"];
+    //     for(var i = 0; i < options.length; i++) {
+    //         var opt = options[i];
+    //         var el = document.createElement("option");
+    //         el.textContent = opt;
+    //         el.value = opt;
+    //         jenis_input.appendChild(el);
+    //     }
+    //     jenis_input.setAttribute('name', 'jenis_input[' + i + ']');
+    //     jenis_input.setAttribute('class', 'form-control');
+
+    //     var isi_otomatis = document.createElement('input');
+    //     isi_otomatis.setAttribute('type','checkbox');
+
+    //     var label_isi_otomatis = document.createElement('label');
+    //     label_isi_otomatis.innerHTML = "Isi Otomatis";
+
+    //     var label_nilai = document.createElement('label');
+    //     label_nilai.innerHTML = "Nilai";
+
+    //     var label_persen = document.createElement('label');
+    //     label_persen.innerHTML = "%";
+
+    //     var cmb_box_nilai = document.createElement('select');
+    //     var options = ["1", "2", "3", "4", "5"];
+    //     for(var i = 0; i < options.length; i++) {
+    //         var opt = options[i];
+    //         var el = document.createElement("option");
+    //         el.textContent = opt;
+    //         el.value = opt;
+    //         jenis_input.appendChild(el);
+    //     }
+    //     cmb_box_nilai.setAttribute('name', 'cmb_bx_nilai');
+    //     cmb_box_nilai.setAttribute('class', 'form-control');
+
+    //     var input_nilai = document.createElement('input');
+    //     input_nilai.setAttribute('class','form-control');
+    //     input_nilai.setAttribute('type','text');
+    //     input_nilai.setAttribute('name','nilai');
+
+    //     var opsional = document.createElement('input');
+    //     opsional.setAttribute('type','checkbox');
+
+    //     var label_opsional = document.createElement('label');
+    //     label_opsional.innerHTML = "Opsional";
+
+
+    //       //meng append element input
+    //     jenis.appendChild(jenis_input);
+    //     aksi_collapse.appendChild(collapse);
+    //     aksi.appendChild(hapus);
+    //     ck1.appendChild(isi_otomatis);
+    //     label_ck1.appendChild(label_isi_otomatis);
+    //     label_n.appendChild(label_nilai);
+    //     label_n_2.appendChild(label_persen);
+    //     cmb_box_n.appendChild(cmb_box_nilai);
+    //     input_n.appendChild(input_nilai);
+    //     ck2.appendChild(opsional);
+    //     label_ck2.appendChild(label_opsional);
+
+    //     hapus.innerHTML = '<a class="glyphicon glyphicon-trash"></a>';
+    //     collapse.innerHTML = '<a data-toggle="collapse" data-target="#debit2" class="toggle_sign glyphicon glyphicon-chevron-down"></a>';
+
+    //       //membuat aksi delete element
+    //     hapus.onclick = function () {
+    //         row.parentNode.removeChild(row);
+    //         row2.parentNode.removeChild(row2);
+    //         row3.parentNode.removeChild(row3);
+    //         row4.parentNode.removeChild(row4);
+    //     };
+
+    //     i++;
+    // }
 
     $('.parentDiv').click(function() {
       var toggle_sign = $(this).find(".toggle_sign");
@@ -1101,6 +1143,27 @@
       } else {
         $(toggle_sign).addClass("glyphicon-chevron-down").removeClass("glyphicon-chevron-up");
       }
+    });
+
+    $("[name='transaksi_template']").click(function(){
+      var data = new FormData();
+        data.append('template',     $(this).val());
+        
+        $.ajax({
+            cache : false,
+            contentType : false,
+            processData : false,
+            type : 'POST',
+            url : '<?php echo base_url()."mst/keuangan_transaksi/transaksi_template_update/".$id?>',
+            data : data,
+            success : function(response){
+              if(response=="OK"){
+                $("#transaksi_template").prop("checked", true);
+              }else{
+                $("#transaksi_template").prop("checked", false);
+              }
+            }
+        });
     });
 
     $("[name='btn_transaksi_save']").click(function(){
