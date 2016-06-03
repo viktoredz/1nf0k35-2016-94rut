@@ -446,7 +446,7 @@ class Penilaiandppp extends CI_Controller {
 		}
 		return $data;
 	}
-	function json_dppp($id=""){
+	function json_dppp($id="",$tahun=''){
 		$this->authentication->verify('kepegawaian','show');
 
 
@@ -476,7 +476,7 @@ class Penilaiandppp extends CI_Controller {
 		}
 		
 
-		$rows_all = $this->penilaiandppp_model->get_data_detail($id);
+		$rows_all = $this->penilaiandppp_model->get_data_detail($id,'2016');
 
 
 		if($_POST) {
@@ -503,20 +503,36 @@ class Penilaiandppp extends CI_Controller {
 		if ($this->session->userdata('puskesmas')!='') {
 			$this->db->where('pegawai.code_cl_phc','P'.$this->session->userdata('puskesmas'));
 		}
-		$rows = $this->penilaiandppp_model->get_data_detail($id,$this->input->post('recordstartindex'), $this->input->post('pagesize'));
+		$rows = $this->penilaiandppp_model->get_data_detail($id,'2016',$this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();
 		foreach($rows as $act) {
 			$data[] = array(
-				'id_mst_peg_struktur_org'			=> $act->id_mst_peg_struktur_org,
-				'tugas'								=> $act->tugas,
-				'id_mst_peg_struktur_skp'			=> $act->id_mst_peg_struktur_skp,
-				'ak'								=> $act->ak,
-				'kuant'								=> $act->kuant,
-				'output'							=> $act->output,
-				'target'							=> $act->target,
-				'waktu'								=> $act->waktu,
-				'biaya'								=> $act->biaya,
-				'code_cl_phc'						=> $act->code_cl_phc,
+				'id_pegawai'						=> $act->id_pegawai,
+				'tahun'								=> $act->tahun,
+				'id_pegawai_penilai'				=> $act->id_pegawai_penilai,
+				'id_pegawai_penilai_atasan' 		=> $act->id_pegawai_penilai_atasan,
+				'skp'								=> $act->skp,
+				'namapegawai'						=> $act->namapegawai,
+				'nama_penilai'						=> $act->nama_penilai,
+				'namaatasanpenilai'					=> $act->namaatasanpenilai,
+				'pelayanan'							=> $act->pelayanan,
+				'integritas'						=> $act->integritas,
+				'komitmen'							=> $act->komitmen,
+				'disiplin'							=> $act->disiplin,
+				'kerjasama'							=> $act->kerjasama,
+				'kepemimpinan'						=> $act->kepemimpinan,
+				'jumlah'							=> $act->jumlah,
+				'ratarata'							=> $act->ratarata,
+				'nilai_prestasi'					=> $act->nilai_prestasi,
+				'keberatan'							=> $act->keberatan,
+				'keberatan_tgl'						=> $act->keberatan_tgl,
+				'tanggapan'							=> $act->tanggapan,
+				'tanggapan_tgl'						=> $act->tanggapan_tgl,
+				'keputusan_tgl'						=> $act->keputusan_tgl,
+				'rekomendasi'						=> $act->rekomendasi,
+				'tgl_diterima'						=> $act->tgl_diterima,
+				'tgl_dibuat'						=> $act->tgl_dibuat,
+				'tgl_diterima_atasan'				=> $act->tgl_diterima_atasan,
 				'edit'		=> 1,
 				'delete'	=> 1
 			);
@@ -585,7 +601,7 @@ class Penilaiandppp extends CI_Controller {
 		}
 	}
 
-	function json_skp($id=""){
+	function json_skp($id="",$id_pegawai=''){
 		$this->authentication->verify('kepegawaian','show');
 
 
@@ -614,7 +630,7 @@ class Penilaiandppp extends CI_Controller {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
 		}
-		$rows = $this->penilaiandppp_model->get_data_skp($id,$this->input->post('recordstartindex'), $this->input->post('pagesize'));
+		$rows = $this->penilaiandppp_model->get_data_skp($id,$id_pegawai,$this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();
 		$no=1;
 		foreach($rows as $act) {
@@ -631,6 +647,13 @@ class Penilaiandppp extends CI_Controller {
 				'waktu'								=> $act->waktu,
 				'biaya'								=> $act->biaya,
 				'code_cl_phc'						=> $act->code_cl_phc,
+				'ak_nilai'							=> $act->ak_nilai,
+				'kuant_nilai'						=> $act->kuant_nilai,
+				'target_nilai'						=> $act->kuant_nilai,
+				'kuant_output_nilai'				=> $act->target_nilai,
+				'waktu_nilai'						=> $act->waktu_nilai,
+				'biaya_nilai'						=> $act->biaya_nilai,
+				'id_pegawai_nilai'					=> $act->id_pegawai_nilai,
 				'edit'		=> 1,
 				'delete'	=> 1
 			);

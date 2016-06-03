@@ -658,6 +658,7 @@ $(function(){
           { name: 'code_cl_phc', type: 'string'},
           { name: 'ak_nilai', type: 'string'},
           { name: 'kuant_nilai', type: 'string'},
+          { name: 'kuant_output_nilai', type: 'string'},
           { name: 'target_nilai', type: 'string'},
           { name: 'waktu_nilai', type: 'string'},
           { name: 'biaya_nilai', type: 'string'},
@@ -668,7 +669,7 @@ $(function(){
           { name: 'edit', type: 'number'},
           { name: 'delete', type: 'number'}
             ],
-        url: "<?php echo site_url('kepegawaian/penilaiandppp/json_skp/{id_mst_peg_struktur_org}'); ?>",
+        url: "<?php echo site_url('kepegawaian/penilaiandppp/json_skp/{id_mst_peg_struktur_org}/{id_pegawai}'); ?>",
         cache: false,
           updateRow: function (rowID, rowData, commit) {
                   commit(true);
@@ -716,7 +717,7 @@ $(function(){
             }
          },
         root: 'Rows',
-            pagesize: 30,
+            pagesize: 10,
             beforeprocessing: function(data){   
           if (data != null){
             sourceskp.totalrecords = data[0].TotalRows;          

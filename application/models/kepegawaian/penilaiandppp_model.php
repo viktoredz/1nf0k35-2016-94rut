@@ -15,10 +15,15 @@ class Penilaiandppp_model extends CI_Model {
         $query = $this->db->get('mst_peg_struktur_skp',$limit,$start);
         return $query->result();
     }
-    function get_data_detail($start=0,$limit=999999,$options=array())
+    function get_data_detail($id=0,$tahun=0,$start=0,$limit=999999,$options=array())
     {	$puskesmas_ = 'P'.$this->session->userdata('puskesmas');
-    	$this->db->select("mst_peg_golruang.ruang, mst_peg_struktur_org.*, pangkat.nip_nit,mst_peg_struktur_org.tar_nama_posisi, pangkat.id_mst_peg_golruang");
+    	$this->db->where('pegawai_dp3.tahun',$tahun);
+    	$this->db->where('pegawai_dp3.id_pegawai',$id);
+
+    	$this->db->select("pegawai_dp3.*,mst_peg_golruang.ruang, mst_peg_struktur_org.*, pangkat.nip_nit,mst_peg_struktur_org.tar_nama_posisi, pangkat.id_mst_peg_golruang,pegawai.nama as namapegawai,penilai.nama as nama_penilai,atasanpenilai.nama as namaatasanpenilai ");
     	$this->db->join("pegawai",'pegawai_dp3.id_pegawai = pegawai.id_pegawai','left');
+    	$this->db->join("pegawai as penilai",'pegawai_dp3.id_pegawai_penilai = penilai.id_pegawai','left');
+    	$this->db->join("pegawai as atasanpenilai",'pegawai_dp3.id_pegawai_penilai_atasan = atasanpenilai.id_pegawai','left');
     	$this->db->join("(SELECT  id_pegawai, nip_nit, tmt,id_mst_peg_golruang, masa_krj_bln, masa_krj_thn, CONCAT(tmt, id_pegawai) AS pangkatterakhir FROM
         pegawai_pangkat WHERE CONCAT(tmt, id_pegawai) IN (SELECT  CONCAT(MAX(tmt), id_pegawai) FROM pegawai_pangkat GROUP BY id_pegawai)) pangkat",'pangkat.id_pegawai = pegawai.id_pegawai','left');
         $this->db->join("pegawai_struktur",'pegawai_struktur.id_pegawai = pegawai.id_pegawai','left');
@@ -52,26 +57,48 @@ class Penilaiandppp_model extends CI_Model {
 		$id_pegawai = $this->input->post('id_pegawai');
 
 
+    	$this->db->where('id_pegawai',$id_pegawai);
+    	$this->db->where('tahun',$tahun);
     	$this->db->where('id_mst_peg_struktur_org',$id_mst_peg_struktur_org);
-    	$this->db->where('id_mst_peg_struktur_org',$id_mst_peg_struktur_org);
-    	$this->db->where('id_mst_peg_struktur_org',$id_mst_peg_struktur_org);
+    	$this->db->where('id_mst_peg_struktur_skp',$id_mst_peg_struktur_skp);
     	$query = $this->db->get('pegawai_skp_nilai');
     	if ($query->num_rows() >0) {
-    		$this->db->where('id_mst_peg_struktur_org',$id_mst_peg_struktur_org);
-    	$this->db->where('id_mst_peg_struktur_org',$id_mst_peg_struktur_org);
-    	$this->db->where('id_mst_peg_struktur_org',$id_mst_peg_struktur_org);
+    		$this->db->where('id_pegawai',$id_pegawai);
+	    	$this->db->where('tahun',$tahun);
+	    	$this->db->where('id_mst_peg_struktur_org',$id_mst_peg_struktur_org);
+	    	$this->db->where('id_mst_peg_struktur_skp',$id_mst_peg_struktur_skp);
     		$value = array(
-    				'' => 
+    				'ak'	=> $ak,
+    				'kuant' => $kuant,
+    				'target' => $target,
+    				'waktu' => $waktu,
+    				'biaya' => $biaya,
     			);
     		$this->db->insert('pegawai_skp_nilai',$value);
     	}else{
-
+    		$this->db->where('',$id_pegawai);
+	    	$this->db->where('',$tahun);
+	    	$this->db->where('',$id_mst_peg_struktur_org);
+	    	$this->db->where('',$id_mst_peg_struktur_skp);
+    		$value = array(
+    				'ak'						=> $ak,
+    				'kuant' 					=> $kuant,
+    				'target'					=> $target,
+    				'waktu' 					=> $waktu,
+    				'biaya' 					=> $biaya,
+    				'id_pegawai'				=> $id_pegawai,
+    				'tahun' 					=> $tahun,
+    				'id_mst_peg_struktur_org' 	=> $id_mst_peg_struktur_org,
+    				'id_mst_peg_struktur_skp' 	=> $id_mst_peg_struktur_skp,
+    			);
+    		$this->db->insert('pegawai_skp_nilai',$value);
     	}
     }
-    function get_data_skp($id,$start=0,$limit=999999,$options=array())
+    function get_data_skp($id=0,$id_pegawai=0,$start=0,$limit=999999,$options=array())
     {
-        $this->db->select("*");
-        $this->db->where('id_mst_peg_struktur_org',$id);
+        $this->db->select("mst_peg_struktur_skp.*,pegawai_skp_nilai.id_pegawai as id_pegawai_nilai,pegawai_skp_nilai.tahun as tahun_nilai,pegawai_skp_nilai.id_mst_peg_struktur_org as id_mst_peg_struktur_org_nilai,pegawai_skp_nilai.id_mst_peg_struktur_skp as id_mst_peg_struktur_skp_nilai,pegawai_skp_nilai.ak as ak_nilai,pegawai_skp_nilai.kuant as kuant_nilai,pegawai_skp_nilai.target as target_nilai,pegawai_skp_nilai.waktu as waktu_nilai,pegawai_skp_nilai.biaya as biaya_nilai");
+        $this->db->where('mst_peg_struktur_skp.id_mst_peg_struktur_org',$id);
+        $this->db->join('pegawai_skp_nilai',"mst_peg_struktur_skp.id_mst_peg_struktur_skp = pegawai_skp_nilai.id_mst_peg_struktur_skp AND pegawai_skp_nilai.id_pegawai=".'"'.$id_pegawai.'"'."",'left');
         $query = $this->db->get('mst_peg_struktur_skp',$limit,$start);
         return $query->result();
     }
