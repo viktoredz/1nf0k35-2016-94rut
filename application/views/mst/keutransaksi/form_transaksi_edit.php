@@ -177,8 +177,9 @@
                                     }
                                     $select = $k->id_mst_kategori_transaksi == $id_mst_kategori_transaksi ? 'selected' : '' ;
                                   ?>
-                                  <option value="<?php echo $k->id_mst_kategori_transaksi ?>" <?php echo $select ?>><?php echo $k->nama ?></option>
-                              <?php endforeach ?>
+                                  <option value="Dari Nilai Kredit" echo "selected" ?> Dari Nilai Kredit</option>
+                                  <!-- <option value="<?php echo $k->id_mst_kategori_transaksi ?>" <?php echo $select ?>><?php echo $k->nama ?></option> -->
+                              <!-- <?php endforeach ?> -->
                             </select>
                           </div> 
                            <p id="d_value_nilai"></p>
@@ -530,7 +531,6 @@
 
         data.append('value',            $("[name='debit_value']").val());
         data.append('urutan',           counter_kredit);
-        data.append('id_mst_transaksi', {id});
 
         $.ajax({
            cache : false,
@@ -566,7 +566,7 @@
                                           </div>\
                                           <div class="col-md-1">\
                                             <div class="parentDiv">\
-                                              <a data-toggle="collapse" data-target="#kredit'+counter+'" class="toggle_sign glyphicon glyphicon-chevron-down">\
+                                              <a data-toggle="collapse" data-target="#kredit'+counter_kredit+'" class="toggle_sign glyphicon glyphicon-chevron-down">\
                                               </a>\
                                             </div>\
                                           </div>\
@@ -577,7 +577,7 @@
                                         </div>\
                                       </div>\
                                     </div>\
-                                    <div class="collapse" id="kredit'+counter+'">\
+                                    <div class="collapse" id="kredit'+counter_kredit+'">\
                                       <div class="row">\
                                         <div class="col-sm-1">\
                                         </div>\

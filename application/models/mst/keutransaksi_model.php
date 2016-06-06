@@ -87,11 +87,12 @@ class Keutransaksi_model extends CI_Model {
         return $data;
     }
 
-    function jurnal_transaksi_add_debit(){
+    function jurnal_transaksi_add_debit($id_mst_transaksi=0){
 
         $data['type']                    = "debit";
         $data['value']                   = 99;
         $data['urutan']                  = $this->input->post('urutan');
+        $data['id_mst_transaksi']        = $id_mst_transaksi;
 
         if($this->db->insert('mst_keu_transaksi_item', $data)){
             return 1;
@@ -100,12 +101,12 @@ class Keutransaksi_model extends CI_Model {
         }
     }
 
-    function jurnal_transaksi_add_kredit(){
+    function jurnal_transaksi_add_kredit($id_mst_transaksi=0){
 
         $data['type']                    = "kredit";
         $data['value']                   = 98;
         $data['urutan']                  = $this->input->post('urutan');
-        $data['id_mst_transaksi']        = $this->input->post('id_mst_transaksi');
+        $data['id_mst_transaksi']        = $id_mst_transaksi;
 
         if($this->db->insert('mst_keu_transaksi_item', $data)){
             return 1;
@@ -114,15 +115,17 @@ class Keutransaksi_model extends CI_Model {
         }
     }
 
-    function jurnal_transaksi_add(){
+    function jurnal_transaksi_add($id_mst_transaksi=0){
 
         $data = array(
            array(
-              '`group`'      => $this->input->post('group'),
-              'type'         => 'debit'
+              '`group`'          => $this->input->post('group'),
+              'id_mst_transaksi' => $id_mst_transaksi,
+              'type'             => 'debit'
            ),
            array(
               '`group`'      => $this->input->post('group'),
+              'id_mst_transaksi' => $id_mst_transaksi,
               'type'         => 'kredit'
            )
         );  
