@@ -91,6 +91,7 @@ class Keutransaksi_model extends CI_Model {
 
         $data['type']                    = "debit";
         $data['value']                   = 99;
+        $data['urutan']                  = $this->input->post('urutan');
 
         if($this->db->insert('mst_keu_transaksi_item', $data)){
             return 1;
@@ -103,6 +104,8 @@ class Keutransaksi_model extends CI_Model {
 
         $data['type']                    = "kredit";
         $data['value']                   = 98;
+        $data['urutan']                  = $this->input->post('urutan');
+        $data['id_mst_transaksi']        = $this->input->post('id_mst_transaksi');
 
         if($this->db->insert('mst_keu_transaksi_item', $data)){
             return 1;
@@ -113,17 +116,16 @@ class Keutransaksi_model extends CI_Model {
 
     function jurnal_transaksi_add(){
 
-        // for($i=1; $i<10; $i++){
         $data = array(
            array(
+              '`group`'      => $this->input->post('group'),
               'type'         => 'debit'
            ),
            array(
+              '`group`'      => $this->input->post('group'),
               'type'         => 'kredit'
-              // 'group' => $i
            )
         );  
-        // }
 
         if($this->db->insert_batch('mst_keu_transaksi_item',$data)){
             return 1;

@@ -539,6 +539,7 @@ class Keuangan_transaksi extends CI_Controller {
     	$this->form_validation->set_rules('value','Value','trim');
     	$this->form_validation->set_rules('urutan','Urutan','trim');
     	$this->form_validation->set_rules('id_mst_akun','Akun','trim');
+    	$this->form_validation->set_rules('id_mst_transaksi','Transaksi','trim');
 
 		$data['id_mst_kategori_transaksi']	= "";
 	    $data['action']						= "add";
@@ -562,7 +563,8 @@ class Keuangan_transaksi extends CI_Controller {
 		$this->authentication->verify('mst','add');
 
     	$this->form_validation->set_rules('value','Value','trim');
-    	$this->form_validation->set_rules('id_mst_akun','Akun','trim');
+    	$this->form_validation->set_rules('type','Akun','trim');
+    	$this->form_validation->set_rules('group','Group','trim');
 
 		$data['id_mst_kategori_transaksi']	= "";
 	    $data['action']						= "add";
