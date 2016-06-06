@@ -113,7 +113,7 @@
 
   function detail(id){
       $.ajax({
-          url: "<?php echo base_url().'mst/keuangan_transaksi/transaksi_edit/'?>/" +id,
+          url: "<?php echo base_url().'mst/keuangan_transaksi/transaksi_edit'?>/" +id,
           type : 'POST',
           success : function(data) {
               $('#content2').html(data);

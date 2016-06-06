@@ -99,6 +99,18 @@ class Keutransaksi_model extends CI_Model {
         }
     }
 
+    function jurnal_transaksi_add_kredit(){
+
+        $data['type']                    = "kredit";
+        $data['value']                   = 98;
+
+        if($this->db->insert('mst_keu_transaksi_item', $data)){
+            return 1;
+        }else{
+            return mysql_error();
+        }
+    }
+
     function jurnal_transaksi_add(){
 
         // for($i=1; $i<10; $i++){
