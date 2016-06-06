@@ -539,12 +539,31 @@
         });
       });
       
-      var counter = 1;
-      var form_kredit = '<div id="kredit">\
+     
+      counter = 2; 
+      $("[name='add_kredit']").click(function() {
+         var data = new FormData();
+
+            $('#biodata_notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
+            $('#biodata_notice').show();
+
+        data.append('value',          $("[name='debit_value']").val());
+
+        $.ajax({
+           cache : false,
+           contentType : false,
+           processData : false,
+           type: 'POST',
+           url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_add_kredit/{id}" ?>',
+           data : data,
+           success: function (response) {
+            if(response=="OK"){
+
+               var form_kredit = '<div id="kredit">\
                   <div class="row" >\
                     <div class="col-md-12">\
                       <div class="row">\
-                        <div class="col-md-1" style="padding-top:5px;"><label>'+(counter+1)+'</label> </div>\
+                        <div class="col-md-1" style="padding-top:5px;"><label>'+(counter)+'</label> </div>\
                         <div class="col-md-8" style="padding-top:5px;">\
                           <select  name="kredit_akun" type="text" class="form-control">\
                             <?php foreach($akun as $a) : ?>\
@@ -654,26 +673,8 @@
                     </div>\
                   </div>\
               </div>';
-              counter++;
-
-      $("[name='add_kredit']").click(function() {
-         var data = new FormData();
-
-            $('#biodata_notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
-            $('#biodata_notice').show();
-
-        data.append('value',          $("[name='debit_value']").val());
-
-        $.ajax({
-           cache : false,
-           contentType : false,
-           processData : false,
-           type: 'POST',
-           url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_add_kredit/{id}" ?>',
-           data : data,
-           success: function (response) {
-            if(response=="OK"){
               $('#Kredit').append(form_kredit);
+               counter++;
             }else{
                 alert("Failed.");
             }
