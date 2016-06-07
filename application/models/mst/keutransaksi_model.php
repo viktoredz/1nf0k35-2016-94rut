@@ -109,11 +109,19 @@ class Keutransaksi_model extends CI_Model {
         $data['id_mst_transaksi']        = $id_mst_transaksi;
 
         if($this->db->insert('mst_keu_transaksi_item', $data)){
-            return 1;
+            return $data;
         }else{
             return mysql_error();
         }
     }
+
+    function get_data_kredit($id_mst_transaksi=0){
+        $this->db->select('*');
+        $this->db->where('id_mst_transaksi',$id_mst_transaksi);
+        $query = $this->db->get('mst_keu_transaksi_item');
+        return $query->result();
+    }
+    
 
     function jurnal_transaksi_add($id_mst_transaksi=0){
 
