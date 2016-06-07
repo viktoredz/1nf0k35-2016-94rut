@@ -42,85 +42,11 @@ class Struktur_model extends CI_Model {
 		}
     }
 
-    function mendukung_transaksi_update($id){
-        $data['mendukung_transaksi']      = $this->input->post('mendukung_transaksi');
-       
-        $this->db->where('id_mst_akun',$id);
+    
 
-        if($this->db->update($this->tb, $data)){
-            $this->db->where('id_mst_akun',$id);
-            $this->db->select('mendukung_transaksi');
-            $variable = $this->db->get('mst_keu_akun');
-            foreach ($variable->result() as $key) {
-                if ($key->mendukung_transaksi=='1') {
-                    return '1';
-                }else{
-                    return '2';    
-                }
-            }
-        }else{
-            return mysql_error();
-        }
-    }
+   
 
-    function mendukung_anggaran_update($id){
-        $data['mendukung_anggaran']       = $this->input->post('mendukung_anggaran');
-       
-        $this->db->where('id_mst_akun',$id);
-
-        if($this->db->update($this->tb, $data)){
-            $this->db->where('id_mst_akun',$id);
-            $this->db->select('mendukung_anggaran');
-            $variable = $this->db->get('mst_keu_akun');
-            foreach ($variable->result() as $key) {
-                if($key->mendukung_anggaran=='1'){
-                    return '1';
-                }else{
-                    return '2';
-                }
-            }
-        }else{
-            return mysql_error();
-        }
-    }
-
-    function mendukung_target_update($id){
-        $data['mendukung_target']         = $this->input->post('mendukung_target');
-       
-        $this->db->where('id_mst_akun',$id);
-
-        if($this->db->update($this->tb, $data)){
-            $this->db->where('id_mst_akun',$id);
-            $this->db->select('mendukung_target');
-            $variable = $this->db->get('mst_keu_akun');
-            foreach ($variable->result() as $key ) {
-               if ($key->mendukung_target=='1') {
-                   return '1';
-               }else{
-                   return '2';
-               }
-            }
-        }else{
-            return mysql_error();
-        }
-    }
-
-    function akun_delete(){  
-        $this->db->where('tar_id_struktur_org', $this->input->post('id_mst_akun'));
-        $this->db->delete($this->tb);
-        
-
-        $this->db->where('tar_id_struktur_org_parent',$this->input->post('id_mst_akun'));
-        $q = $this->db->get('pegawai_struktur');
-        if ($q->num_rows() > 0 ) {
-            $child = $q->result_array();
-            foreach ($child as $dt) {
-                $this->akun_delete($dt['tar_id_struktur_org']);
-            }
-
-        }
-    }
-
+  
     function akun_add(){
         if(strlen($this->session->userdata('puskesmas'))=='4') {
             $puskes = 'P'.$this->session->userdata('puskesmas');
@@ -160,27 +86,7 @@ class Struktur_model extends CI_Model {
         return $no;
 
     }
-    function akun_update(){
-        $this->db->where('tar_id_struktur_org', $this->input->post('tar_id_struktur_org'));
-        $query = $this->db->get('pegawai_struktur');
-        if ($query->num_rows() > 0) {
-            $data = array(
-               'tar_id_struktur_org'        => $this->input->post('tar_id_struktur_org'),
-               'nip'                        => '1010101010',
-               'nxama'                       => $this->input->post('tar_aktif') ,
-            );
-            //$this->db->where('tar_id_struktur_org', $this->input->post('tar_id_struktur_org'));
-            return $this->db->insert($this->tb, $data);             
-        }else{
-            $data = array(
-               'nip'                        => '1010101010',
-               'nama'                       => $this->input->post('tar_aktif') ,
-            );
-            $this->db->where('tar_id_struktur_org', $this->input->post('tar_id_struktur_org'));
-            return $this->db->update($this->tb, $data);             
-        }
-        
-    }
+    
 
  	function get_data($start=0,$limit=999999,$options=array())
     {
@@ -193,50 +99,30 @@ class Struktur_model extends CI_Model {
         $this->db->where('mst_peg_struktur_org.code_cl_phc',$kodepuskesmas);
         $this->db->where('mst_peg_struktur_org.tar_aktif',1);
         $this->db->order_by('tar_id_struktur_org','asc');
-        $this->db->select('mst_peg_struktur_org.*,pegawai.nama,pegawai.nik',false);
-        $this->db->join('pegawai_struktur','pegawai_struktur.tar_id_struktur_org = mst_peg_struktur_org.tar_id_struktur_org','left'); 
-        $this->db->join('pegawai','pegawai.id_pegawai = pegawai_struktur.id_pegawai','left'); 
+        $this->db->select('mst_peg_struktur_org.*,(select count(id_pegawai) from pegawai_struktur where tar_id_struktur_org = mst_peg_struktur_org.tar_id_struktur_org) as jml_anggota',false);
+        // ,pegawai.nama,pegawai.nik$this->db->join('pegawai_struktur','pegawai_struktur.tar_id_struktur_org = mst_peg_struktur_org.tar_id_struktur_org','left'); 
+        // $this->db->join('pegawai','pegawai.id_pegawai = pegawai_struktur.id_pegawai','left'); 
         $query = $this->db->get('mst_peg_struktur_org');     
         return $query->result_array();  
     }
 
-    function get_data_akun_non_aktif(){     
-        $this->db->where('aktif','0');
-        $query = $this->db->get('mst_keu_akun');     
-        return $query->result_array();  
-    }
-
-    function get_parent_akun(){     
-        $this->db->where('id_mst_akun_parent IS NULL');
-        $this->db->order_by('uraian','asc');
-        $query = $this->db->get('mst_keu_akun');     
-        return $query->result();  
-    }
+  
+   
 
    function get_data_akun_detail($id){
         $data = array();
         $this->db->where("tar_id_struktur_org",$id);
-        $query = $this->db->get('pegawai_struktur');
-        if($query->num_rows()>0){
-            $data = $query->row_array();
-        }
+        $this->db->join("pegawai",'pegawai.id_pegawai = pegawai.id_pegawai','left');
+        $query = $this->db->get('xpegawai_struktur');
+        // if($query->num_rows()>0){
+        //     $data = $query->row_array();
+        // }
 
-        $query->free_result();
-        return $data;
+        // $query->free_result();
+        return $query->result();
     }
 
-    function get_data_akun_non_aktif_detail($id){
-        $data = array();
-        $this->db->where("id_mst_akun",$id);
-        $this->db->where('aktif',0);
-        $query = $this->db->get('mst_keu_akun');
-        if($query->num_rows()>0){
-            $data = $query->row_array();
-        }
-
-        $query->free_result();
-        return $data;
-    }
+  
 
 }
 

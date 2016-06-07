@@ -36,9 +36,9 @@
   </div>
 </section>
 
-<div id="popup_keuangan_akun_detail" style="display:none">
+<div id="popup_pegawai_data_detail" style="display:none">
   <div id="popup_title">Detail Posisi</div>
-  <div id="popup_keuangan_akun_detail_content">&nbsp;</div>
+  <div id="popup_pegawai_data_detail_content">&nbsp;</div>
 </div>
 
 <script type="text/javascript">
@@ -157,9 +157,8 @@
                 { name: "tar_id_struktur_org", type: "number" },
                 { name: "tar_id_struktur_org_parent", type: "number" },
                 { name: "tar_nama_posisi", type: "string" },
+                { name: "jml_anggota", type: "number" },
                 { name: "tar_aktif", type: "string" },
-                { name: "nip", type: "string" },
-                { name: "nama", type: "string" },
                 { name: "code_cl_phc", type: "string" }
             ],
                 hierarchy:
@@ -254,7 +253,7 @@
 
               columns: [                             
                 { text: 'Nama Posisi ', editable: false,datafield: 'tar_nama_posisi', columntype: 'textbox', filtertype: 'textbox',align: 'center', width: '70%' },
-                { text: 'Jumlah Karyawan', editable: false,datafield: 'nama', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '25%', cellsalign: 'center' },
+                { text: 'Jumlah Karyawan', editable: false,datafield: 'jml_anggota', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '25%', cellsalign: 'center' },
                 {text: 'Detail', sortable: false, align:'center', width: '5%',editable: false, filterable: false, cellsrenderer: function (row, column, value) {
                   if(row){
                     return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_edit.gif' onclick='detail(" + row + ");'></a></div>";
@@ -266,17 +265,17 @@
         });
 
     function detail(id){
-        $("#popup_keuangan_akun_detail #popup_keuangan_akun_detail_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
+        $("#popup_pegawai_data_detail #popup_pegawai_data_detail_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
           $.get("<?php echo base_url().'kepegawaian/struktur/induk_detail' ?>/"+ id, function(data) {
-            $("#popup_keuangan_akun_detail_content").html(data);
+            $("#popup_pegawai_data_detail_content").html(data);
           });
-          $("#popup_keuangan_akun_detail").jqxWindow({
+          $("#popup_pegawai_data_detail").jqxWindow({
             theme: theme, resizable: false,
             width: 600,
             height: 380,
             isModal: true, autoOpen: false, modalOpacity: 0.2
           });
-          $("#popup_keuangan_akun_detail").jqxWindow('open');
+          $("#popup_pegawai_data_detail").jqxWindow('open');
       }
     
 </script>

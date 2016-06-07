@@ -24,61 +24,26 @@
   </div>
 
   <div class="row" style="margin: 5px">
-          <div class="col-md-12">
-            <div class="box box-primary">
-
-              <div class="row" style="margin: 5px">
-                <div class="col-md-6" style="padding: 5px">
-                  Kode Akun
-                </div>
-                <div class="col-md-6">
-                  <input type="hidden" id="tar_id_struktur_org" value="<?php $tar_id_struktur_org;?>">
-                  <?php
-                    if(set_value('tar_id_struktur_org')=="" && isset($tar_id_struktur_org)){
-                      echo $tar_id_struktur_org;
-                    }else{
-                      echo('-');
-                    }
-                  ?>
-                </div>
-              </div>
-
-              <div class="row" style="margin: 5px">
-                <div class="col-md-6" style="padding: 5px">
-                  Nama Jabatan
-                </div>
-                <div class="col-md-6">
-                  <input type="hidden" id="tar_nama_posisi" value="<?php $tar_nama_posisi?>">
-                  <?php
-                    if(set_value('tar_nama_posisi')=="" && isset($tar_nama_posisi)){
-                     echo $tar_nama_posisi;
-                    }else{
-                      echo  set_value('tar_nama_posisi');
-                    }
-                  ?>
-                </div>
-              </div>
-
-              <div class="row" style="margin: 5px">
-                <div class="col-md-6" style="padding: 5px">
-                  Status
-                </div>
-                <div class="col-md-6">
-                  <input type="checkbox" name="tar_aktif" id="tar_aktif" value="<?php $tar_aktif; ?>" 
-                  <?php 
-                  if ($tar_aktif=='1') {
-                    echo 'checked';
-                  }else{
-                    echo '';
-                  }
-                  ?>
-                  >
-                </div>
-              </div>
-
-              <br>
-            </div>
-          </div>
+    <div class="col-md-12">
+      <div class="box box-primary">
+          <table class="table table-striped table-hover">
+              <tr>
+                  <th>NIP</th>  
+                  <th>Nama</th>  
+              </tr>
+              <?php if(isset($all_pegawai)){
+                foreach ($all_pegawai as $key) {
+              ?>
+              <tr>
+                <td><?php echo $key->nip_nit; ?></td>
+                <td><?php echo $key->gelar_depan.' '.$key->nama.' '.$key->gelar_belakang; ?></td>
+              </tr>
+              <?php }
+              } 
+              ?>
+          </table>
+      </div>
+    </div>
   </div>
 </form>
 
