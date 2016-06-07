@@ -95,6 +95,8 @@
 			{ name: 'nama', type: 'string'},
 			{ name: 'id_mst_peg_golruang', type: 'string'},
 			{ name: 'ruang', type: 'string'},
+			{ name: 'tahun_penilaian', type: 'string'},
+			{ name: 'nilai_prestasi', type: 'string'},
 			{ name: 'tar_nama_posisi', type: 'string'},
 			{ name: 'detail', type: 'number'},
         ],
@@ -144,7 +146,7 @@
 				{ text: 'Detail', align: 'center', filtertype: 'none', sortable: false, width: '4%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
 				    if(dataRecord.detail==1){
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_view.gif' onclick='detail(\""+dataRecord.id_pegawai+"\",\""+dataRecord.code_cl_phc+"\");'></a></div>";
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_view.gif' onclick='detail(\""+dataRecord.id_pegawai+"\",\""+dataRecord.code_cl_phc+"\",\""+dataRecord.tahun_penilaian+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}
@@ -156,12 +158,12 @@
 				{ text: 'Golongan', align: 'center', cellsalign: 'center', editable:false ,datafield: 'id_mst_peg_golruang', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
 				{ text: 'Nama Golongan', align: 'center', cellsalign: 'center', editable:false ,datafield: 'ruang', columntype: 'textbox', filtertype: 'textbox', width: '15%' },
 				{text: 'Jabatan', align: 'center', datafield: 'tar_nama_posisi',editable:false , width: '28%', columntype: 'textbox'},
-                { text: 'Nilai', datafield: 'nilai', columntype: 'textbox', editable:false, filtertype: 'textbox', align: 'center', width: '8%' },
+                { text: 'Nilai', datafield: 'nilai_prestasi',cellsalign:'right', columntype: 'textbox', editable:false, filtertype: 'textbox', align: 'center', width: '8%' },
             ]
 		});
 
-	function detail(id_pegawai,code_cl_phc){
-		document.location.href="<?php echo base_url().'kepegawaian/penilaiandppp/edit';?>/" + id_pegawai+'/'+code_cl_phc;
+	function detail(id_pegawai,code_cl_phc,tahun){
+		document.location.href="<?php echo base_url().'kepegawaian/penilaiandppp/edit';?>/" + id_pegawai+'/'+code_cl_phc+'/'+tahun;
 	}
 	// $("#btn-add").click(function(){
 	// 	document.location.href="<?php echo base_url().'kepegawaian/penilaiandppp/add';?>/" ;

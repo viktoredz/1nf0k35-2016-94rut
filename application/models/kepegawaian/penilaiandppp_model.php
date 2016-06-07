@@ -20,7 +20,7 @@ class Penilaiandppp_model extends CI_Model {
     	$this->db->where('pegawai_dp3.tahun',$tahun);
     	$this->db->where('pegawai_dp3.id_pegawai',$id);
 
-    	$this->db->select("pegawai_dp3.*,mst_peg_golruang.ruang, mst_peg_struktur_org.*, pangkat.nip_nit,mst_peg_struktur_org.tar_nama_posisi, pangkat.id_mst_peg_golruang,pegawai.nama as namapegawai,penilai.nama as nama_penilai,atasanpenilai.nama as namaatasanpenilai ");
+    	$this->db->select("pegawai_dp3.*,mst_peg_golruang.ruang, mst_peg_struktur_org.*, pangkat.nip_nit,mst_peg_struktur_org.tar_nama_posisi, pangkat.id_mst_peg_golruang,pegawai.nama as namapegawai,penilai.gelar_depan as gelardepannama_penilai,penilai.nama as nama_penilai,penilai.gelar_belakang as gelarbelakangnama_penilai,atasanpenilai.nama as namaatasanpenilai,atasanpenilai.gelar_depan as gelardepannamaatasanpenilai,atasanpenilai.gelar_belakang as gelarbelakangnamaatasanpenilai ");
     	$this->db->join("pegawai",'pegawai_dp3.id_pegawai = pegawai.id_pegawai','left');
     	$this->db->join("pegawai as penilai",'pegawai_dp3.id_pegawai_penilai = penilai.id_pegawai','left');
     	$this->db->join("pegawai as atasanpenilai",'pegawai_dp3.id_pegawai_penilai_atasan = atasanpenilai.id_pegawai','left');
@@ -34,7 +34,7 @@ class Penilaiandppp_model extends CI_Model {
     }
     function get_data($start=0,$limit=999999,$options=array())
     {	$puskesmas_ = 'P'.$this->session->userdata('puskesmas');
-    	$this->db->select("mst_peg_golruang.ruang, app_users_list.username,pegawai.*, pangkat.nip_nit,mst_peg_struktur_org.tar_nama_posisi, pangkat.id_mst_peg_golruang");
+    	$this->db->select("mst_peg_golruang.ruang, app_users_list.username,pegawai.*, pangkat.nip_nit,mst_peg_struktur_org.tar_nama_posisi, pangkat.id_mst_peg_golruang,(select nilai_prestasi from pegawai_dp3  where id_pegawai = pegawai.id_pegawai order by tahun desc limit 1) as nilai_prestasi,ifnull((select tahun from pegawai_dp3  where id_pegawai = pegawai.id_pegawai order by tahun desc limit 1 ),YEAR(CURDATE())) as tahun_penilaian");
     	$this->db->join("(SELECT  id_pegawai, nip_nit, tmt,id_mst_peg_golruang, masa_krj_bln, masa_krj_thn, CONCAT(tmt, id_pegawai) AS pangkatterakhir FROM
         pegawai_pangkat WHERE CONCAT(tmt, id_pegawai) IN (SELECT  CONCAT(MAX(tmt), id_pegawai) FROM pegawai_pangkat GROUP BY id_pegawai)) pangkat",'pangkat.id_pegawai = pegawai.id_pegawai','left');
         $this->db->join("pegawai_struktur",'pegawai_struktur.id_pegawai = pegawai.id_pegawai','left');
@@ -74,7 +74,7 @@ class Penilaiandppp_model extends CI_Model {
     				'waktu' => $waktu,
     				'biaya' => $biaya,
     			);
-    		$this->db->insert('pegawai_skp_nilai',$value);
+    		$this->db->update('pegawai_skp_nilai',$value);
     	}else{
     		$this->db->where('',$id_pegawai);
 	    	$this->db->where('',$tahun);
@@ -94,11 +94,11 @@ class Penilaiandppp_model extends CI_Model {
     		$this->db->insert('pegawai_skp_nilai',$value);
     	}
     }
-    function get_data_skp($id=0,$id_pegawai=0,$start=0,$limit=999999,$options=array())
+    function get_data_skp($id=0,$id_pegawai=0,$tahun=0,$start=0,$limit=999999,$options=array())
     {
-        $this->db->select("mst_peg_struktur_skp.*,pegawai_skp_nilai.id_pegawai as id_pegawai_nilai,pegawai_skp_nilai.tahun as tahun_nilai,pegawai_skp_nilai.id_mst_peg_struktur_org as id_mst_peg_struktur_org_nilai,pegawai_skp_nilai.id_mst_peg_struktur_skp as id_mst_peg_struktur_skp_nilai,pegawai_skp_nilai.ak as ak_nilai,pegawai_skp_nilai.kuant as kuant_nilai,pegawai_skp_nilai.target as target_nilai,pegawai_skp_nilai.waktu as waktu_nilai,pegawai_skp_nilai.biaya as biaya_nilai");
+        $this->db->select("mst_peg_struktur_skp.*,pegawai_skp_nilai.id_pegawai as id_pegawai_nilai,pegawai_skp_nilai.tahun as tahun_nilai,pegawai_skp_nilai.id_mst_peg_struktur_org as id_mst_peg_struktur_org_nilai,pegawai_skp_nilai.id_mst_peg_struktur_skp as id_mst_peg_struktur_skp_nilai,pegawai_skp_nilai.ak as ak_nilai,pegawai_skp_nilai.kuant as kuant_nilai,pegawai_skp_nilai.target as target_nilai,pegawai_skp_nilai.waktu as waktu_nilai,pegawai_skp_nilai.biaya as biaya_nilai,(((pegawai_skp_nilai.kuant / mst_peg_struktur_skp.kuant)*100)+((pegawai_skp_nilai.target / mst_peg_struktur_skp.target)*100)+(((1.76*mst_peg_struktur_skp.waktu - pegawai_skp_nilai.waktu)/mst_peg_struktur_skp.waktu)*100)) as perhitungan_nilai,((((pegawai_skp_nilai.kuant / mst_peg_struktur_skp.kuant)*100)+((pegawai_skp_nilai.target / mst_peg_struktur_skp.target)*100)+(((1.76*mst_peg_struktur_skp.waktu - pegawai_skp_nilai.waktu)/mst_peg_struktur_skp.waktu)*100))/3) as pencapaian_nilai");
         $this->db->where('mst_peg_struktur_skp.id_mst_peg_struktur_org',$id);
-        $this->db->join('pegawai_skp_nilai',"mst_peg_struktur_skp.id_mst_peg_struktur_skp = pegawai_skp_nilai.id_mst_peg_struktur_skp AND pegawai_skp_nilai.id_pegawai=".'"'.$id_pegawai.'"'."",'left');
+        $this->db->join('pegawai_skp_nilai',"mst_peg_struktur_skp.id_mst_peg_struktur_skp = pegawai_skp_nilai.id_mst_peg_struktur_skp AND pegawai_skp_nilai.id_pegawai=".'"'.$id_pegawai.'"'." and tahun=".'"'.$tahun.'"'."",'left');
         $query = $this->db->get('mst_peg_struktur_skp',$limit,$start);
         return $query->result();
     }
@@ -164,43 +164,6 @@ class Penilaiandppp_model extends CI_Model {
         return $this->db->get_where($table, array('id_inv_permohonan_barang'=>$data));
     }
 
-   
-   function insert_entry()
-    {
-    	$data['id_inv_permohonan_barang']	= $this->kode_permohonan($this->input->post('id_inv_permohonan_barang'));
-    	$data['tanggal_permohonan']	= date("Y-m-d",strtotime($this->input->post('tgl')));
-		$data['keterangan']			= $this->input->post('keterangan');
-		$data['code_cl_phc']		= $this->input->post('codepus');
-		$data['id_mst_inv_ruangan']	= $this->input->post('ruangan');
-
-		$data['waktu_dibuat']		= date('Y-m-d');
-		$data['jumlah_unit']      	= 0;
-		$data['app_users_list_username'] 	= $this->session->userdata('username'); 
-		//$data['id_inv_permohonan_barang']	= $this->get_permohonan_id($this->input->post('codepus'));
-		if($this->db->insert($this->tabel, $data)){
-			return $data['id_inv_permohonan_barang'];
-		}else{
-			return mysql_error();
-		}
-    }
-
-    function update_entry($kode,$code_cl_phc)
-    {
-    	$data['tanggal_permohonan']	= date("Y-m-d",strtotime($this->input->post('tgl')));
-		$data['keterangan']			= $this->input->post('keterangan');
-		$data['code_cl_phc']		= $this->input->post('codepus');
-		$data['id_mst_inv_ruangan']	= $this->input->post('ruangan');
-        $data['pilihan_status_pengadaan'] = $this->input->post('statuspengadaan');
-
-		$this->db->where('id_inv_permohonan_barang',$kode);
-		$this->db->where('code_cl_phc',$code_cl_phc);
-
-		if($this->db->update($this->tabel, $data)){
-			return true;
-		}else{
-			return mysql_error();
-		}
-    }
     function getdatawhere($table='',$data=''){
     	
     	$query = $this->db->get_where($table,$data);
@@ -237,15 +200,12 @@ class Penilaiandppp_model extends CI_Model {
 		
     }
     
-	function delete_entry($kode,$code_cl_phc)
+	function delete_dppp($id_pegawai,$tahun)
 	{
-		$this->db->where('id_inv_permohonan_barang',$kode);
-		$this->db->delete('inv_permohonan_barang_item');
+		$this->db->where('id_pegawai',$id_pegawai);
+		$this->db->where('tahun',$tahun);
 
-		$this->db->where('id_inv_permohonan_barang',$kode);
-		$this->db->where('code_cl_phc',$code_cl_phc);
-
-		return $this->db->delete($this->tabel);
+		return $this->db->delete('pegawai_dp3');
 
 	}
 	function delete_entryitem($kode,$code_cl_phc,$kode_item)
@@ -260,5 +220,27 @@ class Penilaiandppp_model extends CI_Model {
 		$this->db->order_by('uraian','asc');
         $query = $this->db->get('mst_inv_barang',$limit,$start);
         return $query->result();
+    }
+    function get_rowdata($id_pegawai,$tahun){
+        $puskesmas_ = 'P'.$this->session->userdata('puskesmas');
+        $this->db->where('pegawai_dp3.tahun',$tahun);
+        $this->db->where('pegawai_dp3.id_pegawai',$id_pegawai);
+
+        $this->db->select("pegawai_dp3.*,mst_peg_golruang.ruang, mst_peg_struktur_org.*, pangkat.nip_nit,mst_peg_struktur_org.tar_nama_posisi, pangkat.id_mst_peg_golruang,pegawai.nama as namapegawai,penilai.gelar_depan as gelardepannama_penilai,penilai.nama as nama_penilai,penilai.gelar_belakang as gelarbelakangnama_penilai,atasanpenilai.nama as namaatasanpenilai,atasanpenilai.gelar_depan as gelardepannamaatasanpenilai,atasanpenilai.gelar_belakang as gelarbelakangnamaatasanpenilai ");
+        $this->db->join("pegawai",'pegawai_dp3.id_pegawai = pegawai.id_pegawai','left');
+        $this->db->join("pegawai as penilai",'pegawai_dp3.id_pegawai_penilai = penilai.id_pegawai','left');
+        $this->db->join("pegawai as atasanpenilai",'pegawai_dp3.id_pegawai_penilai_atasan = atasanpenilai.id_pegawai','left');
+        $this->db->join("(SELECT  id_pegawai, nip_nit, tmt,id_mst_peg_golruang, masa_krj_bln, masa_krj_thn, CONCAT(tmt, id_pegawai) AS pangkatterakhir FROM
+        pegawai_pangkat WHERE CONCAT(tmt, id_pegawai) IN (SELECT  CONCAT(MAX(tmt), id_pegawai) FROM pegawai_pangkat GROUP BY id_pegawai)) pangkat",'pangkat.id_pegawai = pegawai.id_pegawai','left');
+        $this->db->join("pegawai_struktur",'pegawai_struktur.id_pegawai = pegawai.id_pegawai','left');
+        $this->db->join("mst_peg_golruang",'mst_peg_golruang.id_golongan = pangkat.id_mst_peg_golruang','left');
+        $this->db->join("mst_peg_struktur_org",'mst_peg_struktur_org.tar_id_struktur_org = pegawai_struktur.tar_id_struktur_org','left');
+        $query =$this->db->get('pegawai_dp3');
+        if ($query->num_rows() > 0){
+            $data = $query->row_array();
+        }
+
+        $query->free_result();    
+        return $data;
     }
 }

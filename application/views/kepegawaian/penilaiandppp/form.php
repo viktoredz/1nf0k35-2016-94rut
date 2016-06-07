@@ -91,16 +91,17 @@ if ($username == $userdataname) {
             data.append('ratarata', $('#ratarata').val());
             data.append('nilai_prestasi', $('#nilai_prestasi').val());
             data.append('tgl_diterima', $('#tgl_diterima').val());
-            data.append('nilai_nilai_skp', $('#nilai_skp').val());
-            data.append('nilai_pelayanan', $('#nilai_pelayanan').val());
-            data.append('nilai_integritas', $('#inilai_ntegritas').val());
-            data.append('nilai_komitmen', $('#nilai_komitmen').val());
-            data.append('nilai_disiplin', $('#nilai_disiplin').val());
-            data.append('nilai_kerjasama', $('#knilai_erjasama').val());
-            data.append('nilai_kepemimpinan', $('#knilai_epemimpinan').val());
-            data.append('nilai_jumlah', $('#nilai_jumlah').val());
-            data.append('nilai_ratarata', $('#nilai_ratarata').val());
+            data.append('nilaiskp', $('#nilaiskp').val());
+            data.append('nilaipelayanan', $('#nilaipelayanan').val());
+            data.append('nilaiintegritas', $('#nilaiintegritas').val());
+            data.append('nilaikomitmen', $('#nilaikomitmen').val());
+            data.append('nilaidisiplin', $('#nilaidisiplin').val());
+            data.append('nilaikerjasama', $('#nilaikerjasama').val());
+            data.append('nilaikepemimpinan', $('#nilaikepemimpinan').val());
+            data.append('nilaijumlah', $('#nilaijumlah').val());
+            data.append('nilairatarata', $('#nilairatarata').val());
             data.append('nilai_nilai_prestasi', $('#nilai_nilai_prestasi').val());
+            var tahunskrng = $('#tahun').val();
             $.ajax({
                 cache : false,
                 contentType : false,
@@ -121,6 +122,7 @@ if ($username == $userdataname) {
                       $('#notice-pegawai').hide();
                       $('#notice-content-pegawai').html('<div class="alert">'+res[1]+'</div>');
                       $('#notice-pegawai').show();
+                      alert('Maaf penilaian pegawai sudah dimasukan pada tahun ini '+tahunskrng);
                   }
                   else{
                       $('#tambahjqxgrid').html(response);
@@ -234,7 +236,7 @@ if ($username == $userdataname) {
 
         <div class="form-group">
           <label>Keberatan</label>
-          <textarea <?php echo $showtanggapan;?> class="form-control" name="keberatan" id="keberatan" placeholder="Keberatan"><?php 
+          <textarea <?php echo $showtanggapan;?> class="form-control" name="keberatan" id="keberatan" placeholder="Keberatan" ><?php 
               if(set_value('keberatan')=="" && isset($keberatan)){
                 echo $keberatan;
               }else{
@@ -486,7 +488,7 @@ if ($username == $userdataname) {
               <label>Jumlah</label>
           </div>
           <div class="col-md-5">
-            <input <?php echo $funshowhidden;?> type="number" class="form-control" name="jumlah" id="jumlah" placeholder="Jumlah" value="<?php 
+            <input disabled="disabled" type="number" class="form-control" name="jumlah" id="jumlah" placeholder="Jumlah" value="<?php 
             if(set_value('jumlah')=="" && isset($jumlah)){
                 echo $jumlah;
               }else{
@@ -495,7 +497,7 @@ if ($username == $userdataname) {
             ?>">
           </div>
           <div class="col-md-4">
-            <input type="text" class="form-control" name="nilaijumlah" id="nilaijumlah" placeholder="Nilai Jumlah" value="<?php 
+            <input type="text" disabled="disabled" class="form-control" name="nilaijumlah" id="nilaijumlah" placeholder="Nilai Jumlah" value="<?php 
               if(set_value('nilaijumlah')=="" && isset($nilaijumlah)){
                   echo $nilaijumlah;
                 }else{
@@ -510,7 +512,7 @@ if ($username == $userdataname) {
               <label>Rata - rata</label>
           </div>
           <div class="col-md-5">
-            <input <?php echo $funshowhidden;?> type="number" class="form-control" name="ratarata" id="ratarata" placeholder="Rata - rata" value="<?php 
+            <input disabled="disabled" type="number" class="form-control" name="ratarata" id="ratarata" placeholder="Rata - rata" value="<?php 
             if(set_value('ratarata')=="" && isset($ratarata)){
                 echo $ratarata;
               }else{
@@ -519,7 +521,7 @@ if ($username == $userdataname) {
             ?>">
           </div>
           <div class="col-md-4">
-            <input <?php echo $funshowhidden;?> type="text" class="form-control" name="nilairatarata" id="nilairatarata" placeholder="Nilai Rata - rata" value="<?php 
+            <input disabled="disabled" type="text" class="form-control" name="nilairatarata" id="nilairatarata" placeholder="Nilai Rata - rata" value="<?php 
               if(set_value('nilairatarata')=="" && isset($nilairatarata)){
                   echo $nilairatarata;
                 }else{
@@ -565,47 +567,6 @@ if ($username == $userdataname) {
   <div class="col-md-12">
     <div class="box box-success">
       <div class="box-body">
-          <!-- <table border="1">
-            <tr>
-              <th rowspan="2" width="3%"  align="center">No</th>
-              <th rowspan="2" width="15%" align="center">Kegiatan Tugas Jabatan</th>
-              <th rowspan="2" width="3%"  align="center">AK</th>
-              <th colspan="4" width="30%" align="center">Target</th>
-              <th rowspan="2" width="3%"  align="center">AK</th>
-              <th colspan="4" width="30%" align="center">Realisasi</th>
-              <th rowspan="2" width="8%"  align="center">Perhitungan</th>
-              <th rowspan="2" width="8%"  align="center">Nilai Pencapaian SKP</th>
-            </tr>
-            <tr>
-              <th width="7%">Kuant/ Output</th>
-              <th width="7%">Kual/Mutu</th>
-              <th width="7%">Waktu (Bulan)</th>
-              <th width="9%">Biaya</th>
-              <th width="7%">Kuant/ Output</th>
-              <th width="7%">Kual/Mutu</th>
-              <th width="7%">Waktu (Bulan)</th>
-              <th width="9%">Biaya</th>
-            </tr>
-            <tr>
-              <th rowspan="2" width="3%"  align="center">1</th>
-              <th rowspan="2" width="15%" align="center">2</th>
-              <th rowspan="2" width="3%"  align="center">3</th>
-              <th width="7%">4</th>
-              <th width="7%">5</th>
-              <th width="7%">6</th>
-              <th width="9%">7</th>
-              <th rowspan="2" width="3%"  align="center">8</th>
-              <th width="7%">9</th>
-              <th width="7%">10</th>
-              <th width="7%">11</th>
-              <th width="9%">12</th>
-              <th rowspan="2" width="8%"  align="center">13</th>
-              <th rowspan="2" width="8%"  align="center">14</th>
-            </tr>
-            <?php 
-
-            ?>
-          </table> -->
           <div id='jqxWidget'>
               <div id="jqxgridPenilaianSKP"></div>
               <div style="font-size: 12px; font-family: Verdana, Geneva, 'DejaVu Sans', sans-serif; margin-top: 30px;">
@@ -639,7 +600,181 @@ $(function(){
 
   });
     $(document).ready(function () {
-            // prepare the data
+      $("#skp").change(function(){
+          if ($("#skp").val() < 0) {
+            alert("Maaf, nilai tidak boleh kurang dari nol");
+            $("#skp").val(0);
+            $("#nilaiskp").val('');
+          }else if ($("#skp").val() < 60) {
+            $("#nilaiskp").val('D');
+          }else if ($("#skp").val() <= 70) {
+            $("#nilaiskp").val('C');
+          }else if ($("#skp").val() <= 80) {
+            $("#nilaiskp").val('B');
+          }else if ($("#skp").val() <= 100) {
+            $("#nilaiskp").val('A');
+          }else if ($("#skp").val() > 100) {
+            alert("Maaf, nilai tidak boleh lebih dari seratus");
+            $("#skp").val(0);
+            $("#nilaiskp").val('');
+          }
+          tambahalldata();
+          ratarataall();
+      });
+      $("#pelayanan").change(function(){
+          if ($("#pelayanan").val() < 0) {
+            alert("Maaf, nilai tidak boleh kurang dari nol");
+            $("#pelayanan").val(0);
+            $("#nilaipelayanan").val('');
+          }else if ($("#pelayanan").val() < 60) {
+            $("#nilaipelayanan").val('D');
+          }else if ($("#pelayanan").val() <= 70) {
+            $("#nilaipelayanan").val('C');
+          }else if ($("#pelayanan").val() <= 80) {
+            $("#nilaipelayanan").val('B');
+          }else if ($("#pelayanan").val() <= 100) {
+            $("#nilaipelayanan").val('A');
+          }else if ($("#pelayanan").val() > 100) {
+            alert("Maaf, nilai tidak boleh lebih dari seratus");
+            $("#skp").val(0);
+            $("#nilaipelayanan").val('');
+          }
+          tambahalldata();
+          ratarataall();
+      });
+      $("#integritas").change(function(){
+          if ($("#integritas").val() < 0) {
+            alert("Maaf, nilai tidak boleh kurang dari nol");
+            $("#skp").val(0);
+            $("#nilaiintegritas").val('');
+          }else if ($("#integritas").val() < 60) {
+            $("#nilaiintegritas").val('D');
+          }else if ($("#integritas").val() <= 70) {
+            $("#nilaiintegritas").val('C');
+          }else if ($("#integritas").val() <= 80) {
+            $("#nilaiintegritas").val('B');
+          }else if ($("#integritas").val() <= 100) {
+            $("#nilaiintegritas").val('A');
+          }else if ($("#integritas").val() > 100) {
+            alert("Maaf, nilai tidak boleh lebih dari seratus");
+            $("#integritas").val(0);
+            $("#nilaiintegritas").val('');
+          }
+          tambahalldata();
+          ratarataall();
+      });
+      $("#komitmen").change(function(){
+          if ($("#komitmen").val() < 0) {
+            alert("Maaf, nilai tidak boleh kurang dari nol");
+            $("#komitmen").val(0);
+            $("#nilaikomitmen").val('');
+          }else if ($("#komitmen").val() < 60) {
+            $("#nilaikomitmen").val('D');
+          }else if ($("#komitmen").val() <= 70) {
+            $("#nilaikomitmen").val('C');
+          }else if ($("#komitmen").val() <= 80) {
+            $("#nilaikomitmen").val('B');
+          }else if ($("#komitmen").val() <= 100) {
+            $("#nilaikomitmen").val('A');
+          }else if ($("#komitmen").val() > 100) {
+            alert("Maaf, nilai tidak boleh lebih dari seratus");
+            $("#komitmen").val(0);
+            $("#nilaikomitmen").val('');
+          }
+          tambahalldata();
+          ratarataall();
+      });
+      $("#disiplin").change(function(){
+          if ($("#disiplin").val() < 0) {
+            alert("Maaf, nilai tidak boleh kurang dari nol");
+            $("#disiplin").val(0);
+            $("#nilaidisiplin").val('');
+          }else if ($("#disiplin").val() < 60) {
+            $("#nilaidisiplin").val('D');
+          }else if ($("#disiplin").val() <= 70) {
+            $("#nilaidisiplin").val('C');
+          }else if ($("#disiplin").val() <= 80) {
+            $("#nilaidisiplin").val('B');
+          }else if ($("#disiplin").val() <= 100) {
+            $("#nilaidisiplin").val('A');
+          }else if ($("#disiplin").val() > 100) {
+            alert("Maaf, nilai tidak boleh lebih dari seratus");
+            $("#disiplin").val(0);
+            $("#nilaidisiplin").val('');
+          }
+          tambahalldata();
+          ratarataall();
+      });
+      $("#kerjasama").change(function(){
+          if ($("#kerjasama").val() < 0) {
+            alert("Maaf, nilai tidak boleh kurang dari nol");
+            $("#kerjasama").val(0);
+            $("#nilaikerjasama").val('');
+          }else if ($("#kerjasama").val() < 60) {
+            $("#nilaikerjasama").val('D');
+          }else if ($("#kerjasama").val() <= 70) {
+            $("#nilaikerjasama").val('C');
+          }else if ($("#kerjasama").val() <= 80) {
+            $("#nilaikerjasama").val('B');
+          }else if ($("#kerjasama").val() <= 100) {
+            $("#nilaikerjasama").val('A');
+          }else if ($("#kerjasama").val() > 100) {
+            alert("Maaf, nilai tidak boleh lebih dari seratus");
+            $("#kerjasama").val(0);
+            $("#nilaikerjasama").val('');
+          }
+          tambahalldata();
+          ratarataall();
+      });
+      $("#kepemimpinan").change(function(){
+          if ($("#kepemimpinan").val() < 0) {
+            alert("Maaf, nilai tidak boleh kurang dari nol");
+            $("#kepemimpinan").val(0);
+            $("#nilaikepemimpinan").val('');
+          }else if ($("#kepemimpinan").val() < 60) {
+            $("#nilaikepemimpinan").val('D');
+          }else if ($("#kepemimpinan").val() <= 70) {
+            $("#nilaikepemimpinan").val('C');
+          }else if ($("#kepemimpinan").val() <= 80) {
+            $("#nilaikepemimpinan").val('B');
+          }else if ($("#kepemimpinan").val() <= 100) {
+            $("#nilaikepemimpinan").val('A');
+          }else if ($("#kepemimpinan").val() > 100) {
+            alert("Maaf, nilai tidak boleh lebih dari seratus");
+            $("#kepemimpinan").val(0);
+            $("#nilaikepemimpinan").val('');
+          }
+          tambahalldata();
+          ratarataall();
+      });
+      function tambahalldata(){
+          $("#jumlah").val(parseInt($("#skp").val())+parseInt($("#pelayanan").val())+parseInt($("#integritas").val())+parseInt($("#komitmen").val())+parseInt($("#disiplin").val())+parseInt($("#kerjasama").val())+parseInt($("#kepemimpinan").val()));
+      }
+      function ratarataall(){
+          var jumlahrata = (parseInt($("#skp").val())+parseInt($("#pelayanan").val())+parseInt($("#integritas").val())+parseInt($("#komitmen").val())+parseInt($("#disiplin").val())+parseInt($("#kerjasama").val())+parseInt($("#kepemimpinan").val()))/7;
+          $("#ratarata").val(jumlahrata.toFixed(2));
+          if ($("#ratarata").val() < 0) {
+            alert("Maaf, nilai tidak boleh lebih dari nol");
+          }else if ($("#ratarata").val() < 60) {
+            $("#nilairatarata").val('D');
+          }else if ($("#ratarata").val() <= 70) {
+            $("#nilairatarata").val('C');
+          }else if ($("#ratarata").val() <= 80) {
+            $("#nilairatarata").val('B');
+          }else if ($("#ratarata").val() <= 100) {
+            $("#nilairatarata").val('A');
+          }else if ($("#ratarata").val() > 100) {
+            alert("Maaf, nilai tidak boleh lebih dari seratus");
+          }
+      }
+      var tahun = $("#tahun").val();
+      $("#tahun").change(function(){
+          tahun = $("#tahun").val();
+          alert(tahun);
+          $("#jqxgridPenilaianSKP").jqxGrid('updatebounddata', 'cells');
+      });
+      
+      var data = {};  // prepare the data
       var sourceskp = {
           datatype: "json",
           type  : "POST",
@@ -656,20 +791,21 @@ $(function(){
           { name: 'waktu', type: 'string'},
           { name: 'biaya', type: 'string'},
           { name: 'code_cl_phc', type: 'string'},
-          { name: 'ak_nilai', type: 'string'},
-          { name: 'kuant_nilai', type: 'string'},
+          { name: 'ak_nilai', type: 'double'},
+          { name: 'kuant_nilai', type: 'double'},
           { name: 'kuant_output_nilai', type: 'string'},
-          { name: 'target_nilai', type: 'string'},
-          { name: 'waktu_nilai', type: 'string'},
-          { name: 'biaya_nilai', type: 'string'},
-          { name: 'perhitungan_nilai', type: 'string'},
-          { name: 'pencapaian_nilai', type: 'string'},
+          { name: 'target_nilai', type: 'double'},
+          { name: 'waktu_nilai', type: 'double'},
+          { name: 'biaya_nilai', type: 'double'},
+          { name: 'perhitungan_nilai', type: 'double'},
+          { name: 'pencapaian_nilai', type: 'double'},
           { name: 'id_pegawai', type: 'string'},
           { name: 'tahun', type: 'string'},
           { name: 'edit', type: 'number'},
           { name: 'delete', type: 'number'}
             ],
-        url: "<?php echo site_url('kepegawaian/penilaiandppp/json_skp/{id_mst_peg_struktur_org}/{id_pegawai}'); ?>",
+        id: 'id_mst_peg_struktur_skp',
+        url: "<?php echo base_url().'kepegawaian/penilaiandppp/json_skp/{id_mst_peg_struktur_org}/{id_pegawai}'; ?>/"+tahun,
         cache: false,
           updateRow: function (rowID, rowData, commit) {
                   commit(true);
@@ -681,40 +817,31 @@ $(function(){
           $("#jqxgridPenilaianSKP").jqxGrid('updatebounddata', 'sort');
         },
         updateRow: function (rowID, rowData, commit) {
-            commit(true);
-            var arr = $.map(rowData, function(el) { return el });         
             
-            if(typeof(arr[1]) === 'object'){
-              var arr2 = $.map(arr[1], function(el) { return el });
-              if(arr[4] + '' + arr[5] + '' + arr[6] + '' + arr[7]+ '' + arr[8]!='') {
-                $.post( '<?php echo base_url()?>mst/keuangan_akun/akun_add', {id_mst_akun:arr[2],id_mst_akun_parent:arr2[0], uraian:arr[4], kode:arr[5], saldo_normal:arr[6], saldo_awal : arr[7], mendukung_transaksi : arr[8]}, function( data ) {
-                    if(data != 0){
-                      alert(data);                  
-                    }else{
-                      alert("Data "+arr[4]+" berhasil disimpan");                  
-                    }
-                });
-              }
-            }else{    
-              $.post( '<?php echo base_url()?>kepegawaian/penilaiandppp/updatenilaiskp', 
-                {
-                  row:rowID,
-                  id_pegawai:"<?php echo $id_pegawai?>",
-                  tahun:$('#tahun').val(), 
-                  id_mst_peg_struktur_org: "<?php echo $id_mst_peg_struktur_org?>", 
-                  id_mst_peg_struktur_skp : arr[2], 
-                  ak : arr[12], 
-                  kuant:arr[13], 
-                  target : arr[13],
-                  waktu : arr[14],
-                  biaya : arr[15]
-                },
-                function( data ) {
-                  if(data != 0){
-                    alert(data);
-                  }
-              });
-            }
+            $.post( '<?php echo base_url()?>kepegawaian/penilaiandppp/updatenilaiskp', 
+              {
+                id_pegawai:"<?php echo $id_pegawai?>",
+                tahun:$('#tahun').val(), 
+                id_mst_peg_struktur_org: "<?php echo $id_mst_peg_struktur_org?>", 
+                id_mst_peg_struktur_skp : rowData.id_mst_peg_struktur_skp, 
+                ak : rowData.ak_nilai, 
+                kuant: rowData.kuant_nilai, 
+                target : rowData.target_nilai,
+                waktu : rowData.waktu_nilai,
+                biaya : rowData.biaya_nilai,
+                //insert
+                // ak : arr[12], 
+                // kuant:arr[13], 
+                // target : arr[14],
+                // waktu : arr[15],
+                // biaya : arr[16]
+              },
+              function( data ) {
+                if(data != 0){
+                  alert(data);
+                }
+            });
+            $("#jqxgridPenilaianSKP").jqxGrid('updatebounddata', 'cells');
          },
         root: 'Rows',
             pagesize: 10,
@@ -723,6 +850,7 @@ $(function(){
             sourceskp.totalrecords = data[0].TotalRows;          
           }
         }
+        
         };    
 
         var dataadapterskp = new $.jqx.dataAdapter(sourceskp, {
@@ -752,13 +880,13 @@ $(function(){
             { text: 'No', editable:false ,datafield: 'no', columntype: 'textbox', filtertype: 'none', width: '3%' },
             { text: 'Kegiatan Tugas Jabatan',editable:false , align: 'center',  datafield: 'tugas', columntype: 'textbox', filtertype: 'textbox',  width: '15%' },
             { text: 'AK', editable:false ,align: 'center', cellsalign: 'center', datafield: 'ak', columntype: 'textbox', filtertype: 'textbox', width: '3%' },
-            { text: 'Kuant/ Output',columngroup: 'target', cellsalign: 'center',editable:false ,align: 'center', datafield: 'kuant_output', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
-            { text: 'Kual/Mutu',columngroup: 'target', editable:false ,align: 'center', datafield: 'target', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
+            { text: 'Kuant/ Output',columngroup: 'target', cellsalign: 'left',editable:false ,align: 'center', datafield: 'target', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
+            { text: 'Kual/Mutu',columngroup: 'target', editable:false ,align: 'center',cellsalign: 'right', datafield: 'kuant_output', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
             { text: 'Waktu (Bulan)',columngroup: 'target', editable:false ,align: 'center', cellsalign: 'right', datafield: 'waktu', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
             { text: 'Biaya',columngroup: 'target', editable:false ,align: 'center', cellsalign: 'right', datafield: 'biaya', columntype: 'textbox', filtertype: 'textbox', width: '9%' },
-            { text: 'AK',align: 'center'<?php echo $gridshowedit; ?>, cellsalign: 'center', datafield: 'ak_nilai', columntype: 'textbox', filtertype: 'textbox', width: '3%' },
-            { text: 'Kuant/ Output' <?php echo $gridshowedit; ?>,columngroup: 'realisasi',align: 'center',cellsalign: 'center', datafield: 'kuant_output_nilai', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
-            { text: 'Kual/Mutu' <?php echo $gridshowedit; ?>,columngroup: 'realisasi',align: 'center',  datafield: 'target_nilai', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
+            { text: 'AK',align: 'center'<?php echo $gridshowedit; ?>, cellsalign: 'right', datafield: 'ak_nilai', columntype: 'textbox', filtertype: 'textbox', width: '3%' },
+            { text: 'Kuant/ Output' <?php echo $gridshowedit; ?>,columngroup: 'realisasi',align: 'center',cellsalign: 'right', datafield: 'kuant_nilai', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
+            { text: 'Kual/Mutu' <?php echo $gridshowedit; ?>,columngroup: 'realisasi',align: 'center', cellsalign: 'right', datafield: 'target_nilai', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
             { text: 'Waktu (Bulan)' <?php echo $gridshowedit; ?>,columngroup: 'realisasi',align: 'center', cellsalign: 'right', datafield: 'waktu_nilai', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
             { text: 'Biaya' <?php echo $gridshowedit; ?>,columngroup: 'realisasi',align: 'center', cellsalign: 'right', datafield: 'biaya_nilai', columntype: 'textbox', filtertype: 'textbox', width: '9%' },
             { text: 'Perhitungan' <?php echo $gridshowedit; ?>,align: 'center', cellsalign: 'right', datafield: 'perhitungan_nilai', columntype: 'textbox', filtertype: 'none', width: '8%' },
@@ -771,6 +899,11 @@ $(function(){
               { text: 'Realisasi', align: 'center', name: 'realisasi' }
             ]
         });
-        });
+        }); 
+        if ($('#id_pegawai').attr('value') == $('#id_pegawai_penilai_atasan').attr('value')) {
+          $("input").prop('disabled', true);
+          $("textarea").prop('disabled', true);
+        }
+        
 </script>
              
