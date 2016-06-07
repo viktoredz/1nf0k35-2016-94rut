@@ -548,11 +548,12 @@ class Keuangan_transaksi extends CI_Controller {
 		$data['template']					= $this->keutransaksi_model->get_data_template_trans($id);
 		$data['kategori']					= $this->keutransaksi_model->get_data_kategori_transaksi();
 		$data['alert_form']		    		= '';
+		$data['kredit']						= $this->keutransaksi_model->get_data_kredit($id);
 
 		if($this->form_validation->run()== FALSE){
 			die($this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data));
 		}elseif($this->keutransaksi_model->jurnal_transaksi_add_kredit($id)){
-			// die("OK");
+			die("OK");
 		}else{
 			$data['alert_form'] = 'Save data failed...';
 		}
@@ -663,6 +664,7 @@ class Keuangan_transaksi extends CI_Controller {
 			$data['template']			= $this->keutransaksi_model->get_data_template_trans($id);
 			$data['kategori']			= $this->keutransaksi_model->get_data_kategori_transaksi();
 			$data['akun']				= $this->keutransaksi_model->get_data_akun();
+			$data['kredit']				= $this->keutransaksi_model->get_data_kredit($id);
 
 			die($this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data,true));
 		}elseif($this->keutransaksi_model->transaksi_update($id)){

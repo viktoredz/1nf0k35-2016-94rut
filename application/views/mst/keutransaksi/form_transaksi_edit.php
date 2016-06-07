@@ -215,8 +215,9 @@
                     <a class="glyphicon glyphicon-plus" name="add_kredit"></a>
                   </div> 
                 </div>
-                
-                <div id="kredit">
+
+                <?php foreach($kredit as $row) : ?>
+                <div id="kredit <?php echo $row->id_mst_transaksi_item ?>">
                   <div class="row" >
                     <div class="col-md-12">
                       <div class="row">
@@ -325,6 +326,7 @@
                   </div>
                 <!-- </div> -->
               </div>
+              <?php endforeach ?>
             </div>
           </div>
         </div>
@@ -541,7 +543,8 @@
            success: function (response) {
             if(response=="OK"){
 
-               var form_kredit = '<div id="kredit">\
+               var form_kredit = '<?php foreach($kredit as $row) : ?>\
+                                  <div id="kredit'+<?php echo $row->id_mst_transaksi_item ?>+'">\
                                     <div class="row" >\
                                       <div class="col-md-12">\
                                         <div class="row">\
@@ -654,7 +657,9 @@
                                         </div>\
                                       </div>\
                                     </div>\
-                                </div>';
+                                </div>\
+                    <?php endforeach ?>';
+
 
               $('#Kredit').append(form_kredit);
                counter_kredit++;
