@@ -137,28 +137,29 @@ class Keutransaksi_model extends CI_Model {
         }
     }
 
-    function jurnal_transaksi_update($id){
+    function jurnal_transaksi_update($id=0){
        
-        // $data = array(
-        //    array(
-        //       'id_mst_transaksi'   => $this->input->post('id_mst_transaksi'),
-        //       'id_mst_akun'        => $this->input->post('id_mst_akun'),
-        //       'value'              => $this->input->post('value')
-        //    ),
-        //    array(
-        //       'id_mst_transaksi'   => $this->input->post('id_mst_transaksi'),
-        //       'id_mst_akun'        => $this->input->post('id_mst_akun'),
-        //       'value'              => $this->input->post('value')
-        //    )
-        // );
-        
-        $data['id_mst_transaksi']        = $this->input->post('id_mst_transaksi');
-        $data['id_mst_akun']             = $this->input->post('id_mst_akun');
-        $data['value']                   = $this->input->post('value');
-        
-        $this->db->where('id_mst_transaksi_item',$id);
+        $data = array(
+           array(
+              'id_mst_transaksi'   => $id,
+              'id_mst_akun'        => $this->input->post('id_mst_akun'),
+              'value'              => $this->input->post('value')
+           ),
+           array(
+              'id_mst_transaksi'   => $id,
+              'id_mst_akun'        => $this->input->post('id_mst_akun'),
+              'value'              => $this->input->post('value')
+           )
+        );
 
-        if($this->db->update('mst_keu_transaksi_item', $data)){
+        // $data['id_mst_transaksi']        = $id;
+        // $data['id_mst_akun']             = $this->input->post('id_mst_akun');
+        // $data['value']                   = $this->input->post('value');
+        
+        // $this->db->where('id_mst_transaksi',$id);
+
+        // if($this->db->update('mst_keu_transaksi_item', $data)){
+        if($this->db->update_batch('mst_keu_transaksi_item', $data, 'id_mst_transaksi')){
             return true;
         }else{
             return mysql_error();

@@ -413,7 +413,7 @@
            success: function (response) {
             if(response=="OK"){
 
-            var form_debit = '<div id="debt">\
+          var form_debit = '<div id="debt">\
                               <div class="row">\
                                 <div class="col-md-12">\
                                   <div class="row">\
@@ -520,7 +520,6 @@
            }
         });
       });
-      
      
       counter_kredit = 2; 
       $("[name='add_kredit']").click(function() {

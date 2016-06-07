@@ -552,7 +552,7 @@ class Keuangan_transaksi extends CI_Controller {
 		if($this->form_validation->run()== FALSE){
 			die($this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data));
 		}elseif($this->keutransaksi_model->jurnal_transaksi_add_kredit($id)){
-			die("OK");
+			// die("OK");
 		}else{
 			$data['alert_form'] = 'Save data failed...';
 		}
