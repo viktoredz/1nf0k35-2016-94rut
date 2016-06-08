@@ -18,67 +18,31 @@
       <?php } ?>
     </div>
     <div class="col-sm-12" style="text-align: right">
-      <button type="button" name="non_aktifkan_status" class="btn btn-danger"><i class='fa fa-times-circle-o'></i> &nbsp; Non Aktifkan</button>
-      <button type="button" name="btn_keuangan_akun_close" class="btn btn-primary"><i class='fa fa-close'></i> &nbsp; Tutup</button>
+      <button type="button" name="btn_pegawai_data_close" class="btn btn-primary"><i class='fa fa-close'></i> &nbsp; Tutup</button>
     </div>
   </div>
 
   <div class="row" style="margin: 5px">
-          <div class="col-md-12">
-            <div class="box box-primary">
-
-              <div class="row" style="margin: 5px">
-                <div class="col-md-6" style="padding: 5px">
-                  Kode Akun
-                </div>
-                <div class="col-md-6">
-                  <input type="hidden" id="tar_id_struktur_org" value="<?php $tar_id_struktur_org;?>">
-                  <?php
-                    if(set_value('tar_id_struktur_org')=="" && isset($tar_id_struktur_org)){
-                      echo $tar_id_struktur_org;
-                    }else{
-                      echo('-');
-                    }
-                  ?>
-                </div>
-              </div>
-
-              <div class="row" style="margin: 5px">
-                <div class="col-md-6" style="padding: 5px">
-                  Nama Jabatan
-                </div>
-                <div class="col-md-6">
-                  <input type="hidden" id="tar_nama_posisi" value="<?php $tar_nama_posisi?>">
-                  <?php
-                    if(set_value('tar_nama_posisi')=="" && isset($tar_nama_posisi)){
-                     echo $tar_nama_posisi;
-                    }else{
-                      echo  set_value('tar_nama_posisi');
-                    }
-                  ?>
-                </div>
-              </div>
-
-              <div class="row" style="margin: 5px">
-                <div class="col-md-6" style="padding: 5px">
-                  Status
-                </div>
-                <div class="col-md-6">
-                  <input type="checkbox" name="tar_aktif" id="tar_aktif" value="<?php $tar_aktif; ?>" 
-                  <?php 
-                  if ($tar_aktif=='1') {
-                    echo 'checked';
-                  }else{
-                    echo '';
-                  }
-                  ?>
-                  >
-                </div>
-              </div>
-
-              <br>
-            </div>
-          </div>
+    <div class="col-md-12">
+      <div class="box box-primary">
+          <table class="table table-striped table-hover">
+              <tr>
+                  <th>NIP</th>  
+                  <th>Nama</th>  
+              </tr>
+              <?php if(isset($all_pegawai)){
+                foreach ($all_pegawai as $key) {
+              ?>
+              <tr>
+                <td><?php echo $key->nip_nit; ?></td>
+                <td><?php echo $key->gelar_depan.' '.$key->nama.' '.$key->gelar_belakang; ?></td>
+              </tr>
+              <?php }
+              } 
+              ?>
+          </table>
+      </div>
+    </div>
   </div>
 </form>
 
@@ -87,30 +51,10 @@
   $(document).ready(function () {   
     tabIndex = 1;
 
-    $("[name='btn_keuangan_akun_close']").click(function(){
-        $("#popup_keuangan_akun_detail").jqxWindow('close');
+    $("[name='btn_pegawai_data_close']").click(function(){
+        $("#popup_pegawai_data_detail").jqxWindow('close');
     });
 
-    $("[name='non_aktifkan_status']").click(function(){
-        $.ajax({
-            cache : false,
-            contentType : false,
-            processData : false,
-            type : 'POST',
-            url : '<?php echo base_url()."mst/pegorganisasi/non_aktif_akun/{tar_id_struktur_org}"   ?>',
-            success : function(response){
-              if(response=="OK"){
-                  $("[name='non_aktifkan_status']").show();
-                $("#popup_keuangan_akun_detail").jqxWindow('close');
-                $("#treeGrid").jqxTreeGrid('updateBoundData', 'filter');
-              }else{
-                $("#popup_keuangan_akun_detail").jqxWindow('close');
-                $("#treeGrid").jqxTreeGrid('updateBoundData', 'filter');
-              }
-            }
-        });
-        return false;
-    });
 
     $("[name='akun_mendukung_target']").click(function(){
       var data = new FormData();
