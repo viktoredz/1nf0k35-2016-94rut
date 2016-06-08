@@ -289,7 +289,23 @@ class Penilaiandppp extends CI_Controller {
 
 			$this->template->show($data,"home");
 	}
+	function form_tab_dpp($pageIndex,$id){
+		$data = array();
+		$data['id']=$id;
 
+		switch ($pageIndex) {
+			case 1:
+				die($this->parser->parse("kepegawaian/drh/form_jabatan_struktural",$data));
+				break;
+			case 2:
+				die($this->parser->parse("kepegawaian/drh/form_jabatan_fungsional",$data));
+				break;
+			default:
+				die($this->parser->parse("kepegawaian/drh/form_jabatan_fungsional",$data));
+				break;
+		}
+
+	}
 	function add_dppp($id_pegawai=0,$tahun=0,$id_mst_peg_struktur_org=0,$id_mst_peg_struktur_skp=0){
 		$data['action']				= "add";
 		$data['id_pegawai']			= $id_pegawai;
@@ -804,6 +820,18 @@ class Penilaiandppp extends CI_Controller {
 		);
 
 		echo json_encode(array($json));
+	}
+	function nilairataskp($id=0,$id_pegawai=0,$tahun=0){
+		$this->db->select("((sum((((pegawai_skp_nilai.kuant / mst_peg_struktur_skp.kuant)*100)+((pegawai_skp_nilai.target / mst_peg_struktur_skp.target)*100)+(((1.76*mst_peg_struktur_skp.waktu - pegawai_skp_nilai.waktu)/mst_peg_struktur_skp.waktu)*100))/3))/6) as nilairata");
+        $this->db->where('mst_peg_struktur_skp.id_mst_peg_struktur_org',$id);
+        $this->db->join('pegawai_skp_nilai',"mst_peg_struktur_skp.id_mst_peg_struktur_skp = pegawai_skp_nilai.id_mst_peg_struktur_skp AND pegawai_skp_nilai.id_pegawai=".'"'.$id_pegawai.'"'." and tahun=".'"'.$tahun.'"'."",'left');
+        $query = $this->db->get('mst_peg_struktur_skp');
+		foreach ($query->result() as $q) {
+			$nilairataskp[] = array(
+				'nilai' => number_format($q->nilairata,2)  
+			);
+			echo json_encode($nilairataskp);
+		}
 	}
 	function updatenilaiskp(){
 		$this->authentication->verify('kepegawaian','edit');

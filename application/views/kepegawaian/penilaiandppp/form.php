@@ -41,6 +41,7 @@ if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
 
 ?>
 <script type="text/javascript">
+    
     function ambil_nip_penilai()
     {
       var kode = "<?php echo $idlogin; ?>";
@@ -63,7 +64,24 @@ if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
 
       return false;
     }
+    function ambilnilairataskp()
+    {
+      var tahundata = $("#tahun").val();
+      $.ajax({
+      url: "<?php echo base_url().'kepegawaian/penilaiandppp/nilairataskp/{id_mst_peg_struktur_org}/{id_pegawai}' ?>/"+tahundata,
+      dataType: "json",
+      success:function(data)
+      { 
+        $.each(data,function(index,elemet){
+          $("#nilairataskp").val(elemet.nilai);
+        });
+      }
+      });
+
+      return false;
+    }
     $(function(){
+      ambilnilairataskp();
       ambil_nip_penilai();
         $('#form-ss-penilaidpp').submit(function(){
             var data = new FormData();
@@ -122,6 +140,7 @@ if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
                       $("#btn_add_dppp").show();
                       $("#jqxgrid").show();
                       $("#jqxgrid").jqxGrid('updatebounddata', 'cells');
+                      ambilnilairataskp();
                   }
                   else if(res[0]=="Error"){
                       $('#notice-pegawai').hide();
@@ -182,6 +201,13 @@ if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
             echo $id_pegawai;
           }else{
             echo  set_value('id_pegawai');
+          }
+        ?>">
+        <input type="hidden" class="form-control" name="nilairataskp" id="nilairataskp" placeholder="nilairataskp " value="<?php 
+        if(set_value('nilairataskp')=="" && isset($nilairataskp)){
+            echo $nilairataskp;
+          }else{
+            echo  set_value('nilairataskp');
           }
         ?>">
         <input type="hidden" class="form-control" name="id_pegawai_penilai" id="id_pegawai_penilai" placeholder="ID Penilai" value="<?php 
@@ -541,7 +567,7 @@ if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
               <label>Nilai Prestasi</label>
           </div>
           <div class="col-md-5">
-            <input <?php echo $funshowhidden;?> type="number" class="form-control" name="nilai_prestasi" id="nilai_prestasi" placeholder="Nilai Prestasi" value="<?php 
+            <input disabled="disabled" type="number" class="form-control" name="nilai_prestasi" id="nilai_prestasi" placeholder="Nilai Prestasi" value="<?php 
             if(set_value('nilai_prestasi')=="" && isset($nilai_prestasi)){
                 echo $nilai_prestasi;
               }else{
@@ -550,7 +576,7 @@ if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
             ?>">
           </div>
           <div class="col-md-4">
-            <input <?php echo $funshowhidden;?> type="text" class="form-control" name="nilai_nilai_prestasi" id="nilai_nilai_prestasi" placeholder="Nilai Prestasi" value="<?php 
+            <input disabled="disabled"type="text" class="form-control" name="nilai_nilai_prestasi" id="nilai_nilai_prestasi" placeholder="Nilai Prestasi" value="<?php 
               if(set_value('nilai_nilai_prestasi')=="" && isset($nilai_nilai_prestasi)){
                   echo $nilai_nilai_prestasi;
                 }else{
@@ -630,6 +656,7 @@ $(function(){
               $("#nilaiskp").val('');
             }
         }
+        nilairataskp()
       }
       skpnilai();
       $("#skp").change(function(){
@@ -657,6 +684,7 @@ $(function(){
               $("#nilaipelayanan").val('');
             }
         }
+        nilairataskp()
       }
       pelayanannilai();
       $("#pelayanan").change(function(){
@@ -684,6 +712,7 @@ $(function(){
               $("#nilaiintegritas").val('');
             }
         }
+        nilairataskp()
       }
       integritasnilai();
       $("#integritas").change(function(){
@@ -711,6 +740,7 @@ $(function(){
               $("#nilaikomitmen").val('');
             }
         }
+        nilairataskp()
       }
       komitmennilai();
       $("#komitmen").change(function(){
@@ -738,6 +768,7 @@ $(function(){
               $("#nilaidisiplin").val('');
             }
         }
+        nilairataskp()
       }
       disiplinnilai();
       $("#disiplin").change(function(){
@@ -765,6 +796,7 @@ $(function(){
               $("#nilaikerjasama").val('');
             }
         }
+        nilairataskp()
       }
       kerjasamanilai();
       $("#kerjasama").change(function(){
@@ -792,6 +824,7 @@ $(function(){
             $("#nilaikepemimpinan").val('');
           }
         }
+        nilairataskp();
       }
       kepemimpinannilai();
       $("#kepemimpinan").change(function(){
@@ -802,23 +835,48 @@ $(function(){
       function tambahalldata(){
           $("#jumlah").val(parseInt($("#skp").val())+parseInt($("#pelayanan").val())+parseInt($("#integritas").val())+parseInt($("#komitmen").val())+parseInt($("#disiplin").val())+parseInt($("#kerjasama").val())+parseInt($("#kepemimpinan").val()));
       }
+      ratarataall();
       function ratarataall(){
           var jumlahrata = (parseInt($("#skp").val())+parseInt($("#pelayanan").val())+parseInt($("#integritas").val())+parseInt($("#komitmen").val())+parseInt($("#disiplin").val())+parseInt($("#kerjasama").val())+parseInt($("#kepemimpinan").val()))/7;
-          $("#ratarata").val(jumlahrata.toFixed(2));
+            $("#ratarata").val(jumlahrata.toFixed(2));
+
           if ($("#ratarata").val() < 0) {
             alert("Maaf, nilai tidak boleh lebih dari nol");
           }else if ($("#ratarata").val() < 60) {
+            $("#nilaijumlah").val('D');
             $("#nilairatarata").val('D');
           }else if ($("#ratarata").val() <= 70) {
+            $("#nilaijumlah").val('C');
             $("#nilairatarata").val('C');
           }else if ($("#ratarata").val() <= 80) {
+            $("#nilaijumlah").val('B');
             $("#nilairatarata").val('B');
           }else if ($("#ratarata").val() <= 100) {
+            $("#nilaijumlah").val('A');
             $("#nilairatarata").val('A');
           }else if ($("#ratarata").val() > 100) {
             alert("Maaf, nilai tidak boleh lebih dari seratus");
           }
+         
       }
+
+      function nilairataskp(){
+      var nilaiskpdata = parseInt($("#nilairataskp").val())*60/100;
+      var nilairata = parseInt($("#ratarata").val())*40/100;
+      //alert($("#nilairataskp").val());
+      $("#nilai_prestasi").val(parseInt(nilairata)+parseInt(nilaiskpdata));
+        if ($("#nilai_prestasi").val() !='') {
+          if ($("#nilai_prestasi").val() < 60) {
+            $("#nilai_nilai_prestasi").val('D');
+          }else if ($("#kepemimpinan").val() <= 70) {
+            $("#nilai_nilai_prestasi").val('C');
+          }else if ($("#kepemimpinan").val() <= 80) {
+            $("#nilai_nilai_prestasi").val('B');
+          }else if ($("#kepemimpinan").val() <= 100) {
+            $("#nilai_nilai_prestasi").val('A');
+          }
+        }
+    }
       var tahun = $("#tahun").val();
       $("#tahun").change(function(){
           tahun = $("#tahun").val();
@@ -894,6 +952,7 @@ $(function(){
                 }
             });
             $("#jqxgridPenilaianSKP").jqxGrid('updatebounddata', 'cells');
+            ambilnilairataskp();
          },
         root: 'Rows',
             pagesize: 10,

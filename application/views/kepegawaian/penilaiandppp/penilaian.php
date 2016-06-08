@@ -132,7 +132,7 @@
 	}
   
 	function add_dppp(){
-		$.get("<?php echo base_url().'kepegawaian/penilaiandppp/add_dppp/'.$id_pegawai.'/'.$tahun.'/'.$id_mst_peg_struktur_org.'/'.$id_mst_peg_struktur_skp; ?>" , function(data) {
+		$.get("<?php echo base_url().'kepegawaian/penilaiandppp/form_tab_dpp/'.$id_pegawai.'/'.$tahun.'/'.$id_mst_peg_struktur_org.'/'.$id_mst_peg_struktur_skp; ?>" , function(data) {
       $("#tambahjqxgrid").show();
 			$("#tambahjqxgrid").html(data);
       $("#jqxgrid").hide();
