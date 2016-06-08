@@ -610,133 +610,170 @@ $(function(){
           $("input").prop('disabled', true);
           $("textarea").prop('disabled', true);
         }
-      $("#skp").change(function(){
+      function skpnilai(){
+        if ($("#skp").val() !='') {
           if ($("#skp").val() < 0) {
-            alert("Maaf, nilai tidak boleh kurang dari nol");
-            $("#skp").val(0);
-            $("#nilaiskp").val('');
-          }else if ($("#skp").val() < 60) {
-            $("#nilaiskp").val('D');
-          }else if ($("#skp").val() <= 70) {
-            $("#nilaiskp").val('C');
-          }else if ($("#skp").val() <= 80) {
-            $("#nilaiskp").val('B');
-          }else if ($("#skp").val() <= 100) {
-            $("#nilaiskp").val('A');
-          }else if ($("#skp").val() > 100) {
-            alert("Maaf, nilai tidak boleh lebih dari seratus");
-            $("#skp").val(0);
-            $("#nilaiskp").val('');
-          }
+              alert("Maaf, nilai tidak boleh kurang dari nol");
+              $("#skp").val(0);
+              $("#nilaiskp").val('');
+            }else if ($("#skp").val() < 60) {
+              $("#nilaiskp").val('D');
+            }else if ($("#skp").val() <= 70) {
+              $("#nilaiskp").val('C');
+            }else if ($("#skp").val() <= 80) {
+              $("#nilaiskp").val('B');
+            }else if ($("#skp").val() <= 100) {
+              $("#nilaiskp").val('A');
+            }else if ($("#skp").val() > 100) {
+              alert("Maaf, nilai tidak boleh lebih dari seratus");
+              $("#skp").val(0);
+              $("#nilaiskp").val('');
+            }
+        }
+      }
+      skpnilai();
+      $("#skp").change(function(){
+          skpnilai();
           tambahalldata();
           ratarataall();
       });
-      $("#pelayanan").change(function(){
+      function pelayanannilai(){
+        if ($("#pelayanan").val() !='') {
           if ($("#pelayanan").val() < 0) {
-            alert("Maaf, nilai tidak boleh kurang dari nol");
-            $("#pelayanan").val(0);
-            $("#nilaipelayanan").val('');
-          }else if ($("#pelayanan").val() < 60) {
-            $("#nilaipelayanan").val('D');
-          }else if ($("#pelayanan").val() <= 70) {
-            $("#nilaipelayanan").val('C');
-          }else if ($("#pelayanan").val() <= 80) {
-            $("#nilaipelayanan").val('B');
-          }else if ($("#pelayanan").val() <= 100) {
-            $("#nilaipelayanan").val('A');
-          }else if ($("#pelayanan").val() > 100) {
-            alert("Maaf, nilai tidak boleh lebih dari seratus");
-            $("#skp").val(0);
-            $("#nilaipelayanan").val('');
-          }
+              alert("Maaf, nilai tidak boleh kurang dari nol");
+              $("#pelayanan").val(0);
+              $("#nilaipelayanan").val('');
+            }else if ($("#pelayanan").val() < 60) {
+              $("#nilaipelayanan").val('D');
+            }else if ($("#pelayanan").val() <= 70) {
+              $("#nilaipelayanan").val('C');
+            }else if ($("#pelayanan").val() <= 80) {
+              $("#nilaipelayanan").val('B');
+            }else if ($("#pelayanan").val() <= 100) {
+              $("#nilaipelayanan").val('A');
+            }else if ($("#pelayanan").val() > 100) {
+              alert("Maaf, nilai tidak boleh lebih dari seratus");
+              $("#skp").val(0);
+              $("#nilaipelayanan").val('');
+            }
+        }
+      }
+      pelayanannilai();
+      $("#pelayanan").change(function(){
+          pelayanannilai();
           tambahalldata();
           ratarataall();
       });
-      $("#integritas").change(function(){
+      function integritasnilai(){
+        if ($("#integritas").val() !='') {
           if ($("#integritas").val() < 0) {
-            alert("Maaf, nilai tidak boleh kurang dari nol");
-            $("#skp").val(0);
-            $("#nilaiintegritas").val('');
-          }else if ($("#integritas").val() < 60) {
-            $("#nilaiintegritas").val('D');
-          }else if ($("#integritas").val() <= 70) {
-            $("#nilaiintegritas").val('C');
-          }else if ($("#integritas").val() <= 80) {
-            $("#nilaiintegritas").val('B');
-          }else if ($("#integritas").val() <= 100) {
-            $("#nilaiintegritas").val('A');
-          }else if ($("#integritas").val() > 100) {
-            alert("Maaf, nilai tidak boleh lebih dari seratus");
-            $("#integritas").val(0);
-            $("#nilaiintegritas").val('');
-          }
+              alert("Maaf, nilai tidak boleh kurang dari nol");
+              $("#skp").val(0);
+              $("#nilaiintegritas").val('');
+            }else if ($("#integritas").val() < 60) {
+              $("#nilaiintegritas").val('D');
+            }else if ($("#integritas").val() <= 70) {
+              $("#nilaiintegritas").val('C');
+            }else if ($("#integritas").val() <= 80) {
+              $("#nilaiintegritas").val('B');
+            }else if ($("#integritas").val() <= 100) {
+              $("#nilaiintegritas").val('A');
+            }else if ($("#integritas").val() > 100) {
+              alert("Maaf, nilai tidak boleh lebih dari seratus");
+              $("#integritas").val(0);
+              $("#nilaiintegritas").val('');
+            }
+        }
+      }
+      integritasnilai();
+      $("#integritas").change(function(){
+          integritasnilai();
           tambahalldata();
           ratarataall();
       });
-      $("#komitmen").change(function(){
+      function komitmennilai(){
+        if ($("#komitmen").val() !='') {
           if ($("#komitmen").val() < 0) {
-            alert("Maaf, nilai tidak boleh kurang dari nol");
-            $("#komitmen").val(0);
-            $("#nilaikomitmen").val('');
-          }else if ($("#komitmen").val() < 60) {
-            $("#nilaikomitmen").val('D');
-          }else if ($("#komitmen").val() <= 70) {
-            $("#nilaikomitmen").val('C');
-          }else if ($("#komitmen").val() <= 80) {
-            $("#nilaikomitmen").val('B');
-          }else if ($("#komitmen").val() <= 100) {
-            $("#nilaikomitmen").val('A');
-          }else if ($("#komitmen").val() > 100) {
-            alert("Maaf, nilai tidak boleh lebih dari seratus");
-            $("#komitmen").val(0);
-            $("#nilaikomitmen").val('');
-          }
+              alert("Maaf, nilai tidak boleh kurang dari nol");
+              $("#komitmen").val(0);
+              $("#nilaikomitmen").val('');
+            }else if ($("#komitmen").val() < 60) {
+              $("#nilaikomitmen").val('D');
+            }else if ($("#komitmen").val() <= 70) {
+              $("#nilaikomitmen").val('C');
+            }else if ($("#komitmen").val() <= 80) {
+              $("#nilaikomitmen").val('B');
+            }else if ($("#komitmen").val() <= 100) {
+              $("#nilaikomitmen").val('A');
+            }else if ($("#komitmen").val() > 100) {
+              alert("Maaf, nilai tidak boleh lebih dari seratus");
+              $("#komitmen").val(0);
+              $("#nilaikomitmen").val('');
+            }
+        }
+      }
+      komitmennilai();
+      $("#komitmen").change(function(){
+          komitmennilai();
           tambahalldata();
           ratarataall();
       });
-      $("#disiplin").change(function(){
+      function disiplinnilai(){
+        if ($("#disiplin").val() !='') {
           if ($("#disiplin").val() < 0) {
-            alert("Maaf, nilai tidak boleh kurang dari nol");
-            $("#disiplin").val(0);
-            $("#nilaidisiplin").val('');
-          }else if ($("#disiplin").val() < 60) {
-            $("#nilaidisiplin").val('D');
-          }else if ($("#disiplin").val() <= 70) {
-            $("#nilaidisiplin").val('C');
-          }else if ($("#disiplin").val() <= 80) {
-            $("#nilaidisiplin").val('B');
-          }else if ($("#disiplin").val() <= 100) {
-            $("#nilaidisiplin").val('A');
-          }else if ($("#disiplin").val() > 100) {
-            alert("Maaf, nilai tidak boleh lebih dari seratus");
-            $("#disiplin").val(0);
-            $("#nilaidisiplin").val('');
-          }
+              alert("Maaf, nilai tidak boleh kurang dari nol");
+              $("#disiplin").val(0);
+              $("#nilaidisiplin").val('');
+            }else if ($("#disiplin").val() < 60) {
+              $("#nilaidisiplin").val('D');
+            }else if ($("#disiplin").val() <= 70) {
+              $("#nilaidisiplin").val('C');
+            }else if ($("#disiplin").val() <= 80) {
+              $("#nilaidisiplin").val('B');
+            }else if ($("#disiplin").val() <= 100) {
+              $("#nilaidisiplin").val('A');
+            }else if ($("#disiplin").val() > 100) {
+              alert("Maaf, nilai tidak boleh lebih dari seratus");
+              $("#disiplin").val(0);
+              $("#nilaidisiplin").val('');
+            }
+        }
+      }
+      disiplinnilai();
+      $("#disiplin").change(function(){
+          disiplinnilai();
           tambahalldata();
           ratarataall();
       });
-      $("#kerjasama").change(function(){
+      function kerjasamanilai(){
+        if ($("#kerjasama").val() !='') {
           if ($("#kerjasama").val() < 0) {
-            alert("Maaf, nilai tidak boleh kurang dari nol");
-            $("#kerjasama").val(0);
-            $("#nilaikerjasama").val('');
-          }else if ($("#kerjasama").val() < 60) {
-            $("#nilaikerjasama").val('D');
-          }else if ($("#kerjasama").val() <= 70) {
-            $("#nilaikerjasama").val('C');
-          }else if ($("#kerjasama").val() <= 80) {
-            $("#nilaikerjasama").val('B');
-          }else if ($("#kerjasama").val() <= 100) {
-            $("#nilaikerjasama").val('A');
-          }else if ($("#kerjasama").val() > 100) {
-            alert("Maaf, nilai tidak boleh lebih dari seratus");
-            $("#kerjasama").val(0);
-            $("#nilaikerjasama").val('');
-          }
+              alert("Maaf, nilai tidak boleh kurang dari nol");
+              $("#kerjasama").val(0);
+              $("#nilaikerjasama").val('');
+            }else if ($("#kerjasama").val() < 60) {
+              $("#nilaikerjasama").val('D');
+            }else if ($("#kerjasama").val() <= 70) {
+              $("#nilaikerjasama").val('C');
+            }else if ($("#kerjasama").val() <= 80) {
+              $("#nilaikerjasama").val('B');
+            }else if ($("#kerjasama").val() <= 100) {
+              $("#nilaikerjasama").val('A');
+            }else if ($("#kerjasama").val() > 100) {
+              alert("Maaf, nilai tidak boleh lebih dari seratus");
+              $("#kerjasama").val(0);
+              $("#nilaikerjasama").val('');
+            }
+        }
+      }
+      kerjasamanilai();
+      $("#kerjasama").change(function(){
+          kerjasamanilai();
           tambahalldata();
           ratarataall();
       });
-      $("#kepemimpinan").change(function(){
+      function kepemimpinannilai(){
+        if ($("#kepemimpinan").val() !='') {
           if ($("#kepemimpinan").val() < 0) {
             alert("Maaf, nilai tidak boleh kurang dari nol");
             $("#kepemimpinan").val(0);
@@ -754,6 +791,11 @@ $(function(){
             $("#kepemimpinan").val(0);
             $("#nilaikepemimpinan").val('');
           }
+        }
+      }
+      kepemimpinannilai();
+      $("#kepemimpinan").change(function(){
+          kepemimpinannilai();
           tambahalldata();
           ratarataall();
       });
