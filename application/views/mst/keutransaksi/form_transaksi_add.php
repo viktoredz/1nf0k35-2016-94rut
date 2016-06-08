@@ -15,7 +15,7 @@
 <?php } ?>
 
 <section class="content">
-<form action="<?php echo base_url()?>kepegawaian/drh/dodel_multi" id="form_transaksi" name="form_transaksi" method="POST" >
+<form action="<?php echo base_url()?>mst/keuangan_transaksi/transaksi_add/" method="post">
   <div class="row">
     <div class="col-md-12">
       <div class="box box-primary">
@@ -25,7 +25,7 @@
 
         <div class="box-footer">
           <button type="button" id="btn-kembali" class="btn btn-primary pull-right"><i class='fa  fa-arrow-circle-o-left'></i> &nbsp;Kembali</button>
-          <button type="button" name="btn_transaksi_save" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Simpan</button>
+          <button type="submit" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Simpan</button>
           <button type="button" name="btn-reset" value="Reset" onclick='clearForm(this.form)' class="btn btn-success" ><i class='fa fa-refresh'></i> &nbsp; Reset</button>
        </div>
         <div class="box-body">
@@ -35,7 +35,7 @@
             Nama Transaksi
           </div>
           <div class="col-md-8">
-            <input type="text" class="form-control" name="transaksi_nama" placeholder="Pembayaran Biaya Jasa Pelayanan" value="<?php 
+            <input type="text" class="form-control" name="nama" placeholder="Pembayaran Biaya Jasa Pelayanan" value="<?php 
               if(set_value('nama')=="" && isset($nama)){
                 echo $nama;
               }else{
@@ -48,7 +48,7 @@
         <div class="row" style="margin: 5px">
           <div class="col-md-4" style="padding: 5px">Deskripsi</div>
           <div class="col-md-8">
-          <textarea class="form-control" name="transaksi_deskripsi" placeholder="Deskripsi Dari Kategori"><?php 
+          <textarea class="form-control" name="deskripsi" placeholder="Deskripsi Dari Kategori"><?php 
               if(set_value('deskripsi')=="" && isset($deskripsi)){
                 echo $deskripsi;
               }else{
@@ -63,7 +63,7 @@
               Untuk Jurnal
           </div>
             <div class="col-md-8">
-              <select name="transaksi_jurnal" type="text" class="form-control">
+              <select name="untuk_jurnal" type="text" class="form-control">
                 <?php 
                   if(set_value('transaksi_jurnal')=="" && isset($untuk_jurnal)){
                     $transaksi_jurnal = $untuk_jurnal;
@@ -85,7 +85,7 @@
           Kategori
         </div>
         <div class="col-md-8">
-          <select  name="transaksi_kategori" type="text" class="form-control">
+          <select  name="id_mst_kategori_transaksi" type="text" class="form-control">
             <?php foreach($kategori as $k) : ?>
                 <?php
                   if(set_value('id_mst_kategori_transaksi')=="" && isset($id_mst_kategori_transaksi)){
@@ -108,12 +108,13 @@
 </section>
 
 <script type="text/javascript">
-
+  $(function(){
     $("#btn-kembali").click(function(){
       $.get('<?php echo base_url()?>mst/keuangan_transaksi/transaksi_kembali', function (data) {
         $('#content2').html(data);
       });
     });
+  });
 
     function clearForm(form_transaksi) {
    
@@ -151,38 +152,6 @@
       }
     }
 }
-
-    $("[name='btn_transaksi_save']").click(function(){
-        var data = new FormData();
-        $('#biodata_notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
-        $('#biodata_notice').show();
-
-        data.append('nama',                      $("[name='transaksi_nama']").val());
-        data.append('deskripsi',                 $("[name='transaksi_deskripsi']").val());
-        data.append('untuk_jurnal',              $("[name='transaksi_jurnal']").val());
-        data.append('id_mst_kategori_transaksi', $("[name='transaksi_kategori']").val());
-              
-        $.ajax({
-            cache : false,
-            contentType : false,
-            processData : false,
-            type : 'POST',
-            url : '<?php echo base_url()."mst/keuangan_transaksi/transaksi_add/"   ?>',
-            data : data,
-            success : function(response){
-              if(response=="OK"){
-                alert("Data berhasil disimpan.");
-                $("#form_transaksi")[0].reset();
-              }else{
-                alert("Isi kolom yang kosong.");
-              }
-            }
-        });
-
-        return false;
-    });
-
-
 
 </script>
 

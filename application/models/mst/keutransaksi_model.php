@@ -184,7 +184,8 @@ class Keutransaksi_model extends CI_Model {
         $data['bisa_diubah']                        = 0;
         $data['jumlah_transaksi']                   = 0;
         if($this->db->insert('mst_keu_transaksi', $data)){
-            return 1;
+           $lastInsertedID = $this->db->insert_id();
+            return $lastInsertedID;
         }else{
             return mysql_error();
         }

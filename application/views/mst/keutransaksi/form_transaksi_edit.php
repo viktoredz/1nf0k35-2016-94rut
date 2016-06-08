@@ -1,14 +1,21 @@
-<?php if($this->session->flashdata('alert')!=""){ ?>
-<div class="alert alert-success alert-dismissable">
+<?php if(validation_errors()!=""){ ?>
+<div class="alert alert-warning alert-dismissable">
   <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
   <h4>  <i class="icon fa fa-check"></i> Information!</h4>
-  <?php echo $this->session->flashdata('alert')?>
+  <?php echo validation_errors()?>
 </div>
 <?php } ?>
 
+<?php if($this->session->flashdata('alert_form')!=""){ ?>
+<div class="alert alert-success alert-dismissable">
+  <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+  <h4>  <i class="icon fa fa-check"></i> Information!</h4>
+  <?php echo $this->session->flashdata('alert_form')?>
+</div>
+<?php } ?>
 <section class="content">
-<form>
   <div class="row">
+    <form action="<?php echo base_url()?>mst/keuangan_transaksi/transaksi_{action}/{id}" method="post" name="editform">
     <div class="col-md-12">
       <div class="box box-primary">
         <div class="box-header">
@@ -351,50 +358,49 @@
             <?php $i++; endforeach ?> 
           </div>
         </div>
+       </div>
       </div>
+     </form>
     </div>
-  </div>
-</form>
 </section>
 
-<script type="text/javascript">
-
+<script src="http://code.jquery.com/jquery-1.11.0.min.js">
     $("#btn-kembali").click(function(){
       $.get('<?php echo base_url()?>mst/keuangan_transaksi/transaksi_kembali', function (data) {
         $('#content2').html(data);
       });
     });
 
-    $("select[name='debit_akun']").change(function(){
-        var id_mst_akun_debit = $(this).val();
-        alert(id_mst_akun_debit);
+  $("select[name='debit_akun']").change(function(){
+      var id_mst_akun_debit = $(this).val();
+      alert(id_mst_akun_debit);
 
-        var data = new FormData();
-          $('#biodata_notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
-          $('#biodata_notice').show();
+      var data = new FormData();
+        $('#biodata_notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
+        $('#biodata_notice').show();
 
-        data.append('id_mst_akun', id_mst_akun_debit);
-        
-        $.ajax({
-           type: 'POST',
-           url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_edit/{id}" ?>',
-           data : 'id_mst_akun='+id_mst_akun_debit,
-           success: function (response) {
-            if(response=="OK"){
-                alert("Success.");
-            }else{
-                alert("Failed.");
-            }
-           }
-        });
-    });
-
-    $("[name='debit_value_nilai']").change(function(){
+      data.append('id_mst_akun', id_mst_akun_debit);
       
-      var x = document.getElementById("debit_value_nilai").value;
-      document.getElementById("d_value_nilai").innerHTML = "Text: " + x;
+      $.ajax({
+         type: 'POST',
+         url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_edit/{id}" ?>',
+         data : 'id_mst_akun='+id_mst_akun_debit,
+         success: function (response) {
+          if(response=="OK"){
+              alert("Success.");
+          }else{
+              alert("Failed.");
+          }
+         }
+      });
+  });
+
+  $("[name='debit_value_nilai']").change(function(){
     
-    });
+    var x = document.getElementById("debit_value_nilai").value;
+    document.getElementById("d_value_nilai").innerHTML = "Text: " + x;
+  
+  });
 
       counter_debit = 2; 
       $("[name='add_debit']").click(function() {
@@ -542,123 +548,6 @@
            data : data,
            success: function (response) {
             if(response=="OK"){
-
-               // var form_kredit = '<?php foreach($kredit as $row) : ?>\
-               //                    <div id="kredit'+<?php echo $row->id_mst_transaksi_item ?>+'">\
-               //                      <div class="row" >\
-               //                        <div class="col-md-12">\
-               //                          <div class="row">\
-               //                            <div class="col-md-1" style="padding-top:5px;"><label>'+(counter_kredit)+'</label> </div>\
-               //                            <div class="col-md-8" style="padding-top:5px;">\
-               //                              <select  name="kredit_akun" type="text" class="form-control">\
-               //                                <?php foreach($akun as $a) : ?>\
-               //                                  <?php
-               //                                    if(set_value('id_mst_akun')=="" && isset($id_mst_akun)){
-               //                                      $id_mst_akun = $id_mst_akun;
-               //                                    }else{
-               //                                      $id_mst_akun = set_value('id_mst_akun');
-               //                                    }
-               //                                      $select = $a->id_mst_akun == $id_mst_akun ? 'selected' : '' ;
-               //                                  ?>\
-               //                                  <option value="<?php echo $a->id_mst_akun ?>"\
-               //                                   <?php echo $select ?>><?php echo $a->uraian ?>\
-               //                                   </option>\
-               //                                  <?php endforeach ?>\
-               //                              </select>\
-               //                            </div>\
-               //                            <div class="col-md-1">\
-               //                              <div class="parentDiv">\
-               //                                <a data-toggle="collapse" data-target="#kredit'+counter_kredit+'" class="toggle_sign glyphicon glyphicon-chevron-down">\
-               //                                </a>\
-               //                              </div>\
-               //                            </div>\
-               //                            <div class="col-md-2">\
-               //                              <a class="glyphicon glyphicon-trash">\
-               //                              </a>\
-               //                            </div>\
-               //                          </div>\
-               //                        </div>\
-               //                      </div>\
-               //                      <div class="collapse" id="kredit'+counter_kredit+'">\
-               //                        <div class="row">\
-               //                          <div class="col-sm-1">\
-               //                          </div>\
-               //                          <div class="col-sm-7">\
-               //                            <div class="row">\
-               //                              <div class="col-md-1">\
-               //                                <input type="checkbox" name="kredit_isi_otomatis" value="1" <?php 
-               //                                  if(set_value('status')=="" && isset($status)){
-               //                                    $status = $status;
-               //                                  }else{
-               //                                    $status = set_value('status');
-               //                                  }
-               //                                  if($status == 1) echo "checked";
-               //                                ?>>\
-               //                              </div>\
-               //                              <div class="col-md-6" style="padding-top:5px;"><label> Isi Otomatis </label> </div>\
-               //                            </div>\
-               //                          </div>\
-               //                        </div>\
-               //                        <div class="row">\
-               //                          <div class="col-sm-1">\
-               //                          </div>\
-               //                          <div class="col-sm-1">\
-               //                          </div>\
-               //                          <div class="col-sm-10">\
-               //                            <div class="row">\
-               //                              <div class="col-md-2" style="padding-top:5px;"><label> Nilai </label> </div>\
-               //                              <div class="col-md-7">\
-               //                                <select  name="kredit_cmbx_nilai" type="text" class="form-control">\
-               //                                  <?php foreach($kategori as $k) : ?>\
-               //                                      <?php
-               //                                        if(set_value('id_mst_kategori_transaksi')=="" && isset($id_mst_kategori_transaksi)){
-               //                                          $id_mst_kategori_transaksi = $id_mst_kategori_transaksi;
-               //                                        }else{
-               //                                          $id_mst_kategori_transaksi = set_value('id_mst_kategori_transaksi');
-               //                                        }
-               //                                        $select = $k->id_mst_kategori_transaksi == $id_mst_kategori_transaksi ? 'selected' : '' ;
-               //                                      ?>\
-               //                                      <option value="<?php echo $k->id_mst_kategori_transaksi ?>"\
-               //                                       <?php echo $select ?>><?php echo $k->nama ?>\
-               //                                      </option>\
-               //                                  <?php endforeach ?>\
-               //                                </select>\
-               //                              </div>\
-               //                              <div class="col-md-2">\
-               //                                  <input type="text" class="form-control" name="kredit_value_nilai" value="<?php 
-               //                                  if(set_value('value')=="" && isset($value)){
-               //                                    echo $value;
-               //                                  }else{
-               //                                    echo  set_value('value');
-               //                                  }
-               //                                  ?>">\
-               //                              </div>\
-               //                              <div class="col-md-1" style="padding-top:5px;"><label>%</label> </div>\
-               //                            </div>\
-               //                          </div>\
-               //                        </div>\
-               //                        <div class="row">\
-               //                          <div class="col-sm-1">\
-               //                          </div>\
-               //                          <div class="col-sm-7">\
-               //                            <div class="row">\
-               //                              <div class="col-md-1">\
-               //                                <input type="checkbox" name="kredit_opsional" value="1" <?php 
-               //                                  if(set_value('status')=="" && isset($status)){
-               //                                  $status = $status;
-               //                                    }else{
-               //                                  $status = set_value('status');
-               //                                    }
-               //                                  if($status == 1) echo "checked";
-               //                                ?>>\
-               //                              </div>\
-               //                              <div class="col-md-3" style="padding-top:5px;"><label> Opsional </label> </div>\
-               //                            </div>\
-               //                          </div>\
-               //                        </div>\
-               //                      </div>\
-               //                  </div>\
-               //      <?php endforeach ?>';
 
               var form_kredit = '<div id="kredit">\
                                     <div class="row" >\

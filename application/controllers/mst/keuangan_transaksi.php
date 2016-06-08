@@ -625,15 +625,16 @@ class Keuangan_transaksi extends CI_Controller {
 			$data['kategori']			= $this->keutransaksi_model->get_data_kategori_transaksi();
 			$data['id_mst_transaksi']	= "";
 			$data['alert_form']		    = '';
-
-			
+		
 			die($this->parser->parse("mst/keutransaksi/form_transaksi_add",$data,true));
-		}elseif($this->keutransaksi_model->transaksi_insert()){
-			die("OK");
+		}elseif($id = $this->keutransaksi_model->transaksi_insert()){
+			$this->session->set_flashdata('alert', 'Save data successful...');
+			redirect(base_url()."mst/keuangan_transaksi/transaksi_edit/".$id);
 		}else{
-			$data['alert_form'] = 'Save data failed...';
+			$this->session->set_flashdata('alert_form', 'Save data failed...');
+			redirect(base_url()."mst/keuangan_transaksi/transaksi_add");
 		}
-		die($this->parser->parse("mst/keutransaksi/form_transaksi_add",$data));
+		$this->template->show($data,"home");
 	}
 
 	function delete_transaksi($id=0){
@@ -668,12 +669,14 @@ class Keuangan_transaksi extends CI_Controller {
 
 			die($this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data,true));
 		}elseif($this->keutransaksi_model->transaksi_update($id)){
-			die("OK");
+			$this->session->set_flashdata('alert_form', 'Save data successful...');
+			redirect(base_url()."mst/keuangan_transaksi/transaksi_edit/".$id);
 		}else{
-			$data['alert_form'] = 'Save data failed...';
+			$this->session->set_flashdata('alert_form', 'Save data successful...');
+			redirect(base_url()."mst/keuangan_transaksi/transaksi_edit/".$id);
 		}
-		die($this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data));
 
+		$this->template->show($data,"home");
 	}
 
 
