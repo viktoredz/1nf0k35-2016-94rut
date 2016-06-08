@@ -118,11 +118,12 @@ class Keutransaksi_model extends CI_Model {
     function get_data_kredit($id_mst_transaksi=0){
         $this->db->select('*');
         $this->db->where('id_mst_transaksi',$id_mst_transaksi);
+        $this->db->where('type','kredit');
+        $this->db->order_by('urutan','asc');
         $query = $this->db->get('mst_keu_transaksi_item');
         return $query->result();
     }
     
-
     function jurnal_transaksi_add($id_mst_transaksi=0){
 
         $data = array(
