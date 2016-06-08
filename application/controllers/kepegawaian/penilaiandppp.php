@@ -15,7 +15,7 @@ class Penilaiandppp extends CI_Controller {
 		$this->authentication->verify('kepegawaian','edit');
 		$data['title_group'] = "Kepegawaian";
 		$data['title_form'] = "Penilaian DPPP";
-		
+		$this->session->set_userdata('filter_tahun','');
 
 		$kodepuskesmas = $this->session->userdata('puskesmas');
 		if(strlen($kodepuskesmas) == 4){
@@ -248,11 +248,17 @@ class Penilaiandppp extends CI_Controller {
 		}
 	}
 	
-	
+	function filtertahun(){
+		if($_POST) {
+			if($this->input->post('filtertahun') != '') {
+				$this->session->set_userdata('filter_tahun',$this->input->post('filtertahun'));
+			}
+		}
+	}
 	
 
 
-	function edit($id_pegawai=0,$code_cl_phc="",$tahun=0){
+	function edit($id_pegawai=0,$code_cl_phc=""){
 		$this->authentication->verify('kepegawaian','edit');
 
 			$data 	= $this->penilaiandppp_model->get_datapegawai($id_pegawai,$code_cl_phc); 
@@ -262,9 +268,21 @@ class Penilaiandppp extends CI_Controller {
 			$data['action']			= "edit";
 			$data['kode']			= $id_pegawai;
 			$data['code_cl_phc']	= $code_cl_phc;
-			$data['tahun']			= $tahun;
+			$data['tahun']			= '0';
 			$data['id_mst_peg_struktur_skp']	= '0';
-			$data['idlogin']							= $this->penilaiandppp_model->idlogin();
+			$data['idlogin']		= $this->penilaiandppp_model->idlogin();
+
+			$daftaranakbuah			= $this->penilaiandppp_model->getanakbuah($data['idlogin']);
+			
+			if (in_array($id_pegawai, $daftaranakbuah)) {
+		    $data['statusanakbuah'] = "anakbuah";
+			}else if ($id_pegawai == $data['idlogin']) {
+				$data['statusanakbuah'] = "diasendiri";
+			}else{
+				$data['statusanakbuah'] = "atasan";
+			}
+
+
 
 			$data['penilaian']	  	= $this->parser->parse('kepegawaian/penilaiandppp/penilaian', $data, TRUE);
 			$data['content'] 	= $this->parser->parse("kepegawaian/penilaiandppp/detail",$data,true);
@@ -279,6 +297,15 @@ class Penilaiandppp extends CI_Controller {
 		$data['id_mst_peg_struktur_org']			= $id_mst_peg_struktur_org;
 		$data['id_mst_peg_struktur_skp']			= $id_mst_peg_struktur_skp;
 		$data['idlogin']							= $this->penilaiandppp_model->idlogin();
+		$daftaranakbuah			= $this->penilaiandppp_model->getanakbuah($data['idlogin']);
+		
+		if (in_array($id_pegawai, $daftaranakbuah)) {
+		    $data['statusanakbuah'] = "anakbuah";
+		}else if ($id_pegawai == $data['idlogin']) {
+			$data['statusanakbuah'] = "diasendiri";
+		}else{
+			$data['statusanakbuah'] = "atasan";
+		}
 		$data										= $this->penilaiandppp_model->getusername($id_pegawai);
 
         $this->form_validation->set_rules('tgl_dibuat', 'Tanggal dibuat', 'trim|required');
@@ -328,7 +355,17 @@ class Penilaiandppp extends CI_Controller {
 			$data['tahun']				= $tahun;
 			$data['id_mst_peg_struktur_org']			= $id_mst_peg_struktur_org;
 			$data['id_mst_peg_struktur_skp']			= $id_mst_peg_struktur_skp;
-			$data['idlogin']							= $this->penilaiandppp_model->idlogin();
+			$data['idlogin']		= $this->penilaiandppp_model->idlogin();
+
+			$daftaranakbuah			= $this->penilaiandppp_model->getanakbuah($data['idlogin']);
+			
+			if (in_array($id_pegawai, $daftaranakbuah)) {
+		    $data['statusanakbuah'] = "anakbuah";
+			}else if ($id_pegawai == $data['idlogin']) {
+				$data['statusanakbuah'] = "diasendiri";
+			}else{
+				$data['statusanakbuah'] = "atasan";
+			}
 			$data['notice']							= validation_errors();
 			die($this->parser->parse('kepegawaian/penilaiandppp/form', $data));
 		}else{
@@ -404,6 +441,17 @@ class Penilaiandppp extends CI_Controller {
 		$data['id_mst_peg_struktur_org']			= $id_mst_peg_struktur_org;
 		$data['id_mst_peg_struktur_skp']			= $id_mst_peg_struktur_skp;
 		$data['idlogin']							= $this->penilaiandppp_model->idlogin();
+
+		$daftaranakbuah			= $this->penilaiandppp_model->getanakbuah($data['idlogin']);
+		
+		if (in_array($id_pegawai, $daftaranakbuah)) {
+	    $data['statusanakbuah'] = "anakbuah";
+		}else if ($id_pegawai == $data['idlogin']) {
+			$data['statusanakbuah'] = "diasendiri";
+		}else{
+			$data['statusanakbuah'] = "atasan";
+		}
+
 		$data										= $this->penilaiandppp_model->getusername($id_pegawai);
 
         $this->form_validation->set_rules('tgl_dibuat', 'Tanggal dibuat', 'trim|required');
@@ -453,7 +501,18 @@ class Penilaiandppp extends CI_Controller {
 			$data['tahun']				= $tahun;
 			$data['id_mst_peg_struktur_org']			= $id_mst_peg_struktur_org;
 			$data['id_mst_peg_struktur_skp']			= $id_mst_peg_struktur_skp;
-			$data['idlogin']							= $this->penilaiandppp_model->idlogin();
+			$data['idlogin']		= $this->penilaiandppp_model->idlogin();
+
+			$daftaranakbuah			= $this->penilaiandppp_model->getanakbuah($data['idlogin']);
+			
+			if (in_array($id_pegawai, $daftaranakbuah)) {
+		    	$data['statusanakbuah'] = "anakbuah";
+			}else if ($id_pegawai == $data['idlogin']) {
+				$data['statusanakbuah'] = "diasendiri";
+			}else{
+				$data['statusanakbuah'] = "atasan";
+			}
+
 			$data['notice']							= validation_errors();
 			die($this->parser->parse('kepegawaian/penilaiandppp/form', $data));
 		}else{
@@ -526,7 +585,7 @@ class Penilaiandppp extends CI_Controller {
 		}
 		return $data;
 	}
-	function json_dppp($id="",$tahun=''){
+	function json_dppp($id=""){
 		$this->authentication->verify('kepegawaian','show');
 
 
@@ -556,7 +615,7 @@ class Penilaiandppp extends CI_Controller {
 		}
 		
 
-		$rows_all = $this->penilaiandppp_model->get_data_detail($id,$tahun);
+		$rows_all = $this->penilaiandppp_model->get_data_detail($id);
 
 
 		if($_POST) {
@@ -583,7 +642,7 @@ class Penilaiandppp extends CI_Controller {
 		if ($this->session->userdata('puskesmas')!='') {
 			$this->db->where('pegawai.code_cl_phc','P'.$this->session->userdata('puskesmas'));
 		}
-		$rows = $this->penilaiandppp_model->get_data_detail($id,$tahun,$this->input->post('recordstartindex'), $this->input->post('pagesize'));
+		$rows = $this->penilaiandppp_model->get_data_detail($id,$this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();
 		foreach($rows as $act) {
 			$data[] = array(
@@ -637,13 +696,11 @@ class Penilaiandppp extends CI_Controller {
 	function nipterakhirpegawai($id=0){
 		$this->db->order_by('tmt','desc');
 		$this->db->where('pegawai_pangkat.id_pegawai',$id);
-		$this->db->select("cl_district.value,nip_nit,id_mst_peg_golruang,ruang,IF(jabatanstruktural.sk_status = 'pengangkatan' AND jabatanfungsional.sk_status = 'pengangkatan', CONCAT(jabatanstruktural.tar_nama_struktural,'-', jabatanfungsional.tar_nama_fungsional),(IF(jabatanstruktural.sk_status = 'pengangkatan', jabatanstruktural.tar_nama_struktural, (IF(jabatanfungsional.sk_status = 'pengangkatan', jabatanfungsional.tar_nama_fungsional, '-'))))) AS namajabatan");
+		$this->db->select("cl_district.value,nip_nit,id_mst_peg_golruang,ruang,mst_peg_struktur_org.tar_nama_posisi AS namajabatan");
 		$this->db->join('mst_peg_golruang','mst_peg_golruang.id_golongan = pegawai_pangkat.id_mst_peg_golruang','left');
 		$this->db->join('cl_district','cl_district.code = substr(pegawai_pangkat.code_cl_phc,2,4)','left');
-		$this->db->join("(SELECT  id_pegawai, sk_status, tar_eselon, mst_peg_struktural.tar_nama_struktural, CONCAT(tmt, id_pegawai) AS jabatanterakhirstuktural, tmt AS tmtstruktural FROM pegawai_jabatan LEFT JOIN mst_peg_struktural ON pegawai_jabatan.id_mst_peg_struktural = mst_peg_struktural.tar_id_struktural WHERE jenis = 'STRUKTURAL' AND CONCAT(tmt, id_pegawai) IN (SELECT  CONCAT(MAX(tmt), id_pegawai) FROM
-                pegawai_jabatan WHERE jenis = 'STRUKTURAL' GROUP BY id_pegawai)) jabatanstruktural","jabatanstruktural.id_pegawai = pegawai_pangkat.id_pegawai",'left');
-        $this->db->join("(SELECT  id_pegawai, sk_status, mst_peg_fungsional.tar_nama_fungsional, CONCAT(tmt, id_pegawai) AS jabatanterakhirfungsional,
-            tmt AS tmtfungsional FROM pegawai_jabatan LEFT JOIN mst_peg_fungsional ON pegawai_jabatan.id_mst_peg_fungsional = mst_peg_fungsional.tar_id_fungsional WHERE jenis LIKE 'FUNGSIONAL%' AND CONCAT(tmt, id_pegawai) IN (SELECT  CONCAT(MAX(tmt), id_pegawai) FROM pegawai_jabatan WHERE jenis LIKE 'FUNGSIONAL%' GROUP BY id_pegawai)) jabatanfungsional","jabatanfungsional.id_pegawai = pegawai_pangkat.id_pegawai","left");
+		$this->db->join('pegawai_struktur','pegawai_struktur.id_pegawai = pegawai_pangkat.id_pegawai','left');
+		$this->db->join('mst_peg_struktur_org','mst_peg_struktur_org.tar_id_struktur_org = pegawai_struktur.tar_id_struktur_org','left');
 		$query = $this->db->get('pegawai_pangkat',1);
 		foreach ($query->result() as $q) {
 			$nipterakhir[] = array(
@@ -658,15 +715,13 @@ class Penilaiandppp extends CI_Controller {
 	function nipterakhirpenilai($id=0){
 		$this->db->order_by('tmt','desc');
 		$this->db->where('pegawai_pangkat.id_pegawai',$id);
-		$this->db->select("pegawai.nama,pegawai.gelar_depan,pegawai.gelar_belakang,cl_district.value,nip_nit,id_mst_peg_golruang,ruang,IF(jabatanstruktural.sk_status = 'pengangkatan' AND jabatanfungsional.sk_status = 'pengangkatan', CONCAT(jabatanstruktural.tar_nama_struktural,'-', jabatanfungsional.tar_nama_fungsional),(IF(jabatanstruktural.sk_status = 'pengangkatan', jabatanstruktural.tar_nama_struktural, (IF(jabatanfungsional.sk_status = 'pengangkatan', jabatanfungsional.tar_nama_fungsional, '-'))))) AS namajabatan,ifnull((select id_pegawai from pegawai_struktur where tar_id_struktur_org = (select tar_id_struktur_org_parent from mst_peg_struktur_org where tar_id_struktur_org = (SELECT 
-            tar_id_struktur_org FROM pegawai_struktur WHERE id_pegawai = pegawai_pangkat.id_pegawai))),$id) AS id_atasanpenilai");
+		$this->db->select("pegawai.nama,pegawai.gelar_depan,pegawai.gelar_belakang,cl_district.value,nip_nit,id_mst_peg_golruang,ruang,mst_peg_struktur_org.tar_nama_posisi AS namajabatan,ifnull((select id_pegawai from pegawai_struktur where tar_id_struktur_org = (select tar_id_struktur_org_parent from mst_peg_struktur_org where tar_id_struktur_org = (SELECT 
+            tar_id_struktur_org FROM pegawai_struktur WHERE id_pegawai = pegawai_pangkat.id_pegawai))),$id) AS id_atasanpenilai",false);
 		$this->db->join('mst_peg_golruang','mst_peg_golruang.id_golongan = pegawai_pangkat.id_mst_peg_golruang','left');
 		$this->db->join('pegawai','pegawai.id_pegawai = pegawai_pangkat.id_pegawai','left');
 		$this->db->join('cl_district','cl_district.code = substr(pegawai_pangkat.code_cl_phc,2,4)','left');
-		$this->db->join("(SELECT  id_pegawai, sk_status, tar_eselon, mst_peg_struktural.tar_nama_struktural, CONCAT(tmt, id_pegawai) AS jabatanterakhirstuktural, tmt AS tmtstruktural FROM pegawai_jabatan LEFT JOIN mst_peg_struktural ON pegawai_jabatan.id_mst_peg_struktural = mst_peg_struktural.tar_id_struktural WHERE jenis = 'STRUKTURAL' AND CONCAT(tmt, id_pegawai) IN (SELECT  CONCAT(MAX(tmt), id_pegawai) FROM
-                pegawai_jabatan WHERE jenis = 'STRUKTURAL' GROUP BY id_pegawai)) jabatanstruktural","jabatanstruktural.id_pegawai = pegawai_pangkat.id_pegawai",'left');
-        $this->db->join("(SELECT  id_pegawai, sk_status, mst_peg_fungsional.tar_nama_fungsional, CONCAT(tmt, id_pegawai) AS jabatanterakhirfungsional,
-            tmt AS tmtfungsional FROM pegawai_jabatan LEFT JOIN mst_peg_fungsional ON pegawai_jabatan.id_mst_peg_fungsional = mst_peg_fungsional.tar_id_fungsional WHERE jenis LIKE 'FUNGSIONAL%' AND CONCAT(tmt, id_pegawai) IN (SELECT  CONCAT(MAX(tmt), id_pegawai) FROM pegawai_jabatan WHERE jenis LIKE 'FUNGSIONAL%' GROUP BY id_pegawai)) jabatanfungsional","jabatanfungsional.id_pegawai = pegawai_pangkat.id_pegawai","left");
+		$this->db->join('pegawai_struktur','pegawai_struktur.id_pegawai = pegawai_pangkat.id_pegawai','left');
+		$this->db->join('mst_peg_struktur_org','mst_peg_struktur_org.tar_id_struktur_org = pegawai_struktur.tar_id_struktur_org','left');
 		$query = $this->db->get('pegawai_pangkat',1);
 		
 		foreach ($query->result() as $q) {

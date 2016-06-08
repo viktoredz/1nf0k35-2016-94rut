@@ -15,9 +15,9 @@ class Penilaiandppp_model extends CI_Model {
         $query = $this->db->get('mst_peg_struktur_skp',$limit,$start);
         return $query->result();
     }
-    function get_data_detail($id=0,$tahun=0,$start=0,$limit=999999,$options=array())
+    function get_data_detail($id=0,$start=0,$limit=999999,$options=array())
     {	$puskesmas_ = 'P'.$this->session->userdata('puskesmas');
-    	$this->db->where('pegawai_dp3.tahun',$tahun);
+    	// $this->db->where('pegawai_dp3.tahun',$tahun);
     	$this->db->where('pegawai_dp3.id_pegawai',$id);
 
     	$this->db->select("pegawai_dp3.*,mst_peg_golruang.ruang, mst_peg_struktur_org.*, pangkat.nip_nit,mst_peg_struktur_org.tar_nama_posisi, pangkat.id_mst_peg_golruang,pegawai.nama as namapegawai,penilai.gelar_depan as gelardepannama_penilai,penilai.nama as nama_penilai,penilai.gelar_belakang as gelarbelakangnama_penilai,atasanpenilai.nama as namaatasanpenilai,atasanpenilai.gelar_depan as gelardepannamaatasanpenilai,atasanpenilai.gelar_belakang as gelarbelakangnamaatasanpenilai ");
@@ -33,8 +33,14 @@ class Penilaiandppp_model extends CI_Model {
         return $query->result();
     }
     function get_data($start=0,$limit=999999,$options=array())
-    {	$puskesmas_ = 'P'.$this->session->userdata('puskesmas');
-    	$this->db->select("mst_peg_golruang.ruang, app_users_list.username,pegawai.*, pangkat.nip_nit,mst_peg_struktur_org.tar_nama_posisi, pangkat.id_mst_peg_golruang,(select nilai_prestasi from pegawai_dp3  where id_pegawai = pegawai.id_pegawai order by tahun desc limit 1) as nilai_prestasi,ifnull((select tahun from pegawai_dp3  where id_pegawai = pegawai.id_pegawai order by tahun desc limit 1 ),YEAR(CURDATE())) as tahun_penilaian");
+    {	
+        $puskesmas_ = 'P'.$this->session->userdata('puskesmas');
+        $filter_tahun=$this->session->userdata('filter_tahun');
+        if ($filter_tahun!='') {
+            $this->db->select("mst_peg_golruang.ruang, app_users_list.username,pegawai.*, pangkat.nip_nit,mst_peg_struktur_org.tar_nama_posisi, pangkat.id_mst_peg_golruang,(select nilai_prestasi from pegawai_dp3  where id_pegawai = pegawai.id_pegawai and tahun=".'"'.$filter_tahun.'"'." limit 1) as nilai_prestasi,ifnull((select tahun from pegawai_dp3  where id_pegawai = pegawai.id_pegawai and tahun=".'"'.$filter_tahun.'"'." limit 1 ),$filter_tahun) as tahun_penilaian",false);
+        }else{
+            $this->db->select("mst_peg_golruang.ruang, app_users_list.username,pegawai.*, pangkat.nip_nit,mst_peg_struktur_org.tar_nama_posisi, pangkat.id_mst_peg_golruang,(select nilai_prestasi from pegawai_dp3  where id_pegawai = pegawai.id_pegawai order by tahun desc limit 1) as nilai_prestasi,ifnull((select tahun from pegawai_dp3  where id_pegawai = pegawai.id_pegawai order by tahun desc limit 1 ),YEAR(CURDATE())) as tahun_penilaian");
+        }
     	$this->db->join("(SELECT  id_pegawai, nip_nit, tmt,id_mst_peg_golruang, masa_krj_bln, masa_krj_thn, CONCAT(tmt, id_pegawai) AS pangkatterakhir FROM
         pegawai_pangkat WHERE CONCAT(tmt, id_pegawai) IN (SELECT  CONCAT(MAX(tmt), id_pegawai) FROM pegawai_pangkat GROUP BY id_pegawai)) pangkat",'pangkat.id_pegawai = pegawai.id_pegawai','left');
         $this->db->join("pegawai_struktur",'pegawai_struktur.id_pegawai = pegawai.id_pegawai','left');
@@ -120,6 +126,15 @@ class Penilaiandppp_model extends CI_Model {
     		$data = '';
     	}
     	return $data;
+    }
+    function getanakbuah($id=0){
+        $puskesmas_ = 'P'.$this->session->userdata('puskesmas');
+        $query = $this->db->query("select b.id_pegawai from pegawai_struktur b where b.tar_id_struktur_org in (SELECT mst_peg_struktur_org.tar_id_struktur_org FROM mst_peg_struktur_org WHERE mst_peg_struktur_org.tar_id_struktur_org_parent = (SELECT  a.tar_id_struktur_org FROM pegawai_struktur a WHERE a.id_pegawai = ".'"'.$id.'"'." and a.code_cl_phc=".'"'.$puskesmas_.'"'."))",false);
+        $data=array();
+        foreach ($query->result_array() as $key) {
+            $data[] = $key['id_pegawai'];
+        }
+        return $data;
     }
     function getusername($id=0){
     	$this->db->select('app_users_list.username,pegawai_struktur.tar_id_struktur_org,(SELECT tar_id_struktur_org_parent FROM mst_peg_struktur_org WHERE tar_id_struktur_org = pegawai_struktur.tar_id_struktur_org) AS parent');

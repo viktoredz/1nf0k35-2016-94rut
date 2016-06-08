@@ -289,7 +289,7 @@ class stuktur_kepegawaian extends CI_Controller {
 					'username' => $this->input->post('username'),
 					'password' => $this->encrypt->sha1($this->input->post('password').$this->config->item('encryption_key')),
 					'code' => $code_cl,
-					'level' => 'kepegawaian',
+					'level' => 'pegawai',
 					'status_active' => 1,
 					'status_aproved' => 1,
 					'id_pegawai' => $id_pegawai,

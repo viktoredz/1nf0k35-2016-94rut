@@ -36,7 +36,7 @@
       { name: 'edit', type: 'number'},
       { name: 'delete', type: 'number'}
         ],
-    url: "<?php echo site_url('kepegawaian/penilaiandppp/json_dppp/{id_pegawai}/{tahun}'); ?>",
+    url: "<?php echo site_url('kepegawaian/penilaiandppp/json_dppp/{id_pegawai}'); ?>",
     cache: false,
       updateRow: function (rowID, rowData, commit) {
              
@@ -101,8 +101,8 @@
         { text: 'Jumlah', editable:false ,align: 'center', cellsalign: 'center', datafield: 'jumlah', columntype: 'textbox', filtertype: 'textbox', width: '8%' },
         { text: 'Rata-rata', editable:false ,align: 'center', cellsalign: 'right', datafield: 'ratarata', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
         { text: 'Nilai Prestasi', editable:false ,align: 'center', cellsalign: 'right', datafield: 'nilai_prestasi', columntype: 'textbox', filtertype: 'textbox', width: '8%' },
-        { text: 'Keberatan', editable:false ,align: 'center', cellsalign: 'center', datafield: 'keberatan', columntype: 'textbox', filtertype: 'none', width: '7%' },
         { text: 'Tanggapan', editable:false ,align: 'center', cellsalign: 'center', datafield: 'tanggapan', columntype: 'textbox', filtertype: 'none', width: '7%' },
+        { text: 'Keberatan', editable:false ,align: 'center', cellsalign: 'center', datafield: 'keberatan', columntype: 'textbox', filtertype: 'none', width: '7%' },
         { text: 'Keputusan', editable:false ,align: 'center', cellsalign: 'center', datafield: 'keputusan', columntype: 'textbox', filtertype: 'none', width: '7%' },
         { text: 'Rekomendasi', editable:false ,align: 'center', cellsalign: 'center', datafield: 'rekomendasi', columntype: 'textbox', filtertype: 'none', width: '9%' }
             ]
@@ -173,7 +173,21 @@
 	<div style="width:100%;">
   <div class="row">
 		<div style="padding:5px" class="pull-right">
+    <?php 
+      if (set_value('username')=='' && isset($username)) {
+        $username = $username;
+      }else{
+        $username = set_value('username');
+      }
+      $userdataname = $this->session->userdata('username');
+      if (($username != $userdataname)) {
+      if ($statusanakbuah=='anakbuah')  {
+    ?>
 			<button class="btn btn-success" id='btn_add_dppp' type='button'><i class='fa fa-plus-square'></i> Tambah Dppp</button>
+    <?php
+      }
+      }
+    ?>
       <button class="btn btn-warning" id='btn_back_dppp' type='button'><i class='glyphicon glyphicon-arrow-left'></i> Kembali</button>
 		</div>
   </div>

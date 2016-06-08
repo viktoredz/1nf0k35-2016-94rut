@@ -30,9 +30,17 @@
 		     	<div class="row">
 			     	<div class="col-md-4" style="padding-top:5px;"><label> Tahun </label> </div>
 			     	<div class="col-md-8">
-			     		<select name="code_cl_phc" id="puskesmas" class="form-control">
-							<?php for($i=date("Y")-8;$i<=date("Y")+8; $i++ ) { ;
-								$select = $i == date("Y") ? 'selected=selected' : '';
+			     		<select name="filtertahun" id="filtertahun" class="form-control">
+
+							<?php 
+							$tahuntampil = $this->session->userdata('filter_tahun');
+							if ($tahuntampil!='') {
+								$selectahun = $tahuntampil;
+							}else{
+								$selectahun = date("Y");
+							}
+							for($i=date("Y")-8;$i<=date("Y")+8; $i++ ) { ;
+								$select = $i == $selectahun ? 'selected=selected' : '';
 							?>
 								<option value="<?php echo $i; ?>" <?php echo $select; ?>><?php echo $i; ?></option>
 							<?php	} ;?>
@@ -146,7 +154,7 @@
 				{ text: 'Detail', align: 'center', filtertype: 'none', sortable: false, width: '4%', cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', row);
 				    if(dataRecord.detail==1){
-						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_view.gif' onclick='detail(\""+dataRecord.id_pegawai+"\",\""+dataRecord.code_cl_phc+"\",\""+dataRecord.tahun_penilaian+"\");'></a></div>";
+						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_view.gif' onclick='detail(\""+dataRecord.id_pegawai+"\",\""+dataRecord.code_cl_phc+"\");'></a></div>";
 					}else{
 						return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
 					}
@@ -162,14 +170,19 @@
             ]
 		});
 
-	function detail(id_pegawai,code_cl_phc,tahun){
-		document.location.href="<?php echo base_url().'kepegawaian/penilaiandppp/edit';?>/" + id_pegawai+'/'+code_cl_phc+'/'+tahun;
+	function detail(id_pegawai,code_cl_phc){
+		document.location.href="<?php echo base_url().'kepegawaian/penilaiandppp/edit';?>/" + id_pegawai+'/'+code_cl_phc;
 	}
 	// $("#btn-add").click(function(){
 	// 	document.location.href="<?php echo base_url().'kepegawaian/penilaiandppp/add';?>/" ;
 	// });
 	$("select[name='code_cl_phc']").change(function(){
 		$.post("<?php echo base_url().'kepegawaian/penilaiandppp/filter' ?>", 'code_cl_phc='+$(this).val(),  function(){
+			$("#jqxgrid").jqxGrid('updatebounddata', 'cells');
+		});
+    });
+    $("select[name='filtertahun']").change(function(){
+		$.post("<?php echo base_url().'kepegawaian/penilaiandppp/filtertahun' ?>", 'filtertahun='+$(this).val(),  function(){
 			$("#jqxgrid").jqxGrid('updatebounddata', 'cells');
 		});
     });

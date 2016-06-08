@@ -51,7 +51,7 @@
                 <label>Jabatan : </label>
               </div>
               <div class="col-md-8 col-xs-6">
-                  <div id="jabtanterakhir"></div>
+                  <div id="jabatanterakhir"></div>
               </div>
             </div>
             <div class="row">
@@ -206,7 +206,7 @@ $(function(){
           $("#namapenilaiterakhir").html(elemet.namaterakhir);
           $("#nippenilaiterakhir").html(elemet.nipterakhir);
           $("#pangkatpenilaiterakhir").html(elemet.pangkatterakhir);
-          $("#jabatanpenilaiterakhir").html(elemet.pangkatjabatanterakhir);
+          $("#jabatanpenilaiterakhir").html(elemet.jabatanterakhir);
           $("#unitkerjapenilaiterakhir").html(elemet.ukterakhir);
         });
       }

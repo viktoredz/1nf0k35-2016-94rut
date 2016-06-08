@@ -20,18 +20,23 @@ if (set_value('username')=='' && isset($username)) {
   $username = set_value('username');
 }
 $userdataname = $this->session->userdata('username');
-if ($username == $userdataname) {
+// if ($username == $userdataname) {
+if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
   $funshowhidden = 'disabled=disabled';
   $showhidetgl = ',disabled: true';
   $gridshowedit = ', editable:false';
   $showtanggapan = '';
   $showtanggapantgl = '';
+  $showkeputsan = 'disabled=disabled';
+  $showkeputsantgl = ',disabled: true';
 }else{
   $funshowhidden='';
   $showhidetgl = '';
   $gridshowedit = '';
   $showtanggapan = 'disabled=disabled';
   $showtanggapantgl = ',disabled: true';
+  $showkeputsan = '';
+  $showkeputsantgl = '';
 }
 
 ?>
@@ -172,35 +177,35 @@ if ($username == $userdataname) {
             ?>"></div>
         </div>
         
-        <input type="text" class="form-control" name="id_pegawai" id="id_pegawai" placeholder="ID Pegawai" value="<?php 
+        <input type="hidden" class="form-control" name="id_pegawai" id="id_pegawai" placeholder="ID Pegawai" value="<?php 
         if(set_value('id_pegawai')=="" && isset($id_pegawai)){
             echo $id_pegawai;
           }else{
             echo  set_value('id_pegawai');
           }
         ?>">
-        <input type="text" class="form-control" name="id_pegawai_penilai" id="id_pegawai_penilai" placeholder="ID Penilai" value="<?php 
+        <input type="hidden" class="form-control" name="id_pegawai_penilai" id="id_pegawai_penilai" placeholder="ID Penilai" value="<?php 
             if(set_value('id_pegawai_penilai')=="" && isset($id_pegawai_penilai)){
                 echo $id_pegawai_penilai;
               }else{
                 echo  set_value('id_pegawai_penilai');
               }
             ?>">
-        <input type="text" class="form-control" name="id_pegawai_penilai_atasan" id="id_pegawai_penilai_atasan" placeholder="ID Penilai Atasan" value="<?php 
+        <input type="hidden" class="form-control" name="id_pegawai_penilai_atasan" id="id_pegawai_penilai_atasan" placeholder="ID Penilai Atasan" value="<?php 
             if(set_value('id_pegawai_penilai_atasan')=="" && isset($id_pegawai_penilai_atasan)){
                 echo $id_pegawai_penilai_atasan;
               }else{
                 echo  set_value('id_pegawai_penilai_atasan');
               }
             ?>">
-          <input type="text" class="form-control" name="username" id="username" placeholder="username" value="<?php 
+          <input type="hidden" class="form-control" name="username" id="username" placeholder="username" value="<?php 
           if(set_value('username')=="" && isset($username)){
               echo $username;
             }else{
               echo  set_value('username');
             }
           ?>">
-          <input type="text" class="form-control" name="username" id="idlogin" placeholder="idlogin" value="<?php 
+          <input type="hidden" class="form-control" name="username" id="idlogin" placeholder="idlogin" value="<?php 
           if(set_value('idlogin')=="" && isset($idlogin)){
               echo $idlogin;
             }else{
@@ -278,7 +283,7 @@ if ($username == $userdataname) {
 
         <div class="form-group">
           <label>Keputusan</label>
-          <textarea <?php echo $funshowhidden;?> class="form-control" name="keputusan" id="keputusan" placeholder="Keputusan"><?php 
+          <textarea <?php echo $showkeputsan;?> class="form-control" name="keputusan" id="keputusan" placeholder="Keputusan"><?php 
               if(set_value('keputusan')=="" && isset($keputusan)){
                 echo $keputusan;
               }else{
@@ -288,7 +293,7 @@ if ($username == $userdataname) {
         </div>  
         <div class="form-group">
           <label>Rekomendasi</label>
-          <textarea <?php echo $funshowhidden;?> class="form-control" name="rekomendasi" id="rekomendasi" placeholder="Rekomendasi"><?php 
+          <textarea <?php echo $showkeputsan;?> class="form-control" name="rekomendasi" id="rekomendasi" placeholder="Rekomendasi"><?php 
               if(set_value('rekomendasi')=="" && isset($rekomendasi)){
                 echo $rekomendasi;
               }else{
@@ -591,15 +596,20 @@ $(function(){
     });
     $("#keberatan_tgl").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme <?php echo $showtanggapantgl;?>});
     $("#tanggapan_tgl").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme <?php echo $showhidetgl;?>});
-    $("#keputusan_tgl").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme <?php echo $showhidetgl;?>});
-    $("#tgl_diterima").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme <?php echo $showhidetgl;?>});
-    $("#tgl_diterima_atasan").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme <?php echo $showhidetgl;?>});
+    $("#keputusan_tgl").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme <?php echo $showkeputsantgl;?>});
+    $("#tgl_diterima").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme <?php echo $showkeputsantgl;?>});
+    $("#tgl_diterima_atasan").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme <?php echo $showkeputsantgl;?>});
     $("#tgl_dibuat").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme <?php echo $showhidetgl;?>});
     
 
 
   });
     $(document).ready(function () {
+       var statusanakbuah ="<?php echo $statusanakbuah; ?>";
+        if (statusanakbuah == "atasan") {
+          $("input").prop('disabled', true);
+          $("textarea").prop('disabled', true);
+        }
       $("#skp").change(function(){
           if ($("#skp").val() < 0) {
             alert("Maaf, nilai tidak boleh kurang dari nol");
@@ -904,6 +914,6 @@ $(function(){
           $("input").prop('disabled', true);
           $("textarea").prop('disabled', true);
         }
-        
+
 </script>
              
