@@ -116,7 +116,8 @@
                     </div> 
                   </div>
 
-                  <div id="debt">
+                <?php foreach($debit as $row) : ?>
+                  <div id="debt <?php echo $row->id_mst_transaksi_item ?>">
                     <div class="row">
                       <div class="col-md-12">
                         <div class="row">
@@ -213,7 +214,8 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              <?php endforeach ?>
+            </div>
 
               <div id="Kredit" class="col-sm-6">
                 <div class="row">
@@ -223,7 +225,7 @@
                   </div> 
                 </div>
 
-                <?php foreach($kredit as $row) : ?>
+              <?php foreach($kredit as $row) : ?>
                 <div id="kredit <?php echo $row->id_mst_transaksi_item ?>">
                   <div class="row" >
                     <div class="col-md-12">
@@ -246,7 +248,7 @@
                         </div>
                         <div class="col-md-1">
                           <div class="parentDiv">
-                            <a data-toggle="collapse" data-target="#kredit1" class="toggle_sign glyphicon glyphicon-chevron-down"></a>
+                            <a data-toggle="collapse" data-target="#kredit <?php echo $row->id_mst_transaksi_item ?>" class="toggle_sign glyphicon glyphicon-chevron-down"></a>
                           </div>
                         </div>
 <!--                    <div class="col-md-2">
@@ -256,7 +258,7 @@
                     </div>
                   </div>
 
-                  <div class="collapse" id="kredit1">
+                  <div class="collapse" id="kredit <?php echo $row->id_mst_transaksi_item ?>">
 
                     <div class="row">
                       <div class="col-sm-1"></div>
@@ -363,8 +365,7 @@
      </form>
     </div>
 </section>
-
-<script src="http://code.jquery.com/jquery-1.11.0.min.js">
+<script type="text/javascript">
     $("#btn-kembali").click(function(){
       $.get('<?php echo base_url()?>mst/keuangan_transaksi/transaksi_kembali', function (data) {
         $('#content2').html(data);

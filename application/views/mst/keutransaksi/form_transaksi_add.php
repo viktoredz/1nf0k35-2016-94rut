@@ -109,11 +109,22 @@
 
 <script type="text/javascript">
   $(function(){
-    $("#btn-kembali").click(function(){
-      $.get('<?php echo base_url()?>mst/keuangan_transaksi/transaksi_kembali', function (data) {
-        $('#content2').html(data);
-      });
+    clearForm();
+
+    $('#btn-kembali').click(function(){
+        window.location.href="<?php echo base_url()?>mst/keuangan_transaksi";
+        
     });
+
+    // $("#btn-kembali").click(function(){
+    //   $.get('<?php echo base_url()?>mst/keuangan_transaksi/transaksi_kembali', function (data) {
+    //     $('#content2').html(data);
+    //   });
+    // });
+
+    $("#menu_master_data").addClass("active");
+    $("#menu_mst_keuangan_transaksi").addClass("active");
+
   });
 
     function clearForm(form_transaksi) {

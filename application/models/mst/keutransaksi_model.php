@@ -123,6 +123,15 @@ class Keutransaksi_model extends CI_Model {
         $query = $this->db->get('mst_keu_transaksi_item');
         return $query->result();
     }
+
+    function get_data_debit($id_mst_transaksi=0){
+        $this->db->select('*');
+        $this->db->where('id_mst_transaksi',$id_mst_transaksi);
+        $this->db->where('type','debit');
+        $this->db->order_by('urutan','asc');
+        $query = $this->db->get('mst_keu_transaksi_item');
+        return $query->result();
+    }
     
     function jurnal_transaksi_add($id_mst_transaksi=0){
 
@@ -177,14 +186,33 @@ class Keutransaksi_model extends CI_Model {
 
     function transaksi_insert(){
 
-        $data['nama']                               = $this->input->post('nama');
-        $data['deskripsi']                          = $this->input->post('deskripsi');
-        $data['untuk_jurnal']                       = $this->input->post('untuk_jurnal');
-        $data['id_mst_kategori_transaksi']          = $this->input->post('id_mst_kategori_transaksi');
-        $data['bisa_diubah']                        = 0;
-        $data['jumlah_transaksi']                   = 0;
-        if($this->db->insert('mst_keu_transaksi', $data)){
+        $data_transaksi = array(
+          'nama'                        => $this->input->post('nama'),
+          'deskripsi'                   => $this->input->post('deskripsi'),
+          'untuk_jurnal'                => $this->input->post('untuk_jurnal'),
+          'id_mst_kategori_transaksi'   => $this->input->post('id_mst_kategori_transaksi'),
+          'bisa_diubah'                 => 0,
+          'jumlah_transaksi'            => 0
+        );   
+
+        if($this->db->insert('mst_keu_transaksi', $data_transaksi)){
            $lastInsertedID = $this->db->insert_id();
+
+            $data_transaksi_item = array(
+               array(
+                  'id_mst_transaksi' => $lastInsertedID,
+                  'urutan'           => 1,
+                  'type'             => 'debit'
+               ),
+               array(
+                  'id_mst_transaksi' => $lastInsertedID,
+                  'urutan'           => 1,
+                  'type'             => 'kredit'
+               )
+            ); 
+           
+           $this->db->insert_batch('mst_keu_transaksi_item',$data_transaksi_item);
+            
             return $lastInsertedID;
         }else{
             return mysql_error();
