@@ -18,8 +18,7 @@
       <?php } ?>
     </div>
     <div class="col-sm-12" style="text-align: right">
-      <button type="button" name="non_aktifkan_status" class="btn btn-danger"><i class='fa fa-times-circle-o'></i> &nbsp; Non Aktifkan</button>
-      <button type="button" name="btn_keuangan_akun_close" class="btn btn-primary"><i class='fa fa-close'></i> &nbsp; Tutup</button>
+      <button type="button" name="btn_pegawai_data_close" class="btn btn-primary"><i class='fa fa-close'></i> &nbsp; Tutup</button>
     </div>
   </div>
 
@@ -52,30 +51,10 @@
   $(document).ready(function () {   
     tabIndex = 1;
 
-    $("[name='btn_keuangan_akun_close']").click(function(){
-        $("#popup_keuangan_akun_detail").jqxWindow('close');
+    $("[name='btn_pegawai_data_close']").click(function(){
+        $("#popup_pegawai_data_detail").jqxWindow('close');
     });
 
-    $("[name='non_aktifkan_status']").click(function(){
-        $.ajax({
-            cache : false,
-            contentType : false,
-            processData : false,
-            type : 'POST',
-            url : '<?php echo base_url()."mst/pegorganisasi/non_aktif_akun/{tar_id_struktur_org}"   ?>',
-            success : function(response){
-              if(response=="OK"){
-                  $("[name='non_aktifkan_status']").show();
-                $("#popup_keuangan_akun_detail").jqxWindow('close');
-                $("#treeGrid").jqxTreeGrid('updateBoundData', 'filter');
-              }else{
-                $("#popup_keuangan_akun_detail").jqxWindow('close');
-                $("#treeGrid").jqxTreeGrid('updateBoundData', 'filter');
-              }
-            }
-        });
-        return false;
-    });
 
     $("[name='akun_mendukung_target']").click(function(){
       var data = new FormData();

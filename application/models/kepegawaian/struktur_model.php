@@ -100,8 +100,6 @@ class Struktur_model extends CI_Model {
         $this->db->where('mst_peg_struktur_org.tar_aktif',1);
         $this->db->order_by('tar_id_struktur_org','asc');
         $this->db->select('mst_peg_struktur_org.*,(select count(id_pegawai) from pegawai_struktur where tar_id_struktur_org = mst_peg_struktur_org.tar_id_struktur_org) as jml_anggota',false);
-        // ,pegawai.nama,pegawai.nik$this->db->join('pegawai_struktur','pegawai_struktur.tar_id_struktur_org = mst_peg_struktur_org.tar_id_struktur_org','left'); 
-        // $this->db->join('pegawai','pegawai.id_pegawai = pegawai_struktur.id_pegawai','left'); 
         $query = $this->db->get('mst_peg_struktur_org');     
         return $query->result_array();  
     }
@@ -111,14 +109,12 @@ class Struktur_model extends CI_Model {
 
    function get_data_akun_detail($id){
         $data = array();
-        $this->db->where("tar_id_struktur_org",$id);
-        $this->db->join("pegawai",'pegawai.id_pegawai = pegawai.id_pegawai','left');
-        $query = $this->db->get('xpegawai_struktur');
-        // if($query->num_rows()>0){
-        //     $data = $query->row_array();
-        // }
-
-        // $query->free_result();
+        $this->db->where('pegawai_struktur.tar_id_struktur_org',$id);
+        $this->db->select("pangkat.nip_nit,pegawai.*");
+        $this->db->join("pegawai_struktur","pegawai_struktur.id_pegawai = pegawai.id_pegawai",'left');
+        $this->db->join("(SELECT  id_pegawai, nip_nit, tmt,id_mst_peg_golruang, masa_krj_bln, masa_krj_thn, CONCAT(tmt, id_pegawai) AS pangkatterakhir FROM
+        pegawai_pangkat WHERE CONCAT(tmt, id_pegawai) IN (SELECT  CONCAT(MAX(tmt), id_pegawai) FROM pegawai_pangkat GROUP BY id_pegawai)) pangkat",'pangkat.id_pegawai = pegawai.id_pegawai','left');
+        $query = $this->db->get('pegawai');
         return $query->result();
     }
 
