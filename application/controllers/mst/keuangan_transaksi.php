@@ -560,37 +560,38 @@ class Keuangan_transaksi extends CI_Controller {
 		die($this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data));
 	}
 
-	function jurnal_transaksi_add($id=0){
-		$this->authentication->verify('mst','add');
+	// function jurnal_transaksi_add($id=0){
+	// 	$this->authentication->verify('mst','add');
 
-    	$this->form_validation->set_rules('value','Value','trim');
-    	$this->form_validation->set_rules('type','Akun','trim');
-    	$this->form_validation->set_rules('group','Group','trim');
+ //    	$this->form_validation->set_rules('value','Value','trim');
+ //    	$this->form_validation->set_rules('type','Akun','trim');
+ //    	$this->form_validation->set_rules('group','Group','trim');
 
-		$data['id_mst_kategori_transaksi']	= "";
-		$data['id']							= $id;
-		$data['akun']						= $this->keutransaksi_model->get_data_akun();
-	    $data['action']						= "add";
-		$data['template']					= $this->keutransaksi_model->get_data_template_trans($id);
-		$data['kategori']					= $this->keutransaksi_model->get_data_kategori_transaksi();
-		$data['alert_form']		    		= '';
+	// 	$data['id_mst_kategori_transaksi']	= "";
+	// 	$data['id']							= $id;
+	// 	$data['akun']						= $this->keutransaksi_model->get_data_akun();
+	//     $data['action']						= "add";
+	// 	$data['template']					= $this->keutransaksi_model->get_data_template_trans($id);
+	// 	$data['kategori']					= $this->keutransaksi_model->get_data_kategori_transaksi();
+	// 	$data['alert_form']		    		= '';
 
-		if($this->form_validation->run()== FALSE){
-			die($this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data));
-		}elseif($this->keutransaksi_model->jurnal_transaksi_add($id)){
-			die("OK");
-		}else{
-			$data['alert_form'] = 'Save data failed...';
-		}
-		die($this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data));
-	}
+	// 	if($this->form_validation->run()== FALSE){
+	// 		die($this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data));
+	// 	}elseif($this->keutransaksi_model->jurnal_transaksi_add($id)){
+	// 		die("OK");
+	// 	}else{
+	// 		$data['alert_form'] = 'Save data failed...';
+	// 	}
+	// 	die($this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data));
+	// }
 
-	function jurnal_transaksi_edit($id=0){
+	function jurnal_transaksi_edit_debit($id=0){
 		$this->authentication->verify('mst','edit');
 
     	$this->form_validation->set_rules('id_mst_transaksi','Transaksi','trim');
         $this->form_validation->set_rules('id_mst_akun','Akun','trim');
         $this->form_validation->set_rules('value','Value','trim');
+        $this->form_validation->set_rules('auto_fill','Isi Otomatis','trim');
 
 		if($this->form_validation->run()== FALSE){
 
@@ -599,9 +600,38 @@ class Keuangan_transaksi extends CI_Controller {
 			$data['template']			= $this->keutransaksi_model->get_data_template_trans($id);
 			$data['kategori']			= $this->keutransaksi_model->get_data_kategori_transaksi();
 			$data['akun']				= $this->keutransaksi_model->get_data_akun();
+			$data['kredit']			    = $this->keutransaksi_model->get_data_kredit($id);
+			$data['debit']				= $this->keutransaksi_model->get_data_debit($id);
 
 			die($this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data,true));
-		}elseif($this->keutransaksi_model->jurnal_transaksi_update($id)){
+		}elseif($this->keutransaksi_model->jurnal_transaksi_update_debit($id)){
+			die("OK");
+		}else{
+			$data['alert_form'] = 'Save data failed...';
+		}
+		die($this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data));
+	}
+
+	function jurnal_transaksi_edit_kredit($id=0){
+		$this->authentication->verify('mst','edit');
+
+    	$this->form_validation->set_rules('id_mst_transaksi','Transaksi','trim');
+        $this->form_validation->set_rules('id_mst_akun','Akun','trim');
+        $this->form_validation->set_rules('value','Value','trim');
+        $this->form_validation->set_rules('auto_fill','Isi Otomatis','trim');
+
+		if($this->form_validation->run()== FALSE){
+
+			$data['id']					= $id;
+	   		$data['action']		        = "edit";
+			$data['template']			= $this->keutransaksi_model->get_data_template_trans($id);
+			$data['kategori']			= $this->keutransaksi_model->get_data_kategori_transaksi();
+			$data['akun']				= $this->keutransaksi_model->get_data_akun();
+			$data['kredit']			    = $this->keutransaksi_model->get_data_kredit($id);
+			$data['debit']				= $this->keutransaksi_model->get_data_debit($id);
+
+			die($this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data,true));
+		}elseif($this->keutransaksi_model->jurnal_transaksi_update_kredit($id)){
 			die("OK");
 		}else{
 			$data['alert_form'] = 'Save data failed...';

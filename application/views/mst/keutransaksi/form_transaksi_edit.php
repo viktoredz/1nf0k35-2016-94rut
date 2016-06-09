@@ -13,6 +13,14 @@
   <?php echo $this->session->flashdata('alert_form')?>
 </div>
 <?php } ?>
+
+<script>
+  $(function() {
+    $("#menu_master_data").addClass("active");
+    $("#menu_mst_keuangan_transaksi").addClass("active");
+  });
+</script>
+
 <section class="content">
   <div class="row">
     <form action="<?php echo base_url()?>mst/keuangan_transaksi/transaksi_{action}/{id}" method="post" name="editform">
@@ -156,12 +164,12 @@
                         <div class="row">
                           <div class="col-md-1">
                             <input type="checkbox" name="debit_isi_otomatis" value="1" <?php 
-                              if(set_value('status')=="" && isset($status)){
-                                $status = $status;
+                              if(set_value('auto_fill')=="" && isset($auto_fill)){
+                                $auto_fill = $auto_fill;
                               }else{
-                                $status = set_value('status');
+                                $auto_fill = set_value('auto_fill');
                               }
-                              if($status == 1) echo "checked";
+                              if($auto_fill == 1) echo "checked";
                             ?>>
                           </div> 
                           <div class="col-md-6" style="padding-top:5px;"><label> Isi Otomatis </label> </div>
@@ -190,7 +198,6 @@
                               <!-- <?php endforeach ?> -->
                             </select>
                           </div> 
-                           <p id="d_value_nilai"></p>
                         </div>
                       </div>
                     </div>
@@ -230,7 +237,7 @@
                   <div class="row" >
                     <div class="col-md-12">
                       <div class="row">
-                        <div class="col-md-1" style="padding-top:5px;"><label><?php echo $row->urutan ?></label> </div>
+                        <!-- <div class="col-md-1" style="padding-top:5px;"><label><?php echo $row->urutan ?></label> </div> -->
                         <div class="col-md-8" style="padding-top:5px;">
                           <select  name="kredit_akun" type="text" class="form-control">
                             <?php foreach($akun as $a) : ?>
@@ -248,7 +255,7 @@
                         </div>
                         <div class="col-md-1">
                           <div class="parentDiv">
-                            <a data-toggle="collapse" data-target="#kredit <?php echo $row->id_mst_transaksi_item ?>" class="toggle_sign glyphicon glyphicon-chevron-down"></a>
+                            <a data-toggle="collapse" data-target="#kredit" class="toggle_sign glyphicon glyphicon-chevron-down"></a>
                           </div>
                         </div>
 <!--                    <div class="col-md-2">
@@ -258,7 +265,7 @@
                     </div>
                   </div>
 
-                  <div class="collapse" id="kredit <?php echo $row->id_mst_transaksi_item ?>">
+                  <div class="collapse" id="kredit">
 
                     <div class="row">
                       <div class="col-sm-1"></div>
@@ -266,12 +273,12 @@
                         <div class="row">
                           <div class="col-md-1">
                             <input type="checkbox" name="kredit_isi_otomatis" value="1" <?php 
-                              if(set_value('status')=="" && isset($status)){
-                                $status = $status;
+                              if(set_value('auto_fill')=="" && isset($auto_fill)){
+                                $auto_fill = $auto_fill;
                               }else{
-                                $status = set_value('status');
+                                $auto_fill = set_value('auto_fill');
                               }
-                              if($status == 1) echo "checked";
+                              if($auto_fill == 1) echo "checked";
                             ?>>
                           </div> 
                           <div class="col-md-6" style="padding-top:5px;"><label> Isi Otomatis </label> </div>
@@ -301,7 +308,7 @@
                             </select>
                           </div> 
                           <div class="col-md-2">
-                              <input type="text" class="form-control" name="kredit_value_nilai" value="<?php 
+                              <input type="text" class="form-control" id="kredit_value_nilai" name="kredit_value_nilai" value="<?php 
                               if(set_value('value')=="" && isset($value)){
                                 echo $value;
                               }else{
@@ -311,6 +318,7 @@
                           </div>
                           <div class="col-md-1" style="padding-top:5px;"><label>%</label> </div>
                         </div>
+                        <p id="k_value_nilai"></p>
                       </div>
                     </div>
 
@@ -366,25 +374,22 @@
     </div>
 </section>
 <script type="text/javascript">
-    $("#btn-kembali").click(function(){
-      $.get('<?php echo base_url()?>mst/keuangan_transaksi/transaksi_kembali', function (data) {
-        $('#content2').html(data);
-      });
+
+  $("#btn-kembali").click(function(){
+    $.get('<?php echo base_url()?>mst/keuangan_transaksi/transaksi_kembali', function (data) {
+      $('#content2').html(data);
     });
+  });
 
   $("select[name='debit_akun']").change(function(){
       var id_mst_akun_debit = $(this).val();
-      alert(id_mst_akun_debit);
-
       var data = new FormData();
-        $('#biodata_notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
-        $('#biodata_notice').show();
 
       data.append('id_mst_akun', id_mst_akun_debit);
       
       $.ajax({
          type: 'POST',
-         url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_edit/{id}" ?>',
+         url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_edit_debit/{id}" ?>',
          data : 'id_mst_akun='+id_mst_akun_debit,
          success: function (response) {
           if(response=="OK"){
@@ -396,12 +401,119 @@
       });
   });
 
-  $("[name='debit_value_nilai']").change(function(){
-    
-    var x = document.getElementById("debit_value_nilai").value;
-    document.getElementById("d_value_nilai").innerHTML = "Text: " + x;
-  
+  $("select[name='kredit_akun']").change(function(){
+      var id_mst_akun_kredit = $(this).val();
+      var data = new FormData();
+
+      data.append('id_mst_akun', id_mst_akun_kredit);
+      
+      $.ajax({
+         type: 'POST',
+         url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_edit_kredit/{id}" ?>',
+         data : 'id_mst_akun='+id_mst_akun_kredit,
+         success: function (response) {
+          if(response=="OK"){
+              alert("Success.");
+          }else{
+              alert("Failed.");
+          }
+         }
+      });
   });
+
+  $("[name='debit_isi_otomatis']").change(function(){
+      var data = new FormData();
+        data.append('auto_fill',  $("[name='debit_isi_otomatis']:checked").val());
+        
+        $.ajax({
+            cache : false,
+            contentType : false,
+            processData : false,
+            type : 'POST',
+            url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_edit_debit/{id}" ?>',
+            data : data,
+            success : function(response){
+              if(response=="OK"){
+                  $("#debit_isi_otomatis").prop("checked", true);
+                  // alert("Success.");
+              }else{
+                  $("#debit_isi_otomatis").prop("checked", false);
+                  // alert("Failed.");
+              }
+            }
+        });
+    });
+
+  $("[name='kredit_isi_otomatis']").change(function(){
+      var data = new FormData();
+        data.append('auto_fill',  $("[name='kredit_isi_otomatis']:checked").val());
+        
+        $.ajax({
+            cache : false,
+            contentType : false,
+            processData : false,
+            type : 'POST',
+            url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_edit_kredit/{id}" ?>',
+            data : data,
+            success : function(response){
+              if(response=="OK"){
+                  $("#kredit_isi_otomatis").prop("checked", true);
+                  // alert("Success.");
+              }else{
+                  $("#kredit_isi_otomatis").prop("checked", false);
+                  // alert("Failed.");
+              }
+            }
+        });
+    });
+
+    $("[name='kredit_value_nilai']").change(function(){
+
+      var nilai_kredit = $(this).val();
+      document.getElementById("k_value_nilai").innerHTML = "Text: " + nilai_kredit;
+
+      var data = new FormData();
+      data.append('value', nilai_kredit);
+      
+      $.ajax({
+         type: 'POST',
+         url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_edit_kredit/{id}" ?>',
+         data : 'value='+nilai_kredit,
+         success: function (response) {
+          if(response=="OK"){
+              alert("Success.");
+          }else{
+              alert("Failed.");
+          }
+         }
+      });
+  });
+
+
+  // function kreditValueNilai() {
+  //   var nilai_kredit = document.getElementById("kredit_value_nilai").value;
+  //   document.getElementById("k_value_nilai").innerHTML = "You wrote: " + nilai_kredit;
+
+  //   var data = new FormData();
+  //   data.append('value', nilai_kredit);
+    
+  //   $.ajax({
+  //       cache : false,
+  //       contentType : false,
+  //       processData : false,
+  //       type : 'POST',
+  //       url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_edit_kredit/{id}" ?>',
+  //       data : data,
+  //       data : 'value='+nilai_kredit,
+  //       success : function(response){
+  //         if(response=="OK"){
+  //             alert("Success.");
+  //         }else{
+  //             alert("Failed.");
+  //         }
+  //       }
+  //   });
+  // }
 
       counter_debit = 2; 
       $("[name='add_debit']").click(function() {
