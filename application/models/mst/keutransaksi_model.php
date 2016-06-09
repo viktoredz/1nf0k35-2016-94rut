@@ -208,6 +208,7 @@ class Keutransaksi_model extends CI_Model {
         $data['auto_fill']               = $this->input->post('auto_fill');
         $data['value']                   = $this->input->post('value');
         
+        // $this->db->where('id_mst_transaksi_item',$id);
         $this->db->where('id_mst_transaksi',$id);
         $this->db->where('type','kredit');
 
