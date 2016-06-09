@@ -14,7 +14,7 @@ class Penilaiandppp extends CI_Controller {
 	function index(){
 		$this->authentication->verify('kepegawaian','edit');
 		$data['title_group'] = "Kepegawaian";
-		$data['title_form'] = "Penilaian DPPP";
+		$data['title_form'] = "Penilaian DP3";
 		$this->session->set_userdata('filter_tahun','');
 		$this->session->set_userdata('filter_tahundata',$this->input->post('filtertahundata'));
 		$kodepuskesmas = $this->session->userdata('puskesmas');
@@ -264,7 +264,7 @@ class Penilaiandppp extends CI_Controller {
 			$data 	= $this->penilaiandppp_model->get_datapegawai($id_pegawai,$code_cl_phc); 
 
 			$data['title_group'] 	= "Kepegawaian";
-			$data['title_form']		= "Penilaian DPPP";
+			$data['title_form']		= "Penilaian DP3";
 			$data['action']			= "edit";
 			$data['kode']			= $id_pegawai;
 			$data['code_cl_phc']	= $code_cl_phc;
@@ -489,7 +489,7 @@ class Penilaiandppp extends CI_Controller {
 			$data['statusanakbuah'] = "atasan";
 		}
 		
-
+		
 		die($this->parser->parse('kepegawaian/penilaiandppp/pengukuran', $data));
 		
 	}
@@ -753,14 +753,14 @@ class Penilaiandppp extends CI_Controller {
 		$this->penilaiandppp_model->delete_dppp($id_pegawai,$tahun);
 	}
 	function nipterakhirpegawai($id=0){
-		$this->db->order_by('tmt','desc');
-		$this->db->where('pegawai_pangkat.id_pegawai',$id);
+		$this->db->where('pegawai.id_pegawai',$id);
 		$this->db->select("cl_district.value,nip_nit,id_mst_peg_golruang,ruang,mst_peg_struktur_org.tar_nama_posisi AS namajabatan");
-		$this->db->join('mst_peg_golruang','mst_peg_golruang.id_golongan = pegawai_pangkat.id_mst_peg_golruang','left');
-		$this->db->join('cl_district','cl_district.code = substr(pegawai_pangkat.code_cl_phc,2,4)','left');
-		$this->db->join('pegawai_struktur','pegawai_struktur.id_pegawai = pegawai_pangkat.id_pegawai','left');
+		$this->db->join("(SELECT  id_pegawai, nip_nit, tmt,id_mst_peg_golruang, masa_krj_bln, masa_krj_thn, CONCAT(tmt, id_pegawai) AS pangkatterakhir FROM pegawai_pangkat WHERE CONCAT(tmt, id_pegawai) IN (SELECT  CONCAT(MAX(tmt), id_pegawai) FROM pegawai_pangkat GROUP BY id_pegawai)) pangkat",'pangkat.id_pegawai = pegawai.id_pegawai','left');
+		$this->db->join('mst_peg_golruang','mst_peg_golruang.id_golongan = pangkat.id_mst_peg_golruang','left');
+		$this->db->join('cl_district','cl_district.code = substr(pegawai.code_cl_phc,2,4)','left');
+		$this->db->join('pegawai_struktur','pegawai_struktur.id_pegawai = pegawai.id_pegawai','left');
 		$this->db->join('mst_peg_struktur_org','mst_peg_struktur_org.tar_id_struktur_org = pegawai_struktur.tar_id_struktur_org','left');
-		$query = $this->db->get('pegawai_pangkat',1);
+		$query = $this->db->get('pegawai',1);
 		foreach ($query->result() as $q) {
 			$nipterakhir[] = array(
 				'nip' => $q->nip_nit,  
@@ -771,17 +771,64 @@ class Penilaiandppp extends CI_Controller {
 			echo json_encode($nipterakhir);
 		}
 	}
+
+	function nippenilai($id_pegawai=0){
+		$query = $this->db->query("select id_pegawai from pegawai_struktur where tar_id_struktur_org= (select tar_id_struktur_org_parent from mst_peg_struktur_org where tar_id_struktur_org = (select tar_id_struktur_org from pegawai_struktur where id_pegawai =".'"'.$id_pegawai.'"'."))");
+		if($query->num_rows() >0 ){
+			foreach ($query->result() as $key) {
+				$data = $key->id_pegawai;
+			}
+		}else{
+			$dat = 0;
+		}
+		return $data;
+	}
 	function nipterakhirpenilai($id=0){
-		$this->db->order_by('tmt','desc');
-		$this->db->where('pegawai_pangkat.id_pegawai',$id);
+		$id_penilai = $this->nippenilai($id);
+		$this->db->where('pegawai.id_pegawai',$id_penilai);
 		$this->db->select("pegawai.nama,pegawai.gelar_depan,pegawai.gelar_belakang,cl_district.value,nip_nit,id_mst_peg_golruang,ruang,mst_peg_struktur_org.tar_nama_posisi AS namajabatan,ifnull((select id_pegawai from pegawai_struktur where tar_id_struktur_org = (select tar_id_struktur_org_parent from mst_peg_struktur_org where tar_id_struktur_org = (SELECT 
-            tar_id_struktur_org FROM pegawai_struktur WHERE id_pegawai = pegawai_pangkat.id_pegawai))),$id) AS id_atasanpenilai",false);
-		$this->db->join('mst_peg_golruang','mst_peg_golruang.id_golongan = pegawai_pangkat.id_mst_peg_golruang','left');
-		$this->db->join('pegawai','pegawai.id_pegawai = pegawai_pangkat.id_pegawai','left');
-		$this->db->join('cl_district','cl_district.code = substr(pegawai_pangkat.code_cl_phc,2,4)','left');
-		$this->db->join('pegawai_struktur','pegawai_struktur.id_pegawai = pegawai_pangkat.id_pegawai','left');
+            tar_id_struktur_org FROM pegawai_struktur WHERE id_pegawai = pegawai.id_pegawai))),$id) AS id_atasanpenilai",false);
+		$this->db->join("(SELECT  id_pegawai, nip_nit, tmt,id_mst_peg_golruang, masa_krj_bln, masa_krj_thn, CONCAT(tmt, id_pegawai) AS pangkatterakhir FROM pegawai_pangkat WHERE CONCAT(tmt, id_pegawai) IN (SELECT  CONCAT(MAX(tmt), id_pegawai) FROM pegawai_pangkat GROUP BY id_pegawai)) pangkat",'pangkat.id_pegawai = pegawai.id_pegawai','left');
+		$this->db->join('mst_peg_golruang','mst_peg_golruang.id_golongan = pangkat.id_mst_peg_golruang','left');
+		$this->db->join('cl_district','cl_district.code = substr(pegawai.code_cl_phc,2,4)','left');
+		$this->db->join('pegawai_struktur','pegawai_struktur.id_pegawai = pegawai.id_pegawai','left');
 		$this->db->join('mst_peg_struktur_org','mst_peg_struktur_org.tar_id_struktur_org = pegawai_struktur.tar_id_struktur_org','left');
-		$query = $this->db->get('pegawai_pangkat',1);
+		$query = $this->db->get('pegawai',1);
+		
+		foreach ($query->result() as $q) {
+			$nipterakhir[] = array(
+				'namaterakhir' => $q->gelar_depan.' '.$q->nama.' '.$q->gelar_belakang,  
+				'nipterakhir' => $q->nip_nit,  
+				'pangkatterakhir' => $q->id_mst_peg_golruang.' - '.$q->ruang,  
+				'jabatanterakhir' => $q->namajabatan,  
+				'ukterakhir' => 'Dinas Kesehatan '.$q->value,    
+				'id_atasanpenilai' => $q->id_atasanpenilai,  
+			);
+			echo json_encode($nipterakhir);
+		}
+	}
+	function nippenilaiatasan($id_pegawai=0){
+		$query = $this->db->query("select id_pegawai from pegawai_struktur where tar_id_struktur_org = (select tar_id_struktur_org_parent from mst_peg_struktur_org where tar_id_struktur_org=(select tar_id_struktur_org from pegawai_struktur where id_pegawai = (select id_pegawai from pegawai_struktur where tar_id_struktur_org= (select tar_id_struktur_org_parent from mst_peg_struktur_org where tar_id_struktur_org = (select tar_id_struktur_org from pegawai_struktur where id_pegawai =".'"'.$id_pegawai.'"'.")))))");
+		if($query->num_rows() >0 ){
+			foreach ($query->result() as $key) {
+				$data = $key->id_pegawai;
+			}
+		}else{
+			$dat = 0;
+		}
+		return $data;
+	}
+	function atasannipterakhirpenilai($id=0){
+		$id_penilai = $this->nippenilaiatasan($id);
+		$this->db->where('pegawai.id_pegawai',$id_penilai);
+		$this->db->select("pegawai.nama,pegawai.gelar_depan,pegawai.gelar_belakang,cl_district.value,nip_nit,id_mst_peg_golruang,ruang,mst_peg_struktur_org.tar_nama_posisi AS namajabatan,ifnull((select id_pegawai from pegawai_struktur where tar_id_struktur_org = (select tar_id_struktur_org_parent from mst_peg_struktur_org where tar_id_struktur_org = (SELECT 
+            tar_id_struktur_org FROM pegawai_struktur WHERE id_pegawai = pegawai.id_pegawai))),$id) AS id_atasanpenilai",false);
+		$this->db->join("(SELECT  id_pegawai, nip_nit, tmt,id_mst_peg_golruang, masa_krj_bln, masa_krj_thn, CONCAT(tmt, id_pegawai) AS pangkatterakhir FROM pegawai_pangkat WHERE CONCAT(tmt, id_pegawai) IN (SELECT  CONCAT(MAX(tmt), id_pegawai) FROM pegawai_pangkat GROUP BY id_pegawai)) pangkat",'pangkat.id_pegawai = pegawai.id_pegawai','left');
+		$this->db->join('mst_peg_golruang','mst_peg_golruang.id_golongan = pangkat.id_mst_peg_golruang','left');
+		$this->db->join('cl_district','cl_district.code = substr(pegawai.code_cl_phc,2,4)','left');
+		$this->db->join('pegawai_struktur','pegawai_struktur.id_pegawai = pegawai.id_pegawai','left');
+		$this->db->join('mst_peg_struktur_org','mst_peg_struktur_org.tar_id_struktur_org = pegawai_struktur.tar_id_struktur_org','left');
+		$query = $this->db->get('pegawai',1);
 		
 		foreach ($query->result() as $q) {
 			$nipterakhir[] = array(

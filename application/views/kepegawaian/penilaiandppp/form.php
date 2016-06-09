@@ -42,20 +42,49 @@ if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
     
     function ambil_nip_penilai()
     {
-      var kode = "<?php echo $idlogin; ?>";
+      var kode = "<?php echo $idlogin ?>";
       $.ajax({
-      url: "<?php echo base_url().'kepegawaian/penilaiandppp/nipterakhirpenilai' ?>/"+kode,
+      url: "<?php echo base_url().'kepegawaian/penilaiandppp/nipterakhirpenilai/'.$id_pegawai ?>/",
       dataType: "json",
       success:function(data)
       { 
         $.each(data,function(index,elemet){
-          $("#namapenilaiterakhir").html(elemet.namaterakhir);
-          $("#nippenilaiterakhir").html(elemet.nipterakhir);
-          $("#id_pegawai_penilai").val(elemet.nipterakhir);
-          $("#id_pegawai_penilai_atasan").val(elemet.id_atasanpenilai);
-          $("#pangkatpenilaiterakhir").html(elemet.pangkatterakhir);
-          $("#jabatanpenilaiterakhir").html(elemet.pangkatjabatanterakhir);
-          $("#unitkerjapenilaiterakhir").html(elemet.ukterakhir);
+          if ((elemet.namaterakhir=='')||(elemet.jabatanterakhir=='')) {
+            $("#penilaipenilaidata").hide();
+            $("#atasanpenilaidata").hide();
+          }else{
+            $("#penilaipenilaidata").show();
+            $("#namapenilaiterakhir").html(elemet.namaterakhir);
+            $("#nippenilaiterakhir").html(elemet.nipterakhir);
+            $("#pangkatpenilaiterakhir").html(elemet.pangkatterakhir);
+            $("#jabatanpenilaiterakhir").html(elemet.jabatanterakhir);
+            $("#unitkerjapenilaiterakhir").html(elemet.ukterakhir);
+          }
+        });
+      }
+      });
+
+      return false;
+    }
+    function ambil_atasan_nip_penilai()
+    {
+      var kode = "<?php echo $idlogin ?>";
+      $.ajax({
+      url: "<?php echo base_url().'kepegawaian/penilaiandppp/atasannipterakhirpenilai/'.$id_pegawai ?>/",
+      dataType: "json",
+      success:function(data)
+      { 
+        $.each(data,function(index,elemet){
+          if ((elemet.namaterakhir=='')||(elemet.jabatanterakhir=='')) {
+            $("#atasanpenilaidata").hide();
+          }else{
+            $("#atasanpenilaidata").show();
+            $("#atasannamapenilaiterakhir").html(elemet.namaterakhir);
+            $("#atasannippenilaiterakhir").html(elemet.nipterakhir);
+            $("#atasanpangkatpenilaiterakhir").html(elemet.pangkatterakhir);
+            $("#atasanjabatanpenilaiterakhir").html(elemet.jabatanterakhir);
+            $("#atasanunitkerjapenilaiterakhir").html(elemet.ukterakhir);
+          }
         });
       }
       });
@@ -72,6 +101,8 @@ if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
       { 
         $.each(data,function(index,elemet){
           $("#nilairataskp").val(elemet.nilai);
+          $("#skp").val(elemet.nilai);
+          $("#skp").val(elemet.data);
         });
       }
       });
@@ -81,6 +112,7 @@ if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
     $(function(){
       ambilnilairataskp();
       ambil_nip_penilai();
+      ambil_atasan_nip_penilai();
         $('#form-ss-penilaidpp').submit(function(){
             var data = new FormData();
             $('#notice-content-pegawai').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
@@ -158,12 +190,17 @@ if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
         
     });
 </script>
+<div class="box-body">
  <?php echo form_open(current_url(), 'id="form-ss-penilaidpp"') ?>
       
 <div class="row">
   <div class="col-md-12">
   <div class="box-footer" style="float:right">
+    <?php 
+    if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {}else{
+    ?>
     <button type="submit" class="btn btn-primary"><i class='fa fa-save'></i> &nbsp; Simpan</button>
+    <?php } ?>
     <!-- <button type="button" id="btn_back_dppp" class="btn btn-warning"><i class='fa fa-reply'></i> &nbsp; Kembali</button> -->
   </div>
   </div>
@@ -356,7 +393,7 @@ if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
               <label>SKP</label>
           </div>
           <div class="col-md-5">
-            <input <?php echo $funshowhidden;?> type="number" class="form-control" name="skp" id="skp" placeholder="SKP" value="<?php 
+            <input <?php echo $funshowhidden;?> type="text" class="form-control" name="skp" id="skp" placeholder="SKP" value="<?php 
               if(set_value('skp')=="" && isset($skp)){
                   echo $skp;
                 }else{
@@ -598,7 +635,7 @@ if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
   </div><!-- /.form-box -->
 </div><!-- /.register-box -->
 </form>  
-
+</div>
 <script type="text/javascript">
 $(function(){
     $("#menu_kepegawaian").addClass("active");

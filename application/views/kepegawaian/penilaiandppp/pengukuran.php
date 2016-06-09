@@ -1,18 +1,19 @@
 <?php 
 if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
-  $gridshowedit = ',disabled: true';
+  $gridshowedit = ', editable:false ';
 }else{
   $gridshowedit = '';
 }
 
 ?>
-<div class="row">
+
+<div class="box-body">
   <div class="col-md-12">
     <div class="box box-success">
       <div class="box-body">
           <div class="row">
             <div class="box-body">
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <label>Tahun</label>
                 <select name="tahungrid" id="tahungrid" class="form-control">
                   <?php 
@@ -33,7 +34,17 @@ if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
                   <?php } ;?>
                 </select>
               </div>
-              <div class="col-md-8">  
+              <div class="col-md-3">
+                <label>Nilai Rata-rata</label>
+                <input type="text" class="form-control" name="nilairataskpdata" id="nilairataskpdata" placeholder="nilairataskpdata " value="<?php 
+                  if(set_value('nilairataskpdata')=="" && isset($nilairataskpdata)){
+                      echo $nilairataskpdata;
+                    }else{
+                      echo  set_value('nilairataskpdata');
+                    }
+                  ?>">
+              </div>
+              <div class="col-md-6">  
                 <div class="row">
                   <div class="col-md-12">
                     <div class="box-footer" style="float:right">
@@ -55,9 +66,26 @@ if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
     </div>
   </div>
 </div>
+</div>
 <script type="text/javascript">
-   
+   function ambilnilairataskp()
+    {
+      var tahundata = $("#tahungrid").val();
+      $.ajax({
+      url: "<?php echo base_url().'kepegawaian/penilaiandppp/nilairataskp/{id_mst_peg_struktur_org}/{id_pegawai}' ?>/"+tahundata,
+      dataType: "json",
+      success:function(data)
+      { 
+        $.each(data,function(index,elemet){
+          $("#nilairataskpdata").val(elemet.nilai);
+        });
+      }
+      });
+
+      return false;
+    }
 $(function(){
+    ambilnilairataskp();
     $("#btnrefreshdata").click(function(){
       $("#jqxgridPenilaianSKP").jqxGrid('updatebounddata', 'cells');
     });
@@ -130,6 +158,7 @@ $(function(){
             });
             $("#jqxgridPenilaianSKP").jqxGrid('updatebounddata', 'cells');
             ambilnilairataskp();
+            ambilnilairataskp();
          },
         root: 'Rows',
             pagesize: 10,
@@ -177,8 +206,8 @@ $(function(){
             { text: 'Kual/Mutu' <?php echo $gridshowedit; ?>,columngroup: 'realisasi',align: 'center', cellsalign: 'right', datafield: 'target_nilai', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
             { text: 'Waktu (Bulan)' <?php echo $gridshowedit; ?>,columngroup: 'realisasi',align: 'center', cellsalign: 'right', datafield: 'waktu_nilai', columntype: 'textbox', filtertype: 'textbox', width: '7%' },
             { text: 'Biaya' <?php echo $gridshowedit; ?>,columngroup: 'realisasi',align: 'center', cellsalign: 'right', datafield: 'biaya_nilai', columntype: 'textbox', filtertype: 'textbox', width: '9%' },
-            { text: 'Perhitungan' <?php echo $gridshowedit; ?>,align: 'center', cellsalign: 'right', datafield: 'perhitungan_nilai', columntype: 'textbox', filtertype: 'none', width: '9%' },
-            { text: 'Nilai Pencapaian SKP' <?php echo $gridshowedit; ?>,align: 'center', cellsalign: 'right', datafield: 'pencapaian_nilai', columntype: 'textbox', filtertype: 'none', width: '9%' },
+            { text: 'Perhitungan' , editable:false ,align: 'center', cellsalign: 'right', datafield: 'perhitungan_nilai', columntype: 'textbox', filtertype: 'none', width: '8%' },
+            { text: 'Nilai Pencapaian SKP' , editable:false ,align: 'center', cellsalign: 'right', datafield: 'pencapaian_nilai', columntype: 'textbox', filtertype: 'none', width: '8%' },
             ],
 
             columngroups: 

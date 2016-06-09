@@ -5,8 +5,13 @@
       <!-- general form elements -->
       <div class="box box-primary">
         <div class="box-header">
+          <div class="col-sm-12 col-md-10">
           <h3 class="box-title">{title_form}</h3>
-      </div>
+          </div>
+          <div class="col-sm-12 col-md-1" style="text-align: right">
+            <button type="button" class="btn btn-success" id="btn-return"><i class='fa fa-arrow-circle-o-left'></i> &nbsp; Kembali</button>
+          </div>
+        </div>
 
       <div class="box-footer" >
 
@@ -16,9 +21,6 @@
         </div>
 
         <div class="row">
-          <div class="col-sm-12 col-md-1" style="text-align:  center">
-              <img src="<?php echo base_url()?>kepegawaian/drh/getphoto/{id}" id='linkimages' style='border:1px solid #ECECEC' height='100'>
-          </div>
           <div class="col-sm-12 col-md-4" style="padding-top: 10px">
             <div class="row">
               <div class="col-md-4 col-xs-6" style="text-align: right;">
@@ -28,7 +30,6 @@
                   {gelar_depan} {nama} {gelar_belakang}
               </div>
             </div>
-
             <div class="row">
               <div class="col-md-4 col-xs-6" style="text-align: right;">
                 <label>NIP : </label>
@@ -63,13 +64,11 @@
               </div>
             </div>
           </div>
-          <div class="col-sm-12 col-md-1" style="text-align:  center">
-              <img src="<?php echo base_url()?>kepegawaian/drh/getphoto/{id}" id='linkimages' style='border:1px solid #ECECEC' height='100'>
-          </div>
-          <div class="col-sm-12 col-md-4" style="padding-top: 10px">
+
+          <div class="col-sm-12 col-md-4" style="padding-top: 10px" id="penilaipenilaidata">
             <div class="row">
               <div class="col-md-4 col-xs-6" style="text-align: right;">
-                <label>Penilai : </label>
+                <label> Penilai : </label>
               </div>
               <div class="col-md-8 col-xs-6">
                   <div id="namapenilaiterakhir"></div>
@@ -110,8 +109,49 @@
               </div>
             </div>
           </div>
-          <div class="col-sm-12 col-md-1" style="text-align: right">
-            <button type="button" class="btn btn-success" id="btn-return"><i class='fa fa-arrow-circle-o-left'></i> &nbsp; Kembali</button>
+          <div class="col-sm-12 col-md-4" style="padding-top: 10px" id="atasanpenilaidata">
+            <div class="row">
+              <div class="col-md-4 col-xs-6" style="text-align: right;">
+                <label>Atasan Penilai:</label>
+              </div>
+              <div class="col-md-8 col-xs-6">
+                  <div id="atasannamapenilaiterakhir"></div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4 col-xs-6" style="text-align: right;">
+                <label>NIP : </label>
+              </div>
+              <div class="col-md-8 col-xs-6">
+                  <div id="atasannippenilaiterakhir"></div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 col-xs-6" style="text-align: right;">
+                <label>Pankat : </label>
+              </div>
+              <div class="col-md-8 col-xs-6">
+                  <div id="atasanpangkatpenilaiterakhir"></div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4 col-xs-6" style="text-align: right;">
+                <label>Jabatan : </label>
+              </div>
+              <div class="col-md-8 col-xs-6">
+                  <div id="atasanjabatanpenilaiterakhir"></div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 col-xs-6" style="text-align: right;">
+                <label>Unit Kerja : </label>
+              </div>
+              <div class="col-md-8 col-xs-6">
+                  <div id="atasanunitkerjapenilaiterakhir"></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -134,6 +174,9 @@
 $(function(){
     ambil_nip_pegawai();
     ambil_nip_penilai();
+    ambil_atasan_nip_penilai();
+    $("#penilaipenilaidata").hide();
+    $("#atasanpenilaidata").hide();
     $('#btn-kembali').click(function(){
         window.location.href="<?php echo base_url()?>inventory/permohonanbarang";
     });
@@ -198,16 +241,47 @@ $(function(){
     {
       var kode = "<?php echo $idlogin ?>";
       $.ajax({
-      url: "<?php echo base_url().'kepegawaian/penilaiandppp/nipterakhirpenilai' ?>/"+kode,
+      url: "<?php echo base_url().'kepegawaian/penilaiandppp/nipterakhirpenilai/'.$kode ?>/",
       dataType: "json",
       success:function(data)
       { 
         $.each(data,function(index,elemet){
-          $("#namapenilaiterakhir").html(elemet.namaterakhir);
-          $("#nippenilaiterakhir").html(elemet.nipterakhir);
-          $("#pangkatpenilaiterakhir").html(elemet.pangkatterakhir);
-          $("#jabatanpenilaiterakhir").html(elemet.jabatanterakhir);
-          $("#unitkerjapenilaiterakhir").html(elemet.ukterakhir);
+          if ((elemet.namaterakhir=='')||(elemet.jabatanterakhir=='')) {
+            $("#penilaipenilaidata").hide();
+            $("#atasanpenilaidata").hide();
+          }else{
+            $("#penilaipenilaidata").show();
+            $("#namapenilaiterakhir").html(elemet.namaterakhir);
+            $("#nippenilaiterakhir").html(elemet.nipterakhir);
+            $("#pangkatpenilaiterakhir").html(elemet.pangkatterakhir);
+            $("#jabatanpenilaiterakhir").html(elemet.jabatanterakhir);
+            $("#unitkerjapenilaiterakhir").html(elemet.ukterakhir);
+          }
+        });
+      }
+      });
+
+      return false;
+    }
+    function ambil_atasan_nip_penilai()
+    {
+      var kode = "<?php echo $idlogin ?>";
+      $.ajax({
+      url: "<?php echo base_url().'kepegawaian/penilaiandppp/atasannipterakhirpenilai/'.$kode ?>/",
+      dataType: "json",
+      success:function(data)
+      { 
+        $.each(data,function(index,elemet){
+          if ((elemet.namaterakhir=='')||(elemet.jabatanterakhir=='')) {
+            $("#atasanpenilaidata").hide();
+          }else{
+            $("#atasanpenilaidata").show();
+            $("#atasannamapenilaiterakhir").html(elemet.namaterakhir);
+            $("#atasannippenilaiterakhir").html(elemet.nipterakhir);
+            $("#atasanpangkatpenilaiterakhir").html(elemet.pangkatterakhir);
+            $("#atasanjabatanpenilaiterakhir").html(elemet.jabatanterakhir);
+            $("#atasanunitkerjapenilaiterakhir").html(elemet.ukterakhir);
+          }
         });
       }
       });

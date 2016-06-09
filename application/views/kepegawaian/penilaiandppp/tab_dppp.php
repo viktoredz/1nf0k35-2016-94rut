@@ -45,7 +45,7 @@
                       <i class="icon fa fa-plus" style="font-size: 18px"></i>
                   </div>
                   <div style="margin-left: 10px; vertical-align: middle; text-align: center; float: left;">
-                      DPPP Belakang</div>
+                      Penilaian DP3</div>
               </div>
             </li>
         </ul>
