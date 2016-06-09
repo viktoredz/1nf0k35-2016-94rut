@@ -16,7 +16,7 @@ class Penilaiandppp extends CI_Controller {
 		$data['title_group'] = "Kepegawaian";
 		$data['title_form'] = "Penilaian DPPP";
 		$this->session->set_userdata('filter_tahun','');
-
+		$this->session->set_userdata('filter_tahundata',$this->input->post('filtertahundata'));
 		$kodepuskesmas = $this->session->userdata('puskesmas');
 		if(strlen($kodepuskesmas) == 4){
 			$this->db->like('code','P'.substr($kodepuskesmas, 0,4));
@@ -289,23 +289,44 @@ class Penilaiandppp extends CI_Controller {
 
 			$this->template->show($data,"home");
 	}
-	function form_tab_dpp($pageIndex,$id){
+	function adddatadppp($action='',$id_pegawai=0,$tahun=0,$id_mst_peg_struktur_org=0,$id_mst_peg_struktur_skp=0){
+		$this->authentication->verify('kepegawaian','add');
+
+		$data['title_group'] = "Kepegawaian";
+		$data['title_form']="Penilaian DP3";
+		$data['id_pegawai']=$id_pegawai;
+
+		$data['id_mst_peg_struktur_org']=$id_mst_peg_struktur_org;
+		$data['tahun']=$tahun;
+		$data['id_mst_peg_struktur_skp']=$id_mst_peg_struktur_skp;
+		$data['action']=$action;
+
+		die($this->parser->parse("kepegawaian/penilaiandppp/tab_dppp",$data));
+	}
+	function form_tab_dpp($action='',$pageIndex,$id_pegawai=0,$tahun=0,$id_mst_peg_struktur_org=0,$id_mst_peg_struktur_skp=0){
 		$data = array();
-		$data['id']=$id;
+		$data['id_pegawai']=$id_mst_peg_struktur_org;
+		$data['id_mst_peg_struktur_org']=$id_mst_peg_struktur_org;
 
 		switch ($pageIndex) {
 			case 1:
-				die($this->parser->parse("kepegawaian/drh/form_jabatan_struktural",$data));
+				$this->pengukuran($id_pegawai,$tahun,$id_mst_peg_struktur_org,$id_mst_peg_struktur_skp);
 				break;
 			case 2:
-				die($this->parser->parse("kepegawaian/drh/form_jabatan_fungsional",$data));
+				if ($action=='edit') {
+					$this->edit_dppp($id_pegawai,$tahun,$id_mst_peg_struktur_org,$id_mst_peg_struktur_skp);
+				}else{
+					$this->add_dppp($id_pegawai,$tahun,$id_mst_peg_struktur_org,$id_mst_peg_struktur_skp);	
+				}
+				
 				break;
 			default:
-				die($this->parser->parse("kepegawaian/drh/form_jabatan_fungsional",$data));
+				$this->pengukuran($id_pegawai,$tahun,$id_mst_peg_struktur_org,$id_mst_peg_struktur_skp);
 				break;
 		}
 
 	}
+
 	function add_dppp($id_pegawai=0,$tahun=0,$id_mst_peg_struktur_org=0,$id_mst_peg_struktur_skp=0){
 		$data['action']				= "add";
 		$data['id_pegawai']			= $id_pegawai;
@@ -449,6 +470,28 @@ class Penilaiandppp extends CI_Controller {
 				}
 			}
 		}
+	}
+	function pengukuran($id_pegawai=0,$tahun=0,$id_mst_peg_struktur_org=0,$id_mst_peg_struktur_skp=0){
+		$data						= $this->penilaiandppp_model->getusername($id_pegawai);
+		$data['action']				= "add";
+		$data['id_pegawai']			= $id_pegawai;
+		$data['tahun']				= $tahun;
+		$data['id_mst_peg_struktur_org']			= $id_mst_peg_struktur_org;
+		$data['id_mst_peg_struktur_skp']			= $id_mst_peg_struktur_skp;
+		$data['idlogin']							= $this->penilaiandppp_model->idlogin();
+		$daftaranakbuah				= $this->penilaiandppp_model->getanakbuah($data['idlogin']);
+		
+		if (in_array($id_pegawai, $daftaranakbuah)) {
+		    $data['statusanakbuah'] = "anakbuah";
+		}else if ($id_pegawai == $data['idlogin']) {
+			$data['statusanakbuah'] = "diasendiri";
+		}else{
+			$data['statusanakbuah'] = "atasan";
+		}
+		
+
+		die($this->parser->parse('kepegawaian/penilaiandppp/pengukuran', $data));
+		
 	}
 	function edit_dppp($id_pegawai=0,$tahun=0,$id_mst_peg_struktur_org=0,$id_mst_peg_struktur_skp=0){
 		$data['action']				= "edit";
@@ -752,7 +795,13 @@ class Penilaiandppp extends CI_Controller {
 			echo json_encode($nipterakhir);
 		}
 	}
-
+	function filtertahundata(){
+		if($_POST) {
+			if($this->input->post('filtertahundata') != '') {
+				$this->session->set_userdata('filter_tahundata',$this->input->post('filtertahundata'));
+			}
+		}
+	}
 	function json_skp($id="",$id_pegawai='',$tahun=0){
 		$this->authentication->verify('kepegawaian','show');
 
@@ -781,6 +830,11 @@ class Penilaiandppp extends CI_Controller {
 			if(!empty($ord)) {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
+		}
+		if ($this->session->userdata('filter_tahundata')!='') {
+			$tahun = $this->session->userdata('filter_tahundata');
+		}else{
+			$tahun = date("Y");
 		}
 		$rows = $this->penilaiandppp_model->get_data_skp($id,$id_pegawai,$tahun,$this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();
@@ -839,7 +893,6 @@ class Penilaiandppp extends CI_Controller {
 		$this->form_validation->set_rules('tahun','Realisasi tahun','trim|required');
 		$this->form_validation->set_rules('id_mst_peg_struktur_org','Realisasi id_mst_peg_struktur_org','trim|required');
 		$this->form_validation->set_rules('id_mst_peg_struktur_skp',' Realisasi id_mst_peg_struktur_skp ','trim|required');
-		$this->form_validation->set_rules('ak','ak','Realisasi trim|required');
 		$this->form_validation->set_rules('kuant','Realisasi kuant','trim|required');
 		$this->form_validation->set_rules('target','Realisasi target','trim|required');
 		$this->form_validation->set_rules('waktu','Realisasi waktu','trim|required');

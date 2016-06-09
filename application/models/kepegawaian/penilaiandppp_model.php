@@ -50,18 +50,33 @@ class Penilaiandppp_model extends CI_Model {
 		$query =$this->db->get('pegawai',$limit,$start);
         return $query->result();
     }
+    function getakmaster($id_mst_peg_struktur_org=0,$id_mst_peg_struktur_skp=0){
+        $this->db->where('id_mst_peg_struktur_org',$id_mst_peg_struktur_org);
+        $this->db->where('id_mst_peg_struktur_skp',$id_mst_peg_struktur_skp);
+        $query = $this->db->get('mst_peg_struktur_skp');
+        if($query->num_rows > 0){
+            foreach ($query->result() as $key) {
+                $data = $key->ak;
+            }
+        }else{
+            $data = 0;
+        }
+        return $data;
+    }
     function dppp_update (){
     	
+
+        
 		$biaya = $this->input->post('biaya');
 		$waktu = $this->input->post('waktu');
 		$target = $this->input->post('target');
 		$kuant = $this->input->post('kuant');
-		$ak = $this->input->post('ak');
 		$id_mst_peg_struktur_skp = $this->input->post('id_mst_peg_struktur_skp');
 		$id_mst_peg_struktur_org = $this->input->post('id_mst_peg_struktur_org');
 		$tahun = $this->input->post('tahun');
 		$id_pegawai = $this->input->post('id_pegawai');
-
+        $aksimpan = $this->getakmaster($id_mst_peg_struktur_org,$id_mst_peg_struktur_skp);
+        $ak = $aksimpan * $kuant;
 
     	$this->db->where('id_pegawai',$id_pegawai);
     	$this->db->where('tahun',$tahun);

@@ -1,11 +1,15 @@
 <script>
   $(function() {
-        $('#jqxTabsdppp').jqxTabs({ width: '100%', height: '500'});
-        $('#btn-skjabatan-tambah').click(function(){
-            $.get('<?php echo base_url()?>kepegawaian/drh_jabatan/add/{id}', function (data) {
-                $('#content5').html(data);
-            });
-        });
+        $('#jqxTabsdppp').jqxTabs({ width: '100%', height: '1000'});
+        // $('#btn-skjabatan-tambah').click(function(){
+        //     $.get('<?php echo base_url()?>kepegawaian/penilaiandppp/add/{id}', function (data) {
+        //         $("#tambahjqxgrid").show();
+        //         $("#tambahjqxgrid").html(data);
+        //         $("#jqxgrid").hide();
+        //         $("#btn_back_dppp").show();
+        //         $("#btn_add_dppp").hide();
+        //     }0)
+        // });
 
         var loadPage = function (url, tabIndex) {
             $.get(url, function (data) {
@@ -13,21 +17,16 @@
             });
         }
 
-        loadPage('<?php echo base_url()?>kepegawaian/drh_jabatan/form_tab_dpp/1/{id}', 1);
+        loadPage('<?php echo base_url()?>kepegawaian/penilaiandppp/form_tab_dpp/{action}/1/{id_pegawai}/{tahun}/{id_mst_peg_struktur_org}/0', 1);
         $('#jqxTabsdppp').on('selected', function (event) {
             var pageIndex = event.args.item + 1;
-            loadPage('<?php echo base_url()?>kepegawaian/drh_jabatan/form_tab_dpp/'+pageIndex+'/{id}', pageIndex);
+            loadPage('<?php echo base_url()?>kepegawaian/penilaiandppp/form_tab_dpp/{action}/'+pageIndex+'/{id_pegawai}/{tahun}/{id_mst_peg_struktur_org}/0', pageIndex);
         });
 
   });
 </script>
 
 <section class="content">
-  <div class="row" style="margin-bottom:15px">
-    <div class="col-md-12" style="text-align: right">
-      <button type="button" class="btn btn-success" id="btn-skjabatan-tambah"><i class='fa fa-plus-circle'></i> &nbsp; Tambah SK Jabatan</button>
-    </div>
-  </div>
 <div id='jqxWidgetJabatan'>
     <div id='jqxTabsdppp'>
         <ul>
