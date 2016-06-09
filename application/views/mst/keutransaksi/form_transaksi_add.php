@@ -14,6 +14,13 @@
 </div>
 <?php } ?>
 
+<script>
+  $(function() {
+    $("#menu_master_data").addClass("active");
+    $("#menu_mst_keuangan_transaksi").addClass("active");
+  });
+</script>
+
 <section class="content">
 <form action="<?php echo base_url()?>mst/keuangan_transaksi/transaksi_add/" method="post">
   <div class="row">
@@ -121,9 +128,6 @@
     //     $('#content2').html(data);
     //   });
     // });
-
-    $("#menu_master_data").addClass("active");
-    $("#menu_mst_keuangan_transaksi").addClass("active");
 
   });
 

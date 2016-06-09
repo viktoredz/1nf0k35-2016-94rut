@@ -8,7 +8,7 @@
         </div>
         <div class="box-footer pull-right">
           <button type="button" class="btn btn-primary" id="jqxgrid_transaksi_refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button> 
-          <button type="button" class="btn btn-success" id="btn-add"><i class='fa fa-plus-square'></i> &nbsp; Tambah Transaksi</button>
+          <button type="button" class="btn btn-success" onclick="document.location.href='<?php echo base_url()?>mst/keuangan_transaksi/transaksi_add'"><i class='fa fa-plus-square-o'></i> &nbsp; Tambah Transaksi</button>
         </div>
         <div class="box-body">
           <div class="div-grid">
@@ -112,15 +112,20 @@
     });
 
   function detail(id){
-      $.ajax({
-          url: "<?php echo base_url().'mst/keuangan_transaksi/transaksi_edit'?>/" +id,
-          type : 'POST',
-          success : function(data) {
-              $('#content2').html(data);
-          }
-      });
-      return false;
-    }
+    document.location.href="<?php echo base_url().'mst/keuangan_transaksi/transaksi_edit';?>/" + id ;
+    $('#content2').html(data);
+  }
+
+  // function detail(id){
+  //     $.ajax({
+  //         url: "<?php echo base_url().'mst/keuangan_transaksi/transaksi_edit'?>/" +id,
+  //         type : 'POST',
+  //         success : function(data) {
+  //             $('#content2').html(data);
+  //         }
+  //     });
+  //     return false;
+  //   }
 
   function del(id){
     var confirms = confirm("Hapus Data ?");
