@@ -560,31 +560,6 @@ class Keuangan_transaksi extends CI_Controller {
 		die($this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data));
 	}
 
-	// function jurnal_transaksi_add($id=0){
-	// 	$this->authentication->verify('mst','add');
-
- //    	$this->form_validation->set_rules('value','Value','trim');
- //    	$this->form_validation->set_rules('type','Akun','trim');
- //    	$this->form_validation->set_rules('group','Group','trim');
-
-	// 	$data['id_mst_kategori_transaksi']	= "";
-	// 	$data['id']							= $id;
-	// 	$data['akun']						= $this->keutransaksi_model->get_data_akun();
-	//     $data['action']						= "add";
-	// 	$data['template']					= $this->keutransaksi_model->get_data_template_trans($id);
-	// 	$data['kategori']					= $this->keutransaksi_model->get_data_kategori_transaksi();
-	// 	$data['alert_form']		    		= '';
-
-	// 	if($this->form_validation->run()== FALSE){
-	// 		die($this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data));
-	// 	}elseif($this->keutransaksi_model->jurnal_transaksi_add($id)){
-	// 		die("OK");
-	// 	}else{
-	// 		$data['alert_form'] = 'Save data failed...';
-	// 	}
-	// 	die($this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data));
-	// }
-
 	function jurnal_transaksi_edit_debit($id=0){
 		$this->authentication->verify('mst','edit');
 
