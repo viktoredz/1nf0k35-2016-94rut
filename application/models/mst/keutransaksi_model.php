@@ -208,11 +208,16 @@ class Keutransaksi_model extends CI_Model {
         $data['auto_fill']               = $this->input->post('auto_fill');
         $data['value']                   = $this->input->post('value');
         
+        $this->db->set('id_mst_transaksi',$id);
+        $this->db->set('id_mst_akun',     $data['id_mst_akun']);
+        $this->db->set('auto_fill',       $data['auto_fill']);
+        $this->db->set('value',           $data['value']);
+
         // $this->db->where('id_mst_transaksi_item',$id);
         $this->db->where('id_mst_transaksi',$id);
         $this->db->where('type','kredit');
 
-        if($this->db->update('mst_keu_transaksi_item', $data)){
+        if($this->db->update('mst_keu_transaksi_item')){
             return true;
         }else{
             return mysql_error();
@@ -237,11 +242,13 @@ class Keutransaksi_model extends CI_Model {
                array(
                   'id_mst_transaksi' => $lastInsertedID,
                   'urutan'           => 1,
+                  '`group`'          => 1,
                   'type'             => 'debit'
                ),
                array(
                   'id_mst_transaksi' => $lastInsertedID,
                   'urutan'           => 1,
+                  '`group`'          => 1,
                   'type'             => 'kredit'
                )
             ); 
@@ -256,9 +263,10 @@ class Keutransaksi_model extends CI_Model {
 
     function delete_transaksi($id){
 
-        $this->db->where('id_mst_transaksi',$id);
+        $this->db->delete('mst_keu_transaksi', array('id_mst_transaksi' => $id));
+        $this->db->delete('mst_keu_transaksi_setting', array('id_mst_transaksi' => $id));
+        $this->db->delete('mst_keu_transaksi_item', array('id_mst_transaksi' => $id));
 
-        return $this->db->delete('mst_keu_transaksi');
     }
 
     function transaksi_update($id){
@@ -312,8 +320,6 @@ class Keutransaksi_model extends CI_Model {
         }
     }
     
-
-
     function delete_transaksi_otomatis($id){
         $this->db->where('id_mst_otomasi_transaksi',$id);
 
@@ -371,7 +377,6 @@ class Keutransaksi_model extends CI_Model {
         
          return $query->result();
     }
-
 
     function kategori_trans_template_update($id){
         $data['id_mst_kategori_transaksi']   = $id;

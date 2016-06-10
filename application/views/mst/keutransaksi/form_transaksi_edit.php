@@ -164,12 +164,7 @@
                         <div class="row">
                           <div class="col-md-1">
                             <input type="checkbox" name="debit_isi_otomatis" value="1" <?php 
-                              if(set_value('auto_fill')=="" && isset($auto_fill)){
-                                $auto_fill = $auto_fill;
-                              }else{
-                                $auto_fill = set_value('auto_fill');
-                              }
-                              if($auto_fill == 1) echo "checked";
+                              if(!empty($row->auto_fill)){ echo "checked";}
                             ?>>
                           </div> 
                           <div class="col-md-6" style="padding-top:5px;"><label> Isi Otomatis </label> </div>
@@ -273,12 +268,7 @@
                         <div class="row">
                           <div class="col-md-1">
                             <input type="checkbox" name="kredit_isi_otomatis" value="1" <?php 
-                              if(set_value('auto_fill')=="" && isset($auto_fill)){
-                                $auto_fill = $auto_fill;
-                              }else{
-                                $auto_fill = set_value('auto_fill');
-                              }
-                              if($auto_fill == 1) echo "checked";
+                              if(!empty($row->auto_fill)){ echo "checked";}
                             ?>>
                           </div> 
                           <div class="col-md-6" style="padding-top:5px;"><label> Isi Otomatis </label> </div>
@@ -318,7 +308,6 @@
                           </div>
                           <div class="col-md-1" style="padding-top:5px;"><label>%</label> </div>
                         </div>
-                        <p id="k_value_nilai"></p>
                       </div>
                     </div>
 
@@ -380,12 +369,6 @@
         window.location.href="<?php echo base_url()?>mst/keuangan_transaksi";
     });
 
-  // $("#btn-kembali").click(function(){
-  //   $.get('<?php echo base_url()?>mst/keuangan_transaksi/transaksi_kembali', function (data) {
-  //     $('#content2').html(data);
-  //   });
-  // });
-
   $("select[name='debit_akun']").change(function(){
       var id_mst_akun_debit = $(this).val();
       var data = new FormData();
@@ -418,9 +401,9 @@
          data : 'id_mst_akun='+id_mst_akun_kredit,
          success: function (response) {
           if(response=="OK"){
-              alert("Success.");
+              // alert("Success.");
           }else{
-              alert("Failed.");
+              // alert("Failed.");
           }
          }
       });
@@ -440,10 +423,8 @@
             success : function(response){
               if(response=="OK"){
                   $("#debit_isi_otomatis").prop("checked", true);
-                  // alert("Success.");
               }else{
                   $("#debit_isi_otomatis").prop("checked", false);
-                  // alert("Failed.");
               }
             }
         });
@@ -475,7 +456,6 @@
     $("[name='kredit_value_nilai']").change(function(){
 
       var nilai_kredit = $(this).val();
-      document.getElementById("k_value_nilai").innerHTML = "Text: " + nilai_kredit;
 
       var data = new FormData();
       data.append('value', nilai_kredit);
@@ -486,9 +466,9 @@
          data : 'value='+nilai_kredit,
          success: function (response) {
           if(response=="OK"){
-              alert("Success.");
+              // alert("Success.");
           }else{
-              alert("Failed.");
+              // alert("Failed.");
           }
          }
       });
@@ -555,12 +535,12 @@
                                 <div class="row">\
                                   <div class="col-md-1">\
                                    <input type="checkbox" name="debit_isi_otomatis" value="1" <?php 
-                                      if(set_value('status')=="" && isset($status)){
-                                        $status = $status;
+                                      if(set_value('auto_fill')=="" && isset($auto_fill)){
+                                        $auto_fill = $auto_fill;
                                       }else{
-                                        $status = set_value('status');
+                                        $auto_fill = set_value('auto_fill');
                                       }
-                                      if($status == 1) echo "checked";
+                                      if($auto_fill == 1) echo "checked";
                                     ?>>\
                                   </div>\
                                   <div class="col-md-6" style="padding-top:5px;"><label> Isi Otomatis </label></div>\
@@ -843,12 +823,12 @@
                                                           <div class="row">\
                                                             <div class="col-md-1">\
                                                               <input type="checkbox" name="debit_isi_otomatis" value="1" <?php 
-                                                                if(set_value('status')=="" && isset($status)){
-                                                                  $status = $status;
+                                                                if(set_value('auto_fill')=="" && isset($auto_fill)){
+                                                                  $auto_fill = $auto_fill;
                                                                 }else{
-                                                                  $status = set_value('status');
+                                                                  $auto_fill = set_value('auto_fill');
                                                                 }
-                                                                if($status == 1) echo "checked";
+                                                                if($auto_fill == 1) echo "checked";
                                                               ?>>\
                                                             </div>\
                                                             <div class="col-md-6" style="padding-top:5px;"><label> Isi Otomatis </label> </div>\

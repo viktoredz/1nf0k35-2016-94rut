@@ -113,7 +113,6 @@
 
   function detail(id){
     document.location.href="<?php echo base_url().'mst/keuangan_transaksi/transaksi_edit';?>/" + id ;
-    $('#content2').html(data);
   }
 
   // function detail(id){
