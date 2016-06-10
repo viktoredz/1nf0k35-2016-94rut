@@ -937,6 +937,11 @@ class Penilaiandppp extends CI_Controller {
 
 		$this->penilaiandppp_model->delete_dppp($id_pegawai,$tahun);
 	}
+	function dodelpermohonanpengukuran($id_pegawai=0,$tahun=0,$id_mst_peg_struktur_org=0,$periode=0){
+		$this->authentication->verify('kepegawaian','del');
+
+		$this->penilaiandppp_model->delete_pengukuran($id_pegawai,$tahun,$id_mst_peg_struktur_org,$periode);
+	}
 	function nipterakhirpegawai($id=0){
 		$this->db->where('pegawai.id_pegawai',$id);
 		$this->db->select("cl_district.value,nip_nit,id_mst_peg_golruang,ruang,mst_peg_struktur_org.tar_nama_posisi AS namajabatan");
