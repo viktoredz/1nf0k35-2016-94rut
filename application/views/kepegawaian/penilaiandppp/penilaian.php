@@ -132,7 +132,7 @@
 	}
   
 	function add_dppp(){
-		$.get("<?php echo base_url().'kepegawaian/penilaiandppp/adddatadppp/add/'.$id_pegawai.'/0/'.$id_mst_peg_struktur_org.'/0'; ?>" , function(data) {
+		$.get("<?php echo base_url().'kepegawaian/penilaiandppp/add_dppp/'.$id_pegawai.'/0/'.$id_mst_peg_struktur_org.'/0'; ?>" , function(data) {
       $("#tambahjqxgrid").show();
 			$("#tambahjqxgrid").html(data);
       $("#jqxgrid").hide();
@@ -142,7 +142,7 @@
 	}
 
 	function edit_dppp(id_pegawai,tahun){
-		$.get("<?php echo base_url().'kepegawaian/penilaiandppp/adddatadppp/edit/'; ?>"+id_pegawai+'/'+tahun+'/'+"<?php echo $id_mst_peg_struktur_org; ?>" , function(data) {
+		$.get("<?php echo base_url().'kepegawaian/penilaiandppp/edit_dppp/'; ?>"+id_pegawai+'/'+tahun+'/'+"<?php echo $id_mst_peg_struktur_org; ?>" , function(data) {
       $("#tambahjqxgrid").show();
       $("#tambahjqxgrid").html(data);
       $("#jqxgrid").hide();
@@ -168,7 +168,8 @@
 	<div id="popup_title">Data dppp</div>
 	<div id="popup_content">&nbsp;</div>
 </div>
-
+<section class="content">
+<div class="box-body">
 <div>
 	<div style="width:100%;">
   <div class="row">
@@ -197,3 +198,5 @@
       </div>
 	</div>
 </div>
+</div>
+</section>

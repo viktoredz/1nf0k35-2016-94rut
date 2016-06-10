@@ -59,9 +59,11 @@ if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
             $("#pangkatpenilaiterakhir").html(elemet.pangkatterakhir);
             $("#jabatanpenilaiterakhir").html(elemet.jabatanterakhir);
             $("#unitkerjapenilaiterakhir").html(elemet.ukterakhir);
+            $("#id_pegawai_penilai").val(elemet.id_pegawai_penilai);
           }
         });
       }
+
       });
 
       return false;
@@ -84,6 +86,7 @@ if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
             $("#atasanpangkatpenilaiterakhir").html(elemet.pangkatterakhir);
             $("#atasanjabatanpenilaiterakhir").html(elemet.jabatanterakhir);
             $("#atasanunitkerjapenilaiterakhir").html(elemet.ukterakhir);
+            $("#id_pegawai_penilai_atasan").val(elemet.id_atasan_penilai);
           }
         });
       }
@@ -93,16 +96,17 @@ if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
     }
     function ambilnilairataskp()
     {
-      var tahundata = $("#tahun").val();
+
       $.ajax({
-      url: "<?php echo base_url().'kepegawaian/penilaiandppp/nilairataskp/{id_mst_peg_struktur_org}/{id_pegawai}' ?>/"+tahundata,
+      url: "<?php echo base_url().'kepegawaian/penilaiandppp/nilairataskpterakhir/{id_mst_peg_struktur_org}/{id_pegawai}/'.$tahun."/0" ?>",
       dataType: "json",
       success:function(data)
       { 
         $.each(data,function(index,elemet){
           $("#nilairataskp").val(elemet.nilai);
-          $("#skp").val(elemet.nilai);
-          $("#skp").val(elemet.data);
+          <?php if (!isset($skp)) {?>
+            $("#skp").val(elemet.nilai);
+          <?php } ?>
         });
       }
       });
@@ -131,6 +135,7 @@ if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
                 data.append('keberatan', $('#keberatan').val());
             }
             data.append('keputusan_tgl', $('#keputusan_tgl').val());
+
             data.append('keputusan', $('#keputusan').val());
             data.append('rekomendasi', $('#rekomendasi').val());
             data.append('skp', $('#skp').val());
@@ -197,7 +202,9 @@ if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
   <div class="col-md-12">
   <div class="box-footer" style="float:right">
     <?php 
-    if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {}else{
+    if (($statusanakbuah == 'atasan')) {
+      
+    }else{
     ?>
     <button type="submit" class="btn btn-primary"><i class='fa fa-save'></i> &nbsp; Simpan</button>
     <?php } ?>

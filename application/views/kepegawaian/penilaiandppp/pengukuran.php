@@ -13,38 +13,47 @@ if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
       <div class="box-body">
           <div class="row">
             <div class="box-body">
-              <div class="col-md-3">
+              <div class="col-md-2">
                 <label>Tahun</label>
-                <select name="tahungrid" id="tahungrid" class="form-control">
-                  <?php 
-                    if (($tahun!='')&&($tahun!='0')) {
-                        $tahun = $tahun;  
+                <input disabled="disabled" type="text" class="form-control" name="tgl_dibuat_data_pengukuran" id="tgl_dibuat_data_pengukuran" placeholder="Tanggal Dibuat " value="<?php 
+                  if(set_value('tgl_dibuat_data_pengukuran')=="" && isset($tgl_dibuat)){
+                      echo date("d-m-Y",strtotime($tgl_dibuat));
                     }else{
-                      if ($this->session->userdata('filter_tahundata')!='') {
-                        $tahun = $this->session->userdata('filter_tahundata');
-                      }else{
-                        $tahun = date("Y");
-                      }
-                      
-                    }
-                    for($i=date("Y")-8;$i<=date("Y")+8; $i++ ) { ;
-                    $select = $i == $tahun ? 'selected=selected' : '';
-                  ?>
-                    <option value="<?php echo $i; ?>" <?php echo $select; ?>><?php echo $i; ?></option>
-                  <?php } ;?>
-                </select>
-              </div>
-              <div class="col-md-3">
-                <label>Nilai Rata-rata</label>
-                <input type="text" class="form-control" name="nilairataskpdata" id="nilairataskpdata" placeholder="nilairataskpdata " value="<?php 
-                  if(set_value('nilairataskpdata')=="" && isset($nilairataskpdata)){
-                      echo $nilairataskpdata;
-                    }else{
-                      echo  set_value('nilairataskpdata');
+                      echo  set_value('tgl_dibuat_data_pengukuran');
                     }
                   ?>">
               </div>
-              <div class="col-md-6">  
+              <div class="col-md-2">
+                <label>Tahun</label>
+                <input disabled="disabled" type="text" class="form-control" name="tahungrid_datapengukuran" id="tahungrid_datapengukuran" placeholder="Tahun " value="<?php 
+                  if(set_value('tahungrid_datapengukuran')=="" && isset($tahun)){
+                      echo $tahun;
+                    }else{
+                      echo  set_value('tahungrid_datapengukuran');
+                    }
+                  ?>">
+              </div>
+              <div class="col-md-2">
+                <label>Periode</label>
+                <input disabled="disabled" type="text" class="form-control" name="periode_datapengukuran" id="periode_datapengukuran" placeholder="periode " value="<?php 
+                  if(set_value('periode_datapengukuran')=="" && isset($periode)){
+                      echo $periode;
+                    }else{
+                      echo  set_value('periode_datapengukuran');
+                    }
+                  ?>">
+              </div>
+              <div class="col-md-2">
+                <label>Nilai Rata-rata</label>
+                <input disabled="disabled" type="text" class="form-control" name="nilairataskpdata_datapengukuran" id="nilairataskpdata_datapengukuran" placeholder="nilairataskpdata " value="<?php 
+                  if(set_value('nilairataskpdata_datapengukuran')=="" && isset($nilairataskpdata)){
+                      echo $nilairataskpdata;
+                    }else{
+                      echo  set_value('nilairataskpdata_datapengukuran');
+                    }
+                  ?>">
+              </div>
+              <div class="col-md-4">  
                 <div class="row">
                   <div class="col-md-12">
                     <div class="box-footer" style="float:right">
@@ -70,14 +79,15 @@ if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
 <script type="text/javascript">
    function ambilnilairataskp()
     {
-      var tahundata = $("#tahungrid").val();
+      var tahundata = $("#tahungrid_datapengukuran").val();
+      var periodedata = $("#periode_datapengukuran").val();
       $.ajax({
-      url: "<?php echo base_url().'kepegawaian/penilaiandppp/nilairataskp/{id_mst_peg_struktur_org}/{id_pegawai}' ?>/"+tahundata,
+      url: "<?php echo base_url().'kepegawaian/penilaiandppp/nilairataskp/{id_mst_peg_struktur_org}/{id_pegawai}' ?>/"+tahundata+'/'+periodedata,
       dataType: "json",
       success:function(data)
       { 
         $.each(data,function(index,elemet){
-          $("#nilairataskpdata").val(elemet.nilai);
+          $("#nilairataskpdata_datapengukuran").val(elemet.nilai);
         });
       }
       });
@@ -86,17 +96,18 @@ if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
     }
 $(function(){
     ambilnilairataskp();
+    filtergriddata();
     $("#btnrefreshdata").click(function(){
       $("#jqxgridPenilaianSKP").jqxGrid('updatebounddata', 'cells');
     });
     $("#menu_kepegawaian").addClass("active");
     $("#menu_kepegawaian_penilaiandppp").addClass("active");
-      var tahungrid = $("#tahungrid").val();
-      $("#tahungrid").change(function(){
-          tahungrid = $("#tahungrid").val();
+      var tahungrid = $("#tahungrid_datapengukuran").val();
+      $("#tahungrid_datapengukuran").change(function(){
+          tahungrid = $("#tahungrid_datapengukuran").val();
           $("#jqxgridPenilaianSKP").jqxGrid('updatebounddata');
       });
-      var data = {};  // prepare the data
+      var data = {};  
       var sourceskp = {
           datatype: "json",
           type  : "POST",
@@ -126,7 +137,6 @@ $(function(){
           { name: 'edit', type: 'number'},
           { name: 'delete', type: 'number'}
             ],
-        id: 'id_mst_peg_struktur_skp',
         url: "<?php echo base_url().'kepegawaian/penilaiandppp/json_skp/{id_mst_peg_struktur_org}/{id_pegawai}'; ?>/",
         cache: false,
           updateRow: function (rowID, rowData, commit) {
@@ -143,7 +153,8 @@ $(function(){
             $.post( '<?php echo base_url()?>kepegawaian/penilaiandppp/updatenilaiskp', 
               {
                 id_pegawai:"<?php echo $id_pegawai?>",
-                tahun:$('#tahungrid').val(), 
+                tahun:$('#tahungrid_datapengukuran').val(), 
+                periode:$('#periode_datapengukuran').val(), 
                 id_mst_peg_struktur_org: "<?php echo $id_mst_peg_struktur_org?>", 
                 id_mst_peg_struktur_skp : rowData.id_mst_peg_struktur_skp, 
                 kuant: rowData.kuant_nilai, 
@@ -157,7 +168,6 @@ $(function(){
                 }
             });
             $("#jqxgridPenilaianSKP").jqxGrid('updatebounddata', 'cells');
-            ambilnilairataskp();
             ambilnilairataskp();
          },
         root: 'Rows',
@@ -217,9 +227,9 @@ $(function(){
             ]
         });
         }); 
-  $("#tahungrid").change(function(){
-    $.post("<?php echo base_url().'kepegawaian/penilaiandppp/filtertahundata' ?>", 'filtertahundata='+$(this).val(),  function(){
-      $("#jqxgridPenilaianSKP").jqxGrid('updatebounddata', 'cells');
-    });
-    });
+    function filtergriddata(){
+      $.post("<?php echo base_url().'kepegawaian/penilaiandppp/filtertahundata/'?>", 'filtertahundata='+$("#tahungrid_datapengukuran").val()+'&filterperiodedata='+$("#periode_datapengukuran").val(),  function(){
+        $("#jqxgridPenilaianSKP").jqxGrid('updatebounddata', 'cells');
+      });
+    };
 </script>

@@ -32,6 +32,22 @@ class Penilaiandppp_model extends CI_Model {
 		$query =$this->db->get('pegawai_dp3',$limit,$start);
         return $query->result();
     }
+    function get_data_detail_pengukuran($id=0,$start=0,$limit=999999,$options=array())
+    {   
+        $this->db->order_by('tahun','desc');
+        $this->db->order_by('periode','desc');
+        $this->db->where('pegawai_skp.id_pegawai',$id);
+        $this->db->select("pegawai_skp.*,pegawai.gelar_depan,pegawai.nama,pegawai.gelar_belakang,penilai.gelar_depan as gelardepannama_penilai,penilai.nama as nama_penilai,penilai.gelar_belakang as gelarbelakangnama_penilai, (SELECT 
+            ((SUM((((pegawai_skp_nilai.kuant / mst_peg_struktur_skp.kuant) * 100) + ((pegawai_skp_nilai.target / mst_peg_struktur_skp.target) * 100) + (((1.76 * mst_peg_struktur_skp.waktu - pegawai_skp_nilai.waktu) / mst_peg_struktur_skp.waktu) * 100)) / 3)) / 6) AS nilairata FROM pegawai_skp_nilai JOIN mst_peg_struktur_skp ON mst_peg_struktur_skp.id_mst_peg_struktur_org = pegawai_skp_nilai.id_mst_peg_struktur_org AND mst_peg_struktur_skp.id_mst_peg_struktur_skp = pegawai_skp_nilai.id_mst_peg_struktur_skp WHERE pegawai_skp_nilai.id_pegawai =pegawai_skp.id_pegawai and
+            pegawai_skp_nilai.tahun = pegawai_skp.tahun and  pegawai_skp_nilai.periode = pegawai_skp.periode) AS ratarata,(SELECT 
+            ((SUM((((pegawai_skp_nilai.kuant / mst_peg_struktur_skp.kuant) * 100) + ((pegawai_skp_nilai.target / mst_peg_struktur_skp.target) * 100) + (((1.76 * mst_peg_struktur_skp.waktu - pegawai_skp_nilai.waktu) / mst_peg_struktur_skp.waktu) * 100)) / 3))) AS nilairata FROM pegawai_skp_nilai JOIN mst_peg_struktur_skp ON mst_peg_struktur_skp.id_mst_peg_struktur_org = pegawai_skp_nilai.id_mst_peg_struktur_org AND mst_peg_struktur_skp.id_mst_peg_struktur_skp = pegawai_skp_nilai.id_mst_peg_struktur_skp WHERE pegawai_skp_nilai.id_pegawai =pegawai_skp.id_pegawai and
+            pegawai_skp_nilai.tahun = pegawai_skp.tahun and pegawai_skp_nilai.periode = pegawai_skp.periode) AS jumlah, pegawai_struktur.tar_id_struktur_org as id_mst_peg_struktur_org");
+        $this->db->join("pegawai",'pegawai_skp.id_pegawai = pegawai.id_pegawai','left');
+        $this->db->join("pegawai as penilai",'pegawai_skp.id_pegawai_penilai = penilai.id_pegawai','left');
+        $this->db->join("pegawai_struktur",'pegawai_struktur.id_pegawai = pegawai_skp.id_pegawai','left');
+        $query =$this->db->get('pegawai_skp',$limit,$start);
+        return $query->result();
+    }
     function get_data($start=0,$limit=999999,$options=array())
     {	
         $puskesmas_ = 'P'.$this->session->userdata('puskesmas');
@@ -63,6 +79,17 @@ class Penilaiandppp_model extends CI_Model {
         }
         return $data;
     }
+    function get_data_row_pengukuran($id_pegawai=0,$tahun=0,$id_mst_peg_struktur_org=0,$periode=0){
+        $this->db->where('tahun',$tahun);
+        $this->db->where('periode',$periode);
+        $this->db->where('id_pegawai',$id_pegawai);
+        $query = $this->db->get('pegawai_skp');
+        if($query->num_rows > 0){
+           $data = $query->row_array();
+        }
+        $query->free_result();
+        return $data;
+    }
     function dppp_update (){
     	
 
@@ -71,6 +98,7 @@ class Penilaiandppp_model extends CI_Model {
 		$waktu = $this->input->post('waktu');
 		$target = $this->input->post('target');
 		$kuant = $this->input->post('kuant');
+        $periode = $this->input->post('periode');
 		$id_mst_peg_struktur_skp = $this->input->post('id_mst_peg_struktur_skp');
 		$id_mst_peg_struktur_org = $this->input->post('id_mst_peg_struktur_org');
 		$tahun = $this->input->post('tahun');
@@ -80,12 +108,14 @@ class Penilaiandppp_model extends CI_Model {
 
     	$this->db->where('id_pegawai',$id_pegawai);
     	$this->db->where('tahun',$tahun);
+        $this->db->where('periode',$periode);
     	$this->db->where('id_mst_peg_struktur_org',$id_mst_peg_struktur_org);
     	$this->db->where('id_mst_peg_struktur_skp',$id_mst_peg_struktur_skp);
     	$query = $this->db->get('pegawai_skp_nilai');
     	if ($query->num_rows() >0) {
     		$this->db->where('id_pegawai',$id_pegawai);
 	    	$this->db->where('tahun',$tahun);
+            $this->db->where('periode',$periode);
 	    	$this->db->where('id_mst_peg_struktur_org',$id_mst_peg_struktur_org);
 	    	$this->db->where('id_mst_peg_struktur_skp',$id_mst_peg_struktur_skp);
     		$value = array(
@@ -107,6 +137,7 @@ class Penilaiandppp_model extends CI_Model {
     				'target'					=> $target,
     				'waktu' 					=> $waktu,
     				'biaya' 					=> $biaya,
+                    'periode'                     => $periode,
     				'id_pegawai'				=> $id_pegawai,
     				'tahun' 					=> $tahun,
     				'id_mst_peg_struktur_org' 	=> $id_mst_peg_struktur_org,
@@ -115,11 +146,11 @@ class Penilaiandppp_model extends CI_Model {
     		$this->db->insert('pegawai_skp_nilai',$value);
     	}
     }
-    function get_data_skp($id=0,$id_pegawai=0,$tahun=0,$start=0,$limit=999999,$options=array())
+    function get_data_skp($id=0,$id_pegawai=0,$tahun=0,$periode=0,$start=0,$limit=999999,$options=array())
     {
         $this->db->select("mst_peg_struktur_skp.*,pegawai_skp_nilai.id_pegawai as id_pegawai_nilai,pegawai_skp_nilai.tahun as tahun_nilai,pegawai_skp_nilai.id_mst_peg_struktur_org as id_mst_peg_struktur_org_nilai,pegawai_skp_nilai.id_mst_peg_struktur_skp as id_mst_peg_struktur_skp_nilai,pegawai_skp_nilai.ak as ak_nilai,pegawai_skp_nilai.kuant as kuant_nilai,pegawai_skp_nilai.target as target_nilai,pegawai_skp_nilai.waktu as waktu_nilai,pegawai_skp_nilai.biaya as biaya_nilai,(((pegawai_skp_nilai.kuant / mst_peg_struktur_skp.kuant)*100)+((pegawai_skp_nilai.target / mst_peg_struktur_skp.target)*100)+(((1.76*mst_peg_struktur_skp.waktu - pegawai_skp_nilai.waktu)/mst_peg_struktur_skp.waktu)*100)) as perhitungan_nilai,((((pegawai_skp_nilai.kuant / mst_peg_struktur_skp.kuant)*100)+((pegawai_skp_nilai.target / mst_peg_struktur_skp.target)*100)+(((1.76*mst_peg_struktur_skp.waktu - pegawai_skp_nilai.waktu)/mst_peg_struktur_skp.waktu)*100))/3) as pencapaian_nilai");
         $this->db->where('mst_peg_struktur_skp.id_mst_peg_struktur_org',$id);
-        $this->db->join('pegawai_skp_nilai',"mst_peg_struktur_skp.id_mst_peg_struktur_skp = pegawai_skp_nilai.id_mst_peg_struktur_skp AND pegawai_skp_nilai.id_pegawai=".'"'.$id_pegawai.'"'." and tahun=".'"'.$tahun.'"'."",'left');
+        $this->db->join('pegawai_skp_nilai',"mst_peg_struktur_skp.id_mst_peg_struktur_skp = pegawai_skp_nilai.id_mst_peg_struktur_skp AND pegawai_skp_nilai.id_pegawai=".'"'.$id_pegawai.'"'." and tahun=".'"'.$tahun.'"'."and periode=".'"'.$periode.'"'."",'left');
         $query = $this->db->get('mst_peg_struktur_skp',$limit,$start);
         return $query->result();
     }

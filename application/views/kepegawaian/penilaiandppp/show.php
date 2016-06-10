@@ -173,9 +173,6 @@
 	function detail(id_pegawai,code_cl_phc){
 		document.location.href="<?php echo base_url().'kepegawaian/penilaiandppp/edit';?>/" + id_pegawai+'/'+code_cl_phc;
 	}
-	// $("#btn-add").click(function(){
-	// 	document.location.href="<?php echo base_url().'kepegawaian/penilaiandppp/add';?>/" ;
-	// });
 	$("select[name='code_cl_phc']").change(function(){
 		$.post("<?php echo base_url().'kepegawaian/penilaiandppp/filter' ?>", 'code_cl_phc='+$(this).val(),  function(){
 			$("#jqxgrid").jqxGrid('updatebounddata', 'cells');
