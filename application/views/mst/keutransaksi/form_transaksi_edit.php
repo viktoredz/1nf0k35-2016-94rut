@@ -202,12 +202,7 @@
                         <div class="row">
                           <div class="col-md-1">
                             <input type="checkbox" name="debit_opsional" value="1" <?php 
-                              if(set_value('status')=="" && isset($status)){
-                              $status = $status;
-                                }else{
-                              $status = set_value('status');
-                                }
-                              if($status == 1) echo "checked";
+                              if(!empty($row->opsional)){ echo "checked";}
                             ?>>
                           </div> 
                           <div class="col-md-3" style="padding-top:5px;"><label> Opsional </label> </div>
@@ -284,16 +279,16 @@
                           <div class="col-md-2" style="padding-top:5px;"><label> Nilai </label> </div>
                           <div class="col-md-7">
                             <select  name="kredit_cmbx_nilai" type="text" class="form-control">
-                              <?php foreach($kategori as $k) : ?>
+                              <?php foreach($nilai_debit as $nd) : ?>
                                   <?php
-                                    if(set_value('id_mst_kategori_transaksi')=="" && isset($id_mst_kategori_transaksi)){
-                                      $id_mst_kategori_transaksi = $id_mst_kategori_transaksi;
+                                    if(set_value('id_mst_akun')=="" && isset($id_mst_akun)){
+                                      $id_mst_akun = $id_mst_akun;
                                     }else{
-                                      $id_mst_kategori_transaksi = set_value('id_mst_kategori_transaksi');
+                                      $id_mst_akun = set_value('id_mst_akun');
                                     }
-                                    $select = $k->id_mst_kategori_transaksi == $id_mst_kategori_transaksi ? 'selected' : '' ;
+                                    $select = $nd->id_mst_akun == $id_mst_akun ? 'selected' : '' ;
                                   ?>
-                                  <option value="<?php echo $k->id_mst_kategori_transaksi ?>" <?php echo $select ?>><?php echo $k->nama ?></option>
+                                  <option value="<?php echo $nd->id_mst_akun ?>" <?php echo $select ?>><?php echo $nd->uraian ?></option>
                               <?php endforeach ?>
                             </select>
                           </div> 
@@ -453,8 +448,28 @@
         });
     });
 
-    $("[name='kredit_value_nilai']").change(function(){
+    $("[name='debit_opsional']").change(function(){
+      var data = new FormData();
+        data.append('opsional',  $("[name='debit_opsional']:checked").val());
+        
+        $.ajax({
+            cache : false,
+            contentType : false,
+            processData : false,
+            type : 'POST',
+            url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_edit_debit/{id}" ?>',
+            data : data,
+            success : function(response){
+              if(response=="OK"){
+                  $("#debit_opsional").prop("checked", true);
+              }else{
+                  $("#debit_opsional").prop("checked", false);
+              }
+            }
+        });
+    });
 
+    $("[name='kredit_value_nilai']").change(function(){
       var nilai_kredit = $(this).val();
 
       var data = new FormData();

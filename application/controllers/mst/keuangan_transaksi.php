@@ -567,6 +567,7 @@ class Keuangan_transaksi extends CI_Controller {
         $this->form_validation->set_rules('id_mst_akun','Akun','trim');
         $this->form_validation->set_rules('value','Value','trim');
         $this->form_validation->set_rules('auto_fill','Isi Otomatis','trim');
+        $this->form_validation->set_rules('opsional','Opsional','trim');
 
 		if($this->form_validation->run()== FALSE){
 
@@ -671,6 +672,8 @@ class Keuangan_transaksi extends CI_Controller {
 			$data['kategori']			= $this->keutransaksi_model->get_data_kategori_transaksi();
 			$data['title_form']			= "Transaksi Baru / Ubah Transaksi";
 			$data['title_group'] 		= "Keuangan";
+			$data['nilai_debit']		= $this->keutransaksi_model->get_data_nilai_debit($id);
+
 			
 			$data['content'] = $this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data,true);
 			// die($this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data,true));
