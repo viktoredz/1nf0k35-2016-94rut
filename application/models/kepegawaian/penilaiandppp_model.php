@@ -269,6 +269,19 @@ class Penilaiandppp_model extends CI_Model {
 		return $this->db->delete('pegawai_dp3');
 
 	}
+    function delete_pengukuran($id_pegawai=0,$tahun=0,$id_mst_peg_struktur_org=0,$periode=0){
+        $this->db->where('id_pegawai',$id_pegawai);
+        $this->db->where('tahun',$tahun);
+        $this->db->where('id_mst_peg_struktur_org',$id_mst_peg_struktur_org);
+        $this->db->where('periode',$periode);
+
+        $this->db->delete('pegawai_skp_nilai');
+        
+        $this->db->where('id_pegawai',$id_pegawai);
+        $this->db->where('tahun',$tahun);
+        $this->db->where('periode',$periode);
+        return $this->db->delete('pegawai_skp');
+    }
 	function delete_entryitem($kode,$code_cl_phc,$kode_item)
 	{
 		$this->db->where('id_inv_permohonan_barang',$kode);

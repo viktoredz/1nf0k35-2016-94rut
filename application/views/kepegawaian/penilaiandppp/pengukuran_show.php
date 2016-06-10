@@ -72,7 +72,7 @@
         { text: 'Del', align: 'center', filtertype: 'none', sortable: false, width: '5%', cellsrenderer: function (row) {
             var dataRecord = $("#jqxgridPengukuran").jqxGrid('getrowdata', row);
             if(dataRecord.delete==1){
-            return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del_pengukuran(\""+dataRecord.id_pegawai+"\",\""+dataRecord.tahun+"\");'></a></div>";
+            return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_del.gif' onclick='del_pengukuran(\""+dataRecord.id_pegawai+"\",\""+dataRecord.tahun+"\",\""+dataRecord.id_mst_peg_struktur_org+"\",\""+dataRecord.periode+"\");'></a></div>";
           }else{
             return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_lock.gif'></a></div>";
           }
@@ -134,10 +134,10 @@
         });
 	}
 
-	function del_pengukuran(id_pegawai,tahun){
+	function del_pengukuran(id_pegawai,tahun,id_mst_peg_struktur_org,periode){
 		var confirms = confirm("Hapus Data ?");
 		if(confirms == true){
-			$.post("<?php echo base_url().'kepegawaian/penilaiandppp/dodelpermohonan';?>/" + id_pegawai+'/'+tahun,  function(){
+			$.post("<?php echo base_url().'kepegawaian/penilaiandppp/dodelpermohonanpengukuran';?>/" +id_pegawai+"/"+tahun+'/'+id_mst_peg_struktur_org+'/'+periode,  function(){
 				alert('Data berhasil dihapus');
 
 				$("#jqxgridPengukuran").jqxGrid('updatebounddata', 'cells');
