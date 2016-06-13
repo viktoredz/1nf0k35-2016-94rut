@@ -184,11 +184,11 @@ class Keutransaksi_model extends CI_Model {
                 return mysql_error();
             }
 
-        }elseif ($data_opsional['opsional'] > 0) {
+        }elseif ($data_opsional['opsional'] > -1) {
 
             $this->db->set('opsional', $data_opsional['opsional']);     
             $this->db->where('id_mst_transaksi',$id);
-            $this->db->where('type','kredit');
+            $this->db->where('type','debit');
 
             if($this->db->update('mst_keu_transaksi_item')){
                 return true;
@@ -213,6 +213,7 @@ class Keutransaksi_model extends CI_Model {
     function jurnal_transaksi_update_kredit($id=0){
        
         $data['id_mst_transaksi']             = $id;
+        $data_opsional['opsional']            = $this->input->post('opsional');
         $data_akun['id_mst_akun']             = $this->input->post('id_mst_akun');
         $data_auto['auto_fill']               = $this->input->post('auto_fill');
         $data_value['value']                  = $this->input->post('value');
@@ -232,6 +233,19 @@ class Keutransaksi_model extends CI_Model {
         }elseif ($data_value['value'] > 0) {
 
             $this->db->set('value', $data_value['value']);     
+            $this->db->where('id_mst_transaksi',$id);
+            $this->db->where('type','kredit');
+
+            if($this->db->update('mst_keu_transaksi_item')){
+                return true;
+            }else{
+                return mysql_error();
+            }
+
+
+        }elseif ($data_opsional['opsional'] > -1) {
+
+            $this->db->set('opsional', $data_opsional['opsional']);     
             $this->db->where('id_mst_transaksi',$id);
             $this->db->where('type','kredit');
 

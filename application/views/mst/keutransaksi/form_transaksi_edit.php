@@ -312,12 +312,7 @@
                         <div class="row">
                           <div class="col-md-1">
                             <input type="checkbox" name="kredit_opsional" value="1" <?php 
-                              if(set_value('status')=="" && isset($status)){
-                              $status = $status;
-                                }else{
-                              $status = set_value('status');
-                                }
-                              if($status == 1) echo "checked";
+                              if(!empty($row->opsional)){ echo "checked";}
                             ?>>
                           </div> 
                           <div class="col-md-3" style="padding-top:5px;"><label> Opsional </label> </div>
@@ -425,9 +420,53 @@
         });
     });
 
-  $("[name='kredit_isi_otomatis']").change(function(){
+      $("[name='kredit_isi_otomatis']").change(function(){
+          var data = new FormData();
+            data.append('auto_fill',  $("[name='kredit_isi_otomatis']:checked").val());
+            
+            $.ajax({
+                cache : false,
+                contentType : false,
+                processData : false,
+                type : 'POST',
+                url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_edit_kredit/{id}" ?>',
+                data : data,
+                success : function(response){
+                  if(response=="OK"){
+                      $("#kredit_isi_otomatis").prop("checked", true);
+                      // alert("Success.");
+                  }else{
+                      $("#kredit_isi_otomatis").prop("checked", false);
+                      // alert("Failed.");
+                  }
+                }
+            });
+        });
+
+      $("[name='debit_opsional']").change(function(){
+        var data = new FormData();
+          data.append('opsional',  $("[name='debit_opsional']:checked").val());
+          
+          $.ajax({
+              cache : false,
+              contentType : false,
+              processData : false,
+              type : 'POST',
+              url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_edit_debit/{id}" ?>',
+              data : data,
+              success : function(response){
+                if(response=="OK"){
+                    $("#debit_opsional").prop("checked", true);
+                }else{
+                    $("#debit_opsional").prop("checked", false);
+                }
+              }
+          });
+      });
+
+      $("[name='kredit_opsional']").change(function(){
       var data = new FormData();
-        data.append('auto_fill',  $("[name='kredit_isi_otomatis']:checked").val());
+        data.append('opsional',  $("[name='kredit_opsional']:checked").val());
         
         $.ajax({
             cache : false,
@@ -438,36 +477,15 @@
             data : data,
             success : function(response){
               if(response=="OK"){
-                  $("#kredit_isi_otomatis").prop("checked", true);
-                  // alert("Success.");
+                  $("#kredit_opsional").prop("checked", true);
               }else{
-                  $("#kredit_isi_otomatis").prop("checked", false);
-                  // alert("Failed.");
+                  $("#kredit_opsional").prop("checked", false);
               }
             }
         });
     });
 
-    $("[name='debit_opsional']").change(function(){
-      var data = new FormData();
-        data.append('opsional',  $("[name='debit_opsional']:checked").val());
-        
-        $.ajax({
-            cache : false,
-            contentType : false,
-            processData : false,
-            type : 'POST',
-            url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_edit_debit/{id}" ?>',
-            data : data,
-            success : function(response){
-              if(response=="OK"){
-                  $("#debit_opsional").prop("checked", true);
-              }else{
-                  $("#debit_opsional").prop("checked", false);
-              }
-            }
-        });
-    });
+
 
     $("[name='kredit_value_nilai']").change(function(){
       var nilai_kredit = $(this).val();
@@ -513,7 +531,7 @@
                                 <div class="col-md-12">\
                                   <div class="row">\
                                     <div class="col-md-8" style="padding-top:5px;">\
-                                     <select  name="debit_akun" id="debit_akun" class="form-control"\ type="text">\
+                                     <select  name="debit_akun_append" id="debit_akun_append" class="form-control"\ type="text">\
                                         <?php foreach($akun as $a) : ?>\
                                           <?php
                                             if(set_value('id_mst_akun')=="" && isset($id_mst_akun)){
@@ -549,13 +567,13 @@
                               <div class="col-md-7">\
                                 <div class="row">\
                                   <div class="col-md-1">\
-                                   <input type="checkbox" name="debit_isi_otomatis" value="1" <?php 
+                                   <input type="checkbox" name="debit_isi_otomatis_append" value="1" <?php 
                                       if(set_value('auto_fill')=="" && isset($auto_fill)){
-                                        $auto_fill = $auto_fill;
+                                          $auto_fill = $auto_fill;
                                       }else{
-                                        $auto_fill = set_value('auto_fill');
+                                          $auto_fill = set_value('auto_fill');
                                       }
-                                      if($auto_fill == 1) echo "checked";
+                                          if($auto_fill == 1) echo "checked";
                                     ?>>\
                                   </div>\
                                   <div class="col-md-6" style="padding-top:5px;"><label> Isi Otomatis </label></div>\
@@ -592,14 +610,14 @@
                                 <div class="col-md-7">\
                                   <div class="row">\
                                     <div class="col-md-1">\
-                                      <input type="checkbox" name="debit_opsional" value="1" <?php 
-                                        if(set_value('status')=="" && isset($status)){
-                                        $status = $status;
-                                          }else{
-                                        $status = set_value('status');
-                                          }
-                                        if($status == 1) echo "checked";
-                                      ?>>\
+                                      <input type="checkbox" name="debit_opsional_append" value="1" <?php 
+                                      if(set_value('auto_fill')=="" && isset($auto_fill)){
+                                          $auto_fill = $auto_fill;
+                                      }else{
+                                          $auto_fill = set_value('auto_fill');
+                                      }
+                                          if($auto_fill == 1) echo "checked";
+                                    ?>>\
                                     </div>\
                                     <div class="col-md-3" style="padding-top:5px;"><label> Opsional </label></div>\
                                   </div>\
@@ -609,6 +627,69 @@
 
                 $('#Debit').append(form_debit);
                 counter_debit++;
+
+                $("select[name='debit_akun_append']").change(function(){
+                    var id_mst_akun_debit = $(this).val();
+                    var data = new FormData();
+
+                    data.append('id_mst_akun', id_mst_akun_debit);
+                    
+                    $.ajax({
+                       type: 'POST',
+                       url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_edit_debit/{id}" ?>',
+                       data : 'id_mst_akun='+id_mst_akun_debit,
+                       success: function (response) {
+                        if(response=="OK"){
+                            alert("Success.");
+                        }else{
+                            alert("Failed.");
+                        }
+                       }
+                    });
+                });
+
+                $("[name='debit_isi_otomatis_append']").change(function(){
+                var data = new FormData();
+                  data.append('auto_fill',  $("[name='debit_isi_otomatis_append']:checked").val());
+                  
+                  $.ajax({
+                      cache : false,
+                      contentType : false,
+                      processData : false,
+                      type : 'POST',
+                      url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_edit_debit/{id}" ?>',
+                      data : data,
+                      success : function(response){
+                        if(response=="OK"){
+                            $("#debit_isi_otomatis_append").prop("checked", true);
+                        }else{
+                            $("#debit_isi_otomatis_append").prop("checked", false);
+                        }
+                      }
+                  });
+              });
+
+              $("[name='debit_opsional_append']").change(function(){
+                var data = new FormData();
+                  data.append('opsional',  $("[name='debit_opsional_append']:checked").val());
+                  
+                  $.ajax({
+                      cache : false,
+                      contentType : false,
+                      processData : false,
+                      type : 'POST',
+                      url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_edit_debit/{id}" ?>',
+                      data : data,
+                      success : function(response){
+                        if(response=="OK"){
+                            $("#debit_opsional_append").prop("checked", true);
+                        }else{
+                            $("#debit_opsional_append").prop("checked", false);
+                        }
+                      }
+                  });
+              });
+
             }else{
                 alert("Failed.");
             }

@@ -595,6 +595,7 @@ class Keuangan_transaksi extends CI_Controller {
         $this->form_validation->set_rules('id_mst_akun','Akun','trim');
         $this->form_validation->set_rules('value','Value','trim');
         $this->form_validation->set_rules('auto_fill','Isi Otomatis','trim');
+        $this->form_validation->set_rules('opsional','Opsional','trim');
 
 		if($this->form_validation->run()== FALSE){
 
