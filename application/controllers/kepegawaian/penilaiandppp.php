@@ -614,7 +614,7 @@ class Penilaiandppp extends CI_Controller {
         $this->form_validation->set_rules('tgl_diterima_atasan', 'tanggal diterima Atasan', 'trim|required');
         $this->form_validation->set_rules('id_pegawai', 'id Pegawai', 'trim|required');
         $this->form_validation->set_rules('id_pegawai_penilai', 'id_penilai', 'trim|required');
-        $this->form_validation->set_rules('id_pegawai_penilai_atasan', 'id_penilai_atasan', 'trim|required');
+        $this->form_validation->set_rules('id_pegawai_penilai_atasan', 'id_penilai_atasan', 'trim');
         $this->form_validation->set_rules('tahun', 'Tahun', 'trim|required');
         $this->form_validation->set_rules('tanggapan_tgl', 'Tanggal Tanggapan', 'trim|required');
         $this->form_validation->set_rules('tanggapan', 'Tanggapan', 'trim|required');
@@ -622,8 +622,8 @@ class Penilaiandppp extends CI_Controller {
         $userdataname = $this->session->userdata('username');
         $username = $this->input->post('username');
 		if ($username == $userdataname) {
-        	$this->form_validation->set_rules('keberatan_tgl', 'Tanggal Keberatan', 'trim|required');
-        	$this->form_validation->set_rules('keberatan', 'Keberatan', 'trim|required');
+        	$this->form_validation->set_rules('keberatan_tgl', 'Tanggal Keberatan', 'trim');
+        	$this->form_validation->set_rules('keberatan', 'Keberatan', 'trim');
     	}
         $this->form_validation->set_rules('keputusan_tgl', 'Tanggal Keputusan', 'trim|required');
         $this->form_validation->set_rules('keputusan', 'Keputusan', 'trim|required');
@@ -722,7 +722,7 @@ class Penilaiandppp extends CI_Controller {
 				$datainsert = $values;
 			}
 			
-			if($this->db->update('pegawai_dp3', $values,$keyup)){
+			if($this->db->update('pegawai_dp3', $datainsert,$keyup)){
 				die("OK|");
 			}else{
 				die("Error|Proses data gagal");

@@ -130,7 +130,7 @@ if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
             data.append('tanggapan_tgl', $('#tanggapan_tgl').val());
             data.append('tanggapan', $('#tanggapan').val());
             data.append('username', $('#username').val());
-            if ($('#username').val()!="<?php echo $userdataname; ?>") {
+            if ($('#username').val()=="<?php echo $userdataname; ?>") {
                 data.append('keberatan_tgl', $('#keberatan_tgl').val());
                 data.append('keberatan', $('#keberatan').val());
             }
