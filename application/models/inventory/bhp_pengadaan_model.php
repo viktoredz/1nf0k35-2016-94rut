@@ -34,7 +34,7 @@ class Bhp_pengadaan_model extends CI_Model {
             return false;
         }else{
             $dataobat = $this->input->post('obat');
-            if(!empty()&&($dataobat=="8")){
+            if(!empty($dataobat)&&($dataobat=="8")){
                 $tgl_kadaluarsa = explode("-", $this->input->post('tgl_kadaluarsa'));
                 $batch = $this->input->post('batch');
             }else{
