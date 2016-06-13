@@ -578,6 +578,8 @@ class Keuangan_transaksi extends CI_Controller {
 			$data['akun']				= $this->keutransaksi_model->get_data_akun();
 			$data['kredit']			    = $this->keutransaksi_model->get_data_kredit($id);
 			$data['debit']				= $this->keutransaksi_model->get_data_debit($id);
+			$data['urutan']				= $this->keutransaksi_model->get_data_urutan_debit($id);
+
 
 			die($this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data,true));
 		}elseif($this->keutransaksi_model->jurnal_transaksi_update_debit($id)){
@@ -674,6 +676,8 @@ class Keuangan_transaksi extends CI_Controller {
 			$data['title_form']			= "Transaksi Baru / Ubah Transaksi";
 			$data['title_group'] 		= "Keuangan";
 			$data['nilai_debit']		= $this->keutransaksi_model->get_data_nilai_debit($id);
+			$data['urutan']				= $this->keutransaksi_model->get_data_urutan_debit($id);
+			
 
 			
 			$data['content'] = $this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data,true);

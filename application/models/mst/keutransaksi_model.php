@@ -142,6 +142,16 @@ class Keutransaksi_model extends CI_Model {
         return $query->result();
     }
 
+    function get_data_urutan_debit($id_mst_transaksi=0,$start=0,$limit=1,$options=array()){
+
+            $this->db->select('urutan');
+            $this->db->where('id_mst_transaksi',$id_mst_transaksi);
+            $this->db->order_by('urutan','desc');
+            $query = $this->db->get('mst_keu_transaksi_item',$limit);
+       
+            return $query->result();
+    }
+
     function jurnal_transaksi_add($id_mst_transaksi=0){
 
         $data = array(
@@ -175,6 +185,7 @@ class Keutransaksi_model extends CI_Model {
         if ($data_akun['id_mst_akun'] > 0){
 
             $this->db->set('id_mst_akun', $data_akun['id_mst_akun']);     
+            // $this->db->where('id_mst_transaksi_item',$);
             $this->db->where('id_mst_transaksi',$id);
             $this->db->where('type','debit');
 
