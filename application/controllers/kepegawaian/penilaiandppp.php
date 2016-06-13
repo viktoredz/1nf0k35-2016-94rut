@@ -442,7 +442,7 @@ class Penilaiandppp extends CI_Controller {
         $this->form_validation->set_rules('tgl_diterima_atasan', 'tanggal diterima Atasan', 'trim|required');
         $this->form_validation->set_rules('id_pegawai', 'id Pegawai', 'trim|required');
         $this->form_validation->set_rules('id_pegawai_penilai', 'id_penilai', 'trim|required');
-        $this->form_validation->set_rules('id_pegawai_penilai_atasan', 'id_penilai_atasan', 'trim|required');
+        $this->form_validation->set_rules('id_pegawai_penilai_atasan', 'id_penilai_atasan', 'trim');
         $this->form_validation->set_rules('tahun', 'Tahun', 'trim|required');
         $this->form_validation->set_rules('tanggapan_tgl', 'Tanggal Tanggapan', 'trim|required');
         $this->form_validation->set_rules('tanggapan', 'Tanggapan', 'trim|required');
