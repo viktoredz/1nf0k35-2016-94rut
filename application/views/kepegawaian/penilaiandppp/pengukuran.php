@@ -99,6 +99,7 @@ $(function(){
     filtergriddata();
     $("#btnrefreshdata").click(function(){
       $("#jqxgridPenilaianSKP").jqxGrid('updatebounddata', 'cells');
+      ambilnilairataskp();
     });
     $("#menu_kepegawaian").addClass("active");
     $("#menu_kepegawaian_penilaiandppp").addClass("active");
@@ -187,6 +188,7 @@ $(function(){
         });
          
         $('#btn-refresh-skp').click(function () {
+          
           $("#jqxgridPenilaianSKP").jqxGrid('clearfilters');
         });
 
