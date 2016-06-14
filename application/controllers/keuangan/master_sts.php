@@ -32,7 +32,7 @@ class Master_sts extends CI_Controller {
 			$data['ambildata'] = $this->sts_model->get_data_puskesmas_filter($this->session->userdata('puskes'));
 			$i=0;
 			foreach($data['ambildata'] as $d){
-				$txt = $d["id_anggaran"]." \t ".$d["sub_id"]." \t ".$d["rekening"]." \t ".$d["kode_anggaran"]." \t ".$d["uraian"]." \t ".$d["type"]." \t".$i++." \t".$d["id_keu_anggaran"]." \t".$d["tarif"]." \t".$d["code_cl_phc"]." \n";				
+				$txt = $d["id_anggaran"]." \t ".$d["sub_id"]." \t ".$d["rekening"]." \t ".$d["kode_anggaran"]." \t ".$d["uraian"]." \t ".$d["type"]." \t".$i++." \t".$d["id_keu_anggaran"]." \t".$d["tarif"]." \t".$d["code_pl_phc"]." \n";				
 				echo $txt;
 			}
 		}

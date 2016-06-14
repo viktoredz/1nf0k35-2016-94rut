@@ -18,7 +18,7 @@ class Sts_model extends CI_Model {
     	$kodepuskesmas = 'P'.$this->session->userdata('puskesmas');
 
 		$this->db->where('tgl', date("Y-m-d",strtotime($this->input->post('tgl'))) );
-		$this->db->where('code_cl_phc', $kodepuskesmas);
+		$this->db->where('code_pl_phc', $kodepuskesmas);
 		$query = $this->db->get('keu_sts')->row();
 		if(!empty($query->id_sts)){
 			return false;
@@ -31,7 +31,7 @@ class Sts_model extends CI_Model {
     	$kodepuskesmas = 'P'.$this->session->userdata('puskesmas');
 
 		$this->db->where('nomor', $this->input->post('nomor'));
-		$this->db->where('code_cl_phc', $kodepuskesmas);
+		$this->db->where('code_pl_phc', $kodepuskesmas);
 		$query = $this->db->get('keu_sts')->row();
 		if(!empty($query->id_sts)){
 			return false;
@@ -55,7 +55,7 @@ class Sts_model extends CI_Model {
 		$tgl = $datatgl[2].'-'.$datatgl[1].'-'.$datatgl[0];
 
 		$data['id_sts'] 		 = $this->kode_sts($this->input->post('id_sts'));
-		$data['code_cl_phc']	 = 'P'.$this->session->userdata('puskesmas');
+		$data['code_pl_phc']	 = 'P'.$this->session->userdata('puskesmas');
         $data['nomor']           = $this->input->post('nomor');
        	$data['tgl']             = $tgl;
 
@@ -119,8 +119,8 @@ class Sts_model extends CI_Model {
 	function get_data_sts($id, $puskes){
  		$this->db->select('*');		
 		$this->db->where('id_sts', $id);
-		$this->db->where('code_cl_phc', 'P'.$puskes);
-		$this->db->join('cl_phc','cl_phc.code = keu_sts.code_cl_phc');
+		$this->db->where('code_pl_phc', 'P'.$puskes);
+		$this->db->join('cl_phc','cl_phc.code = keu_sts.code_pl_phc');
 		$query = $this->db->get('keu_sts');		
 		return $query->row_array();
     }	
@@ -153,11 +153,11 @@ class Sts_model extends CI_Model {
 		#$kodepuskesmas = $this->session->userdata('puskesmas');
 		$kodepuskesmas = $pus;
 		if(substr($kodepuskesmas, -2)=="01"){			
-			$this->db->join('keu_anggaran_tarif', "keu_anggaran_tarif.id_keu_anggaran=keu_anggaran.id_anggaran and keu_anggaran_tarif.code_cl_phc= '".$pus."'",'left');
+			$this->db->join('keu_anggaran_tarif', "keu_anggaran_tarif.id_keu_anggaran=keu_anggaran.id_anggaran and keu_anggaran_tarif.code_pl_phc= '".$pus."'",'left');
 			$this->db->where("keu_anggaran.type",'kec');
 			//kecamatan
 		}else{
-			$this->db->join('keu_anggaran_tarif', "keu_anggaran_tarif.id_keu_anggaran=keu_anggaran.id_anggaran and keu_anggaran_tarif.code_cl_phc= '".$pus."'",'left');
+			$this->db->join('keu_anggaran_tarif', "keu_anggaran_tarif.id_keu_anggaran=keu_anggaran.id_anggaran and keu_anggaran_tarif.code_pl_phc= '".$pus."'",'left');
 			$this->db->where("keu_anggaran.type",'kel');
 			//kelurahan
 		}
@@ -306,7 +306,7 @@ class Sts_model extends CI_Model {
 		   'status' => 'draft'
 		);
 		$this->db->where('id_sts', $this->input->post('id_sts'));
-		$this->db->where('code_cl_phc', $this->input->post('code_cl_phc'));
+		$this->db->where('code_pl_phc', $this->input->post('code_pl_phc'));
 		
 		return $this->db->update("keu_sts", $data);				
 	}
@@ -314,7 +314,7 @@ class Sts_model extends CI_Model {
 	function cek_tarif($id_anggaran){
 		$this->db->select('count(id_keu_anggaran) as n, id_keu_anggaran');
 		$this->db->where('id_keu_anggaran',$id_anggaran);
-		$this->db->where('code_cl_phc',$this->session->userdata('puskes'));
+		$this->db->where('code_pl_phc',$this->session->userdata('puskes'));
 		$query = $this->db->get('keu_anggaran_tarif');
 		
 		foreach($query->result() as $q){
@@ -385,7 +385,7 @@ class Sts_model extends CI_Model {
 		);
 		//update
 		$this->db->where('id_sts', $this->input->post('id_sts'));		
-		$this->db->where('code_cl_phc', $this->input->post('puskes'));
+		$this->db->where('code_pl_phc', $this->input->post('puskes'));
 		$this->db->update('keu_sts', $data);
 		
 	}	
@@ -393,13 +393,13 @@ class Sts_model extends CI_Model {
 	function tutup_sts(){
 		$data = array(		   
 			'id_sts' => $this->input->post('id_sts'),
-			'code_cl_phc' => $this->input->post('puskes'),
+			'code_pl_phc' => $this->input->post('puskes'),
 			'status' => 'draft'
 		);
 				
 		//update
 		$this->db->where('id_sts', $this->input->post('id_sts'));		
-		$this->db->where('code_cl_phc', $this->input->post('puskes'));
+		$this->db->where('code_pl_phc', $this->input->post('puskes'));
 		$this->db->update('keu_sts', $data);
 		
 	}
@@ -435,11 +435,11 @@ class Sts_model extends CI_Model {
 		$data = array(		   
 		   'id_keu_anggaran' => $this->input->post('id_anggaran'),
 		   'tarif' => $this->input->post('tarif'),
-		   'code_cl_phc' => $this->session->userdata('puskes')
+		   'code_pl_phc' => $this->session->userdata('puskes')
 		);
 		if($this->cek_tarif($data['id_keu_anggaran']) > 0){
 			$this->db->where('keu_anggaran_tarif.id_keu_anggaran', $data['id_keu_anggaran']);
-			$this->db->where('keu_anggaran_tarif.code_cl_phc', $data['code_cl_phc']);
+			$this->db->where('keu_anggaran_tarif.code_pl_phc', $data['code_pl_phc']);
 			return $this->db->update('keu_anggaran_tarif', $data);
 		}else{
 			return $this->db->insert('keu_anggaran_tarif', $data);

@@ -253,7 +253,7 @@ class Sts extends CI_Controller {
 		
 		$this->db->select('nomor');
 		$this->db->where("year(tgl) = ('".date("Y",strtotime($date))."')");
-		$this->db->where('code_cl_phc',$this->session->userdata('puskesmas'));
+		$this->db->where('code_pl_phc',$this->session->userdata('puskesmas'));
 		$this->db->order_by('tgl','desc');
 		$this->db->limit('1');
 		$query = $this->db->get('keu_sts');
@@ -309,7 +309,7 @@ class Sts extends CI_Controller {
 		$this->db->select('tgl');
 		$this->db->order_by('tgl','desc');
 		$this->db->limit('1');
-		$this->db->where('code_cl_phc',$this->session->userdata('puskesmas'));
+		$this->db->where('code_pl_phc',$this->session->userdata('puskesmas'));
 		$query = $this->db->get('keu_sts');
 		
 		$datetime = new DateTime('tomorrow');
@@ -411,7 +411,7 @@ class Sts extends CI_Controller {
 		}
 
 		$data_puskesmas						= $this->sts_model->get_data_row($id);
-		$nama_puskesmas						= $this->sts_model->get_data_nama($data_puskesmas['code_cl_phc']);
+		$nama_puskesmas						= $this->sts_model->get_data_nama($data_puskesmas['code_pl_phc']);
 		$data_puskesmas['puskesmas']		= $nama_puskesmas['value'];
 		$data_puskesmas['tgl']				= date("d-m-Y",strtotime($data_puskesmas['tgl']));
 		$data_puskesmas['nomor']			= $data_puskesmas['nomor'];
