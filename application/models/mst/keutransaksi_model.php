@@ -133,6 +133,14 @@ class Keutransaksi_model extends CI_Model {
         return $query->result();
     }
 
+    function get_data_jurnal_transaksi($id_mst_transaksi=0){
+        $this->db->select('*');
+        $this->db->where('id_mst_transaksi',$id_mst_transaksi);
+        $this->db->order_by('urutan','asc');
+        $query = $this->db->get('mst_keu_transaksi_item');
+        return $query->result();
+    }
+
     function get_data_nilai_debit($id_mst_transaksi=0){
         $this->db->select('mst_keu_transaksi_item.id_mst_akun, mst_keu_akun.uraian');
         $this->db->join("mst_keu_akun","mst_keu_akun.id_mst_akun=mst_keu_transaksi_item.id_mst_akun");
@@ -143,16 +151,32 @@ class Keutransaksi_model extends CI_Model {
     }
 
     function get_data_urutan_debit($id_mst_transaksi=0,$start=0,$limit=1,$options=array()){
-
-            $this->db->select('urutan');
-            $this->db->where('id_mst_transaksi',$id_mst_transaksi);
-            $this->db->order_by('urutan','desc');
-            $query = $this->db->get('mst_keu_transaksi_item',$limit);
-       
-            return $query->result();
+        $this->db->select('max(urutan) as urutan');
+        $this->db->where('id_mst_transaksi',$id_mst_transaksi);
+        $this->db->where('type','debit');
+        $this->db->order_by('urutan','desc');
+        $query = $this->db->get('mst_keu_transaksi_item',$limit);
+        return $query->result();
     }
 
-    function jurnal_transaksi_add($id_mst_transaksi=0){
+    function get_data_urutan_kredit($id_mst_transaksi=0,$start=0,$limit=1,$options=array()){
+        $this->db->select('max(urutan) as urutan');
+        $this->db->where('id_mst_transaksi',$id_mst_transaksi);
+        $this->db->where('type','kredit');
+        $this->db->order_by('urutan','desc');
+        $query = $this->db->get('mst_keu_transaksi_item',$limit);
+        return $query->result();
+    }
+
+    function get_data_group($id_mst_transaksi=0,$start=0,$limit=1,$options=array()){
+        $this->db->select('max(`group`) as `group`');
+        $this->db->where('id_mst_transaksi',$id_mst_transaksi);
+        $this->db->order_by('`group`','desc');
+        $query = $this->db->get('mst_keu_transaksi_item',$limit);
+        return $query->result();
+    }
+
+    function jurnal_transaksi_pasangan_add($id_mst_transaksi=0){
 
         $data = array(
            array(
@@ -172,6 +196,12 @@ class Keutransaksi_model extends CI_Model {
         }else{
             return mysql_error();
         }
+    }
+
+    function jurnal_transaksi_delete_debit($id){
+        $this->db->where('id_mst_transaksi_item',$id);
+
+        return $this->db->delete('mst_keu_transaksi_item');
     }
 
     function jurnal_transaksi_update_debit($id=0){

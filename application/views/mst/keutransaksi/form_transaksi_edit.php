@@ -106,9 +106,9 @@
         <div class="pull-right"><label>Jurnal Transaksi</label> <a class="glyphicon glyphicon-plus"name="jurnal_transaksi"></a></div>
       </div>  
 
-
+      <?php foreach($jurnal_transaksi as $row) : ?>
       <div id="jurnal_transaksi" class="col-md-12">
-        <div id="jt">
+        <div id="jt <?php echo $row->id_mst_transaksi_item ?>">
           <div class="box box-primary">
             <div class="box-header">
               <h3 class="box-title">Jurnal Pasangan</h3>
@@ -150,9 +150,9 @@
                               <a data-toggle="collapse" data-target="#debit<?php echo $row->id_mst_transaksi_item ?>" class="toggle_sign glyphicon glyphicon-chevron-down"></a>
                             </div>
                           </div>
-<!--                           <div class="col-md-2">
+                          <div class="col-md-2">
                             <a href="#" class="glyphicon glyphicon-trash"></a>
-                          </div>  -->
+                          </div> 
                       </div>
                     </div>
                   </div>
@@ -330,7 +330,8 @@
       </div>
     </div>
   </div>
-  
+ <?php endforeach ?>
+
   <label>Pengaturan Transaksi</label>
 
         <div class="row" style="margin: 5px">
@@ -358,6 +359,15 @@
     $('#btn-kembali').click(function(){
         window.location.href="<?php echo base_url()?>mst/keuangan_transaksi";
     });
+
+    // $.ajax({
+    //   url : '<?php echo site_url('mst/keuangan_transaksi/get_debit_akun') ?>',
+    //   type : 'GET',
+    //     success : function(data) {
+    //       $("select[name='debit_akun']").html(data);
+    //       $("select[name='debit_akun']").change();
+    //     }
+    // });
 
   $("select[name='debit_akun']").change(function(){
       var id_mst_akun_debit = $(this).val();
@@ -507,19 +517,17 @@
       });
   });
 
-      // <?php foreach($urutan as $u) : ?>
-      //   counter_debit = <?php $u->urutan ?>
-      // <?php endforeach ?>
+      <?php foreach($urutan_debit as $u) : ?>
+      counter_debit = "<?php echo $u->urutan+1 ?>";
 
-      counter_debit = 2;
       $("[name='add_debit']").click(function() {
          var data = new FormData();
             $('#biodata_notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
             $('#biodata_notice').show();
 
-        data.append('value',          $("[name='debit_value']").val());
-        data.append('urutan',         counter_debit);
-
+            data.append('value',          $("[name='debit_value']").val());
+            data.append('urutan',         counter_debit);
+      
         $.ajax({
            cache : false,
            contentType : false,
@@ -529,9 +537,7 @@
            data : data,
            success: function (response) {
             if(response=="OK"){
-            // alert(counter_debit)
-
-
+       
           var form_debit = '<div id="debt">\
                               <div class="row">\
                                 <div class="col-md-12">\
@@ -633,6 +639,8 @@
 
                 $('#Debit').append(form_debit);
                 counter_debit++;
+                <?php endforeach ?>
+
 
                 $("select[name='debit_akun_append']").change(function(){
                     var id_mst_akun_debit = $(this).val();
@@ -702,8 +710,10 @@
            }
         });
       });
+
+      <?php foreach($urutan_kredit as $u) : ?>
+      counter_kredit = "<?php echo $u->urutan+1 ?>";
      
-      counter_kredit = 2; 
       $("[name='add_kredit']").click(function() {
          var data = new FormData();
 
@@ -839,6 +849,8 @@
 
               $('#Kredit').append(form_kredit);
                counter_kredit++;
+               <?php endforeach ?>
+
 
               $("select[name='kredit_akun_append']").change(function(){
                 var id_mst_akun_kredit = $(this).val();
@@ -931,7 +943,9 @@
         });
       });
 
-    counter_jurnal =2;
+    <?php foreach($group as $g) : ?>
+    counter_jurnal = "<?php echo $g->group+1 ?>";
+
     $("[name='jurnal_transaksi']").click(function(){
         var data = new FormData();
         $('#biodata_notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
@@ -946,10 +960,11 @@
             contentType : false,
             processData : false,
             type : 'POST',
-            url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_add/{id}" ?>',
+            url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_pasangan_add/{id}" ?>',
             data : data,
             success : function(response){
               if(response=="OK"){
+                alert(counter_jurnal)
 
               var form_jurnal_transaksi ='<div id="jt">\
                                             <div class="box box-primary">\
@@ -1207,6 +1222,8 @@
 
                 $('#jt').append(form_jurnal_transaksi);
                 counter_jurnal++;
+               <?php endforeach ?>
+
               }else{
                 alert("Failed.");
               }
