@@ -90,12 +90,12 @@ class Keutransaksi_model extends CI_Model {
     function jurnal_transaksi_add_debit($id_mst_transaksi=0){
 
         $data['type']                    = "debit";
-        $data['value']                   = 99;
         $data['urutan']                  = $this->input->post('urutan');
         $data['id_mst_transaksi']        = $id_mst_transaksi;
 
         if($this->db->insert('mst_keu_transaksi_item', $data)){
-            return 1;
+           $lastInsertedID = $this->db->insert_id();
+            return $lastInsertedID;
         }else{
             return mysql_error();
         }
@@ -104,12 +104,12 @@ class Keutransaksi_model extends CI_Model {
     function jurnal_transaksi_add_kredit($id_mst_transaksi=0){
 
         $data['type']                    = "kredit";
-        $data['value']                   = 98;
         $data['urutan']                  = $this->input->post('urutan');
         $data['id_mst_transaksi']        = $id_mst_transaksi;
 
         if($this->db->insert('mst_keu_transaksi_item', $data)){
-            return $data;
+           $lastInsertedID = $this->db->insert_id();
+            return $lastInsertedID;
         }else{
             return mysql_error();
         }
@@ -215,7 +215,7 @@ class Keutransaksi_model extends CI_Model {
         if ($data_akun['id_mst_akun'] > 0){
 
             $this->db->set('id_mst_akun', $data_akun['id_mst_akun']);     
-            // $this->db->where('id_mst_transaksi_item',$);
+            $this->db->where('id_mst_transaksi_item',$this->input->post('id_mst_transaksi_item'));
             $this->db->where('id_mst_transaksi',$id);
             $this->db->where('type','debit');
 
@@ -228,6 +228,7 @@ class Keutransaksi_model extends CI_Model {
         }elseif ($data_opsional['opsional'] > -1) {
 
             $this->db->set('opsional', $data_opsional['opsional']);     
+            $this->db->where('id_mst_transaksi_item',$this->input->post('id_mst_transaksi_item'));
             $this->db->where('id_mst_transaksi',$id);
             $this->db->where('type','debit');
 
@@ -239,7 +240,8 @@ class Keutransaksi_model extends CI_Model {
 
         }else{
 
-            $this->db->set('auto_fill', $data_auto['auto_fill']);     
+            $this->db->set('auto_fill', $data_auto['auto_fill']); 
+            $this->db->where('id_mst_transaksi_item',$this->input->post('id_mst_transaksi_item'));
             $this->db->where('id_mst_transaksi',$id);
             $this->db->where('type','debit');
 
@@ -261,7 +263,8 @@ class Keutransaksi_model extends CI_Model {
 
         if( $data_akun['id_mst_akun']  > 0){
         
-            $this->db->set('id_mst_akun', $data_akun['id_mst_akun']);     
+            $this->db->set('id_mst_akun', $data_akun['id_mst_akun']);  
+            $this->db->where('id_mst_transaksi_item',$this->input->post('id_mst_transaksi_item'));
             $this->db->where('id_mst_transaksi',$id);
             $this->db->where('type','kredit');
 
@@ -273,7 +276,8 @@ class Keutransaksi_model extends CI_Model {
 
         }elseif ($data_value['value'] > 0) {
 
-            $this->db->set('value', $data_value['value']);     
+            $this->db->set('value', $data_value['value']); 
+            $this->db->where('id_mst_transaksi_item',$this->input->post('id_mst_transaksi_item'));
             $this->db->where('id_mst_transaksi',$id);
             $this->db->where('type','kredit');
 
@@ -286,7 +290,8 @@ class Keutransaksi_model extends CI_Model {
 
         }elseif ($data_opsional['opsional'] > -1) {
 
-            $this->db->set('opsional', $data_opsional['opsional']);     
+            $this->db->set('opsional', $data_opsional['opsional']); 
+            $this->db->where('id_mst_transaksi_item',$this->input->post('id_mst_transaksi_item'));
             $this->db->where('id_mst_transaksi',$id);
             $this->db->where('type','kredit');
 
@@ -298,7 +303,8 @@ class Keutransaksi_model extends CI_Model {
 
         } else{
 
-            $this->db->set('auto_fill', $data_auto['auto_fill']);     
+            $this->db->set('auto_fill', $data_auto['auto_fill']);  
+            $this->db->where('id_mst_transaksi_item',$this->input->post('id_mst_transaksi_item'));
             $this->db->where('id_mst_transaksi',$id);
             $this->db->where('type','kredit');
 

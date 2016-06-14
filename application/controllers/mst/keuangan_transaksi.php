@@ -551,8 +551,8 @@ class Keuangan_transaksi extends CI_Controller {
 
 		if($this->form_validation->run()== FALSE){
 			die($this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data));
-		}elseif($this->keutransaksi_model->jurnal_transaksi_add_debit($id)){
-			die("OK");
+		}elseif($id_mst_transaksi_item = $this->keutransaksi_model->jurnal_transaksi_add_debit($id)){
+			die("OK|$id_mst_transaksi_item");
 		}else{
 			$data['alert_form'] = 'Save data failed...';
 		}
@@ -587,6 +587,7 @@ class Keuangan_transaksi extends CI_Controller {
 	function jurnal_transaksi_edit_debit($id=0){
 		$this->authentication->verify('mst','edit');
 
+    	$this->form_validation->set_rules('id_mst_transaksi_item','Transaksi Item','trim');
     	$this->form_validation->set_rules('id_mst_transaksi','Transaksi','trim');
         $this->form_validation->set_rules('id_mst_akun','Akun','trim');
         $this->form_validation->set_rules('value','Value','trim');
@@ -632,8 +633,8 @@ class Keuangan_transaksi extends CI_Controller {
 
 		if($this->form_validation->run()== FALSE){
 			die($this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data));
-		}elseif($this->keutransaksi_model->jurnal_transaksi_add_kredit($id)){
-			die("OK");
+		}elseif($id_mst_transaksi_item = $this->keutransaksi_model->jurnal_transaksi_add_kredit($id)){
+			die("OK|$id_mst_transaksi_item");
 		}else{
 			$data['alert_form'] = 'Save data failed...';
 		}
@@ -643,6 +644,7 @@ class Keuangan_transaksi extends CI_Controller {
 	function jurnal_transaksi_edit_kredit($id=0){
 		$this->authentication->verify('mst','edit');
 
+    	$this->form_validation->set_rules('id_mst_transaksi_item','Transaksi Item','trim');
     	$this->form_validation->set_rules('id_mst_transaksi','Transaksi','trim');
         $this->form_validation->set_rules('id_mst_akun','Akun','trim');
         $this->form_validation->set_rules('value','Value','trim');
