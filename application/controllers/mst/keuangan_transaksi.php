@@ -538,6 +538,7 @@ class Keuangan_transaksi extends CI_Controller {
 		$this->authentication->verify('mst','add');
     	
     	$this->form_validation->set_rules('value','Value','trim');
+    	$this->form_validation->set_rules('group','Group','trim');
     	$this->form_validation->set_rules('urutan','Urutan','trim');
     	$this->form_validation->set_rules('id_mst_akun','Akun','trim');
 
@@ -733,7 +734,6 @@ class Keuangan_transaksi extends CI_Controller {
 			$data['jurnal_transaksi'] 	= $this->keutransaksi_model->get_data_jurnal_transaksi($id);
 
 			$data['content'] = $this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data,true);
-			// die($this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data,true));
 		}elseif($this->keutransaksi_model->transaksi_update($id)){
 			$this->session->set_flashdata('alert_form', 'Save data successful...');
 			redirect(base_url()."mst/keuangan_transaksi/transaksi_edit/".$id);
