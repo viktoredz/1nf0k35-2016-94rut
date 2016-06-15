@@ -198,8 +198,14 @@ class Keutransaksi_model extends CI_Model {
         }
     }
 
-    function jurnal_transaksi_delete_debit($id){
-        $this->db->where('id_mst_transaksi_item',$id);
+    function jurnal_transaksi_delete_debit(){
+        $this->db->where('id_mst_transaksi_item',$this->input->post('id_mst_transaksi_item'));
+
+        return $this->db->delete('mst_keu_transaksi_item');
+    }
+
+    function jurnal_transaksi_delete_kredit(){
+        $this->db->where('id_mst_transaksi_item',$this->input->post('id_mst_transaksi_item'));
 
         return $this->db->delete('mst_keu_transaksi_item');
     }

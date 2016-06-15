@@ -559,29 +559,28 @@ class Keuangan_transaksi extends CI_Controller {
 		die($this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data));
 	}
 
-	function jurnal_transaksi_delete_debit($id=0){
-		$this->authentication->verify('mst','add');
-    	
-    	$this->form_validation->set_rules('value','Value','trim');
-    	$this->form_validation->set_rules('urutan','Urutan','trim');
-    	$this->form_validation->set_rules('id_mst_akun','Akun','trim');
+	function jurnal_transaksi_delete_debit(){
+		$this->authentication->verify('mst','del');
 
-		$data['id_mst_kategori_transaksi']	= "";
-		$data['id']							= $id;
-		$data['akun']						= $this->keutransaksi_model->get_data_akun();
-	    $data['action']						= "add";
-		$data['template']					= $this->keutransaksi_model->get_data_template_trans($id);
-		$data['kategori']					= $this->keutransaksi_model->get_data_kategori_transaksi();
-		$data['alert_form']		    		= '';
+    	$this->form_validation->set_rules('id_mst_transaksi_item','ID','trim');
 
-		if($this->form_validation->run()== FALSE){
-			die($this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data));
-		}elseif($this->keutransaksi_model->jurnal_transaksi_delete_debit($id)){
+		if($this->keutransaksi_model->jurnal_transaksi_delete_debit()){
 			die("OK");
 		}else{
-			$data['alert_form'] = 'Save data failed...';
+			alert("Delete data error");
 		}
-		die($this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data));
+	}
+
+	function jurnal_transaksi_delete_kredit(){
+		$this->authentication->verify('mst','del');
+
+    	$this->form_validation->set_rules('id_mst_transaksi_item','ID','trim');
+
+		if($this->keutransaksi_model->jurnal_transaksi_delete_kredit()){
+			die("OK");
+		}else{
+			alert("Delete data error");
+		}
 	}
 
 	function jurnal_transaksi_edit_debit($id=0){
