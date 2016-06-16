@@ -560,6 +560,18 @@ class Keuangan_transaksi extends CI_Controller {
 		die($this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data));
 	}
 
+	function jurnal_transaksi_delete(){
+		$this->authentication->verify('mst','del');
+    	
+    	$this->form_validation->set_rules('group','Group','trim');
+
+		if($this->keutransaksi_model->jurnal_transaksi_delete()){
+			die("OK");
+		}else{
+			alert("Delete data error");
+		}
+	}
+
 	function jurnal_transaksi_delete_debit(){
 		$this->authentication->verify('mst','del');
 

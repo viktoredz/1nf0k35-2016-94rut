@@ -108,11 +108,11 @@
 
       <div id="jurnal_transaksi" class="col-md-12">
        <?php foreach($jurnal_transaksi as $jt) : ?>
-        <div id="jt-<?php echo $jt->group ?>">
+        <div id="jt">
           <div class="box box-primary">
             <div class="box-header">
-              <h3 class="box-title">Jurnal Pasangan <?php echo $jt->group ?></h3>
-              <div class="pull-right"><a onclick="return confirm('Anda yakin ingin menghapus menu ini ?')" class="glyphicon glyphicon-trash"></a></div>
+              <h3 class="box-title">Jurnal Pasangan</h3>
+              <div class="pull-right"><a id="delete_jt-<?php echo $jt->group ?>" name="delete_jt" onclick="return confirm('Anda yakin ingin menghapus menu ini ?')" class="glyphicon glyphicon-trash"></a></div>
             </div>
             <div class="box-body">
               <div class="row">
@@ -123,19 +123,16 @@
                       <a class="glyphicon glyphicon-plus" name="add_debit"></a>
                     </div> 
                   </div>
-
                 <?php foreach($debit as $row) : ?>
                   <div id="debt">
                     <div class="row">
                       <div class="col-md-12">
                         <div class="row">
-                          
                           <div class="row" style="margin: 5px">
                             <div class="col-md-8">
                               <input type="hidden" class="form-control" name="debit_id" id="debit_id" value="<?php echo $row->id_mst_transaksi_item ?>">
                             </div>
                           </div>
-
                           <div class="col-md-8" style="padding-top:5px;">
                            <select id="debit_akun-<?php echo $row->id_mst_transaksi_item ?>" name="debit_akun"  type="text" class="form-control">
                               <?php foreach($akun as $a) : ?>
@@ -158,7 +155,6 @@
                             </div>
                           </div>
                           <div class="col-md-2">
-                            <!-- <a href="#" class="glyphicon glyphicon-trash"></a> -->
                             <a id="delete_debit-<?php echo $row->id_mst_transaksi_item ?>" name="delete_debit" onclick="return confirm('Anda yakin ingin menghapus data ini ?')" class="glyphicon glyphicon-trash"></a>
                           </div> 
                       </div>
@@ -407,6 +403,25 @@
            success: function (response) {
             if(response=="OK"){
                 $("#kredit").remove();
+            }else{
+                alert("Failed.");
+            }
+           }
+        });
+    });
+
+    $("[name='delete_jt']").click(function() {
+        var group_sementara = this.id;
+        var fields = id_sementara.split(/-/);
+        var group = fields[1];
+
+        $.ajax({
+           type: 'POST',
+           url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_delete" ?>',
+           data : 'group='+group,
+           success: function (response) {
+            if(response=="OK"){
+                $("#jt").remove();
             }else{
                 alert("Failed.");
             }
@@ -1353,11 +1368,11 @@
                                           </div>\
                                         </div>';
 
-                $('#jurnal_transaksi').append(form_jurnal_transaksi);
-                counter_jurnal++;
-               <?php endforeach ?>
+      $('#jurnal_transaksi').append(form_jurnal_transaksi);
+      counter_jurnal++;
+      <?php endforeach ?>
 
-                <?php foreach($urutan_debit as $u) : ?>
+      <?php foreach($urutan_debit as $u) : ?>
       counter_debit = "<?php echo $u->urutan+1 ?>";
       group_debit   = "<?php echo $jt->group ?>";
 
