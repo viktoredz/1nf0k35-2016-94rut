@@ -112,7 +112,7 @@
           <div class="box box-primary">
             <div class="box-header">
               <h3 class="box-title">Jurnal Pasangan <?php echo $jt->group ?></h3>
-              <div class="pull-right"><a href="#" onclick="return confirm('Anda yakin ingin menghapus menu ini ?')" class="glyphicon glyphicon-trash"></a></div>
+              <div class="pull-right"><a onclick="return confirm('Anda yakin ingin menghapus menu ini ?')" class="glyphicon glyphicon-trash"></a></div>
             </div>
             <div class="box-body">
               <div class="row">
@@ -125,7 +125,7 @@
                   </div>
 
                 <?php foreach($debit as $row) : ?>
-                  <div id="debt <?php echo $row->id_mst_transaksi_item ?>">
+                  <div id="debt">
                     <div class="row">
                       <div class="col-md-12">
                         <div class="row">
@@ -231,7 +231,7 @@
                 </div>
 
               <?php foreach($kredit as $row) : ?> 
-                <div id="kredit <?php echo $row->id_mst_transaksi_item ?>">
+                <div id="kredit">
                   <div class="row" >
                     <div class="col-md-12">
                       <div class="row">
@@ -269,23 +269,22 @@
                       </div>
                     </div>
                   </div>
-
                   <div class="collapse" id="kredit<?php echo $row->id_mst_transaksi_item ?>">
-
                     <div class="row">
                       <div class="col-sm-1"></div>
                       <div class="col-sm-7">
                         <div class="row">
                           <div class="col-md-1">
                             <input type="checkbox" id="kredit_isi_otomatis-<?php echo $row->id_mst_transaksi_item ?>" name="kredit_isi_otomatis" value="1" <?php 
-                              if(!empty($row->auto_fill)){ echo "checked";}
+                              if(!empty($row->auto_fill)){ 
+                                echo "checked";
+                              }
                             ?>>
                           </div> 
                           <div class="col-md-6" style="padding-top:5px;"><label> Isi Otomatis </label> </div>
                         </div>
                       </div>
                     </div>
-
                     <div class="row">
                       <div class="col-sm-1"></div>
                       <div class="col-sm-1"></div>
@@ -320,14 +319,15 @@
                         </div>
                       </div>
                     </div>
-
                     <div class="row">
                       <div class="col-sm-1"></div>
                       <div class="col-sm-7">
                         <div class="row">
                           <div class="col-md-1">
                             <input type="checkbox" id="kredit_opsional-<?php echo $row->id_mst_transaksi_item ?>" name="kredit_opsional" value="1" <?php 
-                              if(!empty($row->opsional)){ echo "checked";}
+                              if(!empty($row->opsional)){
+                               echo "checked";
+                              }
                             ?>>
                           </div> 
                           <div class="col-md-3" style="padding-top:5px;"><label> Opsional </label> </div>
@@ -387,7 +387,7 @@
            data : 'id_mst_transaksi_item='+id_mst_transaksi_item,
            success: function (response) {
             if(response=="OK"){
-                $("#debt").hide();
+                $("#debt").remove();
             }else{
                 alert("Failed.");
             }
@@ -406,7 +406,7 @@
            data : 'id_mst_transaksi_item='+id_mst_transaksi_item,
            success: function (response) {
             if(response=="OK"){
-                $("#kredit").hide();
+                $("#kredit").remove();
             }else{
                 alert("Failed.");
             }
@@ -962,12 +962,12 @@
               $('#kredit_id_append').val(a[1]);
 
               $("[name='delete_kredit_append']").click(function() {
-                  var id_mst_transaksi_item_debit = $('#debit_id_append').val();
+                  var id_mst_transaksi_item_kredit = $('#kredit_id_append').val();
 
                   $.ajax({
                      type: 'POST',
                      url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_delete_kredit" ?>',
-                     data : 'id_mst_transaksi_item='+id_mst_transaksi_item_debit,
+                     data : 'id_mst_transaksi_item='+id_mst_transaksi_item_kredit,
                      success: function (response) {
                       if(response=="OK"){
                           $("#kredit").remove();
@@ -1642,7 +1642,7 @@
                                             </div>\
                                           </div>\
                                           <div class="col-md-2">\
-                                            <a id="delete_kredit_append" name="delete_kredit_append_jt" class="glyphicon glyphicon-trash" data-confirm="Are you sure to delete this item?">\
+                                            <a id="delete_kredit_append_jt" name="delete_kredit_append_jt" onclick="return confirm(Anda yakin ingin menghapus data ini ?);" class="glyphicon glyphicon-trash">\
                                             </a>\
                                           </div>\
                                         </div>\
@@ -1735,12 +1735,12 @@
               $('#kredit_id_append').val(a[1]);
 
               $("[name='delete_kredit_append_jt']").click(function() {
-                  var id_mst_transaksi_item_debit = $('#debit_id_append').val();
+                  var id_mst_transaksi_item_kredit = $('#debit_id_append').val();
 
                   $.ajax({
                      type: 'POST',
                      url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_delete_kredit" ?>',
-                     data : 'id_mst_transaksi_item='+id_mst_transaksi_item_debit,
+                     data : 'id_mst_transaksi_item='+id_mst_transaksi_item_kredit,
                      success: function (response) {
                       if(response=="OK"){
                           $("#kredit").remove();
@@ -1759,7 +1759,6 @@
 
                 data.append('id_mst_akun', id_mst_transaksi_item_kredit);
                 data.append('id_mst_akun', id_mst_akun_kredit);
-
                 
                 $.ajax({
                    type: 'POST',

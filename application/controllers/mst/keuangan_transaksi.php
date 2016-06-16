@@ -731,7 +731,7 @@ class Keuangan_transaksi extends CI_Controller {
 			$data['nilai_debit']		= $this->keutransaksi_model->get_data_nilai_debit($id);
 			$data['urutan_debit']   	= $this->keutransaksi_model->get_data_urutan_debit($id);
 			$data['urutan_kredit']   	= $this->keutransaksi_model->get_data_urutan_kredit($id);
-			$data['jurnal_transaksi'] 	= $this->keutransaksi_model->get_data_jurnal_transaksi($id);
+			$data['jurnal_transaksi']	= $this->keutransaksi_model->get_data_jurnal_transaksi($id);
 
 			$data['content'] = $this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data,true);
 		}elseif($this->keutransaksi_model->transaksi_update($id)){

@@ -91,7 +91,7 @@ class Keutransaksi_model extends CI_Model {
 
         $data['type']                    = "debit";
         $data['urutan']                  = $this->input->post('urutan');
-        $data['group']                 = $this->input->post('group');
+        $data['group']                   = $this->input->post('group');
         $data['id_mst_transaksi']        = $id_mst_transaksi;
 
         if($this->db->insert('mst_keu_transaksi_item', $data)){
@@ -129,7 +129,7 @@ class Keutransaksi_model extends CI_Model {
         $this->db->select('*');
         $this->db->where('id_mst_transaksi',$id_mst_transaksi);
         $this->db->where('type','debit');
-        // $this->db->where('`group`',);
+        // $this->db->where('`group`', );
         $this->db->order_by('urutan','asc');
         $query = $this->db->get('mst_keu_transaksi_item');
         return $query->result();
