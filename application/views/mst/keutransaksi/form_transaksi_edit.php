@@ -155,27 +155,26 @@
                             </div>
                           </div>
                           <div class="col-md-2">
-                            <a id="delete_debit-<?php echo $row->id_mst_transaksi_item ?>" name="delete_debit" onclick="return confirm('Anda yakin ingin menghapus data ini ?')" class="glyphicon glyphicon-trash"></a>
+                            <a id="delete_debit-<?php echo $row->id_mst_transaksi_item ?>" name="delete_debit" class="glyphicon glyphicon-trash"></a>
                           </div> 
                       </div>
                     </div>
                   </div>
-
                   <div class="collapse" id="debit<?php echo $row->id_mst_transaksi_item ?>">
-
                     <div class="row">
                       <div class="col-md-7">
                         <div class="row">
                           <div class="col-md-1">
                             <input type="checkbox" id="debit_isi_otomatis-<?php echo $row->id_mst_transaksi_item ?>" name="debit_isi_otomatis" value="1" <?php 
-                              if(!empty($row->auto_fill)){ echo "checked";}
+                              if(!empty($row->auto_fill)){
+                               echo "checked";
+                              }
                             ?>>
                           </div> 
                           <div class="col-md-6" style="padding-top:5px;"><label> Isi Otomatis </label> </div>
                         </div>
                       </div>
                     </div>
-
                     <div class="row">
                     <div class="col-sm-1"></div>
                       <div class="col-sm-10">
@@ -200,7 +199,6 @@
                         </div>
                       </div>
                     </div>
-
                     <div class="row">
                       <div class="col-md-7">
                         <div class="row">
@@ -303,13 +301,7 @@
                             </select>
                           </div> 
                           <div class="col-md-2">
-                              <input type="text" class="form-control" id="kredit_value_nilai-<?php echo $row->id_mst_transaksi_item ?>" name="kredit_value_nilai" value="<?php 
-                              if(set_value('value')=="" && isset($value)){
-                                echo $value;
-                              }else{
-                                echo  set_value('value');
-                              }
-                              ?>">
+                            <input type="text" class="form-control" id="kredit_value_nilai-<?php echo $row->id_mst_transaksi_item ?>" name="kredit_value_nilai" value="<?php echo $row->value ?>">
                           </div>
                           <div class="col-md-1" style="padding-top:5px;"><label>%</label> </div>
                         </div>
@@ -330,10 +322,8 @@
                         </div>
                       </div>
                     </div>
-                    
                   </div>
-                <!-- </div> -->
-              </div>
+                </div>
               <?php endforeach ?>
             </div>
           </div>
@@ -342,7 +332,6 @@
     </div>
   <?php endforeach ?>
 </div>
-
 
   <label>Pengaturan Transaksi</label>
 
@@ -359,7 +348,7 @@
               <?php echo $t->seting_deskripsi ?>
               </br></br>
             <?php $i++; endforeach ?> 
-          </div>
+         </div>
         </div>
        </div>
       </div>
@@ -372,62 +361,105 @@
         window.location.href="<?php echo base_url()?>mst/keuangan_transaksi";
     });
 
-    $("[name='delete_debit']").click(function() {
-        var id_trans_item_sementara = this.id;
-        var fields = id_trans_item_sementara.split(/-/);
-        var id_mst_transaksi_item = fields[1];
+    $("[name='delete_debit']").click(function(event){
+       event.stopPropagation();
+       if(confirm("Anda yakin ingin menghapus data ini ?")) {
+        this.click;
 
-        $.ajax({
-           type: 'POST',
-           url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_delete_debit" ?>',
-           data : 'id_mst_transaksi_item='+id_mst_transaksi_item,
-           success: function (response) {
-            if(response=="OK"){
-                $("#debt").remove();
-            }else{
-                alert("Failed.");
-            }
-           }
-        });
+          var id_trans_item_sementara = this.id;
+          var fields = id_trans_item_sementara.split(/-/);
+          var id_mst_transaksi_item = fields[1];
+
+          $.ajax({
+             type: 'POST',
+             url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_delete_debit" ?>',
+             data : 'id_mst_transaksi_item='+id_mst_transaksi_item,
+             success: function (response) {
+              if(response=="OK"){
+                  $("#debt").remove();
+              }else{
+                  alert("Failed.");
+              }
+             }
+          });
+        } else {
+           // alert("Cancel");
+       }       
+       event.preventDefault();
     });
 
-    $("[name='delete_kredit']").click(function() {
-        var id_trans_item_sementara = this.id;
-        var fields = id_trans_item_sementara.split(/-/);
-        var id_mst_transaksi_item = fields[1];
+    $("[name='delete_kredit']").click(function(event){
+       event.stopPropagation();
+       if(confirm("Anda yakin ingin menghapus data ini ?")) {
+        this.click;
 
-        $.ajax({
-           type: 'POST',
-           url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_delete_kredit" ?>',
-           data : 'id_mst_transaksi_item='+id_mst_transaksi_item,
-           success: function (response) {
-            if(response=="OK"){
-                $("#kredit").remove();
-            }else{
-                alert("Failed.");
-            }
-           }
-        });
+          var id_trans_item_sementara = this.id;
+          var fields = id_trans_item_sementara.split(/-/);
+          var id_mst_transaksi_item = fields[1];
+
+          $.ajax({
+             type: 'POST',
+             url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_delete_kredit" ?>',
+             data : 'id_mst_transaksi_item='+id_mst_transaksi_item,
+             success: function (response) {
+              if(response=="OK"){
+                  $("#kredit").remove();
+              }else{
+                  alert("Failed.");
+              }
+             }
+          });
+        } else {
+           // alert("Cancel");
+       }       
+       event.preventDefault();
     });
 
-    $("[name='delete_jt']").click(function() {
-        var group_sementara = this.id;
-        var fields = id_sementara.split(/-/);
-        var group = fields[1];
+    $("[name='delete_jt']").click(function(event){
+       event.stopPropagation();
+       if(confirm("Anda yakin ingin menghapus data ini ?")) {
+        this.click;
 
-        $.ajax({
-           type: 'POST',
-           url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_delete" ?>',
-           data : 'group='+group,
-           success: function (response) {
-            if(response=="OK"){
-                $("#jt").remove();
-            }else{
-                alert("Failed.");
-            }
-           }
-        });
+          var group_sementara = this.id;
+          var fields = group_sementara.split(/-/);
+          var group = fields[1];
+
+          $.ajax({
+             type: 'POST',
+             url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_delete" ?>',
+             data : 'group='+group,
+             success: function (response) {
+              if(response=="OK"){
+                  $("#jt").remove();
+              }else{
+                  alert("Failed.");
+              }
+             }
+          });
+        } else {
+           // alert("Cancel");
+       }       
+       event.preventDefault();
     });
+
+    // $("[name='delete_jt']").click(function() {
+    //     var group_sementara = this.id;
+    //     var fields = id_sementara.split(/-/);
+    //     var group = fields[1];
+
+    //     $.ajax({
+    //        type: 'POST',
+    //        url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_delete" ?>',
+    //        data : 'group='+group,
+    //        success: function (response) {
+    //         if(response=="OK"){
+    //             $("#jt").remove();
+    //         }else{
+    //             alert("Failed.");
+    //         }
+    //        }
+    //     });
+    // });
 
   $("select[name='debit_akun']").change(function(){
       var id_mst_akun_debit = $(this).val();
@@ -588,7 +620,7 @@
          data : 'value='+nilai_kredit+'&id_mst_transaksi_item='+id_mst_transaksi_item,
          success: function (response) {
           if(response=="OK"){
-            alert(id_mst_transaksi_item);
+              // alert(id_mst_transaksi_item);
               // alert("Success.");
           }else{
               // alert("Failed.");
@@ -657,7 +689,7 @@
                                       </div>\
                                     </div>\
                                     <div class="col-md-2">\
-                                      <a id="delete_debit_append" name="delete_debit_append" class="glyphicon glyphicon-trash" data-confirm="Are you sure to delete this item?">\
+                                      <a id="delete_debit_append" name="delete_debit_append" data-confirm="Are you sure to delete this item?" class="glyphicon glyphicon-trash" data-confirm="Are you sure to delete this item?">\
                                       </a>\
                                     </div>\
                               </div>\
@@ -733,23 +765,30 @@
 
                 $('#debit_id_append').val(a[1]);
 
-                $("[name='delete_debit_append']").click(function() {
-                    var id_mst_transaksi_item_debit = $('#debit_id_append').val();
-
-                    $.ajax({
-                       type: 'POST',
-                       url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_delete_debit" ?>',
-                       data : 'id_mst_transaksi_item='+id_mst_transaksi_item_debit,
-                       success: function (response) {
-                        if(response=="OK"){
-                            $("#debt").remove();
-                        }else{
-                            alert("Failed.");
-                        }
-                       }
-                    });
-                });
-
+                  $("[name='delete_debit_append']").click(function(event){
+                     event.stopPropagation();
+                     if(confirm("Anda yakin ingin menghapus data ini ??")) {
+                      this.click;
+             
+                         var id_mst_transaksi_item_debit = $('#debit_id_append').val();
+                       
+                           $.ajax({
+                           type: 'POST',
+                           url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_delete_debit" ?>',
+                           data : 'id_mst_transaksi_item='+id_mst_transaksi_item_debit,
+                           success: function (response) {
+                            if(response=="OK"){
+                                $("#debt").remove();
+                            }else{
+                                alert("Failed.");
+                            }
+                           }
+                        });
+                     } else {
+                         // alert("Cancel");
+                     }       
+                     event.preventDefault();
+                  });
 
                 $("select[name='debit_akun_append']").change(function(){
                     var id_mst_akun_debit = $(this).val();
@@ -976,21 +1015,29 @@
 
               $('#kredit_id_append').val(a[1]);
 
-              $("[name='delete_kredit_append']").click(function() {
-                  var id_mst_transaksi_item_kredit = $('#kredit_id_append').val();
+              $("[name='delete_kredit_append']").click(function(event){
+                 event.stopPropagation();
+                 if(confirm("Anda yakin ingin menghapus data ini ?")) {
+                  this.click;
+         
+                    var id_mst_transaksi_item_kredit = $('#kredit_id_append').val();
 
-                  $.ajax({
-                     type: 'POST',
-                     url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_delete_kredit" ?>',
-                     data : 'id_mst_transaksi_item='+id_mst_transaksi_item_kredit,
-                     success: function (response) {
-                      if(response=="OK"){
-                          $("#kredit").remove();
-                      }else{
-                          alert("Failed.");
-                      }
-                     }
-                  });
+                    $.ajax({
+                       type: 'POST',
+                       url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_delete_kredit" ?>',
+                       data : 'id_mst_transaksi_item='+id_mst_transaksi_item_kredit,
+                       success: function (response) {
+                        if(response=="OK"){
+                            $("#kredit").remove();
+                        }else{
+                            alert("Failed.");
+                        }
+                       }
+                    });
+                  } else {
+                     // alert("Cancel");
+                 }       
+                 event.preventDefault();
               });
 
               $("select[name='kredit_akun_append']").change(function(){
@@ -1120,8 +1167,7 @@
                                               <div class="box-header">\
                                                 <h3 class="box-title">Jurnal Pasangan</h3>\
                                                 <div class="pull-right">\
-                                                <a class="glyphicon glyphicon-trash">\
-                                                </a>\
+                                                <a id="delete_jt_append-<?php echo $jt->group ?>" name="delete_jt_append" class="glyphicon glyphicon-trash"></a>\
                                                 </div>\
                                               </div>\
                                               <div class="box-body">\
@@ -1371,6 +1417,25 @@
       $('#jurnal_transaksi').append(form_jurnal_transaksi);
       counter_jurnal++;
       <?php endforeach ?>
+
+      $("[name='delete_jt_append']").click(function() {
+          var group_sementara = this.id;
+          var fields = group_sementara.split(/-/);
+          var group = fields[1];
+
+          $.ajax({
+             type: 'POST',
+             url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_delete" ?>',
+             data : 'group='+group,
+             success: function (response) {
+              if(response=="OK"){
+                  $("#jt").remove();
+              }else{
+                  alert("Failed.");
+              }
+             }
+          });
+      });
 
       <?php foreach($urutan_debit as $u) : ?>
       counter_debit = "<?php echo $u->urutan+1 ?>";
