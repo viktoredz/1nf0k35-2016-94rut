@@ -631,6 +631,7 @@ class Keuangan_transaksi extends CI_Controller {
 		$this->authentication->verify('mst','add');
     	
     	$this->form_validation->set_rules('value','Value','trim');
+    	$this->form_validation->set_rules('group','Group','trim');
     	$this->form_validation->set_rules('urutan','Urutan','trim');
     	$this->form_validation->set_rules('id_mst_akun','Akun','trim');
 
@@ -680,6 +681,35 @@ class Keuangan_transaksi extends CI_Controller {
 			$data['alert_form'] = 'Save data failed...';
 		}
 		die($this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data));
+	}
+
+	function set_debit_akun(){
+		$this->authentication->verify('mst','edit');
+		$this->session->set_userdata('debit_akun',$this->input->post('debit_akun'));		
+	}
+
+	function debit_akun_selected($id=0){
+		$data['id']	= $id;
+		return $this->keutransaksi_model->get_debit_akun_selected();
+	}
+
+	function get_debit_akun(){
+
+		if ($this->input->post('debit_akun')!="null") {
+			if($this->input->is_ajax_request()) {
+				$debit_akun = $this->input->post('debit_akun');
+				$this->session->set_userdata('debit_akun',$this->input->post('debit_akun'));
+				$debt_akun   = $this->keutransaksi_model->get_data_akun();
+				foreach($debt_akun as $d) :
+					$select = $d->id_mst_akun == ($this->session->userdata('debit_akun')!='0' ?  $this->session->userdata('debit_akun') : $this->debit_akun_selected())  ? 'selected' : '';
+					echo '<option value="'.$d->id_mst_akun.'" '.$select.'>' . $d->uraian . '</option>';
+				
+				endforeach;
+
+				return FALSE;
+			}
+		 show_404();
+	   	}
 	}
 
 	function transaksi_add(){

@@ -111,7 +111,7 @@
         <div id="jt">
           <div class="box box-primary">
             <div class="box-header">
-              <h3 class="box-title">Jurnal Pasangan</h3>
+              <h3 class="box-title">Jurnal Pasangan <?php echo $jt->group ?></h3>
               <div class="pull-right"><a id="delete_jt-<?php echo $jt->group ?>" name="delete_jt" onclick="return confirm('Anda yakin ingin menghapus menu ini ?')" class="glyphicon glyphicon-trash"></a></div>
             </div>
             <div class="box-body">
@@ -135,7 +135,9 @@
                           </div>
                           <div class="col-md-8" style="padding-top:5px;">
                            <select id="debit_akun-<?php echo $row->id_mst_transaksi_item ?>" name="debit_akun"  type="text" class="form-control">
-                              <?php foreach($akun as $a) : ?>
+                              <option value="0">Pilih Akun</option>
+ 
+ <!--                              <?php foreach($akun as $a) : ?>
                                 <?php
                                   if(set_value('id_mst_akun')=="" && isset($id_mst_akun)){
                                     $id_mst_akun = $id_mst_akun;
@@ -145,7 +147,7 @@
                                     $select = $a->id_mst_akun == $id_mst_akun ? 'selected' : '' ;
                                 ?>
                                 <option value="<?php echo $a->id_mst_akun ?>" <?php echo $select ?>><?php echo $a->uraian ?></option>
-                                <?php endforeach ?>
+                                <?php endforeach ?> -->
                             </select>
                             <p id="demo"></p>
                           </div>
@@ -361,6 +363,15 @@
         window.location.href="<?php echo base_url()?>mst/keuangan_transaksi";
     });
 
+    $.ajax({
+      url : '<?php echo site_url('mst/keuangan_transaksi/get_debit_akun') ?>',
+      type : 'GET',
+        success : function(data) {
+          $("select[name='debit_akun']").html(data);
+          $("select[name='debit_akun']").change();
+        }
+    });
+
     $("[name='delete_debit']").click(function(event){
        event.stopPropagation();
        if(confirm("Anda yakin ingin menghapus data ini ?")) {
@@ -441,25 +452,6 @@
        }       
        event.preventDefault();
     });
-
-    // $("[name='delete_jt']").click(function() {
-    //     var group_sementara = this.id;
-    //     var fields = id_sementara.split(/-/);
-    //     var group = fields[1];
-
-    //     $.ajax({
-    //        type: 'POST',
-    //        url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_delete" ?>',
-    //        data : 'group='+group,
-    //        success: function (response) {
-    //         if(response=="OK"){
-    //             $("#jt").remove();
-    //         }else{
-    //             alert("Failed.");
-    //         }
-    //        }
-    //     });
-    // });
 
   $("select[name='debit_akun']").change(function(){
       var id_mst_akun_debit = $(this).val();
@@ -1160,12 +1152,12 @@
             data : data,
             success : function(response){
               if(response=="OK"){
-                // alert(counter_jurnal)
+                alert(counter_jurnal)
 
               var form_jurnal_transaksi ='<div id="jt">\
                                             <div class="box box-primary">\
                                               <div class="box-header">\
-                                                <h3 class="box-title">Jurnal Pasangan</h3>\
+                                                <h3 class="box-title">Jurnal Pasangan </h3>\
                                                 <div class="pull-right">\
                                                 <a id="delete_jt_append-<?php echo $jt->group ?>" name="delete_jt_append" class="glyphicon glyphicon-trash"></a>\
                                                 </div>\
@@ -1439,7 +1431,8 @@
 
       <?php foreach($urutan_debit as $u) : ?>
       counter_debit = "<?php echo $u->urutan+1 ?>";
-      group_debit   = "<?php echo $jt->group ?>";
+      group_debit   = "<?php echo $g->group+1 ?>";
+
 
       $("[name='add_debit_jt']").click(function() {
          var data = new FormData();
@@ -1666,7 +1659,8 @@
 
       <?php foreach($urutan_kredit as $u) : ?>
       counter_kredit = "<?php echo $u->urutan+1 ?>";
-     
+      group_kredit   = "<?php echo $g->group+1 ?>";
+
       $("[name='add_kredit_jt']").click(function() {
          var data = new FormData();
 
@@ -1675,6 +1669,7 @@
 
         data.append('value',            $("[name='debit_value']").val());
         data.append('urutan',           counter_kredit);
+        data.append('group',            group_debit);
 
         $.ajax({
            cache : false,
@@ -1684,7 +1679,6 @@
            url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_add_kredit/{id}" ?>',
            data : data,
            success: function (response) {
-            // if(response=="OK"){
             a = response.split("|");
               if(a[0]=="OK"){
                 if(a[1]!=null){
