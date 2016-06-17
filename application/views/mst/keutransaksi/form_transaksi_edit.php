@@ -1152,7 +1152,7 @@
             data : data,
             success : function(response){
               if(response=="OK"){
-                alert(counter_jurnal)
+                // alert(counter_jurnal)
 
               var form_jurnal_transaksi ='<div id="jt">\
                                             <div class="box box-primary">\
@@ -1664,12 +1664,12 @@
       $("[name='add_kredit_jt']").click(function() {
          var data = new FormData();
 
-            $('#biodata_notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
-            $('#biodata_notice').show();
+        $('#biodata_notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
+        $('#biodata_notice').show();
 
         data.append('value',            $("[name='debit_value']").val());
         data.append('urutan',           counter_kredit);
-        data.append('group',            group_debit);
+        data.append('group',            group_kredit);
 
         $.ajax({
            cache : false,
