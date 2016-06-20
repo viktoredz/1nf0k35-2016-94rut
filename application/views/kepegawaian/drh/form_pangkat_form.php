@@ -467,7 +467,13 @@
           </div>
   </div>
 </form>
-
+<?php
+if ($action=='edit') {
+  $dataeble = ',disabled: true';
+}else{
+  $dataeble = '';
+}
+?>
 <script>
   $(function () { 
     ambil_nip();
@@ -701,7 +707,7 @@
       }
   } 
     tabIndex = 1;
-    $("[name='tmt']").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme, height:30});
+    $("[name='tmt']").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme, height:30 <?php echo $dataeble; ?>});
     $("[name='bkn_tgl']").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme, height:30});
     $("[name='sk_tgl']").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme, height:30});
     $("[name='sttpl_tgl']").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme, height:30});
