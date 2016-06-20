@@ -1109,5 +1109,106 @@ class Drh_model extends CI_Model {
 
         return $this->db->delete('pegawai_diklat');
     }
+    function get_data_detail($id=0,$start=0,$limit=999999,$options=array())
+    {   $puskesmas_ = 'P'.$this->session->userdata('puskesmas');
+        // $this->db->where('pegawai_dp3.tahun',$tahun);
+        $this->db->where('pegawai_dp3.id_pegawai',$id);
 
+        $this->db->select("pegawai_dp3.*,mst_peg_golruang.ruang, mst_peg_struktur_org.*, pangkat.nip_nit,mst_peg_struktur_org.tar_nama_posisi, pangkat.id_mst_peg_golruang,pegawai.nama as namapegawai,penilai.gelar_depan as gelardepannama_penilai,penilai.nama as nama_penilai,penilai.gelar_belakang as gelarbelakangnama_penilai,atasanpenilai.nama as namaatasanpenilai,atasanpenilai.gelar_depan as gelardepannamaatasanpenilai,atasanpenilai.gelar_belakang as gelarbelakangnamaatasanpenilai ");
+        $this->db->join("pegawai",'pegawai_dp3.id_pegawai = pegawai.id_pegawai','left');
+        $this->db->join("pegawai as penilai",'pegawai_dp3.id_pegawai_penilai = penilai.id_pegawai','left');
+        $this->db->join("pegawai as atasanpenilai",'pegawai_dp3.id_pegawai_penilai_atasan = atasanpenilai.id_pegawai','left');
+        $this->db->join("(SELECT  id_pegawai, nip_nit, tmt,id_mst_peg_golruang, masa_krj_bln, masa_krj_thn, CONCAT(tmt, id_pegawai) AS pangkatterakhir FROM
+        pegawai_pangkat WHERE CONCAT(tmt, id_pegawai) IN (SELECT  CONCAT(MAX(tmt), id_pegawai) FROM pegawai_pangkat GROUP BY id_pegawai)) pangkat",'pangkat.id_pegawai = pegawai.id_pegawai','left');
+        $this->db->join("pegawai_struktur",'pegawai_struktur.id_pegawai = pegawai.id_pegawai','left');
+        $this->db->join("mst_peg_golruang",'mst_peg_golruang.id_golongan = pangkat.id_mst_peg_golruang','left');
+        $this->db->join("mst_peg_struktur_org",'mst_peg_struktur_org.tar_id_struktur_org = pegawai_struktur.tar_id_struktur_org','left');
+        $query =$this->db->get('pegawai_dp3',$limit,$start);
+        return $query->result();
+    }
+    function get_data_detail_pengukuran($id=0,$start=0,$limit=999999,$options=array())
+    {   
+        $this->db->order_by('tahun','desc');
+        $this->db->order_by('periode','desc');
+        $this->db->where('pegawai_skp.id_pegawai',$id);
+        $this->db->select("pegawai_skp.*,pegawai.gelar_depan,pegawai.nama,pegawai.gelar_belakang,penilai.gelar_depan as gelardepannama_penilai,penilai.nama as nama_penilai,penilai.gelar_belakang as gelarbelakangnama_penilai, (SELECT 
+            ((SUM((((pegawai_skp_nilai.kuant / mst_peg_struktur_skp.kuant) * 100) + ((pegawai_skp_nilai.target / mst_peg_struktur_skp.target) * 100) + (((1.76 * mst_peg_struktur_skp.waktu - pegawai_skp_nilai.waktu) / mst_peg_struktur_skp.waktu) * 100)) / 3)) / 6) AS nilairata FROM pegawai_skp_nilai JOIN mst_peg_struktur_skp ON mst_peg_struktur_skp.id_mst_peg_struktur_org = pegawai_skp_nilai.id_mst_peg_struktur_org AND mst_peg_struktur_skp.id_mst_peg_struktur_skp = pegawai_skp_nilai.id_mst_peg_struktur_skp WHERE pegawai_skp_nilai.id_pegawai =pegawai_skp.id_pegawai and
+            pegawai_skp_nilai.tahun = pegawai_skp.tahun and  pegawai_skp_nilai.periode = pegawai_skp.periode) AS ratarata,(SELECT 
+            ((SUM((((pegawai_skp_nilai.kuant / mst_peg_struktur_skp.kuant) * 100) + ((pegawai_skp_nilai.target / mst_peg_struktur_skp.target) * 100) + (((1.76 * mst_peg_struktur_skp.waktu - pegawai_skp_nilai.waktu) / mst_peg_struktur_skp.waktu) * 100)) / 3))) AS nilairata FROM pegawai_skp_nilai JOIN mst_peg_struktur_skp ON mst_peg_struktur_skp.id_mst_peg_struktur_org = pegawai_skp_nilai.id_mst_peg_struktur_org AND mst_peg_struktur_skp.id_mst_peg_struktur_skp = pegawai_skp_nilai.id_mst_peg_struktur_skp WHERE pegawai_skp_nilai.id_pegawai =pegawai_skp.id_pegawai and
+            pegawai_skp_nilai.tahun = pegawai_skp.tahun and pegawai_skp_nilai.periode = pegawai_skp.periode) AS jumlah, pegawai_struktur.tar_id_struktur_org as id_mst_peg_struktur_org");
+        $this->db->join("pegawai",'pegawai_skp.id_pegawai = pegawai.id_pegawai','left');
+        $this->db->join("pegawai as penilai",'pegawai_skp.id_pegawai_penilai = penilai.id_pegawai','left');
+        $this->db->join("pegawai_struktur",'pegawai_struktur.id_pegawai = pegawai_skp.id_pegawai','left');
+        $query =$this->db->get('pegawai_skp',$limit,$start);
+        return $query->result();
+    }
+    function get_data_row_pengukuran($id_pegawai=0,$tahun=0,$id_mst_peg_struktur_org=0,$periode=0){
+        $this->db->where('tahun',$tahun);
+        $this->db->where('periode',$periode);
+        $this->db->where('id_pegawai',$id_pegawai);
+        $query = $this->db->get('pegawai_skp');
+        if($query->num_rows > 0){
+           $data = $query->row_array();
+        }
+        $query->free_result();
+        return $data;
+    }
+    function getanakbuah($id=0){
+        $puskesmas_ = 'P'.$this->session->userdata('puskesmas');
+        $query = $this->db->query("select b.id_pegawai from pegawai_struktur b where b.tar_id_struktur_org in (SELECT mst_peg_struktur_org.tar_id_struktur_org FROM mst_peg_struktur_org WHERE mst_peg_struktur_org.tar_id_struktur_org_parent = (SELECT  a.tar_id_struktur_org FROM pegawai_struktur a WHERE a.id_pegawai = ".'"'.$id.'"'." and a.code_cl_phc=".'"'.$puskesmas_.'"'."))",false);
+        $data=array();
+        foreach ($query->result_array() as $key) {
+            $data[] = $key['id_pegawai'];
+        }
+        return $data;
+    }
+    function getusername($id=0){
+        $this->db->select('app_users_list.username,pegawai_struktur.tar_id_struktur_org,(SELECT tar_id_struktur_org_parent FROM mst_peg_struktur_org WHERE tar_id_struktur_org = pegawai_struktur.tar_id_struktur_org) AS parent');
+        $this->db->join('pegawai_struktur','app_users_list.id_pegawai = pegawai_struktur.id_pegawai AND app_users_list.code = SUBSTR(pegawai_struktur.code_cl_phc,2,11)','left');
+        $this->db->where("app_users_list.id_pegawai",$id);
+        $query = $this->db->get('app_users_list');
+        return $query->row_array();
+    }
+    function get_rowdata($id_pegawai,$tahun){
+        $puskesmas_ = 'P'.$this->session->userdata('puskesmas');
+        $this->db->where('pegawai_dp3.tahun',$tahun);
+        $this->db->where('pegawai_dp3.id_pegawai',$id_pegawai);
+
+        $this->db->select("app_users_list.username,pegawai_dp3.*,mst_peg_golruang.ruang, mst_peg_struktur_org.*, pangkat.nip_nit,mst_peg_struktur_org.tar_nama_posisi, pangkat.id_mst_peg_golruang,pegawai.nama as namapegawai,penilai.gelar_depan as gelardepannama_penilai,penilai.nama as nama_penilai,penilai.gelar_belakang as gelarbelakangnama_penilai,atasanpenilai.nama as namaatasanpenilai,atasanpenilai.gelar_depan as gelardepannamaatasanpenilai,atasanpenilai.gelar_belakang as gelarbelakangnamaatasanpenilai ");
+        $this->db->join("pegawai",'pegawai_dp3.id_pegawai = pegawai.id_pegawai','left');
+        $this->db->join("pegawai as penilai",'pegawai_dp3.id_pegawai_penilai = penilai.id_pegawai','left');
+        $this->db->join("pegawai as atasanpenilai",'pegawai_dp3.id_pegawai_penilai_atasan = atasanpenilai.id_pegawai','left');
+        $this->db->join("(SELECT  id_pegawai, nip_nit, tmt,id_mst_peg_golruang, masa_krj_bln, masa_krj_thn, CONCAT(tmt, id_pegawai) AS pangkatterakhir FROM
+        pegawai_pangkat WHERE CONCAT(tmt, id_pegawai) IN (SELECT  CONCAT(MAX(tmt), id_pegawai) FROM pegawai_pangkat GROUP BY id_pegawai)) pangkat",'pangkat.id_pegawai = pegawai.id_pegawai','left');
+        $this->db->join("pegawai_struktur",'pegawai_struktur.id_pegawai = pegawai.id_pegawai','left');
+        $this->db->join("mst_peg_golruang",'mst_peg_golruang.id_golongan = pangkat.id_mst_peg_golruang','left');
+        $this->db->join("app_users_list",'app_users_list.id_pegawai = pegawai_dp3.id_pegawai','left');
+        $this->db->join("mst_peg_struktur_org",'mst_peg_struktur_org.tar_id_struktur_org = pegawai_struktur.tar_id_struktur_org','left');
+        $query =$this->db->get('pegawai_dp3');
+        if ($query->num_rows() > 0){
+            $data = $query->row_array();
+        }
+
+        $query->free_result();    
+        return $data;
+    }
+    function idlogin(){
+        $id_login = $this->session->userdata('username');
+        $this->db->where('username',$id_login);
+        $this->db->select('app_users_list.id_pegawai AS idlogin');
+        $this->db->join('pegawai_struktur','app_users_list.id_pegawai = pegawai_struktur.id_pegawai AND app_users_list.code = SUBSTR(pegawai_struktur.code_cl_phc,2,11)','left');
+        $query = $this->db->get('app_users_list',1);
+        if ($query->num_rows() >0) {
+            foreach ($query->result() as $key) {
+                if ($key->idlogin==null) {
+                    $data = 'puskesmas';
+                }else{
+                    $data = $key->idlogin;
+                }
+            }
+        }else{
+            $data = '';
+        }
+        return $data;
+    }
 }
