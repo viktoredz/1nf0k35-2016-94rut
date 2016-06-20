@@ -123,20 +123,19 @@ class Keutransaksi_model extends CI_Model {
         $this->db->where('type','kredit');
         $this->db->order_by('urutan','asc');
         $query = $this->db->get('mst_keu_transaksi_item');
-        return $query->result();
+
+        if($query->num_rows() > 0) {
+            foreach ($query->result() as $row) {
+                $data[$row->group][] = $row;
+            }
+            return $data;
+        }
+        $query->free_result();
     }
 
-    // function get_data_debit($id_mst_transaksi=0){
-    //     $this->db->select('*');
-    //     $this->db->where('id_mst_transaksi',$id_mst_transaksi);
-    //     $this->db->where('type','debit');
-    //     // $this->db->where('`group`', );
-    //     $this->db->order_by('urutan','asc');
-    //     $query = $this->db->get('mst_keu_transaksi_item');
-    //     return $query->result();
-    // }
 
     function get_data_debit($id_mst_transaksi=0){
+        $data = array();
         $this->db->select('*');
         $this->db->where('id_mst_transaksi',$id_mst_transaksi);
         $this->db->where('type','debit');
@@ -145,11 +144,14 @@ class Keutransaksi_model extends CI_Model {
 
         if($query->num_rows() > 0) {
             foreach ($query->result() as $row) {
-                $data[$row->id_mst_transaksi_item] = $row;
+                $data[$row->group][] = $row;
             }
             return $data;
-        }$query->free_result();
+        }
+        $query->free_result();
     }
+
+
 
     function get_debit_akun_selected($id_mst_transaksi=0){
 
@@ -227,7 +229,12 @@ class Keutransaksi_model extends CI_Model {
         );  
 
         if($this->db->insert_batch('mst_keu_transaksi_item',$data)){
-            return 1;
+             $first_id = $this->db->insert_id();
+             $count = count($data);
+             $last_id = $first_id + ($count-1);
+             $id = $first_id|$last_id;
+             // print_r($id);
+            return $id;
         }else{
             return mysql_error();
         }

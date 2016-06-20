@@ -526,8 +526,8 @@ class Keuangan_transaksi extends CI_Controller {
 
 		if($this->form_validation->run()== FALSE){
 			die($this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data));
-		}elseif($this->keutransaksi_model->jurnal_transaksi_pasangan_add($id)){
-			die("OK");
+		}elseif($id_mst_transaksi_item=$this->keutransaksi_model->jurnal_transaksi_pasangan_add($id)){
+			die("OK|$id_mst_transaksi_item");
 		}else{
 			$data['alert_form'] = 'Save data failed...';
 		}
@@ -616,7 +616,6 @@ class Keuangan_transaksi extends CI_Controller {
 			$data['kredit']			    = $this->keutransaksi_model->get_data_kredit($id);
 			$data['debit']				= $this->keutransaksi_model->get_data_debit($id);
 			$data['urutan']				= $this->keutransaksi_model->get_data_urutan_debit($id);
-
 
 			die($this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data,true));
 		}elseif($this->keutransaksi_model->jurnal_transaksi_update_debit($id)){
