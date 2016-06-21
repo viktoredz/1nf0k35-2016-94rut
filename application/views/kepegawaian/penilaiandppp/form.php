@@ -183,7 +183,7 @@ if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
                       $("#simpandatapeniliandppp").hide();
                     }else{
                       alert('Data berhasil diubah');
-                       $("#tambahjqxgrid").shiw();
+                       $("#tambahjqxgrid").show();
                       $("#btn_back_dppp").show();
                       $("#btn_add_dppp").hide();
                       $("#jqxgrid").hide();
