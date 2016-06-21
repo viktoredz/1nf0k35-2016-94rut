@@ -171,6 +171,7 @@ if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
                 success : function(response){
                   var res  = response.split("|");
                   if(res[0]=="OK"){
+                    if ("<?php echo $action;?>"=='add') {
                       $("#tambahjqxgrid").hide();
                       $("#btn_back_dppp").hide();
                       $("#btn_add_dppp").show();
@@ -180,6 +181,13 @@ if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
                       $("#btn-refresh-datagrid").show();
                       $("#btn-export-datagrid").hide();
                       $("#simpandatapeniliandppp").hide();
+                    }else{
+                      alert('Data berhasil diubah');
+                       $("#tambahjqxgrid").shiw();
+                      $("#btn_back_dppp").show();
+                      $("#btn_add_dppp").hide();
+                      $("#jqxgrid").hide();
+                    }
                   }
                   else if(res[0]=="Error"){
                       $('#notice-pegawai').hide();
