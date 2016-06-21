@@ -1,6 +1,10 @@
 
 <script>
 	$(function(){
+    $("#btn-refresh-datagrid").show();
+    $("#btn-export-datagrid").hide();
+    $("#simpandatapeniliandppp").hide();
+    
 		var sourceskp = {
       datatype: "json",
       type  : "POST",
@@ -61,7 +65,7 @@
       }
     });
      
-    $('#btn-refresh-skp').click(function () {
+    $('#btn-refresh-datagrid').click(function () {
       $("#jqxgrid").jqxGrid('clearfilters');
     });
 
@@ -118,12 +122,16 @@
     $("#btn_back_dppp").hide();
  		$('#btn_add_dppp').click(function () {
 			add_dppp();
+     
 		});
     $("#btn_back_dppp").click(function(){
         $("#jqxgrid").show();
         $("#tambahjqxgrid").hide();
         $("#btn_back_dppp").hide();
         $("#btn_add_dppp").show();
+        $("#btn-refresh-datagrid").show();
+        $("#btn-export-datagrid").hide();
+        $("#simpandatapeniliandppp").hide();
     });
 	});
 	function close_popup(){
@@ -138,6 +146,8 @@
       $("#jqxgrid").hide();
       $("#btn_back_dppp").show();
       $("#btn_add_dppp").hide();
+       $("#simpandatapeniliandppp").show();
+      $("#btn-export-datagrid").hide();
 		});
 	}
 
@@ -148,6 +158,7 @@
       $("#jqxgrid").hide();
       $("#btn_back_dppp").show();
       $("#btn_add_dppp").hide();
+      $("#btn-export-datagrid").show();
     });
 	}
 
@@ -184,12 +195,15 @@
       if (($username != $userdataname)) {
       if ($statusanakbuah=='anakbuah')  {
     ?>
-			<button class="btn btn-success" id='btn_add_dppp' type='button'><i class='fa fa-plus-square'></i> Tambah Dppp</button>
+			<button class="btn btn-success" id='btn_add_dppp' type='button'><i class='fa fa-plus-square'></i> Tambah DP3</button>
     <?php
       }
       }
     ?>
       <button class="btn btn-warning" id='btn_back_dppp' type='button'><i class='glyphicon glyphicon-arrow-left'></i> Kembali</button>
+      <button type="button" class="btn btn-primary" id="btn-refresh-datagrid"><i class='fa fa-save'></i> &nbsp; Refresh</button>
+      <button type="button" class="btn btn-success" id="btn-export-datagrid"><i class='fa fa-save'></i> &nbsp; Export</button>
+      
 		</div>
   </div>
       <div class="row">

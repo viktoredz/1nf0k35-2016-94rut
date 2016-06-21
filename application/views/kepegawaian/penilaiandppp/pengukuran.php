@@ -68,7 +68,7 @@ if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
                 <div class="row">
                   <div class="col-md-12">
                     <div class="box-footer" style="float:right">
-                        <button type="button" class="btn btn-primary" id="btnrefreshdata"><i class='fa fa-save'></i> &nbsp; Refresh</button>
+                        <!-- <button type="button" class="btn btn-primary" id="btnrefreshdata"><i class='fa fa-save'></i> &nbsp; Refresh</button> -->
                     </div>
                   </div>
                 </div>
@@ -106,6 +106,9 @@ if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
       return false;
     }
 $(function(){
+  $("#btnrefreshdata").show();
+    $("#btnrefreshdata-luar").hide();
+    $("#btnrexportdata-luar").show();
     ambilnilairataskp();
     filtergriddata();
     $("#btnrefreshdata").click(function(){
@@ -245,4 +248,38 @@ $(function(){
         $("#jqxgridPenilaianSKP").jqxGrid('updatebounddata', 'cells');
       });
     };
+    $("#btnrexportdata-luar").click(function(){
+    
+    var post = "";
+    var filter = $("#jqxgridPenilaianSKP").jqxGrid('getfilterinformation');
+    for(i=0; i < filter.length; i++){
+      var fltr  = filter[i];
+      var value = fltr.filter.getfilters()[0].value;
+      var condition = fltr.filter.getfilters()[0].condition;
+      var filteroperation = fltr.filter.getfilters()[0].operation;
+      var filterdatafield = fltr.filtercolumn;
+      
+      post = post+'&filtervalue'+i+'='+value;
+      post = post+'&filtercondition'+i+'='+condition;
+      post = post+'&filteroperation'+i+'='+filteroperation;
+      post = post+'&filterdatafield'+i+'='+filterdatafield;
+      post = post+'&'+filterdatafield+'operator=and';
+    }
+    post = post+'&filterscount='+i;
+    
+    var sortdatafield = $("#jqxgridPenilaianSKP").jqxGrid('getsortcolumn');
+    if(sortdatafield != "" && sortdatafield != null){
+      post = post + '&sortdatafield='+sortdatafield;
+    }
+    if(sortdatafield != null){
+      var sortorder = $("#jqxgridPenilaianSKP").jqxGrid('getsortinformation').sortdirection.ascending ? "asc" : ($("#jqxgridPenilaianSKP").jqxGrid('getsortinformation').sortdirection.descending ? "desc" : "");
+      post = post+'&sortorder='+sortorder;
+      
+    }
+    
+    $.post("<?php echo base_url()?>kepegawaian/penilaiandppp/data_export/{id_pegawai}/{tahun}/{id_mst_peg_struktur_org}/{periode}",post,function(response ){
+      location.href = response;
+      // alert(response);
+    });
+  });
 </script>

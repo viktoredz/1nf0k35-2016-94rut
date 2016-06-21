@@ -1,6 +1,9 @@
 
 <script>
 	$(function(){
+    $("#btnrefreshdata").hide();
+    $("#btnrefreshdata-luar").show();
+    $("#btnrexportdata-luar").hide();
 		var sourcedppp = {
       datatype: "json",
       type  : "POST",
@@ -44,7 +47,7 @@
       }
     });
      
-    $('#btn-refresh-skp').click(function () {
+    $('#btnrefreshdata-luar').click(function () {
       $("#jqxgridPengukuran").jqxGrid('clearfilters');
     });
 
@@ -103,6 +106,9 @@
         $("#tambahjqxgridPengukuran").hide();
         $("#btn_back_pengukuran").hide();
         $("#btn_add_pengukuran").show();
+        $("#btnrefreshdata").hide();
+        $("#btnrefreshdata-luar").show();
+        $("#btnexporthdata-luar").hide();
     });
 	});
  
@@ -173,6 +179,9 @@
       }
     ?>
       <button class="btn btn-warning" id='btn_back_pengukuran' type='button'><i class='glyphicon glyphicon-arrow-left'></i> Kembali</button>
+      <button type="button" class="btn btn-primary" id="btnrefreshdata"><i class='fa fa-save'></i> &nbsp; Refresh</button>
+      <button type="button" class="btn btn-primary" id="btnrefreshdata-luar"><i class='fa fa-save'></i> &nbsp; Refresh</button>
+      <button type="button" class="btn btn-success" id="btnrexportdata-luar"><i class='fa fa-save'></i> &nbsp; Export</button>
 		</div>
   </div>
       <div class="row">

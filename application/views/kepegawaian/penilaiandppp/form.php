@@ -114,6 +114,7 @@ if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
       return false;
     }
     $(function(){
+      $("#simpandatapeniliandppp").show();
       ambilnilairataskp();
       ambil_nip_penilai();
       ambil_atasan_nip_penilai();
@@ -176,15 +177,26 @@ if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
                       $("#jqxgrid").show();
                       $("#jqxgrid").jqxGrid('updatebounddata', 'cells');
                       ambilnilairataskp();
+                      $("#btn-refresh-datagrid").show();
+                      $("#btn-export-datagrid").hide();
+                      $("#simpandatapeniliandppp").hide();
                   }
                   else if(res[0]=="Error"){
                       $('#notice-pegawai').hide();
                       $('#notice-content-pegawai').html('<div class="alert">'+res[1]+'</div>');
                       $('#notice-pegawai').show();
                       alert('Maaf penilaian pegawai sudah dimasukan pada tahun ini '+tahunskrng);
+                      $("#btn-refresh-datagrid").hide();
+                      $("#btn-export-datagrid").hide();
+                      $("#simpandatapeniliandppp").show();
+                      $("#btn_back_dppp").show();
                   }
                   else{
                       $('#tabadddppp2').html(response);
+                      $("#btn-refresh-datagrid").hide();
+                      $("#btn-export-datagrid").hide();
+                      $("#simpandatapeniliandppp").show();
+                      $("#btn_back_dppp").show();
                   }
               }
             });
@@ -206,7 +218,7 @@ if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
       
     }else{
     ?>
-    <button type="submit" class="btn btn-primary"><i class='fa fa-save'></i> &nbsp; Simpan</button>
+      <button type="submit" id="simpandatapeniliandppp" class="btn btn-primary"><i class='fa fa-save'></i> &nbsp; Simpan</button>
     <?php } ?>
     <!-- <button type="button" id="btn_back_dppp" class="btn btn-warning"><i class='fa fa-reply'></i> &nbsp; Kembali</button> -->
   </div>
@@ -645,10 +657,19 @@ if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
 </div>
 <script type="text/javascript">
 $(function(){
+    $("#btn-refresh-datagrid").hide();
+    $("#btn-export-datagrid").show();
     $("#menu_kepegawaian").addClass("active");
     $("#menu_kepegawaian_penilaiandppp").addClass("active");
 
-
+     $("#btn-export-datagrid").click(function(){
+    
+    var post = "";
+      $.post("<?php echo base_url()?>kepegawaian/penilaiandppp/data_export_dp3/{id_pegawai}/{tahun}",post,function(response ){
+        location.href = response;
+        // alert(response);
+      });
+    });
     $('#btn-kembali').click(function(){
         window.location.href="<?php echo base_url()?>kepegawaian/penilaiandppp";
     });
@@ -663,6 +684,7 @@ $(function(){
 
   });
     $(document).ready(function () {
+      skpnilai();
        var statusanakbuah ="<?php echo $statusanakbuah; ?>";
         if (statusanakbuah == "atasan") {
           $("input").prop('disabled', true);
@@ -682,7 +704,7 @@ $(function(){
               $("#nilaiskp").val('B');
             }else if ($("#skp").val() <= 100) {
               $("#nilaiskp").val('A');
-            }else if ($("#skp").val() > 100) {
+            }else if ($("#skp").val() > 1000) {
               alert("Maaf, nilai tidak boleh lebih dari seratus");
               $("#skp").val(0);
               $("#nilaiskp").val('');
@@ -690,7 +712,7 @@ $(function(){
         }
         
       }
-      skpnilai();
+      
       $("#skp").change(function(){
           skpnilai();
           tambahalldata();
