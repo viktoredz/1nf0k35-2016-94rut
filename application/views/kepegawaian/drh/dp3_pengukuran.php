@@ -28,9 +28,20 @@
                     }
                   ?>">
               </div>
-              <div class="col-md-2">
+              <div class="col-md-3">
                 <label>Periode</label>
-                <input disabled="disabled" type="text" class="form-control" name="periode_datapengukuran" id="periode_datapengukuran" placeholder="periode " value="<?php 
+                <input disabled="disabled" type="text" class="form-control" name="periode_datapengukurandata" id="periode_datapengukurandata" placeholder="periode " value="<?php 
+                  if(set_value('periode_datapengukurandata')=="" && isset($periode)){
+                      if ($periode==1) {
+                        echo 'Januari - Juni';
+                      }else{
+                        echo 'Juli - Desember';
+                      }
+                    }else{
+                      echo  set_value('periode_datapengukurandata');
+                    }
+                  ?>">
+                  <input disabled="disabled" type="hidden" class="form-control" name="periode_datapengukuran" id="periode_datapengukuran" placeholder="periode " value="<?php 
                   if(set_value('periode_datapengukuran')=="" && isset($periode)){
                       echo $periode;
                     }else{
