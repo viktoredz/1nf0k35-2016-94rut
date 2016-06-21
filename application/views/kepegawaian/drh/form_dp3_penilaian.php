@@ -1,6 +1,8 @@
 
 <script>
 	$(function(){
+    $("#btn-refresh-datagrid").show();
+    $("#btn-export-datagrid").hide();
 		var sourceskp = {
       datatype: "json",
       type  : "POST",
@@ -61,7 +63,7 @@
       }
     });
      
-    $('#btn-refresh-skp').click(function () {
+    $('#btn-refresh-datagrid').click(function () {
       $("#jqxgrid").jqxGrid('clearfilters');
     });
 
@@ -112,13 +114,15 @@
         $("#jqxgrid").show();
         $("#tambahjqxgrid").hide();
         $("#btn_back_dppp").hide();
+        $("#btn-refresh-datagrid").show();
+        $("#btn-export-datagrid").show();
     });
 	});
 	function close_popup(){
 		$("#popup_dppp").jqxWindow('close');
 		ambil_total();
 	}
-  
+   
 
 	function edit_dppp(id_pegawai,tahun){
 		$.get("<?php echo base_url().'kepegawaian/drh_dp3/edit_dppp/'; ?>"+id_pegawai+'/'+tahun+'/' , function(data) {
@@ -143,6 +147,8 @@
   <div class="row">
 		<div style="padding:5px" class="pull-right">
       <button class="btn btn-warning" id='btn_back_dppp' type='button'><i class='glyphicon glyphicon-arrow-left'></i> Kembali</button>
+      <button type="button" class="btn btn-primary" id="btn-refresh-datagrid"><i class='fa fa-save'></i> &nbsp; Refresh</button>
+      <button type="button" class="btn btn-success" id="btn-export-datagrid"><i class='fa fa-save'></i> &nbsp; Export</button>
 		</div>
   </div>
       <div class="row">

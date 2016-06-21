@@ -6,6 +6,7 @@ class Drh extends CI_Controller {
 		$this->load->model('kepegawaian/drh_model');
 		$this->load->model('mst/puskesmas_model');
 		$this->load->model('inventory/inv_ruangan_model');
+		
 	}
 
 	function index(){

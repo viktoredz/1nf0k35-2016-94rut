@@ -689,7 +689,7 @@ class Penilaiandppp extends CI_Controller {
 				'id_pegawai_penilai' 	=> $this->input->post('id_pegawai_penilai'),
 				'id_pegawai_penilai_atasan' 					=> $this->input->post('id_pegawai_penilai_atasan'),
 				'tanggapan' 			=> $this->input->post('tanggapan'),
-				'tanggapan_tgl' 		=> $this->input->post('tanggapan_tgl'),
+				'tanggapan_tgl' 		=> $tanggapan_tgl,
 				'keputusan_tgl' 		=> $keputusan_tgl,
 				'keputusan' 			=> $this->input->post('keputusan'),
 				'rekomendasi' 			=> $this->input->post('rekomendasi'),
@@ -711,8 +711,9 @@ class Penilaiandppp extends CI_Controller {
 			$userdataname = $this->session->userdata('username');
         	$username = $this->input->post('username');
         	$keberatan_t = explode("-", $this->input->post('keberatan_tgl'));
-			$keberatan_tgl = $keberatan_t[2].'-'.$keberatan_t[1].'-'.$keberatan_t[0];
+			
 			if ($username == $userdataname) {
+				$keberatan_tgl = $keberatan_t[2].'-'.$keberatan_t[1].'-'.$keberatan_t[0];
 				$valuestanggapan = array(
 						'keberatan_tgl' 		=> $keberatan_tgl,
 						'keberatan' 			=> $this->input->post('keberatan')
@@ -1133,7 +1134,6 @@ class Penilaiandppp extends CI_Controller {
 	function nilairataskpterakhir($id=0,$id_pegawai=0,$tahun=0,$periode=0){
 		$this->db->select("((sum((((pegawai_skp_nilai.kuant / mst_peg_struktur_skp.kuant)*100)+((pegawai_skp_nilai.target / mst_peg_struktur_skp.target)*100)+(((1.76*mst_peg_struktur_skp.waktu - pegawai_skp_nilai.waktu)/mst_peg_struktur_skp.waktu)*100))/3))/6) as nilairata");
         $this->db->where('mst_peg_struktur_skp.id_mst_peg_struktur_org',$id);
-        // $this->db->join('pegawai_skp_nilai',"mst_peg_struktur_skp.id_mst_peg_struktur_skp = pegawai_skp_nilai.id_mst_peg_struktur_skp AND pegawai_skp_nilai.id_pegawai=".'"'.$id_pegawai.'"'." and tahun=".'"'.$tahun.'"'."and periode=".'"'.$periode.'"'."",'left');
         $this->db->join("(SELECT concat(id_pegawai,tahun,periode),pegawai_skp_nilai.*  FROM pegawai_skp_nilai where concat(id_pegawai,tahun,periode) in (select concat(id_pegawai,max(tahun),max(periode)) from pegawai_skp_nilai where id_pegawai=".'"'.$id_pegawai.'"'.")) as pegawai_skp_nilai","mst_peg_struktur_skp.id_mst_peg_struktur_skp = pegawai_skp_nilai.id_mst_peg_struktur_skp AND mst_peg_struktur_skp.id_mst_peg_struktur_org = pegawai_skp_nilai.id_mst_peg_struktur_org",'left');
         $query = $this->db->get('mst_peg_struktur_skp');
 		foreach ($query->result() as $q) {

@@ -33,7 +33,7 @@ $userdataname = $this->session->userdata('username');
     {
       var kode = "<?php echo $idlogin ?>";
       $.ajax({
-      url: "<?php echo base_url().'kepegawaian/penilaiandppp/nipterakhirpenilai/'.$id_pegawai ?>/",
+      url: "<?php echo base_url().'kepegawaian/drh_dp3/nipterakhirpenilai/'.$id_pegawai ?>/",
       dataType: "json",
       success:function(data)
       { 
@@ -61,7 +61,7 @@ $userdataname = $this->session->userdata('username');
     {
       var kode = "<?php echo $idlogin ?>";
       $.ajax({
-      url: "<?php echo base_url().'kepegawaian/penilaiandppp/atasannipterakhirpenilai/'.$id_pegawai ?>/",
+      url: "<?php echo base_url().'kepegawaian/drh_dp3/atasannipterakhirpenilai/'.$id_pegawai ?>/",
       dataType: "json",
       success:function(data)
       { 
@@ -83,11 +83,19 @@ $userdataname = $this->session->userdata('username');
 
       return false;
     }
+    $("#btn-export-datagrid").click(function(){
+    
+    var post = "";
+    $.post("<?php echo base_url()?>kepegawaian/drh_dp3/data_export_dp3/{id_pegawai}/{tahun}",post,function(response ){
+      location.href = response;
+      // alert(response);
+    });
+  });
     function ambilnilairataskp()
     {
 
       $.ajax({
-      url: "<?php echo base_url().'kepegawaian/penilaiandppp/nilairataskpterakhir/{id_mst_peg_struktur_org}/{id_pegawai}/'.$tahun."/0" ?>",
+      url: "<?php echo base_url().'kepegawaian/drh_dp3/nilairataskpterakhir/{id_mst_peg_struktur_org}/{id_pegawai}/'.$tahun."/0" ?>",
       dataType: "json",
       success:function(data)
       { 
@@ -103,6 +111,8 @@ $userdataname = $this->session->userdata('username');
       return false;
     }
     $(function(){
+      $("#btn-refresh-datagrid").hide();
+      $("#btn-export-datagrid").show();
       ambilnilairataskp();
       ambil_nip_penilai();
       ambil_atasan_nip_penilai();
@@ -154,7 +164,7 @@ $userdataname = $this->session->userdata('username');
                 contentType : false,
                 processData : false,
                 type : 'POST',
-                url : '<?php echo base_url()."kepegawaian/penilaiandppp/".$action."_dppp/".$id_pegawai."/".$tahun."/".$id_mst_peg_struktur_org."/"?>',
+                url : '<?php echo base_url()."kepegawaian/drh_dp3/".$action."_dppp/".$id_pegawai."/".$tahun."/".$id_mst_peg_struktur_org."/"?>',
                 data : data,
                 success : function(response){
                   var res  = response.split("|");
@@ -631,7 +641,7 @@ $(function(){
 
 
     $('#btn-kembali').click(function(){
-        window.location.href="<?php echo base_url()?>kepegawaian/penilaiandppp";
+        window.location.href="<?php echo base_url()?>kepegawaian/drh_dp3";
     });
     $("#keberatan_tgl").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme <?php echo $showtanggapantgl;?>});
     $("#tanggapan_tgl").jqxDateTimeInput({ formatString: 'dd-MM-yyyy', theme: theme <?php echo $showhidetgl;?>});

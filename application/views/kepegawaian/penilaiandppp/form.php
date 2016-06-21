@@ -328,7 +328,7 @@ if (($statusanakbuah == 'diasendiri') || ($statusanakbuah == 'atasan')) {
               if(set_value('tanggapan_tgl')=="" && isset($tanggapan_tgl)){
                 date("Y-m-d",strtotime($tanggapan_tgl));
               }else{
-                date("Y-m-d",strtotime(set_value('tgltanggapan')));
+                date("Y-m-d",strtotime(set_value('tanggapan_tgl')));
               }
             ?>"></div>
         </div>
@@ -901,10 +901,11 @@ $(function(){
       }
       
       function nilairataskp(){
-      var nilaiskpdata = parseInt($("#nilairataskp").val())*60/100;
-      var nilairata = parseInt($("#ratarata").val())*40/100;
+      var nilaiskpdata = (parseFloat($("#skp").val())*60/100);
+      var nilairata = parseFloat($("#ratarata").val())*40/100;
       //alert($("#nilairataskp").val());
-      $("#nilai_prestasi").val(parseInt(nilairata)+parseInt(nilaiskpdata));
+      
+      $("#nilai_prestasi").val(parseFloat(nilairata)+parseFloat(nilaiskpdata));
         if ($("#nilai_prestasi").val() !='') {
           if ($("#nilai_prestasi").val() < 60) {
             $("#nilai_nilai_prestasi").val('D');

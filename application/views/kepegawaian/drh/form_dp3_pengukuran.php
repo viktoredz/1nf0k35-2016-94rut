@@ -1,6 +1,10 @@
 
 <script>
 	$(function(){
+    $("#btnrefreshdata").hide();
+    $("#btnrefreshdata-luar").show();
+    $("#btnrexportdata-luar").hide();
+    
 		var sourcedppp = {
       datatype: "json",
       type  : "POST",
@@ -44,7 +48,7 @@
       }
     });
      
-    $('#btn-refresh-skp').click(function () {
+    $('#btnrefreshdata-luar').click(function () {
       $("#jqxgridPengukuran").jqxGrid('clearfilters');
     });
 
@@ -92,7 +96,9 @@
         $("#jqxgridPengukuran").show();
         $("#tambahjqxgridPengukuran").hide();
         $("#btn_back_pengukuran").hide();
-        
+        $("#btnrefreshdata").hide();
+        $("#btnrefreshdata-luar").show();
+        $("#btnexporthdata-luar").hide();
     });
 	});
  
@@ -103,6 +109,7 @@
               $("#tambahjqxgridPengukuran").show();
               $("#tambahjqxgridPengukuran").html(data);
               $("#jqxgridPengukuran").hide();
+              $("#btnrexportdata-luar").show();
               $("#btn_back_pengukuran").show();
               
         });
@@ -123,6 +130,9 @@
   <div class="row">
 		<div style="padding:5px" class="pull-right">
       <button class="btn btn-warning" id='btn_back_pengukuran' type='button'><i class='glyphicon glyphicon-arrow-left'></i> Kembali</button>
+      <button type="button" class="btn btn-primary" id="btnrefreshdata"><i class='fa fa-save'></i> &nbsp; Refresh</button>
+      <button type="button" class="btn btn-primary" id="btnrefreshdata-luar"><i class='fa fa-save'></i> &nbsp; Refresh</button>
+      <button type="button" class="btn btn-success" id="btnrexportdata-luar"><i class='fa fa-save'></i> &nbsp; Export</button>
 		</div>
   </div>
       <div class="row">

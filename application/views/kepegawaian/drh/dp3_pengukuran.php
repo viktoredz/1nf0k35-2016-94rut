@@ -52,7 +52,7 @@
                 <div class="row">
                   <div class="col-md-12">
                     <div class="box-footer" style="float:right">
-                        <button type="button" class="btn btn-primary" id="btnrefreshdata"><i class='fa fa-save'></i> &nbsp; Refresh</button>
+                        <!-- <button type="button" class="btn btn-primary" id="btnrefreshdata"><i class='fa fa-save'></i> &nbsp; Refresh</button> -->
                     </div>
                   </div>
                 </div>
@@ -77,7 +77,7 @@
       var tahundata = $("#tahungrid_datapengukuran").val();
       var periodedata = $("#periode_datapengukuran").val();
       $.ajax({
-      url: "<?php echo base_url().'kepegawaian/penilaiandppp/nilairataskp/{id_mst_peg_struktur_org}/{id_pegawai}' ?>/"+tahundata+'/'+periodedata,
+      url: "<?php echo base_url().'kepegawaian/drh_dp3/nilairataskp/{id_mst_peg_struktur_org}/{id_pegawai}' ?>/"+tahundata+'/'+periodedata,
       dataType: "json",
       success:function(data)
       { 
@@ -90,6 +90,9 @@
       return false;
     }
 $(function(){
+    $("#btnrefreshdata").show();
+    $("#btnrefreshdata-luar").hide();
+    $("#btnrexportdata-luar").show();
     ambilnilairataskp();
     filtergriddata();
     $("#btnrefreshdata").click(function(){
@@ -133,7 +136,7 @@ $(function(){
           { name: 'edit', type: 'number'},
           { name: 'delete', type: 'number'}
             ],
-        url: "<?php echo base_url().'kepegawaian/penilaiandppp/json_skp/{id_mst_peg_struktur_org}/{id_pegawai}'; ?>/",
+        url: "<?php echo base_url().'kepegawaian/drh_dp3/json_skp/{id_mst_peg_struktur_org}/{id_pegawai}'; ?>/",
         cache: false,
           updateRow: function (rowID, rowData, commit) {
                   commit(true);
@@ -146,7 +149,7 @@ $(function(){
         },
         updateRow: function (rowID, rowData, commit) {
             
-            $.post( '<?php echo base_url()?>kepegawaian/penilaiandppp/updatenilaiskp', 
+            $.post( '<?php echo base_url()?>kepegawaian/drh_dp3/updatenilaiskp', 
               {
                 id_pegawai:"<?php echo $id_pegawai?>",
                 tahun:$('#tahungrid_datapengukuran').val(), 
@@ -192,8 +195,8 @@ $(function(){
           width: '100%',
           
           source: dataadapterskp, theme: theme,columnsresize: true,showtoolbar: false, pagesizeoptions: ['10', '25', '50', '100', '200'],
-          showfilterrow: true, filterable: true, sortable: true, autoheight: true, pageable: true, virtualmode: true, editable: true,
-          enabletooltips: true,
+          showfilterrow: false, filterable: false, sortable: false, autoheight: true, pageable: true, virtualmode: true, editable: false,
+          enabletooltips: false,
           selectionmode: 'singlerow',
           editmode: 'selectedrow',
           rendergridrows: function(obj)
@@ -225,8 +228,42 @@ $(function(){
         });
         }); 
     function filtergriddata(){
-      $.post("<?php echo base_url().'kepegawaian/penilaiandppp/filtertahundata/'?>", 'filtertahundata='+$("#tahungrid_datapengukuran").val()+'&filterperiodedata='+$("#periode_datapengukuran").val(),  function(){
+      $.post("<?php echo base_url().'kepegawaian/drh_dp3/filtertahundata/'?>", 'filtertahundata='+$("#tahungrid_datapengukuran").val()+'&filterperiodedata='+$("#periode_datapengukuran").val(),  function(){
         $("#jqxgridPenilaianSKP").jqxGrid('updatebounddata', 'cells');
       });
     };
+    $("#btnrexportdata-luar").click(function(){
+    
+    var post = "";
+    var filter = $("#jqxgridPenilaianSKP").jqxGrid('getfilterinformation');
+    for(i=0; i < filter.length; i++){
+      var fltr  = filter[i];
+      var value = fltr.filter.getfilters()[0].value;
+      var condition = fltr.filter.getfilters()[0].condition;
+      var filteroperation = fltr.filter.getfilters()[0].operation;
+      var filterdatafield = fltr.filtercolumn;
+      
+      post = post+'&filtervalue'+i+'='+value;
+      post = post+'&filtercondition'+i+'='+condition;
+      post = post+'&filteroperation'+i+'='+filteroperation;
+      post = post+'&filterdatafield'+i+'='+filterdatafield;
+      post = post+'&'+filterdatafield+'operator=and';
+    }
+    post = post+'&filterscount='+i;
+    
+    var sortdatafield = $("#jqxgridPenilaianSKP").jqxGrid('getsortcolumn');
+    if(sortdatafield != "" && sortdatafield != null){
+      post = post + '&sortdatafield='+sortdatafield;
+    }
+    if(sortdatafield != null){
+      var sortorder = $("#jqxgridPenilaianSKP").jqxGrid('getsortinformation').sortdirection.ascending ? "asc" : ($("#jqxgridPenilaianSKP").jqxGrid('getsortinformation').sortdirection.descending ? "desc" : "");
+      post = post+'&sortorder='+sortorder;
+      
+    }
+    
+    $.post("<?php echo base_url()?>kepegawaian/drh_dp3/data_export/{id_pegawai}/{tahun}/{id_mst_peg_struktur_org}/{periode}",post,function(response ){
+      location.href = response;
+      // alert(response);
+    });
+  });
 </script>
