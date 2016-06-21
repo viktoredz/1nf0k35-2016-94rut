@@ -1444,23 +1444,31 @@
       $('#debit_id_jt').val(a[1]);
       $('#kredit_id_jt').val(a[2]);
 
-      $("[name='delete_jt']").click(function() {
+      $("[name='delete_jt']").click(function(event){
+         event.stopPropagation();
+         if(confirm("Anda yakin ingin menghapus data ini ?")) {
+          this.click;
+
           var group_sementara = this.id;
           var fields = group_sementara.split(/-/);
           var group = fields[1];
-
-          $.ajax({
-             type: 'POST',
-             url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_delete" ?>',
-             data : 'group='+group,
-             success: function (response) {
-              if(response=="OK"){
+ 
+            $.ajax({
+               type: 'POST',
+               url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_delete" ?>',
+               data : 'group='+group,
+               success: function (response) {
+                if(response=="OK"){
                   $("#jt-"+group).remove();
-              }else{
-                  alert("Failed.");
-              }
-             }
-          });
+                }else{
+                    alert("Failed.");
+                }
+               }
+            });
+          } else {
+             // alert("Cancel");
+         }       
+         event.preventDefault();
       });
 
       $("select[name='debit_akun_jt']").change(function(){
