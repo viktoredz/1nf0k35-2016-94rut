@@ -232,9 +232,7 @@ class Keutransaksi_model extends CI_Model {
              $first_id = $this->db->insert_id();
              $count = count($data);
              $last_id = $first_id + ($count-1);
-             $id = $first_id|$last_id;
-             // print_r($id);
-            return $id;
+            return $first_id."|".$last_id;
         }else{
             return mysql_error();
         }
