@@ -151,23 +151,6 @@ class Keutransaksi_model extends CI_Model {
         $query->free_result();
     }
 
-
-
-    function get_debit_akun_selected($id_mst_transaksi=0){
-
-        $this->db->select('id_mst_akun'); 
-        $this->db->where('id_mst_transaksi_item','445');
-        $query = $this->db->get('mst_keu_transaksi_item');     
-        if ($query->num_rows()) {
-            foreach ($query->result() as $key) {
-                $id_data = $key->id_mst_akun;
-            }
-        }else{
-            $id_data =0;
-        }
-        return $id_data;
-    }
-
     function get_data_jurnal_transaksi($id_mst_transaksi=0){
         $this->db->select('*');
         $this->db->where('id_mst_transaksi',$id_mst_transaksi);

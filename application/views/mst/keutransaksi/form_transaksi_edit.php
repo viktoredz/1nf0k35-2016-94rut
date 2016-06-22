@@ -135,18 +135,17 @@
                           </div>
                           <div class="col-md-8" style="padding-top:5px;">
                            <select id="debit_akun-<?php echo $row->id_mst_transaksi_item ?>" name="debit_akun"  type="text" class="form-control">
-                              <option value="0">Pilih Akun</option>
- <!--                              <?php foreach($akun as $a) : ?>
+                              <?php foreach($akun as $a) : ?>
                                 <?php
-                                  if(set_value('id_mst_akun')=="" && isset($id_mst_akun)){
-                                    $id_mst_akun = $id_mst_akun;
+                                  if(set_value('id_mst_akun')=="" && isset($row->id_mst_akun)){
+                                    $id_mst_akun = $row->id_mst_akun;
                                   }else{
                                     $id_mst_akun = set_value('id_mst_akun');
                                   }
                                     $select = $a->id_mst_akun == $id_mst_akun ? 'selected' : '' ;
                                 ?>
                                 <option value="<?php echo $a->id_mst_akun ?>" <?php echo $select ?>><?php echo $a->uraian ?></option>
-                                <?php endforeach ?> -->
+                                <?php endforeach ?>
                             </select>
                             <p id="demo"></p>
                           </div>
@@ -240,8 +239,8 @@
                           <select id="kredit_akun-<?php echo $row->id_mst_transaksi_item ?>" name="kredit_akun" type="text" class="form-control">
                             <?php foreach($akun as $a) : ?>
                               <?php
-                                if(set_value('id_mst_akun')=="" && isset($id_mst_akun)){
-                                  $id_mst_akuns = $id_mst_akun;
+                                if(set_value('id_mst_akun')=="" && isset($row->id_mst_akun)){
+                                  $id_mst_akuns = $row->id_mst_akun;
                                 }else{
                                   $id_mst_akuns = set_value('id_mst_akun');
                                 }
@@ -358,15 +357,6 @@
 
     $('#btn-kembali').click(function(){
         window.location.href="<?php echo base_url()?>mst/keuangan_transaksi";
-    });
-
-    $.ajax({
-      url : '<?php echo site_url('mst/keuangan_transaksi/get_debit_akun') ?>',
-      type : 'GET',
-        success : function(data) {
-          $("select[name='debit_akun']").html(data);
-          $("select[name='debit_akun']").change();
-        }
     });
 
     $("[name='delete_debit']").click(function(event){
@@ -1222,9 +1212,7 @@
                                                                     }
                                                                       $select = $a->id_mst_akun == $id_mst_akun ? 'selected' : '' ;
                                                                   ?>
-                                                                  <option value="<?php echo $a->id_mst_akun ?>"\
-                                                                   <?php echo $select ?>><?php echo $a->uraian ?>\
-                                                                   </option>\
+                                                                  <option value="<?php echo $a->id_mst_akun ?>"<?php echo $select ?>><?php echo $a->uraian ?></option>\
                                                                   <?php endforeach ?>\
                                                               </select>\
                                                             </div>\
@@ -1333,9 +1321,7 @@
                                                                   }
                                                                     $select = $a->id_mst_akun == $id_mst_akun ? 'selected' : '' ;
                                                                 ?>\
-                                                                <option value="<?php echo $a->id_mst_akun ?>"\
-                                                                 <?php echo $select ?>><?php echo $a->uraian ?>\
-                                                                 </option>\
+                                                                <option value="<?php echo $a->id_mst_akun ?>"<?php echo $select ?>><?php echo $a->uraian ?></option>\
                                                                 <?php endforeach ?>\
                                                             </select>\
                                                           </div>\
