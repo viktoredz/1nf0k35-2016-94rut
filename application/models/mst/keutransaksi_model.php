@@ -160,12 +160,20 @@ class Keutransaksi_model extends CI_Model {
     }
 
     function get_data_nilai_debit($id_mst_transaksi=0){
-        $this->db->select('mst_keu_transaksi_item.id_mst_akun, mst_keu_akun.uraian');
+        $data = array();
+        $this->db->select('mst_keu_transaksi_item.id_mst_akun, mst_keu_akun.uraian,mst_keu_transaksi_item.group');
         $this->db->join("mst_keu_akun","mst_keu_akun.id_mst_akun=mst_keu_transaksi_item.id_mst_akun");
         $this->db->where('id_mst_transaksi',$id_mst_transaksi);
         $this->db->where('type','debit');
         $query = $this->db->get('mst_keu_transaksi_item');
-        return $query->result();
+
+        if ($query->num_rows()>0) {
+              foreach ($query->result() as $row) {
+                $data[$row->group][] = $row;
+              }
+              return $data;
+        }
+        $query->free_result();
     }
 
     function get_data_urutan_debit($id_mst_transaksi=0,$start=0,$limit=1,$options=array()){

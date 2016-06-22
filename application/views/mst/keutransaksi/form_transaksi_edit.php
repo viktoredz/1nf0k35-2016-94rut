@@ -285,7 +285,7 @@
                           <div class="col-md-2" style="padding-top:5px;"><label> Nilai </label> </div>
                           <div class="col-md-7">
                             <select  name="kredit_cmbx_nilai" type="text" class="form-control">
-                              <?php foreach($nilai_debit as $nd) : ?>
+                              <?php foreach($nilai_debit[$row->group] as $nd) : ?>
                                   <?php
                                     if(set_value('id_mst_akun')=="" && isset($id_mst_akun)){
                                       $id_mst_akun = $id_mst_akun;
