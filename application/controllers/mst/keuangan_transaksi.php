@@ -599,12 +599,13 @@ class Keuangan_transaksi extends CI_Controller {
 	function jurnal_transaksi_edit_debit($id=0){
 		$this->authentication->verify('mst','edit');
 
+    	$this->form_validation->set_rules('id_mst_transaksi_item_from','Transaksi Item From','trim');
     	$this->form_validation->set_rules('id_mst_transaksi_item','Transaksi Item','trim');
     	$this->form_validation->set_rules('id_mst_transaksi','Transaksi','trim');
-        $this->form_validation->set_rules('id_mst_akun','Akun','trim');
-        $this->form_validation->set_rules('value','Value','trim');
         $this->form_validation->set_rules('auto_fill','Isi Otomatis','trim');
         $this->form_validation->set_rules('opsional','Opsional','trim');
+        $this->form_validation->set_rules('id_mst_akun','Akun','trim');
+        $this->form_validation->set_rules('value','Value','trim');
 
 		if($this->form_validation->run()== FALSE){
 
@@ -656,12 +657,13 @@ class Keuangan_transaksi extends CI_Controller {
 	function jurnal_transaksi_edit_kredit($id=0){
 		$this->authentication->verify('mst','edit');
 
+    	$this->form_validation->set_rules('id_mst_transaksi_item_from','Transaksi Item From','trim');
     	$this->form_validation->set_rules('id_mst_transaksi_item','Transaksi Item','trim');
     	$this->form_validation->set_rules('id_mst_transaksi','Transaksi','trim');
-        $this->form_validation->set_rules('id_mst_akun','Akun','trim');
-        $this->form_validation->set_rules('value','Value','trim');
         $this->form_validation->set_rules('auto_fill','Isi Otomatis','trim');
         $this->form_validation->set_rules('opsional','Opsional','trim');
+        $this->form_validation->set_rules('id_mst_akun','Akun','trim');
+        $this->form_validation->set_rules('value','Value','trim');
 
 		if($this->form_validation->run()== FALSE){
 
@@ -749,6 +751,7 @@ class Keuangan_transaksi extends CI_Controller {
 			$data['urutan_debit']   	= $this->keutransaksi_model->get_data_urutan_debit($id);
 			$data['urutan_kredit']   	= $this->keutransaksi_model->get_data_urutan_kredit($id);
 			$data['jurnal_transaksi']	= $this->keutransaksi_model->get_data_jurnal_transaksi($id);
+			$data['row_kredit']			= $this->keutransaksi_model->get_data_row_kredit($id);
 
 			$data['content'] = $this->parser->parse("mst/keutransaksi/form_transaksi_edit",$data,true);
 		}elseif($this->keutransaksi_model->transaksi_update($id)){

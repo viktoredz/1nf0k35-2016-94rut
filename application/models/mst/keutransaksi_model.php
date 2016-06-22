@@ -194,6 +194,22 @@ class Keutransaksi_model extends CI_Model {
         return $query->result();
     }
 
+    function get_data_row_kredit($id_mst_transaksi=0){
+        $data = array();
+        $this->db->select('`group`');
+        $this->db->where('id_mst_transaksi',$id_mst_transaksi);
+        $this->db->where('type','kredit');
+        $query = $this->db->get('mst_keu_transaksi_item');
+
+        if ($query->num_rows()>0) {
+            foreach ($query->result() as $row) {
+               $data[$row->group][] = $row;
+            }
+            return $data;
+        }
+        $query->free_result();
+    }
+
     function get_data_group($id_mst_transaksi=0,$start=0,$limit=1,$options=array()){
         $this->db->select('max(`group`) as `group`');
         $this->db->where('id_mst_transaksi',$id_mst_transaksi);
@@ -298,15 +314,30 @@ class Keutransaksi_model extends CI_Model {
 
     function jurnal_transaksi_update_kredit($id=0){
        
-        $data['id_mst_transaksi']             = $id;
-        $data_opsional['opsional']            = $this->input->post('opsional');
-        $data_akun['id_mst_akun']             = $this->input->post('id_mst_akun');
-        $data_auto['auto_fill']               = $this->input->post('auto_fill');
-        $data_value['value']                  = $this->input->post('value');
+        $data['id_mst_transaksi']                       = $id;
+        $data_opsional['opsional']                      = $this->input->post('opsional');
+        $data_akun['id_mst_akun']                       = $this->input->post('id_mst_akun');
+        $data_auto['auto_fill']                         = $this->input->post('auto_fill');
+        $data_value['value']                            = $this->input->post('value');
+        $data_item_from['id_mst_transaksi_item_from']   = $this->input->post('id_mst_transaksi_item_from');
+
 
         if( $data_akun['id_mst_akun']  > 0){
         
             $this->db->set('id_mst_akun', $data_akun['id_mst_akun']);  
+            $this->db->where('id_mst_transaksi_item',$this->input->post('id_mst_transaksi_item'));
+            $this->db->where('id_mst_transaksi',$id);
+            $this->db->where('type','kredit');
+
+            if($this->db->update('mst_keu_transaksi_item')){
+                return true;
+            }else{
+                return mysql_error();
+            }
+
+        }elseif ($data_item_from['id_mst_transaksi_item_from'] > 0) {
+
+            $this->db->set('id_mst_transaksi_item_from', $data_item_from['id_mst_transaksi_item_from']); 
             $this->db->where('id_mst_transaksi_item',$this->input->post('id_mst_transaksi_item'));
             $this->db->where('id_mst_transaksi',$id);
             $this->db->where('type','kredit');
@@ -328,7 +359,7 @@ class Keutransaksi_model extends CI_Model {
                 return true;
             }else{
                 return mysql_error();
-            }
+            }    
 
         }elseif ($data_opsional['opsional'] > -1) {
 
