@@ -220,7 +220,7 @@
                 <div class="row">
                   <div class="col-md-8" style="padding-top:5px;"><label>Kredit</label></div>
                   <div class="col-md-2">
-                    <a class="glyphicon glyphicon-plus" id="<?php echo $jt->group?>" name="add_kredit"></a>
+                    <a class="glyphicon glyphicon-plus" id="add_kredit-<?php echo $jt->group?>" name="add_kredit"></a>
                   </div> 
                 </div>
               <?php foreach($kredit[$jt->group] as $row) : ?> 
@@ -630,17 +630,21 @@
 
       <?php foreach($urutan_debit as $u) : ?>
 
-      counter_debit = "<?php echo $u->urutan+1 ?>";
+      urutan_d = "<?php echo $u->urutan+1 ?>";
+      counter_debit = 2;
 
       $("[name='add_debit']").click(function() {
-         var data = new FormData();
-         var group_debit = this.id;
+        var data = new FormData();
+        var group_debit_sementara = this.id;
+        var fields = group_debit_sementara.split(/-/);
+        var group_debit = fields[1];
+         
 
             $('#biodata_notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
             $('#biodata_notice').show();
 
             data.append('value' ,      $("[name='debit_value']").val());
-            data.append('urutan',      counter_debit);
+            data.append('urutan',      urutan_d);
             data.append('group' ,      group_debit);
 
         $.ajax({
@@ -709,7 +713,7 @@
                                           if($auto_fill == 1) echo "checked";
                                     ?>>\
                                   </div>\
-                                  <div class="col-md-6" style="padding-top:5px;"><label> Isi Otomatis </label></div>\
+                                  <div class="col-md-6" style="padding-top:5px;"><label> Isi Otomatis '+counter_debit+' </label></div>\
                                 </div>\
                               </div>\
                             </div>\
@@ -759,11 +763,19 @@
                             </div>';
 
                 $('#Debit-'+group_debit).append(form_debit);
-                counter_debit++;
+                urutan_d++;
+                alert(counter_debit);
 
+                if (counter_debit > 1) {
+                  $("#add_kredit-"+group_debit).hide();
+                }else{
+                  $("#add_kredit-"+group_debit).show();
+                }
+                counter_debit++;
                 <?php endforeach ?>
 
                 $('#debit_id_append').val(a[1]);
+                 counter_debit_hapus = counter_debit-1;
 
                   $("[name='delete_debit_append']").click(function(event){
                      event.stopPropagation();
@@ -781,8 +793,15 @@
                            success: function (response) {
                             if(response=="OK"){
                                 $("#debt-"+id_mst_transaksi_item).remove();
+                                counter_debit_hapus--;
+                                // alert("ini counter_debit_h "+counter_debit_hapus);
+                                if (counter_debit_hapus < 2) {
+                                  $("#add_kredit-"+group_debit).show();
+                                }else{
+                                  $("#add_kredit-"+group_debit).hide();
+                                }
                             }else{
-                                alert("Failed.");
+                              alert("Failed.");
                             }
                            }
                         });
@@ -882,11 +901,14 @@
 
       <?php foreach($urutan_kredit as $u) : ?>
       urutan_k = "<?php echo $u->urutan+1 ?>";
-      // counter_kredit = 2;
+      counter_kredit = 2;
 
       $("[name='add_kredit']").click(function() {
          var data = new FormData();
-         var group_kredit = this.id;
+         var group_kredit_sementara = this.id;
+         var fields = group_kredit_sementara.split(/-/);
+         var group_kredit = fields[1];
+         
 
             $('#biodata_notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
             $('#biodata_notice').show();
@@ -961,7 +983,7 @@
                                                 if($auto_fill == 1) echo "checked";
                                               ?>>\
                                             </div>\
-                                            <div class="col-md-6" style="padding-top:5px;"><label> Isi Otomatis </label> </div>\
+                                            <div class="col-md-6" style="padding-top:5px;"><label> Isi Otomatis'+counter_kredit+' </label> </div>\
                                           </div>\
                                         </div>\
                                       </div>\
@@ -1025,20 +1047,20 @@
 
               $('#Kredit-'+group_kredit).append(form_kredit);
                urutan_k++;
-      
-              <?php foreach($row_kredit[$jt->group] as $u) : ?>
-               row_k = "<?php echo $u->group ?>";
-               
-               if (row_k > 1) {
+               alert("counter_kredit "+counter_kredit);
+
+               if (counter_kredit > 1) {
                   $("#add_debit-"+group_kredit).hide();
                }else{
                   $("#add_debit-"+group_kredit).show();
                }
 
-              <?php endforeach ?>
-              <?php endforeach ?>
+               counter_kredit++;
+
+               <?php endforeach ?>
 
               $('#kredit_id_append').val(a[1]);
+              counter_kredit_hapus = counter_kredit-1;
               $("[name='delete_kredit_append']").click(function(event){
                  event.stopPropagation();
                  if(confirm("Anda yakin ingin menghapus data ini ?")) {
@@ -1055,8 +1077,16 @@
                        success: function (response) {
                         if(response=="OK"){
                             $("#credit-"+id_mst_transaksi_item_kredit).remove();
+                            counter_kredit_hapus--;
+                            alert("counter_kredit_hapus "+counter_kredit_hapus);
+                            if (counter_kredit_hapus < 2) {
+                              $("#add_debit-"+group_kredit).show();
+                            }else{
+                              $("#add_debit-"+group_kredit).hide();
+                            }
+                            counter_kredit_hapus--;
                         }else{
-                            alert("Failed.");
+                          alert("Failed.");
                         }
                        }
                     });
