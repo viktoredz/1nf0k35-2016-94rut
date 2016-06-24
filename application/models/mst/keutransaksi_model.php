@@ -264,16 +264,18 @@ class Keutransaksi_model extends CI_Model {
         return $this->db->delete('mst_keu_transaksi_item');
     }
 
+
     function jurnal_transaksi_update_debit($id=0){
        
-        $data['id_mst_transaksi']             = $id;
-        $data_akun['id_mst_akun']             = $this->input->post('id_mst_akun');
-        $data_auto['auto_fill']               = $this->input->post('auto_fill');
-        $data_opsional['opsional']            = $this->input->post('opsional');
+        $data['id_mst_transaksi']                      = $id;
+        $data_akun['id_mst_akun']                      = $this->input->post('id_mst_akun');
+        $data_auto['auto_fill']                        = $this->input->post('auto_fill');
+        $data_opsional['opsional']                     = $this->input->post('opsional');
 
         if ($data_akun['id_mst_akun'] > 0){
 
-            $this->db->set('id_mst_akun', $data_akun['id_mst_akun']);     
+            $this->db->set('id_mst_akun', $data_akun['id_mst_akun']); 
+            $this->db->set('id_mst_transaksi_item_from', '0');     
             $this->db->where('id_mst_transaksi_item',$this->input->post('id_mst_transaksi_item'));
             $this->db->where('id_mst_transaksi',$id);
             $this->db->where('type','debit');

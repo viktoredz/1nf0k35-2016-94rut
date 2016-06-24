@@ -147,7 +147,6 @@
                                 <option value="<?php echo $a->id_mst_akun ?>" <?php echo $select ?>><?php echo $a->uraian ?></option>
                                 <?php endforeach ?>
                             </select>
-                            <p id="demo"></p>
                           </div>
                           <div class="col-md-1">
                             <div class="parentDiv">
@@ -679,8 +678,7 @@
                                                   }
                                                     $select = $a->id_mst_akun == $id_mst_akun ? 'selected' : '' ;
                                                 ?>\
-                                                <option value="<?php echo $a->id_mst_akun ?>"\
-                                                <?php echo $select ?>><?php echo $a->uraian ?>\
+                                                <option value="<?php echo $a->id_mst_akun ?>"><?php echo $a->uraian ?>\
                                                 </option>\
                                                 <?php endforeach ?>\
                                             </select>\
@@ -724,19 +722,7 @@
                                         <div class="col-md-2" style="padding-top:5px;"><label> Nilai </label> </div>\
                                         <div class="col-md-7">\
                                           <select  name="debit_cmbx_nilai" type="text" class="form-control">\
-                                            <?php foreach($kategori as $k) : ?>\
-                                                <?php
-                                                  if(set_value('id_mst_kategori_transaksi')=="" && isset($id_mst_kategori_transaksi)){
-                                                    $id_mst_kategori_transaksi = $id_mst_kategori_transaksi;
-                                                  }else{
-                                                    $id_mst_kategori_transaksi = set_value('id_mst_kategori_transaksi');
-                                                  }
-                                                  $select = $k->id_mst_kategori_transaksi == $id_mst_kategori_transaksi ? 'selected' : '' ;
-                                                ?>\
-                                                <option value="<?php echo $k->id_mst_kategori_transaksi ?>"\
-                                                 <?php echo $select ?>><?php echo $k->nama ?>\
-                                                </option>\
-                                            <?php endforeach ?>\
+                                             <option value="Dari Nilai Kredit" echo "selected" ?> Dari Nilai Kredit</option>\
                                           </select>\
                                         </div>\
                                          <p id="d_value_nilai"></p>\
@@ -764,8 +750,7 @@
 
                 $('#Debit-'+group_debit).append(form_debit);
                 urutan_d++;
-                alert(counter_debit);
-
+                // alert(counter_debit);
                 if (counter_debit > 1) {
                   $("#add_kredit-"+group_debit).hide();
                 }else{
@@ -794,8 +779,7 @@
                             if(response=="OK"){
                                 $("#debt-"+id_mst_transaksi_item).remove();
                                 counter_debit--;
-                                alert("ini counter_debit"+counter_debit);
-
+                                // alert("ini counter_debit"+counter_debit);
                                 if (counter_debit < 2) {
                                   $("#add_kredit-"+group_debit).show();
                                 }else{
@@ -952,7 +936,7 @@
                                                   }
                                                     $select = $a->id_mst_akun == $id_mst_akun ? 'selected' : '' ;
                                                 ?>\
-                                                <option value="<?php echo $a->id_mst_akun ?>"<?php echo $select ?>><?php echo $a->uraian ?></option>\
+                                                <option value="<?php echo $a->id_mst_akun ?>"><?php echo $a->uraian ?></option>\
                                               <?php endforeach ?>\
                                             </select>\
                                           </div>\
@@ -1049,7 +1033,7 @@
 
               $('#Kredit-'+group_kredit).append(form_kredit);
                urutan_k++;
-               alert("counter_kredit "+counter_kredit);
+               // alert("counter_kredit "+counter_kredit);
 
                if (counter_kredit > 1) {
                   $("#add_debit-"+group_kredit).hide();
@@ -1081,7 +1065,7 @@
                         if(response=="OK"){
                             $("#credit-"+id_mst_transaksi_item_kredit).remove();
                             counter_kredit--;
-                            alert("counter_kredit "+counter_kredit);
+                            // alert("counter_kredit "+counter_kredit);
                             if (counter_kredit < 2) {
                               $("#add_debit-"+group_kredit).show();
                             }else{
@@ -1270,9 +1254,10 @@
                                                                     }
                                                                       $select = $a->id_mst_akun == $id_mst_akun ? 'selected' : '' ;
                                                                   ?>
-                                                                  <option value="<?php echo $a->id_mst_akun ?>"<?php echo $select ?>><?php echo $a->uraian ?></option>\
+                                                                  <option value="<?php echo $a->id_mst_akun ?>"><?php echo $a->uraian ?></option>\
                                                                   <?php endforeach ?>\
                                                               </select>\
+                                                              <div id="demo"></div>\
                                                             </div>\
                                                             <div class="col-md-1">\
                                                               <div class="parentDiv">\
@@ -1313,19 +1298,7 @@
                                                             <div class="col-md-2" style="padding-top:5px;"><label> Nilai </label></div>\
                                                             <div class="col-md-7">\
                                                               <select  name="debit_cmbx_nilai" type="text" class="form-control">\
-                                                                <?php foreach($kategori as $k) : ?>\
-                                                                    <?php
-                                                                      if(set_value('id_mst_kategori_transaksi')=="" && isset($id_mst_kategori_transaksi)){
-                                                                        $id_mst_kategori_transaksi = $id_mst_kategori_transaksi;
-                                                                      }else{
-                                                                        $id_mst_kategori_transaksi = set_value('id_mst_kategori_transaksi');
-                                                                      }
-                                                                      $select = $k->id_mst_kategori_transaksi == $id_mst_kategori_transaksi ? 'selected' : '' ;
-                                                                    ?>
-                                                                    <option value="<?php echo $k->id_mst_kategori_transaksi ?>"\
-                                                                     <?php echo $select ?>><?php echo $k->nama ?>\
-                                                                    </option>\
-                                                                <?php endforeach ?>\
+                                                                <option value="Dari Nilai Kredit" echo "selected" ?> Dari Nilai Kredit</option>\
                                                               </select>\
                                                             </div>\
                                                           </div>\
@@ -1379,7 +1352,7 @@
                                                                   }
                                                                     $select = $a->id_mst_akun == $id_mst_akun ? 'selected' : '' ;
                                                                 ?>\
-                                                                <option value="<?php echo $a->id_mst_akun ?>"<?php echo $select ?>><?php echo $a->uraian ?></option>\
+                                                                <option value="<?php echo $a->id_mst_akun ?>"><?php echo $a->uraian ?></option>\
                                                                 <?php endforeach ?>\
                                                             </select>\
                                                           </div>\
@@ -1425,19 +1398,17 @@
                                                           <div class="row">\
                                                             <div class="col-md-2" style="padding-top:5px;"><label> Nilai </label> </div>\
                                                             <div class="col-md-7">\
-                                                              <select  name="kredit_cmbx_nilai" type="text" class="form-control">\
-                                                                <?php foreach($kategori as $k) : ?>\
+                                                              <select id="kredit_cmbx_nilai-'+a[2]+'" name="kredit_cmbx_nilai" type="text" class="form-control">\
+                                                                <?php foreach($nilai_debit[$row->group] as $nd) : ?>\
                                                                     <?php
-                                                                      if(set_value('id_mst_kategori_transaksi')=="" && isset($id_mst_kategori_transaksi)){
-                                                                        $id_mst_kategori_transaksi = $id_mst_kategori_transaksi;
+                                                                      if(set_value('id_mst_akun')=="" && isset($id_mst_akun)){
+                                                                        $id_mst_akun = $id_mst_akun;
                                                                       }else{
-                                                                        $id_mst_kategori_transaksi = set_value('id_mst_kategori_transaksi');
+                                                                        $id_mst_akun = set_value('id_mst_akun');
                                                                       }
-                                                                      $select = $k->id_mst_kategori_transaksi == $id_mst_kategori_transaksi ? 'selected' : '' ;
+                                                                      $select = $nd->id_mst_akun == $id_mst_akun ? 'selected' : '' ;
                                                                     ?>\
-                                                                    <option value="<?php echo $k->id_mst_kategori_transaksi ?>"\
-                                                                     <?php echo $select ?>><?php echo $k->nama ?>\
-                                                                    </option>\
+                                                                    <option value="<?php echo $nd->id_mst_akun ?>" <?php echo $select ?>><?php echo $nd->uraian ?></option>\
                                                                 <?php endforeach ?>\
                                                               </select>\
                                                             </div>\
@@ -1515,14 +1486,15 @@
          event.preventDefault();
       });
 
+
       $("select[name='debit_akun_jt']").change(function(){
           var id_mst_akun_debit = $(this).val();
+
           var id_trans_item_sementara = this.id;
           var fields = id_trans_item_sementara.split(/-/);
           var id_mst_transaksi_item_debit = fields[1];
 
           var data = new FormData();
-
           data.append('id_mst_akun', id_mst_akun_debit);
           data.append('id_mst_transaksi_item',id_mst_transaksi_item_debit );
 
@@ -1738,8 +1710,7 @@
                                             }
                                               $select = $a->id_mst_akun == $id_mst_akun ? 'selected' : '' ;
                                           ?>\
-                                          <option value="<?php echo $a->id_mst_akun ?>"\
-                                          <?php echo $select ?>><?php echo $a->uraian ?>\
+                                          <option value="<?php echo $a->id_mst_akun ?>"><?php echo $a->uraian ?>\
                                           </option>\
                                           <?php endforeach ?>\
                                       </select>\
@@ -1989,8 +1960,7 @@
                                                   }
                                                     $select = $a->id_mst_akun == $id_mst_akun ? 'selected' : '' ;
                                                 ?>\
-                                                <option value="<?php echo $a->id_mst_akun ?>"\
-                                                 <?php echo $select ?>><?php echo $a->uraian ?>\
+                                                <option value="<?php echo $a->id_mst_akun ?>"><?php echo $a->uraian ?>\
                                                  </option>\
                                                 <?php endforeach ?>\
                                             </select>\
