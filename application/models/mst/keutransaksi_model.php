@@ -225,12 +225,14 @@ class Keutransaksi_model extends CI_Model {
               '`group`'          => $this->input->post('group'),
               'id_mst_transaksi' => $id_mst_transaksi,
               'urutan'           => '1',
+              'id_mst_akun'      => '1',
               'type'             => 'debit'
            ),
            array(
               '`group`'          => $this->input->post('group'),
               'id_mst_transaksi' => $id_mst_transaksi,
               'urutan'           => '1',
+              'id_mst_akun'      => '1',
               'type'             => 'kredit'
            )
         );  
@@ -267,10 +269,10 @@ class Keutransaksi_model extends CI_Model {
 
     function jurnal_transaksi_update_debit($id=0){
        
-        $data['id_mst_transaksi']                      = $id;
-        $data_akun['id_mst_akun']                      = $this->input->post('id_mst_akun');
-        $data_auto['auto_fill']                        = $this->input->post('auto_fill');
-        $data_opsional['opsional']                     = $this->input->post('opsional');
+            $data['id_mst_transaksi']                      = $id;
+            $data_akun['id_mst_akun']                      = $this->input->post('id_mst_akun');
+            $data_auto['auto_fill']                        = $this->input->post('auto_fill');
+            $data_opsional['opsional']                     = $this->input->post('opsional');
 
         if ($data_akun['id_mst_akun'] > 0){
 
@@ -316,30 +318,15 @@ class Keutransaksi_model extends CI_Model {
 
     function jurnal_transaksi_update_kredit($id=0){
        
-        $data['id_mst_transaksi']                       = $id;
-        $data_opsional['opsional']                      = $this->input->post('opsional');
-        $data_akun['id_mst_akun']                       = $this->input->post('id_mst_akun');
-        $data_auto['auto_fill']                         = $this->input->post('auto_fill');
-        $data_value['value']                            = $this->input->post('value');
-        $data_item_from['id_mst_transaksi_item_from']   = $this->input->post('id_mst_transaksi_item_from');
-
+            $data['id_mst_transaksi']                       = $id;
+            $data_opsional['opsional']                      = $this->input->post('opsional');
+            $data_akun['id_mst_akun']                       = $this->input->post('id_mst_akun');
+            $data_auto['auto_fill']                         = $this->input->post('auto_fill');
+            $data_value['value']                            = $this->input->post('value');
 
         if( $data_akun['id_mst_akun']  > 0){
         
             $this->db->set('id_mst_akun', $data_akun['id_mst_akun']);  
-            $this->db->where('id_mst_transaksi_item',$this->input->post('id_mst_transaksi_item'));
-            $this->db->where('id_mst_transaksi',$id);
-            $this->db->where('type','kredit');
-
-            if($this->db->update('mst_keu_transaksi_item')){
-                return true;
-            }else{
-                return mysql_error();
-            }
-
-        }elseif ($data_item_from['id_mst_transaksi_item_from'] > 0) {
-
-            $this->db->set('id_mst_transaksi_item_from', $data_item_from['id_mst_transaksi_item_from']); 
             $this->db->where('id_mst_transaksi_item',$this->input->post('id_mst_transaksi_item'));
             $this->db->where('id_mst_transaksi',$id);
             $this->db->where('type','kredit');
