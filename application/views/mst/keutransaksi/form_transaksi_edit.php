@@ -764,7 +764,7 @@
 
                 $('#Debit-'+group_debit).append(form_debit);
                 urutan_d++;
-                // alert(counter_debit);
+                alert(counter_debit);
 
                 if (counter_debit > 1) {
                   $("#add_kredit-"+group_debit).hide();
@@ -794,7 +794,8 @@
                             if(response=="OK"){
                                 $("#debt-"+id_mst_transaksi_item).remove();
                                 counter_debit--;
-                                // alert("ini counter_debit"+counter_debit);
+                                alert("ini counter_debit"+counter_debit);
+
                                 if (counter_debit < 2) {
                                   $("#add_kredit-"+group_debit).show();
                                 }else{
@@ -1048,7 +1049,7 @@
 
               $('#Kredit-'+group_kredit).append(form_kredit);
                urutan_k++;
-               // alert("counter_kredit "+counter_kredit);
+               alert("counter_kredit "+counter_kredit);
 
                if (counter_kredit > 1) {
                   $("#add_debit-"+group_kredit).hide();
@@ -1080,7 +1081,7 @@
                         if(response=="OK"){
                             $("#credit-"+id_mst_transaksi_item_kredit).remove();
                             counter_kredit--;
-                            // alert("counter_kredit "+counter_kredit);
+                            alert("counter_kredit "+counter_kredit);
                             if (counter_kredit < 2) {
                               $("#add_debit-"+group_kredit).show();
                             }else{
