@@ -130,7 +130,7 @@
     var confirms = confirm("Hapus Data ?");
     if(confirms == true){
       $.post("<?php echo base_url().'mst/keuangan_transaksi/delete_transaksi' ?>/" + id,  function(){
-        alert('data berhasil dihapus');
+        alert('Data berhasil dihapus');
         $("#jqxgrid_transaksi").jqxGrid('updatebounddata', 'cells');
       });
     }

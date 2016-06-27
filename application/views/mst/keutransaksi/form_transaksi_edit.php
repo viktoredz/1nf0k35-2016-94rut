@@ -468,11 +468,13 @@
       var id_mst_transaksi_item = fields[1];
 
       var id_kredit_cmbx_sementara = $("[name='kredit_cmbx_nilai']").attr('id');
-      // var s = $("#kredit_cmbx_nilai").attr('id');
       var fields = id_kredit_cmbx_sementara.split(/-/);
       var id_kredit_cmbx = fields[1];
-      // alert(s);
-      alert($("[name='kredit_cmbx_nilai']").prop('id'));
+
+      
+      var xyz = $('[id^="kredit_cmbx_nilai"]').attr("id");
+      // var x = fields[0];
+      alert(xyz);
 
       $.ajax({
          type: 'POST',
@@ -483,9 +485,8 @@
             var debit_akun_val = $("#debit_akun-"+id_mst_transaksi_item+"").val();
             var debit_akun_select = $("#debit_akun-"+id_mst_transaksi_item+">option:selected").text();
             
-            // $("[name='kredit_cmbx_nilai']>option:first").val(debit_akun_val).text(debit_akun_select);
-            $("#kredit_cmbx_nilai-"+id_kredit_cmbx+">option:first").val(debit_akun_val).text(debit_akun_select);
-
+            $("[name='kredit_cmbx_nilai']>option:first").val(debit_akun_val).text(debit_akun_select);
+            // $("#kredit_cmbx_nilai-"+id_kredit_cmbx+">option:first").val(debit_akun_val).text(debit_akun_select);
 
           }else{
               // alert("Failed.");
@@ -762,6 +763,7 @@
                                   </div>';
 
                 $('#Debit-'+group_debit).append(form_debit);
+                // alert("sebelum urutan "+urutan_d);
                 urutan_d++;
                 counter_debit++;
                 // alert("sesudah"+counter_debit);
@@ -872,12 +874,10 @@
               if(response=="OK"){
                   $("#debt-"+data).remove();
                   counter_debit--;
-                  // alert("counter_debit "+counter_debit);
+                  urutan_d--;
                   if (counter_debit < 2) {
-                    // $("#add_kredit-"+group_debit).show();
                     $("[name='add_kredit']").show();
                   }else{
-                    // $("#add_kredit-"+group_debit).hide();
                     $("[name='add_kredit']").hide();
                   }
               }else{
@@ -900,14 +900,18 @@
          var group_kredit_sementara = this.id;
          var fields = group_kredit_sementara.split(/-/);
          var group_kredit = fields[1];
-         
+
+         // var debit_akun_val = $("[name='debit_akun']").val();
+         // alert (debit_akun_val);
+
 
             $('#biodata_notice-content').html('<div class="alert">Mohon tunggu, proses simpan data....</div>');
             $('#biodata_notice').show();
 
-        data.append('value',            $("[name='debit_value']").val());
-        data.append('urutan',           urutan_k);
-        data.append('group',            group_kredit);
+        data.append('value',                      $("[name='debit_value']").val());
+        data.append('urutan',                     urutan_k);
+        data.append('group',                      group_kredit);
+        data.append('id_mst_transaksi_item_from', $("[name='debit_akun']").val());
 
         $.ajax({
            cache : false,
@@ -976,7 +980,7 @@
                                                 if($auto_fill == 1) echo "checked";
                                               ?>>\
                                             </div>\
-                                            <div class="col-md-6" style="padding-top:5px;"><label> Isi Otomatis'+counter_kredit+' </label> </div>\
+                                            <div class="col-md-6" style="padding-top:5px;"><label> Isi Otomatis </label> </div>\
                                           </div>\
                                         </div>\
                                       </div>\
@@ -1172,6 +1176,7 @@
               if(response=="OK"){
                   $("#credit-"+data).remove();
                   counter_kredit--;
+                  urutan_k--;
                   if (counter_kredit < 2) {
                     $("[name='add_debit']").show();
                   }else{

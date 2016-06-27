@@ -631,6 +631,7 @@ class Keuangan_transaksi extends CI_Controller {
 	function jurnal_transaksi_add_kredit($id=0){
 		$this->authentication->verify('mst','add');
     	
+    	$this->form_validation->set_rules('id_mst_transaksi_item_from',' ID Mst Transaksi Item From','trim');
     	$this->form_validation->set_rules('value','Value','trim');
     	$this->form_validation->set_rules('group','Group','trim');
     	$this->form_validation->set_rules('urutan','Urutan','trim');
