@@ -945,6 +945,43 @@ class Drh_model extends CI_Model {
         }
     }
     
+    function insert_entry_pendidikan_formal($id)
+    {
+        $data['id_pegawai']                 = $id;
+        $data['id_mst_peg_jurusan']         = $this->input->post('id_jurusan');
+        $data['sekolah_nama']               = $this->input->post('sekolah_nama');
+        $data['ijazah_tgl']                 = date("Y-m-d",strtotime($this->input->post('ijazah_tgl')));
+        $data['sekolah_lokasi']             = $this->input->post('sekolah_lokasi');
+        $data['ijazah_no']                  = $this->input->post('ijazah_no');
+        $data['gelar_depan']                = $this->input->post('gelar_depan');
+        $data['gelar_belakang']             = $this->input->post('gelar_belakang');
+        $data['status_pendidikan_cpns']     = $this->input->post('status_pendidikan_cpns');
+
+       
+        if($this->db->insert('pegawai_pendidikan', $data)){
+            return true; 
+        }else{
+            return mysql_error();
+        }
+    }
+    function update_entry_pendidikan_formal($id=0,$id_mst_peg_jurusan=0)
+    {
+        $data['sekolah_nama']               = $this->input->post('sekolah_nama');
+        $data['ijazah_tgl']                 = date("Y-m-d",strtotime($this->input->post('ijazah_tgl')));
+        $data['sekolah_lokasi']             = $this->input->post('sekolah_lokasi');
+        $data['ijazah_no']                  = $this->input->post('ijazah_no');
+        $data['gelar_depan']                = $this->input->post('gelar_depan');
+        $data['gelar_belakang']             = $this->input->post('gelar_belakang');
+        $data['status_pendidikan_cpns']     = $this->input->post('status_pendidikan_cpns');
+
+       $this->db->where('id_pegawai',$id);
+       $this->db->where('id_mst_peg_jurusan',$id_mst_peg_jurusan);
+        if($this->db->update('pegawai_pendidikan', $data)){
+            return true; 
+        }else{
+            return mysql_error();
+        }
+    }
     function get_data_pendidikan_struktural($id,$start=0,$limit=999999,$options=array())
     {
         $this->db->select("pegawai_diklat.*,mst_peg_diklat.nama_diklat as jenis_diklat,mst_peg_diklat.jenis",false);

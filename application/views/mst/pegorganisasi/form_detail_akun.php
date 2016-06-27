@@ -117,7 +117,7 @@
       { name: 'edit', type: 'number'},
       { name: 'delete', type: 'number'}
         ],
-    url: "<?php echo site_url('mst/pegorganisasi/json_skp/{tar_id_struktur_org}'); ?>",
+    url: "<?php echo site_url('mst/pegorganisasi/json_skp/{tar_id_struktur_org}/{code_cl_phc}'); ?>",
     cache: false,
       updateRow: function (rowID, rowData, commit) {
              

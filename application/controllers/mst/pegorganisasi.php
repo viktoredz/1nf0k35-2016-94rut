@@ -300,7 +300,7 @@ class Pegorganisasi extends CI_Controller {
 		}
 		return $data;
 	}
-	function json_skp($id=""){
+	function json_skp($id="",$code_cl_phc=''){
 		$this->authentication->verify('kepegawaian','show');
 
 
@@ -328,6 +328,9 @@ class Pegorganisasi extends CI_Controller {
 			if(!empty($ord)) {
 				$this->db->order_by($ord, $this->input->post('sortorder'));
 			}
+		}
+		if ($code_cl_phc!='') {
+			$this->db->where('code_cl_phc',$code_cl_phc);
 		}
 		$rows = $this->pegorganisasi_model->get_data_skp($id,$this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();

@@ -99,7 +99,7 @@ class Struktur_model extends CI_Model {
         $this->db->where('mst_peg_struktur_org.code_cl_phc',$kodepuskesmas);
         $this->db->where('mst_peg_struktur_org.tar_aktif',1);
         $this->db->order_by('tar_id_struktur_org','asc');
-        $this->db->select('mst_peg_struktur_org.*,(select count(id_pegawai) from pegawai_struktur where tar_id_struktur_org = mst_peg_struktur_org.tar_id_struktur_org) as jml_anggota',false);
+        $this->db->select('mst_peg_struktur_org.*,(select count(id_pegawai) from pegawai_struktur where tar_id_struktur_org = mst_peg_struktur_org.tar_id_struktur_org and code_cl_phc = mst_peg_struktur_org.code_cl_phc) as jml_anggota',false);
         $query = $this->db->get('mst_peg_struktur_org');     
         return $query->result_array();  
     }
