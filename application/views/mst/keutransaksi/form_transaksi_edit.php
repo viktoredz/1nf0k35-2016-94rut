@@ -134,7 +134,7 @@
                             </div>
                           </div>
                           <div class="col-md-8" style="padding-top:5px;">
-                           <select id="debit_akun-<?php echo $row->id_mst_transaksi_item ?>" name="debit_akun"  type="text" class="form-control">
+                           <select id="debit_akun-<?php echo $row->id_mst_transaksi_item ?>" name="debit_akun" type="text" class="form-control">
                               <?php foreach($akun as $a) : ?>
                                 <?php
                                   if(set_value('id_mst_akun')=="" && isset($row->id_mst_akun)){
@@ -471,7 +471,12 @@
          data : 'id_mst_akun='+id_mst_akun_debit+'&id_mst_transaksi_item='+id_mst_transaksi_item,
          success: function (response) {
           if(response=="OK"){
-              // alert("Success.");
+
+            var debit_akun_val = $("#debit_akun-"+id_mst_transaksi_item+"").val();
+            var debit_akun_select = $("#debit_akun-"+id_mst_transaksi_item+">option:selected").text();
+
+            $( "[name='kredit_cmbx_nilai']>option:first").val(debit_akun_val).text(debit_akun_select);
+
           }else{
               // alert("Failed.");
           }
@@ -974,7 +979,7 @@
                                           <div class="row">\
                                             <div class="col-md-2" style="padding-top:5px;"><label> Nilai </label> </div>\
                                             <div class="col-md-7">\
-                                              <select id="kredit_cmbx_nilai-'+a[1]+'" name="kredit_cmbx_nilai" type="text" class="form-control">\
+                                              <select id="kredit_cmbx_nilai_append-'+a[1]+'" name="kredit_cmbx_nilai_append" type="text" class="form-control">\
                                                 <?php foreach($nilai_debit[$row->group] as $nd) : ?>\
                                                     <?php
                                                       if(set_value('id_mst_akun')=="" && isset($id_mst_akun)){
@@ -1378,7 +1383,7 @@
                                                           <div class="row">\
                                                             <div class="col-md-2" style="padding-top:5px;"><label> Nilai </label> </div>\
                                                             <div class="col-md-7">\
-                                                              <select id="kredit_cmbx_nilai-'+a[2]+'" name="kredit_cmbx_nilai" type="text" class="form-control">\
+                                                              <select id="kredit_cmbx_nilai_jt-'+a[2]+'" name="kredit_cmbx_nilai_jt" type="text" class="form-control">\
                                                                 <?php foreach($nilai_debit[$row->group] as $nd) : ?>\
                                                                     <?php
                                                                       if(set_value('id_mst_akun')=="" && isset($id_mst_akun)){
@@ -1986,7 +1991,7 @@
                                           <div class="row">\
                                             <div class="col-md-2" style="padding-top:5px;"><label> Nilai </label> </div>\
                                             <div class="col-md-7">\
-                                              <select  name="kredit_cmbx_nilai" type="text" class="form-control">\
+                                              <select  name="kredit_cmbx_nilai_jt_append" type="text" class="form-control">\
                                                 <?php foreach($kategori as $k) : ?>\
                                                     <?php
                                                       if(set_value('id_mst_kategori_transaksi')=="" && isset($id_mst_kategori_transaksi)){
