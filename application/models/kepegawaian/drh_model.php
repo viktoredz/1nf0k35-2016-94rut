@@ -320,11 +320,68 @@ class Drh_model extends CI_Model {
 
         return $this->db->delete('pegawai_penghargaan');
     }
+
+    function getusernamedelete($id){
+        $this->db->where('id_pegawai',$id);
+        $query = $this->db->get('app_users_list');
+        if ($query->num_rows() > 0) {
+            $data = $query->row_array();
+        }else{
+            $data = 0;
+        }
+        $query->free_result();
+        return $data;
+    }
+    function deleteall($id){
+        $this->db->where('id_pegawai',$id);
+        $this->db->delete('pegawai_diklat');
+
+        $this->db->where('id_pegawai',$id);
+        $this->db->delete('pegawai_dp3');
+
+        $this->db->where('id_pegawai',$id);
+        $this->db->delete('pegawai_jabatan');
+
+        $this->db->where('id_pegawai',$id);
+        $this->db->delete('pegawai_keluarga');
+
+        $this->db->where('id_pegawai',$id);
+        $this->db->delete('pegawai_pangkat');
+
+        $this->db->where('id_pegawai',$id);
+        $this->db->delete('pegawai_penghargaan');
+
+        $this->db->where('id_pegawai',$id);
+        $this->db->delete('pegawai_skp');
+
+        $this->db->where('id_pegawai',$id);
+        $this->db->delete('pegawai_skp_nilai');
+
+        $this->db->where('id_pegawai',$id);
+        $this->db->delete('pegawai_struktur');
+
+        $this->db->where('id_pegawai',$id);
+        $this->db->delete('pegawai_pendidikan');
+
+        $this->db->where('id_pegawai',$id);
+        return $this->db->delete($this->tabel);
+    }
 	function delete_entry($id)
 	{
-		$this->db->where('id_pegawai',$id);
+        $username = $this->getusernamedelete($id);
 
-		return $this->db->delete($this->tabel);
+        if ($username !=0) {
+            $this->db->where('code',$username['code']);
+            $this->db->where('username',$username['username']);
+            $this->db->delete('app_users_profile');
+
+            $this->db->where('id_pegawai',$id);
+            $this->db->delete('app_users_list');
+            $this->deleteall($id);
+        }else{
+            $this->deleteall($id);    
+        }
+        
 	}
 
     function delete_entry_ortu($id,$urut)
@@ -780,6 +837,7 @@ class Drh_model extends CI_Model {
     }
     function get_data_pendidikan_formal($id,$start=0,$limit=999999,$options=array())
     {
+        $this->db->where('id_pegawai',$id);
         $this->db->select("pegawai_pendidikan.*,IF(pegawai_pendidikan.status_pendidikan_cpns=1,'Ya','Tidak') as cpns,mst_peg_jurusan.nama_jurusan,mst_peg_tingkatpendidikan.deskripsi",false);
         $this->db->order_by('ijazah_tgl','asc');
         $this->db->join('mst_peg_jurusan','mst_peg_jurusan.id_jurusan=pegawai_pendidikan.id_mst_peg_jurusan');
