@@ -32,7 +32,7 @@
         <div class="box-footer">
           <button type="button" id="btn-kembali" class="btn btn-primary pull-right"><i class='fa  fa-arrow-circle-o-left'></i> &nbsp;Kembali</button>
           <button type="button" name="btn_transaksi_save" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Simpan</button>
-          <button type="button" name="btn-reset" value="Reset" onclick='clearForm(this.form)' class="btn btn-success" ><i class='fa fa-refresh'></i> &nbsp; Reset</button>
+          <button type="button" name="btn-reset" value="Reset" class="btn btn-success" ><i class='fa fa-refresh'></i> &nbsp; Reset</button>
         </div>
         <div class="box-body">
 
@@ -459,23 +459,28 @@
       });
   });
 
+  $('#kredit_id_').val();
+
   $("select[name='debit_akun']").change(function(){
       var id_mst_akun_debit = $(this).val();
       var id_trans_item_sementara = this.id;
       var fields = id_trans_item_sementara.split(/-/);
       var id_mst_transaksi_item = fields[1];
 
+      var id_kredit_cmbx_sementara = $("*[name='kredit_cmbx_nilai']").attr('id');
+      var fields = id_kredit_cmbx_sementara.split(/-/);
+      var id_kredit_cmbx = fields[1];
+
       $.ajax({
          type: 'POST',
          url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_edit_debit/{id}" ?>',
-         data : 'id_mst_akun='+id_mst_akun_debit+'&id_mst_transaksi_item='+id_mst_transaksi_item,
+         data : 'id_mst_akun='+id_mst_akun_debit+'&id_mst_transaksi_item='+id_mst_transaksi_item+'&id_mst_transaksi_item_from='+id_mst_akun_debit+'&id_mst_transaksi_item_kredit='+id_kredit_cmbx,
          success: function (response) {
           if(response=="OK"){
-
             var debit_akun_val = $("#debit_akun-"+id_mst_transaksi_item+"").val();
             var debit_akun_select = $("#debit_akun-"+id_mst_transaksi_item+">option:selected").text();
-
-            $( "[name='kredit_cmbx_nilai']>option:first").val(debit_akun_val).text(debit_akun_select);
+            
+            $("[name='kredit_cmbx_nilai']>option:first").val(debit_akun_val).text(debit_akun_select);
 
           }else{
               // alert("Failed.");
@@ -2257,43 +2262,6 @@
         });
         return false;
     });
-
-    function clearForm(form_transaksi) {
-   
-    var elements = form_transaksi.elements;
-    form_transaksi.reset();
-
-    for(i=0; i<elements.length; i++) {
-     
-      field_type = elements[i].type.toLowerCase();
- 
-      switch(field_type) {
-     
-        case "text":
-        case "password":
-        case "textarea":
-        case "hidden":  
-         
-          elements[i].value = "";
-          break;
-           
-        case "radio":
-        case "checkbox":
-          if (elements[i].checked) {
-                elements[i].checked = false;
-          }
-          break;
-
-        case "select-one":
-        case "select-multi":
-                    elements[i].selectedIndex = -1;
-          break;
-
-        default:
-          break;
-      }
-    }
-}
 
 </script>
 

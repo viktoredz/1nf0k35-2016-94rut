@@ -273,19 +273,35 @@ class Keutransaksi_model extends CI_Model {
             $data_akun['id_mst_akun']                      = $this->input->post('id_mst_akun');
             $data_auto['auto_fill']                        = $this->input->post('auto_fill');
             $data_opsional['opsional']                     = $this->input->post('opsional');
+            $data_item_from['id_mst_transaksi_item_from']  = $this->input->post('id_mst_transaksi_item_from');
+
 
         if ($data_akun['id_mst_akun'] > 0){
 
-            $this->db->set('id_mst_akun', $data_akun['id_mst_akun']); 
-            $this->db->set('id_mst_transaksi_item_from', '0');     
-            $this->db->where('id_mst_transaksi_item',$this->input->post('id_mst_transaksi_item'));
-            $this->db->where('id_mst_transaksi',$id);
-            $this->db->where('type','debit');
+            foreach ($data as $id=>$value){
 
-            if($this->db->update('mst_keu_transaksi_item')){
-                return true;
+                $up_data = array(
+                        array(
+                            'id_mst_transaksi_item'=>$this->input->post('id_mst_transaksi_item'),
+                            'id_mst_akun'=>$data_akun['id_mst_akun'],
+                            'id_mst_transaksi_item_from' => '0'
+                        ),
+                        array(
+                            'id_mst_transaksi_item'=>$this->input->post('id_mst_transaksi_item_kredit'),
+                            'id_mst_transaksi_item_from'=>$data_item_from['id_mst_transaksi_item_from']
+                        )
+                    );
+            }
+
+            if (count($up_data) == 0)
+                return FALSE;
+
+            $this->db->update_batch('mst_keu_transaksi_item', $up_data, 'id_mst_transaksi_item');
+ 
+            if ($this->db->affected_rows() > 0){
+                return TRUE;
             }else{
-                return mysql_error();
+                return FALSE;
             }
 
         }elseif ($data_opsional['opsional'] > -1) {
@@ -396,12 +412,14 @@ class Keutransaksi_model extends CI_Model {
                   'id_mst_transaksi' => $lastInsertedID,
                   'urutan'           => 1,
                   '`group`'          => 1,
+                  'id_mst_akun'      => 1,
                   'type'             => 'debit'
                ),
                array(
                   'id_mst_transaksi' => $lastInsertedID,
                   'urutan'           => 1,
                   '`group`'          => 1,
+                  'id_mst_akun'      => 1,
                   'type'             => 'kredit'
                )
             ); 

@@ -600,6 +600,7 @@ class Keuangan_transaksi extends CI_Controller {
 		$this->authentication->verify('mst','edit');
 
     	$this->form_validation->set_rules('id_mst_transaksi_item_from','Transaksi Item From','trim');
+    	$this->form_validation->set_rules('id_mst_transaksi_item_kredit','Transaksi Item Kredit','trim');
     	$this->form_validation->set_rules('id_mst_transaksi_item','Transaksi Item','trim');
     	$this->form_validation->set_rules('id_mst_transaksi','Transaksi','trim');
         $this->form_validation->set_rules('auto_fill','Isi Otomatis','trim');
