@@ -176,6 +176,15 @@
                       <i class="icon fa fa-list-alt" style="font-size: 18px"></i>
                   </div>
                   <div style="margin-left: 8px; vertical-align: middle; text-align: center; float: left;">
+                      Gaji</div>
+              </div>
+            </li>            
+            <li style="margin-left: 15px;">
+              <div style="height: 20px; margin-top: 5px;">
+                  <div style="float: left;">
+                      <i class="icon fa fa-list-alt" style="font-size: 18px"></i>
+                  </div>
+                  <div style="margin-left: 8px; vertical-align: middle; text-align: center; float: left;">
                       Status</div>
               </div>
             </li>
@@ -188,6 +197,7 @@
         <div id="content6" style="background: #FAFAFA"></div>
         <div id="content7" style="background: #FAFAFA"></div>
         <div id="content8" style="background: #FAFAFA"></div>
+        <div id="content9" style="background: #FAFAFA"></div>
     </div>
 </div>
 
