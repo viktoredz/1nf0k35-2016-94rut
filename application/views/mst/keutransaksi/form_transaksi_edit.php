@@ -164,7 +164,7 @@
                       <div class="col-md-7">
                         <div class="row">
                           <div class="col-md-1">
-                            <input type="checkbox" id="debit_isi_otomatis-<?php echo $row->id_mst_transaksi_item ?>" name="debit_isi_otomatis-<?php echo $row->group ?>" onclick="debit_isi_otomatis(<?php echo $row->id_mst_transaksi_item ?><?php echo '8899' ?><?php echo $row->group ?>)" value="1" <?php 
+                            <input type="checkbox" id="debit_isi_otomatis-<?php echo $row->id_mst_transaksi_item ?>" name="debit_isi_otomatis-<?php echo $row->group ?>" onclick="debit_isi_otomatis(<?php echo $row->id_mst_transaksi_item ?><?php echo '8899' ?><?php echo $row->group ?>)" checked="" value="1" <?php 
                               if(!empty($row->auto_fill)){
                                echo "checked";
                               }
@@ -360,13 +360,12 @@
       var id  = arr[0];
       var group  = arr[1];
 
-      var debit_akun_val = $("#debit_akun-"+id+"").val();
+      var debit_akun_val    = $("#debit_akun-"+id+"").val();
       var debit_akun_select = $("#debit_akun-"+id+">option:selected").text();
 
       var id_kredit_sementara = $("[name='kredit_cmbx_nilai-"+group+"']").attr("id");
       var fields = id_kredit_sementara.split(/-/);
       var id_kredit_cmbx = fields[1];
-      // alert(xyz);
 
       $.ajax({
          type: 'POST',
@@ -374,16 +373,13 @@
          data : 'id_mst_akun='+debit_akun_val+'&id_mst_transaksi_item='+id+'&id_mst_transaksi_item_from='+debit_akun_val+'&id_mst_transaksi_item_kredit='+id_kredit_cmbx,
          success: function (response) {
           if(response=="OK"){
-
             $("[name='kredit_cmbx_nilai-"+group+"']>option:first").val(debit_akun_val).text(debit_akun_select);
             // $("#kredit_cmbx_nilai-"+id_kredit_cmbx+">option:first").val(debit_akun_val).text(debit_akun_select);
-
           }else{
               // alert("Failed.");
           }
          }
       });
-
     }
 
     $('#btn-kembali').click(function(){
@@ -533,11 +529,13 @@
             data : data,
             success : function(response){
               if(response=="OK"){
-                  if ($("[name='debit_isi_otomatis-"+group+"']").attr("checked","checked")==true){ 
-                      //do something
-                  }else{
-                      $("[name='kredit_cmbx_nilai-"+group+"']").html(data);
-                  };
+                if($("[name='debit_isi_otomatis-"+group+"']:checked").val()>0){
+                    $("#debit_isi_otomatis").prop("checked", true);
+                    $("[name='kredit_cmbx_nilai-"+group+"']").prop("disabled",false);
+                }else{
+                    $("#debit_isi_otomatis").prop("checked", false);
+                    $("[name='kredit_cmbx_nilai-"+group+"']").prop("disabled",true);
+                };
               }else{
                   $("#debit_isi_otomatis").prop("checked", false);
                   alert("unchecked");
