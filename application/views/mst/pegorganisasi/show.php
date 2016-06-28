@@ -184,7 +184,7 @@
                 id: 'tar_id_struktur_org',
 
                 url: '<?php echo base_url()?>mst/pegorganisasi/api_data',
-
+                
                  addRow: function (rowID, rowData, position, parentID, commit) {        
                     commit(true);
                     newRowID = rowID;
@@ -417,18 +417,20 @@
                 { text: 'Nama Posisi ', datafield: 'tar_nama_posisi', columntype: 'textbox', filtertype: 'textbox',align: 'center', width: '70%' },
                 { text: 'Aktif', datafield: 'tar_aktif', columntype: 'textbox', filtertype: 'textbox', align: 'center',  width: '15%', cellsalign: 'center' },
                 {text: 'Detail', sortable: false, align:'center', width: '15%',editable: false, filterable: false, cellsrenderer: function (row, column, value) {
-                  if(row){
-                    return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_view.gif' onclick='detail(" + row + ");'></a></div>";
-                  }
+                    if (row) {
+                   var dataRecord = $("#treeGrid").jqxTreeGrid('getRow', row);
+                    return "<div style='width:100%;padding-top:2px;text-align:center'><a href='javascript:void(0);'><img border=0 src='<?php echo base_url(); ?>media/images/16_view.gif' onclick='detail(\""+dataRecord.tar_id_struktur_org+"\",\""+dataRecord.code_cl_phc+"\");'></a></div>";
+                    }
                   },
                 }
               ]
             });
         });
 
-    function detail(id){
+    function detail(id,code_cl_phc){
+        var code_cl_phc = code_cl_phc.split(" ");
         $("#popup_keuangan_akun_detail #popup_keuangan_akun_detail_content").html("<div style='text-align:center'><br><br><br><br><img src='<?php echo base_url();?>media/images/indicator.gif' alt='loading content.. '><br>loading</div>");
-          $.get("<?php echo base_url().'mst/pegorganisasi/induk_detail' ?>/"+ id, function(data) {
+          $.get("<?php echo base_url().'mst/pegorganisasi/induk_detail' ?>/"+ id+'/'+code_cl_phc[1], function(data) {
             $("#popup_keuangan_akun_detail_content").html(data);
           });
           $("#popup_keuangan_akun_detail").jqxWindow({
