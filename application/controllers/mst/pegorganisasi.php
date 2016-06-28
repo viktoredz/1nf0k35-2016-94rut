@@ -136,8 +136,8 @@ class Pegorganisasi extends CI_Controller {
 
 	
 
-	function induk_detail($id=0){
-			$data 						= $this->pegorganisasi_model->get_data_akun_detail($id);
+	function induk_detail($id=0,$code_cl_phc=0){
+			$data 						= $this->pegorganisasi_model->get_data_akun_detail($id,$code_cl_phc);
 			$data['notice']				= validation_errors();
 			$data['action']				= "edit";
 			$data['id']					= $id;

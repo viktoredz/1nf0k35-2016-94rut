@@ -1,0 +1,333 @@
+<?php
+class Bukupenjagaan extends CI_Controller {
+
+    public function __construct(){
+		parent::__construct();
+		$this->load->add_package_path(APPPATH.'third_party/tbs_plugin_opentbs_1.8.0/');
+		require_once(APPPATH.'third_party/tbs_plugin_opentbs_1.8.0/demo/tbs_class.php');
+		require_once(APPPATH.'third_party/tbs_plugin_opentbs_1.8.0/tbs_plugin_opentbs.php');
+
+		$this->load->model('kepegawaian/bukupenjagaan_model');
+		$this->load->model('inventory/inv_barang_model');
+		$this->load->model('mst/puskesmas_model');
+		$this->load->model('inventory/inv_ruangan_model');
+		$this->load->model('mst/invbarang_model');
+	}
+
+	function index(){
+		$this->authentication->verify('kepegawaian','edit');
+		$data['title_group'] = "Bahan Habis Pakai";
+		$data['title_form'] = "Permintaan / Permohonan";
+
+		$kodepuskesmas = $this->session->userdata('puskesmas');
+		$this->db->where('code','P'.$kodepuskesmas);
+
+		$data['datapuskesmas'] 	= $this->inv_ruangan_model->get_data_puskesmas();
+		$data['content'] = $this->parser->parse("kepegawaian/bukupenjagaan/show",$data,true);
+		$this->template->show($data,"home");
+	}
+	function tmtteakhir(){
+		$kodepus = 'P'.$this->session->userdata('puskesmas');
+		$this->db->where('code_cl_phc',$kodepus);
+		$this->db->select('max(tmt)');
+		$query = $this->db->get('xpegawai_pangkat');
+		if ($query->num_rows() > 0) {
+			$data = $query->row_array();
+		}else{
+			$data = 0;
+		}
+		return $data;
+	}
+	function tabbuku($pageIndex){
+		$data = array();
+		switch ($pageIndex) {
+			case 1:
+				$tmt = $this->tmtteakhir();
+				$data['tmtteakhir'] = $tmt['tm'];
+				die($this->parser->parse("kepegawaian/bukupenjagaan/show_kenaikanpangkat",$data));
+
+				break;
+			case 2:
+				die($this->parser->parse("kepegawaian/bukupenjagaan/show_pensiun",$data));
+
+				break;
+			case 3:
+				die($this->parser->parse("kepegawaian/bukupenjagaan/show_gaji",$data));
+
+				break;
+			default:
+
+				die($this->parser->parse("kepegawaian/bukupenjagaan/show_kenaikanpangkat",$data));
+				break;
+		}
+
+	}
+	function json(){
+		$this->authentication->verify('kepegawaian','show');
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl_lahir') {
+					$value = date("Y-m-d",strtotime($value));
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		if ($this->session->userdata('puskesmas')!='') {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
+		$rows_all = $this->bukupenjagaan_model->get_data();
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl_lahir') {
+					$value = date("Y-m-d",strtotime($value));
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		if ($this->session->userdata('puskesmas')!='') {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
+		$rows = $this->bukupenjagaan_model->get_data($this->input->post('recordstartindex'), $this->input->post('pagesize'));
+		$data = array();
+		$no=$this->input->post('pagesize')+1;
+		foreach($rows as $act) {
+			$data[] = array(
+				'no' 							=> $no++,
+				'id_pegawai' 					=> $act->id_pegawai,
+				'code_cl_phc' 					=> $act->code_cl_phc,
+				'nik' 							=> $act->nik,
+				'nama'							=> $act->gelar_depan.' '.$act->nama.' '.$act->gelar_belakang,
+				'tgl_lhr'						=> $act->tgl_lhr,
+				'tmp_lahir'						=> $act->tmp_lahir,
+				'nip_nit'						=> $act->nip_nit,
+				'tmt'							=> $act->tmt,
+				'id_mst_peg_golruang'			=> $act->id_mst_peg_golruang,
+				'ruang'							=> $act->ruang,
+				'detail'						=> 1,
+				'edit'							=> 1,
+			);
+		}
+
+
+		
+		$size = sizeof($rows_all);
+		$json = array(
+			'TotalRows' => (int) $size,
+			'Rows' => $data
+		);
+
+		echo json_encode(array($json));
+	}
+
+	public function barang($id = 0){
+		$this->authentication->verify('kepegawaian','show');
+
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'harga' ) {
+					$this->db->where('inv_inventaris_habispakai_permintaan_item.harga',$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		$this->db->where('inv_inventaris_habispakai_permintaan_item.id_inv_hasbispakai_permintaan',$id);
+		$rows_all_activity = $this->bukupenjagaan_model->getItem();
+
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'harga' ) {
+					$this->db->where('inv_inventaris_habispakai_permintaan_item.harga',$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+
+		$this->db->where('inv_inventaris_habispakai_permintaan_item.id_inv_hasbispakai_permintaan',$id);
+		$activity = $this->bukupenjagaan_model->getItem($this->input->post('recordstartindex'), $this->input->post('pagesize'));
+		$data = array();
+
+		$kodepuskesmas = $this->session->userdata('puskesmas');
+		if(substr($kodepuskesmas, -2)=="01"){
+			$unlock = 1;
+		}else{
+			$unlock = 0;
+		}
+		
+		foreach($activity as $act) {
+			$data[] = array(
+				'id_inv_hasbispakai_permintaan'   		=> $act->id_inv_hasbispakai_permintaan,
+				'id_mst_inv_barang_habispakai'   		=> $act->id_mst_inv_barang_habispakai,
+				'uraian'								=> $act->uraian,
+				'jml'									=> $act->jml,
+				'harga'									=> number_format($act->harga,2),
+				'subtotal'								=> number_format($act->jml*$act->harga,2),
+				'tgl_permintaan'							=> $act->tgl_permintaan,
+				'status_permintaan'							=> $act->status_permintaan,
+				'pilihan_satuan'							=> $act->pilihan_satuan,
+			);
+		}
+
+
+		
+		$size = sizeof($rows_all_activity);
+		$json = array(
+			'TotalRows' => (int) $size,
+			'Rows' => $data
+		);
+
+		echo json_encode(array($json));
+	}
+
+	function permintaan_export()
+	{
+		$TBS = new clsTinyButStrong;		
+		$TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN);
+		$this->authentication->verify('kepegawaian','show');
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl_permintaan') {
+					$value = date("Y-m-d",strtotime($value));
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		if ($this->session->userdata('puskesmas')!='') {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
+		$rows_all = $this->bukupenjagaan_model->get_data();
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl_permintaan') {
+					$value = date("Y-m-d",strtotime($value));
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		if ($this->session->userdata('puskesmas')!='') {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
+		$rows = $this->bukupenjagaan_model->get_data();
+		$data_tabel = array();
+		$no=1;
+		foreach($rows as $act) {
+			$data_tabel[] = array(
+				'no' 							=> $no++,
+				'id_inv_hasbispakai_permintaan' => $act->id_inv_hasbispakai_permintaan,
+				'code_cl_phc' 					=> $act->code_cl_phc,
+				'tgl_permintaan' 				=> date("d-m-Y",strtotime($act->tgl_permintaan)),
+				'jumlah_unit'					=> $act->jumlah_unit,
+				'status_permintaan'				=> ucwords($act->status_permintaan),
+				'uraian'						=> $act->uraian,
+				'nilai_pembelian'				=> $act->nilai_pembelian,
+				'jumlah_unit'					=> $act->jumlah_unit,
+				'nilai_pembelian'				=> number_format($act->nilai_pembelian),
+				'value'							=> $act->value,
+				'keterangan'					=> $act->keterangan,
+				'detail'						=> 1,
+				'edit'							=> 1,
+				'delete'						=> ($act->status_permintaan=='diterima') ? 0 : 1
+			);
+		}
+		$kode_sess=$this->session->userdata('puskesmas');
+		$kd_prov = $this->inv_barang_model->get_nama('value','cl_province','code',substr($kode_sess, 0,2));
+		$kd_kab  = $this->inv_barang_model->get_nama('value','cl_district','code',substr($kode_sess, 0,4));
+		$kd_kec  = 'KEC. '.$this->inv_barang_model->get_nama('nama','cl_kec','code',substr($kode_sess, 0,7));
+		$namapus  = $this->inv_barang_model->get_nama('value','cl_phc','code','P'.$kode_sess);
+		$tahun  = date("Y");
+
+		$data_puskesmas[] = array('nama_puskesmas' => $namapus,'kd_prov' => $kd_prov,'kd_kab' => $kd_kab,'tahun' => $tahun);
+		$dir = getcwd().'/';
+		$template = $dir.'public/files/template/kepegawaian/bukupenjagaan.xlsx';		
+		
+		$TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8);
+
+		// Merge data in the first sheet
+		$TBS->MergeBlock('a', $data_tabel);
+		$TBS->MergeBlock('b', $data_puskesmas);
+		
+		$code = uniqid();
+		$output_file_name = 'public/files/hasil/hasil_export_bukupenjagaan'.$code.'.xlsx';
+		$output = $dir.$output_file_name;
+		$TBS->Show(OPENTBS_FILE, $output); // Also merges all [onshow] automatic fields.
+		
+		echo base_url().$output_file_name ;
+
+	}
+	
+}

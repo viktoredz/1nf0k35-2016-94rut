@@ -105,9 +105,10 @@ class Pegorganisasi_model extends CI_Model {
         return $query->result();  
     }
 
-   function get_data_akun_detail($id){
+   function get_data_akun_detail($id,$code_cl_phc){
         $data = array();
         $this->db->where("tar_id_struktur_org",$id);
+        $this->db->where("code_cl_phc",$code_cl_phc);
         $query = $this->db->get('mst_peg_struktur_org');
         if($query->num_rows()>0){
             $data = $query->row_array();

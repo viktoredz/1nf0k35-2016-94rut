@@ -55,10 +55,18 @@
               <label>Jenis</label>
               <select type="text" class="form-control" name="jenis">
                 <option value="">--</option>
-                <option value="diklat">Diklat</option>
-                <option value="kursus">Kursus</option>
-                <option value="dikjang">Dikjang</option>
-                <option value="prajabatan">Prajabatan</option>
+                <?php  
+                  if(set_value('jenis')=="" && isset($jenis)){
+                    $select = $jenis;
+                  }else{
+                    $select = set_value('jenis');
+                  }
+                    $array = array_values($tipe);
+                    foreach ($array as $v1) {
+                      echo "<option value=".$v1." ".(($select == $v1) ? 'selected':'')." >" .$v1."</option>";
+                    }
+                  ?>
+                
               </select>
             </div>
 

@@ -91,7 +91,7 @@ class Kursusdiklat extends CI_Controller {
 				$data['title_form']	 ="Tambah Kursus/Diklat Pegawai";
 				$data['action']		 ="add";
 				$data['kode']		 ="";
-
+				$data['tipe'] 		= $this->kursusdiklat_model->pilihan_enums('mst_peg_diklat','jenis');
 			
 				$data['content'] = $this->parser->parse("mst/kursusdiklat/form",$data,true);
 				$this->template->show($data,"home");
@@ -121,6 +121,7 @@ class Kursusdiklat extends CI_Controller {
 			$data['title_form']	 = "Ubah Kursus/Diklat Pegawai";
 			$data['action']		 = "edit";
 			$data['id']			 = $id;
+			$data['tipe'] 		= $this->kursusdiklat_model->pilihan_enums('mst_peg_diklat','jenis');
 
 			$data['content'] = $this->parser->parse("mst/kursusdiklat/form",$data,true);
 			$this->template->show($data,"home");
