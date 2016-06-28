@@ -36,7 +36,12 @@
 </div>
 </form>
 </section>
-
+<style type="text/css">
+    .redClass
+    {
+        background-color: #FF9595;
+    }
+</style>
 <script type="text/javascript">
 	$(function () {	
 	    $("#menu_kepegawaian").addClass("active");
@@ -73,6 +78,7 @@
 		sort: function(){
 			$("#jqxgridPangkat").jqxGrid('updatebounddata', 'sort');
 		},
+
 		root: 'Rows',
         pagesize: 10,
         beforeprocessing: function(data){		
@@ -80,7 +86,16 @@
 				source.totalrecords = data[0].TotalRows;					
 			}
 		}
-		};		
+		};	
+		var cellclass = function (row, column, value, data) {
+			if (data.tmt != null) {
+				var th = data.tmtdata.split('-');
+				var thsk = "<?php echo date('Y');?>";
+	            if (parseInt(th[0])+4 <= thsk ) {
+	                return "redClass";
+	            }
+			}
+        };		
 		var dataadapter = new $.jqx.dataAdapter(source, {
 			loadError: function(xhr, status, error){
 				alert(error);
@@ -111,17 +126,17 @@
 				// 	}
     //              }
     //             },
-    			{ text: 'No', editable:false ,align: 'center', cellsalign: 'center', datafield: 'no', columntype: 'textbox', filtertype: 'none', width: '5%' },
-    			{ text: 'Nip', editable:false ,align: 'center', cellsalign: 'left', datafield: 'nip_nit', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
-    			{ text: 'Nama', editable:false ,align: 'center', cellsalign: 'left', datafield:'nama', columntype: 'textbox', filtertype: 'textbox', width: '20%' },
-				{ text: 'Tempat Lahir', editable:false ,align: 'center', cellsalign: 'left', datafield: 'tmp_lahir', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
-				{ text: 'Tgl. Lahir',editable:false , align: 'center', cellsalign: 'center', datafield: 'tgl_lhr', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '8%' },
-				{ text: 'TMT',editable:false , align: 'center', cellsalign: 'center', datafield: 'tmt', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '8%' },
+    			{ text: 'No', editable:false ,align: 'center', cellsalign: 'center', datafield: 'no', columntype: 'textbox', filtertype: 'none', width: '5%',sortable: false,cellclassname: cellclass },
+    			{ text: 'Nip', editable:false ,align: 'center', cellsalign: 'left', datafield: 'nip_nit', columntype: 'textbox', filtertype: 'textbox', width: '15%',cellclassname: cellclass },
+    			{ text: 'Nama', editable:false ,align: 'center', cellsalign: 'left', datafield:'nama', columntype: 'textbox', filtertype: 'textbox', width: '20%',cellclassname: cellclass },
+				{ text: 'Tempat Lahir', editable:false ,align: 'center', cellsalign: 'left', datafield: 'tmp_lahir', columntype: 'textbox', filtertype: 'textbox', width: '10%',cellclassname: cellclass },
+				{ text: 'Tgl. Lahir',editable:false , align: 'center', cellsalign: 'center', datafield: 'tgl_lhr', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '8%',cellclassname: cellclass },
+				{ text: 'TMT',editable:false , align: 'center', cellsalign: 'center', datafield: 'tmt', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '8%',cellclassname: cellclass },
 				<?php 
 					$tmtakhir = explode("-", date("Y-m-d"));
 					for($i=$tmtakhir[0]; $i<=$tmtakhir[0]+5;$i++){
 				?>
-				{ text: 'April',columngroup: '<?php echo $i; ?>', editable:false ,sortable: false,align: 'center', cellsalign: 'left',  columntype: 'textbox', filtertype: 'none', width: '5%',cellsrenderer: function (row) {
+				{ text: 'Apr',cellclassname: cellclass,columngroup: '<?php echo $i; ?>', editable:false ,sortable: false,align: 'center', cellsalign: 'left',  columntype: 'textbox', filtertype: 'none', width: '4%',cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgridPangkat").jqxGrid('getrowdata', row);
 				    	if (dataRecord.tmtdata !=null) {
 					    	var tmtakhir = dataRecord.tmtdata.split('-');
@@ -131,7 +146,7 @@
 						}
 					}
 				},
-				{ text: 'Oktober',columngroup: '<?php echo $i; ?>',sortable: false, editable:false ,align: 'center', cellsalign: 'left',  columntype: 'textbox', filtertype: 'none', width: '6%' ,  columntype: 'textbox', filtertype: 'none', width: '5%',cellsrenderer: function (row) {
+				{ text: 'Okt',cellclassname: cellclass,columngroup: '<?php echo $i; ?>',sortable: false, editable:false ,align: 'center', cellsalign: 'left',  columntype: 'textbox', filtertype: 'none', width: '4%' ,  columntype: 'textbox', filtertype: 'none', width: '5%',cellsrenderer: function (row) {
 				    var dataRecord = $("#jqxgridPangkat").jqxGrid('getrowdata', row);
 				    	if (dataRecord.tmtdata !=null) {
 					    	var tmtakhir = dataRecord.tmtdata.split('-');
@@ -147,7 +162,7 @@
 			columngroups: 
 	        [
 	        	<?php 
-					$tmtakhirdata = explode("-", $tmtteakhir);
+					$tmtakhirdata = explode("-", date("Y-m-d"));
 					for($i=$tmtakhirdata[0]; $i<=$tmtakhirdata[0]+5;$i++){
 				?>
 	          	{ text: '<?php echo $i; ?>',align: 'center', name: '<?php echo $i; ?>' },
