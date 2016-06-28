@@ -9,9 +9,9 @@
 		    </div> -->
 	      	<div class="box-footer">
 		      <div class="col-md-8">
-			 	<button type="button" class="btn btn-primary" onclick="document.location.href='<?php echo base_url()?>kepegawaian/bukupenjagaan/add'"><i class='fa fa-plus-square-o'></i> &nbsp; Permintaan / Permohonan Baru</button>
+			 	<!-- <button type="button" class="btn btn-primary" onclick="document.location.href='<?php echo base_url()?>kepegawaian/bukupenjagaan/add'"><i class='fa fa-plus-square-o'></i> &nbsp; Permintaan / Permohonan Baru</button>
 			 	<button type="button" class="btn btn-success" id="btn-refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
-	          <button type="button" id="btn-export" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Export</button>
+	          <button type="button" id="btn-export" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Export</button> -->
 		     </div>
 		      <div class="col-md-4">
 		     	<div class="row">
@@ -42,7 +42,9 @@
 	    $("#menu_kepegawaian").addClass("active");
 	    $("#menu_kepegawaian_bukupenjagaan").addClass("active");
 	});
-	   var source = {
+	var tmtteakhir = "<?php echo $tmtteakhir; ?>";
+	var splittmtterakhir = tmtteakhir.split('-');
+	var source = {
 			datatype: "json",
 			type	: "POST",
 			datafields: [
@@ -55,6 +57,7 @@
 			{ name: 'tmp_lahir', type: 'string'},
 			{ name: 'nip_nit', type: 'string'},
 			{ name: 'tmt', type: 'date'},
+			{ name: 'tmtdata', type: 'string'},
 			{ name: 'id_mst_peg_golruang', type: 'string'},
 			{ name: 'ruang', type: 'string'},
 			{ name: 'detail', type: 'number'}
@@ -113,9 +116,43 @@
     			{ text: 'Nama', editable:false ,align: 'center', cellsalign: 'left', datafield:'nama', columntype: 'textbox', filtertype: 'textbox', width: '20%' },
 				{ text: 'Tempat Lahir', editable:false ,align: 'center', cellsalign: 'left', datafield: 'tmp_lahir', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
 				{ text: 'Tgl. Lahir',editable:false , align: 'center', cellsalign: 'center', datafield: 'tgl_lhr', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '8%' },
-				{ text: 'TMT',editable:false , align: 'center', cellsalign: 'center', datafield: 'tmt', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '8%' }
+				{ text: 'TMT',editable:false , align: 'center', cellsalign: 'center', datafield: 'tmt', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '8%' },
+				<?php 
+					$tmtakhir = explode("-", date("Y-m-d"));
+					for($i=$tmtakhir[0]; $i<=$tmtakhir[0]+5;$i++){
+				?>
+				{ text: 'April',columngroup: '<?php echo $i; ?>', editable:false ,sortable: false,align: 'center', cellsalign: 'left',  columntype: 'textbox', filtertype: 'none', width: '5%',cellsrenderer: function (row) {
+				    var dataRecord = $("#jqxgridPangkat").jqxGrid('getrowdata', row);
+				    	if (dataRecord.tmtdata !=null) {
+					    	var tmtakhir = dataRecord.tmtdata.split('-');
+					    	if (parseInt(tmtakhir[0])+4 == <?php echo $i;?>  && parseInt(tmtakhir[1]) =='4') {
+							return "<div style='width:100%;padding-top:4px;text-align:center'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span></div>";
+							}
+						}
+					}
+				},
+				{ text: 'Oktober',columngroup: '<?php echo $i; ?>',sortable: false, editable:false ,align: 'center', cellsalign: 'left',  columntype: 'textbox', filtertype: 'none', width: '6%' ,  columntype: 'textbox', filtertype: 'none', width: '5%',cellsrenderer: function (row) {
+				    var dataRecord = $("#jqxgridPangkat").jqxGrid('getrowdata', row);
+				    	if (dataRecord.tmtdata !=null) {
+					    	var tmtakhir = dataRecord.tmtdata.split('-');
+					    	if (parseInt(tmtakhir[0])+4 == <?php echo $i;?> && parseInt(tmtakhir[1]) =='9' ) {
+							return "<div style='width:100%;padding-top:4px;text-align:center'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span></div>";
+							}
+						}
+					}
+				},
+				<?php } ?>
 				
-            ]
+            ],
+			columngroups: 
+	        [
+	        	<?php 
+					$tmtakhirdata = explode("-", $tmtteakhir);
+					for($i=$tmtakhirdata[0]; $i<=$tmtakhirdata[0]+5;$i++){
+				?>
+	          	{ text: '<?php echo $i; ?>',align: 'center', name: '<?php echo $i; ?>' },
+	          	<?php } ?>
+	        ]
 		});
 
 	function detail(id){

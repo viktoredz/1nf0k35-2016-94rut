@@ -3,15 +3,15 @@
 <form action="<?php echo base_url()?>kepegawaian/bukupenjagaan/dodel_multi" method="POST" name="">
   <div class="row">
     <div class="col-md-12">
-      <div class="box box-primary"><!-- 
-	        <div class="box-header">
+      <div class="box box-primary">
+	        <!-- <div class="box-header">
 	          <h3 class="box-title">{title_form}</h3>
 		    </div> -->
 	      	<div class="box-footer">
 		      <div class="col-md-8">
-			 	<button type="button" class="btn btn-primary" onclick="document.location.href='<?php echo base_url()?>kepegawaian/bukupenjagaan/add'"><i class='fa fa-plus-square-o'></i> &nbsp; Permintaan / Permohonan Baru</button>
+			 	<!-- <button type="button" class="btn btn-primary" onclick="document.location.href='<?php echo base_url()?>kepegawaian/bukupenjagaan/add'"><i class='fa fa-plus-square-o'></i> &nbsp; Permintaan / Permohonan Baru</button>
 			 	<button type="button" class="btn btn-success" id="btn-refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
-	          <button type="button" id="btn-export" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Export</button>
+	          <button type="button" id="btn-export" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Export</button> -->
 		     </div>
 		      <div class="col-md-4">
 		     	<div class="row">
@@ -42,24 +42,27 @@
 	    $("#menu_kepegawaian").addClass("active");
 	    $("#menu_kepegawaian_bukupenjagaan").addClass("active");
 	});
-	   var source = {
+	var source = {
 			datatype: "json",
 			type	: "POST",
 			datafields: [
-			{ name: 'id_inv_hasbispakai_permintaan', type: 'string'},
-			{ name: 'tgl_permintaan', type: 'date'},
-			{ name: 'uraian', type: 'string'},
-			{ name: 'no', type: 'string'},
+			{ name: 'id_pegawai', type: 'string'},
+			{ name: 'tgl_lhr', type: 'date'},
 			{ name: 'code_cl_phc', type: 'string'},
-			{ name: 'pilihan_status_pembelian', type: 'string'},
-			{ name: 'status_permintaan', type: 'string'},
-			{ name: 'jumlah_unit', type: 'double'},
-			{ name: 'total_harga', type: 'double'},
-			{ name: 'nilai_pembelian', type: 'double'},
-			{ name: 'keterangan', type: 'text'},
-			{ name: 'detail', type: 'number'},
-			{ name: 'edit', type: 'number'},
-			{ name: 'delete', type: 'number'}
+			{ name: 'no', type: 'string'},
+			{ name: 'nik', type: 'string'},
+			{ name: 'nama', type: 'string'},
+			{ name: 'tmp_lahir', type: 'string'},
+			{ name: 'nip_nit', type: 'string'},
+			{ name: 'tahunpensiun', type: 'string'},
+			{ name: 'bulanpensiun', type: 'string'},
+			{ name: 'nip_nit', type: 'string'},
+			{ name: 'tmt', type: 'date'},
+			{ name: 'tmtdata', type: 'string'},
+			{ name: 'keterangan', type: 'string'},
+			{ name: 'id_mst_peg_golruang', type: 'string'},
+			{ name: 'ruang', type: 'string'},
+			{ name: 'detail', type: 'number'}
         ],
 		url: "<?php echo site_url('kepegawaian/bukupenjagaan/json'); ?>",
 		cache: false,
@@ -111,13 +114,21 @@
     //              }
     //             },
     			{ text: 'No', editable:false ,align: 'center', cellsalign: 'center', datafield: 'no', columntype: 'textbox', filtertype: 'none', width: '5%' },
-				{ text: 'Tgl. Permintaan',editable:false , align: 'center', cellsalign: 'center', datafield: 'tgl_permintaan', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '11%' },
-				{ text: 'Status Permintaan', editable:false ,align: 'center', cellsalign: 'center', datafield: 'status_permintaan', columntype: 'textbox', filtertype: 'textbox', width: '12%' },
-				{ text: 'Kategori Barang', editable:false ,align: 'center', cellsalign: 'center', datafield:'uraian', columntype: 'textbox', filtertype: 'textbox', width: '14%' },
-				{ text: 'Jumlah Unit', editable:false ,align: 'center', cellsalign: 'right', datafield: 'jumlah_unit', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
-				{ text: 'Total Harga (Rp.)', editable:false ,align: 'center', cellsalign: 'right', datafield: 'nilai_pembelian', columntype: 'textbox', filtertype: 'textbox', width: '15%' },
-				{ text: 'Keterangan', editable:false ,datafield: 'keterangan', columntype: 'textbox', filtertype: 'textbox', width: '25%' }
-            ]
+    			{ text: 'Nip', editable:false ,align: 'center', cellsalign: 'left', datafield: 'nip_nit', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
+    			{ text: 'Nama', editable:false ,align: 'center', cellsalign: 'left', datafield:'nama', columntype: 'textbox', filtertype: 'textbox', width: '20%' },
+				{ text: 'Tempat Lahir', editable:false ,align: 'center', cellsalign: 'left', datafield: 'tmp_lahir', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
+				{ text: 'Tgl. Lahir',editable:false , align: 'center', cellsalign: 'center', datafield: 'tgl_lhr', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '8%' },
+				{ text: 'TMT',editable:false , align: 'center', cellsalign: 'center', datafield: 'tmt', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '8%' },
+				{ text: 'Bulan', editable:false ,align: 'center', cellsalign: 'center', datafield: 'bulanpensiun', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
+				{ text: 'Tahun', editable:false ,align: 'center', cellsalign: 'center', datafield: 'tahunpensiun', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
+				{ text: 'Keterangan', editable:false ,align: 'center', cellsalign: 'left', datafield: 'keterangan', columntype: 'textbox', filtertype: 'textbox', width: '19%' },
+				
+            ],
+			columngroups: 
+	        [
+	          	{ text: 'Bulan',align: 'center', name: 'bulan' },
+	          	{ text: 'Tahun',align: 'center', name: 'tahun' },
+	        ]
 		});
 
 	function detail(id){

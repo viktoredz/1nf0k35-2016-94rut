@@ -14,7 +14,7 @@ class Bukupenjagaan_model extends CI_Model {
     function get_data($start=0,$limit=999999,$options=array())
     {
         $this->db->order_by('nama','asc');
-        $this->db->select("pegawai.*,pangkat.nip_nit,pangkat.tmt,pangkat.id_mst_peg_golruang,pangkat.masa_krj_bln,pangkat.masa_krj_thn,mst_peg_golruang.ruang");
+        $this->db->select("pegawai.*,pangkat.nip_nit,pangkat.tmt,pangkat.id_mst_peg_golruang,pangkat.masa_krj_bln,pangkat.masa_krj_thn,mst_peg_golruang.ruang, '' as keterangan");
         $this->db->join("(SELECT  id_pegawai, nip_nit, tmt,id_mst_peg_golruang, masa_krj_bln, masa_krj_thn, CONCAT(tmt, id_pegawai) AS pangkatterakhir FROM
         pegawai_pangkat WHERE CONCAT(tmt, id_pegawai) IN (SELECT  CONCAT(MAX(tmt), id_pegawai) FROM pegawai_pangkat GROUP BY id_pegawai)) pangkat",'pangkat.id_pegawai = pegawai.id_pegawai','left');
         $this->db->join("mst_peg_golruang",'mst_peg_golruang.id_golongan = pangkat.id_mst_peg_golruang','left');

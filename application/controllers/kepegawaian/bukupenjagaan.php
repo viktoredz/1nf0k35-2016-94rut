@@ -16,21 +16,16 @@ class Bukupenjagaan extends CI_Controller {
 
 	function index(){
 		$this->authentication->verify('kepegawaian','edit');
-		$data['title_group'] = "Bahan Habis Pakai";
-		$data['title_form'] = "Permintaan / Permohonan";
-
-		$kodepuskesmas = $this->session->userdata('puskesmas');
-		$this->db->where('code','P'.$kodepuskesmas);
-
-		$data['datapuskesmas'] 	= $this->inv_ruangan_model->get_data_puskesmas();
+		$data['title_group'] = "Kepegawaian";
+		$data['title_form'] = "Buku Penjagaan";
 		$data['content'] = $this->parser->parse("kepegawaian/bukupenjagaan/show",$data,true);
 		$this->template->show($data,"home");
 	}
 	function tmtteakhir(){
 		$kodepus = 'P'.$this->session->userdata('puskesmas');
 		$this->db->where('code_cl_phc',$kodepus);
-		$this->db->select('max(tmt)');
-		$query = $this->db->get('xpegawai_pangkat');
+		$this->db->select('max(tmt) as maxtmt');
+		$query = $this->db->get('pegawai_pangkat');
 		if ($query->num_rows() > 0) {
 			$data = $query->row_array();
 		}else{
@@ -40,10 +35,17 @@ class Bukupenjagaan extends CI_Controller {
 	}
 	function tabbuku($pageIndex){
 		$data = array();
+		$this->authentication->verify('kepegawaian','edit');
+		$data['title_group'] = "Kepegawaian";
+		$data['title_form'] = "Buku Penjagaan";
+		$kodepuskesmas = $this->session->userdata('puskesmas');
+		$this->db->where('code','P'.$kodepuskesmas);
+
+		$data['datapuskesmas'] 	= $this->inv_ruangan_model->get_data_puskesmas();
 		switch ($pageIndex) {
 			case 1:
 				$tmt = $this->tmtteakhir();
-				$data['tmtteakhir'] = $tmt['tm'];
+				$data['tmtteakhir'] = $tmt['maxtmt'];
 				die($this->parser->parse("kepegawaian/bukupenjagaan/show_kenaikanpangkat",$data));
 
 				break;
@@ -113,9 +115,11 @@ class Bukupenjagaan extends CI_Controller {
 		if ($this->session->userdata('puskesmas')!='') {
 			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
 		}
+			
 		$rows = $this->bukupenjagaan_model->get_data($this->input->post('recordstartindex'), $this->input->post('pagesize'));
 		$data = array();
-		$no=$this->input->post('pagesize')+1;
+		
+		$no=$this->input->post('recordstartindex')+1;
 		foreach($rows as $act) {
 			$data[] = array(
 				'no' 							=> $no++,
@@ -127,14 +131,16 @@ class Bukupenjagaan extends CI_Controller {
 				'tmp_lahir'						=> $act->tmp_lahir,
 				'nip_nit'						=> $act->nip_nit,
 				'tmt'							=> $act->tmt,
+				'tmtdata'						=> $act->tmt,
+				'bulanpensiun'					=> $this->bulan(date("n",strtotime($act->tgl_lhr))),
+				'tahunpensiun'					=> date("Y",strtotime($act->tgl_lhr))+55,
 				'id_mst_peg_golruang'			=> $act->id_mst_peg_golruang,
 				'ruang'							=> $act->ruang,
+				'keterangan'					=> $act->keterangan,
 				'detail'						=> 1,
 				'edit'							=> 1,
 			);
 		}
-
-
 		
 		$size = sizeof($rows_all);
 		$json = array(
@@ -144,7 +150,36 @@ class Bukupenjagaan extends CI_Controller {
 
 		echo json_encode(array($json));
 	}
-
+	function bulan($bulan)
+	{
+		Switch ($bulan){
+		    case 1 : $bulan="Januari";
+		        Break;
+		    case 2 : $bulan="Februari";
+		        Break;
+		    case 3 : $bulan="Maret";
+		        Break;
+		    case 4 : $bulan="April";
+		        Break;
+		    case 5 : $bulan="Mei";
+		        Break;
+		    case 6 : $bulan="Juni";
+		        Break;
+		    case 7 : $bulan="Juli";
+		        Break;
+		    case 8 : $bulan="Agustus";
+		        Break;
+		    case 9 : $bulan="September";
+		        Break;
+		    case 10 : $bulan="Oktober";
+		        Break;
+		    case 11 : $bulan="November";
+		        Break;
+		    case 12 : $bulan="Desember";
+		        Break;
+		    }
+		return $bulan;
+	}
 	public function barang($id = 0){
 		$this->authentication->verify('kepegawaian','show');
 
