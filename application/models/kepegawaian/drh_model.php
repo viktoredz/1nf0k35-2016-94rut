@@ -418,6 +418,60 @@ class Drh_model extends CI_Model {
         $query = $this->db->get('pegawai_keluarga',$limit,$start);
         return $query->result();
     }
+
+    function get_data_gaji_edit($id,$tmt){
+        $data = array();
+
+        $this->db->select("*");
+        $this->db->where("id_pegawai",$id);
+        $this->db->where("tmt",$tmt);
+        $query = $this->db->get("pegawai_gaji");
+        if($query->num_rows()>0){
+            $data = $query->row_array();
+        }
+
+        $query->free_result();
+        return $data;
+    }
+
+    function get_data_gaji($id=0,$start=0,$limit=999999,$options=array())
+    {
+        $this->db->select("*,mst_peg_golruang.id_golongan,mst_peg_golruang.ruang",false);
+        $this->db->where('pegawai_gaji.id_pegawai',$id);
+        $this->db->order_by('tmt','desc');
+        $this->db->join('mst_peg_golruang','mst_peg_golruang.id=pegawai_gaji.id_mst_peg_golruang');
+        $query = $this->db->get('pegawai_gaji',$limit,$start);
+        return $query->result();
+    }
+
+    function update_entry_gaji($id,$tmt){
+        $data['surat_nomor']            = $this->input->post('surat_nomor');
+        $data['id_mst_peg_golruang']    = $this->input->post('id_mst_peg_golruang');
+        $data['gaji_lama']              = $this->input->post('gaji_lama');
+        $data['gaji_lama_pp']           = $this->input->post('gaji_lama_pp');
+        $data['gaji_baru']              = $this->input->post('gaji_baru');
+        $data['gaji_baru_pp']              = $this->input->post('gaji_baru_pp');
+        $data['sk_tgl']                 = date("Y-m-d",strtotime($this->input->post('sk_tgl')));
+        $data['sk_nomor']               = $this->input->post('sk_nomor');
+        $data['sk_pejabat']             = $this->input->post('sk_pejabat');
+        $data['masa_krj_bln']           = $this->input->post('masa_krj_bln');
+        $data['masa_krj_thn']           = $this->input->post('masa_krj_thn');
+        $this->db->where('id_pegawai',$id);
+        $this->db->where('tmt',$tmt);
+        if($this->db->update('pegawai_gaji', $data)){
+            return true; 
+        }else{
+            return mysql_error();
+        }
+    }
+    function delete_entry_gaji($id,$tmt)
+    {
+        $this->db->where('id_pegawai',$id);
+        $this->db->where('tmt',$tmt);
+
+        return $this->db->delete('pegawai_gaji');
+    }
+
     function get_data_pengahargaan($id=0,$start=0,$limit=999999,$options=array())
     {
         $this->db->select("*,mst_peg_penghargaan.nama_penghargaan",false);
@@ -610,6 +664,34 @@ class Drh_model extends CI_Model {
             return mysql_error();
         }
     }
+    function insert_entry_gaji($id){
+        $data['id_pegawai']             = $id;
+        $data['tmt']                    = date("Y-m-d",strtotime($this->input->post('tmt')));
+        $data['surat_nomor']            = $this->input->post('surat_nomor');
+        $data['id_mst_peg_golruang']    = $this->input->post('id_mst_peg_golruang');
+        $data['gaji_lama']              = $this->input->post('gaji_lama');
+        $data['gaji_lama_pp']           = $this->input->post('gaji_lama_pp');
+        $data['gaji_baru']              = $this->input->post('gaji_baru');
+        $data['gaji_baru_pp']              = $this->input->post('gaji_baru_pp');
+        $data['sk_tgl']                 = date("Y-m-d",strtotime($this->input->post('sk_tgl')));
+        $data['sk_nomor']               = $this->input->post('sk_nomor');
+        $data['sk_pejabat']             = $this->input->post('sk_pejabat');
+        $data['masa_krj_bln']           = $this->input->post('masa_krj_bln');
+        $data['masa_krj_thn']           = $this->input->post('masa_krj_thn');
+        $this->db->where('id_pegawai',$id);
+        $this->db->where('tmt',date("Y-m-d",strtotime($this->input->post('tmt'))));
+        $query = $this->db->get('pegawai_gaji');
+        if ($query->num_rows() > 0) {
+            return 'false';
+        }else{
+            if($this->db->insert('pegawai_gaji', $data)){
+                return 'true'; 
+            }else{
+                return mysql_error();
+            }    
+        }
+    }
+
     function insert_entry_anak($id)
     {
         $data['id_pegawai']                   = $id;
