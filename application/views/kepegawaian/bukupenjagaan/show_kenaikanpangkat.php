@@ -150,7 +150,7 @@
 				    var dataRecord = $("#jqxgridPangkat").jqxGrid('getrowdata', row);
 				    	if (dataRecord.tmtdata !=null) {
 					    	var tmtakhir = dataRecord.tmtdata.split('-');
-					    	if (parseInt(tmtakhir[0])+4 == <?php echo $i;?> && parseInt(tmtakhir[1]) =='9' ) {
+					    	if (parseInt(tmtakhir[0])+4 == <?php echo $i;?> && parseInt(tmtakhir[1]) =='10' ) {
 							return "<div style='width:100%;padding-top:4px;text-align:center'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span></div>";
 							}
 						}
