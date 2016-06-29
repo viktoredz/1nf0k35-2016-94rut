@@ -214,6 +214,7 @@ class Keutransaksi_model extends CI_Model {
               'id_mst_transaksi' => $id_mst_transaksi,
               'urutan'           => '1',
               'id_mst_akun'      => '1',
+              'value'            => '0',
               'type'             => 'debit'
            ),
            array(
@@ -221,6 +222,7 @@ class Keutransaksi_model extends CI_Model {
               'id_mst_transaksi' => $id_mst_transaksi,
               'urutan'           => '1',
               'id_mst_akun'      => '1',
+              'value'            => '100',
               'type'             => 'kredit'
            )
         );  
@@ -229,7 +231,9 @@ class Keutransaksi_model extends CI_Model {
              $first_id = $this->db->insert_id();
              $count = count($data);
              $last_id = $first_id + ($count-1);
-            return $first_id."|".$last_id;
+             $group = $this->input->post('group');
+             $value_k = 100;
+            return $first_id."|".$last_id."|".$group."|".$value_k;
         }else{
             return mysql_error();
         }
