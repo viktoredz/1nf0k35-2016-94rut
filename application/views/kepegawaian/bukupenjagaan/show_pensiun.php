@@ -114,14 +114,14 @@
     //              }
     //             },
     			{ text: 'No', editable:false ,align: 'center', cellsalign: 'center', datafield: 'no', columntype: 'textbox', filtertype: 'none', width: '5%', sortable: false},
-    			{ text: 'Nip', editable:false ,align: 'center', cellsalign: 'left', datafield: 'nip_nit', columntype: 'textbox', filtertype: 'textbox', width: '15%' },
-    			{ text: 'Nama', editable:false ,align: 'center', cellsalign: 'left', datafield:'nama', columntype: 'textbox', filtertype: 'textbox', width: '20%' },
-				{ text: 'Tempat Lahir', editable:false ,align: 'center', cellsalign: 'left', datafield: 'tmp_lahir', columntype: 'textbox', filtertype: 'textbox', width: '10%' },
-				{ text: 'Tgl. Lahir',editable:false , align: 'center', cellsalign: 'center', datafield: 'tgl_lhr', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '8%' },
-				{ text: 'TMT',editable:false , align: 'center', cellsalign: 'center', datafield: 'tmt', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '8%' },
+    			{ text: 'Nip', editable:false ,align: 'center', cellsalign: 'left', datafield: 'nip_nit', columntype: 'textbox', filtertype: 'textbox', width: '20%' },
+    			{ text: 'Nama', editable:false ,align: 'center', cellsalign: 'left', datafield:'nama', columntype: 'textbox', filtertype: 'textbox', width: '25%' },
+				{ text: 'Tempat Lahir', editable:false ,align: 'center', cellsalign: 'left', datafield: 'tmp_lahir', columntype: 'textbox', filtertype: 'textbox', width: '12%' },
+				{ text: 'Tgl. Lahir',editable:false , align: 'center', cellsalign: 'center', datafield: 'tgl_lhr', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '9%' },
+				{ text: 'TMT',editable:false , align: 'center', cellsalign: 'center', datafield: 'tmt', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '9%' },
 				{ text: 'Bulan', editable:false ,align: 'center', cellsalign: 'center', datafield: 'bulanpensiun', columntype: 'textbox', filtertype: 'none',sortable: false, width: '10%' },
 				{ text: 'Tahun', editable:false ,align: 'center', cellsalign: 'center', datafield: 'tahunpensiun', columntype: 'textbox', filtertype: 'none',sortable: false, width: '10%' },
-				{ text: 'Keterangan', editable:false ,align: 'center', cellsalign: 'left', datafield: 'keterangan', columntype: 'textbox', filtertype: 'textbox', width: '19%' },
+				
 				
             ],
 			columngroups: 

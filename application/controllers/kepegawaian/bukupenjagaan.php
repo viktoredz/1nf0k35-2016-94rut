@@ -64,6 +64,93 @@ class Bukupenjagaan extends CI_Controller {
 		}
 
 	}
+	function json_gaji(){
+		$this->authentication->verify('kepegawaian','show');
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl_lahir') {
+					$value = date("Y-m-d",strtotime($value));
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		if ($this->session->userdata('puskesmas')!='') {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
+		$rows_all = $this->bukupenjagaan_model->get_datagaji();
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tgl_lahir') {
+					$value = date("Y-m-d",strtotime($value));
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		if ($this->session->userdata('puskesmas')!='') {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
+			
+		$rows = $this->bukupenjagaan_model->get_datagaji($this->input->post('recordstartindex'), $this->input->post('pagesize'));
+		$data = array();
+		
+		$no=$this->input->post('recordstartindex')+1;
+		foreach($rows as $act) {
+			$data[] = array(
+				'no' 							=> $no++,
+				'id_pegawai' 					=> $act->id_pegawai,
+				'code_cl_phc' 					=> $act->code_cl_phc,
+				'nik' 							=> $act->nik,
+				'nama'							=> $act->gelar_depan.' '.$act->nama.' '.$act->gelar_belakang,
+				'tgl_lhr'						=> $act->tgl_lhr,
+				'tmp_lahir'						=> $act->tmp_lahir,
+				'nip_nit'						=> $act->nip_nit,
+				'tmt'							=> $act->tmt,
+				'gaji_baru'						=> number_format($act->gaji_baru,2),
+				'tmtdata'						=> $act->tmt,
+				'bulanpensiun'					=> $this->bulan(date("n",strtotime($act->tgl_lhr))),
+				'tahunpensiun'					=> date("Y",strtotime($act->tgl_lhr))+55,
+				'id_golongan'					=> $act->id_golongan,
+				'ruang'							=> $act->id_golongan.' - '.$act->ruang,
+				'keterangan'					=> $act->keterangan,
+				'detail'						=> 1,
+				'edit'							=> 1,
+			);
+		}
+		
+		$size = sizeof($rows_all);
+		$json = array(
+			'TotalRows' => (int) $size,
+			'Rows' => $data
+		);
+
+		echo json_encode(array($json));
+	}
 	function json(){
 		$this->authentication->verify('kepegawaian','show');
 
@@ -135,7 +222,7 @@ class Bukupenjagaan extends CI_Controller {
 				'bulanpensiun'					=> $this->bulan(date("n",strtotime($act->tgl_lhr))),
 				'tahunpensiun'					=> date("Y",strtotime($act->tgl_lhr))+55,
 				'id_mst_peg_golruang'			=> $act->id_mst_peg_golruang,
-				'ruang'							=> $act->ruang,
+				'ruang'							=> $act->id_mst_peg_golruang.' - '.$act->ruang,
 				'keterangan'					=> $act->keterangan,
 				'detail'						=> 1,
 				'edit'							=> 1,

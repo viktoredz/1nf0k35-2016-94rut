@@ -128,9 +128,9 @@
     //             },
     			{ text: 'No', editable:false ,align: 'center', cellsalign: 'center', datafield: 'no', columntype: 'textbox', filtertype: 'none', width: '5%',sortable: false,cellclassname: cellclass },
     			{ text: 'Nip', editable:false ,align: 'center', cellsalign: 'left', datafield: 'nip_nit', columntype: 'textbox', filtertype: 'textbox', width: '15%',cellclassname: cellclass },
-    			{ text: 'Nama', editable:false ,align: 'center', cellsalign: 'left', datafield:'nama', columntype: 'textbox', filtertype: 'textbox', width: '20%',cellclassname: cellclass },
-				{ text: 'Tempat Lahir', editable:false ,align: 'center', cellsalign: 'left', datafield: 'tmp_lahir', columntype: 'textbox', filtertype: 'textbox', width: '10%',cellclassname: cellclass },
-				{ text: 'Tgl. Lahir',editable:false , align: 'center', cellsalign: 'center', datafield: 'tgl_lhr', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '8%',cellclassname: cellclass },
+    			{ text: 'Nama', editable:false ,align: 'center', cellsalign: 'left', datafield:'nama', columntype: 'textbox', filtertype: 'textbox', width: '18%',cellclassname: cellclass },
+				{ text: 'Pangkat', editable:false ,align: 'center', cellsalign: 'left', datafield: 'ruang', columntype: 'textbox', filtertype: 'textbox', width: '17%',cellclassname: cellclass },
+				// { text: 'Tgl. Lahir',editable:false , align: 'center', cellsalign: 'center', datafield: 'tgl_lhr', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '8%',cellclassname: cellclass },
 				{ text: 'TMT',editable:false , align: 'center', cellsalign: 'center', datafield: 'tmt', columntype: 'date', filtertype: 'date', cellsformat: 'dd-MM-yyyy', width: '8%',cellclassname: cellclass },
 				<?php 
 					$tmtakhir = explode("-", date("Y-m-d"));
