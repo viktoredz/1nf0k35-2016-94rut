@@ -747,9 +747,6 @@ class Keuangan_transaksi extends CI_Controller {
 			$data['action']				= "edit";
 			$data['template']			= $this->keutransaksi_model->get_data_template_trans($id);
 			$data['kategori']			= $this->keutransaksi_model->get_data_kategori_transaksi();
-			$data['row_kredit']			= $this->keutransaksi_model->get_data_row_kredit($id);
-			$data['num_of_kredit'] 		= count($data['row_kredit']);
-			// $data['row_debit']			= $this->keutransaksi_model->get_data_row_debit($id);
 			$data['title_form']			= "Transaksi Baru / Ubah Transaksi";
 			$data['title_group'] 		= "Keuangan";
 			$data['nilai_debit']		= $this->keutransaksi_model->get_data_nilai_debit($id);

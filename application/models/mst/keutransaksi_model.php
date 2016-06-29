@@ -198,32 +198,6 @@ class Keutransaksi_model extends CI_Model {
         return $query->result();
     }
 
-
-    // function get_data_row_kredit($id_mst_transaksi=0){
-    //     $this->db->select('`group`');
-    //     $this->db->where('id_mst_transaksi',$id_mst_transaksi);
-    //     $this->db->where('type','kredit');
-    //     $query = $this->db->get('mst_keu_transaksi_item');
-    //     return $query->result();
-    // }
-
-
-    function get_data_row_kredit($id_mst_transaksi=0){
-        $data = array();
-        $this->db->select('`group`');
-        $this->db->where('id_mst_transaksi',$id_mst_transaksi);
-        $this->db->where('type','kredit');
-        $query = $this->db->get('mst_keu_transaksi_item');
-
-        if ($query->num_rows()>0) {
-            foreach ($query->result() as $row) {
-               $data[$row->group][] = $row;
-            }
-            return $data;
-        }
-        $query->free_result();
-    }
-
     function get_data_group($id_mst_transaksi=0,$start=0,$limit=1,$options=array()){
         $this->db->select('max(`group`) as `group`');
         $this->db->where('id_mst_transaksi',$id_mst_transaksi);

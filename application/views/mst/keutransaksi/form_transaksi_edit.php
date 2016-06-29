@@ -120,7 +120,13 @@
                   <div class="row">
                     <div class="col-md-7" style="padding-top:5px;"><label> Debit</label> </div>
                     <div class="col-md-1">
-                      <a class="glyphicon glyphicon-plus" id="add_debit-<?php echo $jt->group?>" name="add_debit"></a>
+                      <?php
+                        // print_r(count($kredit[$jt->group]));
+                        if(count($kredit[$jt->group]) > "1"){?>
+                            <a style="height: 0px;width: 0px;overflow:hidden;" class="glyphicon glyphicon-plus" id="add_debit-<?php echo $jt->group?>" name="add_debit"></a>
+                         <?php }else{  ?>
+                            <a class="glyphicon glyphicon-plus" id="add_debit-<?php echo $jt->group?>" name="add_debit"></a>
+                      <?php } ?>
                     </div> 
                   </div>
                 <?php foreach($debit[$jt->group] as $row) : ?>
@@ -134,7 +140,7 @@
                             </div>
                           </div>
                           <div class="col-md-8" style="padding-top:5px;">
-                           <select id="debit_akun-<?php echo $row->id_mst_transaksi_item ?>" name="debit_akun-<?php echo $row->group ?>" onchange="debit_akun(<?php echo $row->id_mst_transaksi_item ?><?php echo '8899' ?><?php echo $row->group ?>)" type="text" class="form-control">
+                           <select id="debit_akun-<?php echo $row->id_mst_transaksi_item ?>" name="debit_akun-<?php echo $row->group ?>" onchange="debit_akun(<?php echo $row->id_mst_transaksi_item ?>,<?php echo $row->group ?>)" type="text" class="form-control">
                               <?php foreach($akun as $a) : ?>
                                 <?php
                                   if(set_value('id_mst_akun')=="" && isset($row->id_mst_akun)){
@@ -164,7 +170,8 @@
                       <div class="col-md-7">
                         <div class="row">
                           <div class="col-md-1">
-                            <input type="checkbox" id="debit_isi_otomatis-<?php echo $row->id_mst_transaksi_item ?>" name="debit_isi_otomatis-<?php echo $row->group ?>" onclick="debit_isi_otomatis(<?php echo $row->id_mst_transaksi_item ?><?php echo '8899' ?><?php echo $row->group ?>)" checked="" value="1" <?php 
+                            <input type="checkbox" id="debit_isi_otomatis-<?php echo $row->id_mst_transaksi_item ?>" name="debit_isi_otomatis-<?php echo $row->group ?>" onclick="debit_isi_otomatis(<?php echo $row->id_mst_transaksi_item ?>,<?php echo $row->group ?>)" value="1" 
+                            <?php 
                               if(!empty($row->auto_fill)){
                                echo "checked";
                               }
@@ -219,7 +226,13 @@
                 <div class="row">
                   <div class="col-md-8" style="padding-top:5px;"><label>Kredit</label></div>
                   <div class="col-md-2">
-                    <a class="glyphicon glyphicon-plus" id="add_kredit-<?php echo $jt->group?>" name="add_kredit"></a>
+                    <?php
+                      // print_r(count($debit[$jt->group]));
+                      if(count($debit[$jt->group]) > "1"){?>
+                          <a style="height: 0px;width: 0px;overflow:hidden;" class="glyphicon glyphicon-plus" id="add_kredit-<?php echo $jt->group?>" name="add_kredit"></a>
+                       <?php }else{  ?>
+                          <a class="glyphicon glyphicon-plus" id="add_kredit-<?php echo $jt->group?>" name="add_kredit"></a>
+                    <?php } ?>
                   </div> 
                 </div>
               <?php foreach($kredit[$jt->group] as $row) : ?> 
@@ -354,31 +367,28 @@
 </section>
 <script type="text/javascript">
 
-    function debit_akun(data) {
-      var num = data;
-      var arr = num.toString().split("8899");
-      var id  = arr[0];
-      var group  = arr[1];
+    function debit_akun(id,group) {
 
       var debit_akun_val    = $("#debit_akun-"+id+"").val();
       var debit_akun_select = $("#debit_akun-"+id+">option:selected").text();
 
-      var id_kredit_sementara = $("[name='kredit_cmbx_nilai-"+group+"']").attr("id");
-      var fields = id_kredit_sementara.split(/-/);
-      var id_kredit_cmbx = fields[1];
+      $("[name='kredit_cmbx_nilai-"+group+"']").each(function(){
+        var id_kredit_sementara = this.id;
+        var fields = id_kredit_sementara.split(/-/);
+        var id_kredit_cmbx = fields[1];
 
-      $.ajax({
-         type: 'POST',
-         url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_edit_debit/{id}" ?>',
-         data : 'id_mst_akun='+debit_akun_val+'&id_mst_transaksi_item='+id+'&id_mst_transaksi_item_from='+debit_akun_val+'&id_mst_transaksi_item_kredit='+id_kredit_cmbx,
-         success: function (response) {
-          if(response=="OK"){
-            $("[name='kredit_cmbx_nilai-"+group+"']>option:first").val(debit_akun_val).text(debit_akun_select);
-            // $("#kredit_cmbx_nilai-"+id_kredit_cmbx+">option:first").val(debit_akun_val).text(debit_akun_select);
-          }else{
-              // alert("Failed.");
-          }
-         }
+        $.ajax({
+           type: 'POST',
+           url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_edit_debit/{id}" ?>',
+           data : 'id_mst_akun='+debit_akun_val+'&id_mst_transaksi_item='+id+'&id_mst_transaksi_item_from='+debit_akun_val+'&id_mst_transaksi_item_kredit='+id_kredit_cmbx,
+           success: function (response) {
+            if(response=="OK"){
+              $("[name='kredit_cmbx_nilai-"+group+"']>").val(debit_akun_val).text(debit_akun_select);
+            }else{
+                alert("Failed.");
+            }
+           }
+        });
       });
     }
 
@@ -509,16 +519,10 @@
       });
   });
 
-  function debit_isi_otomatis(data) {
-        var num = data;
-        var arr = num.toString().split("8899");
-        
-        var id_mst_transaksi_item  = arr[0];
-        var group  = arr[1];
-
+  function debit_isi_otomatis(id,group) {
         var data = new FormData();
             data.append('auto_fill'            ,$("[name='debit_isi_otomatis-"+group+"']:checked").val());
-            data.append('id_mst_transaksi_item', id_mst_transaksi_item);
+            data.append('id_mst_transaksi_item', id);
 
         $.ajax({
             cache : false,
@@ -544,33 +548,33 @@
         });
     }
 
-  $("[name='debit_isi_otomatis']").change(function(){
-      var id_trans_item_sementara = this.id;
-      var fields = id_trans_item_sementara.split(/-/);
-      var id_mst_transaksi_item = fields[1];
+  // $("[name='debit_isi_otomatis']").change(function(){
+  //     var id_trans_item_sementara = this.id;
+  //     var fields = id_trans_item_sementara.split(/-/);
+  //     var id_mst_transaksi_item = fields[1];
 
-      var data = new FormData();
-        data.append('auto_fill',  $("[name='debit_isi_otomatis']:checked").val());
-        data.append('id_mst_transaksi_item',  id_mst_transaksi_item);
+  //     var data = new FormData();
+  //       data.append('auto_fill',  $("[name='debit_isi_otomatis']:checked").val());
+  //       data.append('id_mst_transaksi_item',  id_mst_transaksi_item);
 
         
-        $.ajax({
-            cache : false,
-            contentType : false,
-            processData : false,
-            type : 'POST',
-            url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_edit_debit/{id}" ?>',
-            data : data,
-            success : function(response){
-              if(response=="OK"){
-                  $("#debit_isi_otomatis").prop("checked", true);
-                  $("#kredit_cmbx_nilai").prop("disabled", true);
-              }else{
-                  $("#debit_isi_otomatis").prop("checked", false);
-              }
-            }
-        });
-    });
+  //       $.ajax({
+  //           cache : false,
+  //           contentType : false,
+  //           processData : false,
+  //           type : 'POST',
+  //           url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_edit_debit/{id}" ?>',
+  //           data : data,
+  //           success : function(response){
+  //             if(response=="OK"){
+  //                 $("#debit_isi_otomatis").prop("checked", true);
+  //                 $("#kredit_cmbx_nilai").prop("disabled", true);
+  //             }else{
+  //                 $("#debit_isi_otomatis").prop("checked", false);
+  //             }
+  //           }
+  //       });
+  //   });
 
       $("[name='kredit_isi_otomatis']").change(function(){
           var id_trans_item_sementara = this.id;
