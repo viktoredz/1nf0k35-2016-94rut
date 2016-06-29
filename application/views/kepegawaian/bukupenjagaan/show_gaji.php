@@ -9,9 +9,9 @@
 		    </div> -->
 	      	<div class="box-footer">
 		      <div class="col-md-8">
-			 	<!-- <button type="button" class="btn btn-primary" onclick="document.location.href='<?php echo base_url()?>kepegawaian/bukupenjagaan/add'"><i class='fa fa-plus-square-o'></i> &nbsp; Permintaan / Permohonan Baru</button>
-			 	<button type="button" class="btn btn-success" id="btn-refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
-	          <button type="button" id="btn-export" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Export</button> -->
+			 	<!-- <button type="button" class="btn btn-primary" onclick="document.location.href='<?php echo base_url()?>kepegawaian/bukupenjagaan/add'"><i class='fa fa-plus-square-o'></i> &nbsp; Permintaan / Permohonan Baru</button>-->
+			 	<button type="button" class="btn btn-success" id="btn-refresh-gaji"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
+	          <button type="button" id="btn-export-gaji" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Export</button> 
 		     </div>
 		      <div class="col-md-4">
 		     	<div class="row">
@@ -90,7 +90,7 @@
 			if (data.tmt != null) {
 				var th = data.tmtdata.split('-');
 				var thsk = "<?php echo date('Y');?>";
-	            if (parseInt(th[0])+4 <= thsk ) {
+	            if (parseInt(th[0])+2 <= thsk ) {
 	                return "redClass";
 	            }
 			}
@@ -101,7 +101,7 @@
 			}
 		});
      
-		$('#btn-refresh').click(function () {
+		$('#btn-refresh-gaji').click(function () {
 			$("#jqxgridGaji").jqxGrid('clearfilters');
 		});
 
@@ -157,7 +157,7 @@
 	}
 
 
-	$("#btn-export").click(function(){
+	$("#btn-export-gaji").click(function(){
 		
 		var post = "";
 		var filter = $("#jqxgridGaji").jqxGrid('getfilterinformation');
@@ -194,8 +194,8 @@
 		}
 		post = post+'&puskes='+$("#puskesmas option:selected").text();
 		
-		$.post("<?php echo base_url()?>kepegawaian/bukupenjagaan/permintaan_export",post,function(response	){
-			//alert(response);
+		$.post("<?php echo base_url()?>kepegawaian/bukupenjagaan/permintaan_export_gaji",post,function(response	){
+			// alert(response);
 			window.location.href=response;
 		});
 	});

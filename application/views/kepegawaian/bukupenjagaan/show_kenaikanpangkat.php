@@ -9,9 +9,9 @@
 		    </div> -->
 	      	<div class="box-footer">
 		      <div class="col-md-8">
-			 	<!-- <button type="button" class="btn btn-primary" onclick="document.location.href='<?php echo base_url()?>kepegawaian/bukupenjagaan/add'"><i class='fa fa-plus-square-o'></i> &nbsp; Permintaan / Permohonan Baru</button>
-			 	<button type="button" class="btn btn-success" id="btn-refresh"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
-	          <button type="button" id="btn-export" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Export</button> -->
+			 	<!-- <button type="button" class="btn btn-primary" onclick="document.location.href='<?php echo base_url()?>kepegawaian/bukupenjagaan/add'"><i class='fa fa-plus-square-o'></i> &nbsp; Permintaan / Permohonan Baru</button>-->
+			 	<button type="button" class="btn btn-success" id="btn-refresh-pangkat"><i class='fa fa-refresh'></i> &nbsp; Refresh</button>
+	          <button type="button" id="btn-export-pangkat" class="btn btn-warning"><i class='fa fa-save'></i> &nbsp; Export</button> 
 		     </div>
 		      <div class="col-md-4">
 		     	<div class="row">
@@ -102,7 +102,7 @@
 			}
 		});
      
-		$('#btn-refresh').click(function () {
+		$('#btn-refresh-pangkat').click(function () {
 			$("#jqxgridPangkat").jqxGrid('clearfilters');
 		});
 
@@ -175,7 +175,7 @@
 	}
 
 
-	$("#btn-export").click(function(){
+	$("#btn-export-pangkat").click(function(){
 		
 		var post = "";
 		var filter = $("#jqxgridPangkat").jqxGrid('getfilterinformation');
@@ -212,8 +212,8 @@
 		}
 		post = post+'&puskes='+$("#puskesmas option:selected").text();
 		
-		$.post("<?php echo base_url()?>kepegawaian/bukupenjagaan/permintaan_export",post,function(response	){
-			//alert(response);
+		$.post("<?php echo base_url()?>kepegawaian/bukupenjagaan/permintaan_export_pangkat",post,function(response	){
+			// alert(response);
 			window.location.href=response;
 		});
 	});

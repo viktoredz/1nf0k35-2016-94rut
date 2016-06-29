@@ -75,7 +75,7 @@ class Bukupenjagaan extends CI_Controller {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
 
-				if($field == 'tgl_lahir') {
+				if($field == 'tmt') {
 					$value = date("Y-m-d",strtotime($value));
 					$this->db->where($field,$value);
 				}elseif($field != 'year') {
@@ -100,7 +100,7 @@ class Bukupenjagaan extends CI_Controller {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
 
-				if($field == 'tgl_lahir') {
+				if($field == 'tmt') {
 					$value = date("Y-m-d",strtotime($value));
 					$this->db->where($field,$value);
 				}elseif($field != 'year') {
@@ -134,9 +134,9 @@ class Bukupenjagaan extends CI_Controller {
 				'gaji_baru'						=> number_format($act->gaji_baru,2),
 				'tmtdata'						=> $act->tmt,
 				'bulanpensiun'					=> $this->bulan(date("n",strtotime($act->tgl_lhr))),
-				'tahunpensiun'					=> date("Y",strtotime($act->tgl_lhr))+55,
-				'id_golongan'					=> $act->id_golongan,
-				'ruang'							=> $act->id_golongan.' - '.$act->ruang,
+				'tahunpensiun'					=> date("Y",strtotime($act->tgl_lhr))+56,
+				'id_mst_peg_golruang'			=> $act->id_mst_peg_golruang,
+				'ruang'							=> $act->id_mst_peg_golruang.' - '.$act->ruang,
 				'keterangan'					=> $act->keterangan,
 				'detail'						=> 1,
 				'edit'							=> 1,
@@ -162,7 +162,7 @@ class Bukupenjagaan extends CI_Controller {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
 
-				if($field == 'tgl_lahir') {
+				if($field == 'tmt') {
 					$value = date("Y-m-d",strtotime($value));
 					$this->db->where($field,$value);
 				}elseif($field != 'year') {
@@ -187,7 +187,7 @@ class Bukupenjagaan extends CI_Controller {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
 
-				if($field == 'tgl_lahir') {
+				if($field == 'tmt') {
 					$value = date("Y-m-d",strtotime($value));
 					$this->db->where($field,$value);
 				}elseif($field != 'year') {
@@ -220,7 +220,7 @@ class Bukupenjagaan extends CI_Controller {
 				'tmt'							=> $act->tmt,
 				'tmtdata'						=> $act->tmt,
 				'bulanpensiun'					=> $this->bulan(date("n",strtotime($act->tgl_lhr))),
-				'tahunpensiun'					=> date("Y",strtotime($act->tgl_lhr))+55,
+				'tahunpensiun'					=> date("Y",strtotime($act->tgl_lhr))+56,
 				'id_mst_peg_golruang'			=> $act->id_mst_peg_golruang,
 				'ruang'							=> $act->id_mst_peg_golruang.' - '.$act->ruang,
 				'keterangan'					=> $act->keterangan,
@@ -350,7 +350,7 @@ class Bukupenjagaan extends CI_Controller {
 		echo json_encode(array($json));
 	}
 
-	function permintaan_export()
+	function permintaan_export_pangkat()
 	{
 		$TBS = new clsTinyButStrong;		
 		$TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN);
@@ -364,7 +364,7 @@ class Bukupenjagaan extends CI_Controller {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
 
-				if($field == 'tgl_permintaan') {
+				if($field == 'tmt') {
 					$value = date("Y-m-d",strtotime($value));
 					$this->db->where($field,$value);
 				}elseif($field != 'year') {
@@ -389,7 +389,7 @@ class Bukupenjagaan extends CI_Controller {
 				$field = $this->input->post('filterdatafield'.$i);
 				$value = $this->input->post('filtervalue'.$i);
 
-				if($field == 'tgl_permintaan') {
+				if($field == 'tmt') {
 					$value = date("Y-m-d",strtotime($value));
 					$this->db->where($field,$value);
 				}elseif($field != 'year') {
@@ -404,26 +404,172 @@ class Bukupenjagaan extends CI_Controller {
 		if ($this->session->userdata('puskesmas')!='') {
 			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
 		}
+			
+		$rows = $this->bukupenjagaan_model->get_data();
+
+		$datatahun=array();
+		$temp=array();
+		$datamerge=array();
+		
+		$tmtakhir = explode("-", date("Y-m-d"));
+		for($i=0; $i<=4;$i++){
+			$temp = $datamerge;
+			$dt=$i+1;
+			$datatahun = array(
+					"th$dt" => $tmtakhir[0]+$i,
+				);
+			$datamerge= array_merge($temp,$datatahun);
+		}
+		$datatampil = array();
+		$datatampil[] = $datamerge;
+
+
+
+		$data_tabel = array();
+		
+		$no=1;
+		foreach($rows as $act) {
+			$databulan = explode('-', $act->tmt);
+			$data_tabel[] = array(
+				'no' 							=> $no++,
+				'id_pegawai' 					=> $act->id_pegawai,
+				'code_cl_phc' 					=> $act->code_cl_phc,
+				'nik' 							=> $act->nik,
+				'nama'							=> $act->gelar_depan.' '.$act->nama.' '.$act->gelar_belakang.'  '.date("d-m-Y",strtotime($act->tgl_lhr)).'  '.$act->nip_nit,
+				'tgl_lhr'						=> $act->tgl_lhr,
+				'tmp_lahir'						=> $act->tmp_lahir,
+				'nip_nit'						=> $act->nip_nit,
+				'tmt'							=> $act->tmt,
+				'tmtdata'						=> $act->tmt,
+				'bulanpensiun'					=> $this->bulan(date("n",strtotime($act->tgl_lhr))),
+				'tahunpensiun'					=> date("Y",strtotime($act->tgl_lhr))+56,
+				'id_mst_peg_golruang'			=> $act->id_mst_peg_golruang,
+				'ruang'							=> $act->id_mst_peg_golruang.' - '.$act->ruang,
+				'keterangan'					=> $act->keterangan,
+				'aprilth_1'						=> (($databulan[0]+4 == $datatampil[0]['th1']  && $databulan[1] =='4') ? 'v' : '-'),
+				'septemberth_1'					=> (($databulan[0]+4 == $datatampil[0]['th1']  && $databulan[1] =='9') ? 'v' : '-'),
+				'aprilth_2'						=> (($databulan[0]+4 == $datatampil[0]['th2']  && $databulan[1] =='4') ? 'v' : '-'),
+				'septemberth_2'					=> (($databulan[0]+4 == $datatampil[0]['th2']  && $databulan[1] =='9') ? 'v' : '-'),
+				'aprilth_3'						=> (($databulan[0]+4 == $datatampil[0]['th3']  && $databulan[1] =='4') ? 'v' : '-'),
+				'septemberth_3'					=> (($databulan[0]+4 == $datatampil[0]['th3']  && $databulan[1] =='9') ? 'v' : '-'),
+				'aprilth_4'						=> (($databulan[0]+4 == $datatampil[0]['th4']  && $databulan[1] =='4') ? 'v' : '-'),
+				'septemberth_4'					=> (($databulan[0]+4 == $datatampil[0]['th4']  && $databulan[1] =='9') ? 'v' : '-'),
+				'aprilth_5'						=> (($databulan[0]+4 == $datatampil[0]['th5']  && $databulan[1] =='4') ? 'v' : '-'),
+				'septemberth_5'					=> (($databulan[0]+4 == $datatampil[0]['th5']  && $databulan[1] =='9') ? 'v' : '-'),
+				'detail'						=> 1,
+				'edit'							=> 1,
+			);
+			
+		}
+		
+
+		$kode_sess=$this->session->userdata('puskesmas');
+		$kd_prov = $this->inv_barang_model->get_nama('value','cl_province','code',substr($kode_sess, 0,2));
+		$kd_kab  = $this->inv_barang_model->get_nama('value','cl_district','code',substr($kode_sess, 0,4));
+		$kd_kec  = 'KEC. '.$this->inv_barang_model->get_nama('nama','cl_kec','code',substr($kode_sess, 0,7));
+		$namapus  = $this->inv_barang_model->get_nama('value','cl_phc','code','P'.$kode_sess);
+		$tahun  = date("Y");
+
+		$data_puskesmas[] = array('nama_puskesmas' => $namapus,'kd_prov' => $kd_prov,'kd_kab' => $kd_kab,'tahun' => $tahun);
+		$dir = getcwd().'/';
+		$template = $dir.'public/files/template/kepegawaian/bukupenjagaan_pangkat.xlsx';		
+		
+		$TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8);
+
+		
+		
+		$TBS->MergeBlock('b', $data_puskesmas);
+		$TBS->MergeBlock('a', $data_tabel); 
+		$TBS->MergeBlock('c', $datatampil); 
+
+		
+		$code = uniqid();
+		$output_file_name = 'public/files/hasil/hasil_export_bukupenjagaan_pangkat'.$code.'.xlsx';
+		$output = $dir.$output_file_name;
+		$TBS->Show(OPENTBS_FILE, $output); // Also merges all [onshow] automatic fields.
+		
+		echo base_url().$output_file_name ;
+
+	}
+	
+	function permintaan_export_pensiun()
+	{
+		$TBS = new clsTinyButStrong;		
+		$TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN);
+		$this->authentication->verify('kepegawaian','show');
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tmt') {
+					$value = date("Y-m-d",strtotime($value));
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		if ($this->session->userdata('puskesmas')!='') {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
+		$rows_all = $this->bukupenjagaan_model->get_data();
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tmt') {
+					$value = date("Y-m-d",strtotime($value));
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		if ($this->session->userdata('puskesmas')!='') {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
+			
 		$rows = $this->bukupenjagaan_model->get_data();
 		$data_tabel = array();
-		$no=1;
+		
+		$no=$this->input->post('recordstartindex')+1;
 		foreach($rows as $act) {
 			$data_tabel[] = array(
 				'no' 							=> $no++,
-				'id_inv_hasbispakai_permintaan' => $act->id_inv_hasbispakai_permintaan,
+				'id_pegawai' 					=> $act->id_pegawai,
 				'code_cl_phc' 					=> $act->code_cl_phc,
-				'tgl_permintaan' 				=> date("d-m-Y",strtotime($act->tgl_permintaan)),
-				'jumlah_unit'					=> $act->jumlah_unit,
-				'status_permintaan'				=> ucwords($act->status_permintaan),
-				'uraian'						=> $act->uraian,
-				'nilai_pembelian'				=> $act->nilai_pembelian,
-				'jumlah_unit'					=> $act->jumlah_unit,
-				'nilai_pembelian'				=> number_format($act->nilai_pembelian),
-				'value'							=> $act->value,
+				'nik' 							=> $act->nik,
+				'nama'							=> $act->gelar_depan.' '.$act->nama.' '.$act->gelar_belakang,
+				'tgl_lhr'						=> $act->tgl_lhr,
+				'tmp_lahir'						=> $act->tmp_lahir,
+				'nip_nit'						=> $act->nip_nit,
+				'tmt'							=> $act->tmt,
+				'tmtdata'						=> $act->tmt,
+				'bulanpensiun'					=> $this->bulan(date("n",strtotime($act->tgl_lhr))),
+				'tahunpensiun'					=> date("Y",strtotime($act->tgl_lhr))+56,
+				'id_mst_peg_golruang'			=> $act->id_mst_peg_golruang,
+				'ruang'							=> $act->id_mst_peg_golruang.' - '.$act->ruang,
 				'keterangan'					=> $act->keterangan,
 				'detail'						=> 1,
 				'edit'							=> 1,
-				'delete'						=> ($act->status_permintaan=='diterima') ? 0 : 1
 			);
 		}
 		$kode_sess=$this->session->userdata('puskesmas');
@@ -435,7 +581,7 @@ class Bukupenjagaan extends CI_Controller {
 
 		$data_puskesmas[] = array('nama_puskesmas' => $namapus,'kd_prov' => $kd_prov,'kd_kab' => $kd_kab,'tahun' => $tahun);
 		$dir = getcwd().'/';
-		$template = $dir.'public/files/template/kepegawaian/bukupenjagaan.xlsx';		
+		$template = $dir.'public/files/template/kepegawaian/bukupenjagaan_pensiun.xlsx';		
 		
 		$TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8);
 
@@ -444,12 +590,149 @@ class Bukupenjagaan extends CI_Controller {
 		$TBS->MergeBlock('b', $data_puskesmas);
 		
 		$code = uniqid();
-		$output_file_name = 'public/files/hasil/hasil_export_bukupenjagaan'.$code.'.xlsx';
+		$output_file_name = 'public/files/hasil/hasil_export_bukupenjagaan_pensiun'.$code.'.xlsx';
 		$output = $dir.$output_file_name;
 		$TBS->Show(OPENTBS_FILE, $output); // Also merges all [onshow] automatic fields.
 		
 		echo base_url().$output_file_name ;
 
 	}
-	
+	function permintaan_export_gaji()
+	{
+		$TBS = new clsTinyButStrong;		
+		$TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN);
+		$this->authentication->verify('kepegawaian','show');
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tmt') {
+					$value = date("Y-m-d",strtotime($value));
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		if ($this->session->userdata('puskesmas')!='') {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
+		$rows_all = $this->bukupenjagaan_model->get_datagaji();
+
+		if($_POST) {
+			$fil = $this->input->post('filterscount');
+			$ord = $this->input->post('sortdatafield');
+
+			for($i=0;$i<$fil;$i++) {
+				$field = $this->input->post('filterdatafield'.$i);
+				$value = $this->input->post('filtervalue'.$i);
+
+				if($field == 'tmt') {
+					$value = date("Y-m-d",strtotime($value));
+					$this->db->where($field,$value);
+				}elseif($field != 'year') {
+					$this->db->like($field,$value);
+				}
+			}
+
+			if(!empty($ord)) {
+				$this->db->order_by($ord, $this->input->post('sortorder'));
+			}
+		}
+		if ($this->session->userdata('puskesmas')!='') {
+			$this->db->where('code_cl_phc','P'.$this->session->userdata('puskesmas'));
+		}
+			
+		$rows = $this->bukupenjagaan_model->get_datagaji();
+
+		$datatahun=array();
+		$temp=array();
+		$datamerge=array();
+		
+		$tmtakhir = explode("-", date("Y-m-d"));
+		for($i=0; $i<=4;$i++){
+			$temp = $datamerge;
+			$dt=$i+1;
+			$datatahun = array(
+					"th$dt" => $tmtakhir[0]+$i,
+				);
+			$datamerge= array_merge($temp,$datatahun);
+		}
+		$datatampil = array();
+		$datatampil[] = $datamerge;
+
+
+
+		$data_tabel = array();
+		
+		$no=1;
+		foreach($rows as $act) {
+			$databulan = explode('-', $act->tmt);
+			$data_tabel[] = array(
+				'no' 							=> $no++,
+				'id_pegawai' 					=> $act->id_pegawai,
+				'code_cl_phc' 					=> $act->code_cl_phc,
+				'nik' 							=> $act->nik,
+				'nama'							=> $act->gelar_depan.' '.$act->nama.' '.$act->gelar_belakang.'  '.date("d-m-Y",strtotime($act->tgl_lhr)).'  '.$act->nip_nit,
+				'tgl_lhr'						=> $act->tgl_lhr,
+				'tmp_lahir'						=> $act->tmp_lahir,
+				'nip_nit'						=> $act->nip_nit,
+				'tmt'							=> $act->tmt,
+				'tmtdata'						=> $act->tmt,
+				'gaji_baru'						=> number_format($act->gaji_baru,2),
+				'bulanpensiun'					=> $this->bulan(date("n",strtotime($act->tgl_lhr))),
+				'tahunpensiun'					=> date("Y",strtotime($act->tgl_lhr))+55,
+				'id_mst_peg_golruang'			=> $act->id_mst_peg_golruang,
+				'ruang'							=> $act->id_mst_peg_golruang.' - '.$act->ruang,
+				'keterangan'					=> $act->keterangan,
+				'gajith_1'						=> (($databulan[0]+2 == $datatampil[0]['th1']  ) ? $databulan[2].'-'.$databulan[1].'-'.(($databulan[0])+2) : '-'),
+				'gajith_2'						=> (($databulan[0]+2 == $datatampil[0]['th2']  ) ? $databulan[2].'-'.$databulan[1].'-'.(($databulan[0])+2) : '-'),
+				'gajith_3'						=> (($databulan[0]+2 == $datatampil[0]['th3']  ) ? $databulan[2].'-'.$databulan[1].'-'.(($databulan[0])+2) : '-'),
+				'gajith_4'						=> (($databulan[0]+2 == $datatampil[0]['th4']  ) ? $databulan[2].'-'.$databulan[1].'-'.(($databulan[0])+2) : '-'),
+				'gajith_5'						=> (($databulan[0]+2 == $datatampil[0]['th5']  ) ? $databulan[2].'-'.$databulan[1].'-'.(($databulan[0])+2) : '-'),
+				'detail'						=> 1,
+				'edit'							=> 1,
+			);
+			
+		}
+		
+
+		$kode_sess=$this->session->userdata('puskesmas');
+		$kd_prov = $this->inv_barang_model->get_nama('value','cl_province','code',substr($kode_sess, 0,2));
+		$kd_kab  = $this->inv_barang_model->get_nama('value','cl_district','code',substr($kode_sess, 0,4));
+		$kd_kec  = 'KEC. '.$this->inv_barang_model->get_nama('nama','cl_kec','code',substr($kode_sess, 0,7));
+		$namapus  = $this->inv_barang_model->get_nama('value','cl_phc','code','P'.$kode_sess);
+		$tahun  = date("Y");
+
+		$data_puskesmas[] = array('nama_puskesmas' => $namapus,'kd_prov' => $kd_prov,'kd_kab' => $kd_kab,'tahun' => $tahun);
+		$dir = getcwd().'/';
+		$template = $dir.'public/files/template/kepegawaian/bukupenjagaan_gaji.xlsx';		
+		
+		$TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8);
+
+		
+		
+		$TBS->MergeBlock('b', $data_puskesmas);
+		$TBS->MergeBlock('a', $data_tabel); 
+		$TBS->MergeBlock('c', $datatampil); 
+
+		
+		$code = uniqid();
+		$output_file_name = 'public/files/hasil/hasil_export_bukupenjagaan_gaji'.$code.'.xlsx';
+		$output = $dir.$output_file_name;
+		$TBS->Show(OPENTBS_FILE, $output); // Also merges all [onshow] automatic fields.
+		
+		echo base_url().$output_file_name ;
+
+	}
 }
+

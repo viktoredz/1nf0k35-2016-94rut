@@ -248,8 +248,8 @@
 		//alert(post);
 		
 		$.post("<?php echo base_url()?>inventory/bhp_opname/laporan_opname",post,function(response	){
-			//alert(response);
-			window.location.href=response;
+			alert(response);
+			// window.location.href=response;
 		});
 	});
 </script>

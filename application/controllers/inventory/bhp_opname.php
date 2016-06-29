@@ -1287,13 +1287,14 @@ class Bhp_opname extends CI_Controller {
 			//$this->db->where("mst_inv_barang_habispakai.id_mst_inv_barang_habispakai_jenis",$kode);
 		}
 		$rows = $this->bhp_opname_model->get_data_lap_opname($filbulan,$filtahun,$filterbhp,$filtername,$order);
-		//die(print_r($rows));
+		
 	//	$get_jumlahawal = $this->bhp_opname_model->get_jumlahawal();
 		$data = array();
 		$no=0;
 		$data_tabel = array();
 		$temp='';
 		$jml=0;
+		die(print_r($rows));
 		foreach ($rows as $key => $val) {
 			$no++;
 			foreach ($val as $act => $value) {
