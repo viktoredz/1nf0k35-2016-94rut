@@ -335,6 +335,7 @@
                   </div>
                 </div>
               <?php endforeach ?>
+              <span id="percent-<?php echo $row->group ?>">0</span>%
             </div>
           </div>
         </div>
@@ -406,7 +407,6 @@
               if(response=="OK"){
                   $("#debt-"+id).remove();
                   var count = $("[name='debt-"+group+"']").length;
-
                   if (count < 2) {
                     // $("[name='add_kredit']").show();
                     $('#add_kredit-'+group+'').show();
@@ -416,7 +416,6 @@
                     $('#add_kredit-'+group+'').hide();
                     alert("hide");
                   };
-
               }else{
                 alert("Failed.");
               };
@@ -511,6 +510,7 @@
        }       
        event.preventDefault();
     });
+
 
   $("select[name='kredit_cmbx_nilai']").change(function(){
       var id_mst_transaksi_item_from = $(this).val();
@@ -694,12 +694,25 @@
 
     function kredit_value_nilai(id,group) {
 
-      var kredit_nilai_val = $("#kredit_value_nilai-"+id+"").val();
+        var kredit_nilai_val = $("#kredit_value_nilai-"+id+"").val();
+        
+        //limit the value to between 0 and 100
+        var thisVal = parseInt($("[name='kredit_value_nilai-"+group+"']").val(), 10);
 
-      // $("[name='kredit_cmbx_nilai-"+group+"']").each(function(){
-      //   var id_kredit_sementara = this.id;
-      //   var fields = id_kredit_sementara.split(/-/);
-      //   var id_kredit_cmbx = fields[1];
+        if (!isNaN(thisVal)) {
+          thisVal = Math.max(0, Math.min(100, thisVal));
+          $(this).val(thisVal);
+        }
+
+        //get total of values
+        var total = 0; 
+        $("[name='kredit_value_nilai-"+group+"']").each(function() {
+            var thisVal = parseInt($(this).val(), 10);
+            if (!isNaN(thisVal))
+                total += thisVal;
+        });
+
+        $('#percent-'+group+'').html(total);
 
         $.ajax({
            type: 'POST',
@@ -713,7 +726,6 @@
             }
            }
         });
-      // });
     }
 
       <?php foreach($urutan_debit as $u) : ?>
