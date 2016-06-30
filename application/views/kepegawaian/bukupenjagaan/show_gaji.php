@@ -160,38 +160,38 @@
 	$("#btn-export-gaji").click(function(){
 		
 		var post = "";
-		var filter = $("#jqxgridGaji").jqxGrid('getfilterinformation');
-		for(i=0; i < filter.length; i++){
-			var fltr 	= filter[i];
-			var value	= fltr.filter.getfilters()[0].value;
-			var condition	= fltr.filter.getfilters()[0].condition;
-			var filteroperation	= fltr.filter.getfilters()[0].operation;
-			var filterdatafield	= fltr.filtercolumn;
-			if(filterdatafield=="tgl_permintaan"){
-				var d = new Date(value);
-				var day = d.getDate();
-				var month = d.getMonth();
-				var year = d.getYear();
-				value = year+'-'+month+'-'+day;
+		// var filter = $("#jqxgridGaji").jqxGrid('getfilterinformation');
+		// for(i=0; i < filter.length; i++){
+		// 	var fltr 	= filter[i];
+		// 	var value	= fltr.filter.getfilters()[0].value;
+		// 	var condition	= fltr.filter.getfilters()[0].condition;
+		// 	var filteroperation	= fltr.filter.getfilters()[0].operation;
+		// 	var filterdatafield	= fltr.filtercolumn;
+		// 	if(filterdatafield=="tmt"){
+		// 		var d = new Date(value);
+		// 		var day = d.getDate();
+		// 		var month = d.getMonth();
+		// 		var year = d.getYear();
+		// 		value = year+'-'+month+'-'+day;
 				
-			}
-			post = post+'&filtervalue'+i+'='+value;
-			post = post+'&filtercondition'+i+'='+condition;
-			post = post+'&filteroperation'+i+'='+filteroperation;
-			post = post+'&filterdatafield'+i+'='+filterdatafield;
-			post = post+'&'+filterdatafield+'operator=and';
-		}
-		post = post+'&filterscount='+i;
+		// 	}
+		// 	post = post+'&filtervalue'+i+'='+value;
+		// 	post = post+'&filtercondition'+i+'='+condition;
+		// 	post = post+'&filteroperation'+i+'='+filteroperation;
+		// 	post = post+'&filterdatafield'+i+'='+filterdatafield;
+		// 	post = post+'&'+filterdatafield+'operator=and';
+		// }
+		// post = post+'&filterscount='+i;
 		
-		var sortdatafield = $("#jqxgridGaji").jqxGrid('getsortcolumn');
-		if(sortdatafield != "" && sortdatafield != null){
-			post = post + '&sortdatafield='+sortdatafield;
-		}
-		if(sortdatafield != null){
-			var sortorder = $("#jqxgridGaji").jqxGrid('getsortinformation').sortdirection.ascending ? "asc" : ($("#jqxgridGaji").jqxGrid('getsortinformation').sortdirection.descending ? "desc" : "");
-			post = post+'&sortorder='+sortorder;
+		// var sortdatafield = $("#jqxgridGaji").jqxGrid('getsortcolumn');
+		// if(sortdatafield != "" && sortdatafield != null){
+		// 	post = post + '&sortdatafield='+sortdatafield;
+		// }
+		// if(sortdatafield != null){
+		// 	var sortorder = $("#jqxgridGaji").jqxGrid('getsortinformation').sortdirection.ascending ? "asc" : ($("#jqxgridGaji").jqxGrid('getsortinformation').sortdirection.descending ? "desc" : "");
+		// 	post = post+'&sortorder='+sortorder;
 			
-		}
+		// }
 		post = post+'&puskes='+$("#puskesmas option:selected").text();
 		
 		$.post("<?php echo base_url()?>kepegawaian/bukupenjagaan/permintaan_export_gaji",post,function(response	){
