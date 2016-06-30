@@ -115,7 +115,8 @@ class Keutransaksi_model extends CI_Model {
 
         if($this->db->insert('mst_keu_transaksi_item', $data)){
            $lastInsertedID = $this->db->insert_id();
-            return $lastInsertedID;
+           $group = $this->input->post('group');
+            return $lastInsertedID."|".$group;
         }else{
             return mysql_error();
         }

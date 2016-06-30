@@ -335,7 +335,7 @@
                   </div>
                 </div>
               <?php endforeach ?>
-              <span id="percent-<?php echo $row->group ?>">0</span>%
+              <!-- <span id="percent-<?php echo $row->group ?>">0</span>% -->
             </div>
           </div>
         </div>
@@ -691,41 +691,60 @@
         });
     });
 
-
     function kredit_value_nilai(id,group) {
 
         var kredit_nilai_val = $("#kredit_value_nilai-"+id+"").val();
         
-        //limit the value to between 0 and 100
+        //limit the value between 0 and 100
         var thisVal = parseInt($("[name='kredit_value_nilai-"+group+"']").val(), 10);
 
         if (!isNaN(thisVal)) {
           thisVal = Math.max(0, Math.min(100, thisVal));
           $(this).val(thisVal);
         }
-
         //get total of values
         var total = 0; 
-        $("[name='kredit_value_nilai-"+group+"']").each(function() {
+        $("[name='kredit_value_nilai-"+group+"']:not(:last)").each(function() {
             var thisVal = parseInt($(this).val(), 10);
             if (!isNaN(thisVal))
                 total += thisVal;
-        });
 
-        $('#percent-'+group+'').html(total);
+            if (100 - total > 0) {
+               $("[name='kredit_value_nilai-"+group+"']:last").val(100 - total);
 
-        $.ajax({
-           type: 'POST',
-           url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_edit_kredit/{id}" ?>',
-           data : 'value='+kredit_nilai_val+'&id_mst_transaksi_item='+id,
-           success: function (response) {
-            if(response=="OK"){
-                // alert("Success.");
-            }else{
-                alert("Failed.");
-            }
-           }
+               $.ajax({
+                   type: 'POST',
+                   url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_edit_kredit/{id}" ?>',
+                   data : 'value='+kredit_nilai_val+'&id_mst_transaksi_item='+id,
+                   success: function (response) {
+                    if(response=="OK"){
+                        // alert("Success.");
+                    }else{
+                        alert("Failed.");
+                    }
+                   }
+                });
+
+            } else{
+               alert("Jumlah Nilai Kredit Harus 100%");
+               $("#kredit_value_nilai-"+id+"").val(0);
+               var fail = 0;
+                  $.ajax({
+                   type: 'POST',
+                   url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_edit_kredit/{id}" ?>',
+                   data : 'value='+fail+'&id_mst_transaksi_item='+id,
+                   success: function (response) {
+                    if(response=="OK"){
+                        // alert("Success.");
+                    }else{
+                        alert("Failed.");
+                    }
+                   }
+                });
+              };
         });
+        // $('#percent-'+group+'').html(total);
+
     }
 
       <?php foreach($urutan_debit as $u) : ?>
@@ -1920,6 +1939,7 @@
             a = response.split("|");
               if(a[0]=="OK"){
                 if(a[1]!=null){
+                  if(a[2]!=null){
 
               var form_kredit = '<div id="credit-'+a[1]+'">\
                                     <div class="row" >\
@@ -2144,6 +2164,9 @@
                       }
                   });
               });
+                    }else{
+                      alert("Kosong");
+                    };
 
                 }else{
                   alert("Kosong");
