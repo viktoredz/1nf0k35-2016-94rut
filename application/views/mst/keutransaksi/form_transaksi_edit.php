@@ -123,14 +123,14 @@
                       <?php
                         // print_r(count($kredit[$jt->group]));
                         if(count($kredit[$jt->group]) > "1"){?>
-                            <a style="height: 0px;width: 0px;overflow:hidden;" class="glyphicon glyphicon-plus" id="add_debit-<?php echo $jt->group?>" name="add_debit"></a>
+                            <a style="visibility: hidden" class="glyphicon glyphicon-plus" id="add_debit-<?php echo $jt->group?>" name="add_debit"></a>
                          <?php }else{  ?>
                             <a class="glyphicon glyphicon-plus" id="add_debit-<?php echo $jt->group?>" name="add_debit"></a>
                       <?php } ?>
                     </div> 
                   </div>
                 <?php foreach($debit[$jt->group] as $row) : ?>
-                  <div id="debt-<?php echo $row->id_mst_transaksi_item ?>">
+                  <div id="debt-<?php echo $row->id_mst_transaksi_item ?>" name="debt-<?php echo $row->group ?>">
                     <div class="row">
                       <div class="col-md-12">
                         <div class="row">
@@ -160,7 +160,7 @@
                             </div>
                           </div>
                           <div class="col-md-2">
-                            <a id="delete_debit-<?php echo $row->id_mst_transaksi_item ?>" name="delete_debit" class="glyphicon glyphicon-trash"></a>
+                            <a id="delete_debit-<?php echo $row->id_mst_transaksi_item ?>" name="delete_debit-<?php echo $row->group ?>" onclick="delete_debit(<?php echo $row->id_mst_transaksi_item ?>,<?php echo $row->group ?>)" class="glyphicon glyphicon-trash"></a>
                           </div> 
                       </div>
                     </div>
@@ -229,7 +229,7 @@
                     <?php
                       // print_r(count($debit[$jt->group]));
                       if(count($debit[$jt->group]) > "1"){?>
-                          <a style="height: 0px;width: 0px;overflow:hidden;" class="glyphicon glyphicon-plus" id="add_kredit-<?php echo $jt->group?>" name="add_kredit"></a>
+                          <a style="visibility: hidden" class="glyphicon glyphicon-plus" id="add_kredit-<?php echo $jt->group?>" name="add_kredit"></a>
                        <?php }else{  ?>
                           <a class="glyphicon glyphicon-plus" id="add_kredit-<?php echo $jt->group?>" name="add_kredit"></a>
                     <?php } ?>
@@ -268,7 +268,7 @@
                           </div>
                         </div>
                         <div class="col-md-2">
-                          <a id="delete_kredit-<?php echo $row->id_mst_transaksi_item ?>" name="delete_kredit" onclick="return confirm('Anda yakin ingin menghapus data ini ?')" class="glyphicon glyphicon-trash"></a>
+                          <a id="delete_kredit-<?php echo $row->id_mst_transaksi_item ?>" name="delete_kredit" class="glyphicon glyphicon-trash"></a>
                         </div> 
                       </div>
                     </div>
@@ -396,32 +396,67 @@
         window.location.href="<?php echo base_url()?>mst/keuangan_transaksi";
     });
 
-    $("[name='delete_debit']").click(function(event){
-       event.stopPropagation();
-       if(confirm("Anda yakin ingin menghapus data ini ?")) {
-        this.click;
-
-          var id_trans_item_sementara = this.id;
-          var fields = id_trans_item_sementara.split(/-/);
-          var id_mst_transaksi_item = fields[1];
-
-          $.ajax({
+      function delete_debit (id,group) {
+        if (confirm("Anda yakin Akan menghapus Data Ini ?")) {
+            $.ajax({
              type: 'POST',
              url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_delete_debit" ?>',
-             data : 'id_mst_transaksi_item='+id_mst_transaksi_item,
+             data : 'id_mst_transaksi_item='+id,
              success: function (response) {
               if(response=="OK"){
-                  $("#debt-"+id_mst_transaksi_item).remove();
+                  $("#debt-"+id).remove();
+                  var count = $("[name='debt-"+group+"']").length;
+
+                  if (count < 2) {
+                    // $("[name='add_kredit']").show();
+                    $('#add_kredit-'+group+'').show();
+                    alert("show");
+                  }else{
+                    // $("[name='add_kredit']").hide();
+                    $('#add_kredit-'+group+'').hide();
+                    alert("hide");
+                  };
+
               }else{
-                  alert("Failed.");
-              }
+                alert("Failed.");
+              };
              }
           });
-        } else {
-           // alert("Cancel");
-       }       
-       event.preventDefault();
-    });
+
+        } else{
+
+        };
+      }
+
+    // $("[name='delete_debit']").click(function(event){
+    //    event.stopPropagation();
+    //    if(confirm("Anda yakin ingin menghapus data ini ?")) {
+    //     this.click;
+
+    //       var id_trans_item_sementara = this.id;
+    //       var fields = id_trans_item_sementara.split(/-/);
+    //       var id_mst_transaksi_item = fields[1];
+
+    //       var count = $('#debt-').length;
+
+
+    //       $.ajax({
+    //          type: 'POST',
+    //          url : '<?php echo base_url()."mst/keuangan_transaksi/jurnal_transaksi_delete_debit" ?>',
+    //          data : 'id_mst_transaksi_item='+id_mst_transaksi_item,
+    //          success: function (response) {
+    //           if(response=="OK"){
+    //               $("#debt-"+id_mst_transaksi_item).remove();
+    //           }else{
+    //               alert("Failed.");
+    //           }
+    //          }
+    //       });
+    //     } else {
+    //        // alert("Cancel");
+    //    }       
+    //    event.preventDefault();
+    // });
 
     $("[name='delete_kredit']").click(function(event){
        event.stopPropagation();
@@ -684,7 +719,6 @@
       <?php foreach($urutan_debit as $u) : ?>
       urutan_d = "<?php echo $u->urutan+1 ?>";
       <?php endforeach; ?>
-
       counter_debit = 1;
 
       $("[name='add_debit']").click(function() {
@@ -1750,7 +1784,9 @@
                             </div>';
 
                 $('#Debit_jt').append(form_debit);
+                alert("atas"+counter_debit);
                 counter_debit++;
+                alert("bawah"+counter_debit);
 
                 <?php endforeach ?>
 
