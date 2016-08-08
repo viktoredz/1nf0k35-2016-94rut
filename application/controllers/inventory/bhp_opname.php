@@ -1294,7 +1294,7 @@ class Bhp_opname extends CI_Controller {
 		$data_tabel = array();
 		$temp='';
 		$jml=0;
-		die(print_r($rows));
+		// die(print_r($rows));
 		foreach ($rows as $key => $val) {
 			$no++;
 			foreach ($val as $act => $value) {
